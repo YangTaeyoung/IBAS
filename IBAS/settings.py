@@ -28,7 +28,7 @@ SECRET_KEY = '_vthq1y2s@$+o&+759)d)0r59e&%!gdcp7(^tsu1=+b-cog_@1'
 DEBUG = True
 
 
-ALLOWED_HOSTS = ['www.inhabas.com', '127.0.0.1']
+ALLOWED_HOSTS = ['www.inhabas.com','165.246.169.191', '127.0.0.1']
 
 
 # Application definition
