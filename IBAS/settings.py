@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -26,7 +28,7 @@ SECRET_KEY = '_vthq1y2s@$+o&+759)d)0r59e&%!gdcp7(^tsu1=+b-cog_@1'
 DEBUG = True
 
 
-ALLOWED_HOSTS = ['165.246.169.191', '127.0.0.1']
+ALLOWED_HOSTS = ['www.inhabas.com', '127.0.0.1']
 
 
 # Application definition
@@ -78,12 +80,12 @@ WSGI_APPLICATION = 'IBAS.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'IBAS',
-        'USER': 'root',
-        'PASSWORD': 'bigdata1156--',
-        'HOST': 'localhost',
-        'PORT': '3356'
+#        'ENGINE': 'django.db.backends.mysql',
+#        'NAME': 'IBAS',
+#        'USER': 'root',
+#        'PASSWORD': 'bigdata1156--',
+#        'HOST': 'localhost',
+#        'PORT': '3356'
     }
 }
 
