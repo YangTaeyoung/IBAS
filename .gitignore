@@ -1,4 +1,4 @@
 *.pyc
 .idea/
 venv/
-IBAS/setting.py
+setting.py
