@@ -1,0 +1,4 @@
+*.pyc
+.idea/
+venv/
+/IBAS/settings.py
