@@ -5961,3 +5961,66 @@ Not Found: /favicon.ico
 [pid: 1757|app: 0|req: 2/2] 112.148.18.72 () {48 vars in 814 bytes} [Tue Feb  2 22:01:35 2021] GET /favicon.ico => generated 2132 bytes in 7 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
 [pid: 1757|app: 0|req: 3/3] 103.73.34.7 () {32 vars in 450 bytes} [Wed Feb  3 00:19:27 2021] GET / => generated 901 bytes in 1 msecs (HTTP/1.1 200) 5 headers in 166 bytes (1 switches on core 0)
 >>>>>>> 329f5fcbe2253d79283a55d83ebf3d01dc1334a5
+*** Starting uWSGI 2.0.18-debian (64bit) on [Wed Feb  3 01:33:18 2021] ***
+compiled with version: 10.0.1 20200405 (experimental) [master revision 0be9efad938:fcb98e4978a:705510a708d3642c9c962beb663c476167e4e8a4] on 11 April 2020 11:15:55
+os: Linux-5.8.0-41-generic #46~20.04.1-Ubuntu SMP Mon Jan 18 17:52:23 UTC 2021
+nodename: ibas-desktop
+machine: x86_64
+clock source: unix
+pcre jit disabled
+detected number of CPU cores: 12
+current working directory: /home/ibas/Django/IBAS
+writing pidfile to /tmp/project-master.pid
+detected binary path: /usr/bin/uwsgi-core
+chdir() to /home/ibas/Django/IBAS
+your processes number limit is 127943
+your memory page size is 4096 bytes
+detected max file descriptor number: 1048576
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address /home/ibas/Django/IBAS/uwsgi.sock fd 3
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 145840 bytes (142 KB) for 1 cores
+*** Operational MODE: single process ***
+*** no app loaded. going in full dynamic mode ***
+*** uWSGI is running in multiple interpreter mode ***
+!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!
+no request plugin is loaded, you will not be able to manage requests.
+you may need to install the package for your language of choice, or simply load it with --plugin.
+!!!!!!!!!!! END OF WARNING !!!!!!!!!!
+spawned uWSGI master process (pid: 12038)
+spawned uWSGI worker 1 (pid: 12039, cores: 1)
+-- unavailable modifier requested: 0 --
+*** Starting uWSGI 2.0.19.1 (64bit) on [Wed Feb  3 01:34:09 2021] ***
+compiled with version: 9.3.0 on 27 January 2021 16:52:57
+os: Linux-5.8.0-41-generic #46~20.04.1-Ubuntu SMP Mon Jan 18 17:52:23 UTC 2021
+nodename: ibas-desktop
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 12
+current working directory: /home/ibas/Django/IBAS
+writing pidfile to /tmp/project-master.pid
+detected binary path: /home/ibas/.local/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+chdir() to /home/ibas/Django/IBAS
+your processes number limit is 127943
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address /home/ibas/Django/IBAS/uwsgi.sock fd 3
+Python version: 3.8.5 (default, Jul 28 2020, 12:59:40)  [GCC 9.3.0]
+PEP 405 virtualenv detected: /home/ibas/Django/IBAS/venv
+Set PythonHome to /home/ibas/Django/IBAS/venv
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0x55629cc105a0
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 145840 bytes (142 KB) for 1 cores
+*** Operational MODE: single process ***
+WSGI app 0 (mountpoint='') ready in 0 seconds on interpreter 0x55629cc105a0 pid: 12085 (default app)
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI master process (pid: 12085)
+spawned uWSGI worker 1 (pid: 12087, cores: 1)
+[pid: 12087|app: 0|req: 1/1] 112.148.18.72 () {46 vars in 837 bytes} [Wed Feb  3 01:34:31 2021] GET / => generated 901 bytes in 17 msecs (HTTP/1.1 200) 5 headers in 166 bytes (1 switches on core 0)
