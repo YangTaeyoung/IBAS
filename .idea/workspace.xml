@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="cb1649c7-88f6-478a-978d-e41b554d2cb2" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/IBAS.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/IBAS.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/django.log" beforeDir="false" afterPath="$PROJECT_DIR$/django.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/bin/gunicorn" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn-20.0.4.dist-info/INSTALLER" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn-20.0.4.dist-info/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn-20.0.4.dist-info/METADATA" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn-20.0.4.dist-info/RECORD" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn-20.0.4.dist-info/REQUESTED" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn-20.0.4.dist-info/WHEEL" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn-20.0.4.dist-info/entry_points.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn-20.0.4.dist-info/top_level.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/app/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/app/base.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/app/pasterapp.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/app/wsgiapp.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/arbiter.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/config.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/debug.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/errors.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/glogging.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/http/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/http/body.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/http/errors.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/http/message.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/http/parser.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/http/unreader.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/http/wsgi.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/instrument/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/instrument/statsd.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/pidfile.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/reloader.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/sock.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/systemd.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/util.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/workers/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/workers/base.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/workers/base_async.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/workers/geventlet.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/workers/ggevent.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/workers/gthread.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/workers/gtornado.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/workers/sync.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/workers/workertmp.py" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DjangoConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)">
+    <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1nvv4q2SHjZw3GzkKSdtDuPJeYu" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RunManager">
+    <configuration name="IBAS" type="Python.DjangoServer" factoryName="Django server">
+      <module name="IBAS" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <option name="port" value="8000" />
+      <option name="host" value="" />
+      <option name="additionalOptions" value="" />
+      <option name="browserUrl" value="" />
+      <option name="runTestServer" value="false" />
+      <option name="runNoReload" value="false" />
+      <option name="useCustomRunCommand" value="false" />
+      <option name="customRunCommand" value="" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="cb1649c7-88f6-478a-978d-e41b554d2cb2" name="Default Changelist" comment="" />
+      <created>1612283191675</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1612283191675</updated>
+      <workItem from="1612283193064" duration="15000" />
+      <workItem from="1612283209383" duration="529000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
