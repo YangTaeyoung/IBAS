@@ -1,51 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="cb1649c7-88f6-478a-978d-e41b554d2cb2" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/IBAS.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/IBAS.iml" afterDir="false" />
+    <list default="true" id="cb1649c7-88f6-478a-978d-e41b554d2cb2" name="Default Changelist" comment="초기화..">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/django.log" beforeDir="false" afterPath="$PROJECT_DIR$/django.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/bin/gunicorn" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn-20.0.4.dist-info/INSTALLER" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn-20.0.4.dist-info/LICENSE" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn-20.0.4.dist-info/METADATA" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn-20.0.4.dist-info/RECORD" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn-20.0.4.dist-info/REQUESTED" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn-20.0.4.dist-info/WHEEL" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn-20.0.4.dist-info/entry_points.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn-20.0.4.dist-info/top_level.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/app/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/app/base.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/app/pasterapp.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/app/wsgiapp.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/arbiter.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/config.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/debug.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/errors.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/glogging.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/http/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/http/body.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/http/errors.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/http/message.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/http/parser.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/http/unreader.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/http/wsgi.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/instrument/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/instrument/statsd.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/pidfile.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/reloader.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/sock.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/systemd.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/util.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/workers/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/workers/base.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/workers/base_async.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/workers/geventlet.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/workers/ggevent.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/workers/gthread.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/workers/gtornado.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/workers/sync.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/lib/python3.8/site-packages/gunicorn/workers/workertmp.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -104,8 +62,31 @@
       <option name="presentableId" value="Default" />
       <updated>1612283191675</updated>
       <workItem from="1612283193064" duration="15000" />
-      <workItem from="1612283209383" duration="529000" />
+      <workItem from="1612283209383" duration="629000" />
+      <workItem from="1612285027573" duration="408000" />
     </task>
+    <task id="LOCAL-00001" summary="초기화..">
+      <created>1612283751068</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1612283751068</updated>
+    </task>
+    <task id="LOCAL-00002" summary="초기화..">
+      <created>1612283802075</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1612283802075</updated>
+    </task>
+    <task id="LOCAL-00003" summary="초기화..">
+      <created>1612283823415</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1612283823415</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -121,5 +102,10 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="초기화.." />
+    <option name="LAST_COMMIT_MESSAGE" value="초기화.." />
   </component>
 </project>
