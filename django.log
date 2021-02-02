@@ -5884,6 +5884,8 @@ Not Found: /favicon.ico
 [pid: 24895|app: 0|req: 10/10] 165.246.169.191 () {42 vars in 692 bytes} [Tue Feb  2 21:39:21 2021] GET /favicon.ico => generated 2132 bytes in 4 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
 [pid: 24895|app: 0|req: 11/11] 165.246.169.191 () {42 vars in 737 bytes} [Tue Feb  2 21:39:43 2021] GET / => generated 901 bytes in 1 msecs (HTTP/1.1 200) 5 headers in 166 bytes (1 switches on core 0)
 [pid: 24895|app: 0|req: 12/12] 165.246.169.191 () {42 vars in 737 bytes} [Tue Feb  2 21:39:43 2021] GET / => generated 901 bytes in 1 msecs (HTTP/1.1 200) 5 headers in 166 bytes (1 switches on core 0)
+<<<<<<< HEAD
+=======
 ...brutally killing workers...
 Gracefully killing worker 1 (pid: 24895)...
 worker 1 buried after 1 seconds
@@ -5958,3 +5960,4 @@ spawned uWSGI worker 1 (pid: 1757, cores: 1)
 Not Found: /favicon.ico
 [pid: 1757|app: 0|req: 2/2] 112.148.18.72 () {48 vars in 814 bytes} [Tue Feb  2 22:01:35 2021] GET /favicon.ico => generated 2132 bytes in 7 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
 [pid: 1757|app: 0|req: 3/3] 103.73.34.7 () {32 vars in 450 bytes} [Wed Feb  3 00:19:27 2021] GET / => generated 901 bytes in 1 msecs (HTTP/1.1 200) 5 headers in 166 bytes (1 switches on core 0)
+>>>>>>> 329f5fcbe2253d79283a55d83ebf3d01dc1334a5
