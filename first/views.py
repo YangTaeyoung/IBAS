@@ -5,4 +5,5 @@ from django.http import HttpResponse
 # Create your views here.
 
 def index(request):
-    return HttpResponse("반가워요 웹 팀 여러분")
+    return render(request, 'LightJo.html', {})
+
