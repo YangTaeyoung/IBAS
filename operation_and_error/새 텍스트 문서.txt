@@ -1,4 +1,0 @@
-- bad gateway 502 시
-IBAS 폴더 내에서
-uwsgi --ini uwsgi.ini
-sudo service nginx restart
