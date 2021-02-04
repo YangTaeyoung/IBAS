@@ -6026,3 +6026,83 @@ spawned uWSGI worker 1 (pid: 12087, cores: 1)
 [pid: 12087|app: 0|req: 1/1] 112.148.18.72 () {46 vars in 837 bytes} [Wed Feb  3 01:34:31 2021] GET / => generated 901 bytes in 17 msecs (HTTP/1.1 200) 5 headers in 166 bytes (1 switches on core 0)
 [pid: 12087|app: 0|req: 2/2] 85.204.95.215 () {32 vars in 446 bytes} [Wed Feb  3 01:43:03 2021] GET / => generated 901 bytes in 1 msecs (HTTP/1.1 200) 5 headers in 166 bytes (1 switches on core 0)
 [pid: 12087|app: 0|req: 3/3] 185.57.69.39 () {32 vars in 445 bytes} [Wed Feb  3 01:49:16 2021] GET / => generated 901 bytes in 1 msecs (HTTP/1.1 200) 5 headers in 166 bytes (1 switches on core 0)
+*** Starting uWSGI 2.0.19.1 (64bit) on [Fri Feb  5 00:07:35 2021] ***
+compiled with version: 9.3.0 on 27 January 2021 16:52:57
+os: Linux-5.8.0-41-generic #46~20.04.1-Ubuntu SMP Mon Jan 18 17:52:23 UTC 2021
+nodename: ibas-desktop
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 12
+current working directory: /home/ibas/Django/IBAS
+writing pidfile to /tmp/project-master.pid
+detected binary path: /home/ibas/Django/IBAS_venv/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+chdir() to /home/ibas/Django/IBAS
+your processes number limit is 127943
+your memory page size is 4096 bytes
+detected max file descriptor number: 1048576
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address /home/ibas/Django/IBAS/uwsgi.sock fd 3
+Python version: 3.8.5 (default, Jul 28 2020, 12:59:40)  [GCC 9.3.0]
+PEP 405 virtualenv detected: /home/ibas/Django/IBAS_venv
+Set PythonHome to /home/ibas/Django/IBAS_venv
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0x5611ca191870
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 145840 bytes (142 KB) for 1 cores
+*** Operational MODE: single process ***
+WSGI app 0 (mountpoint='') ready in 0 seconds on interpreter 0x5611ca191870 pid: 21009 (default app)
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI master process (pid: 21009)
+spawned uWSGI worker 1 (pid: 21011, cores: 1)
+[pid: 21011|app: 0|req: 1/1] 112.148.18.72 () {46 vars in 950 bytes} [Fri Feb  5 00:11:40 2021] GET / => generated 989 bytes in 74 msecs (HTTP/1.1 200) 6 headers in 180 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 2/2] 112.148.18.72 () {46 vars in 997 bytes} [Fri Feb  5 00:11:43 2021] GET /accounts/logout/ => generated 660 bytes in 20 msecs (HTTP/1.1 200) 7 headers in 348 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 3/3] 112.148.18.72 () {46 vars in 1013 bytes} [Fri Feb  5 00:11:45 2021] GET /accounts/logout/ => generated 660 bytes in 6 msecs (HTTP/1.1 200) 7 headers in 348 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 4/4] 112.148.18.72 () {46 vars in 1013 bytes} [Fri Feb  5 00:11:47 2021] GET /accounts/logout/ => generated 660 bytes in 7 msecs (HTTP/1.1 200) 7 headers in 348 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 5/5] 112.148.18.72 () {54 vars in 1196 bytes} [Fri Feb  5 00:11:48 2021] POST /accounts/logout/ => generated 0 bytes in 17 msecs (HTTP/1.1 302) 9 headers in 508 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 6/6] 112.148.18.72 () {48 vars in 1138 bytes} [Fri Feb  5 00:11:48 2021] GET / => generated 992 bytes in 1 msecs (HTTP/1.1 200) 6 headers in 180 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 7/7] 112.148.18.72 () {46 vars in 1135 bytes} [Fri Feb  5 00:11:49 2021] GET /accounts/google/login/ => generated 0 bytes in 9 msecs (HTTP/1.1 302) 8 headers in 604 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 8/8] 112.148.18.72 () {44 vars in 1695 bytes} [Fri Feb  5 00:11:53 2021] GET /accounts/google/login/callback/?state=c58JQKH2cPae&code=4%2F0AY0e-g7qHOXYACZWPQ-cGdBVqS5QR14hg1nrNZ1DO9MbuxC5rtUNQ8NXYthumGml24IXqg&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+openid&authuser=0&prompt=consent => generated 0 bytes in 549 msecs (HTTP/1.1 302) 10 headers in 843 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 9/9] 112.148.18.72 () {44 vars in 1217 bytes} [Fri Feb  5 00:11:54 2021] GET / => generated 998 bytes in 4 msecs (HTTP/1.1 200) 6 headers in 180 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 10/10] 112.148.18.72 () {46 vars in 1253 bytes} [Fri Feb  5 00:11:58 2021] GET /admin/ => generated 0 bytes in 16 msecs (HTTP/1.1 302) 9 headers in 331 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 11/11] 112.148.18.72 () {46 vars in 1290 bytes} [Fri Feb  5 00:11:58 2021] GET /admin/login/?next=/admin/ => generated 2608 bytes in 25 msecs (HTTP/1.1 200) 10 headers in 559 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 12/12] 112.148.18.72 () {44 vars in 938 bytes} [Fri Feb  5 00:11:58 2021] GET /admin/ => generated 0 bytes in 4 msecs (HTTP/1.1 302) 9 headers in 331 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 13/13] 112.148.18.72 () {44 vars in 975 bytes} [Fri Feb  5 00:11:58 2021] GET /admin/login/?next=/admin/ => generated 2382 bytes in 15 msecs (HTTP/1.1 200) 9 headers in 461 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 14/14] 112.148.18.72 () {54 vars in 1224 bytes} [Fri Feb  5 00:12:01 2021] POST /admin/login/?next=/admin/ => generated 0 bytes in 74 msecs (HTTP/1.1 302) 11 headers in 625 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 15/15] 112.148.18.72 () {48 vars in 1033 bytes} [Fri Feb  5 00:12:02 2021] GET /admin/ => generated 9410 bytes in 22 msecs (HTTP/1.1 200) 8 headers in 293 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 16/16] 112.148.18.72 () {46 vars in 1039 bytes} [Fri Feb  5 00:12:04 2021] GET /admin/socialaccount/socialaccount/ => generated 9142 bytes in 26 msecs (HTTP/1.1 200) 9 headers in 461 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 17/17] 112.148.18.72 () {44 vars in 858 bytes} [Fri Feb  5 00:12:04 2021] GET /admin/jsi18n/ => generated 8314 bytes in 5 msecs (HTTP/1.1 200) 6 headers in 189 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 18/18] 112.148.18.72 () {46 vars in 1002 bytes} [Fri Feb  5 00:12:07 2021] GET /admin/ => generated 9410 bytes in 19 msecs (HTTP/1.1 200) 8 headers in 293 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 19/19] 112.148.18.72 () {46 vars in 1003 bytes} [Fri Feb  5 00:12:08 2021] GET /admin/auth/user/ => generated 10785 bytes in 28 msecs (HTTP/1.1 200) 9 headers in 462 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 20/20] 112.148.18.72 () {44 vars in 840 bytes} [Fri Feb  5 00:12:08 2021] GET /admin/jsi18n/ => generated 8314 bytes in 4 msecs (HTTP/1.1 200) 6 headers in 189 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 21/21] 112.148.18.72 () {54 vars in 1198 bytes} [Fri Feb  5 00:12:14 2021] POST /admin/auth/user/ => generated 7402 bytes in 25 msecs (HTTP/1.1 200) 9 headers in 461 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 22/22] 112.148.18.72 () {54 vars in 1198 bytes} [Fri Feb  5 00:12:17 2021] POST /admin/auth/user/ => generated 0 bytes in 44 msecs (HTTP/1.1 302) 10 headers in 612 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 23/23] 112.148.18.72 () {48 vars in 1289 bytes} [Fri Feb  5 00:12:17 2021] GET /admin/auth/user/ => generated 10559 bytes in 30 msecs (HTTP/1.1 200) 10 headers in 560 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 24/24] 112.148.18.72 () {44 vars in 840 bytes} [Fri Feb  5 00:12:17 2021] GET /admin/jsi18n/ => generated 8314 bytes in 4 msecs (HTTP/1.1 200) 6 headers in 189 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 25/25] 112.148.18.72 () {46 vars in 1007 bytes} [Fri Feb  5 00:12:21 2021] GET /admin/logout/ => generated 1511 bytes in 23 msecs (HTTP/1.1 200) 9 headers in 392 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 26/26] 112.148.18.72 () {46 vars in 946 bytes} [Fri Feb  5 00:12:23 2021] GET /admin/ => generated 0 bytes in 1 msecs (HTTP/1.1 302) 9 headers in 331 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 27/27] 112.148.18.72 () {46 vars in 983 bytes} [Fri Feb  5 00:12:23 2021] GET /admin/login/?next=/admin/ => generated 2214 bytes in 12 msecs (HTTP/1.1 200) 9 headers in 461 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 28/28] 112.148.18.72 () {46 vars in 963 bytes} [Fri Feb  5 00:12:24 2021] GET /admin/logout/ => generated 0 bytes in 1 msecs (HTTP/1.1 302) 9 headers in 312 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 29/29] 112.148.18.72 () {46 vars in 949 bytes} [Fri Feb  5 00:12:24 2021] GET /admin/ => generated 0 bytes in 1 msecs (HTTP/1.1 302) 9 headers in 331 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 30/30] 112.148.18.72 () {46 vars in 986 bytes} [Fri Feb  5 00:12:24 2021] GET /admin/login/?next=/admin/ => generated 2214 bytes in 12 msecs (HTTP/1.1 200) 9 headers in 461 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 31/31] 112.148.18.72 () {46 vars in 969 bytes} [Fri Feb  5 00:12:25 2021] GET /admin/auth/user/ => generated 0 bytes in 1 msecs (HTTP/1.1 302) 9 headers in 341 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 32/32] 112.148.18.72 () {46 vars in 1006 bytes} [Fri Feb  5 00:12:25 2021] GET /admin/login/?next=/admin/auth/user/ => generated 2234 bytes in 12 msecs (HTTP/1.1 200) 9 headers in 461 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 33/33] 112.148.18.72 () {44 vars in 882 bytes} [Fri Feb  5 00:12:28 2021] GET / => generated 992 bytes in 1 msecs (HTTP/1.1 200) 6 headers in 180 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 34/34] 112.148.18.72 () {46 vars in 965 bytes} [Fri Feb  5 00:12:29 2021] GET /accounts/google/login/ => generated 0 bytes in 17 msecs (HTTP/1.1 302) 8 headers in 604 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 35/35] 112.148.18.72 () {44 vars in 1519 bytes} [Fri Feb  5 00:12:33 2021] GET /accounts/google/login/callback/?state=IJdWksWw6xvV&code=4%2F0AY0e-g7rCKQnwKrPIQ6RZUpu6FKATR742h2kYz_YTREFa2sA5NRxJ3hJcwYZ2dnoSAsiYw&scope=email+profile+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&authuser=0&prompt=none => generated 0 bytes in 523 msecs (HTTP/1.1 302) 10 headers in 739 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 36/36] 112.148.18.72 () {44 vars in 1113 bytes} [Fri Feb  5 00:12:34 2021] GET / => generated 998 bytes in 3 msecs (HTTP/1.1 200) 6 headers in 180 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 37/37] 112.148.18.72 () {44 vars in 1125 bytes} [Fri Feb  5 00:12:38 2021] GET /admin/ => generated 0 bytes in 4 msecs (HTTP/1.1 302) 9 headers in 331 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 38/38] 112.148.18.72 () {44 vars in 1162 bytes} [Fri Feb  5 00:12:38 2021] GET /admin/login/?next=/admin/ => generated 2534 bytes in 14 msecs (HTTP/1.1 200) 10 headers in 559 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 39/39] 112.148.18.72 () {54 vars in 1224 bytes} [Fri Feb  5 00:12:41 2021] POST /admin/login/?next=/admin/ => generated 0 bytes in 73 msecs (HTTP/1.1 302) 11 headers in 625 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 40/40] 112.148.18.72 () {48 vars in 1033 bytes} [Fri Feb  5 00:12:41 2021] GET /admin/ => generated 9394 bytes in 18 msecs (HTTP/1.1 200) 8 headers in 293 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 41/41] 112.148.18.72 () {46 vars in 1003 bytes} [Fri Feb  5 00:12:43 2021] GET /admin/auth/user/ => generated 10807 bytes in 30 msecs (HTTP/1.1 200) 9 headers in 462 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 42/42] 112.148.18.72 () {44 vars in 840 bytes} [Fri Feb  5 00:12:43 2021] GET /admin/jsi18n/ => generated 8314 bytes in 5 msecs (HTTP/1.1 200) 6 headers in 189 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 43/43] 112.148.18.72 () {44 vars in 926 bytes} [Fri Feb  5 00:13:19 2021] GET / => generated 989 bytes in 4 msecs (HTTP/1.1 200) 6 headers in 180 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 44/44] 112.148.18.72 () {46 vars in 997 bytes} [Fri Feb  5 00:13:22 2021] GET /accounts/logout/ => generated 660 bytes in 7 msecs (HTTP/1.1 200) 7 headers in 348 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 45/45] 112.148.18.72 () {54 vars in 1196 bytes} [Fri Feb  5 00:13:23 2021] POST /accounts/logout/ => generated 0 bytes in 15 msecs (HTTP/1.1 302) 9 headers in 508 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 46/46] 112.148.18.72 () {48 vars in 1138 bytes} [Fri Feb  5 00:13:23 2021] GET / => generated 992 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 180 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 47/47] 112.148.18.72 () {46 vars in 1135 bytes} [Fri Feb  5 00:13:25 2021] GET /accounts/google/login/ => generated 0 bytes in 13 msecs (HTTP/1.1 302) 8 headers in 604 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 48/48] 112.148.18.72 () {44 vars in 1691 bytes} [Fri Feb  5 00:13:28 2021] GET /accounts/google/login/callback/?state=8c88gAcNHVyE&code=4/0AY0e-g5qaClkLPnTJ3ANfSRzE6IThHsLzbdhKtYwO0B3g4J2qO9K9Ddjg2R1wKqoyUYEQw&scope=email%20profile%20https://www.googleapis.com/auth/userinfo.profile%20https://www.googleapis.com/auth/userinfo.email%20openid&authuser=1&hd=inha.edu&prompt=consent => generated 0 bytes in 550 msecs (HTTP/1.1 302) 10 headers in 847 bytes (1 switches on core 0)
+[pid: 21011|app: 0|req: 49/49] 112.148.18.72 () {44 vars in 1221 bytes} [Fri Feb  5 00:13:29 2021] GET / => generated 1015 bytes in 4 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
