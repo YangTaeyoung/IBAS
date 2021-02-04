@@ -40,9 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'first',
-    'social_login',
 
     # all auth
+
     'allauth',
     'allauth.account',
     'allauth.socialaccount',

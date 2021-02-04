@@ -2,3 +2,27 @@
 IBAS 폴더 내에서
 uwsgi --ini uwsgi.ini
 sudo service nginx restart
+
+- 잣같은 bad gateway 502 에러.. 다시 두 번째 해결 법 작성함.
+위에서는 소켓이 깨진 것이었으나, 애초에 병신같은 세팅이 문제였던 듯 함.
+
+일단 502에러가 떠서 찾아보니 log를 확인하라고 했음.
+nginx 친구가 uwsgi의 세팅 정보를 받아서 올리는 것이니
+var/log/nginx/error.log 를 살펴봄
+에러가 떠있어서 해당 내역으로 검색해보니 병신같은 timeout을 조정하라고 함.
+씨발 컨텐츠도 없는데 무슨 받는데 시간이 오래걸려? 라고 생각한 나는 이게 아니라고 직감.
+좆까라고 생각하고 nginx가 문제가 없으면 uwsgi에 문제가 있겠구나 하고 생각함.
+log를 살펴보니 이상한 에러가 있음
+
+에러 메시지: no request plugin is loaded, you will not be able to manage requests. you may need to install the package for your language of choice, or simply load it with --plugin.
+플러그인이 없다네?
+
+구글링 해보니 pip install uwsgi-plugin-python3를 받으라함.
+그래도 안됨.
+밑에 보니 then add uwsgi.ini add plugin = python3. 라고 써있음.
+개새끼들 양놈들은 이래서 안됨.
+그래서 plugin = python3 추가하고
+uwsgi --ini uwsgi.ini 명령어 실행시켜서 sock 파일 생성하고 nginx도 깔끔하게 restart함.
+문제 없이 잘 됨.
+
+개같은거
