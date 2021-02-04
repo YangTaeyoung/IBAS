@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="cb1649c7-88f6-478a-978d-e41b554d2cb2" name="Default Changelist" comment="DEBUG TXT 추">
+    <list default="true" id="cb1649c7-88f6-478a-978d-e41b554d2cb2" name="Default Changelist" comment="구글 로그인 이메일 필수로 받기 설">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/IBAS/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/IBAS/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/django.log" beforeDir="false" afterPath="$PROJECT_DIR$/django.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/first/templates/LightJo.html" beforeDir="false" afterPath="$PROJECT_DIR$/first/templates/LightJo.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -131,7 +132,14 @@
       <option name="project" value="LOCAL" />
       <updated>1612365019495</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="구글 로그인 이메일 필수로 받기 설">
+      <created>1612451649211</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1612451649211</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -153,6 +161,7 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="초기화.." />
     <MESSAGE value="DEBUG TXT 추" />
-    <option name="LAST_COMMIT_MESSAGE" value="DEBUG TXT 추" />
+    <MESSAGE value="구글 로그인 이메일 필수로 받기 설" />
+    <option name="LAST_COMMIT_MESSAGE" value="구글 로그인 이메일 필수로 받기 설" />
   </component>
 </project>
