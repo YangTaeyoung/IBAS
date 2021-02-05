@@ -8133,3 +8133,465 @@ spawned uWSGI worker 1 (pid: 11565, cores: 1)
 0130yang@gmail.com
 양태영
 [pid: 11565|app: 0|req: 8/8] 165.246.169.191 () {48 vars in 1341 bytes} [Fri Feb  5 15:24:51 2021] GET /?password=!1wEV9YJXvOeYergCKPLsOLTAG7ny9D2kmzd6OQbs => generated 1076 bytes in 7 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+왔냐?2
+[pid: 11565|app: 0|req: 9/9] 181.215.194.134 () {44 vars in 776 bytes} [Fri Feb  5 16:41:07 2021] GET / => generated 1197 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 11565|app: 0|req: 10/10] 165.246.169.191 () {46 vars in 1287 bytes} [Fri Feb  5 18:13:18 2021] GET /accounts/logout/ => generated 876 bytes in 8 msecs (HTTP/1.1 200) 8 headers in 446 bytes (1 switches on core 0)
+[pid: 11565|app: 0|req: 11/11] 165.246.169.191 () {54 vars in 1140 bytes} [Fri Feb  5 18:13:20 2021] POST /accounts/logout/ => generated 0 bytes in 12 msecs (HTTP/1.1 302) 9 headers in 508 bytes (1 switches on core 0)
+왔냐?2
+[pid: 11565|app: 0|req: 12/12] 165.246.169.191 () {48 vars in 1082 bytes} [Fri Feb  5 18:13:20 2021] GET / => generated 1197 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 11565|app: 0|req: 13/13] 165.246.169.191 () {46 vars in 1104 bytes} [Fri Feb  5 18:13:32 2021] GET /accounts/kakao/login/?method=oauth2 => generated 0 bytes in 15 msecs (HTTP/1.1 302) 8 headers in 548 bytes (1 switches on core 0)
+[pid: 11565|app: 0|req: 14/14] 165.246.169.191 () {46 vars in 1352 bytes} [Fri Feb  5 18:14:45 2021] GET /accounts/kakao/login/callback/?code=8tFDIbUtkQDa4TaP-cZvos6OPbMFXTD3VC2k8-JT_iTzwdeK_Ru6CVs_Xaap8VJymKAB4gorDNIAAAF3cXjrZA&state=KYJXpQHBKfxT => generated 0 bytes in 248 msecs (HTTP/1.1 302) 10 headers in 864 bytes (1 switches on core 0)
+[pid: 11565|app: 0|req: 15/15] 165.246.169.191 () {46 vars in 1217 bytes} [Fri Feb  5 18:14:46 2021] GET /pass => generated 0 bytes in 0 msecs (HTTP/1.1 301) 5 headers in 174 bytes (1 switches on core 0)
+[pid: 11565|app: 0|req: 16/16] 165.246.169.191 () {46 vars in 1219 bytes} [Fri Feb  5 18:14:46 2021] GET /pass/ => generated 114 bytes in 3 msecs (HTTP/1.1 200) 6 headers in 180 bytes (1 switches on core 0)
+유저 패스워드 !0pFnAZdkREJpUo2qv0nxNWprjpgnfDQlxku9erj5
+12
+김진재
+Internal Server Error: /
+Traceback (most recent call last):
+  File "/home/ibas/Django/IBAS_venv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/home/ibas/Django/IBAS_venv/lib/python3.8/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "./first/views.py", line 16, in index
+    email = member.extra_data['email']
+KeyError: 'email'
+[pid: 11565|app: 0|req: 17/17] 165.246.169.191 () {46 vars in 1323 bytes} [Fri Feb  5 18:14:46 2021] GET /?password=!0pFnAZdkREJpUo2qv0nxNWprjpgnfDQlxku9erj5 => generated 57249 bytes in 37 msecs (HTTP/1.1 500) 6 headers in 186 bytes (1 switches on core 0)
+유저 패스워드 !0pFnAZdkREJpUo2qv0nxNWprjpgnfDQlxku9erj5
+12
+김진재
+Internal Server Error: /
+Traceback (most recent call last):
+  File "/home/ibas/Django/IBAS_venv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/home/ibas/Django/IBAS_venv/lib/python3.8/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "./first/views.py", line 16, in index
+    email = member.extra_data['email']
+KeyError: 'email'
+[pid: 11565|app: 0|req: 18/18] 165.246.169.191 () {48 vars in 1354 bytes} [Fri Feb  5 18:17:29 2021] GET /?password=!0pFnAZdkREJpUo2qv0nxNWprjpgnfDQlxku9erj5 => generated 57386 bytes in 23 msecs (HTTP/1.1 500) 6 headers in 186 bytes (1 switches on core 0)
+Not Found: /c/
+[pid: 11565|app: 0|req: 19/19] 180.149.125.164 () {34 vars in 473 bytes} [Fri Feb  5 18:39:00 2021] GET /c/ => generated 2430 bytes in 4 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+...gracefully killing workers...
+Gracefully killing worker 1 (pid: 11565)...
+worker 1 buried after 1 seconds
+binary reloading uWSGI...
+chdir() to /home/ibas/Django/IBAS
+closing all non-uwsgi socket fds > 2 (max_fd = 1048576)...
+found fd 3 mapped to socket 0 (/home/ibas/Django/IBAS/uwsgi.sock)
+running /home/ibas/Django/IBAS_venv/bin/uwsgi
+[uWSGI] getting INI configuration from uwsgi.ini
+open("./python38_plugin.so"): No such file or directory [core/utils.c line 3732]
+!!! UNABLE to load uWSGI plugin: ./python38_plugin.so: cannot open shared object file: No such file or directory !!!
+*** Starting uWSGI 2.0.19.1 (64bit) on [Fri Feb  5 19:09:53 2021] ***
+compiled with version: 9.3.0 on 27 January 2021 16:52:57
+os: Linux-5.8.0-41-generic #46~20.04.1-Ubuntu SMP Mon Jan 18 17:52:23 UTC 2021
+nodename: ibas-desktop
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 12
+current working directory: /home/ibas/Django/IBAS
+detected binary path: /home/ibas/Django/IBAS_venv/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+chdir() to /home/ibas/Django/IBAS
+your processes number limit is 127943
+your memory page size is 4096 bytes
+detected max file descriptor number: 1048576
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 inherited UNIX address /home/ibas/Django/IBAS/uwsgi.sock fd 3
+Python version: 3.8.5 (default, Jul 28 2020, 12:59:40)  [GCC 9.3.0]
+PEP 405 virtualenv detected: /home/ibas/Django/IBAS_venv
+Set PythonHome to /home/ibas/Django/IBAS_venv
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0x561408fa2450
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 145840 bytes (142 KB) for 1 cores
+*** Operational MODE: single process ***
+WSGI app 0 (mountpoint='') ready in 0 seconds on interpreter 0x561408fa2450 pid: 4248 (default app)
+*** uWSGI is running in multiple interpreter mode ***
+gracefully (RE)spawned uWSGI master process (pid: 4248)
+spawned uWSGI worker 1 (pid: 14287, cores: 1)
+유저 패스워드 !0pFnAZdkREJpUo2qv0nxNWprjpgnfDQlxku9erj5
+12
+김진재
+None
+None
+[pid: 14287|app: 0|req: 1/1] 165.246.169.191 () {48 vars in 1354 bytes} [Fri Feb  5 19:10:03 2021] GET /?password=!0pFnAZdkREJpUo2qv0nxNWprjpgnfDQlxku9erj5 => generated 1164 bytes in 75 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 14287|app: 0|req: 2/2] 165.246.169.191 () {46 vars in 1300 bytes} [Fri Feb  5 19:10:07 2021] GET /accounts/logout/ => generated 877 bytes in 20 msecs (HTTP/1.1 200) 8 headers in 446 bytes (1 switches on core 0)
+[pid: 14287|app: 0|req: 3/3] 165.246.169.191 () {46 vars in 957 bytes} [Fri Feb  5 19:10:10 2021] GET /accounts/logout/ => generated 660 bytes in 7 msecs (HTTP/1.1 200) 7 headers in 348 bytes (1 switches on core 0)
+[pid: 14287|app: 0|req: 4/4] 165.246.169.191 () {54 vars in 1140 bytes} [Fri Feb  5 19:10:12 2021] POST /accounts/logout/ => generated 0 bytes in 16 msecs (HTTP/1.1 302) 9 headers in 508 bytes (1 switches on core 0)
+왔냐?2
+[pid: 14287|app: 0|req: 5/5] 165.246.169.191 () {48 vars in 1082 bytes} [Fri Feb  5 19:10:12 2021] GET / => generated 1197 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 14287|app: 0|req: 6/6] 165.246.169.191 () {46 vars in 1104 bytes} [Fri Feb  5 19:10:18 2021] GET /accounts/kakao/login/?method=oauth2 => generated 0 bytes in 15 msecs (HTTP/1.1 302) 8 headers in 548 bytes (1 switches on core 0)
+[pid: 14287|app: 0|req: 7/7] 165.246.169.191 () {44 vars in 1321 bytes} [Fri Feb  5 19:10:18 2021] GET /accounts/kakao/login/callback/?code=ouOc0Brg7WDQASR7RXMjCS4gdhjzZ6M5IDvrkLG-QglxxZ-XSXRod3tOb2I5Ksc9KTvmuQo9c5sAAAF3cavDsg&state=b2MCFRHoKOfI => generated 0 bytes in 148 msecs (HTTP/1.1 302) 10 headers in 864 bytes (1 switches on core 0)
+[pid: 14287|app: 0|req: 8/8] 165.246.169.191 () {44 vars in 1188 bytes} [Fri Feb  5 19:10:18 2021] GET /pass/ => generated 114 bytes in 3 msecs (HTTP/1.1 200) 6 headers in 180 bytes (1 switches on core 0)
+유저 패스워드 !0pFnAZdkREJpUo2qv0nxNWprjpgnfDQlxku9erj5
+12
+김진재
+None
+None
+[pid: 14287|app: 0|req: 9/9] 165.246.169.191 () {46 vars in 1323 bytes} [Fri Feb  5 19:10:18 2021] GET /?password=!0pFnAZdkREJpUo2qv0nxNWprjpgnfDQlxku9erj5 => generated 1164 bytes in 6 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+왔냐?2
+[pid: 14287|app: 0|req: 10/10] 165.246.169.191 () {46 vars in 1233 bytes} [Fri Feb  5 19:10:37 2021] GET / => generated 1156 bytes in 4 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 14287|app: 0|req: 11/11] 165.246.169.191 () {46 vars in 1249 bytes} [Fri Feb  5 19:10:39 2021] GET /accounts/logout/ => generated 877 bytes in 7 msecs (HTTP/1.1 200) 8 headers in 446 bytes (1 switches on core 0)
+[pid: 14287|app: 0|req: 12/12] 165.246.169.191 () {54 vars in 1140 bytes} [Fri Feb  5 19:10:40 2021] POST /accounts/logout/ => generated 0 bytes in 19 msecs (HTTP/1.1 302) 9 headers in 508 bytes (1 switches on core 0)
+왔냐?2
+[pid: 14287|app: 0|req: 13/13] 165.246.169.191 () {48 vars in 1082 bytes} [Fri Feb  5 19:10:40 2021] GET / => generated 1197 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 14287|app: 0|req: 14/14] 165.246.169.191 () {46 vars in 1079 bytes} [Fri Feb  5 19:10:42 2021] GET /accounts/google/login/ => generated 0 bytes in 11 msecs (HTTP/1.1 302) 8 headers in 604 bytes (1 switches on core 0)
+[pid: 14287|app: 0|req: 15/15] 165.246.169.191 () {44 vars in 1633 bytes} [Fri Feb  5 19:10:42 2021] GET /accounts/google/login/callback/?state=QnVgQgNCFY3S&code=4%2F0AY0e-g7e5U4sRse0VsUGfp3DsFa0pv-c8ae7BgvcAjikgin64L8cH641MhyxbHeZAL9NfA&scope=email+profile+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&authuser=0&prompt=none => generated 0 bytes in 469 msecs (HTTP/1.1 302) 10 headers in 851 bytes (1 switches on core 0)
+[pid: 14287|app: 0|req: 16/16] 165.246.169.191 () {44 vars in 1175 bytes} [Fri Feb  5 19:10:43 2021] GET /pass/ => generated 114 bytes in 3 msecs (HTTP/1.1 200) 6 headers in 180 bytes (1 switches on core 0)
+유저 패스워드 !1wEV9YJXvOeYergCKPLsOLTAG7ny9D2kmzd6OQbs
+8
+0130yang
+0130yang@gmail.com
+양태영
+[pid: 14287|app: 0|req: 17/17] 165.246.169.191 () {46 vars in 1310 bytes} [Fri Feb  5 19:10:43 2021] GET /?password=!1wEV9YJXvOeYergCKPLsOLTAG7ny9D2kmzd6OQbs => generated 1183 bytes in 7 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+왔냐?2
+[pid: 14287|app: 0|req: 18/18] 165.246.169.191 () {46 vars in 1220 bytes} [Fri Feb  5 19:10:45 2021] GET / => generated 1156 bytes in 4 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 14287|app: 0|req: 19/19] 165.246.169.191 () {46 vars in 1236 bytes} [Fri Feb  5 19:10:46 2021] GET /accounts/logout/ => generated 876 bytes in 7 msecs (HTTP/1.1 200) 8 headers in 446 bytes (1 switches on core 0)
+[pid: 14287|app: 0|req: 20/20] 165.246.169.191 () {54 vars in 1140 bytes} [Fri Feb  5 19:10:49 2021] POST /accounts/logout/ => generated 0 bytes in 16 msecs (HTTP/1.1 302) 9 headers in 508 bytes (1 switches on core 0)
+왔냐?2
+[pid: 14287|app: 0|req: 21/21] 165.246.169.191 () {48 vars in 1082 bytes} [Fri Feb  5 19:10:49 2021] GET / => generated 1197 bytes in 1 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 14287|app: 0|req: 22/22] 165.246.169.191 () {46 vars in 1104 bytes} [Fri Feb  5 19:10:50 2021] GET /accounts/kakao/login/?method=oauth2 => generated 0 bytes in 11 msecs (HTTP/1.1 302) 8 headers in 548 bytes (1 switches on core 0)
+[pid: 14287|app: 0|req: 23/23] 165.246.169.191 () {44 vars in 1321 bytes} [Fri Feb  5 19:10:50 2021] GET /accounts/kakao/login/callback/?code=NFhnK_cFO3Uk7DZt8blyEe1xAtlnk4a6tvTH4TNqEWreTfQ6mUe0Pg5XCxcrGOsvmd3ZsAo9cpgAAAF3caxBNQ&state=GzRfeM9Dhfrc => generated 0 bytes in 147 msecs (HTTP/1.1 302) 10 headers in 864 bytes (1 switches on core 0)
+[pid: 14287|app: 0|req: 24/24] 165.246.169.191 () {44 vars in 1188 bytes} [Fri Feb  5 19:10:50 2021] GET /pass/ => generated 114 bytes in 3 msecs (HTTP/1.1 200) 6 headers in 180 bytes (1 switches on core 0)
+유저 패스워드 !0pFnAZdkREJpUo2qv0nxNWprjpgnfDQlxku9erj5
+12
+김진재
+None
+None
+[pid: 14287|app: 0|req: 25/25] 165.246.169.191 () {46 vars in 1323 bytes} [Fri Feb  5 19:10:50 2021] GET /?password=!0pFnAZdkREJpUo2qv0nxNWprjpgnfDQlxku9erj5 => generated 1164 bytes in 7 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 14287|app: 0|req: 26/26] 165.246.169.191 () {46 vars in 1300 bytes} [Fri Feb  5 19:14:40 2021] GET /accounts/logout/ => generated 877 bytes in 6 msecs (HTTP/1.1 200) 8 headers in 446 bytes (1 switches on core 0)
+[pid: 14287|app: 0|req: 27/27] 165.246.169.191 () {54 vars in 1140 bytes} [Fri Feb  5 19:14:41 2021] POST /accounts/logout/ => generated 0 bytes in 16 msecs (HTTP/1.1 302) 9 headers in 508 bytes (1 switches on core 0)
+왔냐?2
+[pid: 14287|app: 0|req: 28/28] 165.246.169.191 () {48 vars in 1082 bytes} [Fri Feb  5 19:14:41 2021] GET / => generated 1274 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+왔냐?2
+[pid: 14287|app: 0|req: 29/29] 165.246.169.191 () {48 vars in 1082 bytes} [Fri Feb  5 19:15:38 2021] GET / => generated 1211 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 14287|app: 0|req: 30/30] 165.246.169.191 () {46 vars in 1077 bytes} [Fri Feb  5 19:15:41 2021] GET /accounts/naver/login/ => generated 0 bytes in 14 msecs (HTTP/1.1 302) 8 headers in 537 bytes (1 switches on core 0)
+[pid: 14287|app: 0|req: 31/31] 165.246.169.191 () {44 vars in 1185 bytes} [Fri Feb  5 19:15:59 2021] GET /accounts/naver/login/callback/?code=wDhlzzzQjexXnBc5rI&state=mslItuFz0MFB => generated 0 bytes in 419 msecs (HTTP/1.1 302) 10 headers in 852 bytes (1 switches on core 0)
+[pid: 14287|app: 0|req: 32/32] 165.246.169.191 () {44 vars in 1176 bytes} [Fri Feb  5 19:15:59 2021] GET /pass/ => generated 114 bytes in 4 msecs (HTTP/1.1 200) 6 headers in 180 bytes (1 switches on core 0)
+유저 패스워드 !JbLWiG7XOlNObUyEIpc6UAGUvMM2Sk2Y3dRzn7h2
+10
+apxkf9632
+apxkf9632@naver.com
+양태영
+[pid: 14287|app: 0|req: 33/33] 165.246.169.191 () {46 vars in 1311 bytes} [Fri Feb  5 19:15:59 2021] GET /?password=!JbLWiG7XOlNObUyEIpc6UAGUvMM2Sk2Y3dRzn7h2 => generated 1176 bytes in 4 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+유저 패스워드 !JbLWiG7XOlNObUyEIpc6UAGUvMM2Sk2Y3dRzn7h2
+10
+apxkf9632
+apxkf9632@naver.com
+양태영
+[pid: 14287|app: 0|req: 34/34] 165.246.169.191 () {48 vars in 1342 bytes} [Fri Feb  5 19:21:07 2021] GET /?password=!JbLWiG7XOlNObUyEIpc6UAGUvMM2Sk2Y3dRzn7h2 => generated 1176 bytes in 6 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 14287|app: 0|req: 35/35] 165.246.169.191 () {46 vars in 1288 bytes} [Fri Feb  5 19:21:07 2021] GET /accounts/logout/ => generated 877 bytes in 8 msecs (HTTP/1.1 200) 8 headers in 446 bytes (1 switches on core 0)
+[pid: 14287|app: 0|req: 36/36] 165.246.169.191 () {54 vars in 1140 bytes} [Fri Feb  5 19:21:09 2021] POST /accounts/logout/ => generated 0 bytes in 16 msecs (HTTP/1.1 302) 9 headers in 508 bytes (1 switches on core 0)
+왔냐?2
+[pid: 14287|app: 0|req: 37/37] 165.246.169.191 () {48 vars in 1082 bytes} [Fri Feb  5 19:21:09 2021] GET / => generated 1213 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+...gracefully killing workers...
+Gracefully killing worker 1 (pid: 14287)...
+worker 1 buried after 1 seconds
+binary reloading uWSGI...
+chdir() to /home/ibas/Django/IBAS
+closing all non-uwsgi socket fds > 2 (max_fd = 1048576)...
+found fd 3 mapped to socket 0 (/home/ibas/Django/IBAS/uwsgi.sock)
+running /home/ibas/Django/IBAS_venv/bin/uwsgi
+[uWSGI] getting INI configuration from uwsgi.ini
+open("./python38_plugin.so"): No such file or directory [core/utils.c line 3732]
+!!! UNABLE to load uWSGI plugin: ./python38_plugin.so: cannot open shared object file: No such file or directory !!!
+*** Starting uWSGI 2.0.19.1 (64bit) on [Fri Feb  5 19:22:49 2021] ***
+compiled with version: 9.3.0 on 27 January 2021 16:52:57
+os: Linux-5.8.0-41-generic #46~20.04.1-Ubuntu SMP Mon Jan 18 17:52:23 UTC 2021
+nodename: ibas-desktop
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 12
+current working directory: /home/ibas/Django/IBAS
+detected binary path: /home/ibas/Django/IBAS_venv/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+chdir() to /home/ibas/Django/IBAS
+your processes number limit is 127943
+your memory page size is 4096 bytes
+detected max file descriptor number: 1048576
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 inherited UNIX address /home/ibas/Django/IBAS/uwsgi.sock fd 3
+Python version: 3.8.5 (default, Jul 28 2020, 12:59:40)  [GCC 9.3.0]
+PEP 405 virtualenv detected: /home/ibas/Django/IBAS_venv
+Set PythonHome to /home/ibas/Django/IBAS_venv
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0x558e52295450
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 145840 bytes (142 KB) for 1 cores
+*** Operational MODE: single process ***
+WSGI app 0 (mountpoint='') ready in 0 seconds on interpreter 0x558e52295450 pid: 4248 (default app)
+*** uWSGI is running in multiple interpreter mode ***
+gracefully (RE)spawned uWSGI master process (pid: 4248)
+spawned uWSGI worker 1 (pid: 14769, cores: 1)
+왔냐?2
+[pid: 14769|app: 0|req: 1/1] 165.246.169.191 () {48 vars in 1082 bytes} [Fri Feb  5 19:22:53 2021] GET / => generated 1213 bytes in 69 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+왔냐?2
+[pid: 14769|app: 0|req: 2/2] 165.246.169.191 () {48 vars in 1082 bytes} [Fri Feb  5 19:22:53 2021] GET / => generated 1213 bytes in 3 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 14769|app: 0|req: 3/3] 165.246.169.191 () {46 vars in 1079 bytes} [Fri Feb  5 19:22:56 2021] GET /accounts/google/login/ => generated 0 bytes in 20 msecs (HTTP/1.1 302) 8 headers in 604 bytes (1 switches on core 0)
+[pid: 14769|app: 0|req: 4/4] 165.246.169.191 () {44 vars in 1633 bytes} [Fri Feb  5 19:22:57 2021] GET /accounts/google/login/callback/?state=O25lIbPYjkP6&code=4%2F0AY0e-g5z5YHfF8SHc51sLO73h-W9quAilI7eN5G-HFx4wX2dQHk9_J5hr7qBh_KE6fTROA&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+openid&authuser=0&prompt=none => generated 0 bytes in 558 msecs (HTTP/1.1 302) 10 headers in 851 bytes (1 switches on core 0)
+[pid: 14769|app: 0|req: 5/5] 165.246.169.191 () {44 vars in 1175 bytes} [Fri Feb  5 19:22:57 2021] GET /pass/ => generated 114 bytes in 4 msecs (HTTP/1.1 200) 6 headers in 180 bytes (1 switches on core 0)
+유저 패스워드 !1wEV9YJXvOeYergCKPLsOLTAG7ny9D2kmzd6OQbs
+8
+0130yang
+0130yang@gmail.com
+양태영
+[pid: 14769|app: 0|req: 6/6] 165.246.169.191 () {46 vars in 1310 bytes} [Fri Feb  5 19:22:57 2021] GET /?password=!1wEV9YJXvOeYergCKPLsOLTAG7ny9D2kmzd6OQbs => generated 1175 bytes in 6 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 14769|app: 0|req: 7/7] 165.246.169.191 () {46 vars in 1287 bytes} [Fri Feb  5 19:23:02 2021] GET /accounts/logout/ => generated 876 bytes in 7 msecs (HTTP/1.1 200) 8 headers in 446 bytes (1 switches on core 0)
+[pid: 14769|app: 0|req: 8/8] 165.246.169.191 () {54 vars in 1140 bytes} [Fri Feb  5 19:23:03 2021] POST /accounts/logout/ => generated 0 bytes in 11 msecs (HTTP/1.1 302) 9 headers in 508 bytes (1 switches on core 0)
+왔냐?2
+[pid: 14769|app: 0|req: 9/9] 165.246.169.191 () {48 vars in 1082 bytes} [Fri Feb  5 19:23:03 2021] GET / => generated 1213 bytes in 1 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+Invalid HTTP_HOST header: '_'. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /
+[pid: 14769|app: 0|req: 10/10] 173.230.146.147 () {26 vars in 263 bytes} [Fri Feb  5 19:25:57 2021] GET / => generated 57151 bytes in 36 msecs (HTTP/1.0 400) 3 headers in 116 bytes (1 switches on core 0)
+Invalid HTTP_HOST header: '_'. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /
+[pid: 14769|app: 0|req: 11/11] 46.101.92.113 () {26 vars in 261 bytes} [Fri Feb  5 19:26:15 2021] GET / => generated 57149 bytes in 20 msecs (HTTP/1.0 400) 3 headers in 116 bytes (1 switches on core 0)
+Invalid HTTP_HOST header: '_'. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /login
+[pid: 14769|app: 0|req: 12/12] 61.160.196.102 () {26 vars in 272 bytes} [Fri Feb  5 19:29:40 2021] GET /login => generated 57210 bytes in 23 msecs (HTTP/1.0 400) 3 headers in 116 bytes (1 switches on core 0)
+Invalid HTTP_HOST header: '_'. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /jenkins/login
+[pid: 14769|app: 0|req: 13/13] 61.160.196.102 () {26 vars in 288 bytes} [Fri Feb  5 19:29:40 2021] GET /jenkins/login => generated 57306 bytes in 21 msecs (HTTP/1.0 400) 3 headers in 116 bytes (1 switches on core 0)
+Invalid HTTP_HOST header: '_'. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+Fri Feb  5 19:30:40 2021 - SIGPIPE: writing to a closed pipe/socket/fd (probably the client disconnected) on request /manager/html (ip 61.160.196.102) !!!
+Fri Feb  5 19:30:40 2021 - uwsgi_response_writev_headers_and_body_do(): Broken pipe [core/writer.c line 306] during GET /manager/html (61.160.196.102)
+OSError: write error
+[pid: 14769|app: 0|req: 14/14] 61.160.196.102 () {28 vars in 338 bytes} [Fri Feb  5 19:30:40 2021] GET /manager/html => generated 0 bytes in 24 msecs (HTTP/1.0 400) 3 headers in 0 bytes (0 switches on core 0)
+왔냐?2
+[pid: 14769|app: 0|req: 15/15] 165.246.169.191 () {48 vars in 1082 bytes} [Fri Feb  5 19:32:24 2021] GET / => generated 1213 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+왔냐?2
+[pid: 14769|app: 0|req: 16/16] 165.246.169.191 () {48 vars in 1082 bytes} [Fri Feb  5 19:32:26 2021] GET / => generated 1213 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+왔냐?2
+[pid: 14769|app: 0|req: 17/17] 165.246.169.191 () {48 vars in 1082 bytes} [Fri Feb  5 19:32:26 2021] GET / => generated 1213 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+...gracefully killing workers...
+Gracefully killing worker 1 (pid: 14769)...
+worker 1 buried after 1 seconds
+binary reloading uWSGI...
+chdir() to /home/ibas/Django/IBAS
+closing all non-uwsgi socket fds > 2 (max_fd = 1048576)...
+found fd 3 mapped to socket 0 (/home/ibas/Django/IBAS/uwsgi.sock)
+running /home/ibas/Django/IBAS_venv/bin/uwsgi
+[uWSGI] getting INI configuration from uwsgi.ini
+open("./python38_plugin.so"): No such file or directory [core/utils.c line 3732]
+!!! UNABLE to load uWSGI plugin: ./python38_plugin.so: cannot open shared object file: No such file or directory !!!
+*** Starting uWSGI 2.0.19.1 (64bit) on [Fri Feb  5 19:32:29 2021] ***
+compiled with version: 9.3.0 on 27 January 2021 16:52:57
+os: Linux-5.8.0-41-generic #46~20.04.1-Ubuntu SMP Mon Jan 18 17:52:23 UTC 2021
+nodename: ibas-desktop
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 12
+current working directory: /home/ibas/Django/IBAS
+detected binary path: /home/ibas/Django/IBAS_venv/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+chdir() to /home/ibas/Django/IBAS
+your processes number limit is 127943
+your memory page size is 4096 bytes
+detected max file descriptor number: 1048576
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 inherited UNIX address /home/ibas/Django/IBAS/uwsgi.sock fd 3
+Python version: 3.8.5 (default, Jul 28 2020, 12:59:40)  [GCC 9.3.0]
+PEP 405 virtualenv detected: /home/ibas/Django/IBAS_venv
+Set PythonHome to /home/ibas/Django/IBAS_venv
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0x56156127b450
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 145840 bytes (142 KB) for 1 cores
+*** Operational MODE: single process ***
+WSGI app 0 (mountpoint='') ready in 1 seconds on interpreter 0x56156127b450 pid: 4248 (default app)
+*** uWSGI is running in multiple interpreter mode ***
+gracefully (RE)spawned uWSGI master process (pid: 4248)
+spawned uWSGI worker 1 (pid: 15333, cores: 1)
+왔냐?2
+[pid: 15333|app: 0|req: 1/1] 165.246.169.191 () {48 vars in 1082 bytes} [Fri Feb  5 19:32:32 2021] GET / => generated 1213 bytes in 78 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+왔냐?2
+[pid: 15333|app: 0|req: 2/2] 165.246.169.191 () {48 vars in 1082 bytes} [Fri Feb  5 19:32:33 2021] GET / => generated 1213 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 15333|app: 0|req: 3/3] 165.246.169.191 () {46 vars in 1079 bytes} [Fri Feb  5 19:32:34 2021] GET /accounts/google/login/ => generated 0 bytes in 15 msecs (HTTP/1.1 302) 8 headers in 604 bytes (1 switches on core 0)
+[pid: 15333|app: 0|req: 4/4] 165.246.169.191 () {44 vars in 1633 bytes} [Fri Feb  5 19:32:34 2021] GET /accounts/google/login/callback/?state=lQkvu3DIjFKc&code=4%2F0AY0e-g73rdntPkRy8CDVoIt3EeA3eQLpfiivpxfSXFeV-loiGx4TeNG4KwRv48hQJRJ8_g&scope=email+profile+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&authuser=0&prompt=none => generated 0 bytes in 586 msecs (HTTP/1.1 302) 10 headers in 851 bytes (1 switches on core 0)
+[pid: 15333|app: 0|req: 5/5] 165.246.169.191 () {44 vars in 1175 bytes} [Fri Feb  5 19:32:35 2021] GET /pass/ => generated 330 bytes in 3 msecs (HTTP/1.1 200) 7 headers in 348 bytes (1 switches on core 0)
+왔냐?2
+[pid: 15333|app: 0|req: 6/6] 165.246.169.191 () {46 vars in 1220 bytes} [Fri Feb  5 19:33:54 2021] GET / => generated 1148 bytes in 5 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+왔냐?2
+[pid: 15333|app: 0|req: 7/7] 165.246.169.191 () {48 vars in 1251 bytes} [Fri Feb  5 19:33:55 2021] GET / => generated 1148 bytes in 5 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 15333|app: 0|req: 8/8] 165.246.169.191 () {46 vars in 1236 bytes} [Fri Feb  5 19:33:56 2021] GET /accounts/logout/ => generated 876 bytes in 6 msecs (HTTP/1.1 200) 8 headers in 446 bytes (1 switches on core 0)
+[pid: 15333|app: 0|req: 9/9] 165.246.169.191 () {54 vars in 1140 bytes} [Fri Feb  5 19:33:57 2021] POST /accounts/logout/ => generated 0 bytes in 16 msecs (HTTP/1.1 302) 9 headers in 508 bytes (1 switches on core 0)
+왔냐?2
+[pid: 15333|app: 0|req: 10/10] 165.246.169.191 () {48 vars in 1082 bytes} [Fri Feb  5 19:33:57 2021] GET / => generated 1213 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 15333|app: 0|req: 11/11] 165.246.169.191 () {46 vars in 1079 bytes} [Fri Feb  5 19:33:58 2021] GET /accounts/google/login/ => generated 0 bytes in 10 msecs (HTTP/1.1 302) 8 headers in 604 bytes (1 switches on core 0)
+[pid: 15333|app: 0|req: 12/12] 165.246.169.191 () {44 vars in 1633 bytes} [Fri Feb  5 19:33:58 2021] GET /accounts/google/login/callback/?state=6bFreJTNPCLv&code=4%2F0AY0e-g4_gisXdPxO9t5LvbAKA2tyMYxrqHLFJi074xnO_czFHsgSZQMLnI3g6tnw8jTH4A&scope=email+profile+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&authuser=0&prompt=none => generated 0 bytes in 467 msecs (HTTP/1.1 302) 10 headers in 851 bytes (1 switches on core 0)
+[pid: 15333|app: 0|req: 13/13] 165.246.169.191 () {44 vars in 1175 bytes} [Fri Feb  5 19:33:59 2021] GET /pass/ => generated 364 bytes in 4 msecs (HTTP/1.1 200) 7 headers in 348 bytes (1 switches on core 0)
+유저 패스워드 !1wEV9YJXvOeYergCKPLsOLTAG7ny9D2kmzd6OQbs
+8
+0130yang
+0130yang@gmail.com
+양태영
+[pid: 15333|app: 0|req: 14/14] 165.246.169.191 () {54 vars in 1394 bytes} [Fri Feb  5 19:33:59 2021] POST / => generated 1175 bytes in 8 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 15333|app: 0|req: 15/15] 165.246.169.191 () {46 vars in 1236 bytes} [Fri Feb  5 19:38:34 2021] GET /accounts/logout/ => generated 876 bytes in 7 msecs (HTTP/1.1 200) 8 headers in 446 bytes (1 switches on core 0)
+[pid: 15333|app: 0|req: 16/16] 165.246.169.191 () {46 vars in 957 bytes} [Fri Feb  5 19:38:36 2021] GET /accounts/logout/ => generated 660 bytes in 6 msecs (HTTP/1.1 200) 7 headers in 348 bytes (1 switches on core 0)
+[pid: 15333|app: 0|req: 17/17] 165.246.169.191 () {54 vars in 1140 bytes} [Fri Feb  5 19:38:43 2021] POST /accounts/logout/ => generated 0 bytes in 15 msecs (HTTP/1.1 302) 9 headers in 508 bytes (1 switches on core 0)
+왔냐?2
+[pid: 15333|app: 0|req: 18/18] 165.246.169.191 () {48 vars in 1082 bytes} [Fri Feb  5 19:38:43 2021] GET / => generated 1213 bytes in 1 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 15333|app: 0|req: 19/19] 165.246.169.191 () {46 vars in 1079 bytes} [Fri Feb  5 19:39:06 2021] GET /accounts/google/login/ => generated 0 bytes in 15 msecs (HTTP/1.1 302) 8 headers in 604 bytes (1 switches on core 0)
+[pid: 15333|app: 0|req: 20/20] 165.246.169.191 () {44 vars in 1633 bytes} [Fri Feb  5 19:39:06 2021] GET /accounts/google/login/callback/?state=wGhSxxwzeg4M&code=4%2F0AY0e-g5xFuY7BuSKV9w04X8JA0flzcntXi4xQWXSeU9ZpDserSNZpxpUNEpm9DHf7gfT2g&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+openid&authuser=0&prompt=none => generated 0 bytes in 541 msecs (HTTP/1.1 302) 10 headers in 851 bytes (1 switches on core 0)
+[pid: 15333|app: 0|req: 21/21] 165.246.169.191 () {44 vars in 1175 bytes} [Fri Feb  5 19:39:07 2021] GET /pass/ => generated 863 bytes in 3 msecs (HTTP/1.1 200) 7 headers in 348 bytes (1 switches on core 0)
+유저 패스워드 !1wEV9YJXvOeYergCKPLsOLTAG7ny9D2kmzd6OQbs
+8
+0130yang
+0130yang@gmail.com
+양태영
+[pid: 15333|app: 0|req: 22/22] 165.246.169.191 () {54 vars in 1394 bytes} [Fri Feb  5 19:39:07 2021] POST / => generated 1175 bytes in 6 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 15333|app: 0|req: 23/23] 165.246.169.191 () {46 vars in 1236 bytes} [Fri Feb  5 19:39:12 2021] GET /accounts/logout/ => generated 876 bytes in 7 msecs (HTTP/1.1 200) 8 headers in 446 bytes (1 switches on core 0)
+*** Starting uWSGI 2.0.19.1 (64bit) on [Fri Feb  5 19:45:41 2021] ***
+compiled with version: 9.3.0 on 27 January 2021 16:52:57
+os: Linux-5.8.0-41-generic #46~20.04.1-Ubuntu SMP Mon Jan 18 17:52:23 UTC 2021
+nodename: ibas-desktop
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 12
+current working directory: /home/ibas/Django/IBAS
+writing pidfile to /tmp/project-master.pid
+detected binary path: /home/ibas/Django/IBAS_venv/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+chdir() to /home/ibas/Django/IBAS
+your processes number limit is 127943
+your memory page size is 4096 bytes
+detected max file descriptor number: 1048576
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address /home/ibas/Django/IBAS/uwsgi.sock fd 3
+Python version: 3.8.5 (default, Jul 28 2020, 12:59:40)  [GCC 9.3.0]
+PEP 405 virtualenv detected: /home/ibas/Django/IBAS_venv
+Set PythonHome to /home/ibas/Django/IBAS_venv
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0x555fc4f21640
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 145840 bytes (142 KB) for 1 cores
+*** Operational MODE: single process ***
+WSGI app 0 (mountpoint='') ready in 1 seconds on interpreter 0x555fc4f21640 pid: 3762 (default app)
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI master process (pid: 3762)
+spawned uWSGI worker 1 (pid: 3764, cores: 1)
+왔냐?2
+[pid: 3764|app: 0|req: 1/1] 165.246.169.191 () {44 vars in 870 bytes} [Fri Feb  5 19:45:49 2021] GET / => generated 1148 bytes in 81 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+Not Found: /favicon.ico
+[pid: 3764|app: 0|req: 2/2] 165.246.169.191 () {44 vars in 825 bytes} [Fri Feb  5 19:45:49 2021] GET /favicon.ico => generated 2457 bytes in 9 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+[pid: 3764|app: 0|req: 3/3] 165.246.169.191 () {46 vars in 941 bytes} [Fri Feb  5 19:45:50 2021] GET /accounts/logout/ => generated 0 bytes in 23 msecs (HTTP/1.1 302) 9 headers in 508 bytes (1 switches on core 0)
+왔냐?2
+[pid: 3764|app: 0|req: 4/4] 165.246.169.191 () {46 vars in 1035 bytes} [Fri Feb  5 19:45:50 2021] GET / => generated 1213 bytes in 1 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 3764|app: 0|req: 5/5] 165.246.169.191 () {46 vars in 1079 bytes} [Fri Feb  5 19:45:53 2021] GET /accounts/google/login/ => generated 0 bytes in 14 msecs (HTTP/1.1 302) 8 headers in 604 bytes (1 switches on core 0)
+[pid: 3764|app: 0|req: 6/6] 165.246.169.191 () {44 vars in 1633 bytes} [Fri Feb  5 19:45:53 2021] GET /accounts/google/login/callback/?state=RVIFofyprSLc&code=4%2F0AY0e-g4GMwtRM-__gcK7oGRmDg2ILbjR598upFFUERB4qC94kfsHRRmOAHnXpBWBL5Kx8Q&scope=email+profile+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&authuser=0&prompt=none => generated 0 bytes in 624 msecs (HTTP/1.1 302) 10 headers in 851 bytes (1 switches on core 0)
+[pid: 3764|app: 0|req: 7/7] 165.246.169.191 () {44 vars in 1175 bytes} [Fri Feb  5 19:45:54 2021] GET /pass/ => generated 863 bytes in 4 msecs (HTTP/1.1 200) 7 headers in 348 bytes (1 switches on core 0)
+유저 패스워드 !1wEV9YJXvOeYergCKPLsOLTAG7ny9D2kmzd6OQbs
+8
+0130yang
+0130yang@gmail.com
+양태영
+[pid: 3764|app: 0|req: 8/8] 165.246.169.191 () {54 vars in 1394 bytes} [Fri Feb  5 19:45:54 2021] POST / => generated 1175 bytes in 6 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 3764|app: 0|req: 9/9] 165.246.169.191 () {46 vars in 1236 bytes} [Fri Feb  5 19:45:55 2021] GET /accounts/logout/ => generated 0 bytes in 12 msecs (HTTP/1.1 302) 9 headers in 741 bytes (1 switches on core 0)
+왔냐?2
+[pid: 3764|app: 0|req: 10/10] 165.246.169.191 () {46 vars in 1268 bytes} [Fri Feb  5 19:45:55 2021] GET / => generated 1213 bytes in 1 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 3764|app: 0|req: 11/11] 165.246.169.191 () {46 vars in 1312 bytes} [Fri Feb  5 19:45:59 2021] GET /accounts/google/login/ => generated 0 bytes in 8 msecs (HTTP/1.1 302) 8 headers in 604 bytes (1 switches on core 0)
+Fri Feb  5 19:45:59 2021 - SIGPIPE: writing to a closed pipe/socket/fd (probably the client disconnected) on request /accounts/google/login/callback/?state=Lib61NVP6Jrj&code=4%2F0AY0e-g7hpXUGmeWxBCC0xLDZ65IIhB0zmwuYFggpVZY5YPZNqqzekIxiXl5Zcn5bvh0xJg&scope=email+profile+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&authuser=0&prompt=none (ip 165.246.169.191) !!!
+Fri Feb  5 19:45:59 2021 - uwsgi_response_write_headers_do(): Broken pipe [core/writer.c line 248] during GET /accounts/google/login/callback/?state=Lib61NVP6Jrj&code=4%2F0AY0e-g7hpXUGmeWxBCC0xLDZ65IIhB0zmwuYFggpVZY5YPZNqqzekIxiXl5Zcn5bvh0xJg&scope=email+profile+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&authuser=0&prompt=none (165.246.169.191)
+OSError: write error
+[pid: 3764|app: 0|req: 12/12] 165.246.169.191 () {44 vars in 1866 bytes} [Fri Feb  5 19:45:59 2021] GET /accounts/google/login/callback/?state=Lib61NVP6Jrj&code=4%2F0AY0e-g7hpXUGmeWxBCC0xLDZ65IIhB0zmwuYFggpVZY5YPZNqqzekIxiXl5Zcn5bvh0xJg&scope=email+profile+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&authuser=0&prompt=none => generated 0 bytes in 460 msecs (HTTP/1.1 302) 10 headers in 0 bytes (0 switches on core 0)
+[pid: 3764|app: 0|req: 13/13] 165.246.169.191 () {46 vars in 1356 bytes} [Fri Feb  5 19:45:59 2021] GET /accounts/google/login/ => generated 0 bytes in 6 msecs (HTTP/1.1 302) 8 headers in 604 bytes (1 switches on core 0)
+[pid: 3764|app: 0|req: 14/14] 165.246.169.191 () {44 vars in 1866 bytes} [Fri Feb  5 19:46:00 2021] GET /accounts/google/login/callback/?state=Dn429XI8Q9lN&code=4%2F0AY0e-g6ZDTkHrzPwR8irS3e5sQT3va2OK8KQP9MzPGLSbHuv8RC8R_xaIhZ6NM__yRdUIg&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+openid&authuser=0&prompt=none => generated 0 bytes in 454 msecs (HTTP/1.1 302) 10 headers in 1084 bytes (1 switches on core 0)
+[pid: 3764|app: 0|req: 15/15] 165.246.169.191 () {44 vars in 1408 bytes} [Fri Feb  5 19:46:00 2021] GET /pass/ => generated 863 bytes in 5 msecs (HTTP/1.1 200) 7 headers in 348 bytes (1 switches on core 0)
+유저 패스워드 !1wEV9YJXvOeYergCKPLsOLTAG7ny9D2kmzd6OQbs
+8
+0130yang
+0130yang@gmail.com
+양태영
+[pid: 3764|app: 0|req: 16/16] 165.246.169.191 () {54 vars in 1627 bytes} [Fri Feb  5 19:46:00 2021] POST / => generated 1175 bytes in 6 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 3764|app: 0|req: 17/17] 165.246.169.191 () {46 vars in 1469 bytes} [Fri Feb  5 19:46:01 2021] GET /accounts/logout/ => generated 0 bytes in 16 msecs (HTTP/1.1 302) 9 headers in 974 bytes (1 switches on core 0)
+왔냐?2
+[pid: 3764|app: 0|req: 18/18] 165.246.169.191 () {46 vars in 1501 bytes} [Fri Feb  5 19:46:01 2021] GET / => generated 1213 bytes in 1 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 3764|app: 0|req: 19/19] 165.246.169.191 () {46 vars in 1543 bytes} [Fri Feb  5 19:46:02 2021] GET /accounts/naver/login/ => generated 0 bytes in 8 msecs (HTTP/1.1 302) 8 headers in 537 bytes (1 switches on core 0)
+[pid: 3764|app: 0|req: 20/20] 165.246.169.191 () {44 vars in 1651 bytes} [Fri Feb  5 19:46:15 2021] GET /accounts/naver/login/callback/?code=5oq1fiibvks3Jh2p60&state=CzFcxPYkzSqT => generated 0 bytes in 379 msecs (HTTP/1.1 302) 10 headers in 1318 bytes (1 switches on core 0)
+[pid: 3764|app: 0|req: 21/21] 165.246.169.191 () {44 vars in 1642 bytes} [Fri Feb  5 19:46:15 2021] GET /pass/ => generated 863 bytes in 3 msecs (HTTP/1.1 200) 7 headers in 348 bytes (1 switches on core 0)
+유저 패스워드 !JbLWiG7XOlNObUyEIpc6UAGUvMM2Sk2Y3dRzn7h2
+10
+apxkf9632
+apxkf9632@naver.com
+양태영
+[pid: 3764|app: 0|req: 22/22] 165.246.169.191 () {54 vars in 1861 bytes} [Fri Feb  5 19:46:15 2021] POST / => generated 1176 bytes in 7 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 3764|app: 0|req: 23/23] 165.246.169.191 () {46 vars in 1703 bytes} [Fri Feb  5 19:46:21 2021] GET /accounts/logout/ => generated 0 bytes in 8 msecs (HTTP/1.1 302) 9 headers in 1208 bytes (1 switches on core 0)
+왔냐?2
+[pid: 3764|app: 0|req: 24/24] 165.246.169.191 () {46 vars in 1735 bytes} [Fri Feb  5 19:46:21 2021] GET / => generated 1213 bytes in 1 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+왔냐?2
+[pid: 3764|app: 0|req: 25/25] 165.246.169.191 () {44 vars in 826 bytes} [Fri Feb  5 19:49:09 2021] GET / => generated 1412 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+Not Found: /favicon.ico
+[pid: 3764|app: 0|req: 26/26] 165.246.169.191 () {44 vars in 781 bytes} [Fri Feb  5 19:49:09 2021] GET /favicon.ico => generated 2457 bytes in 6 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+[pid: 3764|app: 0|req: 27/27] 165.246.169.191 () {46 vars in 909 bytes} [Fri Feb  5 19:49:11 2021] GET /accounts/google/login/ => generated 0 bytes in 7 msecs (HTTP/1.1 302) 8 headers in 604 bytes (1 switches on core 0)
+[pid: 3764|app: 0|req: 28/28] 165.246.169.191 () {44 vars in 1463 bytes} [Fri Feb  5 19:49:11 2021] GET /accounts/google/login/callback/?state=P2UTAdtaPJTO&code=4%2F0AY0e-g5XEaS65k1JJgHuQteVuFS3PrRMNAF-zSay8jXQkYKysR4wJVI7P6tcBKUQjF7CWA&scope=email+profile+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&authuser=0&prompt=none => generated 0 bytes in 463 msecs (HTTP/1.1 302) 10 headers in 743 bytes (1 switches on core 0)
+[pid: 3764|app: 0|req: 29/29] 165.246.169.191 () {44 vars in 1067 bytes} [Fri Feb  5 19:49:12 2021] GET /pass/ => generated 863 bytes in 3 msecs (HTTP/1.1 200) 7 headers in 348 bytes (1 switches on core 0)
+유저 패스워드 !1wEV9YJXvOeYergCKPLsOLTAG7ny9D2kmzd6OQbs
+8
+0130yang
+0130yang@gmail.com
+양태영
+[pid: 3764|app: 0|req: 30/30] 165.246.169.191 () {54 vars in 1286 bytes} [Fri Feb  5 19:49:12 2021] POST / => generated 1445 bytes in 7 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 3764|app: 0|req: 31/31] 165.246.169.191 () {46 vars in 1128 bytes} [Fri Feb  5 19:49:13 2021] GET /accounts/logout/ => generated 0 bytes in 11 msecs (HTTP/1.1 302) 9 headers in 633 bytes (1 switches on core 0)
+왔냐?2
+[pid: 3764|app: 0|req: 32/32] 165.246.169.191 () {46 vars in 1160 bytes} [Fri Feb  5 19:49:13 2021] GET / => generated 1412 bytes in 1 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+왔냐?2
+[pid: 3764|app: 0|req: 33/33] 165.246.169.191 () {48 vars in 1191 bytes} [Fri Feb  5 19:49:26 2021] GET / => generated 1412 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+왔냐?2
+[pid: 3764|app: 0|req: 34/34] 165.246.169.191 () {48 vars in 1191 bytes} [Fri Feb  5 19:49:27 2021] GET / => generated 1412 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 3764|app: 0|req: 35/35] 165.246.169.191 () {46 vars in 1204 bytes} [Fri Feb  5 19:49:28 2021] GET /accounts/google/login/ => generated 0 bytes in 15 msecs (HTTP/1.1 302) 8 headers in 604 bytes (1 switches on core 0)
+[pid: 3764|app: 0|req: 36/36] 165.246.169.191 () {44 vars in 1758 bytes} [Fri Feb  5 19:49:29 2021] GET /accounts/google/login/callback/?state=f0xOAC1O7fbg&code=4%2F0AY0e-g4B3B2sv5STbM6Ql2Xv6rpejASzh_F8F9snymCeXHVMeyytZ-azP6OHgLUPidtUTA&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+openid&authuser=0&prompt=none => generated 0 bytes in 448 msecs (HTTP/1.1 302) 10 headers in 976 bytes (1 switches on core 0)
+[pid: 3764|app: 0|req: 37/37] 165.246.169.191 () {44 vars in 1300 bytes} [Fri Feb  5 19:49:29 2021] GET /pass/ => generated 863 bytes in 3 msecs (HTTP/1.1 200) 7 headers in 348 bytes (1 switches on core 0)
+유저 패스워드 !1wEV9YJXvOeYergCKPLsOLTAG7ny9D2kmzd6OQbs
+8
+0130yang
+0130yang@gmail.com
+양태영
+[pid: 3764|app: 0|req: 38/38] 165.246.169.191 () {54 vars in 1519 bytes} [Fri Feb  5 19:49:29 2021] POST / => generated 1445 bytes in 6 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+Not Found: /account/logout
+[pid: 3764|app: 0|req: 39/39] 165.246.169.191 () {46 vars in 1357 bytes} [Fri Feb  5 19:49:32 2021] GET /account/logout => generated 2466 bytes in 5 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+유저 패스워드 !1wEV9YJXvOeYergCKPLsOLTAG7ny9D2kmzd6OQbs
+8
+0130yang
+0130yang@gmail.com
+양태영
+[pid: 3764|app: 0|req: 40/40] 165.246.169.191 () {54 vars in 1519 bytes} [Fri Feb  5 19:49:41 2021] POST / => generated 1446 bytes in 6 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 3764|app: 0|req: 41/41] 165.246.169.191 () {46 vars in 1361 bytes} [Fri Feb  5 19:49:43 2021] GET /accounts/logout/ => generated 0 bytes in 14 msecs (HTTP/1.1 302) 9 headers in 866 bytes (1 switches on core 0)
+왔냐?2
+[pid: 3764|app: 0|req: 42/42] 165.246.169.191 () {46 vars in 1393 bytes} [Fri Feb  5 19:49:43 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+왔냐?2
+[pid: 3764|app: 0|req: 43/43] 165.246.169.191 () {48 vars in 1424 bytes} [Fri Feb  5 19:50:11 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 3764|app: 0|req: 44/44] 165.246.169.191 () {46 vars in 1437 bytes} [Fri Feb  5 19:50:13 2021] GET /accounts/google/login/ => generated 0 bytes in 8 msecs (HTTP/1.1 302) 8 headers in 604 bytes (1 switches on core 0)
+[pid: 3764|app: 0|req: 45/45] 165.246.169.191 () {44 vars in 1991 bytes} [Fri Feb  5 19:50:13 2021] GET /accounts/google/login/callback/?state=xmalgzvtoOzo&code=4%2F0AY0e-g5Du8T5RSkyXI9lguHXfSge5iJ7Qr_A-qswUSz4XPvOSRQR-LflnTOVUMmTXyZWFg&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+openid&authuser=0&prompt=none => generated 0 bytes in 486 msecs (HTTP/1.1 302) 10 headers in 1209 bytes (1 switches on core 0)
+[pid: 3764|app: 0|req: 46/46] 165.246.169.191 () {44 vars in 1533 bytes} [Fri Feb  5 19:50:14 2021] GET /pass/ => generated 863 bytes in 4 msecs (HTTP/1.1 200) 7 headers in 348 bytes (1 switches on core 0)
+유저 패스워드 !1wEV9YJXvOeYergCKPLsOLTAG7ny9D2kmzd6OQbs
+8
+0130yang
+0130yang@gmail.com
+양태영
+[pid: 3764|app: 0|req: 47/47] 165.246.169.191 () {54 vars in 1752 bytes} [Fri Feb  5 19:50:14 2021] POST / => generated 1418 bytes in 7 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 3764|app: 0|req: 48/48] 165.246.169.191 () {46 vars in 1594 bytes} [Fri Feb  5 19:50:21 2021] GET /accounts/logout/ => generated 0 bytes in 11 msecs (HTTP/1.1 302) 9 headers in 1099 bytes (1 switches on core 0)
+왔냐?2
+[pid: 3764|app: 0|req: 49/49] 165.246.169.191 () {46 vars in 1626 bytes} [Fri Feb  5 19:50:21 2021] GET / => generated 1413 bytes in 1 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 3764|app: 0|req: 50/50] 165.246.169.191 () {46 vars in 1668 bytes} [Fri Feb  5 19:50:23 2021] GET /accounts/naver/login/ => generated 0 bytes in 11 msecs (HTTP/1.1 302) 8 headers in 537 bytes (1 switches on core 0)
+[pid: 3764|app: 0|req: 51/51] 165.246.169.191 () {44 vars in 1776 bytes} [Fri Feb  5 19:50:33 2021] GET /accounts/naver/login/callback/?code=WWevApjqDLzOsVpoix&state=GX4lnpjEQ9Ro => generated 0 bytes in 384 msecs (HTTP/1.1 302) 10 headers in 1443 bytes (1 switches on core 0)
+[pid: 3764|app: 0|req: 52/52] 165.246.169.191 () {44 vars in 1767 bytes} [Fri Feb  5 19:50:33 2021] GET /pass/ => generated 863 bytes in 5 msecs (HTTP/1.1 200) 7 headers in 348 bytes (1 switches on core 0)
+유저 패스워드 !JbLWiG7XOlNObUyEIpc6UAGUvMM2Sk2Y3dRzn7h2
+10
+apxkf9632
+apxkf9632@naver.com
+양태영
+[pid: 3764|app: 0|req: 53/53] 165.246.169.191 () {54 vars in 1986 bytes} [Fri Feb  5 19:50:34 2021] POST / => generated 1419 bytes in 5 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+Not Found: /robots.txt
+[pid: 3764|app: 0|req: 54/54] 213.180.203.94 () {36 vars in 477 bytes} [Fri Feb  5 19:52:50 2021] GET /robots.txt => generated 2454 bytes in 5 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+왔냐?2
+[pid: 3764|app: 0|req: 55/55] 213.180.203.94 () {38 vars in 493 bytes} [Fri Feb  5 19:52:53 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)

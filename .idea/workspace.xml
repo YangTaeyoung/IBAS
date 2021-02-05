@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="cb1649c7-88f6-478a-978d-e41b554d2cb2" name="Default Changelist" comment="카카오 로그인 추가">
-      <change afterPath="$PROJECT_DIR$/first/templates/pass_login_param.html" afterDir="false" />
+    <list default="true" id="cb1649c7-88f6-478a-978d-e41b554d2cb2" name="Default Changelist" comment="로그인 변수따기">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/IBAS/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/IBAS/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/django.log" beforeDir="false" afterPath="$PROJECT_DIR$/django.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/first/templates/LightJo.html" beforeDir="false" afterPath="$PROJECT_DIR$/first/templates/LightJo.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/first/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/first/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/first/templates/pass_login_param.html" beforeDir="false" afterPath="$PROJECT_DIR$/first/templates/pass_login_param.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/first/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/first/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -100,7 +99,8 @@
       <workItem from="1612369109950" duration="3765000" />
       <workItem from="1612402198996" duration="2007000" />
       <workItem from="1612431325442" duration="2337000" />
-      <workItem from="1612494390791" duration="5925000" />
+      <workItem from="1612494390791" duration="10909000" />
+      <workItem from="1612521916690" duration="603000" />
     </task>
     <task id="LOCAL-00001" summary="초기화..">
       <created>1612283751068</created>
@@ -158,7 +158,14 @@
       <option name="project" value="LOCAL" />
       <updated>1612458447602</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="로그인 변수따기">
+      <created>1612506387226</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1612506387226</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -182,6 +189,7 @@
     <MESSAGE value="DEBUG TXT 추" />
     <MESSAGE value="구글 로그인 이메일 필수로 받기 설" />
     <MESSAGE value="카카오 로그인 추가" />
-    <option name="LAST_COMMIT_MESSAGE" value="카카오 로그인 추가" />
+    <MESSAGE value="로그인 변수따기" />
+    <option name="LAST_COMMIT_MESSAGE" value="로그인 변수따기" />
   </component>
 </project>

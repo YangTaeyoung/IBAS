@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # 임시 어플리케이션. 실제 프로젝트 시작 시 사라질 예정.
     'first',
 
     # all auth
@@ -148,3 +149,4 @@ AUTHENTICATION_BACKENDS = (
 SITE_ID = 1
 LOGIN_REDIRECT_URL = '/pass'  # 로그인 성공시 리다이렉션 되는 URL 바꿀 필요가 있을 듯..
 ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_LOGOUT_ON_GET = True
