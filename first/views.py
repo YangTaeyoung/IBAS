@@ -19,7 +19,7 @@ def index(request):
         name = member.extra_data.get('name')
         print(name)
         return render(request, 'LightJo.html', {"email": email, "name": name})
-    print("왔냐?2")
+    print("render: LightJo")
     return render(request, 'LightJo.html', {})
 
 
