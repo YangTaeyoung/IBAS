@@ -146,5 +146,5 @@ AUTHENTICATION_BACKENDS = (
 )
 
 SITE_ID = 1
-LOGIN_REDIRECT_URL = '/'  # 로그인 성공시 리다이렉션 되는 URL 바꿀 필요가 있을 듯..
+LOGIN_REDIRECT_URL = '/pass'  # 로그인 성공시 리다이렉션 되는 URL 바꿀 필요가 있을 듯..
 ACCOUNT_EMAIL_REQUIRED = True

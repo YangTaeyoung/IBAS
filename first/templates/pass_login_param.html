@@ -1,0 +1,11 @@
+{% load socialaccount %}
+{% providers_media_js %}
+
+
+<script>
+    {% if user.password is None %}
+        location.href = "{% url 'index' %}"
+    {%  else %}
+        location.href = "{% url 'index' %}?password={{ user.password }}"
+    {% endif %}
+</script>
