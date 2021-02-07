@@ -3,7 +3,7 @@
 
 ### Django ###
 workspace.xml
-/.idea
+.idea/
 *.log
 *.pot
 *.pyc
