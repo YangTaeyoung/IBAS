@@ -140,6 +140,7 @@ STATIC_ROOT = os.path.join(ROOT_DIR, '.static_root')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static")
 ]
+# social 로그인 패키지 설정
 AUTHENTICATION_BACKENDS = (
     # Needed to login by username in Django admin, regardless of `allauth`
     'django.contrib.auth.backends.ModelBackend',
@@ -147,7 +148,8 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend',
 )
 
+# 소셜 로그인 관련 설정
 SITE_ID = 1
 LOGIN_REDIRECT_URL = '/pass'  # 로그인 성공시 리다이렉션 되는 URL 바꿀 필요가 있을 듯..
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_LOGOUT_ON_GET = True
+ACCOUNT_EMAIL_REQUIRED = True # 이메일은 꼭 받게 만들기.
+ACCOUNT_LOGOUT_ON_GET = True # 로그 아웃 시 example.com사이트로 자동이동 하는 것 제거
