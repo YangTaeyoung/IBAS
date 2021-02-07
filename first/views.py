@@ -26,5 +26,3 @@ def index(request):
 def loginchk(request):
     return render(request, 'pass_login_param.html', {})
 
-
-1
