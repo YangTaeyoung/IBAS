@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     # 임시 어플리케이션. 실제 프로젝트 시작 시 사라질 예정.
     'first',
 
+
     # all auth
 
     'allauth',

@@ -8595,3 +8595,840 @@ Not Found: /robots.txt
 [pid: 3764|app: 0|req: 54/54] 213.180.203.94 () {36 vars in 477 bytes} [Fri Feb  5 19:52:50 2021] GET /robots.txt => generated 2454 bytes in 5 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
 왔냐?2
 [pid: 3764|app: 0|req: 55/55] 213.180.203.94 () {38 vars in 493 bytes} [Fri Feb  5 19:52:53 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+...brutally killing workers...
+worker 1 buried after 1 seconds
+binary reloading uWSGI...
+chdir() to /home/ibas/Django/IBAS
+closing all non-uwsgi socket fds > 2 (max_fd = 1048576)...
+found fd 3 mapped to socket 0 (/home/ibas/Django/IBAS/uwsgi.sock)
+running /home/ibas/Django/IBAS_venv/bin/uwsgi
+[uWSGI] getting INI configuration from uwsgi.ini
+open("./python38_plugin.so"): No such file or directory [core/utils.c line 3732]
+!!! UNABLE to load uWSGI plugin: ./python38_plugin.so: cannot open shared object file: No such file or directory !!!
+*** Starting uWSGI 2.0.19.1 (64bit) on [Fri Feb  5 20:04:59 2021] ***
+compiled with version: 9.3.0 on 27 January 2021 16:52:57
+os: Linux-5.8.0-41-generic #46~20.04.1-Ubuntu SMP Mon Jan 18 17:52:23 UTC 2021
+nodename: ibas-desktop
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 12
+current working directory: /home/ibas/Django/IBAS
+detected binary path: /home/ibas/Django/IBAS_venv/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+chdir() to /home/ibas/Django/IBAS
+your processes number limit is 127943
+your memory page size is 4096 bytes
+detected max file descriptor number: 1048576
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 inherited UNIX address /home/ibas/Django/IBAS/uwsgi.sock fd 3
+Python version: 3.8.5 (default, Jul 28 2020, 12:59:40)  [GCC 9.3.0]
+PEP 405 virtualenv detected: /home/ibas/Django/IBAS_venv
+Set PythonHome to /home/ibas/Django/IBAS_venv
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0x55c634e88450
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 145840 bytes (142 KB) for 1 cores
+*** Operational MODE: single process ***
+WSGI app 0 (mountpoint='') ready in 1 seconds on interpreter 0x55c634e88450 pid: 3762 (default app)
+*** uWSGI is running in multiple interpreter mode ***
+gracefully (RE)spawned uWSGI master process (pid: 3762)
+spawned uWSGI worker 1 (pid: 5069, cores: 1)
+*** Starting uWSGI 2.0.19.1 (64bit) on [Fri Feb  5 20:07:43 2021] ***
+compiled with version: 9.3.0 on 27 January 2021 16:52:57
+os: Linux-5.8.0-41-generic #46~20.04.1-Ubuntu SMP Mon Jan 18 17:52:23 UTC 2021
+nodename: ibas-desktop
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 12
+current working directory: /home/ibas/Django/IBAS
+writing pidfile to /tmp/project-master.pid
+detected binary path: /home/ibas/Django/IBAS_venv/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+chdir() to /home/ibas/Django/IBAS
+your processes number limit is 127943
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address /home/ibas/Django/IBAS/uwsgi.sock fd 3
+Python version: 3.8.5 (default, Jul 28 2020, 12:59:40)  [GCC 9.3.0]
+PEP 405 virtualenv detected: /home/ibas/Django/IBAS_venv
+Set PythonHome to /home/ibas/Django/IBAS_venv
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0x55ce541a0a40
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 145840 bytes (142 KB) for 1 cores
+*** Operational MODE: single process ***
+WSGI app 0 (mountpoint='') ready in 1 seconds on interpreter 0x55ce541a0a40 pid: 1861 (default app)
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI master process (pid: 1861)
+spawned uWSGI worker 1 (pid: 1863, cores: 1)
+render: LightJo
+[pid: 1863|app: 0|req: 1/1] 165.246.173.51 () {46 vars in 837 bytes} [Fri Feb  5 20:07:48 2021] GET / => generated 1413 bytes in 98 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+Not Found: /favicon.ico
+[pid: 1863|app: 0|req: 2/2] 165.246.173.51 () {48 vars in 814 bytes} [Fri Feb  5 20:07:48 2021] GET /favicon.ico => generated 2457 bytes in 9 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+render: LightJo
+[pid: 1863|app: 0|req: 3/3] 5.167.63.56 () {32 vars in 444 bytes} [Fri Feb  5 20:12:29 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+Invalid HTTP_HOST header: '_'. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /login
+[pid: 1863|app: 0|req: 4/4] 106.55.246.116 () {26 vars in 272 bytes} [Fri Feb  5 20:12:55 2021] GET /login => generated 57333 bytes in 38 msecs (HTTP/1.0 400) 3 headers in 116 bytes (1 switches on core 0)
+Invalid HTTP_HOST header: '_'. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /jenkins/login
+[pid: 1863|app: 0|req: 5/5] 106.55.246.116 () {26 vars in 288 bytes} [Fri Feb  5 20:12:59 2021] GET /jenkins/login => generated 57429 bytes in 21 msecs (HTTP/1.0 400) 3 headers in 116 bytes (1 switches on core 0)
+Invalid HTTP_HOST header: '_'. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+Fri Feb  5 20:13:47 2021 - SIGPIPE: writing to a closed pipe/socket/fd (probably the client disconnected) on request /manager/html (ip 106.55.246.116) !!!
+Fri Feb  5 20:13:47 2021 - uwsgi_response_writev_headers_and_body_do(): Broken pipe [core/writer.c line 306] during GET /manager/html (106.55.246.116)
+OSError: write error
+[pid: 1863|app: 0|req: 6/6] 106.55.246.116 () {28 vars in 338 bytes} [Fri Feb  5 20:13:47 2021] GET /manager/html => generated 0 bytes in 24 msecs (HTTP/1.0 400) 3 headers in 0 bytes (0 switches on core 0)
+render: LightJo
+[pid: 1863|app: 0|req: 7/7] 83.219.150.201 () {32 vars in 447 bytes} [Fri Feb  5 20:14:40 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+Not Found: /.env
+[pid: 1863|app: 0|req: 8/8] 186.179.112.254 () {36 vars in 507 bytes} [Fri Feb  5 20:24:26 2021] GET /.env => generated 2436 bytes in 5 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+Forbidden (CSRF cookie not set.): /
+[pid: 1863|app: 0|req: 9/9] 186.179.112.254 () {40 vars in 614 bytes} [Fri Feb  5 20:24:26 2021] POST / => generated 2994 bytes in 10 msecs (HTTP/1.1 403) 5 headers in 159 bytes (1 switches on core 0)
+Invalid HTTP_HOST header: '_'. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /boaform/admin/formLogin
+[pid: 1863|app: 0|req: 10/10] 116.68.97.148 () {26 vars in 352 bytes} [Fri Feb  5 21:22:09 2021] GET /boaform/admin/formLogin?username=user&psd=user => generated 58183 bytes in 25 msecs (HTTP/1.0 400) 3 headers in 116 bytes (1 switches on core 0)
+Invalid HTTP_HOST header: '_'. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /login
+[pid: 1863|app: 0|req: 11/11] 183.129.198.133 () {26 vars in 273 bytes} [Fri Feb  5 21:27:55 2021] GET /login => generated 57334 bytes in 24 msecs (HTTP/1.0 400) 3 headers in 116 bytes (1 switches on core 0)
+Invalid HTTP_HOST header: '_'. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /jenkins/login
+[pid: 1863|app: 0|req: 12/12] 183.129.198.133 () {26 vars in 289 bytes} [Fri Feb  5 21:27:56 2021] GET /jenkins/login => generated 57430 bytes in 23 msecs (HTTP/1.0 400) 3 headers in 116 bytes (1 switches on core 0)
+Invalid HTTP_HOST header: '_'. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+Fri Feb  5 21:28:56 2021 - SIGPIPE: writing to a closed pipe/socket/fd (probably the client disconnected) on request /manager/html (ip 183.129.198.133) !!!
+Fri Feb  5 21:28:56 2021 - uwsgi_response_writev_headers_and_body_do(): Broken pipe [core/writer.c line 306] during GET /manager/html (183.129.198.133)
+OSError: write error
+[pid: 1863|app: 0|req: 13/13] 183.129.198.133 () {28 vars in 339 bytes} [Fri Feb  5 21:28:56 2021] GET /manager/html => generated 0 bytes in 24 msecs (HTTP/1.0 400) 3 headers in 0 bytes (0 switches on core 0)
+render: LightJo
+[pid: 1863|app: 0|req: 14/14] 35.201.8.230 () {28 vars in 292 bytes} [Fri Feb  5 22:40:59 2021] OPTIONS / => generated 1413 bytes in 2 msecs (HTTP/1.0 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 1863|app: 0|req: 15/15] 216.218.206.67 () {28 vars in 290 bytes} [Fri Feb  5 22:54:28 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 1863|app: 0|req: 16/16] 220.64.105.4 () {46 vars in 643 bytes} [Sat Feb  6 00:34:16 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 1863|app: 0|req: 17/17] 125.180.148.202 () {40 vars in 734 bytes} [Sat Feb  6 00:42:30 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+Not Found: /favicon.ico
+[pid: 1863|app: 0|req: 18/18] 125.180.148.202 () {40 vars in 689 bytes} [Sat Feb  6 00:42:30 2021] GET /favicon.ico => generated 2457 bytes in 5 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+[pid: 1863|app: 0|req: 19/19] 125.180.148.202 () {42 vars in 815 bytes} [Sat Feb  6 00:42:32 2021] GET /accounts/naver/login/ => generated 0 bytes in 27 msecs (HTTP/1.1 302) 8 headers in 537 bytes (1 switches on core 0)
+render: LightJo
+[pid: 1863|app: 0|req: 20/20] 125.180.148.202 () {42 vars in 791 bytes} [Sat Feb  6 00:42:51 2021] GET / => generated 1413 bytes in 4 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 1863|app: 0|req: 21/21] 125.180.148.202 () {44 vars in 874 bytes} [Sat Feb  6 00:42:52 2021] GET /accounts/google/login/ => generated 0 bytes in 17 msecs (HTTP/1.1 302) 8 headers in 604 bytes (1 switches on core 0)
+[pid: 1863|app: 0|req: 22/22] 125.180.148.202 () {42 vars in 1390 bytes} [Sat Feb  6 00:42:56 2021] GET /accounts/google/login/callback/?state=rzIZ0bDvV4d7&code=4%2F0AY0e-g5DThw-kW9QAWbiHa4QH4r_Hpf6yZrvOVaP2H2h7Z-_h4_YhIMXBzm3nssj27-J4Q&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+openid&authuser=0&prompt=consent => generated 0 bytes in 617 msecs (HTTP/1.1 302) 10 headers in 747 bytes (1 switches on core 0)
+[pid: 1863|app: 0|req: 23/23] 125.180.148.202 () {42 vars in 1066 bytes} [Sat Feb  6 00:42:57 2021] GET /pass => generated 0 bytes in 0 msecs (HTTP/1.1 301) 5 headers in 174 bytes (1 switches on core 0)
+[pid: 1863|app: 0|req: 24/24] 125.180.148.202 () {42 vars in 1068 bytes} [Sat Feb  6 00:42:57 2021] GET /pass/ => generated 863 bytes in 5 msecs (HTTP/1.1 200) 7 headers in 348 bytes (1 switches on core 0)
+유저 패스워드 !EW6BiTfeT5VBDxKAId2qTgIgUmuAgA6CpDFGZKGD
+13
+inha12184816
+inha12184816@gmail.com
+조용식
+[pid: 1863|app: 0|req: 25/25] 125.180.148.202 () {52 vars in 1287 bytes} [Sat Feb  6 00:42:57 2021] POST / => generated 1422 bytes in 6 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 1863|app: 0|req: 26/26] 125.180.148.202 () {44 vars in 1127 bytes} [Sat Feb  6 00:43:12 2021] GET /accounts/logout => generated 0 bytes in 0 msecs (HTTP/1.1 301) 5 headers in 185 bytes (1 switches on core 0)
+[pid: 1863|app: 0|req: 27/27] 125.180.148.202 () {44 vars in 1129 bytes} [Sat Feb  6 00:43:12 2021] GET /accounts/logout/ => generated 0 bytes in 15 msecs (HTTP/1.1 302) 9 headers in 637 bytes (1 switches on core 0)
+render: LightJo
+[pid: 1863|app: 0|req: 28/28] 125.180.148.202 () {44 vars in 1161 bytes} [Sat Feb  6 00:43:12 2021] GET / => generated 1413 bytes in 1 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 1863|app: 0|req: 29/29] 125.180.148.202 () {44 vars in 1203 bytes} [Sat Feb  6 00:43:13 2021] GET /accounts/naver/login/ => generated 0 bytes in 11 msecs (HTTP/1.1 302) 8 headers in 537 bytes (1 switches on core 0)
+render: LightJo
+[pid: 1863|app: 0|req: 30/30] 125.180.148.202 () {44 vars in 1205 bytes} [Sat Feb  6 00:43:24 2021] GET / => generated 1413 bytes in 4 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 1863|app: 0|req: 31/31] 125.180.148.202 () {42 vars in 1208 bytes} [Sat Feb  6 00:43:49 2021] GET /accounts/naver/login/ => generated 0 bytes in 13 msecs (HTTP/1.1 302) 8 headers in 537 bytes (1 switches on core 0)
+render: LightJo
+[pid: 1863|app: 0|req: 32/32] 211.112.85.31 () {40 vars in 729 bytes} [Sat Feb  6 00:45:25 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+Not Found: /favicon.ico
+[pid: 1863|app: 0|req: 33/33] 211.112.85.31 () {40 vars in 680 bytes} [Sat Feb  6 00:45:28 2021] GET /favicon.ico => generated 2453 bytes in 5 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+[pid: 1863|app: 0|req: 34/34] 211.112.85.31 () {42 vars in 808 bytes} [Sat Feb  6 00:45:31 2021] GET /accounts/google/login/ => generated 0 bytes in 15 msecs (HTTP/1.1 302) 8 headers in 600 bytes (1 switches on core 0)
+render: LightJo
+[pid: 1863|app: 0|req: 35/35] 211.112.85.31 () {42 vars in 786 bytes} [Sat Feb  6 00:46:12 2021] GET / => generated 1413 bytes in 4 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 1863|app: 0|req: 36/36] 112.148.18.72 () {46 vars in 949 bytes} [Sat Feb  6 00:46:24 2021] GET / => generated 1413 bytes in 4 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+Not Found: /favicon.ico
+[pid: 1863|app: 0|req: 37/37] 112.148.18.72 () {44 vars in 880 bytes} [Sat Feb  6 00:46:25 2021] GET /favicon.ico => generated 2457 bytes in 5 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+[pid: 1863|app: 0|req: 38/38] 112.148.18.72 () {46 vars in 1006 bytes} [Sat Feb  6 00:46:26 2021] GET /accounts/naver/login/ => generated 0 bytes in 15 msecs (HTTP/1.1 302) 8 headers in 537 bytes (1 switches on core 0)
+[pid: 1863|app: 0|req: 39/39] 112.148.18.72 () {44 vars in 1070 bytes} [Sat Feb  6 00:46:27 2021] GET /accounts/naver/login/callback/?code=TmZuuciOpH1gpt9K9I&state=p6nXMeKBppB9 => generated 0 bytes in 470 msecs (HTTP/1.1 302) 10 headers in 744 bytes (1 switches on core 0)
+[pid: 1863|app: 0|req: 40/40] 112.148.18.72 () {44 vars in 1121 bytes} [Sat Feb  6 00:46:27 2021] GET /pass => generated 0 bytes in 0 msecs (HTTP/1.1 301) 5 headers in 174 bytes (1 switches on core 0)
+[pid: 1863|app: 0|req: 41/41] 112.148.18.72 () {44 vars in 1123 bytes} [Sat Feb  6 00:46:27 2021] GET /pass/ => generated 863 bytes in 4 msecs (HTTP/1.1 200) 7 headers in 348 bytes (2 switches on core 0)
+유저 패스워드 !JbLWiG7XOlNObUyEIpc6UAGUvMM2Sk2Y3dRzn7h2
+10
+apxkf9632
+apxkf9632@naver.com
+양태영
+[pid: 1863|app: 0|req: 42/42] 112.148.18.72 () {54 vars in 1342 bytes} [Sat Feb  6 00:46:27 2021] POST / => generated 1419 bytes in 7 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 1863|app: 0|req: 43/43] 112.148.18.72 () {44 vars in 1113 bytes} [Sat Feb  6 00:46:29 2021] GET / => generated 1391 bytes in 5 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 1863|app: 0|req: 44/44] 211.112.85.31 () {44 vars in 863 bytes} [Sat Feb  6 00:47:50 2021] GET /accounts/naver/login/ => generated 0 bytes in 11 msecs (HTTP/1.1 302) 8 headers in 533 bytes (1 switches on core 0)
+[pid: 1863|app: 0|req: 45/45] 211.112.85.31 () {44 vars in 865 bytes} [Sat Feb  6 00:48:01 2021] GET /accounts/google/login/ => generated 0 bytes in 15 msecs (HTTP/1.1 302) 8 headers in 600 bytes (1 switches on core 0)
+render: LightJo
+[pid: 1863|app: 0|req: 46/46] 211.112.85.31 () {42 vars in 786 bytes} [Sat Feb  6 00:49:23 2021] GET / => generated 1413 bytes in 4 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 1863|app: 0|req: 47/47] 211.112.85.31 () {44 vars in 865 bytes} [Sat Feb  6 00:49:43 2021] GET /accounts/google/login/ => generated 0 bytes in 15 msecs (HTTP/1.1 302) 8 headers in 600 bytes (1 switches on core 0)
+[pid: 1863|app: 0|req: 48/48] 211.112.85.31 () {44 vars in 863 bytes} [Sat Feb  6 00:50:24 2021] GET /accounts/naver/login/ => generated 0 bytes in 15 msecs (HTTP/1.1 302) 8 headers in 533 bytes (1 switches on core 0)
+render: LightJo
+[pid: 1863|app: 0|req: 49/49] 125.180.148.202 () {44 vars in 1197 bytes} [Sat Feb  6 00:50:37 2021] GET / => generated 1413 bytes in 4 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 1863|app: 0|req: 50/50] 125.180.148.202 () {44 vars in 1247 bytes} [Sat Feb  6 00:50:38 2021] GET /accounts/naver/login/ => generated 0 bytes in 18 msecs (HTTP/1.1 302) 8 headers in 537 bytes (1 switches on core 0)
+[pid: 1863|app: 0|req: 51/51] 125.180.148.202 () {42 vars in 1311 bytes} [Sat Feb  6 00:50:46 2021] GET /accounts/naver/login/callback/?code=yyKCAC2IuZ0WjouJK5&state=eN58E9quTIh6 => generated 0 bytes in 476 msecs (HTTP/1.1 302) 10 headers in 979 bytes (1 switches on core 0)
+[pid: 1863|app: 0|req: 52/52] 125.180.148.202 () {42 vars in 1300 bytes} [Sat Feb  6 00:50:46 2021] GET /pass/ => generated 863 bytes in 4 msecs (HTTP/1.1 200) 7 headers in 348 bytes (1 switches on core 0)
+유저 패스워드 !7lJAo1eRtxBn90t9oHzy4dgMJnty7Eb5MalPwKA2
+14
+josik97
+josik97@naver.com
+조용식
+[pid: 1863|app: 0|req: 53/53] 125.180.148.202 () {52 vars in 1519 bytes} [Sat Feb  6 00:50:47 2021] POST / => generated 1417 bytes in 7 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 1863|app: 0|req: 54/54] 106.101.193.188 () {42 vars in 826 bytes} [Sat Feb  6 00:51:38 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+Not Found: /favicon.ico
+[pid: 1863|app: 0|req: 55/55] 106.101.193.188 () {42 vars in 781 bytes} [Sat Feb  6 00:51:38 2021] GET /favicon.ico => generated 2457 bytes in 4 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+[pid: 1863|app: 0|req: 56/56] 106.101.193.188 () {44 vars in 909 bytes} [Sat Feb  6 00:51:41 2021] GET /accounts/google/login/ => generated 0 bytes in 14 msecs (HTTP/1.1 302) 8 headers in 604 bytes (1 switches on core 0)
+[pid: 1863|app: 0|req: 57/57] 106.101.193.188 () {46 vars in 966 bytes} [Sat Feb  6 00:51:41 2021] GET /accounts/google/login/ => generated 0 bytes in 16 msecs (HTTP/1.1 302) 8 headers in 604 bytes (1 switches on core 0)
+render: LightJo
+[pid: 1863|app: 0|req: 58/58] 106.101.193.188 () {44 vars in 883 bytes} [Sat Feb  6 00:51:44 2021] GET / => generated 1413 bytes in 4 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 1863|app: 0|req: 59/59] 106.101.193.188 () {46 vars in 964 bytes} [Sat Feb  6 00:51:47 2021] GET /accounts/naver/login/ => generated 0 bytes in 14 msecs (HTTP/1.1 302) 8 headers in 537 bytes (1 switches on core 0)
+render: LightJo
+[pid: 1863|app: 0|req: 60/60] 112.148.18.72 () {46 vars in 1138 bytes} [Sat Feb  6 01:05:11 2021] GET / => generated 1391 bytes in 5 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 1863|app: 0|req: 61/61] 117.111.2.165 () {42 vars in 706 bytes} [Sat Feb  6 01:05:12 2021] GET / => generated 1413 bytes in 4 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 1863|app: 0|req: 62/62] 112.148.18.72 () {46 vars in 1185 bytes} [Sat Feb  6 01:05:14 2021] GET /accounts/logout/ => generated 0 bytes in 15 msecs (HTTP/1.1 302) 9 headers in 634 bytes (1 switches on core 0)
+render: LightJo
+[pid: 1863|app: 0|req: 63/63] 112.148.18.72 () {46 vars in 1217 bytes} [Sat Feb  6 01:05:14 2021] GET / => generated 1413 bytes in 1 msecs (HTTP/1.1 200) 6 headers in 181 bytes (2 switches on core 0)
+[pid: 1863|app: 0|req: 64/64] 112.148.18.72 () {46 vars in 1259 bytes} [Sat Feb  6 01:05:16 2021] GET /accounts/naver/login/ => generated 0 bytes in 15 msecs (HTTP/1.1 302) 8 headers in 537 bytes (1 switches on core 0)
+[pid: 1863|app: 0|req: 65/65] 112.148.18.72 () {44 vars in 1367 bytes} [Sat Feb  6 01:05:16 2021] GET /accounts/naver/login/callback/?code=bARBeXqMUxfGX20fkF&state=KtqYTboOqFtJ => generated 0 bytes in 459 msecs (HTTP/1.1 302) 10 headers in 978 bytes (1 switches on core 0)
+[pid: 1863|app: 0|req: 66/66] 112.148.18.72 () {44 vars in 1358 bytes} [Sat Feb  6 01:05:16 2021] GET /pass/ => generated 863 bytes in 4 msecs (HTTP/1.1 200) 7 headers in 348 bytes (2 switches on core 0)
+유저 패스워드 !JbLWiG7XOlNObUyEIpc6UAGUvMM2Sk2Y3dRzn7h2
+10
+apxkf9632
+apxkf9632@naver.com
+양태영
+[pid: 1863|app: 0|req: 67/67] 112.148.18.72 () {54 vars in 1577 bytes} [Sat Feb  6 01:05:17 2021] POST / => generated 1419 bytes in 7 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 1863|app: 0|req: 68/68] 117.111.2.165 () {44 vars in 785 bytes} [Sat Feb  6 01:05:20 2021] GET /accounts/google/login/ => generated 0 bytes in 11 msecs (HTTP/1.1 302) 8 headers in 600 bytes (1 switches on core 0)
+[pid: 1863|app: 0|req: 69/69] 112.148.18.72 () {46 vars in 1419 bytes} [Sat Feb  6 01:05:20 2021] GET /accounts/logout/ => generated 0 bytes in 11 msecs (HTTP/1.1 302) 9 headers in 868 bytes (1 switches on core 0)
+render: LightJo
+[pid: 1863|app: 0|req: 70/70] 112.148.18.72 () {46 vars in 1451 bytes} [Sat Feb  6 01:05:20 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 1863|app: 0|req: 71/71] 117.111.2.165 () {44 vars in 782 bytes} [Sat Feb  6 01:05:23 2021] GET /accounts/naver/login/ => generated 0 bytes in 15 msecs (HTTP/1.1 302) 8 headers in 533 bytes (1 switches on core 0)
+render: LightJo
+[pid: 1863|app: 0|req: 72/72] 211.112.85.31 () {40 vars in 720 bytes} [Sat Feb  6 01:06:16 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+Not Found: /favicon.ico
+[pid: 1863|app: 0|req: 73/73] 211.112.85.31 () {40 vars in 671 bytes} [Sat Feb  6 01:06:16 2021] GET /favicon.ico => generated 2453 bytes in 5 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+[pid: 1863|app: 0|req: 74/74] 211.112.85.31 () {42 vars in 797 bytes} [Sat Feb  6 01:06:18 2021] GET /accounts/naver/login/ => generated 0 bytes in 15 msecs (HTTP/1.1 302) 8 headers in 533 bytes (1 switches on core 0)
+render: LightJo
+[pid: 1863|app: 0|req: 75/75] 211.112.85.31 () {42 vars in 786 bytes} [Sat Feb  6 01:07:00 2021] GET / => generated 1413 bytes in 4 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 1863|app: 0|req: 76/76] 211.112.85.31 () {44 vars in 863 bytes} [Sat Feb  6 01:07:14 2021] GET /accounts/naver/login/ => generated 0 bytes in 16 msecs (HTTP/1.1 302) 8 headers in 533 bytes (1 switches on core 0)
+[pid: 1863|app: 0|req: 77/77] 211.112.85.31 () {44 vars in 863 bytes} [Sat Feb  6 01:07:38 2021] GET /accounts/naver/login/ => generated 0 bytes in 17 msecs (HTTP/1.1 302) 8 headers in 533 bytes (1 switches on core 0)
+[pid: 1863|app: 0|req: 78/78] 211.112.85.31 () {44 vars in 863 bytes} [Sat Feb  6 01:08:48 2021] GET /accounts/naver/login/ => generated 0 bytes in 15 msecs (HTTP/1.1 302) 8 headers in 533 bytes (1 switches on core 0)
+render: LightJo
+[pid: 1863|app: 0|req: 79/79] 112.148.18.72 () {46 vars in 1435 bytes} [Sat Feb  6 01:12:48 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 1863|app: 0|req: 80/80] 112.148.18.72 () {46 vars in 1436 bytes} [Sat Feb  6 01:23:30 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 1863|app: 0|req: 81/81] 112.148.18.72 () {46 vars in 1495 bytes} [Sat Feb  6 01:23:32 2021] GET /accounts/google/login/ => generated 0 bytes in 15 msecs (HTTP/1.1 302) 8 headers in 604 bytes (1 switches on core 0)
+render: LightJo
+[pid: 1863|app: 0|req: 82/82] 112.148.18.72 () {44 vars in 1456 bytes} [Sat Feb  6 01:23:35 2021] GET / => generated 1413 bytes in 4 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 1863|app: 0|req: 83/83] 112.148.18.72 () {46 vars in 1496 bytes} [Sat Feb  6 01:23:52 2021] GET / => generated 1413 bytes in 4 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 1863|app: 0|req: 84/84] 112.148.18.72 () {46 vars in 1496 bytes} [Sat Feb  6 01:23:53 2021] GET / => generated 1413 bytes in 4 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 1863|app: 0|req: 85/85] 112.148.18.72 () {46 vars in 1496 bytes} [Sat Feb  6 01:23:53 2021] GET / => generated 1413 bytes in 4 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 1863|app: 0|req: 86/86] 112.148.18.72 () {46 vars in 1496 bytes} [Sat Feb  6 01:23:54 2021] GET / => generated 1413 bytes in 4 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 1863|app: 0|req: 87/87] 112.148.18.72 () {46 vars in 1496 bytes} [Sat Feb  6 01:23:54 2021] GET / => generated 1413 bytes in 4 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 1863|app: 0|req: 88/88] 112.148.18.72 () {46 vars in 1496 bytes} [Sat Feb  6 01:23:54 2021] GET / => generated 1413 bytes in 4 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 1863|app: 0|req: 89/89] 112.148.18.72 () {46 vars in 1496 bytes} [Sat Feb  6 01:24:13 2021] GET / => generated 1413 bytes in 4 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 1863|app: 0|req: 90/90] 112.148.18.72 () {46 vars in 1496 bytes} [Sat Feb  6 01:24:13 2021] GET / => generated 1413 bytes in 4 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 1863|app: 0|req: 91/91] 112.148.18.72 () {46 vars in 1496 bytes} [Sat Feb  6 01:24:13 2021] GET / => generated 1413 bytes in 4 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 1863|app: 0|req: 92/92] 112.148.18.72 () {46 vars in 1496 bytes} [Sat Feb  6 01:24:13 2021] GET / => generated 1413 bytes in 4 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 1863|app: 0|req: 93/93] 112.148.18.72 () {46 vars in 1496 bytes} [Sat Feb  6 01:24:14 2021] GET / => generated 1413 bytes in 4 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 1863|app: 0|req: 94/94] 77.125.58.16 () {50 vars in 836 bytes} [Sat Feb  6 01:25:46 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 1863|app: 0|req: 95/95] 67.205.165.53 () {34 vars in 373 bytes} [Sat Feb  6 01:28:25 2021] GET / => generated 1413 bytes in 1 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 1863|app: 0|req: 96/96] 85.215.2.227 () {40 vars in 502 bytes} [Sat Feb  6 01:30:14 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 1863|app: 0|req: 97/97] 85.215.2.227 () {40 vars in 506 bytes} [Sat Feb  6 01:30:21 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 1863|app: 0|req: 98/98] 85.215.2.227 () {40 vars in 506 bytes} [Sat Feb  6 01:30:29 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+Not Found: /.well-known/acme-challenge/check-your-website-dot-server-daten-dot-de
+[pid: 1863|app: 0|req: 99/99] 85.215.2.227 () {40 vars in 640 bytes} [Sat Feb  6 01:30:36 2021] GET /.well-known/acme-challenge/check-your-website-dot-server-daten-dot-de => generated 2628 bytes in 5 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+render: LightJo
+[pid: 1863|app: 0|req: 100/100] 85.215.2.227 () {50 vars in 847 bytes} [Sat Feb  6 01:31:12 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 1863|app: 0|req: 101/101] 85.215.2.227 () {50 vars in 847 bytes} [Sat Feb  6 01:31:15 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 1863|app: 0|req: 102/102] 85.215.2.227 () {50 vars in 847 bytes} [Sat Feb  6 01:31:15 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 1863|app: 0|req: 103/103] 85.215.2.227 () {50 vars in 847 bytes} [Sat Feb  6 01:31:16 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+*** Starting uWSGI 2.0.19.1 (64bit) on [Sat Feb  6 01:35:47 2021] ***
+compiled with version: 9.3.0 on 27 January 2021 16:52:57
+os: Linux-5.8.0-41-generic #46~20.04.1-Ubuntu SMP Mon Jan 18 17:52:23 UTC 2021
+nodename: ibas-desktop
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 12
+current working directory: /home/ibas/Django/IBAS
+writing pidfile to /tmp/project-master.pid
+detected binary path: /home/ibas/Django/IBAS_venv/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+chdir() to /home/ibas/Django/IBAS
+your processes number limit is 127943
+your memory page size is 4096 bytes
+detected max file descriptor number: 1048576
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address /home/ibas/Django/IBAS/uwsgi.sock fd 3
+Python version: 3.8.5 (default, Jul 28 2020, 12:59:40)  [GCC 9.3.0]
+PEP 405 virtualenv detected: /home/ibas/Django/IBAS_venv
+Set PythonHome to /home/ibas/Django/IBAS_venv
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0x55792f05e870
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 145840 bytes (142 KB) for 1 cores
+*** Operational MODE: single process ***
+WSGI app 0 (mountpoint='') ready in 0 seconds on interpreter 0x55792f05e870 pid: 8443 (default app)
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI master process (pid: 8443)
+spawned uWSGI worker 1 (pid: 8445, cores: 1)
+...gracefully killing workers...
+Gracefully killing worker 1 (pid: 8445)...
+worker 1 buried after 1 seconds
+binary reloading uWSGI...
+chdir() to /home/ibas/Django/IBAS
+closing all non-uwsgi socket fds > 2 (max_fd = 1048576)...
+found fd 3 mapped to socket 0 (/home/ibas/Django/IBAS/uwsgi.sock)
+running /home/ibas/Django/IBAS_venv/bin/uwsgi
+[uWSGI] getting INI configuration from uwsgi.ini
+open("./python38_plugin.so"): No such file or directory [core/utils.c line 3732]
+!!! UNABLE to load uWSGI plugin: ./python38_plugin.so: cannot open shared object file: No such file or directory !!!
+*** Starting uWSGI 2.0.19.1 (64bit) on [Sat Feb  6 01:36:16 2021] ***
+compiled with version: 9.3.0 on 27 January 2021 16:52:57
+os: Linux-5.8.0-41-generic #46~20.04.1-Ubuntu SMP Mon Jan 18 17:52:23 UTC 2021
+nodename: ibas-desktop
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 12
+current working directory: /home/ibas/Django/IBAS
+detected binary path: /home/ibas/Django/IBAS_venv/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+chdir() to /home/ibas/Django/IBAS
+your processes number limit is 127943
+your memory page size is 4096 bytes
+detected max file descriptor number: 1048576
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 inherited UNIX address /home/ibas/Django/IBAS/uwsgi.sock fd 3
+Python version: 3.8.5 (default, Jul 28 2020, 12:59:40)  [GCC 9.3.0]
+PEP 405 virtualenv detected: /home/ibas/Django/IBAS_venv
+Set PythonHome to /home/ibas/Django/IBAS_venv
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0x55e44f66a440
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 145840 bytes (142 KB) for 1 cores
+*** Operational MODE: single process ***
+WSGI app 0 (mountpoint='') ready in 0 seconds on interpreter 0x55e44f66a440 pid: 8443 (default app)
+*** uWSGI is running in multiple interpreter mode ***
+gracefully (RE)spawned uWSGI master process (pid: 8443)
+spawned uWSGI worker 1 (pid: 8457, cores: 1)
+render: LightJo
+[pid: 8457|app: 0|req: 1/1] 65.154.226.165 () {48 vars in 797 bytes} [Sat Feb  6 01:40:43 2021] GET / => generated 1413 bytes in 73 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+...gracefully killing workers...
+Gracefully killing worker 1 (pid: 8457)...
+worker 1 buried after 1 seconds
+binary reloading uWSGI...
+chdir() to /home/ibas/Django/IBAS
+closing all non-uwsgi socket fds > 2 (max_fd = 1048576)...
+found fd 3 mapped to socket 0 (/home/ibas/Django/IBAS/uwsgi.sock)
+running /home/ibas/Django/IBAS_venv/bin/uwsgi
+[uWSGI] getting INI configuration from uwsgi.ini
+open("./python38_plugin.so"): No such file or directory [core/utils.c line 3732]
+!!! UNABLE to load uWSGI plugin: ./python38_plugin.so: cannot open shared object file: No such file or directory !!!
+*** Starting uWSGI 2.0.19.1 (64bit) on [Sat Feb  6 01:54:54 2021] ***
+compiled with version: 9.3.0 on 27 January 2021 16:52:57
+os: Linux-5.8.0-41-generic #46~20.04.1-Ubuntu SMP Mon Jan 18 17:52:23 UTC 2021
+nodename: ibas-desktop
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 12
+current working directory: /home/ibas/Django/IBAS
+detected binary path: /home/ibas/Django/IBAS_venv/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+chdir() to /home/ibas/Django/IBAS
+your processes number limit is 127943
+your memory page size is 4096 bytes
+detected max file descriptor number: 1048576
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 inherited UNIX address /home/ibas/Django/IBAS/uwsgi.sock fd 3
+*** Starting uWSGI 2.0.19.1 (64bit) on [Sat Feb  6 01:54:54 2021] ***
+compiled with version: 9.3.0 on 27 January 2021 16:52:57
+os: Linux-5.8.0-41-generic #46~20.04.1-Ubuntu SMP Mon Jan 18 17:52:23 UTC 2021
+nodename: ibas-desktop
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 12
+current working directory: /home/ibas/Django/IBAS
+writing pidfile to /tmp/project-master.pid
+detected binary path: /home/ibas/Django/IBAS_venv/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+chdir() to /home/ibas/Django/IBAS
+your processes number limit is 127943
+your memory page size is 4096 bytes
+detected max file descriptor number: 1048576
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address /home/ibas/Django/IBAS/uwsgi.sock fd 3
+Python version: 3.8.5 (default, Jul 28 2020, 12:59:40)  [GCC 9.3.0]
+PEP 405 virtualenv detected: /home/ibas/Django/IBAS_venv
+Set PythonHome to /home/ibas/Django/IBAS_venv
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0x55a26b336870
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 145840 bytes (142 KB) for 1 cores
+*** Operational MODE: single process ***
+Python version: 3.8.5 (default, Jul 28 2020, 12:59:40)  [GCC 9.3.0]
+PEP 405 virtualenv detected: /home/ibas/Django/IBAS_venv
+Set PythonHome to /home/ibas/Django/IBAS_venv
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0x55b5fecd7440
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 145840 bytes (142 KB) for 1 cores
+*** Operational MODE: single process ***
+WSGI app 0 (mountpoint='') ready in 0 seconds on interpreter 0x55a26b336870 pid: 8632 (default app)
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI master process (pid: 8632)
+spawned uWSGI worker 1 (pid: 8635, cores: 1)
+WSGI app 0 (mountpoint='') ready in 0 seconds on interpreter 0x55b5fecd7440 pid: 8443 (default app)
+*** uWSGI is running in multiple interpreter mode ***
+gracefully (RE)spawned uWSGI master process (pid: 8443)
+spawned uWSGI worker 1 (pid: 8636, cores: 1)
+*** Starting uWSGI 2.0.19.1 (64bit) on [Sat Feb  6 01:57:23 2021] ***
+compiled with version: 9.3.0 on 27 January 2021 16:52:57
+os: Linux-5.8.0-41-generic #46~20.04.1-Ubuntu SMP Mon Jan 18 17:52:23 UTC 2021
+nodename: ibas-desktop
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 12
+current working directory: /home/ibas/Django/IBAS
+writing pidfile to /tmp/project-master.pid
+detected binary path: /home/ibas/Django/IBAS_venv/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+chdir() to /home/ibas/Django/IBAS
+your processes number limit is 127943
+your memory page size is 4096 bytes
+detected max file descriptor number: 1048576
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address /home/ibas/Django/IBAS/uwsgi.sock fd 3
+Python version: 3.8.5 (default, Jul 28 2020, 12:59:40)  [GCC 9.3.0]
+PEP 405 virtualenv detected: /home/ibas/Django/IBAS_venv
+Set PythonHome to /home/ibas/Django/IBAS_venv
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0x561dfb630870
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 145840 bytes (142 KB) for 1 cores
+*** Operational MODE: single process ***
+WSGI app 0 (mountpoint='') ready in 0 seconds on interpreter 0x561dfb630870 pid: 8720 (default app)
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI master process (pid: 8720)
+spawned uWSGI worker 1 (pid: 8722, cores: 1)
+...gracefully killing workers...
+Gracefully killing worker 1 (pid: 8722)...
+worker 1 buried after 1 seconds
+binary reloading uWSGI...
+chdir() to /home/ibas/Django/IBAS
+closing all non-uwsgi socket fds > 2 (max_fd = 1048576)...
+found fd 3 mapped to socket 0 (/home/ibas/Django/IBAS/uwsgi.sock)
+running /home/ibas/Django/IBAS_venv/bin/uwsgi
+[uWSGI] getting INI configuration from uwsgi.ini
+open("./python38_plugin.so"): No such file or directory [core/utils.c line 3732]
+!!! UNABLE to load uWSGI plugin: ./python38_plugin.so: cannot open shared object file: No such file or directory !!!
+*** Starting uWSGI 2.0.19.1 (64bit) on [Sat Feb  6 01:57:26 2021] ***
+compiled with version: 9.3.0 on 27 January 2021 16:52:57
+os: Linux-5.8.0-41-generic #46~20.04.1-Ubuntu SMP Mon Jan 18 17:52:23 UTC 2021
+nodename: ibas-desktop
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 12
+current working directory: /home/ibas/Django/IBAS
+detected binary path: /home/ibas/Django/IBAS_venv/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+chdir() to /home/ibas/Django/IBAS
+your processes number limit is 127943
+your memory page size is 4096 bytes
+detected max file descriptor number: 1048576
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 inherited UNIX address /home/ibas/Django/IBAS/uwsgi.sock fd 3
+Python version: 3.8.5 (default, Jul 28 2020, 12:59:40)  [GCC 9.3.0]
+PEP 405 virtualenv detected: /home/ibas/Django/IBAS_venv
+Set PythonHome to /home/ibas/Django/IBAS_venv
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0x5622fd71d440
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 145840 bytes (142 KB) for 1 cores
+*** Operational MODE: single process ***
+WSGI app 0 (mountpoint='') ready in 0 seconds on interpreter 0x5622fd71d440 pid: 8720 (default app)
+*** uWSGI is running in multiple interpreter mode ***
+gracefully (RE)spawned uWSGI master process (pid: 8720)
+spawned uWSGI worker 1 (pid: 8725, cores: 1)
+*** Starting uWSGI 2.0.19.1 (64bit) on [Sat Feb  6 02:06:29 2021] ***
+compiled with version: 9.3.0 on 27 January 2021 16:52:57
+os: Linux-5.8.0-41-generic #46~20.04.1-Ubuntu SMP Mon Jan 18 17:52:23 UTC 2021
+nodename: ibas-desktop
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 12
+current working directory: /home/ibas/Django/IBAS
+writing pidfile to /tmp/project-master.pid
+detected binary path: /home/ibas/Django/IBAS_venv/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+chdir() to /home/ibas/Django/IBAS
+your processes number limit is 127943
+your memory page size is 4096 bytes
+detected max file descriptor number: 1048576
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address /home/ibas/Django/IBAS/uwsgi.sock fd 3
+Python version: 3.8.5 (default, Jul 28 2020, 12:59:40)  [GCC 9.3.0]
+PEP 405 virtualenv detected: /home/ibas/Django/IBAS_venv
+Set PythonHome to /home/ibas/Django/IBAS_venv
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0x556b42d54870
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 145840 bytes (142 KB) for 1 cores
+*** Operational MODE: single process ***
+WSGI app 0 (mountpoint='') ready in 0 seconds on interpreter 0x556b42d54870 pid: 8872 (default app)
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI master process (pid: 8872)
+spawned uWSGI worker 1 (pid: 8874, cores: 1)
+render: LightJo
+[pid: 8874|app: 0|req: 1/1] 112.148.18.72 () {44 vars in 1455 bytes} [Sat Feb  6 02:19:46 2021] GET / => generated 1413 bytes in 87 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 8874|app: 0|req: 2/2] 112.148.18.72 () {46 vars in 1538 bytes} [Sat Feb  6 02:19:55 2021] GET /accounts/google/login/ => generated 0 bytes in 16 msecs (HTTP/1.1 302) 8 headers in 604 bytes (1 switches on core 0)
+[pid: 8874|app: 0|req: 3/3] 112.148.18.72 () {44 vars in 2048 bytes} [Sat Feb  6 02:19:57 2021] GET /accounts/google/login/callback/?state=fY7eE6qTAVJt&code=4%2F0AY0e-g5jQCep0MSQ4NUWAeMefuTS46pUPWv1obA6uGieJlABP7c47ipy7mC_G3fblR93zA&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+openid&authuser=0&prompt=none => generated 0 bytes in 509 msecs (HTTP/1.1 302) 10 headers in 1211 bytes (1 switches on core 0)
+[pid: 8874|app: 0|req: 4/4] 112.148.18.72 () {44 vars in 1590 bytes} [Sat Feb  6 02:19:58 2021] GET /pass/ => generated 863 bytes in 3 msecs (HTTP/1.1 200) 7 headers in 348 bytes (2 switches on core 0)
+유저 패스워드 !1wEV9YJXvOeYergCKPLsOLTAG7ny9D2kmzd6OQbs
+8
+0130yang
+0130yang@gmail.com
+양태영
+[pid: 8874|app: 0|req: 5/5] 112.148.18.72 () {54 vars in 1809 bytes} [Sat Feb  6 02:19:58 2021] POST / => generated 1418 bytes in 8 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 8874|app: 0|req: 6/6] 112.148.18.72 () {46 vars in 1651 bytes} [Sat Feb  6 02:20:02 2021] GET /accounts/logout/ => generated 0 bytes in 16 msecs (HTTP/1.1 302) 9 headers in 1101 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 7/7] 112.148.18.72 () {46 vars in 1683 bytes} [Sat Feb  6 02:20:02 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 8/8] 78.158.187.185 () {36 vars in 503 bytes} [Sat Feb  6 02:29:07 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 9/9] 87.107.142.211 () {32 vars in 447 bytes} [Sat Feb  6 04:01:30 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+Invalid HTTP_HOST header: '_'. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /0bef
+[pid: 8874|app: 0|req: 10/10] 172.105.89.161 () {26 vars in 270 bytes} [Sat Feb  6 06:11:00 2021] GET /0bef => generated 57321 bytes in 34 msecs (HTTP/1.0 400) 3 headers in 116 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 11/11] 110.37.227.155 () {32 vars in 453 bytes} [Sat Feb  6 06:18:57 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 12/12] 210.220.79.250 () {46 vars in 645 bytes} [Sat Feb  6 06:46:28 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 13/13] 197.254.118.66 () {32 vars in 447 bytes} [Sat Feb  6 08:15:31 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+Not Found: /wp-login.php
+[pid: 8874|app: 0|req: 14/14] 165.22.252.197 () {34 vars in 457 bytes} [Sat Feb  6 09:05:01 2021] GET /wp-login.php => generated 2456 bytes in 5 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 15/15] 128.14.134.134 () {34 vars in 470 bytes} [Sat Feb  6 11:20:50 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+Invalid HTTP_HOST header: '_'. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /login
+[pid: 8874|app: 0|req: 16/16] 118.70.151.8 () {26 vars in 270 bytes} [Sat Feb  6 13:01:00 2021] GET /login => generated 57331 bytes in 19 msecs (HTTP/1.0 400) 3 headers in 116 bytes (2 switches on core 0)
+Invalid HTTP_HOST header: '_'. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /jenkins/login
+[pid: 8874|app: 0|req: 17/17] 118.70.151.8 () {26 vars in 286 bytes} [Sat Feb  6 13:01:00 2021] GET /jenkins/login => generated 57427 bytes in 20 msecs (HTTP/1.0 400) 3 headers in 116 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 18/18] 193.122.147.105 () {38 vars in 579 bytes} [Sat Feb  6 13:13:32 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 19/19] 193.122.147.105 () {38 vars in 579 bytes} [Sat Feb  6 13:13:32 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+Not Found: /wp-includes/wlwmanifest.xml
+[pid: 8874|app: 0|req: 20/20] 193.122.147.105 () {38 vars in 633 bytes} [Sat Feb  6 13:13:32 2021] GET /wp-includes/wlwmanifest.xml => generated 2501 bytes in 5 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 21/21] 193.122.147.105 () {38 vars in 579 bytes} [Sat Feb  6 13:14:00 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+Not Found: /blog/wp-includes/wlwmanifest.xml
+[pid: 8874|app: 0|req: 22/22] 193.122.147.105 () {38 vars in 643 bytes} [Sat Feb  6 13:14:00 2021] GET /blog/wp-includes/wlwmanifest.xml => generated 2516 bytes in 5 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+Not Found: /web/wp-includes/wlwmanifest.xml
+[pid: 8874|app: 0|req: 23/23] 193.122.147.105 () {38 vars in 641 bytes} [Sat Feb  6 13:14:00 2021] GET /web/wp-includes/wlwmanifest.xml => generated 2513 bytes in 5 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+Not Found: /wordpress/wp-includes/wlwmanifest.xml
+[pid: 8874|app: 0|req: 24/24] 193.122.147.105 () {38 vars in 653 bytes} [Sat Feb  6 13:14:00 2021] GET /wordpress/wp-includes/wlwmanifest.xml => generated 2531 bytes in 5 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+Not Found: /website/wp-includes/wlwmanifest.xml
+[pid: 8874|app: 0|req: 25/25] 193.122.147.105 () {38 vars in 649 bytes} [Sat Feb  6 13:14:01 2021] GET /website/wp-includes/wlwmanifest.xml => generated 2525 bytes in 5 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+Not Found: /wp/wp-includes/wlwmanifest.xml
+[pid: 8874|app: 0|req: 26/26] 193.122.147.105 () {38 vars in 639 bytes} [Sat Feb  6 13:14:01 2021] GET /wp/wp-includes/wlwmanifest.xml => generated 2510 bytes in 5 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+Not Found: /news/wp-includes/wlwmanifest.xml
+[pid: 8874|app: 0|req: 27/27] 193.122.147.105 () {38 vars in 643 bytes} [Sat Feb  6 13:14:01 2021] GET /news/wp-includes/wlwmanifest.xml => generated 2516 bytes in 5 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+Not Found: /wp1/wp-includes/wlwmanifest.xml
+[pid: 8874|app: 0|req: 28/28] 193.122.147.105 () {38 vars in 641 bytes} [Sat Feb  6 13:14:01 2021] GET /wp1/wp-includes/wlwmanifest.xml => generated 2513 bytes in 5 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+Not Found: /test/wp-includes/wlwmanifest.xml
+[pid: 8874|app: 0|req: 29/29] 193.122.147.105 () {38 vars in 643 bytes} [Sat Feb  6 13:14:01 2021] GET /test/wp-includes/wlwmanifest.xml => generated 2516 bytes in 5 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+Not Found: /wp2/wp-includes/wlwmanifest.xml
+[pid: 8874|app: 0|req: 30/30] 193.122.147.105 () {38 vars in 641 bytes} [Sat Feb  6 13:14:02 2021] GET /wp2/wp-includes/wlwmanifest.xml => generated 2513 bytes in 5 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+Not Found: /site/wp-includes/wlwmanifest.xml
+[pid: 8874|app: 0|req: 31/31] 193.122.147.105 () {38 vars in 643 bytes} [Sat Feb  6 13:14:02 2021] GET /site/wp-includes/wlwmanifest.xml => generated 2516 bytes in 5 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+Not Found: /cms/wp-includes/wlwmanifest.xml
+[pid: 8874|app: 0|req: 32/32] 193.122.147.105 () {38 vars in 641 bytes} [Sat Feb  6 13:14:02 2021] GET /cms/wp-includes/wlwmanifest.xml => generated 2513 bytes in 5 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+Not Found: /sito/wp-includes/wlwmanifest.xml
+[pid: 8874|app: 0|req: 33/33] 193.122.147.105 () {38 vars in 643 bytes} [Sat Feb  6 13:14:02 2021] GET /sito/wp-includes/wlwmanifest.xml => generated 2516 bytes in 5 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 34/34] 139.162.119.197 () {32 vars in 383 bytes} [Sat Feb  6 13:44:01 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 35/35] 190.84.161.13 () {32 vars in 446 bytes} [Sat Feb  6 13:54:08 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 36/36] 210.220.86.6 () {46 vars in 650 bytes} [Sat Feb  6 14:09:19 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 37/37] 177.72.63.35 () {32 vars in 445 bytes} [Sat Feb  6 14:09:21 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 38/38] 210.220.86.2 () {46 vars in 646 bytes} [Sat Feb  6 14:11:22 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 39/39] 112.148.18.72 () {44 vars in 882 bytes} [Sat Feb  6 14:28:27 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+Not Found: /favicon.ico
+[pid: 8874|app: 0|req: 40/40] 112.148.18.72 () {44 vars in 837 bytes} [Sat Feb  6 14:28:28 2021] GET /favicon.ico => generated 2457 bytes in 5 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+[pid: 8874|app: 0|req: 41/41] 112.148.18.72 () {46 vars in 963 bytes} [Sat Feb  6 14:28:38 2021] GET /accounts/naver/login/ => generated 0 bytes in 16 msecs (HTTP/1.1 302) 8 headers in 537 bytes (1 switches on core 0)
+[pid: 8874|app: 0|req: 42/42] 112.148.18.72 () {44 vars in 1071 bytes} [Sat Feb  6 14:28:38 2021] GET /accounts/naver/login/callback/?code=MtNP0eGLZmil8zjxK2&state=8D7VbLdtpOjx => generated 0 bytes in 543 msecs (HTTP/1.1 302) 10 headers in 744 bytes (1 switches on core 0)
+[pid: 8874|app: 0|req: 43/43] 112.148.18.72 () {44 vars in 1124 bytes} [Sat Feb  6 14:28:38 2021] GET /pass/ => generated 863 bytes in 3 msecs (HTTP/1.1 200) 7 headers in 348 bytes (1 switches on core 0)
+유저 패스워드 !JbLWiG7XOlNObUyEIpc6UAGUvMM2Sk2Y3dRzn7h2
+10
+apxkf9632
+apxkf9632@naver.com
+양태영
+[pid: 8874|app: 0|req: 44/44] 112.148.18.72 () {54 vars in 1343 bytes} [Sat Feb  6 14:28:39 2021] POST / => generated 1419 bytes in 8 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 8874|app: 0|req: 45/45] 112.148.18.72 () {46 vars in 1185 bytes} [Sat Feb  6 14:28:42 2021] GET /accounts/logout/ => generated 0 bytes in 15 msecs (HTTP/1.1 302) 9 headers in 634 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 46/46] 112.148.18.72 () {46 vars in 1217 bytes} [Sat Feb  6 14:28:42 2021] GET / => generated 1413 bytes in 1 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 8874|app: 0|req: 47/47] 112.148.18.72 () {46 vars in 1261 bytes} [Sat Feb  6 14:28:46 2021] GET /accounts/google/login/ => generated 0 bytes in 14 msecs (HTTP/1.1 302) 8 headers in 604 bytes (1 switches on core 0)
+[pid: 8874|app: 0|req: 48/48] 112.148.18.72 () {44 vars in 1811 bytes} [Sat Feb  6 14:28:51 2021] GET /accounts/google/login/callback/?state=zixjfHGq8xvp&code=4/0AY0e-g4E8682AVTT6KYcfRENNBrlsy8XeVQ2f2U1Ap68KubYwvZ_YLvZKRYN2QLZ-rg-sg&scope=email%20profile%20openid%20https://www.googleapis.com/auth/userinfo.profile%20https://www.googleapis.com/auth/userinfo.email&authuser=1&hd=inha.edu&prompt=none => generated 0 bytes in 566 msecs (HTTP/1.1 302) 10 headers in 977 bytes (1 switches on core 0)
+[pid: 8874|app: 0|req: 49/49] 112.148.18.72 () {44 vars in 1357 bytes} [Sat Feb  6 14:28:52 2021] GET /pass/ => generated 863 bytes in 4 msecs (HTTP/1.1 200) 7 headers in 348 bytes (1 switches on core 0)
+유저 패스워드 !WY0v8DxXdHXJST31oA97oMz1pJ2owJ1p8tHSzHkg
+9
+12162359
+12162359@inha.edu
+양태영/학생/경영학
+[pid: 8874|app: 0|req: 50/50] 112.148.18.72 () {54 vars in 1576 bytes} [Sat Feb  6 14:28:52 2021] POST / => generated 1434 bytes in 6 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+Invalid HTTP_HOST header: '_'. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /login
+[pid: 8874|app: 0|req: 51/51] 161.117.236.5 () {26 vars in 271 bytes} [Sat Feb  6 15:03:10 2021] GET /login => generated 57332 bytes in 23 msecs (HTTP/1.0 400) 3 headers in 116 bytes (1 switches on core 0)
+Invalid HTTP_HOST header: '_'. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /jenkins/login
+[pid: 8874|app: 0|req: 52/52] 161.117.236.5 () {26 vars in 287 bytes} [Sat Feb  6 15:03:11 2021] GET /jenkins/login => generated 57428 bytes in 21 msecs (HTTP/1.0 400) 3 headers in 116 bytes (1 switches on core 0)
+Invalid HTTP_HOST header: '_'. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+Sat Feb  6 15:04:01 2021 - SIGPIPE: writing to a closed pipe/socket/fd (probably the client disconnected) on request /manager/html (ip 161.117.236.5) !!!
+Sat Feb  6 15:04:01 2021 - uwsgi_response_writev_headers_and_body_do(): Broken pipe [core/writer.c line 306] during GET /manager/html (161.117.236.5)
+OSError: write error
+[pid: 8874|app: 0|req: 53/53] 161.117.236.5 () {28 vars in 337 bytes} [Sat Feb  6 15:04:01 2021] GET /manager/html => generated 0 bytes in 24 msecs (HTTP/1.0 400) 3 headers in 0 bytes (0 switches on core 0)
+Not Found: /wp-login.php
+[pid: 8874|app: 0|req: 54/54] 35.181.87.238 () {34 vars in 487 bytes} [Sat Feb  6 15:38:35 2021] GET /wp-login.php => generated 2456 bytes in 5 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+Not Found: /wordpress/wp-login.php
+[pid: 8874|app: 0|req: 55/55] 35.181.87.238 () {34 vars in 507 bytes} [Sat Feb  6 15:38:39 2021] GET /wordpress/wp-login.php => generated 2486 bytes in 5 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+Not Found: /blog/wp-login.php
+[pid: 8874|app: 0|req: 56/56] 35.181.87.238 () {34 vars in 497 bytes} [Sat Feb  6 15:38:41 2021] GET /blog/wp-login.php => generated 2471 bytes in 4 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+Not Found: /wp/wp-login.php
+[pid: 8874|app: 0|req: 57/57] 35.181.87.238 () {34 vars in 493 bytes} [Sat Feb  6 15:38:44 2021] GET /wp/wp-login.php => generated 2465 bytes in 5 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 58/58] 92.84.201.134 () {28 vars in 289 bytes} [Sat Feb  6 15:47:56 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 59/59] 167.248.133.53 () {28 vars in 293 bytes} [Sat Feb  6 16:11:13 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 60/60] 167.248.133.53 () {34 vars in 425 bytes} [Sat Feb  6 16:11:13 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 61/61] 73.59.174.110 () {32 vars in 452 bytes} [Sat Feb  6 16:14:21 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+Not Found: /robots.txt
+[pid: 8874|app: 0|req: 62/62] 66.249.72.4 () {36 vars in 505 bytes} [Sat Feb  6 17:08:07 2021] GET /robots.txt => generated 2454 bytes in 5 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 63/63] 66.249.72.2 () {40 vars in 766 bytes} [Sat Feb  6 17:08:07 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+Not Found: /.env
+[pid: 8874|app: 0|req: 64/64] 186.179.112.254 () {36 vars in 507 bytes} [Sat Feb  6 18:21:31 2021] GET /.env => generated 2436 bytes in 5 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+Forbidden (CSRF cookie not set.): /
+[pid: 8874|app: 0|req: 65/65] 186.179.112.254 () {40 vars in 614 bytes} [Sat Feb  6 18:21:31 2021] POST / => generated 2994 bytes in 2 msecs (HTTP/1.1 403) 5 headers in 159 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 66/66] 2.183.203.113 () {32 vars in 446 bytes} [Sat Feb  6 18:59:27 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 67/67] 212.83.146.233 () {36 vars in 521 bytes} [Sat Feb  6 19:16:42 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 68/68] 5.235.215.58 () {32 vars in 445 bytes} [Sat Feb  6 19:44:19 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 69/69] 94.126.62.217 () {32 vars in 446 bytes} [Sat Feb  6 21:08:20 2021] GET / => generated 1413 bytes in 1 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 8874|app: 0|req: 70/70] 66.249.72.2 () {40 vars in 796 bytes} [Sat Feb  6 21:18:07 2021] GET /accounts/logout => generated 0 bytes in 0 msecs (HTTP/1.1 301) 5 headers in 185 bytes (1 switches on core 0)
+[pid: 8874|app: 0|req: 71/71] 66.249.72.4 () {40 vars in 798 bytes} [Sat Feb  6 21:18:08 2021] GET /accounts/logout/ => generated 0 bytes in 1 msecs (HTTP/1.1 302) 7 headers in 194 bytes (1 switches on core 0)
+[pid: 8874|app: 0|req: 72/72] 66.249.72.6 () {40 vars in 808 bytes} [Sat Feb  6 21:18:09 2021] GET /accounts/naver/login/ => generated 0 bytes in 15 msecs (HTTP/1.1 302) 8 headers in 537 bytes (1 switches on core 0)
+[pid: 8874|app: 0|req: 73/73] 66.249.72.6 () {40 vars in 810 bytes} [Sat Feb  6 21:18:09 2021] GET /accounts/google/login/ => generated 0 bytes in 10 msecs (HTTP/1.1 302) 8 headers in 604 bytes (1 switches on core 0)
+Not Found: /GponForm/diag_Form
+Sat Feb  6 21:48:32 2021 - SIGPIPE: writing to a closed pipe/socket/fd (probably the client disconnected) on request /GponForm/diag_Form?images/ (ip 178.68.163.60) !!!
+Sat Feb  6 21:48:32 2021 - uwsgi_response_writev_headers_and_body_do(): Broken pipe [core/writer.c line 306] during POST /GponForm/diag_Form?images/ (178.68.163.60)
+OSError: write error
+[pid: 8874|app: 0|req: 74/74] 178.68.163.60 () {38 vars in 482 bytes} [Sat Feb  6 21:48:32 2021] POST /GponForm/diag_Form?images/ => generated 0 bytes in 5 msecs (HTTP/1.1 404) 5 headers in 0 bytes (0 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 75/75] 20.185.40.41 () {36 vars in 553 bytes} [Sat Feb  6 21:48:36 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 76/76] 20.185.40.41 () {38 vars in 592 bytes} [Sat Feb  6 21:56:59 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 77/77] 103.242.239.142 () {32 vars in 447 bytes} [Sat Feb  6 22:14:13 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 78/78] 34.78.120.99 () {42 vars in 544 bytes} [Sat Feb  6 23:00:39 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+Not Found: /.env
+[pid: 8874|app: 0|req: 79/79] 51.103.33.179 () {36 vars in 505 bytes} [Sun Feb  7 00:09:31 2021] GET /.env => generated 2436 bytes in 5 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+Forbidden (CSRF cookie not set.): /
+[pid: 8874|app: 0|req: 80/80] 51.103.33.179 () {40 vars in 612 bytes} [Sun Feb  7 00:09:32 2021] POST / => generated 2994 bytes in 2 msecs (HTTP/1.1 403) 5 headers in 159 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 81/81] 3.93.148.226 () {36 vars in 501 bytes} [Sun Feb  7 01:12:27 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 82/82] 185.170.200.134 () {36 vars in 503 bytes} [Sun Feb  7 01:26:09 2021] HEAD / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+Not Found: /robots.txt
+[pid: 8874|app: 0|req: 83/83] 185.170.200.158 () {36 vars in 522 bytes} [Sun Feb  7 01:26:10 2021] GET /robots.txt => generated 2454 bytes in 5 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 84/84] 210.220.70.0 () {46 vars in 643 bytes} [Sun Feb  7 01:37:51 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 85/85] 66.249.72.2 () {40 vars in 766 bytes} [Sun Feb  7 02:05:06 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 86/86] 74.82.47.5 () {28 vars in 286 bytes} [Sun Feb  7 02:15:33 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 87/87] 3.139.106.212 () {34 vars in 476 bytes} [Sun Feb  7 02:58:58 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 88/88] 162.142.125.37 () {28 vars in 293 bytes} [Sun Feb  7 05:07:01 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 89/89] 162.142.125.37 () {34 vars in 425 bytes} [Sun Feb  7 05:07:02 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 90/90] 38.18.36.250 () {42 vars in 732 bytes} [Sun Feb  7 08:25:11 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+Not Found: /robots.txt
+[pid: 8874|app: 0|req: 91/91] 66.249.72.2 () {36 vars in 505 bytes} [Sun Feb  7 08:37:35 2021] GET /robots.txt => generated 2454 bytes in 5 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 92/92] 12.226.191.10 () {32 vars in 446 bytes} [Sun Feb  7 09:54:48 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 93/93] 8.36.123.216 () {32 vars in 375 bytes} [Sun Feb  7 10:00:37 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 94/94] 92.118.160.29 () {30 vars in 433 bytes} [Sun Feb  7 10:26:23 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 95/95] 128.14.133.58 () {34 vars in 469 bytes} [Sun Feb  7 11:19:58 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+Not Found: /manager/html/
+Sun Feb  7 12:21:26 2021 - SIGPIPE: writing to a closed pipe/socket/fd (probably the client disconnected) on request /manager/html/ (ip 103.20.206.168) !!!
+Sun Feb  7 12:21:26 2021 - uwsgi_response_writev_headers_and_body_do(): Broken pipe [core/writer.c line 306] during GET /manager/html/ (103.20.206.168)
+OSError: write error
+[pid: 8874|app: 0|req: 96/96] 103.20.206.168 () {34 vars in 496 bytes} [Sun Feb  7 12:21:26 2021] GET /manager/html/ => generated 0 bytes in 5 msecs (HTTP/1.1 404) 5 headers in 0 bytes (0 switches on core 0)
+Not Found: /config/getuser
+[pid: 8874|app: 0|req: 97/97] 68.183.25.193 () {40 vars in 653 bytes} [Sun Feb  7 12:40:04 2021] GET /config/getuser?index=0 => generated 2477 bytes in 5 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 98/98] 13.212.216.249 () {38 vars in 587 bytes} [Sun Feb  7 13:46:02 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 99/99] 13.212.216.249 () {38 vars in 587 bytes} [Sun Feb  7 13:46:02 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+Not Found: /wp-includes/wlwmanifest.xml
+[pid: 8874|app: 0|req: 100/100] 13.212.216.249 () {38 vars in 641 bytes} [Sun Feb  7 13:46:02 2021] GET /wp-includes/wlwmanifest.xml => generated 2501 bytes in 5 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 101/101] 13.212.216.249 () {38 vars in 587 bytes} [Sun Feb  7 13:46:23 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+Not Found: /blog/wp-includes/wlwmanifest.xml
+[pid: 8874|app: 0|req: 102/102] 13.212.216.249 () {38 vars in 651 bytes} [Sun Feb  7 13:46:24 2021] GET /blog/wp-includes/wlwmanifest.xml => generated 2516 bytes in 5 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+Not Found: /web/wp-includes/wlwmanifest.xml
+[pid: 8874|app: 0|req: 103/103] 13.212.216.249 () {38 vars in 649 bytes} [Sun Feb  7 13:46:24 2021] GET /web/wp-includes/wlwmanifest.xml => generated 2513 bytes in 4 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+Not Found: /wordpress/wp-includes/wlwmanifest.xml
+[pid: 8874|app: 0|req: 104/104] 13.212.216.249 () {38 vars in 661 bytes} [Sun Feb  7 13:46:24 2021] GET /wordpress/wp-includes/wlwmanifest.xml => generated 2531 bytes in 5 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+Not Found: /website/wp-includes/wlwmanifest.xml
+[pid: 8874|app: 0|req: 105/105] 13.212.216.249 () {38 vars in 657 bytes} [Sun Feb  7 13:46:24 2021] GET /website/wp-includes/wlwmanifest.xml => generated 2525 bytes in 4 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+Not Found: /wp/wp-includes/wlwmanifest.xml
+[pid: 8874|app: 0|req: 106/106] 13.212.216.249 () {38 vars in 647 bytes} [Sun Feb  7 13:46:24 2021] GET /wp/wp-includes/wlwmanifest.xml => generated 2510 bytes in 4 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+Not Found: /news/wp-includes/wlwmanifest.xml
+[pid: 8874|app: 0|req: 107/107] 13.212.216.249 () {38 vars in 651 bytes} [Sun Feb  7 13:46:24 2021] GET /news/wp-includes/wlwmanifest.xml => generated 2516 bytes in 4 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+Not Found: /2018/wp-includes/wlwmanifest.xml
+[pid: 8874|app: 0|req: 108/108] 13.212.216.249 () {38 vars in 651 bytes} [Sun Feb  7 13:46:24 2021] GET /2018/wp-includes/wlwmanifest.xml => generated 2516 bytes in 4 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+Not Found: /2019/wp-includes/wlwmanifest.xml
+[pid: 8874|app: 0|req: 109/109] 13.212.216.249 () {38 vars in 651 bytes} [Sun Feb  7 13:46:24 2021] GET /2019/wp-includes/wlwmanifest.xml => generated 2516 bytes in 4 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+Not Found: /shop/wp-includes/wlwmanifest.xml
+[pid: 8874|app: 0|req: 110/110] 13.212.216.249 () {38 vars in 651 bytes} [Sun Feb  7 13:46:24 2021] GET /shop/wp-includes/wlwmanifest.xml => generated 2516 bytes in 5 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+Not Found: /wp1/wp-includes/wlwmanifest.xml
+[pid: 8874|app: 0|req: 111/111] 13.212.216.249 () {38 vars in 649 bytes} [Sun Feb  7 13:46:24 2021] GET /wp1/wp-includes/wlwmanifest.xml => generated 2513 bytes in 4 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+Not Found: /test/wp-includes/wlwmanifest.xml
+[pid: 8874|app: 0|req: 112/112] 13.212.216.249 () {38 vars in 651 bytes} [Sun Feb  7 13:46:24 2021] GET /test/wp-includes/wlwmanifest.xml => generated 2516 bytes in 4 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+Not Found: /media/wp-includes/wlwmanifest.xml
+[pid: 8874|app: 0|req: 113/113] 13.212.216.249 () {38 vars in 653 bytes} [Sun Feb  7 13:46:24 2021] GET /media/wp-includes/wlwmanifest.xml => generated 2519 bytes in 4 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+Not Found: /wp2/wp-includes/wlwmanifest.xml
+[pid: 8874|app: 0|req: 114/114] 13.212.216.249 () {38 vars in 649 bytes} [Sun Feb  7 13:46:24 2021] GET /wp2/wp-includes/wlwmanifest.xml => generated 2513 bytes in 4 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+Not Found: /site/wp-includes/wlwmanifest.xml
+[pid: 8874|app: 0|req: 115/115] 13.212.216.249 () {38 vars in 651 bytes} [Sun Feb  7 13:46:25 2021] GET /site/wp-includes/wlwmanifest.xml => generated 2516 bytes in 4 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+Not Found: /cms/wp-includes/wlwmanifest.xml
+[pid: 8874|app: 0|req: 116/116] 13.212.216.249 () {38 vars in 649 bytes} [Sun Feb  7 13:46:25 2021] GET /cms/wp-includes/wlwmanifest.xml => generated 2513 bytes in 4 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+Not Found: /sito/wp-includes/wlwmanifest.xml
+[pid: 8874|app: 0|req: 117/117] 13.212.216.249 () {38 vars in 651 bytes} [Sun Feb  7 13:46:25 2021] GET /sito/wp-includes/wlwmanifest.xml => generated 2516 bytes in 5 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 118/118] 151.239.234.78 () {32 vars in 447 bytes} [Sun Feb  7 14:40:05 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+Invalid HTTP_HOST header: '_'. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html/
+Sun Feb  7 17:21:51 2021 - SIGPIPE: writing to a closed pipe/socket/fd (probably the client disconnected) on request /manager/html/ (ip 27.254.253.172) !!!
+Sun Feb  7 17:21:51 2021 - uwsgi_response_writev_headers_and_body_do(): Broken pipe [core/writer.c line 306] during GET /manager/html/ (27.254.253.172)
+OSError: write error
+[pid: 8874|app: 0|req: 119/119] 27.254.253.172 () {28 vars in 340 bytes} [Sun Feb  7 17:21:51 2021] GET /manager/html/ => generated 0 bytes in 24 msecs (HTTP/1.0 400) 3 headers in 0 bytes (0 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 120/120] 175.197.24.119 () {44 vars in 1128 bytes} [Sun Feb  7 19:34:38 2021] GET / => generated 1413 bytes in 4 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+Not Found: /favicon.ico
+[pid: 8874|app: 0|req: 121/121] 175.197.24.119 () {44 vars in 1083 bytes} [Sun Feb  7 19:34:38 2021] GET /favicon.ico => generated 2457 bytes in 5 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+[pid: 8874|app: 0|req: 122/122] 175.197.24.119 () {46 vars in 1211 bytes} [Sun Feb  7 19:34:41 2021] GET /accounts/google/login/ => generated 0 bytes in 11 msecs (HTTP/1.1 302) 8 headers in 604 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 123/123] 175.197.24.119 () {44 vars in 1128 bytes} [Sun Feb  7 19:34:46 2021] GET / => generated 1413 bytes in 4 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+Not Found: /favicon.ico
+[pid: 8874|app: 0|req: 124/124] 175.197.24.119 () {44 vars in 1083 bytes} [Sun Feb  7 19:34:46 2021] GET /favicon.ico => generated 2457 bytes in 5 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+[pid: 8874|app: 0|req: 125/125] 175.197.24.119 () {46 vars in 1209 bytes} [Sun Feb  7 19:34:48 2021] GET /accounts/naver/login/ => generated 0 bytes in 14 msecs (HTTP/1.1 302) 8 headers in 537 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 126/126] 175.197.24.119 () {44 vars in 1128 bytes} [Sun Feb  7 19:35:00 2021] GET / => generated 1413 bytes in 4 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+Not Found: /favicon.ico
+[pid: 8874|app: 0|req: 127/127] 175.197.24.119 () {44 vars in 1083 bytes} [Sun Feb  7 19:35:00 2021] GET /favicon.ico => generated 2457 bytes in 4 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+[pid: 8874|app: 0|req: 128/128] 175.197.24.119 () {46 vars in 1211 bytes} [Sun Feb  7 19:35:03 2021] GET /accounts/google/login/ => generated 0 bytes in 15 msecs (HTTP/1.1 302) 8 headers in 604 bytes (1 switches on core 0)
+Invalid HTTP_HOST header: '_'. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /login
+[pid: 8874|app: 0|req: 129/129] 121.36.145.223 () {26 vars in 272 bytes} [Sun Feb  7 19:41:16 2021] GET /login => generated 57333 bytes in 23 msecs (HTTP/1.0 400) 3 headers in 116 bytes (1 switches on core 0)
+Invalid HTTP_HOST header: '_'. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /jenkins/login
+[pid: 8874|app: 0|req: 130/130] 121.36.145.223 () {26 vars in 288 bytes} [Sun Feb  7 19:41:16 2021] GET /jenkins/login => generated 57429 bytes in 22 msecs (HTTP/1.0 400) 3 headers in 116 bytes (1 switches on core 0)
+Invalid HTTP_HOST header: '_'. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+Sun Feb  7 19:42:02 2021 - SIGPIPE: writing to a closed pipe/socket/fd (probably the client disconnected) on request /manager/html (ip 121.36.145.223) !!!
+Sun Feb  7 19:42:02 2021 - uwsgi_response_writev_headers_and_body_do(): Broken pipe [core/writer.c line 306] during GET /manager/html (121.36.145.223)
+OSError: write error
+[pid: 8874|app: 0|req: 131/131] 121.36.145.223 () {28 vars in 338 bytes} [Sun Feb  7 19:42:02 2021] GET /manager/html => generated 0 bytes in 23 msecs (HTTP/1.0 400) 3 headers in 0 bytes (0 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 132/132] 175.199.145.242 () {42 vars in 708 bytes} [Sun Feb  7 21:32:22 2021] GET / => generated 1413 bytes in 4 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 8874|app: 0|req: 133/133] 175.199.145.242 () {44 vars in 787 bytes} [Sun Feb  7 21:33:00 2021] GET /accounts/google/login/ => generated 0 bytes in 13 msecs (HTTP/1.1 302) 8 headers in 600 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 134/134] 175.199.145.242 () {42 vars in 708 bytes} [Sun Feb  7 21:35:14 2021] GET / => generated 1413 bytes in 4 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 135/135] 82.208.153.131 () {32 vars in 453 bytes} [Sun Feb  7 21:36:36 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 136/136] 45.201.188.2 () {32 vars in 445 bytes} [Sun Feb  7 22:38:43 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 137/137] 59.127.128.57 () {40 vars in 536 bytes} [Sun Feb  7 22:51:04 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+Not Found: /api/order
+[pid: 8874|app: 0|req: 138/138] 167.86.104.186 () {36 vars in 429 bytes} [Sun Feb  7 22:52:21 2021] GET /api/order => generated 2447 bytes in 5 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 139/139] 167.86.104.186 () {36 vars in 411 bytes} [Sun Feb  7 22:52:22 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+Not Found: /api/signup
+[pid: 8874|app: 0|req: 140/140] 167.86.104.186 () {36 vars in 431 bytes} [Sun Feb  7 22:52:22 2021] GET /api/signup => generated 2450 bytes in 4 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 141/141] 177.53.249.116 () {32 vars in 334 bytes} [Sun Feb  7 23:33:31 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 142/142] 112.148.18.72 () {44 vars in 926 bytes} [Sun Feb  7 23:51:14 2021] GET / => generated 1391 bytes in 5 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+Not Found: /favicon.ico
+[pid: 8874|app: 0|req: 143/143] 112.148.18.72 () {44 vars in 881 bytes} [Sun Feb  7 23:51:14 2021] GET /favicon.ico => generated 2457 bytes in 5 msecs (HTTP/1.1 404) 5 headers in 159 bytes (1 switches on core 0)
+[pid: 8874|app: 0|req: 144/144] 112.148.18.72 () {46 vars in 997 bytes} [Sun Feb  7 23:51:17 2021] GET /accounts/logout/ => generated 0 bytes in 17 msecs (HTTP/1.1 302) 9 headers in 508 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 145/145] 112.148.18.72 () {46 vars in 1091 bytes} [Sun Feb  7 23:51:17 2021] GET / => generated 1413 bytes in 1 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+[pid: 8874|app: 0|req: 146/146] 112.148.18.72 () {46 vars in 1135 bytes} [Sun Feb  7 23:51:20 2021] GET /accounts/google/login/ => generated 0 bytes in 14 msecs (HTTP/1.1 302) 8 headers in 604 bytes (1 switches on core 0)
+[pid: 8874|app: 0|req: 147/147] 112.148.18.72 () {44 vars in 1689 bytes} [Sun Feb  7 23:51:22 2021] GET /accounts/google/login/callback/?state=cUdFnd4IQmZQ&code=4%2F0AY0e-g4-E5MWcBXtSsc87kwQEyG05f2MFQ1AinTkOVhOTxdpYRAEFoQ0Sz4kLB13pqLhaA&scope=email+profile+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&authuser=0&prompt=none => generated 0 bytes in 461 msecs (HTTP/1.1 302) 10 headers in 851 bytes (1 switches on core 0)
+[pid: 8874|app: 0|req: 148/148] 112.148.18.72 () {44 vars in 1231 bytes} [Sun Feb  7 23:51:23 2021] GET /pass/ => generated 863 bytes in 3 msecs (HTTP/1.1 200) 7 headers in 348 bytes (1 switches on core 0)
+유저 패스워드 !1wEV9YJXvOeYergCKPLsOLTAG7ny9D2kmzd6OQbs
+8
+0130yang
+0130yang@gmail.com
+양태영
+[pid: 8874|app: 0|req: 149/149] 112.148.18.72 () {54 vars in 1450 bytes} [Sun Feb  7 23:51:23 2021] POST / => generated 1418 bytes in 8 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)
+render: LightJo
+[pid: 8874|app: 0|req: 150/150] 193.254.245.90 () {36 vars in 545 bytes} [Sun Feb  7 23:51:44 2021] GET / => generated 1413 bytes in 2 msecs (HTTP/1.1 200) 6 headers in 181 bytes (1 switches on core 0)

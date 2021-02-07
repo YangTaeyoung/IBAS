@@ -3,7 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="cb1649c7-88f6-478a-978d-e41b554d2cb2" name="Default Changelist" comment="주석 추가">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/first/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/first/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IBAS/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/IBAS/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/django.log" beforeDir="false" afterPath="$PROJECT_DIR$/django.log" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -96,7 +97,8 @@
       <workItem from="1612402198996" duration="2007000" />
       <workItem from="1612431325442" duration="2337000" />
       <workItem from="1612494390791" duration="10909000" />
-      <workItem from="1612521916690" duration="1005000" />
+      <workItem from="1612521916690" duration="1171000" />
+      <workItem from="1612542878273" duration="2017000" />
     </task>
     <task id="LOCAL-00001" summary="초기화..">
       <created>1612283751068</created>
@@ -168,7 +170,14 @@
       <option name="project" value="LOCAL" />
       <updated>1612522770020</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="주석 추가">
+      <created>1612522926062</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1612522926062</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
