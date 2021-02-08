@@ -5,76 +5,78 @@
     <title>입부 신청</title>
 </head>
 <body>
-<table border="1">
-    {% csrf_token %}
-    <input type="hidden" id="user_token" name="user_token" value="{{ token }}"/>
-    <input type="hidden" id="user_auth" name="user_auth" value="4"/>
-    <input type="hidden" id="user_role" name="user_role" value="5"/>
-    <input type="hidden" id="is_activated" name="is_activated" value="0"/>
-    <input type="hidden" id="user_gen" name="user_gen" value="1"/>
-    <tr>
-        <td>
-            <label> 이름 </label>
-        </td>
-        <td>
-            <input type="text" name="user_name" value="{{ name }}"/>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <label> 이메일 </label>
-        </td>
-        <td>
-            <input type="text" name="user_email" value="{{ email }}"/>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <label> 학번 </label>
-        </td>
-        <td>
-            <input type="text" name="user_stu"/>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <label> 전공 </label>
-        </td>
-        <td>
-            <input type="text" name="user_major"/>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <label> 학년 </label>
-        </td>
-        <td>
-            <label for="user_grade">학년</label>
-            <p>
-                1학년
-                <input type="radio" id="user_grade" name="user_grade" value="1">
-            </p>
-            <p>
-                2학년
-                <input type="radio" id="user_grade" name="user_grade" value="2">
-            </p>
-            <p>
-                3학년
-                <input type="radio" id="user_grade" name="user_grade" value="3">
-            </p>
-            <p>
-                4학년 이상
-                <input type="radio" id="user_grade" name="user_grade" value="4">
-            </p>
-        </td>
-    </tr>
-    <tr>
+<form action="{% url 'join_chk' %}" method="post">
+    <table border="1">
+        {% csrf_token %}
+        <input type="hidden" id="user_token" name="user_token" value="{{ token }}"/>
+        <input type="hidden" id="user_auth" name="user_auth" value="4"/>
+        <input type="hidden" id="user_role" name="user_role" value="5"/>
+        <input type="hidden" id="is_activated" name="is_activated" value="0"/>
+        <input type="hidden" id="user_gen" name="user_gen" value="1"/>
+        <tr>
+            <td>
+                <label> 이름 </label>
+            </td>
+            <td>
+                <input type="text" name="user_name" value="{{ name }}"/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label> 이메일 </label>
+            </td>
+            <td>
+                <input type="text" name="user_email" value="{{ email }}"/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label> 학번 </label>
+            </td>
+            <td>
+                <input type="text" name="user_stu"/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label> 전공 </label>
+            </td>
+            <td>
+                <input type="text" name="user_major"/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label> 학년 </label>
+            </td>
+            <td>
+                <label for="user_grade">학년</label>
+                <p>
+                    1학년
+                    <input type="radio" id="user_grade" name="user_grade" value="1">
+                </p>
+                <p>
+                    2학년
+                    <input type="radio" id="user_grade" name="user_grade" value="2">
+                </p>
+                <p>
+                    3학년
+                    <input type="radio" id="user_grade" name="user_grade" value="3">
+                </p>
+                <p>
+                    4학년 이상
+                    <input type="radio" id="user_grade" name="user_grade" value="4">
+                </p>
+            </td>
+        </tr>
+        <tr>
 
-        <td colspan="2">1
-            <input type="submit" value="입부 신청">
-        </td>
-    </tr>
+            <td colspan="2">1
+                <input type="submit" value="입부 신청">
+            </td>
+        </tr>
 
-</table>
+    </table>
+</form>
 </body>
 </html>

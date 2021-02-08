@@ -12,10 +12,10 @@
 </head>
 
 <body>
-{% if request.session.user is not None %}
-    로그인 한 이메일: {{ request.session.user.user_email }}<br/>
-    로그인 한 사용자 이름: {{ request.session.user.user_name }}<br/>
-
+{% if request.session.user_stu is not None %}
+    로그인 한 이메일: {{ request.session.user_email }}<br/>
+    로그인 한 사용자 이름: {{ request.session.user_name }}<br/>
+    <button type="button" onclick="printConfirm('정말 로그아웃 하시겠습니까?', '{% url 'logout' %}')">로그아웃</button>
 {% else %}
     <a href="{% url 'login' %}">로그인 페이지로 이동</a><br/>
 {% endif %}

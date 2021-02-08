@@ -26,3 +26,8 @@ uwsgi --ini uwsgi.ini 명령어 실행시켜서 sock 파일 생성하고 nginx�
 문제 없이 잘 됨.
 
 개같은거
+
+- Object of type is not JSON serializable 오류
+세션에 객체를 등록 하려고 했을 때 나는 에러.
+리스트 형식 정도는 세션이 지원 하나 객체는 지원하지 않는 듯 하다.
+

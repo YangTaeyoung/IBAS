@@ -26,7 +26,7 @@ class User(models.Model):
     user_pic = models.CharField(db_column='USER_PIC', max_length=1000)  # Field name made lowercase.
     user_auth = models.IntegerField(db_column='USER_AUTH')  # Field name made lowercase.
     user_role = models.IntegerField(db_column='USER_ROLE')  # Field name made lowercase.
-    user_joined = models.DateTimeField(db_column='USER_JOINED', blank=True, null=True)  # Field name made lowercase.
+    user_joined = models.DateTimeField(db_column='USER_JOINED', blank=True, null=True, auto_now_add=True)  # Field name made lowercase.
     user_grade = models.IntegerField(db_column='USER_GRADE')  # Field name made lowercase.
     user_gen = models.IntegerField(db_column='USER_GEN')  # Field name made lowercase.
 
