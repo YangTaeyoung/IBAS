@@ -2,7 +2,7 @@
 {% providers_media_js %} <!-- 소셜 미디어 로그인 페이지와 로그아웃 페이지를 따기 위해 사용 -->
 
 {% if user.password is None %} <!-- google 로그인 페이지로부터 넘어온 게 없으면, 즉, 로그인을 하지 않은 상태라면 -->
-    <script>location.href = "{% url 'index' %}";</script> <!-- 아무런 제약 없이 메인 페이지로 이동함 -->
+    <script>location.href = "{% url 'join' %}";</script> <!-- 아무런 제약 없이 메인 페이지로 이동함 -->
 {% else %} <!--넘어온 것이 있으면-->
     <form id="hd_form" action="{% url 'index' %}" method="post"> <!-- 주소창에 파라미터가 넘어가면 안되므로, POST 방식을 이용해서 파라미터를 넘김-->
         {% csrf_token %} <!-- post 방식을 위한 토큰 -->

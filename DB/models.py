@@ -8,6 +8,73 @@
 from django.db import models
 
 
+class QuestForm(models.Model):
+    quest_no = models.AutoField(db_column='QUEST_NO', primary_key=True)  # Field name made lowercase.
+    quest_name = models.CharField(db_column='QUEST_NAME', max_length=500)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'QUEST_FORM'
+
+
+class User(models.Model):
+    user_email = models.CharField(db_column='USER_EMAIL', max_length=100)  # Field name made lowercase.
+    user_token = models.CharField(db_column='USER_TOKEN', max_length=1000)  # Field name made lowercase.
+    user_stu = models.IntegerField(db_column='USER_STU', primary_key=True)  # Field name made lowercase.
+    user_name = models.CharField(db_column='USER_NAME', max_length=50)  # Field name made lowercase.
+    user_major = models.CharField(db_column='USER_MAJOR', max_length=50)  # Field name made lowercase.
+    user_pic = models.CharField(db_column='USER_PIC', max_length=1000)  # Field name made lowercase.
+    user_auth = models.IntegerField(db_column='USER_AUTH')  # Field name made lowercase.
+    user_role = models.IntegerField(db_column='USER_ROLE')  # Field name made lowercase.
+    user_joined = models.DateTimeField(db_column='USER_JOINED', blank=True, null=True)  # Field name made lowercase.
+    user_grade = models.IntegerField(db_column='USER_GRADE')  # Field name made lowercase.
+    user_gen = models.IntegerField(db_column='USER_GEN')  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'USER'
+
+
+class UserAuth(models.Model):
+    auth_no = models.AutoField(db_column='AUTH_NO', primary_key=True)  # Field name made lowercase.
+    auth_name = models.CharField(db_column='AUTH_NAME', max_length=50)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'USER_AUTH'
+
+
+class UserRole(models.Model):
+    role_no = models.AutoField(db_column='ROLE_NO', primary_key=True)  # Field name made lowercase.
+    role_name = models.CharField(db_column='ROLE_NAME', max_length=50, blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'USER_ROLE'
+
+
+class AccountEmailaddress(models.Model):
+    email = models.CharField(unique=True, max_length=254)
+    verified = models.IntegerField()
+    primary = models.IntegerField()
+    user = models.ForeignKey('AuthUser', models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'account_emailaddress'
+
+
+class AccountEmailconfirmation(models.Model):
+    created = models.DateTimeField()
+    sent = models.DateTimeField(blank=True, null=True)
+    key = models.CharField(unique=True, max_length=64)
+    email_address = models.ForeignKey(AccountEmailaddress, models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'account_emailconfirmation'
+
+
 class AuthGroup(models.Model):
     name = models.CharField(unique=True, max_length=150)
 
@@ -116,6 +183,72 @@ class DjangoSession(models.Model):
     class Meta:
         managed = False
         db_table = 'django_session'
+
+
+class DjangoSite(models.Model):
+    domain = models.CharField(unique=True, max_length=100)
+    name = models.CharField(max_length=50)
+
+    class Meta:
+        managed = False
+        db_table = 'django_site'
+
+
+class SocialLoginBlog(models.Model):
+    text = models.TextField()
+
+    class Meta:
+        managed = False
+        db_table = 'social_login_blog'
+
+
+class SocialaccountSocialaccount(models.Model):
+    provider = models.CharField(max_length=30)
+    uid = models.CharField(max_length=191)
+    last_login = models.DateTimeField()
+    date_joined = models.DateTimeField()
+    extra_data = models.TextField()
+    user = models.ForeignKey(AuthUser, models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'socialaccount_socialaccount'
+        unique_together = (('provider', 'uid'),)
+
+
+class SocialaccountSocialapp(models.Model):
+    provider = models.CharField(max_length=30)
+    name = models.CharField(max_length=40)
+    client_id = models.CharField(max_length=191)
+    secret = models.CharField(max_length=191)
+    key = models.CharField(max_length=191)
+
+    class Meta:
+        managed = False
+        db_table = 'socialaccount_socialapp'
+
+
+class SocialaccountSocialappSites(models.Model):
+    socialapp = models.ForeignKey(SocialaccountSocialapp, models.DO_NOTHING)
+    site = models.ForeignKey(DjangoSite, models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'socialaccount_socialapp_sites'
+        unique_together = (('socialapp', 'site'),)
+
+
+class SocialaccountSocialtoken(models.Model):
+    token = models.TextField()
+    token_secret = models.TextField()
+    expires_at = models.DateTimeField(blank=True, null=True)
+    account = models.ForeignKey(SocialaccountSocialaccount, models.DO_NOTHING)
+    app = models.ForeignKey(SocialaccountSocialapp, models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'socialaccount_socialtoken'
+        unique_together = (('app', 'account'),)
 
 
 class Test(models.Model):

@@ -39,12 +39,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # DB 관련 앱
+    'DB',
+    # 유저 관련 앱
+    'member',
+    # 메인 관련 앱
+    'main',
+    
     # 임시 어플리케이션. 실제 프로젝트 시작 시 사라질 예정.
-    'first',
+    #'first',
 
 
-    # all auth
-
+    # 소셜 로그인 패키지: allauth 관련
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -150,6 +156,6 @@ AUTHENTICATION_BACKENDS = (
 
 # 소셜 로그인 관련 설정
 SITE_ID = 1
-LOGIN_REDIRECT_URL = '/pass'  # 로그인 성공시 리다이렉션 되는 URL 바꿀 필요가 있을 듯..
+LOGIN_REDIRECT_URL = '/user/pass'  # 로그인 성공시 리다이렉션 되는 URL 바꿀 필요가 있을 듯..
 ACCOUNT_EMAIL_REQUIRED = True # 이메일은 꼭 받게 만들기.
 ACCOUNT_LOGOUT_ON_GET = True # 로그 아웃 시 example.com사이트로 자동이동 하는 것 제거

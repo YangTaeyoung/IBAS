@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    {% if request.session.user is not None %}
+        로그인 한 이메일: {{ request.session.user.user_email }}<br/>
+        로그인 한 사용자 이름: {{ request.session.user.user_name }}<br/>
+    {% endif %}
+    <a href="{% url 'index' %}">로그인 페이지로 이동</a><br/>
+
+</body>
+</html>
