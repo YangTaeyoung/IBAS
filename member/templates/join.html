@@ -6,6 +6,7 @@
 </head>
 <body>
 <table border="1">
+    {% csrf_token %}
     <input type="hidden" id="user_token" name="user_token" value="{{ token }}"/>
     <input type="hidden" id="user_auth" name="user_auth" value="4"/>
     <input type="hidden" id="user_role" name="user_role" value="5"/>
