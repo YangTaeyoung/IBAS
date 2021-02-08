@@ -1,15 +1,23 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="{% static 'js/login.html.js' %}">
+        onload = function () {
+            login_isFailed({{ lgn_is_failed }});
+        }
+    </script>
 </head>
-<body>
-    {% if request.session.user is not None %}
-        로그인 한 이메일: {{ request.session.user.user_email }}<br/>
-        로그인 한 사용자 이름: {{ request.session.user.user_name }}<br/>
-    {% endif %}
-    <a href="{% url 'index' %}">로그인 페이지로 이동</a><br/>
 
+<body>
+{% if request.session.user is not None %}
+    로그인 한 이메일: {{ request.session.user.user_email }}<br/>
+    로그인 한 사용자 이름: {{ request.session.user.user_name }}<br/>
+
+{% else %}
+    <a href="{% url 'login' %}">로그인 페이지로 이동</a><br/>
+{% endif %}
 </body>
 </html>

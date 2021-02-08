@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from allauth.socialaccount.models import SocialAccount  # 소셜 계정 DB, socialaccount_socialaccount 테이블을 사용하기 위함.
+from pip._internal import req
 
 from DB.models import AuthUser, User  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
 
@@ -25,7 +26,7 @@ def join(request):
             return render(request, 'join.html', context)
         else:
             request.session["user"] = tar_user
-            return render(request, "index.html", {})
+            return render(request, "index.html", {'lgn_is_failed': 0})
 
     else:  # 파라미터가 제대로 넘어오지 않은 경우, 즉 비정상적인 경로를 통해 로그인 된 경우
         return redirect(request, 'index.html', {'lgn_is_failed': 1})  # 자바 스크립트 경고를 띄우기 위한 변수 지정 후 index로 보냄.
@@ -56,7 +57,11 @@ def join_chk(request):
         user.save()
         tar_user = User.objects.filter(user_token=user_token)
         request.session["user"] = tar_user
-        return render(request, "index.html", {})
+        return render(request, "index.html", {'lgn_is_failed': 0})
+
+
+def pass_param(request):
+    return render(request, "pass_login_param.html", {})
 
 
 def logout(request):
