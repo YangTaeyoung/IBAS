@@ -4,7 +4,7 @@ from DB.models import AuthUser  # 전체 계정 DB, AuthUser 테이블을 사용
 
 # Create your views here.
 
-def index(request):
+def index(request): # 메인 홈페이지 단순 이동
     return render(request, 'index.html', {})
 
 
