@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from allauth.socialaccount.models import SocialAccount, \
     SocialToken  # 소셜 계정 DB, socialaccount_socialaccount 테이블을 사용하기 위함.
 from django.urls import reverse
-from DB.models import AuthUser, User  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
+from DB.models import AuthUser, User, AccountEmailaddress  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
 from django.http import HttpResponseRedirect
 # 내가 만든 세션 모듈 불러오기
 from . import session
@@ -22,6 +22,7 @@ def join(request):  # 회원 가입 페이지로 이동 할 것인지, 이미 �
                 # 있다면 social account에서 앞서서 Auth의 primary key를 통해 가입한 친구의 pk를 넣어서 조회
                 tar_member = SocialAccount.objects.filter(user_id=auth_user.id)[0]  # quesyset의 첫번째 자료. 즉 로그인한 인원의 인스턴스 변수
                 tar_token = SocialToken.objects.filter(account_id=tar_member.id)[0]
+                tar_email_user = AccountEmailaddress.objects.filter(user_id=auth_user.id)[0]
 
                 # extra_data: 사용자의 동의를 통해 얻어온 권한인 듯.
                 email = tar_member.extra_data.get('email')  # 자동 완성을 위해 인스턴스 변수 설정
@@ -34,6 +35,7 @@ def join(request):  # 회원 가입 페이지로 이동 할 것인지, 이미 �
 
                 # 소셜 로그인으로 부터 받은 정보는 저장하지 않기 위해 해당 정보 삭제
                 tar_token.delete()
+                tar_email_user.delete()
                 tar_member.delete()
                 auth_user.delete()
 
