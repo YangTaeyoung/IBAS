@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
-from allauth.socialaccount.models import SocialAccount  # 소셜 계정 DB, socialaccount_socialaccount 테이블을 사용하기 위함.
+from allauth.socialaccount.models import SocialAccount, \
+    SocialToken  # 소셜 계정 DB, socialaccount_socialaccount 테이블을 사용하기 위함.
 from django.urls import reverse
 from DB.models import AuthUser, User  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
 from django.http import HttpResponseRedirect
@@ -16,9 +17,12 @@ def join(request):  # 회원 가입 페이지로 이동 할 것인지, 이미 �
             if len(User.objects.filter(
                     user_token=user_token)) == 0:  # 토큰 정보로 USER DB를 검색 했을 때 나오는 유저 정보가 없을 경우, 즉 입부 신청하지 않은 유저의 경
 
-                user_id = AuthUser.objects.filter(password=user_token)[0]  # auth테이블에서 해당 패스워드가 있는지 조회.
+                auth_user = AuthUser.objects.filter(password=user_token)[0]  # auth테이블에서 해당 패스워드가 있는지 조회.
+
                 # 있다면 social account에서 앞서서 Auth의 primary key를 통해 가입한 친구의 pk를 넣어서 조회
-                tar_member = SocialAccount.objects.filter(user_id=user_id.id)[0]  # quesyset의 첫번째 자료. 즉 로그인한 인원의 인스턴스 변수
+                tar_member = SocialAccount.objects.filter(user_id=auth_user.id)[0]  # quesyset의 첫번째 자료. 즉 로그인한 인원의 인스턴스 변수
+                tar_token = SocialToken.objects.filter(account_id=tar_member.id)[0]
+
                 # extra_data: 사용자의 동의를 통해 얻어온 권한인 듯.
                 email = tar_member.extra_data.get('email')  # 자동 완성을 위해 인스턴스 변수 설정
                 name = tar_member.extra_data.get('name')  # 자동 완성을 위한 이름 설정
@@ -27,6 +31,12 @@ def join(request):  # 회원 가입 페이지로 이동 할 것인지, 이미 �
                     "name": name,
                     "token": request.POST.get("password")
                 }
+
+                # 소셜 로그인으로 부터 받은 정보는 저장하지 않기 위해 해당 정보 삭제
+                tar_token.delete()
+                tar_member.delete()
+                auth_user.delete()
+
                 return render(request, 'join.html', context)
             else:  # 이미 입부신청 되어있는 유저의 경우
                 # tar_member에 유저 정보를 저장
@@ -51,6 +61,7 @@ def join_chk(request):  # 회원 가입 페이지로 부터 정보를 받아 가
         user_grade = request.POST.get("user_grade")
         user_gen = request.POST.get("user_gen")
         user_token = request.POST.get("user_token")
+        user_phone = request.POST.get("user_phone")
         # 사용자 정보를 토대로 모델 객체 생성
         user = User.objects.create(
             user_name=user_name,
@@ -61,7 +72,8 @@ def join_chk(request):  # 회원 가입 페이지로 부터 정보를 받아 가
             user_gen=user_gen,
             user_major=user_major,
             user_role=user_role,
-            user_token=user_token
+            user_token=user_token,
+            user_phone=user_phone
         )
 
         # 사용자 정보를 DB에 저장

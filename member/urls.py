@@ -10,4 +10,3 @@ urlpatterns = [
     path('join.do/', views.join_chk, name="join_chk"),
     path('pass/', views.pass_param, name="pass")
 ]
-
