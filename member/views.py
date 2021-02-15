@@ -35,9 +35,10 @@ def join(request):  # 회원 가입 페이지로 이동 할 것인지, 이미 �
 
                 # 소셜 로그인으로 부터 받은 정보는 저장하지 않기 위해 해당 정보 삭제
                 tar_token.delete()
-                tar_email_user.delete()
                 tar_member.delete()
                 auth_user.delete()
+                tar_email_user.delete()
+
 
                 return render(request, 'join.html', context)
             else:  # 이미 입부신청 되어있는 유저의 경우
