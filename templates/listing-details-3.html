@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,8 +14,8 @@
 	<meta name="format-detection" content="telephone=no">
 	
 	<!-- FAVICONS ICON -->
-	<link rel="icon" href="images/favicon.ico" type="image/x-icon" />
-	<link rel="shortcut icon" type="image/x-icon" href="images/favicon.png" />
+	<link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon" />
+	<link rel="shortcut icon" type="image/x-icon" href="{% static 'images/favicon.png' %}" />
 	
 	<!-- PAGE TITLE HERE -->
 	<title>BizMap Directory & Listings HTML templates</title>
@@ -23,17 +24,17 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	
 	<!--[if lt IE 9]>
-	<script src="js/html5shiv.min.js"></script>
-	<script src="js/respond.min.js"></script>
+	<script src="{% static 'js/html5shiv.min.js' %}"></script>
+	<script src="{% static 'js/respond.min.js' %}"></script>
 	<![endif]-->
 	
 	<!-- STYLESHEETS -->
-	<link rel="stylesheet" type="text/css" href="plugins/calendar/calendar.css">
-	<link rel="stylesheet" type="text/css" href="css/plugins.css">
-	<link rel="stylesheet" type="text/css" href="css/style.css">
-	<link rel="stylesheet" type="text/css" href="css/templete.css">
-	<link class="skin" rel="stylesheet" type="text/css" href="css/skin/skin-1.css">
-	<link rel="stylesheet" type="text/css" href="css/star-rating-svg.css">
+	<link rel="stylesheet" type="text/css" href="{% static 'plugins/calendar/calendar.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/plugins.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/templete.css' %}">
+	<link class="skin" rel="stylesheet" type="text/css" href="{% static 'css/skin/skin-1.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/star-rating-svg.css' %}">
 	
 	
 </head>
@@ -48,8 +49,8 @@
                 <div class="container clearfix">
                     <!-- website logo -->
                     <div class="logo-header mostion">
-						<a href="index.html" class="logo-1"><img src="images/logo-white-1.png" alt=""></a>
-						<a href="index.html" class="logo-2"><img src="images/logo-black-1.png" alt=""></a>
+						<a href="index.html" class="logo-1"><img src="{% static 'images/logo-white-1.png' %}" alt=""></a>
+						<a href="index.html" class="logo-2"><img src="{% static 'images/logo-black-1.png' %}" alt=""></a>
 					</div>
                     <!-- nav toggle button -->
                     <button class="navbar-toggler collapsed navicon justify-content-end" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -137,17 +138,17 @@
 				<div class="listing-slider owl-carousel owl-btn-center-lr owl-btn-1">
 					<div class="item">
 						<div class="slider-img">
-							<img src="images/main-slider/slide2.jpg" alt="">
+							<img src="{% static 'images/main-slider/slide2.jpg' %}" alt="">
 						</div>
 					</div>
 					<div class="item">
 						<div class="slider-img">
-							<img src="images/main-slider/slide3.jpg" alt="">
+							<img src="{% static 'images/main-slider/slide3.jpg' %}" alt="">
 						</div>
 					</div>
 					<div class="item">
 						<div class="slider-img">
-							<img src="images/main-slider/slide4.jpg" alt="">
+							<img src="{% static 'images/main-slider/slide4.jpg' %}" alt="">
 						</div>
 					</div>
 				</div>
@@ -158,7 +159,7 @@
 					<div class="listing-info-box row">
 						<div class="listing-details-left col-lg-7 col-md-7">
 							<div class="listing-theme-logo">
-								<img src="images/gallery/gallery-box/pic1.jpg" alt="">
+								<img src="{% static 'images/gallery/gallery-box/pic1.jpg' %}" alt="">
 							</div>
 							<div class="listing-info">
 								<div class="listing-info-left text-white">
@@ -431,7 +432,7 @@
 										<h2 class="title"><a href="javascript:void(0);">12/20/2020 <i class="la la-angle-double-right m-l5"></i></a></h2>
 									</div>
 									<div class="sale-info">
-										<h3 class="title">50% OFF</h2>
+										<h2 class="title">50% OFF</h2>
 										<p>Shop your Favorites Before They're gone</p>
 									</div>
 								</div>
@@ -503,21 +504,21 @@
 										<li>
 											<span data-exthumbimage="images/gallery/gallery-box/pic1.jpg" data-src="images/gallery/gallery-box/pic1.jpg" class="check-km" title="Light Gallery Grid 1">		
 												<a href="javascript:void(0);"> 
-													<div class="dlab-post-thum"><img src="images/gallery/gallery-box/pic1.jpg" alt=""></div>
+													<div class="dlab-post-thum"><img src="{% static 'images/gallery/gallery-box/pic1.jpg' %}" alt=""></div>
 												</a>
 											</span>
 										</li>
 										<li>
 											<span data-exthumbimage="images/gallery/gallery-box/pic2.jpg" data-src="images/gallery/gallery-box/pic2.jpg" class="check-km" title="Light Gallery Grid 1">		
 												<a href="javascript:void(0);"> 
-													<div class="dlab-post-thum"><img src="images/gallery/gallery-box/pic2.jpg" alt=""></div>
+													<div class="dlab-post-thum"><img src="{% static 'images/gallery/gallery-box/pic2.jpg' %}" alt=""></div>
 												</a>
 											</span>
 										</li>
 										<li>
 											<span data-exthumbimage="images/gallery/gallery-box/pic3.jpg" data-src="images/gallery/gallery-box/pic3.jpg" class="check-km" title="Light Gallery Grid 1">		
 												<a href="javascript:void(0);"> 
-													<div class="dlab-post-thum"><img src="images/gallery/gallery-box/pic3.jpg" alt=""></div>
+													<div class="dlab-post-thum"><img src="{% static 'images/gallery/gallery-box/pic3.jpg' %}" alt=""></div>
 												</a>
 											</span>
 										</li>
@@ -550,7 +551,7 @@
 									<ul>
 										<li>
 											<div class="dlab-post-thum video-bx">
-												<img src="images/gallery/pic1.jpg" alt="">
+												<img src="{% static 'images/gallery/pic1.jpg' %}" alt="">
 												<div class="video-play-icon">
 													<a href="https://www.youtube.com/watch?v=f4Bts39jimI" class="popup-youtube video"><i class="la la-play"></i></a>
 												</div>
@@ -573,7 +574,7 @@
 										<div class="listing-bx event-listing m-b10">
 											<div class="listing-media">
 												<a href="#">
-													<img src="images/listing/pic2.jpg" alt="">
+													<img src="{% static 'images/listing/pic2.jpg' %}" alt="">
 												</a>
 											</div>
 											<div class="listing-info">
@@ -613,7 +614,7 @@
 								<div class="review-header">
 									<div class="review-comment-author">
 										<div class="review-avatar">
-											<img src="images/testimonials/pic1.jpg" alt="">
+											<img src="{% static 'images/testimonials/pic1.jpg' %}" alt="">
 										</div>
 										<div class="comment-info">
 											<div class="info-group">
@@ -679,7 +680,7 @@
 											<li>
 												<div class="review-comment-author">
 													<div class="review-avatar">
-														<img src="images/testimonials/pic1.jpg" alt="">
+														<img src="{% static 'images/testimonials/pic1.jpg' %}" alt="">
 													</div>
 													<div class="comment-info">
 														<div class="info-group">
@@ -693,7 +694,7 @@
 											<li>
 												<div class="review-comment-author">
 													<div class="review-avatar">
-														<img src="images/testimonials/pic1.jpg" alt="">
+														<img src="{% static 'images/testimonials/pic1.jpg' %}" alt="">
 													</div>
 													<div class="comment-info">
 														<div class="info-group">
@@ -708,7 +709,7 @@
 									</div>
 									<div class="review-comments-form">
 										<div class="review-avatar">
-											<img src="images/testimonials/pic1.jpg" alt="">
+											<img src="{% static 'images/testimonials/pic1.jpg' %}" alt="">
 										</div>
 										<div class="form-area">
 											<textarea class="form-control" placeholder="Type To Message"></textarea>
@@ -720,7 +721,7 @@
 								<div class="review-header">
 									<div class="review-comment-author">
 										<div class="review-avatar">
-											<img src="images/testimonials/pic1.jpg" alt="">
+											<img src="{% static 'images/testimonials/pic1.jpg' %}" alt="">
 										</div>
 										<div class="comment-info">
 											<div class="info-group">
@@ -786,7 +787,7 @@
 											<li>
 												<div class="review-comment-author">
 													<div class="review-avatar">
-														<img src="images/testimonials/pic1.jpg" alt="">
+														<img src="{% static 'images/testimonials/pic1.jpg' %}" alt="">
 													</div>
 													<div class="comment-info">
 														<div class="info-group">
@@ -800,7 +801,7 @@
 											<li>
 												<div class="review-comment-author">
 													<div class="review-avatar">
-														<img src="images/testimonials/pic1.jpg" alt="">
+														<img src="{% static 'images/testimonials/pic1.jpg' %}" alt="">
 													</div>
 													<div class="comment-info">
 														<div class="info-group">
@@ -815,7 +816,7 @@
 									</div>
 									<div class="review-comments-form">
 										<div class="review-avatar">
-											<img src="images/testimonials/pic1.jpg" alt="">
+											<img src="{% static 'images/testimonials/pic1.jpg' %}" alt="">
 										</div>
 										<div class="form-area">
 											<textarea class="form-control" placeholder="Type To Message"></textarea>
@@ -827,7 +828,7 @@
 								<div class="review-header">
 									<div class="review-comment-author">
 										<div class="review-avatar">
-											<img src="images/testimonials/pic1.jpg" alt="">
+											<img src="{% static 'images/testimonials/pic1.jpg' %}" alt="">
 										</div>
 										<div class="comment-info">
 											<div class="info-group">
@@ -861,7 +862,7 @@
 									<p class="review-content">Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
 									<div class="row gallery-img">
 										<div class="col-lg-4">
-											<img src="images/listing/pic2.jpg" alt="">
+											<img src="{% static 'images/listing/pic2.jpg' %}" alt="">
 										</div>
 									</div>
 									<ul class="review-meta">
@@ -898,7 +899,7 @@
 											<li>
 												<div class="review-comment-author">
 													<div class="review-avatar">
-														<img src="images/testimonials/pic1.jpg" alt="">
+														<img src="{% static 'images/testimonials/pic1.jpg' %}" alt="">
 													</div>
 													<div class="comment-info">
 														<div class="info-group">
@@ -912,7 +913,7 @@
 											<li>
 												<div class="review-comment-author">
 													<div class="review-avatar">
-														<img src="images/testimonials/pic1.jpg" alt="">
+														<img src="{% static 'images/testimonials/pic1.jpg' %}" alt="">
 													</div>
 													<div class="comment-info">
 														<div class="info-group">
@@ -927,7 +928,7 @@
 									</div>
 									<div class="review-comments-form">
 										<div class="review-avatar">
-											<img src="images/testimonials/pic1.jpg" alt="">
+											<img src="{% static 'images/testimonials/pic1.jpg' %}" alt="">
 										</div>
 										<div class="form-area">
 											<textarea class="form-control" placeholder="Type To Message"></textarea>
@@ -951,7 +952,7 @@
 										<div class="widget-post-bx">
 											<div class="widget-post clearfix">
 												<div class="dlab-post-media">
-													<img src="images/blog/recent-blog/pic1.jpg" width="200" height="143" alt="">
+													<img src="{% static 'images/blog/recent-blog/pic1.jpg' %}" width="200" height="143" alt="">
 													<span class="abb-bx">Add</span>
 												</div>
 												<div class="dlab-post-info">
@@ -979,7 +980,7 @@
 										<div class="widget-post-bx">
 											<div class="widget-post clearfix">
 												<div class="dlab-post-media">
-													<img src="images/blog/recent-blog/pic2.jpg" width="200" height="143" alt="">
+													<img src="{% static 'images/blog/recent-blog/pic2.jpg' %}" width="200" height="143" alt="">
 													<span class="abb-bx">Add</span>
 												</div>
 												<div class="dlab-post-info">
@@ -1007,7 +1008,7 @@
 										<div class="widget-post-bx">
 											<div class="widget-post clearfix">
 												<div class="dlab-post-media">
-													<img src="images/blog/recent-blog/pic3.jpg" width="200" height="143" alt="">
+													<img src="{% static 'images/blog/recent-blog/pic3.jpg' %}" width="200" height="143" alt="">
 													<span class="abb-bx">Add</span>
 												</div>
 												<div class="dlab-post-info">
@@ -1035,7 +1036,7 @@
 										<div class="widget-post-bx">
 											<div class="widget-post clearfix">
 												<div class="dlab-post-media">
-													<img src="images/blog/recent-blog/pic4.jpg" width="200" height="143" alt="">
+													<img src="{% static 'images/blog/recent-blog/pic4.jpg' %}" width="200" height="143" alt="">
 													<span class="abb-bx">Add</span>
 												</div>
 												<div class="dlab-post-info">
@@ -1176,7 +1177,7 @@
 									<div class="widget recent-posts-entry posts-style2">
 										<div class="widget-post-bx">
 											<div class="widget-post clearfix">
-												<div class="dlab-post-media"> <img src="images/blog/recent-blog/pic1.jpg" width="200" height="143" alt=""> </div>
+												<div class="dlab-post-media"> <img src="{% static 'images/blog/recent-blog/pic1.jpg' %}" width="200" height="143" alt=""> </div>
 												<div class="dlab-post-info">
 													<div class="dlab-post-header">
 														<h6 class="post-title"><a href="javascript:void(0);">Moments To Remember </a></h6>
@@ -1343,10 +1344,10 @@
                 <div class="row">
 					<div class="col-xl-5 col-lg-4 col-md-12 col-sm-12">
                         <div class="widget">
-                            <img src="images/logo-white.png" class="m-b15" alt="" width="180">
+                            <img src="{% static 'images/logo-white.png' %}" class="m-b15" alt="" width="180">
 							<p class="text-capitalize m-b20">Lorem Ipsum is simply dummy text of the printing and typesetting industry has been the industry.</p>
                             <div class="subscribe-form m-b20">
-								<form class="dzSubscribe" action="script/mailchamp.php" method="post">
+								<form class="dzSubscribe" action="{% static 'script/mailchamp.php' %}" method="post">
 									<div class="dzSubscribeMsg"></div>
 									<div class="input-group">
 										<input name="dzEmail" required="required" class="form-control" placeholder="Your Email Address" type="email">
@@ -1411,29 +1412,29 @@
     <button class="scroltop fa fa-chevron-up" ></button>
 </div>
 <!-- JAVASCRIPT FILES ========================================= -->
-<script src="js/jquery.min.js"></script><!-- JQUERY.MIN JS -->
-<script src="plugins/bootstrap/js/popper.min.js"></script><!-- BOOTSTRAP.MIN JS -->
-<script src="plugins/bootstrap/js/bootstrap.min.js"></script><!-- BOOTSTRAP.MIN JS -->
-<script src="plugins/bootstrap-select/bootstrap-select.min.js"></script><!-- FORM JS -->
-<script src="plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.js"></script><!-- FORM JS -->
-<script src="plugins/magnific-popup/magnific-popup.js"></script><!-- MAGNIFIC POPUP JS -->
-<script src="plugins/counter/waypoints-min.js"></script><!-- WAYPOINTS JS -->
-<script src="plugins/counter/counterup.min.js"></script><!-- COUNTERUP JS -->
-<script src="plugins/imagesloaded/imagesloaded.js"></script><!-- IMAGESLOADED -->
-<script src="plugins/masonry/masonry-3.1.4.js"></script><!-- MASONRY -->
-<script src="plugins/masonry/masonry.filter.js"></script><!-- MASONRY -->
-<script src="plugins/rangeslider/rangeslider.js"></script><!-- RANGESLIDER -->
-<script src="plugins/owl-carousel/owl.carousel.js"></script><!-- OWL SLIDER -->
-<script src="plugins/lightgallery/js/lightgallery-all.min.js"></script><!-- Lightgallery -->
-<script src="js/custom.js"></script><!-- CUSTOM FUCTIONS  -->
-<script src="js/dz.carousel.js"></script><!-- SORTCODE FUCTIONS  -->
-<script src="js/dz.ajax.js"></script><!-- CONTACT JS  -->
-<script src="js/jquery.star-rating-svg.js"></script><!-- STAR RATING SVG -->
+<script src="{% static 'js/jquery.min.js' %}"></script><!-- JQUERY.MIN JS -->
+<script src="{% static 'plugins/bootstrap/js/popper.min.js' %}"></script><!-- BOOTSTRAP.MIN JS -->
+<script src="{% static 'plugins/bootstrap/js/bootstrap.min.js' %}"></script><!-- BOOTSTRAP.MIN JS -->
+<script src="{% static 'plugins/bootstrap-select/bootstrap-select.min.js' %}"></script><!-- FORM JS -->
+<script src="{% static 'plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.js' %}"></script><!-- FORM JS -->
+<script src="{% static 'plugins/magnific-popup/magnific-popup.js' %}"></script><!-- MAGNIFIC POPUP JS -->
+<script src="{% static 'plugins/counter/waypoints-min.js' %}"></script><!-- WAYPOINTS JS -->
+<script src="{% static 'plugins/counter/counterup.min.js' %}"></script><!-- COUNTERUP JS -->
+<script src="{% static 'plugins/imagesloaded/imagesloaded.js' %}"></script><!-- IMAGESLOADED -->
+<script src="{% static 'plugins/masonry/masonry-3.1.4.js' %}"></script><!-- MASONRY -->
+<script src="{% static 'plugins/masonry/masonry.filter.js' %}"></script><!-- MASONRY -->
+<script src="{% static 'plugins/rangeslider/rangeslider.js' %}"></script><!-- RANGESLIDER -->
+<script src="{% static 'plugins/owl-carousel/owl.carousel.js' %}"></script><!-- OWL SLIDER -->
+<script src="{% static 'plugins/lightgallery/js/lightgallery-all.min.js' %}"></script><!-- Lightgallery -->
+<script src="{% static 'js/custom.js' %}"></script><!-- CUSTOM FUCTIONS  -->
+<script src="{% static 'js/dz.carousel.js' %}"></script><!-- SORTCODE FUCTIONS  -->
+<script src="{% static 'js/dz.ajax.js' %}"></script><!-- CONTACT JS  -->
+<script src="{% static 'js/jquery.star-rating-svg.js' %}"></script><!-- STAR RATING SVG -->
 <script src="https://maps.google.com/maps/api/js?key=AIzaSyBjirg3UoMD5oUiFuZt3P9sErZD-2Rxc68&sensor=false"  ></script><!-- GOOGLE MAP -->
 <script src='https://www.google.com/recaptcha/api.js'></script> <!-- Google API For Recaptcha  -->
-<script src="js/map.script.js"></script><!-- CONTACT JS  -->
-<script src='plugins/calendar/moment.min.js'></script><!-- SORTCODE FUCTIONS  -->
-<script src='plugins/calendar/calendar.js'></script><!-- SORTCODE FUCTIONS  -->
+<script src="{% static 'js/map.script.js' %}"></script><!-- CONTACT JS  -->
+<script src="{% static 'plugins/calendar/moment.min.js' %}"></script><!-- SORTCODE FUCTIONS  -->
+<script src="{% static 'plugins/calendar/calendar.js' %}"></script><!-- SORTCODE FUCTIONS  -->
 <script>
   $(document).ready(function() {
 
