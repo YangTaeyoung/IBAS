@@ -1,8 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from allauth.socialaccount.models import SocialAccount, \
     SocialToken  # 소셜 계정 DB, socialaccount_socialaccount 테이블을 사용하기 위함.
 from django.urls import reverse
-from DB.models import AuthUser, User, AccountEmailaddress  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
+from DB.models import AuthUser, User, UserAuth, UserRole #AccountEmailaddress  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
 from django.http import HttpResponseRedirect
 # 내가 만든 세션 모듈 불러오기
 from . import session
@@ -22,7 +22,6 @@ def join(request):  # 회원 가입 페이지로 이동 할 것인지, 이미 �
                 # 있다면 social account에서 앞서서 Auth의 primary key를 통해 가입한 친구의 pk를 넣어서 조회
                 tar_member = SocialAccount.objects.filter(user_id=auth_user.id)[0]  # quesyset의 첫번째 자료. 즉 로그인한 인원의 인스턴스 변수
                 tar_token = SocialToken.objects.filter(account_id=tar_member.id)[0]
-                tar_email_user = AccountEmailaddress.objects.filter(user_id=auth_user.id)[0]
 
                 # extra_data: 사용자의 동의를 통해 얻어온 권한인 듯.
                 email = tar_member.extra_data.get('email')  # 자동 완성을 위해 인스턴스 변수 설정
@@ -37,7 +36,7 @@ def join(request):  # 회원 가입 페이지로 이동 할 것인지, 이미 �
                 tar_token.delete()
                 tar_member.delete()
                 auth_user.delete()
-                tar_email_user.delete()
+
 
 
                 return render(request, 'join.html', context)
@@ -55,8 +54,8 @@ def join(request):  # 회원 가입 페이지로 이동 할 것인지, 이미 �
 def join_chk(request):  # 회원 가입 페이지로 부터 정보를 받아 가입 처리를 하는 메서드
     if request.method == "POST":  # POST로 데이터가 들어왔을 경우, 안들어 왔다면 -> 비정상 적인 접근임. 일반적으로 GET을 통해서는 접근이 불가능 해야함.
         # 사용자 정보를 받아옴
-        user_auth = request.POST.get("user_auth")
-        user_role = request.POST.get("user_role")
+        user_auth = get_object_or_404(UserAuth, pk=request.POST.get("user_auth"))
+        user_role = get_object_or_404(UserRole, pk=request.POST.get("user_role"))
         user_email = request.POST.get("user_email")
         user_major = request.POST.get("user_major")
         user_name = request.POST.get("user_name")
@@ -65,6 +64,7 @@ def join_chk(request):  # 회원 가입 페이지로 부터 정보를 받아 가
         user_gen = request.POST.get("user_gen")
         user_token = request.POST.get("user_token")
         user_phone = request.POST.get("user_phone")
+        is_activated = request.POST.get("is_activated")
         # 사용자 정보를 토대로 모델 객체 생성
         user = User.objects.create(
             user_name=user_name,
@@ -76,7 +76,8 @@ def join_chk(request):  # 회원 가입 페이지로 부터 정보를 받아 가
             user_major=user_major,
             user_role=user_role,
             user_token=user_token,
-            user_phone=user_phone
+            user_phone=user_phone,
+            is_activated=is_activated
         )
 
         # 사용자 정보를 DB에 저장
@@ -97,7 +98,7 @@ def pass_param(request):  # 구글 로그인으로 부터 파라미터를 받아
 
 def logout(request):  # 로그아웃
     request.session.clear()  # 세션 초기화
-    return HttpResponseRedirect('/user/accounts/logout')  # 구글 세션 초기화 링크
+    return HttpResponseRedirect('/')  # 메인 페이지로 이동
 
 
 def login(request):  # 로그인 페이지로 이동
