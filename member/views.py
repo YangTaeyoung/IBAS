@@ -62,8 +62,8 @@ def join_chk(request):  # 회원 가입 페이지로 부터 정보를 받아 가
             user_major=user_major,
             user_role=user_role,
             user_token=user_token
-        )
-
+        )  
+        # ㅎㅇ
         # 사용자 정보를 DB에 저장
         user.save()
         # 등록한 사용자 정보를 호출
