@@ -1,0 +1,52 @@
+    /*
+    Flaticon icon font: Flaticon
+    Creation date: 21/02/2019 09:40
+    */
+
+    @font-face {
+  font-family: "Flaticon";
+  src: url("./Flaticon.eot");
+  src: url("./Flaticon.eot?#iefix") format("embedded-opentype"),
+       url("./Flaticon.woff2") format("woff2"),
+       url("./Flaticon.woff") format("woff"),
+       url("./Flaticon.ttf") format("truetype"),
+       url("./Flaticon.svg#Flaticon") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: "Flaticon";
+    src: url("./Flaticon.svg#Flaticon") format("svg");
+  }
+}
+
+    .fi:before{
+        display: inline-block;
+  font-family: "Flaticon";
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  line-height: 1;
+  text-decoration: inherit;
+  text-rendering: optimizeLegibility;
+  text-transform: none;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+    }
+
+    .flaticon-cart-of-ecommerce:before { content: "\f100"; }
+.flaticon-carrot:before { content: "\f101"; }
+.flaticon-hockey:before { content: "\f102"; }
+.flaticon-pill-capsule:before { content: "\f103"; }
+.flaticon-birthday-cake:before { content: "\f104"; }
+.flaticon-place:before { content: "\f105"; }
+    
+    $font-Flaticon-cart-of-ecommerce: "\f100";
+    $font-Flaticon-carrot: "\f101";
+    $font-Flaticon-hockey: "\f102";
+    $font-Flaticon-pill-capsule: "\f103";
+    $font-Flaticon-birthday-cake: "\f104";
+    $font-Flaticon-place: "\f105";
