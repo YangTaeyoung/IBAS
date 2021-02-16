@@ -3,6 +3,8 @@
 
 ### Django ###
 workspace.xml
+settings.py
+IBAS/settings.py
 .idea/
 *.log
 *.pot
