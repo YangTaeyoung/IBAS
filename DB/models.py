@@ -14,7 +14,7 @@ class Answer(models.Model):
     answer_quest = models.ForeignKey('QuestForm', models.DO_NOTHING,
                                      db_column='ANSWER_QUEST')  # Field name made lowercase.
     answer_cont = models.CharField(db_column='ANSWER_CONT', max_length=5000)  # Field name made lowercase.
-    answer_created = models.DateTimeField(db_column='ANSWER_CREATED', auto_now_add=True)  # Field name made lowercase.
+    answer_created = models.DateTimeField(db_column='ANSWER_CREATED')  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -39,6 +39,8 @@ class Bank(models.Model):
                                    null=True)  # Field name made lowercase.
     bank_reject_reason = models.CharField(db_column='BANK_REJECT_REASON', max_length=200, blank=True,
                                           null=True)  # Field name made lowercase.
+    bank_account = models.CharField(db_column='BANK_ACCOUNT', max_length=100, blank=True,
+                                    null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -305,7 +307,6 @@ class StateInfo(models.Model):
 
 class User(models.Model):
     user_email = models.CharField(db_column='USER_EMAIL', max_length=100)  # Field name made lowercase.
-    user_token = models.CharField(db_column='USER_TOKEN', max_length=1000)  # Field name made lowercase.
     user_stu = models.IntegerField(db_column='USER_STU', primary_key=True)  # Field name made lowercase.
     user_name = models.CharField(db_column='USER_NAME', max_length=50)  # Field name made lowercase.
     user_major = models.CharField(db_column='USER_MAJOR', max_length=50)  # Field name made lowercase.
@@ -313,10 +314,10 @@ class User(models.Model):
                                 null=True)  # Field name made lowercase.
     user_auth = models.ForeignKey('UserAuth', models.DO_NOTHING, db_column='USER_AUTH')  # Field name made lowercase.
     user_role = models.ForeignKey('UserRole', models.DO_NOTHING, db_column='USER_ROLE')  # Field name made lowercase.
-    user_joined = models.DateTimeField(db_column='USER_JOINED', auto_now_add=True)  # Field name made lowercase.
+    user_joined = models.DateTimeField(db_column='USER_JOINED',auto_now_add=True)  # Field name made lowercase.
     user_grade = models.IntegerField(db_column='USER_GRADE')  # Field name made lowercase.
     user_gen = models.IntegerField(db_column='USER_GEN')  # Field name made lowercase.
-    is_activated = models.IntegerField(db_column='IS_ACTIVATED')  # Field name made lowercase.
+    is_activated = models.IntegerField(db_column='IS_ACTIVATED', default=0)  # Field name made lowercase.
     user_phone = models.IntegerField(db_column='USER_PHONE')  # Field name made lowercase.
 
     class Meta:
@@ -331,6 +332,17 @@ class UserAuth(models.Model):
     class Meta:
         managed = False
         db_table = 'USER_AUTH'
+
+
+class UserDeleteFile(models.Model):
+    user_delete_id = models.AutoField(db_column='USER_DELETE_ID', primary_key=True)  # Field name made lowercase.
+    user_stu = models.ForeignKey(User, models.DO_NOTHING, db_column='USER_STU')  # Field name made lowercase.
+    user_delete_file_path = models.CharField(db_column='USER_DELETE_FILE_PATH',
+                                             max_length=1000)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'USER_DELETE_FILE'
 
 
 class UserRole(models.Model):
