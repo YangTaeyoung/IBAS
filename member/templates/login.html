@@ -25,6 +25,7 @@
     <meta property="og:image" content="" />
     <meta name="format-detection" content="telephone=no" />
 
+      <!-- 커스텀 CSS -->
     <link rel="stylesheet" href="{% static 'css/login.css' %}" />
 
     <!-- 아이바스 로고를 넣을 장소 -->
@@ -75,15 +76,17 @@
   </head>
   <body id="bg">
     <div id="loading-area"></div>
-    <div class="page-wraper">
+    <div>
       <!-- Content -->
       <div
         class="page-content dlab-login bg-primary"
         style="background-position: top right; background-blend-mode: screen"
       >
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col-lg-4 login-form-box">
+        <div>
+            <!-- 전체 컨테이너 -->
+          <div class="container-flex">
+              <!-- 좌측 로그인 창 부분 -->
+            <div class="item_flex_lgn login-form-box">
               <div class="login-form2">
                 <div class="logo-position">로고자리</div>
                 <form class="dlab-form">
@@ -109,7 +112,7 @@
               </div>
             </div>
             <!-- 오른쪽 이미지를 넣을 장소 시작-->
-            <div class="col-lg-8">
+            <div class="item_flex_bg">
               <div class="content-info">
                 <ul class="list-info">
                   <li>
