@@ -1,0 +1,53 @@
+/*네이버 로고를 위해, 구글에서 불러오는 폰트*/
+@import url("https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap");
+
+.naver-logo {
+  font-family: "Archivo Black", sans-serif;
+}
+
+.login-form2 {
+  z-index: 99;
+  padding: 0 45px 0 45px;
+  position: relative;
+  max-width: 400px;
+  margin: 0 auto;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.hr-sect {
+  display: flex;
+  flex-basis: 100%;
+  align-items: center;
+  color: rgba(0, 0, 0, 0.35);
+  font-size: 12px;
+  margin: 8px 0px;
+}
+.hr-sect::before,
+.hr-sect::after {
+  content: "";
+  flex-grow: 1;
+  background: rgba(0, 0, 0, 0.35);
+  height: 1px;
+  font-size: 0px;
+  line-height: 0px;
+  margin: 0px 16px;
+}
+
+.logo-position {
+  background-color: blueviolet;
+  color: aliceblue;
+  height: 150px;
+  bottom: 55px;
+  position: relative;
+}
+
+.copyright {
+  color: rgba(0, 0, 0, 0.35);
+  top: 120pt;
+  position: relative;
+  font-size: 9pt;
+  text-align: center;
+}

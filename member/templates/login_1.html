@@ -1,0 +1,162 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="keywords" content="" />
+    <meta name="author" content="" />
+    <meta name="robots" content="" />
+    <meta
+      name="description"
+      content="BizMap Directory & Listings HTML templates"
+    />
+    <meta
+      property="og:title"
+      content="BizMap Directory & Listings HTML templates"
+    />
+    <meta
+      property="og:description"
+      content="BizMap Directory & Listings HTML templates"
+    />
+    <meta property="og:image" content="" />
+    <meta name="format-detection" content="telephone=no" />
+
+    <link rel="stylesheet" href="{% static 'css/login.css' %}" />
+
+    <!-- 아이바스 로고를 넣을 장소 -->
+    <link
+      rel="icon"
+      href="{% static 'images/favicon.ico' %}"
+      type="image/x-icon"
+    />
+    <link
+      rel="shortcut icon"
+      type="image/x-icon"
+      href="{% static 'images/favicon.png' %}"
+    />
+
+    <!-- PAGE TITLE HERE -->
+    <title>로그인 페이지</title>
+
+    <!-- MOBILE SPECIFIC -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!--[if lt IE 9]>
+      <script src="{% static 'js/html5shiv.min.js' %}"></script>
+      <script src="{% static 'js/respond.min.js' %}"></script>
+    <![endif]-->
+
+    <!-- STYLESHEETS -->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'css/plugins.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'css/style.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'css/templete.css' %}"
+    />
+    <link
+      class="skin"
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'css/skin/skin-1.css' %}"
+    />
+  </head>
+  <body id="bg">
+    <div id="loading-area"></div>
+    <div class="page-wraper">
+      <!-- Content -->
+      <div
+        class="page-content dlab-login bg-primary"
+        style="background-position: top right; background-blend-mode: screen"
+      >
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-lg-4 login-form-box">
+              <div class="login-form2">
+                <div class="logo-position">로고자리</div>
+                <form class="dlab-form">
+                  <div class="hr-sect">소셜 로그인하기</div>
+                  <div class="text-center m-b20">
+                    <a
+                      href="{% provider_login_url 'google' %}"
+                      class="site-button google-plus btn-block"
+                      ><i class="fa fa-google m-r10"></i> 구글 로그인하기</a
+                    >
+                    <a
+                      href="{% provider_login_url 'naver' %}"
+                      class="site-button whatsapp btn-block"
+                      ><span class="naver-logo m-r10">N</span> 네이버
+                      로그인하기</a
+                    >
+                  </div>
+                </form>
+                <div class="copyright">
+                  ©INHA BAS All rights reserved.<br />Developed by 양태영과
+                  아이들
+                </div>
+              </div>
+            </div>
+            <!-- 오른쪽 이미지를 넣을 장소 시작-->
+            <div class="col-lg-8">
+              <div class="content-info">
+                <ul class="list-info">
+                  <li>
+                    <div class="dlab-box">
+                      <i class="fa fa-check"></i>
+                      <p>깔삼한 유료 이미지를 넣을 것</p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <!--오른쪽 이미지 넣을 장소 끝-->
+          </div>
+        </div>
+      </div>
+      <!-- Content END-->
+      <button class="scroltop fa fa-chevron-up"></button>
+    </div>
+    <!-- JAVASCRIPT FILES ========================================= -->
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <!-- JQUERY.MIN JS -->
+    <script src="{% static 'plugins/bootstrap/js/popper.min.js' %}"></script>
+    <!-- BOOTSTRAP.MIN JS -->
+    <script src="{% static 'plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+    <!-- BOOTSTRAP.MIN JS -->
+    <script src="{% static 'plugins/bootstrap-select/bootstrap-select.min.js' %}"></script>
+    <!-- FORM JS -->
+    <script src="{% static 'plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.js' %}"></script>
+    <!-- FORM JS -->
+    <script src="{% static 'plugins/magnific-popup/magnific-popup.js' %}"></script>
+    <!-- MAGNIFIC POPUP JS -->
+    <script src="{% static 'plugins/counter/waypoints-min.js' %}"></script>
+    <!-- WAYPOINTS JS -->
+    <script src="{% static 'plugins/counter/counterup.min.js' %}"></script>
+    <!-- COUNTERUP JS -->
+    <script src="{% static 'plugins/imagesloaded/imagesloaded.js' %}"></script>
+    <!-- IMAGESLOADED -->
+    <script src="{% static 'plugins/masonry/masonry-3.1.4.js' %}"></script>
+    <!-- MASONRY -->
+    <script src="{% static 'plugins/masonry/masonry.filter.js' %}"></script>
+    <!-- MASONRY -->
+    <script src="{% static 'plugins/rangeslider/rangeslider.js' %}"></script>
+    <!-- RANGESLIDER -->
+    <script src="{% static 'plugins/owl-carousel/owl.carousel.js' %}"></script>
+    <!-- OWL SLIDER -->
+    <script src="{% static 'js/custom.js' %}"></script>
+    <!-- CUSTOM FUCTIONS  -->
+    <script src="{% static 'js/dz.carousel.js' %}"></script>
+    <!-- SORTCODE FUCTIONS  -->
+    <script src="{% static 'js/dz.ajax.js' %}"></script>
+    <!-- CONTACT JS  -->
+  </body>
+</html>
