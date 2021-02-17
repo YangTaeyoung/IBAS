@@ -1,0 +1,12 @@
+.form-select {
+  width: 110px;
+  height: 45px;
+
+  float: left;
+  margin-right: 5px;
+  padding: 0%;
+}
+.form-std_no {
+  font-size: 15px;
+  float: right;
+}
