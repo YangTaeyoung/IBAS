@@ -118,4 +118,4 @@ def login(request):  # 로그인 페이지로 이동
     return render(request, 'login.html', {})
 
 def test_join(request):
-    return render(request, 'register_1.html', {})
+    return render(request, 'register_2.html', {})

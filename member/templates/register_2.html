@@ -76,11 +76,7 @@
       <!-- Content -->
       <div
         class="page-content dlab-login bg-primary"
-        style="
-          background-image: url({%static 'images/background/bg6.jpg'%});
-          background-position: top right;
-          background-blend-mode: screen;
-        "
+        style="background-position: top right; background-blend-mode: screen"
       >
         <div class="container-fluid">
           <div class="row">
@@ -91,9 +87,50 @@
                     ><img src="{% static 'images/logo-black.png' %}" alt=""
                   /></a>
                 </div>
-                <div class="tab-content nav">
-                  <div id="login" class="tab-pane active">
-                    <form class="dlab-form">
+                <!-- FORM 즈아리 -->
+                <form class="dlab-form">
+                  <!-- 토큰 시작 -->
+                  <input
+                    type="hidden"
+                    id="user_token"
+                    name="user_token"
+                    value="{{ token }}"
+                  />
+                  <input
+                    type="hidden"
+                    id="user_auth"
+                    name="user_auth"
+                    value="4"
+                  />
+                  <input
+                    type="hidden"
+                    id="user_role"
+                    name="user_role"
+                    value="5"
+                  />
+                  <input
+                    type="hidden"
+                    id="is_activated"
+                    name="is_activated"
+                    value="0"
+                  />
+                  <input
+                    type="hidden"
+                    id="user_gen"
+                    name="user_gen"
+                    value="1"
+                  />
+                  <input
+                    type="hidden"
+                    id="user_pic"
+                    name="user_pic"
+                    value="{{ pic }}"
+                  />
+                  <input type="hidden" name="user_email" value="{{ email }}" />
+                  <!-- 토큰 끝 -->
+                  <!-- 입부신청 작성란 시작 -->
+                  <div class="tab-content nav">
+                    <div id="login" class="tab-pane active">
                       <h3 class="form-title m-t0">입부신청</h3>
                       <!--이름 input-->
                       <div class="form-group">
@@ -104,15 +141,13 @@
                           class="form-control"
                         />
                       </div>
-                      <!--이메일 input-->
-                      <div class="form-group">
-                        <input
-                          type="text"
-                          name="user_email"
-                          value="{{ email }}"
-                          class="form-control"
-                        />
+
+                      <!--이메일은 수정하지 못하도록 고정-->
+                      <div class="form-group form-control_instead">
+                        yyj11kr@naver.com
                       </div>
+
+                      <!-- 이메일 고정되어있으니까 글자위치 안맞음. 수정해야함 . 방법: {{email}}대신 딴거 넣어보기 -->
                       <!--핸드폰 번호 input-->
                       <div class="form-group">
                         <input
@@ -179,172 +214,74 @@
                         />
                       </div>
 
-                      <div class="form-group field-btn text-left">
-                        <div class="input-block">
-                          <input id="check1" type="checkbox" />
-                          <label for="check1">Remember me</label>
-                        </div>
+                      <div class="form-group">
                         <a
                           data-toggle="tab"
-                          href="#forgot-password"
-                          class="btn-link forgot-password"
-                        >
-                          Forgot Password</a
-                        >
-                      </div>
-                      <div class="form-group">
-                        <button class="site-button btn-block button-md">
-                          login
-                        </button>
-                      </div>
-                      <div class="form-group">
-                        <p class="info-bottom">
-                          Don’t have an account?
-                          <a data-toggle="tab" href="#register" class="btn-link"
-                            >Register</a
-                          >
-                        </p>
-                      </div>
-                    </form>
-                  </div>
-                  <div id="forgot-password" class="tab-pane fade">
-                    <form class="dlab-form">
-                      <h3 class="form-title m-t0">Find Your Account</h3>
-                      <div class="form-group text-center">
-                        <a href="#" class="site-button facebook btn-block"
-                          ><i class="fa fa-facebook-official m-r10"></i> Log in
-                          with Facebook</a
+                          href="#register"
+                          class="site-button btn-block button-md"
+                          >다음</a
                         >
                       </div>
+                    </div>
+
+                    <!-- 서술형 질문 -->
+                    <div id="register" class="tab-pane fade">
                       <div class="form-group">
-                        <input
-                          name="dzName"
+                        <h5 class="text-inherit m-b10">지원동기</h5>
+                        <textarea
+                          name="answer_{{ quest.quest_no }}"
                           required=""
-                          class="form-control"
-                          placeholder="Email Id"
+                          class="form-textarea_size"
+                          placeholder="내용을 입력하세요."
                           type="text"
-                        />
+                        ></textarea>
                       </div>
                       <div class="form-group">
-                        <button class="site-button btn-block button-md">
-                          Get New Password
-                        </button>
-                      </div>
-                      <div class="form-group">
-                        <p class="info-bottom">
-                          <a data-toggle="tab" href="#login" class="btn-link"
-                            >Login
-                          </a>
-                          |
-                          <a data-toggle="tab" href="#register" class="btn-link"
-                            >Register</a
-                          >
-                        </p>
-                      </div>
-                    </form>
-                  </div>
-                  <div id="register" class="tab-pane fade">
-                    <form class="dlab-form">
-                      <h3 class="form-title m-t0">
-                        Create an account! It's free and always will be.
-                      </h3>
-                      <div class="form-group text-center">
-                        <a href="#" class="site-button facebook"
-                          ><i class="fa fa-facebook-official m-r10"></i> Log in
-                          with Facebook</a
-                        >
-                      </div>
-                      <div class="form-group">
-                        <input
-                          name="dzName"
+                        <h5 class="text-inherit m-b10">질문</h5>
+                        <textarea
+                          name="answer_{{ quest.quest_no }}"
                           required=""
-                          class="form-control"
-                          placeholder="Full Name"
+                          class="form-textarea_size"
+                          placeholder="내용을 입력하세요."
                           type="text"
-                        />
+                        ></textarea>
                       </div>
                       <div class="form-group">
-                        <input
-                          name="dzName"
+                        <h5 class="text-inherit m-b10">질문</h5>
+                        <textarea
+                          name="answer_{{ quest.quest_no }}"
                           required=""
-                          class="form-control"
-                          placeholder="Email Id"
+                          class="form-textarea_size"
+                          placeholder="내용을 입력하세요."
                           type="text"
-                        />
+                        ></textarea>
                       </div>
                       <div class="form-group">
-                        <input
-                          name="dzName"
+                        <h5 class="text-inherit m-b10">질문</h5>
+                        <textarea
+                          name="answer_{{ quest.quest_no }}"
                           required=""
-                          class="form-control"
-                          placeholder="Address"
+                          class="form-textarea_size"
+                          placeholder="내용을 입력하세요."
                           type="text"
-                        />
-                      </div>
-                      <div class="form-group">
-                        <input
-                          name="dzName"
-                          required=""
-                          class="form-control"
-                          placeholder="City/Town"
-                          type="text"
-                        />
-                      </div>
-                      <h6 class="text-inherit m-b10">
-                        Enter your account details below:
-                      </h6>
-                      <div class="form-group">
-                        <input
-                          name="dzName"
-                          required=""
-                          class="form-control"
-                          placeholder="User Name"
-                          type="text"
-                        />
-                      </div>
-                      <div class="form-group">
-                        <input
-                          name="dzName"
-                          required=""
-                          class="form-control"
-                          placeholder="Password"
-                          type="text"
-                        />
-                      </div>
-                      <div class="form-group">
-                        <input
-                          name="dzName"
-                          required=""
-                          class="form-control"
-                          placeholder="Re-type Your Password"
-                          type="text"
-                        />
+                        ></textarea>
                       </div>
                       <div class="form-group">
                         <input type="checkbox" id="privacy-policy" />
                         <label for="privacy-policy"
-                          >I agree to the
-                          <a href="#" class="btn-link">Terms of Service </a>&
-                          <a href="#" class="btn-link"
-                            >Privacy Policy
-                          </a></label
+                          >약관에 동의합니다.
+                          <a href="#" class="btn-link">약관 </a>&
+                          <a href="#" class="btn-link">약관 </a></label
                         >
                       </div>
                       <div class="form-group">
                         <button class="site-button button-md btn-block">
-                          Submit
+                          입부신청
                         </button>
                       </div>
-                      <div class="form-group">
-                        <p class="info-bottom">
-                          <a data-toggle="tab" href="#login" class="btn-link"
-                            >Login with username and password?</a
-                          >
-                        </p>
-                      </div>
-                    </form>
+                    </div>
                   </div>
-                </div>
+                </form>
               </div>
             </div>
             <div class="col-lg-8">

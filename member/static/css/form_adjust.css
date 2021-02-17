@@ -10,3 +10,52 @@
   font-size: 15px;
   float: right;
 }
+
+.form-float_right {
+  display: block-inline;
+  float: right;
+}
+.form-profile_grid {
+  grid-template-columns: 1fr 3fr;
+}
+.form-question_font {
+  font-size: 20px;
+  font-weight: 900;
+  color: #20124a;
+}
+/* .form-textarea_size는 form-control과 다를게 별로 없음. 
+만든 이유는 form-control때문에 수정되지 않는 부분이 있고, 그 부분을 수정하기 용이하게 하기 위함임. */
+.form-textarea_size {
+  border-color: #e1e6eb;
+  box-shadow: none;
+  width: 100%;
+  height: 150px;
+  font-size: 15px;
+  resize: none;
+  line-height: 20px;
+  padding: 9px 12px;
+  border-radius: 3px;
+}
+/* .form-textarea_size에 해당하는 부분을 클릭했을 때 */
+.form-textarea_size:focus {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  border-color: #e1e1e1;
+  outline: 0;
+}
+
+.form-control_instead {
+  border-color: #e1e6eb;
+  border-width: 1px;
+  box-shadow: none;
+  width: 100%;
+  height: 40px;
+  font-size: 15px;
+  line-height: 20px;
+  padding: 9px 12px;
+  border-radius: 3px;
+}
+.form-control_instead:focus {
+  border-color: #e1e1e1;
+  outline: 0;
+}
