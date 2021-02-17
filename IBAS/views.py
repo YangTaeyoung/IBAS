@@ -98,4 +98,4 @@ def listing_right_sidebar(request):
 
 def register(request):
     context = {}
-    return render(request, "register.html", context)
+    return render(request, "register_1.html", context)
