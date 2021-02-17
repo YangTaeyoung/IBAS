@@ -33,7 +33,7 @@ def error_404(request):
 
 def index_1(request):
     context = {}
-    return render(request, "index-1.html", context)
+    return render(request, "top_bar.html", context)
 
 
 def index_2(request):

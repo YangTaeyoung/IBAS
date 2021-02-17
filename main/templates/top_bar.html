@@ -47,10 +47,8 @@
                 <div class="container clearfix">
                     <!-- website logo -->
                     <div class="logo-header mostion">
-                        <a href="index-1.html" class="logo-1"><img src="{% static 'images/logo-white-1.png' %}"
-                                                                   alt=""></a>
-                        <a href="index-1.html" class="logo-2"><img src="{% static 'images/logo-black-1.png' %}"
-                                                                   alt=""></a>
+                        <a href="index.html" class="logo-1"><img src="{% static 'images/ibas_logo_white.png' %}" alt=""></a>
+                        <a href="index.html" class="logo-2"><img src="{% static 'images/ibas_logo.png' %}" alt=""></a>
                     </div>
                     <!-- nav toggle button -->
                     <button class="navbar-toggler collapsed navicon justify-content-end" type="button"
@@ -63,70 +61,79 @@
                     <!-- extra nav -->
                     <div class="extra-nav">
                         <div class="extra-cell">
-                            <a href="register.html" class="site-button-link white"><i
-                                    class="ti-import m-r5 rotate90"></i> Sign In</a>
-                            <a href="add-listing.html" class="site-button radius-xl m-l10"><i
-                                    class="fa fa-plus m-r5"></i> Add Listing</a>
+                            <!-- 여기도 세션 처리 해야함 -->
+                            <a href="add-listing.html" class="site-button radius-xl m-l10">Log In</a>
+                            <a href="add-listing.html" class="site-button radius-xl m-l10">Sing Up</a>
+                        </div>
+                    </div>
+                    <div class="extra-nav" style="position: absolute; margin-left: 940px;">
+                        <div class="extra-cell">
+                            <a href="add-listing.html" class="site-button radius-xl m-l10">Log Out</a>
+                            <a href="add-listing.html" class="site-button radius-xl m-l10">My Page</a>
+                            <!-- 여기까지 세션 처리 -->
+                            <div class="dropdown dropdown-btn">
+
+                                <svg id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                     aria-expanded="false" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="24"
+                                     height="24" viewBox="0 0 172 172"
+                                     style=" fill:#ffffff; margin-left: 10px; margin-top: 7px">
+                                    <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1"
+                                       stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"
+                                       stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none"
+                                       font-size="none" text-anchor="none" style="mix-blend-mode: normal">
+                                        <path d="M0,172v-172h172v172z" fill="none"></path>
+                                        <g fill="#4611a7">
+                                            <path d="M86,14.33333c-5.934,0 -10.75,4.816 -10.75,10.75v4.98307c-18.54017,4.78017 -32.25,21.56943 -32.25,41.60026v43l-14.33333,14.33333v7.16667h114.66667v-7.16667l-14.33333,-14.33333v-43c0,-20.03083 -13.70983,-36.8061 -32.25,-41.58626v-4.99707c0,-5.934 -4.816,-10.75 -10.75,-10.75zM71.66667,143.33333c0,7.91917 6.42133,14.33333 14.33333,14.33333c7.912,0 14.33333,-6.42133 14.33333,-14.33333z"></path>
+                                        </g>
+                                    </g>
+                                </svg>
+
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item site-button-link" href="javascript:void(0);">
+                                        <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
+                                    <a class="dropdown-item site-button-link" href="javascript:void(0);">
+                                        <i class="fa fa-twitter"></i><span>아직 알림이 없습니다.</span></a>
+                                    <a class="dropdown-item site-button-link" href="javascript:void(0);">
+                                        <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
+                                    <a class="dropdown-item site-button-link" href="javascript:void(0);">
+                                        <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
+                                    <a class="dropdown-item site-button-link" href="javascript:void(0);">
+                                        <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
+                                    <a class="dropdown-item site-button-link" href="javascript:void(0);">
+                                        <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <!-- main nav -->
                     <div class="header-nav navbar-collapse collapse justify-content-end" id="navbarNavDropdown">
                         <ul class="nav navbar-nav">
-                            <li class="down active"><a href="#">Home <i class="fa fa-chevron-down"></i></a>
+                            <li class="down active"><a href="#">IBAS <i class="fa fa-chevron-down"></i></a>
                                 <ul class="sub-menu">
-                                    <li><a href="index-1.html">Home 1</a></li>
-                                    <li><a href="index-2.html">Home 2<span class="tag-new">New</span></a></li>
-                                    <li><a href="index-3.html">Home 3<span class="tag-new">New</span></a></li>
+                                    <li><a href="#">동아리 소개</a></li>
+                                    <li><a href="#">동아리 활동</a></li>
+                                    <!-- 여기 밑에 두개는 세션 처리해야함 -->
+                                    <li><a href="#">회계내역</a></li>
+                                    <li><a href="#">예산지원신청</a></li>
                                 </ul>
                             </li>
-                            <li class="down"><a href="#">Pages <i class="fa fa-chevron-down"></i></a>
+                            <li class="down"><a href="#">게시판 <i class="fa fa-chevron-down"></i></a>
                                 <ul class="sub-menu">
-                                    <li><a href="coming-soon.html">Coming Soon</a></li>
-                                    <li><a href="error-404.html">Error 404</a></li>
-                                    <li><a href="contact-us.html">Contact Us</a></li>
-                                    <li><a href="register.html">Register<span class="tag-new">New</span></a></li>
+                                    <li><a href="#">공지사항</a></li>
+                                    <li><a href="#">자유게시판</a></li>
+                                    <li><a href="#">질문게시판</a></li>
+                                    <li><a href="#">공모전게시판</a></li>
                                 </ul>
                             </li>
-                            <li class="down"><a href="#">Listings <i class="fa fa-chevron-down"></i></a>
+                            <li class="down"><a href="#">강의실 <i class="fa fa-chevron-down"></i></a>
                                 <ul class="sub-menu">
-                                    <li><a href="add-listing.html">Add Listing<span class="tag-new">New</span></a></li>
-                                    <li><a href="#">Listings <i class="fa fa-angle-right"></i></a>
-                                        <ul class="sub-menu">
-                                            <li><a href="listing.html">Listing</a></li>
-                                            <li><a href="listing-left-sidebar.html">Listing Left Sidebar</a></li>
-                                            <li><a href="listing-right-sidebar.html">Listing Right Sidebar</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a href="#">Listing Grid <i class="fa fa-angle-right"></i></a>
-                                        <ul class="sub-menu">
-                                            <li><a href="listing-grid-left-sidebar.html">Left Sidebar</a></li>
-                                            <li><a href="listing-grid-right-sidebar.html">Right Sidebar</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a href="#">Listing Map <i class="fa fa-angle-right"></i></a>
-                                        <ul class="sub-menu">
-                                            <li><a href="listing-grid-map-left-sidebar.html">Left Sidebar</a></li>
-                                            <li><a href="listing-grid-map-right-sidebar.html">Right Sidebar</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a href="#">Listing Details <i class="fa fa-angle-right"></i></a>
-                                        <ul class="sub-menu">
-                                            <li><a href="listing-details.html">Listing Details 1</a></li>
-                                            <li><a href="listing-details-2.html">Listing Details 2<span class="tag-new">New</span></a>
-                                            </li>
-                                            <li><a href="listing-details-3.html">Listing Details 3<span class="tag-new">New</span></a>
-                                            </li>
-                                        </ul>
-                                    </li>
+                                    <li><a href="#">강의</a></li>
+                                    <li><a href="#">스터디</a></li>
+                                    <li><a href="#">취미모임</a></li>
+                                    <li><a href="#">강의개설신청</a></li>
                                 </ul>
                             </li>
-                            <li class="down"><a href="#">Blog <i class="fa fa-chevron-down"></i></a>
-                                <ul class="sub-menu">
-                                    <li><a href="blog-standard.html">Blog</a></li>
-                                    <li><a href="blog-details.html">Blog Details</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="contact-us.html">Contact Us</a></li>
+
                         </ul>
                     </div>
                 </div>
@@ -740,7 +747,8 @@
                         <div class="item">
                             <div class="blog-post dez-blog">
                                 <div class="dlab-post-media">
-                                    <a href="blog-details.html"><img src="{% static 'images/blog/grid/pic3.jpg' %}" alt=""/></a>
+                                    <a href="blog-details.html"><img src="{% static 'images/blog/grid/pic3.jpg' %}"
+                                                                     alt=""/></a>
                                 </div>
                                 <div class="dlab-info">
                                     <div class="category-tag">
@@ -768,7 +776,8 @@
                         <div class="item">
                             <div class="blog-post dez-blog">
                                 <div class="dlab-post-media">
-                                    <a href="blog-details.html"><img src="{% static 'images/blog/grid/pic2.jpg' %}" alt=""/></a>
+                                    <a href="blog-details.html"><img src="{% static 'images/blog/grid/pic2.jpg' %}"
+                                                                     alt=""/></a>
                                 </div>
                                 <div class="dlab-info">
                                     <div class="category-tag">

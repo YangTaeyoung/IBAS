@@ -8,3 +8,7 @@ def index(request): # 메인 홈페이지 단순 이동
     return render(request, 'index.html', {})
 
 
+# 메인 작업중임.
+def index1(request):
+    context = {}
+    return render(request, "top_bar.html", context)
