@@ -10,11 +10,11 @@ from django.db import models
 
 class Answer(models.Model):
     answer_id = models.AutoField(db_column='ANSWER_ID', primary_key=True)  # Field name made lowercase.
-    answer_user = models.ForeignKey('User', models.DO_NOTHING, db_column='ANSWER_USER')  # Field name made lowercase.
+    answer_user = models.ForeignKey('User', on_delete=models.CASCADE, db_column='ANSWER_USER')  # Field name made lowercase.
     answer_quest = models.ForeignKey('QuestForm', models.DO_NOTHING,
                                      db_column='ANSWER_QUEST')  # Field name made lowercase.
     answer_cont = models.CharField(db_column='ANSWER_CONT', max_length=5000)  # Field name made lowercase.
-    answer_created = models.DateTimeField(db_column='ANSWER_CREATED')  # Field name made lowercase.
+    answer_created = models.DateTimeField(db_column='ANSWER_CREATED', auto_now_add=True)  # Field name made lowercase.
 
     class Meta:
         managed = False

@@ -2,14 +2,15 @@ from DB.models import User
 # 로그인 시 세션을 저장하는 함수
 
 
+# 로그인 세션을 등록하는 함수
 def save_session(request, user):
     request.session["user_stu"] = user.user_stu
     request.session["user_name"] = user.user_name
     request.session["user_email"] = user.user_email
-    if user.user_pic is not None:
+    if user.user_pic is not None: # 프로필 사진 있을 경우
         request.session["user_pic"] = user.user_pic
-    else:
-        request.session["user_pic"] = "0"
+    else: # 프로필 사진이 없을 경우
+        request.session["user_pic"] = "0" # 0이 입력, 0일 경우 프로필 사진을 대체 이미지로 변경하면 될 듯.
     request.session["user_joined"] = str(user.user_joined)
     print("날짜 제대로 출력 되나? ", str(user.user_joined))
     request.session["user_major"] = user.user_major

@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from allauth.socialaccount.models import SocialAccount, \
     SocialToken  # 소셜 계정 DB, socialaccount_socialaccount 테이블을 사용하기 위함.
 from django.urls import reverse
-from DB.models import AuthUser, User, UserAuth, UserRole, AccountEmailaddress  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
+from DB.models import AuthUser, User, UserAuth, UserRole, QuestForm, Answer  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
 from django.http import HttpResponseRedirect
 # 내가 만든 세션 모듈 불러오기
 from . import session
@@ -24,6 +24,11 @@ def join(request):  # 회원 가입 페이지로 이동 할 것인지, 이미 �
             # extra_data: 사용자의 동의를 통해 얻어온 권한인 듯.
             email = tar_member.extra_data.get('email')  # 자동 완성을 위해 인스턴스 변수 설정
             name = tar_member.extra_data.get('name')  # 자동 완성을 위한 이름 설정
+            pic = "0" # 임시로 초기화
+            if tar_member.provider == "google": # 사용자가 구글을 통해 로그인 한 경우
+                pic = tar_member.extra_data.get('picture') # extra_data 테이블에서 꺼내는 변수를 picture로 설정
+            elif tar_member.provider == "naver": # 사용자가 네이버를 통해 로그인 한 경우
+                pic = tar_member.extra_data.get('profile_image') #extra_data 테이블에서 꺼내는 변수를 profile_image로 설정
 
             # 소셜 로그인으로 부터 받은 정보는 저장하지 않기 위해 해당 정보 삭제
             tar_token.delete()
@@ -33,9 +38,12 @@ def join(request):  # 회원 가입 페이지로 이동 할 것인지, 이미 �
             if len(User.objects.filter(
                     user_email=email)) == 0:  # 토큰 정보로 USER DB를 검색 했을 때 나오는 유저 정보가 없을 경우, 즉 입부 신청하지 않은 유저의 경
                 # 컨텍스트에 자동완성 정보를 등록
+
                 context = {
                     "email": email,
-                    "name": name
+                    "name": name,
+                    "pic": pic,
+                    "quest_list": QuestForm.objects.all()
                 }
 
                 return render(request, 'join.html', context)
@@ -61,27 +69,39 @@ def join_chk(request):  # 회원 가입 페이지로 부터 정보를 받아 가
         user_grade = request.POST.get("user_grade")
         user_gen = request.POST.get("user_gen")
         user_phone = request.POST.get("user_phone")
+        user_pic = request.POST.get("user_pic")
+
         # 사용자 정보를 토대로 모델 객체 생성
         user = User.objects.create(
-            user_name=user_name,
-            user_stu=user_stu,
-            user_email=user_email,
-            user_grade=user_grade,
-            user_auth=get_object_or_404(UserAuth, pk=user_auth),
-            user_gen=user_gen,
-            user_major=user_major,
-            user_role=get_object_or_404(UserRole, pk=user_role),
-            user_phone=user_phone
+            user_name=user_name,  # 이름
+            user_stu=user_stu,  # 학번
+            user_email=user_email,  # 이메일
+            user_grade=user_grade,  # 학년
+            user_auth=get_object_or_404(UserAuth, pk=user_auth),  # 권한 번호
+            user_gen=user_gen,  # 기수
+            user_major=user_major,  # 전공
+            user_role=get_object_or_404(UserRole, pk=user_role),  # 역할 정보
+            user_phone=user_phone,  # 핸드폰 번호
+            user_pic=user_pic  # 프로필 사진
         )
 
         # 사용자 정보를 DB에 저장
         user.save()
-        # 등록한 사용자 정보를 호출
+        quest_list = QuestForm.objects.all()
+
+        for quest in quest_list:
+            answer = Answer.objects.create(
+                answer_quest=quest,
+                answer_cont=request.POST.get("answer_" + str(quest.quest_no)),
+                answer_user=user,
+            )
+            answer.save()
+            # 등록한 사용자 정보를 호출
         tar_member = User.objects.filter(user_email=user_email)[0]
         # 해당 정보를 로그인 및 정보 출력에 필요한 정보를 세션에 저장
         session.save_session(request, tar_member)
         # 메인 페이지로 이동 lgn_is_failed: 0 -> 로그인 성공 1 -> 로그인 실패
-        return render(request, "index.html", {'lgn_is_failed': 0})
+        return redirect(request, reverse("index"))
     return render(request, "index.html", {'lgn_is_failed': 1})
 
 
