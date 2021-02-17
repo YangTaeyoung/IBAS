@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <!-- 여기서부터 기존 템플릿에 있던 것 -->
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="keywords" content="" />
@@ -67,8 +68,9 @@
       type="text/css"
       href="{% static 'css/skin/skin-1.css' %}"
     />
-    <link rel="stylesheet" href="{% static 'css/form_adjust.css' %}" />
-    <!--외부 css파일 받는 링크-->
+    <!-- 여기서부터 기존 템플릿에 있던 것 -->
+    <!--외부 css파일 받는 링크 / 이 html에서만 쓰는 것. -->
+    <link rel="stylesheet" href="{% static 'css/join.css' %}" />
   </head>
   <body id="bg">
     <div id="loading-area"></div>
@@ -81,15 +83,30 @@
         <div class="container-fluid">
           <div class="row">
             <div class="col-lg-4 login-form-box">
+              <!-- 여기서부터 로그인 양식 시작  -->
               <div class="login-form">
+                <!-- 동아리 로고  -->
                 <div class="logo">
-                  <a href="index.html"
-                    ><img src="{% static 'images/logo-black.png' %}" alt=""
-                  /></a>
+                  <!-- a 태그로 인해 동아리 로고 클릭하면 메인화면으로 감.  -->
+                  <a href="{% url 'index' %}">
+                    <!-- 임의로 div를 통해 동아리 로고 위치 표시함.  -->
+                    <div
+                      style="
+                        width: 150px;
+                        height: 50px;
+                        background-color: #4287f5;
+                      "
+                    >
+                      동아리로고
+                    </div>
+                  </a>
                 </div>
-                <!-- FORM 즈아리 -->
-                <form class="dlab-form">
-                  <!-- 토큰 시작 -->
+                <!-- 회원 가입 입력 폼 시작 -->
+                <form action="{% url 'join_chk' %}" method="post">
+                  <!-- 회원 가입 확인 함수:join_chk()로 전송 -->
+                  <!--POST전송을 위한 CSRF 토큰-->
+                  {% csrf_token %}
+                  <!-- 바로 사용하지 못하는 것들은 사전 설정함. -->
                   <input
                     type="hidden"
                     id="user_token"
@@ -127,11 +144,14 @@
                     value="{{ pic }}"
                   />
                   <input type="hidden" name="user_email" value="{{ email }}" />
-                  <!-- 토큰 끝 -->
+                  <!-- 토큰 끝  -->
+
                   <!-- 입부신청 작성란 시작 -->
+                  <!-- 단답 작성란 시작 -->
                   <div class="tab-content nav">
                     <div id="login" class="tab-pane active">
                       <h3 class="form-title m-t0">입부신청</h3>
+
                       <!--이름 input-->
                       <div class="form-group">
                         <input
@@ -143,17 +163,16 @@
                       </div>
 
                       <!--이메일은 수정하지 못하도록 고정-->
+                      <!-- 안에 적힐 내용의 css는 form-control_instead에서 지정함.  -->
                       <div class="form-group form-control_instead">
-                        yyj11kr@naver.com
+                        {{email}}
                       </div>
 
-                      <!-- 이메일 고정되어있으니까 글자위치 안맞음. 수정해야함 . 방법: {{email}}대신 딴거 넣어보기 -->
                       <!--핸드폰 번호 input-->
                       <div class="form-group">
                         <input
-                          type="text"
+                          type="tel"
                           name="user_phone"
-                          value=""
                           class="form-control"
                           placeholder="핸드폰번호"
                         />
@@ -195,6 +214,7 @@
                           </option>
                         </select>
                       </div>
+
                       <!--학번 input-->
                       <div class="form-group form-std_no">
                         <input
@@ -204,6 +224,7 @@
                           placeholder="학번"
                         />
                       </div>
+
                       <!--전공 input-->
                       <div class="form-group">
                         <input
@@ -213,7 +234,7 @@
                           placeholder="전공"
                         />
                       </div>
-
+                      <!-- 서술형 질문으로 가기위 한 a 태그 -->
                       <div class="form-group">
                         <a
                           data-toggle="tab"
@@ -223,9 +244,11 @@
                         >
                       </div>
                     </div>
+                    <!-- 단답 작성란 시작 -->
 
-                    <!-- 서술형 질문 -->
+                    <!-- 서술형 질문 시작-->
                     <div id="register" class="tab-pane fade">
+                      <!--지원동기와 지원동기 작성란  -->
                       <div class="form-group">
                         <h5 class="text-inherit m-b10">지원동기</h5>
                         <textarea
@@ -236,6 +259,7 @@
                           type="text"
                         ></textarea>
                       </div>
+                      <!--질문과 질문답변 작성란  -->
                       <div class="form-group">
                         <h5 class="text-inherit m-b10">질문</h5>
                         <textarea
@@ -246,6 +270,7 @@
                           type="text"
                         ></textarea>
                       </div>
+                      <!--질문과 질문답변 작성란  -->
                       <div class="form-group">
                         <h5 class="text-inherit m-b10">질문</h5>
                         <textarea
@@ -256,6 +281,7 @@
                           type="text"
                         ></textarea>
                       </div>
+                      <!--질문과 질문답변 작성란  -->
                       <div class="form-group">
                         <h5 class="text-inherit m-b10">질문</h5>
                         <textarea
@@ -266,6 +292,7 @@
                           type="text"
                         ></textarea>
                       </div>
+                      <!-- 개인정보사용동의란이 있다면 사용해야 할 체크박스와 상세 내용 -->
                       <div class="form-group">
                         <input type="checkbox" id="privacy-policy" />
                         <label for="privacy-policy"
@@ -274,6 +301,7 @@
                           <a href="#" class="btn-link">약관 </a></label
                         >
                       </div>
+                      <!-- 입부신청 버튼 -->
                       <div class="form-group">
                         <button class="site-button button-md btn-block">
                           입부신청
@@ -281,9 +309,12 @@
                       </div>
                     </div>
                   </div>
+                  <!-- 입부신청 작성란  -->
                 </form>
               </div>
             </div>
+
+            <!-- 화면 오른쪽에 있는 글자.  -->
             <div class="col-lg-8">
               <div class="content-info">
                 <ul class="list-info">
