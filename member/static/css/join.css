@@ -94,8 +94,14 @@
   outline: 0;
 }
 
-.form-positon {
-  padding: 0px;
+.form-position-center {
+    justify-items: center ;
+    align-items: center;
+}
+.dlab-login .login-form
+{
+  margin: 0;
+  padding: 0;
 }
 
 .login-form .form-control,
@@ -119,7 +125,10 @@
   height: 100vh;
   flex-wrap: nowrap;
 }
-
+.join-frame
+{
+  width: 350px;
+}
 /* flex 컨테이너 아이템 */
 .item_flex_lgn {
   /* 무슨일이 있더라도 width를 고정시키기 */
@@ -127,8 +136,20 @@
   max-width: 500px;
   min-width: 500px;
   height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-content: center;
 }
 
 .item_flex_bg {
   flex: 1;
 }
+.major-search-popup
+{
+  width: 600px;
+  height: 500px;
+  background-color: white;
+  z-index: 1000;
+  overflow: auto;
+}
+

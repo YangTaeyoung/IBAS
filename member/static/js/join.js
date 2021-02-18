@@ -30,7 +30,7 @@ function inputPhoneNumber(obj) {
 // search id이름을 가진 입력창에 키를 누르면 전공 리스트 중에서 조회하도록 만드는 함수.
 function filter() {
     let search = document.getElementById("search").value.toLowerCase();
-    let listInner = document.getElementsByClassName("majors");
+    let listInner = document.getElementsByClassName("listInner");
 
     for (let i = 0; i < listInner.length; i++) {
         colleges = listInner[i].getElementsByClassName("colleges");
@@ -47,11 +47,11 @@ function filter() {
 
 // 전공 검색창이 뜨게 하는 함수
 function popUp() {
-    document.getElementById("pop_up_search_windows").style.display = "block";
+    document.getElementById("major-search-popup").style.display = "block";
 }
 // 전공 검색창이 사라지게 하는 함수
 function popDown() {
-    document.getElementById("pop_up_search_windows").style.display = "none";
+    document.getElementById("major-search-popup").style.display = "none";
 }
 // 전공을 클릭하면 전공 입력창에 선택한 전공이 입력되도록 하는 함수
 function printResult(major_no) {

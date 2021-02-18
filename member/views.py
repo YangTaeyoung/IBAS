@@ -145,7 +145,6 @@ def quest_chk(request):
             )
             answer.save()
 
-    else:
 
 def pass_param(request):  # 구글 로그인으로 부터 파라미터를 받아 넘기는 페이지, 사용자에겐 보이지 않음.
     return render(request, "pass_login_param.html", {})
@@ -158,9 +157,6 @@ def logout(request):  # 로그아웃
 
 def login(request):  # 로그인 페이지로 이동
     return render(request, 'login.html', {})
-
-def test_join(request):
-    return render(request, 'register_2-1.html', {})
 
 def test_join2(request):
     return render(request, 'register_2-2.html', {})
