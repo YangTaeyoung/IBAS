@@ -1,144 +1,323 @@
+{% load static %}
+
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>입부 신청</title>
-    <script src="{% static 'js/join.js' %}"></script>
-    <style>
-        li:hover {
-            background-color: lightcoral;
-        }
-    </style>
+    <!-- 여기서부터 기존 템플릿에 있던 것 -->
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="keywords" content=""/>
+    <meta name="author" content=""/>
+    <meta name="robots" content=""/>
+    <meta
+            name="description"
+            content="BizMap Directory & Listings HTML templates"
+    />
+    <meta
+            property="og:title"
+            content="BizMap Directory & Listings HTML templates"
+    />
+    <meta
+            property="og:description"
+            content="BizMap Directory & Listings HTML templates"
+    />
+    <meta property="og:image" content=""/>
+    <meta name="format-detection" content="telephone=no"/>
+
+    <!-- FAVICONS ICON -->
+    <link
+            rel="icon"
+            href="{% static 'images/favicon.ico' %}"
+            type="image/x-icon"
+    />
+    <link
+            rel="shortcut icon"
+            type="image/x-icon"
+            href="{% static 'images/favicon.png' %}"
+    />
+
+    <!-- PAGE TITLE HERE -->
+    <title>입부신청</title>
+
+    <!-- MOBILE SPECIFIC -->
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <!--[if lt IE 9]>
+      <script src="{% static 'js/html5shiv.min.js' %}"></script>
+      <script src="{% static 'js/respond.min.js' %}"></script>
+    <![endif]-->
+
+    <!-- STYLESHEETS -->
+    <link
+            rel="stylesheet"
+            type="text/css"
+            href="{% static 'css/plugins.css' %}"
+    />
+    <link
+            rel="stylesheet"
+            type="text/css"
+            href="{% static 'css/style.css' %}"
+    />
+    <link
+            rel="stylesheet"
+            type="text/css"
+            href="{% static 'css/templete_1.css' %}"
+    />
+    <link
+            class="skin"
+            rel="stylesheet"
+            type="text/css"
+            href="{% static 'css/skin/skin-1.css' %}"
+    />
+
+    <!-- 여기까지 기존 템플릿에 있던 것 -->
+    <!--외부 css파일 받는 링크 / 이 html에서만 쓰는 것. -->
+    <link rel="stylesheet" href="{% static 'css/join.css' %}"/>
 </head>
+<body id="bg">
+<div id="loading-area"></div>
+<div class="page-wraper">
+    <!-- Content -->
+    <div class="page-content dlab-login bg-primary"
+         style="background-position: top right; background-blend-mode: screen">
+        <div class="container-flex">
+            <div class="item_flex_lgn login-form-box">
+                <!-- 여기서부터 로그인 양식 시작  -->
+                <!-- 세로로 길쭉한 컨테이너-->
+                <div class="login-form form-position-center" style="left: -1%">
+                    <!--길쭉한 컨테이너 속 컨텐츠 컨테이너-->
+                    <div class="join-frame">
+                        <!-- 동아리 로고  -->
+                        <div class="form-logo">
+                            <div class="logo">
+                                <!-- a 태그로 인해 동아리 로고 클릭하면 메인화면으로 감.  -->
+                                <a href="{% url 'index' %}">
+                                    <!-- 임의로 div를 통해 동아리 로고 위치 표시함.  -->
+                                    <div
+                                            class="form-text-align-center"
+                                            style="
+                            height: 50px;
+                            width: 160px;
+                            background-color: #4287f5;
+                          "
+                                    >
+                                        동아리로고
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <!-- 회원 가입 입력 폼 시작 -->
+                        <form action="{% url 'join_chk' %}" method="post">
+                            <!-- 회원 가입 확인 함수:join_chk()로 전송 -->
+                            <!--POST전송을 위한 CSRF 토큰-->
+                            {% csrf_token %}
+                            <!-- 바로 사용하지 못하는 것들은 사전 설정함. -->
+                            <!--사전 설정-->
+                            <input type="hidden" id="user_token" name="user_token" value="{{ token }}"/>
+                            <input type="hidden" id="user_auth" name="user_auth" value="4"/> <!-- 기본 권한 -->
+                            <input type="hidden" id="user_role" name="user_role" value="5"/>
+                            <input type="hidden" id="is_activated" name="is_activated" value="0"/>
+                            <input type="hidden" id="user_gen" name="user_gen" value="1"/>
+                            <input type="hidden" id="user_pic" name="user_pic" value="{{ pic }}">
+                            <input type="hidden" name="user_email" value="{{ email }}"/>
+                            <!-- 토큰 끝  -->
 
-<body>
-<!--전공 검색 팝업창-->
-<div id="pop_up_search_windows"
-     style="display: none; position: absolute; top: 50px; right: 30%; width: 500px; height: 500px; overflow: auto">
-    <div style="background-color: red" onclick="popDown()">X</div>
-    <input type="text" id="search" placeholder="전공을 입력하세요." onkeyup="filter()">
-    <ul>
-        {% for major in major_list %}
-            <li class="majors" id="major_{{ major.major_no }}" onclick="printResult({{ major.major_no }})">
-                <label for="colleges">
-                    단과대학:
-                </label>
-                <p class="colleges">{{ major.major_colleage }}</p>
-                <label for="major_names">
-                    학과명:
-                </label>
-                <p id="major_name_{{ major.major_no }}" class="major_names">{{ major.major_name }}</p>
-            </li>
-        {% endfor %}
-    </ul>
+                            <!-- 입부신청 작성란 시작 -->
+                            <!-- 단답 작성란 시작 -->
+                            <div class="tab-content nav">
+                                <!-- <div id="register" class="tab-pane fade"> -->
+                                <div id="register" class="tab-pane active">
+                                    <h3 class="form-title m-t0 form-text-align-center">
+                                        입부신청
+                                    </h3>
+
+                                    <!--이름 input / 구글이나 네이버로부터 정보 받아옴-->
+                                    <div class="form-group">
+                                        <input
+                                                id="user_name"
+                                                type="text"
+                                                name="user_name"
+                                                value="{{ name }}"
+                                                class="form-control"
+                                                required=""
+                                        />
+                                    </div>
+
+                                    <!--이메일은 수정하지 못하도록 고정 / 구글이나 네이버로부터 정보 받아옴-->
+                                    <!-- 안에 적힐 내용의 css는 form-control_instead에서 지정함.  -->
+                                    <div class="form-group form-control_instead">
+                                        {{ email }}
+                                    </div>
+
+                                    <!-- 핸드폰 번호 input -->
+                                    <div class="form-group">
+                                        <input
+                                                id="user_phone"
+                                                type="tel"
+                                                name="user_phone"
+                                                class="form-control"
+                                                placeholder="핸드폰번호"
+                                                maxlength="13"
+                                                required=""
+                                                onkeyup="inputPhoneNumber(this)"
+                                        />
+                                    </div>
+                                    <!-- 학년 input -->
+                                    <div class="form-container-flex form-group mb-0">
+                                        <div class="form-item-flex-std-grade">
+                                            <select name="user_grade" required="required">
+                                                <option value="1" class="form-control">
+                                                    1학년
+                                                </option>
+                                                <option value="2" class="form-control">
+                                                    2학년
+                                                </option>
+                                                <option value="3" class="form-control">
+                                                    3학년
+                                                </option>
+                                                <option value="4" class="form-control">
+                                                    4학년 이상
+                                                </option>
+                                            </select>
+                                        </div>
+
+                                        <!-- 학번 input -->
+                                        <div class="form-group form-item-flex-std-no">
+                                            <input
+                                                    type="text"
+                                                    name="user_stu"
+                                                    class="form-control"
+                                                    placeholder="학번"
+                                                    required="required"
+                                                    maxlength="8"
+                                                    onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"
+                                            />
+                                        </div>
+                                    </div>
+                                    <!-- 전공 input -->
+                                    <div class="form-container-flex form-group mb-0">
+                                        <div class="form-item-flex-major">
+                                            <input
+                                                    type="text"
+                                                    id="user_major"
+                                                    name="user_major"
+                                                    class="form-control_instead"
+                                                    required="required"
+                                                    readonly="readonly"
+                                                    onclick="popUp()"
+                                            />
+                                        </div>
+                                        <!-- 전공 검색 버튼 -->
+                                        <div class="form-group" onclick="popUp()">
+                                            <i class="fa fa-search fa-2x form-item-flex-major-icon"></i>
+                                        </div>
+                                    </div>
+
+
+                                    <!-- 입부신청 버튼 -->
+                                    <div class="form-group">
+                                        <input type="submit" value="다음" class="site-button button-md btn-block"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 입부신청 작성란  -->
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 오른쪽 이미지를 넣을 장소 시작 -->
+            <div class="item_flex_bg">
+                <div class="content-info">
+                    <ul class="list-info">
+                        <li>
+                            <div class="dlab-box">
+                                <i class="fa fa-check"></i>
+                                <p>깔삼한 유료 이미지를 넣을 것</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!--오른쪽 이미지 넣을 장소 끝-->
+        </div>
+    </div>
 </div>
-<div class="main_frame">
-    <!-- 회원 가입 입력 폼 시작 -->
-    <form action="{% url 'join_chk' %}" method="post"> <!-- 회원 가입 확인 함수:join_chk()로 전송 -->
-        <!-- 임시로 테이블 형태로 제작함 -->
-        <table border="1">
-            <!--POST전송을 위한 CSRF 토큰-->
-            {% csrf_token %}
-            <!-- 바로 사용하지 못하는 것들은 사전 설정함. -->
-            <input type="hidden" id="user_token" name="user_token" value="{{ token }}"/>
-            <input type="hidden" id="user_auth" name="user_auth" value="4"/>
-            <input type="hidden" id="user_role" name="user_role" value="5"/>
-            <input type="hidden" id="is_activated" name="is_activated" value="0"/>
-            <input type="hidden" id="user_gen" name="user_gen" value="1"/>
-            <input type="hidden" id="user_pic" name="user_pic" value="{{ pic }}">
-            <input type="hidden" name="user_email" value="{{ email }}"/>
-            <tr>
-                <td>
-                    <!-- 프로필 사진 -->
-                    <img src="{{ pic }}" alt="본 브라우저에서는 지원하지 않는 형식입니다." width="100" height="100"/>
-                    <label> 이름 </label>
-                </td>
-                <td>
-                    <!--이름 자동완성-->
-                    <input type="text" name="user_name" value="{{ name }}"/>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label> 이메일 </label>
-                </td>
-                <td>
-                    {{ email }} <!--이메일은 수정하지 못하도록 고정-->
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label> 핸드폰 번호 </label>
-                </td>
-                <td>
-                    <input type="tel" name="user_phone" onkeyup="inputPhoneNumber(this)"
-                           maxlength="13"/>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label> 학번 </label>
-                </td>
-                <td>
-                    <input type="text" name="user_stu" maxlength="8" value="12" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label> 전공 </label>
-                </td>
-                <td>
-                    <input type="text" id="user_major" name="user_major" readonly="readonly"/>
-                    <button type="button" onclick="popUp()">검색</button>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label> 학년 </label>
-                </td>
-                <td>
-                    <label for="user_grade">학년</label>
-                    <p>
-                        1학년
-                        <input type="radio" id="user_grade" name="user_grade" value="1">
-                    </p>
-                    <p>
-                        2학년
-                        <input type="radio" id="user_grade" name="user_grade" value="2">
-                    </p>
-                    <p>
-                        3학년
-                        <input type="radio" id="user_grade" name="user_grade" value="3">
-                    </p>
-                    <p>
-                        4학년 이상
-                        <input type="radio" id="user_grade" name="user_grade" value="4">
-                    </p>
-                </td>
-            </tr>
-            <!-- DB에서 가져온 질문 목록: quest_list를 출력하기 위해 있는 for문 -->
-            {% for quest in quest_list %}
-                <tr>
-                    <td colspan="2">
-                        {{ forloop.counter }}. {{ quest.quest_name }} <!-- 질문 내용 예 1. 지원동기를 말해주세요 등-->
-                    </td>
 
-                </tr>
-                <tr>
-                    <!-- 답변 입력 폼 -->
-                    <td colspan="2">
-                        <textarea name="answer_{{ quest.quest_no }}"></textarea>
-                        <!-- 질문에 대한 답변, textarea는 다른 것으로 바꾸어도 되나 name은 수정하면 죽여버림-->
-                    </td>
+<div id="major-search-popup" class="major-search-popup position-absolute top-50 start-50 translate-middle">
+
+    <!-- 닫기 버튼 -->
+    <i  class="fa fa-close fa-2x"></i>
+    <!-- 검색 영역 -->
+    <div class="searchBox">
+        <input class="form-control" type="text" id="search" onkeyup="filter()" placeholder="전공을 입력하세요"/>
+    </div>
+    <!-- 전공 리스트 영역 -->
+    <div class="listBox">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th scope="col">학교명</th>
+                <th scope="col">단과대학</th>
+                <th scope="col">학과명</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for major in major_list %}
+                <tr class="listInner" onclick="printResult({{ major.major_no }})">
+                    <th>인하대학교</th>
+                    <td class="colleges">{{ major.major_colleage }}</td>
+                    <td id="major_name_{{ major.major_no }}" class="major_names">{{ major.major_name }}</td>
                 </tr>
             {% endfor %}
-            <tr>
-                <td colspan="2"> <!--입부 신청 버튼-->
-                    <input type="submit" value="입부 신청">
-                </td>
-            </tr>
+            </tbody>
         </table>
-    </form>
+    </div>
 </div>
+
+<!-- Content END-->
+<button class="scroltop fa fa-chevron-up"></button>
+
+
+<!-- JAVASCRIPT FILES ========================================= -->
+<!-- 직접 만든 회원 가입 관련 JS-->
+<script src="{% static 'js/join.js' %}"></script>
+
+
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<!-- JQUERY.MIN JS -->
+<script src="{% static 'plugins/bootstrap/js/popper.min.js' %}"></script>
+<!-- BOOTSTRAP.MIN JS -->
+<script src="{% static 'plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+<!-- BOOTSTRAP.MIN JS -->
+<script src="{% static 'plugins/bootstrap-select/bootstrap-select.min.js' %}"></script>
+<script src="{% static 'plugins/bootstrap-select/bootstrap-select.min.js' %}"></script>
+<!-- FORM JS -->
+<script src="{% static 'plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.js' %}"></script>
+<!-- FORM JS -->
+<script src="{% static 'plugins/magnific-popup/magnific-popup.js' %}"></script>
+<!-- MAGNIFIC POPUP JS -->
+<script src="{% static 'plugins/counter/waypoints-min.js' %}"></script>
+<!-- WAYPOINTS JS -->
+<script src="{% static 'plugins/counter/counterup.min.js' %}"></script>
+<!-- COUNTERUP JS -->
+<script src="{% static 'plugins/imagesloaded/imagesloaded.js' %}"></script>
+<!-- IMAGESLOADED -->
+<script src="{% static 'plugins/masonry/masonry-3.1.4.js' %}"></script>
+<!-- MASONRY -->
+<script src="{% static 'plugins/masonry/masonry.filter.js' %}"></script>
+<!-- MASONRY -->
+<script src="{% static 'plugins/rangeslider/rangeslider.js' %}"></script>
+<!-- RANGESLIDER -->
+<script src="{% static 'plugins/owl-carousel/owl.carousel.js' %}"></script>
+<!-- OWL SLIDER -->
+<script src="{% static 'js/custom.js' %}"></script>
+<!-- CUSTOM FUCTIONS  -->
+<script src="{% static 'js/dz.carousel.js' %}"></script>
+<!-- SORTCODE FUCTIONS  -->
+<script src="{% static 'js/dz.ajax.js' %}"></script>
+<!-- CONTACT JS  -->
+
+
 </body>
 </html>

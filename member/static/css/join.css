@@ -58,14 +58,13 @@
 .form-textarea_size {
   border-color: #e1e6eb;
   box-shadow: none;
-  width: 700px;
+  width: 100%;
   height: 150px;
   font-size: 15px;
   resize: none;
   line-height: 20px;
   padding: 9px 12px;
   border-radius: 3px;
-  margin-left: 180px;
 }
 /* .form-textarea_size에 해당하는 부분을 클릭했을 때 */
 .form-textarea_size:focus {
@@ -95,6 +94,16 @@
   outline: 0;
 }
 
+.form-position-center {
+    justify-items: center ;
+    align-items: center;
+}
+.dlab-login .login-form
+{
+  margin: 0;
+  padding: 0;
+}
+
 .login-form .form-control,
 .add-listing-form .form-control,
 .add-listing-form .dropdown-toggle.btn-default {
@@ -118,7 +127,10 @@
   align-items: center;
   overflow: auto;
 }
-
+.join-frame
+{
+  width: 350px;
+}
 /* flex 컨테이너 아이템 */
 .item_flex_lgn {
   /* 무슨일이 있더라도 width를 고정시키기 */
@@ -128,6 +140,9 @@
   height: 100vh;
   overflow: auto;
   -ms-overflow-style: none; /*스크롤 안보이게 하기 밑에거도 필요*/
+  display: flex;
+  justify-content: center;
+  align-content: center;
 }
 .item_flex_lgn::-webkit-scrollbar {
   display: none;
@@ -136,6 +151,15 @@
 .item_flex_bg {
   flex: 1;
 }
+.major-search-popup
+{
+  width: 600px;
+  height: 500px;
+  background-color: white;
+  z-index: 1000;
+  overflow: auto;
+}
+
 /* 회원가입 폼 가운데로 오기 위해 */
 .form-center {
   align-items: center;
