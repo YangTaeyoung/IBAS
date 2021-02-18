@@ -1,10 +1,12 @@
 /*네이버 로고를 위해, 구글에서 불러오는 폰트*/
 @import url("https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap");
 
+/*네이버 로고를 대체하여 사용할 폰트*/
 .naver-logo {
     font-family: "Archivo Black", sans-serif;
 }
 
+/*하얀색 박스 내부에서 로고 및 로그인 버튼을 가운데 정렬하기 위함*/
 .login-form2 {
     z-index: 99;
     padding: 0 45px 0 45px;
@@ -17,6 +19,7 @@
     justify-content: center;
 }
 
+/*로그인 버튼쪽 구분선*/
 .hr-sect {
     display: flex;
     flex-basis: 100%;
@@ -25,7 +28,6 @@
     font-size: 12px;
     margin: 8px 0px;
 }
-
 .hr-sect::before,
 .hr-sect::after {
     content: "";
@@ -37,6 +39,7 @@
     margin: 0px 16px;
 }
 
+/*로고 위치 및 크기*/
 .logo-position {
     background-color: blueviolet;
     color: aliceblue;
@@ -45,6 +48,7 @@
     position: relative;
 }
 
+/*하단 카피라이트 글자 색상, 크기, 위치*/
 .copyright {
     color: rgba(0, 0, 0, 0.35);
     top: 120pt;

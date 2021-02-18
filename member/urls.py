@@ -9,6 +9,6 @@ urlpatterns = [
     path('logout/', views.logout, name="logout"),
     path('join.do/', views.join_chk, name="join_chk"),
     path('pass/', views.pass_param, name="pass"),
-    path('test/join', views.test_join, name="test_join"),
     path('test/join2', views.test_join2, name="test_join2"),
+    path('test/join/', views.test_join, name="test_join")
 ]

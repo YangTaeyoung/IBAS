@@ -3,111 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <title>입부 신청</title>
+    <script src="{% static 'js/join.js' %}"></script>
+    <style>
+        li:hover {
+            background-color: lightcoral;
+        }
+    </style>
 </head>
+
 <body>
-
-<!-- 회원 가입 입력 폼 시작 -->
-<form action="{% url 'join_chk' %}" method="post"> <!-- 회원 가입 확인 함수:join_chk()로 전송 -->
-    <!-- 임시로 테이블 형태로 제작함 -->
-    <table border="1">
-        <!--POST전송을 위한 CSRF 토큰-->
-        {% csrf_token %}
-        <!-- 바로 사용하지 못하는 것들은 사전 설정함. -->
-        <input type="hidden" id="user_token" name="user_token" value="{{ token }}"/>
-        <input type="hidden" id="user_auth" name="user_auth" value="4"/>
-        <input type="hidden" id="user_role" name="user_role" value="5"/>
-        <input type="hidden" id="is_activated" name="is_activated" value="0"/>
-        <input type="hidden" id="user_gen" name="user_gen" value="1"/>
-        <input type="hidden" id="user_pic" name="user_pic" value="{{ pic }}">
-        <input type="hidden" name="user_email" value="{{ email }}"/>
-        <tr>
-            <td>
-                <!-- 프로필 사진 -->
-                <img src="{{ pic }}" alt="본 브라우저에서는 지원하지 않는 형식입니다." width="100" height="100"/>
-                <label> 이름 </label>
-            </td>
-            <td>
-                <!--이름 자동완성-->
-                <input type="text" name="user_name" value="{{ name }}"/>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label> 이메일 </label>
-            </td>
-            <td>
-                {{ email }} <!--이메일은 수정하지 못하도록 고정-->
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label> 핸드폰 번호 </label>
-            </td>
-            <td>
-                <input type="tel" name="user_phone"/>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label> 학번 </label>
-            </td>
-            <td>
-                <input type="text" name="user_stu"/>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label> 전공 </label>
-            </td>
-            <td>
-                <input type="text" name="user_major"/>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label> 학년 </label>
-            </td>
-            <td>
-                <label for="user_grade">학년</label>
-                <p>
-                    1학년
-                    <input type="radio" id="user_grade" name="user_grade" value="1">
-                </p>
-                <p>
-                    2학년
-                    <input type="radio" id="user_grade" name="user_grade" value="2">
-                </p>
-                <p>
-                    3학년
-                    <input type="radio" id="user_grade" name="user_grade" value="3">
-                </p>
-                <p>
-                    4학년 이상
-                    <input type="radio" id="user_grade" name="user_grade" value="4">
-                </p>
-            </td>
-        </tr>
-        <!-- DB에서 가져온 질문 목록: quest_list를 출력하기 위해 있는 for문 -->
-        {% for quest in quest_list %}
-            <tr>
-                <td colspan="2">
-                    {{ forloop.counter}}. {{ quest.quest_name }} <!-- 질문 내용 예 1. 지원동기를 말해주세요 등-->
-                </td>
-
-            </tr>
-            <tr>
-                <!-- 답변 입력 폼 -->
-                <td colspan="2">
-                    <textarea name="answer_{{ quest.quest_no }}"></textarea> <!-- 질문에 대한 답변, textarea는 다른 것으로 바꾸어도 되나 name은 수정하면 죽여버림-->
-                </td>
-            </tr>
+<!--전공 검색 팝업창-->
+<div id="pop_up_search_windows"
+     style="display: none; position: absolute; top: 50px; right: 30%; width: 500px; height: 500px; overflow: auto">
+    <div style="background-color: red" onclick="popDown()">X</div>
+    <input type="text" id="search" placeholder="전공을 입력하세요." onkeyup="filter()">
+    <ul>
+        {% for major in major_list %}
+            <li class="majors" id="major_{{ major.major_no }}" onclick="printResult({{ major.major_no }})">
+                <label for="colleges">
+                    단과대학:
+                </label>
+                <p class="colleges">{{ major.major_colleage }}</p>
+                <label for="major_names">
+                    학과명:
+                </label>
+                <p id="major_name_{{ major.major_no }}" class="major_names">{{ major.major_name }}</p>
+            </li>
         {% endfor %}
-        <tr>
-            <td colspan="2"> <!--입부 신청 버튼-->
-                <input type="submit" value="입부 신청">
-            </td>
-        </tr>
-    </table>
-</form>
+    </ul>
+</div>
+<div class="main_frame">
+    <!-- 회원 가입 입력 폼 시작 -->
+    <form action="{% url 'join_chk' %}" method="post"> <!-- 회원 가입 확인 함수:join_chk()로 전송 -->
+        <!-- 임시로 테이블 형태로 제작함 -->
+        <table border="1">
+            <!--POST전송을 위한 CSRF 토큰-->
+            {% csrf_token %}
+            <!-- 바로 사용하지 못하는 것들은 사전 설정함. -->
+            <input type="hidden" id="user_token" name="user_token" value="{{ token }}"/>
+            <input type="hidden" id="user_auth" name="user_auth" value="4"/>
+            <input type="hidden" id="user_role" name="user_role" value="5"/>
+            <input type="hidden" id="is_activated" name="is_activated" value="0"/>
+            <input type="hidden" id="user_gen" name="user_gen" value="1"/>
+            <input type="hidden" id="user_pic" name="user_pic" value="{{ pic }}">
+            <input type="hidden" name="user_email" value="{{ email }}"/>
+            <tr>
+                <td>
+                    <!-- 프로필 사진 -->
+                    <img src="{{ pic }}" alt="본 브라우저에서는 지원하지 않는 형식입니다." width="100" height="100"/>
+                    <label> 이름 </label>
+                </td>
+                <td>
+                    <!--이름 자동완성-->
+                    <input type="text" name="user_name" value="{{ name }}"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label> 이메일 </label>
+                </td>
+                <td>
+                    {{ email }} <!--이메일은 수정하지 못하도록 고정-->
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label> 핸드폰 번호 </label>
+                </td>
+                <td>
+                    <input type="tel" name="user_phone" onkeyup="inputPhoneNumber(this)"
+                           maxlength="13"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label> 학번 </label>
+                </td>
+                <td>
+                    <input type="text" name="user_stu" maxlength="8" value="12" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label> 전공 </label>
+                </td>
+                <td>
+                    <input type="text" id="user_major" name="user_major" readonly="readonly"/>
+                    <button type="button" onclick="popUp()">검색</button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label> 학년 </label>
+                </td>
+                <td>
+                    <label for="user_grade">학년</label>
+                    <p>
+                        1학년
+                        <input type="radio" id="user_grade" name="user_grade" value="1">
+                    </p>
+                    <p>
+                        2학년
+                        <input type="radio" id="user_grade" name="user_grade" value="2">
+                    </p>
+                    <p>
+                        3학년
+                        <input type="radio" id="user_grade" name="user_grade" value="3">
+                    </p>
+                    <p>
+                        4학년 이상
+                        <input type="radio" id="user_grade" name="user_grade" value="4">
+                    </p>
+                </td>
+            </tr>
+            <!-- DB에서 가져온 질문 목록: quest_list를 출력하기 위해 있는 for문 -->
+            {% for quest in quest_list %}
+                <tr>
+                    <td colspan="2">
+                        {{ forloop.counter }}. {{ quest.quest_name }} <!-- 질문 내용 예 1. 지원동기를 말해주세요 등-->
+                    </td>
+
+                </tr>
+                <tr>
+                    <!-- 답변 입력 폼 -->
+                    <td colspan="2">
+                        <textarea name="answer_{{ quest.quest_no }}"></textarea>
+                        <!-- 질문에 대한 답변, textarea는 다른 것으로 바꾸어도 되나 name은 수정하면 죽여버림-->
+                    </td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="2"> <!--입부 신청 버튼-->
+                    <input type="submit" value="입부 신청">
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
 </body>
 </html>

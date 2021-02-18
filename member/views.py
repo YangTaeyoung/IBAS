@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from allauth.socialaccount.models import SocialAccount, \
     SocialToken  # 소셜 계정 DB, socialaccount_socialaccount 테이블을 사용하기 위함.
 from django.urls import reverse
-from DB.models import AuthUser, User, UserAuth, UserRole, QuestForm, Answer  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
+from DB.models import AuthUser, User, UserAuth, UserRole, QuestForm, Answer, MajorInfo  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
 from django.http import HttpResponseRedirect
 # 내가 만든 세션 모듈 불러오기
 from . import session
@@ -14,7 +14,8 @@ def join(request):  # 회원 가입 페이지로 이동 할 것인지, 이미 �
     if request.method == "POST":
         if request.POST.get("password") is not None:  # pass페이지에서 password가 파라미터로 넘어왔을 경우에
             user_token = request.POST.get("password")
-
+            if len(AuthUser.objects.filter(password=user_token)) == 0: # 만약 넘어온 자료가 없으면
+                return redirect(reverse("index")) #홈으로 이동
             auth_user = AuthUser.objects.filter(password=user_token)[0]  # auth테이블에서 해당 패스워드가 있는지 조회.
 
             # 있다면 social account에서 앞서서 Auth의 primary key를 통해 가입한 친구의 pk를 넣어서 조회
@@ -43,7 +44,8 @@ def join(request):  # 회원 가입 페이지로 이동 할 것인지, 이미 �
                     "email": email,
                     "name": name,
                     "pic": pic,
-                    "quest_list": QuestForm.objects.all()
+                    "quest_list": QuestForm.objects.all(),
+                    "major_list": MajorInfo.objects.all(),
                 }
 
                 return render(request, 'join.html', context)
@@ -63,14 +65,14 @@ def join_chk(request):  # 회원 가입 페이지로 부터 정보를 받아 가
         user_auth = request.POST.get("user_auth")
         user_role = request.POST.get("user_role")
         user_email = request.POST.get("user_email")
-        user_major = request.POST.get("user_major")
+        user_major = MajorInfo.objects.filter(major_name=request.POST.get("user_major"))[0]
         user_name = request.POST.get("user_name")
         user_stu = request.POST.get("user_stu")
         user_grade = request.POST.get("user_grade")
+
         user_gen = request.POST.get("user_gen")
         user_phone = request.POST.get("user_phone")
         user_pic = request.POST.get("user_pic")
-
         # 사용자 정보를 토대로 모델 객체 생성
         user = User.objects.create(
             user_name=user_name,  # 이름
@@ -101,9 +103,49 @@ def join_chk(request):  # 회원 가입 페이지로 부터 정보를 받아 가
         # 해당 정보를 로그인 및 정보 출력에 필요한 정보를 세션에 저장
         session.save_session(request, tar_member)
         # 메인 페이지로 이동 lgn_is_failed: 0 -> 로그인 성공 1 -> 로그인 실패
-        return redirect(request, reverse("index"))
+        return redirect(reverse("index"))
     return render(request, "index.html", {'lgn_is_failed': 1})
 
+def quest_chk(request):
+    if request.method == "POST":  # POST로 데이터가 들어왔을 경우, 안들어 왔다면 -> 비정상 적인 접근임. 일반적으로 GET을 통해서는 접근이 불가능 해야함.
+        # 사용자 정보를 받아옴
+        user_auth = request.POST.get("user_auth")
+        user_role = request.POST.get("user_role")
+        user_email = request.POST.get("user_email")
+        user_major = request.POST.get("user_major")
+        user_name = request.POST.get("user_name")
+        user_stu = request.POST.get("user_stu")
+        user_grade = request.POST.get("user_grade")
+        user_gen = request.POST.get("user_gen")
+        user_phone = request.POST.get("user_phone")
+        user_pic = request.POST.get("user_pic")
+
+        user = User.objects.create(
+            user_name=user_name,  # 이름
+            user_stu=user_stu,  # 학번
+            user_email=user_email,  # 이메일
+            user_grade=user_grade,  # 학년
+            user_auth=get_object_or_404(UserAuth, pk=user_auth),  # 권한 번호
+            user_gen=user_gen,  # 기수
+            user_major=user_major,  # 전공
+            user_role=get_object_or_404(UserRole, pk=user_role),  # 역할 정보
+            user_phone=user_phone,  # 핸드폰 번호
+            user_pic=user_pic  # 프로필 사진
+        )
+        quest_list = QuestForm.objects.all()
+
+        # 사용자 정보를 DB에 저장
+        user.save()
+
+        for quest in quest_list:
+            answer = Answer.objects.create(
+                answer_quest=quest,
+                answer_cont=request.POST.get("answer_" + str(quest.quest_no)),
+                answer_user=user,
+            )
+            answer.save()
+
+    else:
 
 def pass_param(request):  # 구글 로그인으로 부터 파라미터를 받아 넘기는 페이지, 사용자에겐 보이지 않음.
     return render(request, "pass_login_param.html", {})

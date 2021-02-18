@@ -1,10 +1,9 @@
-{% load static %}
-{% load socialaccount %}
-{% providers_media_js %}
+{% load static %} {% load socialaccount %} {% providers_media_js %}
 
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <!--여기서부터 기존 탬플릿에 있던 것-->
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="keywords" content="" />
@@ -25,10 +24,7 @@
     <meta property="og:image" content="" />
     <meta name="format-detection" content="telephone=no" />
 
-      <!-- 커스텀 CSS -->
-    <link rel="stylesheet" href="{% static 'css/login.css' %}" />
-
-    <!-- 아이바스 로고를 넣을 장소 -->
+    <!-- 주소창쪽 아이바스 로고를 넣을 때 참고-->
     <link
       rel="icon"
       href="{% static 'images/favicon.ico' %}"
@@ -51,7 +47,7 @@
       <script src="{% static 'js/respond.min.js' %}"></script>
     <![endif]-->
 
-    <!-- STYLESHEETS -->
+    <!-- 탬플릿 내 CSS -->
     <link
       rel="stylesheet"
       type="text/css"
@@ -73,19 +69,22 @@
       type="text/css"
       href="{% static 'css/skin/skin-1.css' %}"
     />
+    <!-- 커스텀 CSS / 이 html에서만 사용함 -->
+    <link rel="stylesheet" href="{% static 'css/login.css' %}" />
   </head>
   <body id="bg">
+    <!--로딩중일 경우 뜨는 회전하는 원형-->
     <div id="loading-area"></div>
     <div>
-      <!-- Content -->
+      <!-- 로그인창과 배경사진 위치, 크기 설정을 위한 기본 틀 -->
       <div
         class="page-content dlab-login bg-primary"
         style="background-position: top right; background-blend-mode: screen"
       >
         <div>
-            <!-- 전체 컨테이너 -->
+          <!-- 전체 컨테이너 -->
           <div class="container-flex">
-              <!-- 좌측 로그인 창 부분 -->
+            <!-- 좌측 로그인 창 부분 시작 -->
             <div class="item_flex_lgn login-form-box">
               <div class="login-form2">
                 <div class="logo-position">로고자리</div>
@@ -111,7 +110,7 @@
                 </div>
               </div>
             </div>
-            <!-- 오른쪽 이미지를 넣을 장소 시작-->
+            <!-- 오른쪽 이미지를 넣을 장소 시작 -->
             <div class="item_flex_bg">
               <div class="content-info">
                 <ul class="list-info">
@@ -124,12 +123,11 @@
                 </ul>
               </div>
             </div>
-            <!--오른쪽 이미지 넣을 장소 끝-->
+            <!-- 오른쪽 이미지 넣을 장소 끝 -->
           </div>
         </div>
       </div>
       <!-- Content END-->
-      <button class="scroltop fa fa-chevron-up"></button>
     </div>
     <!-- JAVASCRIPT FILES ========================================= -->
     <script src="{% static 'js/jquery.min.js' %}"></script>
