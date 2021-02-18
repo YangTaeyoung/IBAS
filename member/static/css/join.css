@@ -58,13 +58,14 @@
 .form-textarea_size {
   border-color: #e1e6eb;
   box-shadow: none;
-  width: 100%;
+  width: 700px;
   height: 150px;
   font-size: 15px;
   resize: none;
   line-height: 20px;
   padding: 9px 12px;
   border-radius: 3px;
+  margin-left: 180px;
 }
 /* .form-textarea_size에 해당하는 부분을 클릭했을 때 */
 .form-textarea_size:focus {
@@ -94,10 +95,6 @@
   outline: 0;
 }
 
-.form-positon {
-  padding: 0px;
-}
-
 .login-form .form-control,
 .add-listing-form .form-control,
 .add-listing-form .dropdown-toggle.btn-default {
@@ -106,7 +103,7 @@
 
 .form-logo {
   position: relative;
-  left: 20%;
+  left: 25%;
 }
 
 .form-text-align-center {
@@ -118,6 +115,8 @@
   display: flex;
   height: 100vh;
   flex-wrap: nowrap;
+  align-items: center;
+  overflow: auto;
 }
 
 /* flex 컨테이너 아이템 */
@@ -127,8 +126,19 @@
   max-width: 500px;
   min-width: 500px;
   height: 100vh;
+  overflow: auto;
+  -ms-overflow-style: none; /*스크롤 안보이게 하기 밑에거도 필요*/
 }
+.item_flex_lgn::-webkit-scrollbar {
+  display: none;
+} /*스크롤 안보이게 하기 위에거도 필요*/
 
 .item_flex_bg {
   flex: 1;
+}
+/* 회원가입 폼 가운데로 오기 위해 */
+.form-center {
+  align-items: center;
+  justify-items: center;
+  left: -15px;
 }

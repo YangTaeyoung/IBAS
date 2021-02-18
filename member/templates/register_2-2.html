@@ -71,6 +71,7 @@
     <!-- 여기까지 기존 템플릿에 있던 것 -->
     <!--외부 css파일 받는 링크 / 이 html에서만 쓰는 것. -->
     <link rel="stylesheet" href="{% static 'css/join.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/join_2.css' %}" />
   </head>
   <body id="bg">
     <div id="loading-area"></div>
@@ -80,171 +81,174 @@
         class="page-content dlab-login bg-primary"
         style="background-position: top right; background-blend-mode: screen"
       >
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col-lg-4 login-form-box">
-              <!-- 여기서부터 로그인 양식 시작  -->
-              <div class="login-form">
-                <!-- 동아리 로고  -->
-                <div class="logo">
-                  <!-- a 태그로 인해 동아리 로고 클릭하면 메인화면으로 감.  -->
-                  <a href="{% url 'index' %}">
-                    <!-- 임의로 div를 통해 동아리 로고 위치 표시함.  -->
-                    <div
-                      style="
-                        width: 150px;
-                        height: 50px;
-                        background-color: #4287f5;
-                      "
-                    >
-                      동아리로고
-                    </div>
-                  </a>
-                </div>
-                <!-- 회원 가입 입력 폼 시작 -->
-                <form action="{% url 'join_chk' %}" method="post">
-                  <!-- 회원 가입 확인 함수:join_chk()로 전송 -->
-                  <!--POST전송을 위한 CSRF 토큰-->
-                  {% csrf_token %}
-                  <!-- 바로 사용하지 못하는 것들은 사전 설정함. -->
-                  <input
-                    type="hidden"
-                    id="user_token"
-                    name="user_token"
-                    value="{{ token }}"
-                  />
-                  <input
-                    type="hidden"
-                    id="user_auth"
-                    name="user_auth"
-                    value="4"
-                  />
-                  <input
-                    type="hidden"
-                    id="user_role"
-                    name="user_role"
-                    value="5"
-                  />
-                  <input
-                    type="hidden"
-                    id="is_activated"
-                    name="is_activated"
-                    value="0"
-                  />
-                  <input
-                    type="hidden"
-                    id="user_gen"
-                    name="user_gen"
-                    value="1"
-                  />
-                  <input
-                    type="hidden"
-                    id="user_pic"
-                    name="user_pic"
-                    value="{{ pic }}"
-                  />
-                  <input type="hidden" name="user_email" value="{{ email }}" />
-                  <!-- 토큰 끝  -->
+        <div class="container-flex">
+          <div class="item_flex_join login-form-box">
+            <!-- 여기서부터 로그인 양식 시작  -->
+            <div class="form-center-position form-width-large">
+              <!-- 동아리 로고  -->
 
-                  <!-- 입부신청 작성란 시작 -->
-                  <!-- 서술형 질문 시작-->
-                  <div id="register" class="tab-pane active">
-                    <!--지원동기와 지원동기 작성란  -->
-                    <div class="form-group">
-                      <h5 class="text-inherit m-b10">지원동기</h5>
-                      <textarea
-                        name="answer_{{ quest.quest_no }}"
-                        required=""
-                        class="form-textarea_size"
-                        placeholder="내용을 입력하세요."
-                        type="text"
-                      ></textarea>
-                    </div>
-                    <!--질문과 질문답변 작성란  -->
-                    <div class="form-group">
-                      <h5 class="text-inherit m-b10">질문</h5>
-                      <textarea
-                        name="answer_{{ quest.quest_no }}"
-                        required=""
-                        class="form-textarea_size"
-                        placeholder="내용을 입력하세요."
-                        type="text"
-                      ></textarea>
-                    </div>
-                    <!--질문과 질문답변 작성란  -->
-                    <div class="form-group">
-                      <h5 class="text-inherit m-b10">질문</h5>
-                      <textarea
-                        name="answer_{{ quest.quest_no }}"
-                        required=""
-                        class="form-textarea_size"
-                        placeholder="내용을 입력하세요."
-                        type="text"
-                      ></textarea>
-                    </div>
-                    <!--질문과 질문답변 작성란  -->
-                    <div class="form-group">
-                      <h5 class="text-inherit m-b10">질문</h5>
-                      <textarea
-                        name="answer_{{ quest.quest_no }}"
-                        required=""
-                        class="form-textarea_size"
-                        placeholder="내용을 입력하세요."
-                        type="text"
-                      ></textarea>
-                    </div>
-                    <!-- 개인정보사용동의란이 있다면 사용해야 할 체크박스와 상세 내용 -->
-                    <div class="form-group">
-                      <input type="checkbox" id="privacy-policy" required="" />
-                      <label for="privacy-policy"
-                        >약관에 동의합니다.
-                        <a href="#" class="btn-link">약관 </a>&
-                        <a href="#" class="btn-link">약관 </a></label
+              <!-- 회원 가입 입력 폼 시작 -->
+              <form action="{% url 'join_chk' %}" method="post">
+                <!-- 회원 가입 확인 함수:join_chk()로 전송 -->
+                <!--POST전송을 위한 CSRF 토큰-->
+                {% csrf_token %}
+                <!-- 바로 사용하지 못하는 것들은 사전 설정함. -->
+                <input
+                  type="hidden"
+                  id="user_token"
+                  name="user_token"
+                  value="{{ token }}"
+                />
+                <input
+                  type="hidden"
+                  id="user_auth"
+                  name="user_auth"
+                  value="4"
+                />
+                <input
+                  type="hidden"
+                  id="user_role"
+                  name="user_role"
+                  value="5"
+                />
+                <input
+                  type="hidden"
+                  id="is_activated"
+                  name="is_activated"
+                  value="0"
+                />
+                <input type="hidden" id="user_gen" name="user_gen" value="1" />
+                <input
+                  type="hidden"
+                  id="user_pic"
+                  name="user_pic"
+                  value="{{ pic }}"
+                />
+                <input type="hidden" name="user_email" value="{{ email }}" />
+                <!-- 토큰 끝  -->
+
+                <!-- 입부신청 작성란 시작 -->
+                <!-- 서술형 질문 시작-->
+                <div id="register" class="tab-pane active">
+                  <!-- 지원 동기와 답변 작성란  -->
+                  <div class="logo form-logo">
+                    <!-- a 태그로 인해 동아리 로고 클릭하면 메인화면으로 감.  -->
+                    <a href="{% url 'index' %}">
+                      <!-- 임의로 div를 통해 동아리 로고 위치 표시함.  -->
+                      <div
+                        style="
+                          width: 150px;
+                          height: 50px;
+                          background-color: #4287f5;
+                        "
                       >
-                    </div>
-                    <!-- 입부신청 버튼 -->
-                    <div class="form-group">
-                      <button class="site-button button-md btn-block">
-                        입부신청
-                      </button>
-                    </div>
+                        동아리로고
+                      </div>
+                    </a>
                   </div>
 
-                  <!-- 입부신청 작성란  -->
-                </form>
-              </div>
-            </div>
+                  <div class="form-group">
+                    <h5 class="text-inherit m-b10 form-text-align-center">
+                      지원동기
+                    </h5>
+                    <textarea
+                      name="answer_{{ quest.quest_no }}"
+                      required=""
+                      class="form-textarea_size"
+                      placeholder="내용을 입력하세요."
+                      type="text"
+                    ></textarea>
+                  </div>
+                  <!--질문과 질문답변 작성란  -->
+                  <div class="form-group">
+                    <h5 class="text-inherit m-b10 form-text-align-center">
+                      질문
+                    </h5>
+                    <textarea
+                      name="answer_{{ quest.quest_no }}"
+                      required=""
+                      class="form-textarea_size"
+                      placeholder="내용을 입력하세요."
+                      type="text"
+                    ></textarea>
+                  </div>
+                  <!--질문과 질문답변 작성란  -->
+                  <div class="form-group">
+                    <h5 class="text-inherit m-b10 form-text-align-center">
+                      질문
+                    </h5>
+                    <textarea
+                      name="answer_{{ quest.quest_no }}"
+                      required=""
+                      class="form-textarea_size"
+                      placeholder="내용을 입력하세요."
+                      type="text"
+                    ></textarea>
+                  </div>
+                  <!--질문과 질문답변 작성란  -->
+                  <div class="form-group">
+                    <h5 class="text-inherit m-b10 form-text-align-center">
+                      질문
+                    </h5>
+                    <textarea
+                      name="answer_{{ quest.quest_no }}"
+                      required=""
+                      class="form-textarea_size"
+                      placeholder="내용을 입력하세요."
+                      type="text"
+                    ></textarea>
+                  </div>
+                  <!-- 개인정보사용동의란이 있다면 사용해야 할 체크박스와 상세 내용 -->
+                  <div class="form-group">
+                    <input type="checkbox" id="privacy-policy" required="" />
+                    <label for="privacy-policy"
+                      >약관에 동의합니다.
+                      <a href="#" class="btn-link">약관 </a>&
+                      <a href="#" class="btn-link">약관 </a></label
+                    >
+                  </div>
+                  <!-- 입부신청 버튼 -->
+                  <div class="form-group">
+                    <button class="site-button button-md btn-block">
+                      입부신청
+                    </button>
+                  </div>
+                </div>
 
-            <!-- 화면 오른쪽에 있는 글자.  -->
-            <div class="col-lg-8">
-              <div class="content-info">
-                <ul class="list-info">
-                  <li>
-                    <div class="dlab-box">
-                      <i class="fa fa-bullhorn"></i>
-                      <p>
-                        Get personalized advice from the friends and travel
-                        experts you trust
-                      </p>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="dlab-box">
-                      <i class="fa fa-car"></i>
-                      <p>
-                        Easily find hotels, things to do & restaurants that are
-                        right for you
-                      </p>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="dlab-box">
-                      <i class="fa fa-check"></i>
-                      <p>It's everything you need to know</p>
-                    </div>
-                  </li>
-                </ul>
-              </div>
+                <!-- 입부신청 작성란  -->
+              </form>
+            </div>
+          </div>
+
+          <!-- 화면 오른쪽에 있는 글자.  -->
+          <div class="item_flex_bg">
+            <div class="content-info">
+              <ul class="list-info">
+                <li>
+                  <div class="dlab-box">
+                    <i class="fa fa-bullhorn"></i>
+                    <p>
+                      Get personalized advice from the friends and travel
+                      experts you trust
+                    </p>
+                  </div>
+                </li>
+                <li>
+                  <div class="dlab-box">
+                    <i class="fa fa-car"></i>
+                    <p>
+                      Easily find hotels, things to do & restaurants that are
+                      right for you
+                    </p>
+                  </div>
+                </li>
+                <li>
+                  <div class="dlab-box">
+                    <i class="fa fa-check"></i>
+                    <p>It's everything you need to know</p>
+                  </div>
+                </li>
+              </ul>
             </div>
           </div>
         </div>

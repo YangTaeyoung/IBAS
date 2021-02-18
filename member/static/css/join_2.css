@@ -1,0 +1,40 @@
+.dlab-login .login-form {
+  justify-content: start;
+}
+.item_flex_join {
+  /* 무슨일이 있더라도 width를 고정시키기 */
+  width: 1050px;
+  max-width: 1050px;
+  min-width: 1050px;
+  height: 100vh;
+  overflow: auto;
+  -ms-overflow-style: none; /*스크롤 안보이게 하기 밑에거도 필요*/
+}
+.item_flex_join::-webkit-scrollbar {
+  display: none;
+} /*스크롤 안보이게 하기 위에거도 필요*/
+
+.item_flex_bg_small {
+  flex: 1;
+  /* width: 500px;
+  max-width: 500px;
+  min-width: 500px;
+  height: 100vh; */
+}
+
+.form-width-large {
+  width: 100%;
+  margin: 0px;
+}
+/* 원래 템플릿에 이상한 공간 있었는데 그거 없애 주려구 이거 만듦.  */
+.dlab-login:before {
+  left: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.dlab-login .login-form {
+  padding: 0;
+  margin: 0;
+  margin-left: 170px;
+}

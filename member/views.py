@@ -145,8 +145,6 @@ def quest_chk(request):
             )
             answer.save()
 
-    else:
-
 def pass_param(request):  # 구글 로그인으로 부터 파라미터를 받아 넘기는 페이지, 사용자에겐 보이지 않음.
     return render(request, "pass_login_param.html", {})
 
