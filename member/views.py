@@ -161,3 +161,6 @@ def test_join1(request):
     return render(request, 'register_2-1.html', {})
 def test_join2(request):
     return render(request, 'register_2-2.html', {})
+def std_or_pro(request):
+    return render(request,'std_or_pro.html', {})
+
