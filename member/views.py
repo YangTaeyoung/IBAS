@@ -40,11 +40,15 @@ def join(request):  # 회원 가입 페이지로 이동 할 것인지, 이미 �
             if len(User.objects.filter(
                     user_email=email)) == 0:  # 토큰 정보로 USER DB를 검색 했을 때 나오는 유저 정보가 없을 경우, 즉 입부 신청하지 않은 유저의 경
                 # 컨텍스트에 자동완성 정보를 등록
+                stu_list = list()
+                for user in User.objects.all():
+                    stu_list.append(user.user_stu)
 
                 context = {
                     "email": email,
                     "name": name,
                     "pic": pic,
+                    "stu_list": stu_list,
                     "quest_list": QuestForm.objects.all(),
                     "major_list": MajorInfo.objects.all(),
                 }
@@ -96,9 +100,7 @@ def quest_chk(request):
         user_gen = request.POST.get("user_gen")
         user_phone = request.POST.get("user_phone")
         user_pic = request.POST.get("user_pic")
-
-        print("이메일좀 나와라 씨발꺼: ", user_email)
-
+        # 받은 정보로 user 모델 인스턴스 변수 생성
         user = User.objects.create(
             user_name=user_name,  # 이름
             user_stu=user_stu,  # 학번
@@ -120,7 +122,7 @@ def quest_chk(request):
         for quest in quest_list:
             answer = Answer.objects.create(
                 answer_quest=quest,
-                answer_cont=request.POST.get("answer_" + str(quest.quest_no)), #줄 바꿈 문자 변형
+                answer_cont=request.POST.get("answer_" + str(quest.quest_no)),
                 answer_user=user,
             )
             answer.save()

@@ -74,6 +74,22 @@
     <!--외부 css파일 받는 링크 / 이 html에서만 쓰는 것. -->
     <link rel="stylesheet" href="{% static 'css/join.css' %}"/>
     <link rel="stylesheet" href="{% static 'css/logo.css' %}"/>
+    <script>
+        function stu_check() // 학번 중복 체크를 위한 함수
+        {
+
+            stu_chk = document.getElementById("user_stu");// 사용자가 입력한 학번 오브젝트
+            {% for user_stu in stu_list %}
+                if (stu_chk.value === "{{ user_stu }}") // 이미 데이터베이스와 일치하는 학번이 있을경
+                {
+                    document.getElementById("error_text").style.display = "block"; // 에러메시지 출력
+                    document.getElementById("btn-next").disabled = "disabled"; // 다음 버튼 비활성화
+
+                    return 0;
+                }
+            {% endfor %}
+        }
+    </script>
 </head>
 <body id="bg">
 <div id="loading-area"></div>
@@ -89,12 +105,13 @@
                     <!--길쭉한 컨테이너 속 컨텐츠 컨테이너-->
                     <div class="join-frame">
                         <!-- 동아리 로고  -->
-                        <div class="logo-container-flex" >
+                        <div class="logo-container-flex">
                             <!-- a 태그로 인해 동아리 로고 클릭하면 메인화면으로 감.  -->
                             <a href="{% url 'index' %}">
                                 <!-- 임의로 div를 통해 동아리 로고 위치 표시함.  -->
                                 <div>
-                                    <img src="{% static 'images/logo.png' %}" alt="현재 브라우저에서는 지원하지 않는 형식입니다." width="150" height="150">
+                                    <img src="{% static 'images/logo.png' %}" alt="현재 브라우저에서는 지원하지 않는 형식입니다."
+                                         width="150" height="150">
                                 </div>
                             </a>
                         </div>
@@ -176,16 +193,21 @@
                                         <!-- 학번 input -->
                                         <div class="form-group form-item-flex-std-no">
                                             <input
+                                                    id="user_stu"
                                                     type="text"
                                                     name="user_stu"
                                                     class="form-control"
                                                     placeholder="학번"
                                                     required="required"
                                                     maxlength="8"
+                                                    onfocusout="stu_check()"
+                                                    onfocusin="document.getElementById('error_text').style.display = 'none';document.getElementById('btn-next').disabled = '';"
                                                     onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"
                                             />
                                         </div>
+
                                     </div>
+                                    <p id="error_text" class="error-text-id" >이미 해당 학번이 가입된 이력이 있습니다.</p>
                                     <!-- 전공 input -->
                                     <div class="form-container-flex form-group mb-0">
                                         <div class="form-item-flex-major">
@@ -208,7 +230,8 @@
 
                                     <!-- 입부신청 버튼 -->
                                     <div class="form-group mt-5 mb-5">
-                                        <input type="submit" value="다음" class="site-button button-md btn-block"/>
+                                        <input id="btn-next" type="submit" value="다음"
+                                               class="site-button button-md btn-block"/>
                                     </div>
                                 </div>
                             </div>

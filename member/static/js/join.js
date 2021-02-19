@@ -26,7 +26,6 @@ function inputPhoneNumber(obj) {
 }
 
 
-
 // search id이름을 가진 입력창에 키를 누르면 전공 리스트 중에서 조회하도록 만드는 함수.
 function filter() {
     let search = document.getElementById("search").value.toLowerCase();
