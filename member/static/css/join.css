@@ -1,179 +1,228 @@
 /* .form-select를 만든 이유는 학년 선택 input과 학번 input을 나란히 하는데 용이하게 하기 위함임. 
 사용된 곳 : 단답작성란에서 select 상위 div의 class부분 */
 .form-float_left {
-  float: left;
-  margin-right: 5px;
-  padding: 0%;
+    float: left;
+    margin-right: 5px;
+    padding: 0%;
 }
 
 /*학년 클릭했을 출력되는 리스트 컨테이너 조정*/
 .bootstrap-select div.dropdown-menu {
-  border-top: 3px black solid;
-  border-radius: 20px;
-  border-bottom: 3px black solid;
+    border-top: 3px black solid;
+    border-radius: 20px;
+    border-bottom: 3px black solid;
 }
+
 .form-major {
-  width: 80%;
+    width: 80%;
 }
-/* .form-select를 만든 이유는 학년 선택 input과 학번 input을 나란히 하는데 용이하게 하기 위함임. 
+
+/* .form-select를 만든 이유는 학년 선택 input과 학번 input을 나란히 하는데 용이하게 하기 위함임.
 사용된 곳 : 단답작성란에서 학번input 상위 div의 class부분 */
 .form-float_right {
-  font-size: 15px;
-  float: right;
+    font-size: 15px;
+    float: right;
 }
+
 /* input 폼이 한줄에 두개 일 경우 컨테이너 학년, 학번에 적용됨,*/
 .form-container-flex {
-  display: flex;
-  column-gap: 10px;
+    display: flex;
+    column-gap: 10px;
 }
-.mb-0 /*밑 마진을 0로 만듦*/ {
-  margin-bottom: 0px;
+
+.mb-0 /*밑 마진을 0로 만듦*/
+{
+    margin-bottom: 0px;
 }
 
 .form-item-flex-std-grade {
-  width: 100px; /* 학년에 적용되는 width값 작은 네모의 폭을 유지하기 위해 값을 고정*/
+    width: 100px; /* 학년에 적용되는 width값 작은 네모의 폭을 유지하기 위해 값을 고정*/
 }
 
 .form-item-flex-std-no {
-  /* 오른쪽 끝까지 채워주기 위해 flex 옵션 사용 */
-  flex: 1;
+    /* 오른쪽 끝까지 채워주기 위해 flex 옵션 사용 */
+    flex: 1;
 }
+
 .bootstrap-select .dropdown-toggle {
-  /* select 버튼 높이 조절.*/
-  height: 45px;
-  border-radius: 20px;
+    /* select 버튼 높이 조절.*/
+    height: 45px;
+    border-radius: 20px;
 }
+
 .form-item-flex-major {
-  width: 400px; /* 전공에 적용되는 width값 작은 네모의 폭을 유지하기 위해 값을 고정*/
+    width: 400px; /* 전공에 적용되는 width값 작은 네모의 폭을 유지하기 위해 값을 고정*/
 }
+
 .form-item-flex-major-icon {
-  width: 50px; /* 아이콘에 적용되는 width값 작은 네모의 폭을 유지하기 위해 값을 고정*/
-  height: 50px; /* 아이콘에 적용되는 width값 작은 네모의 폭을 유지하기 위해 값을 고정*/
-  padding-left: 10px; /* 아이콘 위치를 왼쪽으로 이동*/
-  padding-top: 5px; /* 아이콘 위치를 아래쪽으로 이동*/
+    width: 50px; /* 아이콘에 적용되는 width값 작은 네모의 폭을 유지하기 위해 값을 고정*/
+    height: 50px; /* 아이콘에 적용되는 width값 작은 네모의 폭을 유지하기 위해 값을 고정*/
+    padding-left: 10px; /* 아이콘 위치를 왼쪽으로 이동*/
+    padding-top: 5px; /* 아이콘 위치를 아래쪽으로 이동*/
 }
-/* .form-textarea_size는 form-control과 다를게 별로 없음. 
+
+/* .form-textarea_size는 form-control과 다를게 별로 없음.
 만든 이유는 form-control때문에 수정되지 않는 부분이 있고, 그 부분을 수정하기 용이하게 하기 위함임.
 사용된 곳 : 서술형 질문에서 textarea class부분 */
 .form-textarea_size {
-  border-color: #e1e6eb;
-  box-shadow: none;
-  width: 100%;
-  height: 150px;
-  font-size: 15px;
-  resize: none;
-  line-height: 20px;
-  padding: 9px 12px;
-  border-radius: 3px;
+    border-color: #e1e6eb;
+    box-shadow: none;
+    width: 100%;
+    height: 150px;
+    font-size: 15px;
+    resize: none;
+    line-height: 20px;
+    padding: 9px 12px;
+    border-radius: 3px;
 }
+
 /* .form-textarea_size에 해당하는 부분을 클릭했을 때 */
 .form-textarea_size:focus {
-  -webkit-box-shadow: none;
-  box-shadow: none;
-  border-color: #e1e1e1;
-  outline: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border-color: #e1e1e1;
+    outline: 0;
 }
 
 /* .form-textarea_instead는 form-control과 다를게 별로 없음. 
 만든 이유는 form-control때문에 수정되지 않는 부분이 있고, 그 부분을 수정하기 용이하게 하기 위함임. 
 사용된 곳 : 입부신청에서 email 받아오는 부분, 전공 input부분, */
 .form-control_instead {
-  border: 1px solid #e1e6eb;
-  box-shadow: none;
-  width: 100%;
-  height: 45px;
-  font-size: 15px;
-  line-height: 20px;
-  padding: 10px 12px;
-  border-radius: 20px;
+    border: 1px solid #e1e6eb;
+    box-shadow: none;
+    width: 100%;
+    height: 45px;
+    font-size: 15px;
+    line-height: 20px;
+    padding: 10px 12px;
+    border-radius: 20px;
 }
 
 /* .form-control_instead에 해당하는 부분을 클릭했을 때 */
 .form-control_instead:focus {
-  border-color: #e1e1e1;
-  outline: 0;
+    border-color: #e1e1e1;
+    outline: 0;
 }
 
 .form-position-center {
-    justify-items: center ;
+    justify-items: center;
     align-items: center;
 }
-.dlab-login .login-form
-{
-  margin: 0;
-  padding: 0;
+
+.dlab-login .login-form {
+    margin: 0;
+    padding: 0;
 }
 
 .login-form .form-control,
 .add-listing-form .form-control,
 .add-listing-form .dropdown-toggle.btn-default {
-  border-radius: 20px;
+    border-radius: 20px;
 }
 
 .form-logo {
-  position: relative;
-  height: 100px;
-  width: 300px;
-  color: aliceblue;
-  background-color: blueviolet;
-  margin: auto;
-  margin-bottom: 100px;
-  margin-top: 50px;
+    position: relative;
+    height: 100px;
+    width: 300px;
+    color: aliceblue;
+    background-color: blueviolet;
+    margin: auto;
+    margin-bottom: 100px;
+    margin-top: 50px;
 }
 
 .form-text-align-center {
-  text-align: center;
+    text-align: center;
 }
 
 /* 컨테이너를 flex로 변경*/
 .container-flex {
-  display: flex;
-  height: 100vh;
-  flex-wrap: nowrap;
+    display: flex;
+    height: 100vh;
+    flex-wrap: nowrap;
 }
-.join-frame
-{
-  width: 350px;
+
+.join-frame {
+    width: 350px;
 }
+
 /* flex 컨테이너 아이템 */
 .item_flex_lgn {
-  /* 무슨일이 있더라도 width를 고정시키기 */
-  width: 500px;
-  max-width: 500px;
-  min-width: 500px;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-content: center;
-  display: flex;
-  justify-content: center;
-  align-content: center;
+    /* 무슨일이 있더라도 width를 고정시키기 */
+    width: 500px;
+    max-width: 500px;
+    min-width: 500px;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-content: center;
 }
+
 .item_flex_lgn::-webkit-scrollbar {
-  display: none;
-} /*스크롤 안보이게 하기 위에거도 필요*/
+    display: none;
+}
+
+/*스크롤 안보이게 하기 위에거도 필요*/
 
 .item_flex_bg {
-  flex: 1;
+    flex: 1;
 }
-.major-search-popup
-{
-  position:absolute;
-  display: none;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 500px;
-  height: 300px;
-  background-color: white;
-  z-index: 1000;
-  overflow: auto;
-  font-size: 10pt;
+
+.major-search-popup {
+    position: absolute;
+    display: none;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    height: 400px;
+    background-color: white;
+    z-index: 1000;
+}
+.card-title{
+    margin-bottom: 0;
+}
+.listBox {
+    box-shadow: 4px 3px 19px -15px #808080 inset;
+    height: 200px;
+    overflow: auto;
+}
+
+.listBox::-webkit-scrollbar {
+    width: 15px;
+
+}
+
+.listBox::-webkit-scrollbar-thumb {
+    background-color: #5c5c5c;
+    border-radius: 15px;
+}
+
+.listBox::-webkit-scrollbar-track {
+    background-color: #dcdcdc;
+    border-radius: 15px;
+
 }
 
 /* 회원가입 폼 가운데로 오기 위해 */
 .form-center {
-  align-items: center;
-  justify-items: center;
-  left: -15px;
+    align-items: center;
+    justify-items: center;
+    left: -15px;
+}
+
+.btn-exit:hover {
+    opacity: 0.7;
+}
+
+.gray_shadow {
+    background-color: black;
+    width: 100%;
+    height: 100vh;
+    display: none;
+    position: absolute;
+    z-index: 500;
+    top: 0;
+    left: 0;
+    opacity: 0.5;
 }
