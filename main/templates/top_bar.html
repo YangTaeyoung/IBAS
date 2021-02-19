@@ -31,7 +31,7 @@
     <!-- STYLESHEETS -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/plugins.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/template_1.css.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/template_1.css' %}">
     <link class="skin" rel="stylesheet" type="text/css" href="{% static 'css/skin/skin-1.css' %}">
 
 
@@ -58,19 +58,14 @@
                         <span></span>
                         <span></span>
                     </button>
+
+
                     <!-- extra nav -->
                     <div class="extra-nav">
                         <div class="extra-cell">
                             <!-- 여기도 세션 처리 해야함 -->
                             <a href="#" class="site-button radius-xl m-l10">Log In</a>
-                            <a href="#" class="site-button radius-xl m-l10">Sing Up</a>
-                        </div>
-                    </div>
-                    <div class="extra-nav" style="position: absolute; margin-left: 940px;">
-                        <div class="extra-cell">
-{#                            <a href="#" class="site-button radius-xl m-l10">Log Out</a>#}
-{#                            <a href="#" class="site-button radius-xl m-l10">My Page</a>#}
-                            <!-- 여기까지 세션 처리 -->
+                            <a href="#" class="site-button radius-xl m-l10">Sign Up</a>
                             <div class="dropdown dropdown-btn">
 
                                 <svg id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
@@ -79,8 +74,8 @@
                                      style=" fill:#ffffff; margin-left: 10px; margin-top: 7px">
                                     <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1"
                                        stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"
-                                       stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none"
-                                       font-size="none" text-anchor="none" style="mix-blend-mode: normal">
+                                       stroke-dasharray="" stroke-dashoffset="0" font-family="none"
+                                       font-size="none"  style="mix-blend-mode: normal">
                                         <path d="M0,172v-172h172v172z" fill="none"></path>
                                         <g fill="#4611a7">
                                             <path d="M86,14.33333c-5.934,0 -10.75,4.816 -10.75,10.75v4.98307c-18.54017,4.78017 -32.25,21.56943 -32.25,41.60026v43l-14.33333,14.33333v7.16667h114.66667v-7.16667l-14.33333,-14.33333v-43c0,-20.03083 -13.70983,-36.8061 -32.25,-41.58626v-4.99707c0,-5.934 -4.816,-10.75 -10.75,-10.75zM71.66667,143.33333c0,7.91917 6.42133,14.33333 14.33333,14.33333c7.912,0 14.33333,-6.42133 14.33333,-14.33333z"></path>
@@ -105,6 +100,8 @@
                             </div>
                         </div>
                     </div>
+
+
                     <!-- main nav -->
                     <div class="header-nav navbar-collapse collapse justify-content-end" id="navbarNavDropdown">
                         <ul class="nav navbar-nav">
@@ -143,6 +140,193 @@
     </header>
     <!-- header END -->
 </div>
+
+
+<!-- 이거는 그냥 배경 및 밑으로 스크롤 내렸을 때 잘 되는지 보기위해서 넣은 코드 -->
+<div class="dlab-bnr-inr dlab-bnr-inr-md"
+     style="background-image:url({% static 'images/main-slider/slide1.jpg' %}); background-size: cover;">
+</div>
+<div class="section-full bg-gray content-inner about-us">
+    <div class="container-fluid">
+        <div class="section-head text-black text-center">
+            <h2 class="box-title">Top Trending Places</h2>
+            <div class="dlab-separator bg-primary"></div>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
+                labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud.</p>
+        </div>
+        <div class="most-visite owl-carousel owl-btn-center-lr owl-btn-1 primary">
+            <div class="item">
+                <div class="listing-bx featured-star-left m-b30">
+                    <div class="listing-media">
+                        <img src="{% static 'images/listing/pic1.jpg' %}" alt="">
+                        <ul class="featured-star">
+                            <li><i class="fa fa-star"></i></li>
+                            <li><i class="fa fa-star"></i></li>
+                            <li><i class="fa fa-star"></i></li>
+                            <li><i class="fa fa-star"></i></li>
+                            <li><i class="fa fa-star"></i></li>
+                        </ul>
+                    </div>
+                    <div class="listing-info">
+                        <h3 class="title"><a href="listing-details.html">King Organic Shop</a></h3>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusm.</p>
+                        <ul class="place-info">
+                            <li class="place-location"><i class="fa fa-map-marker"></i>12/a, New</li>
+                            <li class="open"><i class="fa fa-check"></i>Open Now</li>
+                        </ul>
+                    </div>
+                    <ul class="wish-bx">
+                        <li><a class="like-btn" href="javascript:void(0)"><i class="fa fa-heart"></i></a>
+                        </li>
+                        <li><a class="info-btn" href="javascript:void(0)"><i class="fa fa-leaf"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="item">
+                <div class="listing-bx featured-star-left m-b30">
+                    <div class="listing-media">
+                        <img src="{% static 'images/listing/pic2.jpg' %}" alt="">
+                        <ul class="featured-star">
+                            <li><i class="fa fa-star"></i></li>
+                            <li><i class="fa fa-star"></i></li>
+                            <li><i class="fa fa-star"></i></li>
+                            <li><i class="fa fa-star"></i></li>
+                            <li><i class="fa fa-star"></i></li>
+                        </ul>
+                    </div>
+                    <div class="listing-info">
+                        <h3 class="title"><a href="listing-details.html">Dorado Health Care</a></h3>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusm.</p>
+                        <ul class="place-info">
+                            <li class="place-location"><i class="fa fa-map-marker"></i>12/a, New</li>
+                            <li class="open"><i class="fa fa-check"></i>Open Now</li>
+                        </ul>
+                    </div>
+                    <ul class="wish-bx">
+                        <li><a class="like-btn" href="javascript:void(0)"><i class="fa fa-heart"></i></a>
+                        </li>
+                        <li><a class="info-btn" href="javascript:void(0)"><i class="fa fa-leaf"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="item">
+                <div class="listing-bx featured-star-left m-b30">
+                    <div class="listing-media">
+                        <img src="{% static 'images/listing/pic3.jpg' %}" alt="">
+                        <ul class="featured-star">
+                            <li><i class="fa fa-star"></i></li>
+                            <li><i class="fa fa-star"></i></li>
+                            <li><i class="fa fa-star"></i></li>
+                            <li><i class="fa fa-star"></i></li>
+                            <li><i class="fa fa-star"></i></li>
+                        </ul>
+                    </div>
+                    <div class="listing-info">
+                        <h3 class="title"><a href="listing-details.html">Tam Farfhume Shop</a></h3>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusm.</p>
+                        <ul class="place-info">
+                            <li class="place-location"><i class="fa fa-map-marker"></i>12/a, New</li>
+                            <li class="open"><i class="fa fa-check"></i>Open Now</li>
+                        </ul>
+                    </div>
+                    <ul class="wish-bx">
+                        <li><a class="like-btn" href="javascript:void(0)"><i class="fa fa-heart"></i></a>
+                        </li>
+                        <li><a class="info-btn" href="javascript:void(0)"><i class="fa fa-leaf"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="item">
+                <div class="listing-bx featured-star-left m-b30">
+                    <div class="listing-media">
+                        <img src="{% static 'images/listing/pic4.jpg' %}" alt="">
+                        <ul class="featured-star">
+                            <li><i class="fa fa-star"></i></li>
+                            <li><i class="fa fa-star"></i></li>
+                            <li><i class="fa fa-star"></i></li>
+                            <li><i class="fa fa-star"></i></li>
+                            <li><i class="fa fa-star"></i></li>
+                        </ul>
+                    </div>
+                    <div class="listing-info">
+                        <h3 class="title"><a href="listing-details.html">King Organic Shop</a></h3>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusm.</p>
+                        <ul class="place-info">
+                            <li class="place-location"><i class="fa fa-map-marker"></i>12/a, New</li>
+                            <li class="open"><i class="fa fa-check"></i>Open Now</li>
+                        </ul>
+                    </div>
+                    <ul class="wish-bx">
+                        <li><a class="like-btn" href="javascript:void(0)"><i class="fa fa-heart"></i></a>
+                        </li>
+                        <li><a class="info-btn" href="javascript:void(0)"><i class="fa fa-leaf"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="item">
+                <div class="listing-bx featured-star-left m-b30">
+                    <div class="listing-media">
+                        <img src="{% static 'images/listing/pic5.jpg' %}" alt="">
+                        <ul class="featured-star">
+                            <li><i class="fa fa-star"></i></li>
+                            <li><i class="fa fa-star"></i></li>
+                            <li><i class="fa fa-star"></i></li>
+                            <li><i class="fa fa-star"></i></li>
+                            <li><i class="fa fa-star"></i></li>
+                        </ul>
+                    </div>
+                    <div class="listing-info">
+                        <h3 class="title"><a href="listing-details.html">Venzil Hingo Zoo</a></h3>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusm.</p>
+                        <ul class="place-info">
+                            <li class="place-location"><i class="fa fa-map-marker"></i>12/a, New</li>
+                            <li class="open"><i class="fa fa-check"></i>Open Now</li>
+                        </ul>
+                    </div>
+                    <ul class="wish-bx">
+                        <li><a class="like-btn" href="javascript:void(0)"><i class="fa fa-heart"></i></a>
+                        </li>
+                        <li><a class="info-btn" href="javascript:void(0)"><i class="fa fa-leaf"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="item">
+                <div class="listing-bx featured-star-left m-b30">
+                    <div class="listing-media">
+                        <img src="{% static 'images/listing/pic6.jpg' %}" alt="">
+                        <ul class="featured-star">
+                            <li><i class="fa fa-star"></i></li>
+                            <li><i class="fa fa-star"></i></li>
+                            <li><i class="fa fa-star"></i></li>
+                            <li><i class="fa fa-star"></i></li>
+                            <li><i class="fa fa-star"></i></li>
+                        </ul>
+                    </div>
+                    <div class="listing-info">
+                        <h3 class="title"><a href="listing-details.html">KFC Pijja Shop</a></h3>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusm.</p>
+                        <ul class="place-info">
+                            <li class="place-location"><i class="fa fa-map-marker"></i>12/a, New</li>
+                            <li class="open"><i class="fa fa-check"></i>Open Now</li>
+                        </ul>
+                    </div>
+                    <ul class="wish-bx">
+                        <li><a class="like-btn" href="javascript:void(0)"><i class="fa fa-heart"></i></a>
+                        </li>
+                        <li><a class="info-btn" href="javascript:void(0)"><i class="fa fa-leaf"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <!-- JAVASCRIPT FILES ========================================= -->
 <script src="{% static 'js/jquery.min.js' %}"></script><!-- JQUERY.MIN JS -->
