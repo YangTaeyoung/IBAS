@@ -88,23 +88,11 @@
                     <!--길쭉한 컨테이너 속 컨텐츠 컨테이너-->
                     <div class="join-frame">
                         <!-- 동아리 로고  -->
-                        <div class="form-logo">
-                            <div class="logo">
-                                <!-- a 태그로 인해 동아리 로고 클릭하면 메인화면으로 감.  -->
-                                <a href="{% url 'index' %}">
-                                    <!-- 임의로 div를 통해 동아리 로고 위치 표시함.  -->
-                                    <div
-                                            class="form-text-align-center"
-                                            style="
-                            height: 50px;
-                            width: 160px;
-                            background-color: #4287f5;
-                          "
-                                    >
-                                        동아리로고
-                                    </div>
-                                </a>
-                            </div>
+                        <div class="join-logo-container join-logo-position">
+                            <!-- a 태그로 인해 동아리 로고 클릭하면 메인화면으로 감.  -->
+                            <a href="{% url 'index' %}">
+                                <img width="150px" src="{% static 'img/logo.png' %}">
+                            </a>
                         </div>
                         <!-- 회원 가입 입력 폼 시작 -->
                         <form action="{% url 'join_chk' %}" method="post">
@@ -215,7 +203,7 @@
 
 
                                     <!-- 입부신청 버튼 -->
-                                    <div class="form-group">
+                                    <div class="container-btn container-btn-position">
                                         <input type="submit" value="다음" class="site-button button-md btn-block"/>
                                     </div>
                                 </div>
