@@ -244,34 +244,42 @@
     </div>
 </div>
 
-<div id="major-search-popup" class="major-search-popup position-absolute top-50 start-50 translate-middle">
-
-    <!-- 닫기 버튼 -->
-    <i  class="fa fa-close fa-2x"></i>
-    <!-- 검색 영역 -->
-    <div class="searchBox">
-        <input class="form-control" type="text" id="search" onkeyup="filter()" placeholder="전공을 입력하세요"/>
+<!-- 전공 검색 팝업창 -->
+<div id="major-search-popup" class="card major-search-popup ">
+    <div class="card-header" style="display: flex; align-items: baseline; justify-content: space-between">
+        <h5 class="card-title"> 전공 검색 </h5>
+        <i class="fa fa-close fa-2x"></i>
     </div>
-    <!-- 전공 리스트 영역 -->
-    <div class="listBox">
-        <table class="table table-hover">
-            <thead>
-            <tr>
-                <th scope="col">학교명</th>
-                <th scope="col">단과대학</th>
-                <th scope="col">학과명</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for major in major_list %}
-                <tr class="listInner" onclick="printResult({{ major.major_no }})">
-                    <th>인하대학교</th>
-                    <td class="colleges">{{ major.major_colleage }}</td>
-                    <td id="major_name_{{ major.major_no }}" class="major_names">{{ major.major_name }}</td>
+    <div class="card-body">
+        <!-- 닫기 버튼 -->
+
+        <!-- 검색 영역 -->
+        <div class="searchBox">
+            <input class="form-control" type="text" id="search" onkeyup="filter()" placeholder="전공을 입력하세요"/>
+        </div>
+        <!-- 전공 리스트 영역 -->
+    <br/>
+        <div class="listBox">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">학교명</th>
+                    <th scope="col">단과대학</th>
+                    <th scope="col">학과명</th>
                 </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                <!--전공 리스트를 단과대학, 학과명 순으로 가져옴-->
+                {% for major in major_list %}
+                    <tr class="listInner" onclick="printResult({{ major.major_no }})">
+                        <th>인하대학교</th>
+                        <td class="colleges">{{ major.major_colleage }}</td>
+                        <td id="major_name_{{ major.major_no }}" class="major_names">{{ major.major_name }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
