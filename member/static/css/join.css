@@ -120,15 +120,67 @@
     border-radius: 20px;
 }
 
-.form-logo {
-    position: relative;
+/* 수평선에 글자 있게 하는 태그. */
+.hr-sect {
+    display: flex;
+    flex-basis: 100%;
+    align-items: center;
+    color: rgba(0, 0, 0, 0.35);
+    font-size: 12px;
+    margin: 8px 0px;
+}
+
+.hr-sect::before,
+.hr-sect::after {
+    content: "";
+    flex-grow: 1;
+    background: rgba(0, 0, 0, 0.35);
+    height: 1px;
+    font-size: 0px;
+    line-height: 0px;
+    margin: 0px 16px;
+}
+
+/*로고를 넣을 컨테이너*/
+.join-logo-container {
+    height: 150px;
+    display: flex;
+    margin-bottom: 30px;
+    padding: 0;
+}
+.search-btn:hover
+{
+    opacity: 0.5;
+}
+/*로고의 위치(아이템)*/
+.join-logo-position {
+    justify-content: center;
+}
+
+/*임시 로고 사이즈 및 색(추후 색 삭제 예정) */
+.join-logo-size {
+    width: 50px;
     height: 100px;
-    width: 300px;
-    color: aliceblue;
-    background-color: blueviolet;
-    margin: auto;
-    margin-bottom: 100px;
-    margin-top: 50px;
+}
+
+/*다음버튼 컨테이너*/
+.container-btn {
+    display: flex;
+    margin-top: 30px;
+}
+
+/*다음버튼 컨테이너 위치*/
+.container-btn-position {
+    justify-content: center;
+}
+
+/*다음버튼 커스텀 디자인*/
+.join-btn {
+    width: 170px;
+}
+
+.yjbtn {
+    width: 150px;
 }
 
 .form-text-align-center {
@@ -143,6 +195,8 @@
 }
 
 .join-frame {
+    bottom: 20px;
+    position: relative;
     width: 350px;
 }
 
@@ -164,10 +218,12 @@
 
 /*스크롤 안보이게 하기 위에거도 필요*/
 
+/* 전체 레이아웃 중 배경에 적용하는 클래스 */
 .item_flex_bg {
     flex: 1;
 }
 
+/* 전공 검색 팝업 */
 .major-search-popup {
     position: absolute;
     display: none;
@@ -179,9 +235,11 @@
     background-color: white;
     z-index: 1000;
 }
-.card-title{
+
+.card-title {
     margin-bottom: 0;
 }
+
 .listBox {
     box-shadow: 4px 3px 19px -15px #808080 inset;
     height: 200px;
@@ -205,6 +263,12 @@
 }
 
 /* 회원가입 폼 가운데로 오기 위해 */
+.form-center-container {
+    align-items: center;
+    justify-items: center;
+    left: -15px;
+}
+
 .form-center {
     align-items: center;
     justify-items: center;

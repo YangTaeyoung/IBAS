@@ -5,7 +5,6 @@
 /* 쓰인 곳 : 회원가입 양식 바로 위 */
 .item_flex_join {
   /* 무슨일이 있더라도 width를 고정시키기 */
-
   width: 1050px;
   max-width: 1050px;
   min-width: 1050px;
@@ -21,8 +20,16 @@
 /* 쓰인 곳 : 오른쪽 작은 배경사진 */
 .item_flex_bg_small {
   flex: 1;
+  /* width: 500px;
+  max-width: 500px;
+  min-width: 500px;
+  height: 100vh; */
 }
 
+.form-width-large {
+  width: 100%;
+  margin: 0px;
+}
 /* 원래 템플릿에 이상한 공간 있었는데 그거 없애 주려구 이거 만듦.  */
 /* html에서는 쓰이지 않으나, 개발자도구로 보면 디폴트로 적용되는 css부분인 듯.  */
 .dlab-login:before {
@@ -48,11 +55,11 @@
 .btn-width_150px {
   width: 150px;
 }
-/* 입부신청버튼과 약관확인버튼을 div로 묶어 flex로 만들어 주기 위함임.  */
-/* 쓰인 곳: 입부신청버튼부분과 약관확인부분의 상위 div */
-.form-for-flex {
-  display: flex;
-  justify-items: end;
+
+.submit-btn-center{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 /* 아이템 크기를 조절하기 위함임.  */
 /* 약관부분의 div  */

@@ -28,6 +28,7 @@
     font-size: 12px;
     margin: 8px 0px;
 }
+
 .hr-sect::before,
 .hr-sect::after {
     content: "";
@@ -39,13 +40,16 @@
     margin: 0px 16px;
 }
 
-/*로고 위치 및 크기*/
-.logo-position {
-    background-color: blueviolet;
-    color: aliceblue;
+/*로고를 넣을 컨테이너*/
+.login-logo-container {
     height: 150px;
-    bottom: 55px;
-    position: relative;
+    display: flex;
+    margin-bottom: 30px;
+}
+
+/*로고의 위치(아이템)*/
+.login-logo-position {
+    justify-content: center;
 }
 
 /*하단 카피라이트 글자 색상, 크기, 위치*/
@@ -71,6 +75,7 @@
     max-width: 500px;
     min-width: 500px;
     height: 100vh;
+
 }
 
 .item_flex_bg {
