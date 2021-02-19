@@ -1,8 +1,8 @@
 .choose-div {
     background-color: white;
     width: 900px;
-    height: 600px;
-    padding: 30px;
+    height: 400px;
+    padding: 25px;
 }
 
 /*choose-div width 안먹음*/
@@ -15,16 +15,15 @@
     height: 350px;
 }
 
-/* div로 묶어 flex로 만들어 주기 위함임.  */
+/* div로 묶어 grid로 만들어 주기 위함임.  */
 .card-for-grid {
     display: grid;
     grid-template-columns: repeat(2,1fr);
-    row-gap: 20px;
-    column-gap: 20px;
+    row-gap: 30px;
+    column-gap: 30px;
 
 }
-
-.card-item-flex_1 {
-    flex: 1;
-
+/* 기존 템플릿이 가지고 있던 클래스에서 커스텀함. */
+.card-body {
+    text-align: center;
 }
