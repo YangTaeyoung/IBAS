@@ -56,7 +56,8 @@
 
 .submit-btn-center{
     display: flex;
-    justify-items: end;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .item_flex_btn_center {

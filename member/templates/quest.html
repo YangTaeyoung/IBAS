@@ -1,0 +1,243 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- 여기서부터 기존 템플릿에 있던 것 -->
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="keywords" content=""/>
+    <meta name="author" content=""/>
+    <meta name="robots" content=""/>
+    <meta
+            name="description"
+            content="BizMap Directory & Listings HTML templates"
+    />
+    <meta
+            property="og:title"
+            content="BizMap Directory & Listings HTML templates"
+    />
+    <meta
+            property="og:description"
+            content="BizMap Directory & Listings HTML templates"
+    />
+    <meta property="og:image" content=""/>
+    <meta name="format-detection" content="telephone=no"/>
+
+    <!-- FAVICONS ICON -->
+    <link
+            rel="icon"
+            href="{% static 'images/favicon.ico' %}"
+            type="image/x-icon"
+    />
+    <link
+            rel="shortcut icon"
+            type="image/x-icon"
+            href="{% static 'images/favicon.png' %}"
+    />
+
+    <!-- PAGE TITLE HERE -->
+    <title>입부신청</title>
+
+    <!-- MOBILE SPECIFIC -->
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <!--[if lt IE 9]>
+      <script src="{% static 'js/html5shiv.min.js' %}"></script>
+      <script src="{% static 'js/respond.min.js' %}"></script>
+    <![endif]-->
+
+    <!-- STYLESHEETS -->
+    <link
+            rel="stylesheet"
+            type="text/css"
+            href="{% static 'css/plugins.css' %}"
+    />
+    <link
+            rel="stylesheet"
+            type="text/css"
+            href="{% static 'css/style.css' %}"
+    />
+    <link
+            rel="stylesheet"
+            type="text/css"
+            href="{% static 'css/templete_1.css' %}"
+    />
+    <link
+            class="skin"
+            rel="stylesheet"
+            type="text/css"
+            href="{% static 'css/skin/skin-1.css' %}"
+    />
+    <!-- 여기까지 기존 템플릿에 있던 것 -->
+    <!--외부 css파일 받는 링크 / 이 html에서만 쓰는 것. -->
+    <link rel="stylesheet" href="{% static 'css/join.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/join_2.css' %}"/>
+</head>
+<body id="bg">
+<div id="loading-area"></div>
+<div class="page-wraper">
+    <!-- Content -->
+    <div
+            class="page-content dlab-login bg-primary"
+            style="background-position: top right; background-blend-mode: screen"
+    >
+        <div class="container-flex">
+            <div class="item_flex_join login-form-box">
+                <!-- 여기서부터 로그인 양식 시작  -->
+                <div class="join-form2">
+                    <div class="form-center-position form-width-large">
+                        <!-- 동아리 로고  -->
+                        <div class="form-logo">
+                            <!-- a 태그로 인해 동아리 로고 클릭하면 메인화면으로 감.  -->
+                            <a href="{% url 'index' %}">
+                                <!-- 임의로 div를 통해 동아리 로고 위치 표시함.  -->
+                                <div>
+                                    동아리로고
+                                </div>
+                            </a>
+                        </div>
+                        <!-- 회원 가입 입력 폼 시작 -->
+                        <form action="{% url 'quest_chk' %}" method="post">
+                            <!--POST전송을 위한 CSRF 토큰-->
+                            {% csrf_token %}
+                            <!--이전 페이지에서 받았던 회원 정보를 다시 보냄-->
+                            <input type="hidden" name="user_name" value="{{ user_name }}">
+                            <input type="hidden" name="user_auth" value="{{ user_auth }}">
+                            <input type="hidden" name="user_email" value="{{ user_email }}">
+                            <input type="hidden" name="user_gen" value="{{ user_gen }}">
+                            <input type="hidden" name="user_grade" value="{{ user_grade }}">
+                            <input type="hidden" name="user_major" value="{{ user_major }}">
+                            <input type="hidden" name="user_phone" value="{{ user_phone }}">
+                            <input type="hidden" name="user_role" value="{{ user_role }}">
+                            <input type="hidden" name="user_stu" value="{{ user_stu }}">
+                            <input type="hidden" name="user_pic" value="{{ user_pic }}">
+
+
+                            <!-- 입부신청 작성란 시작 -->
+                            <!-- 서술형 질문 시작-->
+                            <div id="register" class="tab-pane active">
+                                <!-- 가입시 질문 작성란  -->
+                                {% for quest in quest_list %}
+                                <div class="form-group">
+                                    <h5 class="text-inherit m-b10">
+                                        {{ forloop.counter }}. {{ quest.quest_name }}
+                                    </h5>
+                                    <textarea
+                                            name="answer_{{ quest.quest_no }}"
+                                            required=""
+                                            class="form-textarea_size form-text-area-size-add"
+                                            placeholder="내용을 입력하세요."
+                                            type="text"
+                                    ></textarea>
+                                </div>
+                                {% endfor %}
+
+                                <!-- 개인정보사용동의란이 있다면 사용해야 할 체크박스와 상세 내용 -->
+                                <div class="submit-btn-center mb-5">
+                                <!-- 체크 박스, 동의 문구 컨테이너 -->
+                                    <div style="display: flex; flex-direction: column">
+                                    <!-- 개인정보 제공 동의 컨테이너 -->
+                                        <div class="form-group item_flex_btn_center mb-0">
+                                            <input type="checkbox" id="privacy-policy" required="required"/>
+                                            <label for="privacy-policy"
+                                            >본인은
+                                                <a href="#" class="btn-link">제3자 개인정보 동의 약관</a>과
+                                                <a href="#" class="btn-link">동아리 회칙</a>에 동의합니다.</label>
+                                        </div>
+                                        {% if user_grade == "3" or user_grade == "4" %}
+                                            <div class="form-group item_flex_btn_center mb-0">
+                                                <input type="checkbox" id="interview_policy" required="required"
+                                                       onclick="alert('빠른 시일 내에 면접을 위해 연락드리겠습니다.')"/>
+                                                <label for="interview_policy">
+                                                    본인은 면접을 보는 것에 동의합니다.
+                                                </label>
+                                            </div>
+
+                                        {% endif %}
+                                    </div>
+                                    <!-- 입부신청 버튼 -->
+
+                                    <div class="form-group item_flex_btn_center2 item-flex-end mb-0">
+                                        <input type="submit" class="site-button button-md yjbtn" value="입부신청"/>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- 입부신청 작성란  -->
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 화면 오른쪽에 있는 글자.  -->
+            <div class="item_flex_bg">
+                <div class="content-info">
+                    <ul class="list-info">
+                        <li>
+                            <div class="dlab-box">
+                                <i class="fa fa-bullhorn"></i>
+                                <p>
+                                    Get personalized advice from the friends and travel
+                                    experts you trust
+                                </p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="dlab-box">
+                                <i class="fa fa-car"></i>
+                                <p>
+                                    Easily find hotels, things to do & restaurants that are
+                                    right for you
+                                </p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="dlab-box">
+                                <i class="fa fa-check"></i>
+                                <p>It's everything you need to know</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Content END-->
+    <button class="scroltop fa fa-chevron-up"></button>
+</div>
+<!-- JAVASCRIPT FILES ========================================= -->
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<!-- JQUERY.MIN JS -->
+<script src="{% static 'plugins/bootstrap/js/popper.min.js' %}"></script>
+<!-- BOOTSTRAP.MIN JS -->
+<script src="{% static 'plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+<!-- BOOTSTRAP.MIN JS -->
+<script src="{% static 'plugins/bootstrap-select/bootstrap-select.min.js' %}"></script>
+<!-- FORM JS -->
+<script src="{% static 'plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.js' %}"></script>
+<!-- FORM JS -->
+<script src="{% static 'plugins/magnific-popup/magnific-popup.js' %}"></script>
+<!-- MAGNIFIC POPUP JS -->
+<script src="{% static 'plugins/counter/waypoints-min.js' %}"></script>
+<!-- WAYPOINTS JS -->
+<script src="{% static 'plugins/counter/counterup.min.js' %}"></script>
+<!-- COUNTERUP JS -->
+<script src="{% static 'plugins/imagesloaded/imagesloaded.js' %}"></script>
+<!-- IMAGESLOADED -->
+<script src="{% static 'plugins/masonry/masonry-3.1.4.js' %}"></script>
+<!-- MASONRY -->
+<script src="{% static 'plugins/masonry/masonry.filter.js' %}"></script>
+<!-- MASONRY -->
+<script src="{% static 'plugins/rangeslider/rangeslider.js' %}"></script>
+<!-- RANGESLIDER -->
+<script src="{% static 'plugins/owl-carousel/owl.carousel.js' %}"></script>
+<!-- OWL SLIDER -->
+<script src="{% static 'js/custom.js' %}"></script>
+<!-- CUSTOM FUCTIONS  -->
+<script src="{% static 'js/dz.carousel.js' %}"></script>
+<!-- SORTCODE FUCTIONS  -->
+<script src="{% static 'js/dz.ajax.js' %}"></script>
+<!-- CONTACT JS  -->
+</body>
+</html>
