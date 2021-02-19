@@ -1,6 +1,8 @@
-.dlab-login .login-form {
+/* .dlab-login .login-form {
   justify-content: start;
-}
+} */
+
+/* 쓰인 곳 : 회원가입 양식 바로 위 */
 .item_flex_join {
   /* 무슨일이 있더라도 width를 고정시키기 */
   width: 1050px;
@@ -10,10 +12,12 @@
   overflow: auto;
   -ms-overflow-style: none; /*스크롤 안보이게 하기 밑에거도 필요*/
 }
+/* 쓰인 곳 : 회원가입 양식 왼쪽 흰색 부분 스크롤바 */
 .item_flex_join::-webkit-scrollbar {
   display: none;
 } /*스크롤 안보이게 하기 위에거도 필요*/
 
+/* 쓰인 곳 : 오른쪽 작은 배경사진 */
 .item_flex_bg_small {
   flex: 1;
   /* width: 500px;
@@ -27,31 +31,29 @@
   margin: 0px;
 }
 /* 원래 템플릿에 이상한 공간 있었는데 그거 없애 주려구 이거 만듦.  */
+/* html에서는 쓰이지 않으나, 개발자도구로 보면 디폴트로 적용되는 css부분인 듯.  */
 .dlab-login:before {
   left: 0;
   top: 0;
   bottom: 0;
 }
 
-.dlab-login .login-form {
-  padding: 0;
-  margin: 0;
-  margin-left: 170px;
-}
-
+/* join-form2는 회원가입 양식 지켜주기 위해서 만들어 진 것임. flex로 바꿔주는게 주요 역할.  */
+/* 쓰인 곳: 회원가입양식 시작 div */
 .join-form2 {
-    z-index: 99;
-    padding: 0 ;
-    position: relative;
-    max-width: 700px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+  z-index: 99;
+  padding: 0;
+  position: relative;
+  max-width: 700px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
-
-.yjbtn{
-    width: 150px;
+/* 입부신청버튼 조절 역할.  */
+/* 쓰인 곳: 입부신청버튼부분 */
+.btn-width_150px {
+  width: 150px;
 }
 
 .submit-btn-center{
@@ -59,21 +61,17 @@
     justify-content: space-between;
     align-items: center;
 }
-
-.item_flex_btn_center {
+/* 아이템 크기를 조절하기 위함임.  */
+/* 약관부분의 div  */
+.item-flex_1 {
   flex: 1;
   /* width: 500px;
   max-width: 500px;
   min-width: 500px;
   height: 100vh; */
 }
-.item_flex_btn_center2 {
+/* 아이템 div 안에 있는 버튼을 오른쪽으로 두기 위함임.  */
+/* 쓰인 곳: 입부신청버튼부분 */
+.item-flex-btn_end {
   justify-content: end;
-  /* width: 500px;
-  max-width: 500px;
-  min-width: 500px;
-  height: 100vh; */
 }
-/*.item-flex-end {*/
-/*    justify-items: end;*/
-/*}*/
