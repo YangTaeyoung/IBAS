@@ -87,13 +87,13 @@
             <div class="join-form2">
               <div class="form-center-position">
                 <!-- 동아리 로고  -->
-                <div class="form-logo">
-                  <!-- a 태그로 인해 동아리 로고 클릭하면 메인화면으로 감.  -->
-                  <a href="{% url 'index' %}">
-                    <!-- 임의로 div를 통해 동아리 로고 위치 표시함.  -->
-                    <div>동아리로고</div>
-                  </a>
-                </div>
+{#                <div class="form-logo">#}
+{#                  <!-- a 태그로 인해 동아리 로고 클릭하면 메인화면으로 감.  -->#}
+{#                  <a href="{% url 'index' %}">#}
+{#                    <!-- 임의로 div를 통해 동아리 로고 위치 표시함.  -->#}
+{#                    <div>동아리로고</div>#}
+{#                  </a>#}
+{#                </div>#}
                 <!-- 회원 가입 입력 폼 시작 -->
                 <form action="{% url 'join_chk' %}" method="post">
                   <!-- 회원 가입 확인 함수:join_chk()로 전송 -->
@@ -141,7 +141,7 @@
 
                   <!-- 입부신청 작성란 시작 -->
                   <!-- 서술형 질문 시작-->
-                  <div id="register" class="tab-pane active">
+                  <div id="register" class="tab-pane active padding-top_50 ">
                     <!-- 지원 동기와 답변 작성란  -->
                     <div class="form-group">
                       <!-- 제목 -->
@@ -207,8 +207,8 @@
                     </div>
 
                     <!-- 개인정보사용동의란이 있다면 사용해야 할 체크박스와 상세 내용 -->
-                    <!-- form-for-flex에 대한 정의는 join_2.css에 정의되어 있음  -->
-                    <div class="form-for-flex">
+                    <!-- submit-btn-center에 대한 정의는 join_2.css에 정의되어 있음  -->
+                    <div class="submit-btn-center">
                       <!-- item-flex_1에 대한 정의는 join_2.css에 정의되어 있음 -->
                       <div class="form-group item-flex_1">
                         <!-- 체크 칸 -->
