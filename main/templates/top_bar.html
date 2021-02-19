@@ -63,10 +63,12 @@
                     <!-- extra nav -->
                     <div class="extra-nav">
                         <div class="extra-cell">
-                            <!-- 여기도 세션 처리 해야함 -->
-                            <a href="#" class="site-button radius-xl m-l10">Log In</a>
-                            <a href="#" class="site-button radius-xl m-l10">Sign Up</a>
-                            <div class="dropdown dropdown-btn">
+
+                            {% if login %} {# 만약 로그인을 해서 is_activated가 있는 경우, Log out 버튼 보이게 #}
+                                <a href="#" class="site-button radius-xl m-l10">Log Out</a>
+                                <a href="#" class="site-button radius-xl m-l10">My Info</a>
+                                {# 여기 밑에 있는 부분은 로그인 한 후, 알람 창 코드임. 수정해야함. #}
+                                <div class="dropdown dropdown-btn">
 
                                 <svg id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
                                      aria-expanded="false" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="24"
@@ -75,14 +77,13 @@
                                     <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1"
                                        stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"
                                        stroke-dasharray="" stroke-dashoffset="0" font-family="none"
-                                       font-size="none"  style="mix-blend-mode: normal">
+                                       font-size="none" style="mix-blend-mode: normal">
                                         <path d="M0,172v-172h172v172z" fill="none"></path>
                                         <g fill="#4611a7">
                                             <path d="M86,14.33333c-5.934,0 -10.75,4.816 -10.75,10.75v4.98307c-18.54017,4.78017 -32.25,21.56943 -32.25,41.60026v43l-14.33333,14.33333v7.16667h114.66667v-7.16667l-14.33333,-14.33333v-43c0,-20.03083 -13.70983,-36.8061 -32.25,-41.58626v-4.99707c0,-5.934 -4.816,-10.75 -10.75,-10.75zM71.66667,143.33333c0,7.91917 6.42133,14.33333 14.33333,14.33333c7.912,0 14.33333,-6.42133 14.33333,-14.33333z"></path>
                                         </g>
                                     </g>
                                 </svg>
-
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                     <a class="dropdown-item site-button-link" href="javascript:void(0);">
                                         <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
@@ -98,6 +99,12 @@
                                         <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
                                 </div>
                             </div>
+
+                            {% else %}
+                                {# 현재 로그인 된 상황이 아니므로 로그인과 sign up이 나와야 한다. #}
+                                <a href="#" class="site-button radius-xl m-l10">Log In</a>
+                                <a href="#" class="site-button radius-xl m-l10">Sign Up</a>
+                            {% endif %}
                         </div>
                     </div>
 
@@ -109,9 +116,12 @@
                                 <ul class="sub-menu">
                                     <li><a href="#">동아리 소개</a></li>
                                     <li><a href="#">동아리 활동</a></li>
-                                    <!-- 여기 밑에 두개는 세션 처리해야함 -->
+
+                                    {# 밑에 있는 회계내역, 예산지원 신청은 회원들만 신청을 할 수 있음. #}
+                                    {% if login %}
                                     <li><a href="#">회계내역</a></li>
                                     <li><a href="#">예산지원신청</a></li>
+                                    {% endif %}
                                 </ul>
                             </li>
                             <li class="down"><a href="#">게시판 <i class="fa fa-chevron-down"></i></a>
@@ -140,6 +150,8 @@
     </header>
     <!-- header END -->
 </div>
+
+
 
 
 <!-- 이거는 그냥 배경 및 밑으로 스크롤 내렸을 때 잘 되는지 보기위해서 넣은 코드 -->
