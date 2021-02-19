@@ -38,7 +38,7 @@ function filter() {
         if (colleges[0].innerHTML.toLowerCase().indexOf(search) != -1 ||
             major_names[0].innerHTML.toLowerCase().indexOf(search) != -1
         ) {
-            listInner[i].style.display = "flex"
+            listInner[i].style.display = "table-row"
         } else {
             listInner[i].style.display = "none"
         }
@@ -47,12 +47,17 @@ function filter() {
 
 // 전공 검색창이 뜨게 하는 함수
 function popUp() {
+    document.getElementById("gray_shadow").style.display ="block"
     document.getElementById("major-search-popup").style.display = "block";
+
 }
+
 // 전공 검색창이 사라지게 하는 함수
 function popDown() {
+    document.getElementById("gray_shadow").style.display ="none"
     document.getElementById("major-search-popup").style.display = "none";
 }
+
 // 전공을 클릭하면 전공 입력창에 선택한 전공이 입력되도록 하는 함수
 function printResult(major_no) {
     document.getElementById("user_major").value = document.getElementById("major_name_" + major_no.toString()).innerHTML;
