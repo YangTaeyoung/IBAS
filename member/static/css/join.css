@@ -121,6 +121,44 @@
   margin-top: 50px;
 }
 
+/*로고를 넣을 컨테이너*/
+.join-logo-container{
+  height: 150px;
+  display: flex;
+  margin-bottom: 30px;
+}
+
+/*로고의 위치(아이템)*/
+.join-logo-position{
+  justify-content: center;
+}
+
+/*임시 로고 사이즈 및 색(추후 색 삭제 예정) */
+.join-logo-size{
+  width: 50px;
+  height: 100px;
+}
+
+/*다음버튼 컨테이너*/
+.container-btn{
+  display: flex;
+  margin-top: 30px;
+}
+
+/*다음버튼 컨테이너 위치*/
+.container-btn-position{
+  justify-content: center;
+}
+
+/*다음버튼 커스텀 디자인*/
+.join-btn{
+  width: 170px;
+}
+
+.yjbtn{
+    width: 150px;
+}
+
 .form-text-align-center {
   text-align: center;
 }
@@ -133,6 +171,8 @@
 }
 .join-frame
 {
+  bottom: 20px;
+  position: relative;
   width: 350px;
 }
 /* flex 컨테이너 아이템 */
@@ -142,9 +182,6 @@
   max-width: 500px;
   min-width: 500px;
   height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-content: center;
   display: flex;
   justify-content: center;
   align-content: center;
@@ -172,7 +209,7 @@
 }
 
 /* 회원가입 폼 가운데로 오기 위해 */
-.form-center {
+.form-center-container {
   align-items: center;
   justify-items: center;
   left: -15px;
