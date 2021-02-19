@@ -28,6 +28,7 @@
     font-size: 12px;
     margin: 8px 0px;
 }
+
 .hr-sect::before,
 .hr-sect::after {
     content: "";
@@ -40,15 +41,15 @@
 }
 
 /*로고를 넣을 컨테이너*/
-.login-logo-container{
-  height: 150px;
-  display: flex;
-  margin-bottom: 30px;
+.login-logo-container {
+    height: 150px;
+    display: flex;
+    margin-bottom: 30px;
 }
 
 /*로고의 위치(아이템)*/
-.login-logo-position{
-  justify-content: center;
+.login-logo-position {
+    justify-content: center;
 }
 
 /*하단 카피라이트 글자 색상, 크기, 위치*/

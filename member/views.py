@@ -111,15 +111,16 @@ def quest_chk(request):
             user_phone=user_phone,  # 핸드폰 번호
             user_pic=user_pic  # 프로필 사진
         )
+        # 모든 질문 리스트를 뽑아옴: 질문이 몇번까지 있는지 알아야 답변을 몇번까지 했는지 알기 때문
         quest_list = QuestForm.objects.all()
 
         # 사용자 정보를 DB에 저장
         user.save()
-
+        # 질문에 대한 답변을 저장하는 곳
         for quest in quest_list:
             answer = Answer.objects.create(
                 answer_quest=quest,
-                answer_cont=request.POST.get("answer_" + str(quest.quest_no)),
+                answer_cont=request.POST.get("answer_" + str(quest.quest_no)), #줄 바꿈 문자 변형
                 answer_user=user,
             )
             answer.save()

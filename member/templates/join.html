@@ -73,6 +73,7 @@
     <!-- 여기까지 기존 템플릿에 있던 것 -->
     <!--외부 css파일 받는 링크 / 이 html에서만 쓰는 것. -->
     <link rel="stylesheet" href="{% static 'css/join.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/logo.css' %}"/>
 </head>
 <body id="bg">
 <div id="loading-area"></div>
@@ -88,24 +89,16 @@
                     <!--길쭉한 컨테이너 속 컨텐츠 컨테이너-->
                     <div class="join-frame">
                         <!-- 동아리 로고  -->
-                        <div class="form-logo">
-                            <div class="logo">
-                                <!-- a 태그로 인해 동아리 로고 클릭하면 메인화면으로 감.  -->
-                                <a href="{% url 'index' %}">
-                                    <!-- 임의로 div를 통해 동아리 로고 위치 표시함.  -->
-                                    <div
-                                            class="form-text-align-center"
-                                            style="
-                            height: 50px;
-                            width: 160px;
-                            background-color: #4287f5;
-                          "
-                                    >
-                                        동아리로고
-                                    </div>
-                                </a>
-                            </div>
+                        <div class="logo-container-flex" >
+                            <!-- a 태그로 인해 동아리 로고 클릭하면 메인화면으로 감.  -->
+                            <a href="{% url 'index' %}">
+                                <!-- 임의로 div를 통해 동아리 로고 위치 표시함.  -->
+                                <div>
+                                    <img src="{% static 'images/logo.png' %}" alt="현재 브라우저에서는 지원하지 않는 형식입니다." width="150" height="150">
+                                </div>
+                            </a>
                         </div>
+
                         <!-- 회원 가입 입력 폼 시작 -->
                         <form action="{% url 'join_chk' %}" method="post">
                             <!-- 회원 가입 확인 함수:join_chk()로 전송 -->
@@ -127,10 +120,7 @@
                             <div class="tab-content nav">
                                 <!-- <div id="register" class="tab-pane fade"> -->
                                 <div id="register" class="tab-pane active">
-                                    <h3 class="form-title m-t0 form-text-align-center">
-                                        입부신청
-                                    </h3>
-
+                                    <div class="hr-sect">기본정보</div>
                                     <!--이름 input / 구글이나 네이버로부터 정보 받아옴-->
                                     <div class="form-group">
                                         <input
@@ -138,6 +128,7 @@
                                                 type="text"
                                                 name="user_name"
                                                 value="{{ name }}"
+                                                placeholder="이름"
                                                 class="form-control"
                                                 required=""
                                         />
@@ -159,6 +150,7 @@
                                                 placeholder="핸드폰번호"
                                                 maxlength="13"
                                                 required=""
+                                                value="010-"
                                                 onkeyup="inputPhoneNumber(this)"
                                         />
                                     </div>
@@ -210,13 +202,12 @@
                                         </div>
                                         <!-- 전공 검색 버튼 -->
                                         <div class="form-group" onclick="popUp()">
-                                            <i class="fa fa-search fa-2x form-item-flex-major-icon"></i>
+                                            <i class="fa fa-search fa-2x form-item-flex-major-icon search-btn"></i>
                                         </div>
                                     </div>
 
-
                                     <!-- 입부신청 버튼 -->
-                                    <div class="form-group">
+                                    <div class="form-group mt-5 mb-5">
                                         <input type="submit" value="다음" class="site-button button-md btn-block"/>
                                     </div>
                                 </div>
@@ -249,7 +240,7 @@
 <div id="major-search-popup" class="card major-search-popup ">
     <div class="card-header" style="display: flex; align-items: center; justify-content: space-between">
         <h4 class="card-title"> 전공 검색 </h4>
-              <!-- 닫기 버튼 -->
+        <!-- 닫기 버튼 -->
         <i class="fa fa-close fa-2x btn-exit" onclick="popDown()"></i>
     </div>
     <div class="card-body">
@@ -261,21 +252,21 @@
         </div>
         <!-- 전공 리스트 영역 -->
 
-    <hr/>
+        <hr/>
         <div class="listBox">
             <table class="table table-hover">
                 <thead>
                 <tr>
                     <th>학교명</th>
-                    <th >단과대학</th>
-                    <th >학과명</th>
+                    <th>단과대학</th>
+                    <th>학과명</th>
                 </tr>
                 </thead>
                 <tbody>
                 <!--전공 리스트를 단과대학, 학과명 순으로 가져옴-->
                 {% for major in major_list %}
                     <tr class="listInner" onclick="printResult({{ major.major_no }})">
-                        <th >인하대학교</th>
+                        <th>인하대학교</th>
                         <td class="colleges">{{ major.major_colleage }}</td>
                         <td id="major_name_{{ major.major_no }}" class="major_names">{{ major.major_name }}</td>
                     </tr>
