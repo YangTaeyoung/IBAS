@@ -117,7 +117,8 @@
                         </div>
 
                         <!-- 회원 가입 입력 폼 시작 -->
-                        <form action="{% url 'join_chk' %}" method="post">
+                        <form action="{% if user_role == "5" %}{% url 'join_chk' %}{% else %}{% url 'quest_chk' %}{% endif %}"
+                              method="post">
                             <!-- 회원 가입 확인 함수:join_chk()로 전송 -->
                             <!--POST전송을 위한 CSRF 토큰-->
                             {% csrf_token %}
@@ -125,11 +126,13 @@
                             <!--사전 설정-->
                             <input type="hidden" id="user_token" name="user_token" value="{{ token }}"/>
                             <input type="hidden" id="user_auth" name="user_auth" value="4"/> <!-- 기본 권한 -->
-                            <input type="hidden" id="user_role" name="user_role" value="5"/>
+                            <input type="hidden" id="user_role" name="user_role" value="{{ user_role }}"/>
                             <input type="hidden" id="is_activated" name="is_activated" value="0"/>
-                            <input type="hidden" id="user_gen" name="user_gen" value="1"/>
+                            <!-- 승인 전까지는 대기하도록 0으로 설정 -->
+                            <input type="hidden" id="user_gen" name="user_gen" value="1"/> <!-- 기수, 바꿔주는게 필요할 듯. -->
                             <input type="hidden" id="user_pic" name="user_pic" value="{{ pic }}">
-                            <input type="hidden" name="user_email" value="{{ email }}"/>
+                            <!-- 프로필 사진, 받아온 것 그대로 넘기기 -->
+                            <input type="hidden" name="user_email" value="{{ email }}"/> <!-- 이메일, 받아온 것 그대로 넘기기 -->
                             <!-- 토큰 끝  -->
 
                             <!-- 입부신청 작성란 시작 -->
@@ -171,25 +174,29 @@
                                                 onkeyup="inputPhoneNumber(this)"
                                         />
                                     </div>
-                                    <!-- 학년 input -->
+                                    <!-- 학년, 학번 컨테이너 -->
                                     <div class="form-container-flex form-group mb-0">
-                                        <div class="form-item-flex-std-grade">
-                                            <select name="user_grade" required="required">
-                                                <option value="1" class="form-control">
-                                                    1학년
-                                                </option>
-                                                <option value="2" class="form-control">
-                                                    2학년
-                                                </option>
-                                                <option value="3" class="form-control">
-                                                    3학년
-                                                </option>
-                                                <option value="4" class="form-control">
-                                                    4학년 이상
-                                                </option>
-                                            </select>
-                                        </div>
-
+                                        <!--학년 컨테이너-->
+                                        {% if user_role == "5" %}
+                                            <div class="form-item-flex-std-grade">
+                                                <select name="user_grade" required="required">
+                                                    <option value="1" class="form-control">
+                                                        1학년
+                                                    </option>
+                                                    <option value="2" class="form-control">
+                                                        2학년
+                                                    </option>
+                                                    <option value="3" class="form-control">
+                                                        3학년
+                                                    </option>
+                                                    <option value="4" class="form-control">
+                                                        4학년 이상
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        {% else %}
+                                            <input type="hidden" name="user_grade" value="5"/>
+                                        {% endif %}
                                         <!-- 학번 input -->
                                         <div class="form-group form-item-flex-std-no">
                                             <input
@@ -197,9 +204,14 @@
                                                     type="text"
                                                     name="user_stu"
                                                     class="form-control"
-                                                    placeholder="학번"
                                                     required="required"
+                                                    {% if user_role == "5" %}
+                                                    placeholder="학번"
                                                     maxlength="8"
+                                                    {% else %}
+                                                    placeholder="교수번호"
+                                                    maxlength="6"
+                                                    {% endif %}
                                                     onfocusout="stu_check()"
                                                     onfocusin="document.getElementById('error_text').style.display = 'none';document.getElementById('btn-next').disabled = '';"
                                                     onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"
@@ -207,7 +219,7 @@
                                         </div>
 
                                     </div>
-                                    <p id="error_text" class="error-text-id" >이미 해당 학번이 가입된 이력이 있습니다.</p>
+                                    <p id="error_text" class="error-text-id">입력하신 {% if user_role == "5" %}학번이{% else %}교수번호가{% endif %} 가입되어 있습니다.</p>
                                     <!-- 전공 input -->
                                     <div class="form-container-flex form-group mb-0">
                                         <div class="form-item-flex-major">
