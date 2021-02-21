@@ -24,16 +24,16 @@
     <meta property="og:image" content=""/>
     <meta name="format-detection" content="telephone=no"/>
 
-    <!-- FAVICONS ICON -->
+    <!-- 주소창 상단 아이바스 로고 아이콘 -->
     <link
             rel="icon"
-            href="{% static 'images/favicon.ico' %}"
+            href="{% static 'images/logo.png' %}"
             type="image/x-icon"
     />
     <link
             rel="shortcut icon"
             type="image/x-icon"
-            href="{% static 'images/favicon.png' %}"
+            href="{% static 'images/logo.png' %}"
     />
 
     <!-- PAGE TITLE HERE -->
@@ -108,7 +108,6 @@
                         <div class="logo-container-flex">
                             <!-- a 태그로 인해 동아리 로고 클릭하면 메인화면으로 감.  -->
                             <a href="{% url 'index' %}">
-                                <!-- 임의로 div를 통해 동아리 로고 위치 표시함.  -->
                                 <div>
                                     <img src="{% static 'images/logo.png' %}" alt="현재 브라우저에서는 지원하지 않는 형식입니다."
                                          width="150" height="150">

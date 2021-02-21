@@ -230,3 +230,6 @@ def test_join2(request):
 
 def std_or_pro(request):
     return render(request, 'std_or_pro.html', {})
+
+def welcome(request):   #입부신청 완료 페이지로 이동
+    return render(request, 'welcome.html', {})
