@@ -6,11 +6,17 @@
     padding: 0%;
 }
 
-/*학년 클릭했을 출력되는 리스트 컨테이너 조정*/
+/*학년 클릭했을 때 출력되는 리스트 컨테이너 조정*/
 .bootstrap-select div.dropdown-menu {
-    border-top: 3px black solid;
+    padding: 0 0;
+    border-top: 1px #dbdbdb solid;
     border-radius: 20px;
-    border-bottom: 3px black solid;
+    border-bottom: 1px #dbdbdb solid;
+}
+
+/*학년 클릭했을 때 상단의 여백 없애기*/
+.bootstrap-select.show.btn-group .dropdown-menu.inner {
+    padding: 0;
 }
 
 .form-major {
