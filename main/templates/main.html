@@ -39,6 +39,7 @@
 <body id="bg">
 <div id="loading-area"></div>
 <div class="page-wraper">
+    <!--임시로 넣어둠, 상단바 이후에 블럭처리해서 바꿀예정-->
      <!-- header -->
     <header class="site-header header-transparent mo-left">
         <!-- main header -->
@@ -152,15 +153,18 @@
     <!-- Content -->
     <div class="page-content bg-white">
         <!-- Section Banner -->
+        <!--메인페이지에 드어갈 이미지 들어가는 자리-->
         <div class="dlab-bnr-inr dlab-bnr-inr-md"
              style="background-image:url({% static 'images/main-background.jpg' %}); background-size: cover;">
             <div class="container">
                 <div class="dlab-bnr-inr-entry align-m dlab-home">
                     <div class="dlab-tabs search-filter">
-                        <ul class="nav nav-tabs" style="margin-top: 600px;">
-                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#restauren" style="padding: 12px 80px;">
+                        <ul class="nav nav-tabs" style="margin-top: 500px;">
+                            <!--강의 신청하러 가기 버튼, 누르면 강의 게시판으로 이동-->
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#" style="padding: 12px 80px;">
                                 <span class="title-head">강의 신청하러 가기</span></a></li>
-                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#restauren" style="padding: 12px 80px; margin-left: 50px">
+                            <!--내 강의실 바로가기 버튼, 누르면 마이페이지의 내 강의실로 이동한, 비회원은 누르면 권한이 없습니다 뜸-->
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#" style="padding: 12px 80px; margin-left: 50px">
                                 <span class="title-head">내 강의실 바로가기</span></a></li>
                         </ul>
                         </div>
