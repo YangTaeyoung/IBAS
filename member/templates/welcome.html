@@ -1,0 +1,108 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="keywords" content=""/>
+    <meta name="author" content=""/>
+    <meta name="robots" content=""/>
+    <meta name="description" content="BizMap Directory & Listings HTML templates"/>
+    <meta property="og:title" content="BizMap Directory & Listings HTML templates"/>
+    <meta property="og:description" content="BizMap Directory & Listings HTML templates"/>
+    <meta property="og:image" content=""/>
+    <meta name="format-detection" content="telephone=no">
+
+    <!-- 주소창 상단 아이바스 로고 아이콘 -->
+    <link rel="icon" href="{% static 'images/logo.png' %}" type="image/x-icon"/>
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'images/logo.png' %}"/>
+
+    <!-- PAGE TITLE HERE -->
+    <title>Welcome INHA BAS</title>
+
+    <!-- MOBILE SPECIFIC -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--[if lt IE 9]>
+	<script src="{% static 'js/html5shiv.min.js' %}"></script>
+	<script src="{% static 'js/respond.min.js' %}"></script>
+	<![endif]-->
+
+    <!-- STYLESHEETS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/plugins.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/templete.css' %}">
+    <link class="skin" rel="stylesheet" type="text/css" href="{% static 'css/skin/skin-2.css' %}">
+    <!--커스텀 css-->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/welcome.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/logo.css' %}">
+
+
+</head>
+<body id="bg">
+<div id="loading-area"></div>
+<div class="page-wraper font-roboto">
+    <!-- Content -->
+    <!-- 배경 사이즈 -->
+    <div class="page-size">
+        <!-- 배경 색, 효과 -->
+        <div
+                class="dlab-bnr-inr dlab-bnr-inr-md bnr-style1"
+                style="
+            background-color: #7133e2;
+            background-size: cover;
+          "
+                id="dezParticles"
+        >
+            <!-- 로고 및 제목과 본문을 담는 테이블 시작 -->
+            <div class="welcome-caption">
+                <!-- 테이블 안 셀 -->
+                <div class="caption-content dlab-home">
+                    <!--동아리 로고-->
+                    <div class="logo-container-flex">
+                        <!-- a 태그로 인해 동아리 로고 클릭하면 메인화면으로 감.  -->
+                        <a href="{% url 'index' %}">
+                            <div>
+                                <img src="{% static 'images/logo_white.png' %}" alt="현재 브라우저에서는 지원하지 않는 형식입니다."
+                                     width="150" height="150">
+                            </div>
+                        </a>
+                    </div>
+                    <!-- 페이지 컨텐츠 시작 -->
+                    <div class="welcome-title">입부신청이 완료되었습니다!</div> <!-- 메인 타이틀 -->
+                    <div class="welcome-content"> <!-- 입부신청 감사멘트 -->
+                        인하대학교 빅데이터 동아리에 지원해주셔서 감사합니다.
+                        <br>빠른 시일 내에 연락드릴 수 있도록 하겠습니다.
+                    </div>
+                    <!-- 메인페이지로 돌아가는 버튼 -->
+                    <div class="font-alt mt-30"><a class="btn btn-border-w btn-round" href="{% url 'index' %}">Back to home page</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Section Banner END -->
+
+</div>
+<!-- Content END-->
+<!-- JAVASCRIPT FILES ========================================= -->
+<script src="{% static 'js/jquery.min.js' %}"></script><!-- JQUERY.MIN JS -->
+<script src="{% static 'plugins/bootstrap/js/popper.min.js' %}"></script><!-- BOOTSTRAP.MIN JS -->
+<script src="{% static 'plugins/bootstrap/js/bootstrap.min.js' %}"></script><!-- BOOTSTRAP.MIN JS -->
+<script src="{% static 'plugins/bootstrap-select/bootstrap-select.min.js' %}"></script><!-- FORM JS -->
+<script src="{% static 'plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.js' %}"></script><!-- FORM JS -->
+<script src="{% static 'plugins/magnific-popup/magnific-popup.js' %}"></script><!-- MAGNIFIC POPUP JS -->
+<script src="{% static 'plugins/counter/waypoints-min.js' %}"></script><!-- WAYPOINTS JS -->
+<script src="{% static 'plugins/counter/counterup.min.js' %}"></script><!-- COUNTERUP JS -->
+<script src="{% static 'plugins/imagesloaded/imagesloaded.js' %}"></script><!-- IMAGESLOADED -->
+<script src="{% static 'plugins/masonry/masonry-3.1.4.js' %}"></script><!-- MASONRY -->
+<script src="{% static 'plugins/masonry/masonry.filter.js' %}"></script><!-- MASONRY -->
+<script src="{% static 'plugins/rangeslider/rangeslider.js' %}"></script><!-- RANGESLIDER -->
+<script src="{% static 'plugins/owl-carousel/owl.carousel.js' %}"></script><!-- OWL SLIDER -->
+<script src="{% static 'js/custom.js' %}"></script><!-- CUSTOM FUCTIONS  -->
+<script src="{% static 'js/dz.carousel.js' %}"></script><!-- SORTCODE FUCTIONS  -->
+<script src="{% static 'js/dz.ajax.js' %}"></script><!-- CONTACT JS  -->
+<script src="{% static 'plugins/particles/particles.js' %}"></script>
+<script src="{% static 'plugins/particles/particles.app.js' %}"></script>
+</body>
+</html>
