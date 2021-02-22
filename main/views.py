@@ -18,8 +18,8 @@ def test_top_bar(request):
 
 # 메인 작업
 def test_main(request):
-    contest = {}
-    return render(request, 'main.html', contest)
+    context = {}
+    return render(request, 'main.html', context)
 
 # 동아리 소개 작업할 것임
 def test_introduce(request):
