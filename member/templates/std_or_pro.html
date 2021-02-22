@@ -68,60 +68,59 @@
                         <!-- padding-bottom_20px에 대한 내용은 std_or_pro.css에 정의되어 있음. -->
                         <div>
                             <div class="padding-bottom_20px">
-                                <h3 class = "type-title-text">회원 유형을 선택해 주세요. </h3>
+                                <h3 class="type-title-text">회원 유형을 선택해 주세요. </h3>
                             </div>
                         </div>
                         <!-- card-for-grid에 대한 내용은 std_or_pro.css에 정의되어 있음. -->
                         <div class="card-for-grid">
-                            <div class="big-card opacity_50">
-                                <div class="card mb-4 " onclick="clickBox(0)">
+                            <!-- big-card에 대한 내용은 std_or_pro.css에 정의되어 있음. -->
+                            <div class="big-card">
+                                <!-- card에 대한 내용은 std_or_pro.css에 정의되어 있음. -->
+                                <div class="card mb-4 ">
                                     <!-- card-body에 대한 내용은 std_or_pro.css에 정의되어 있음. -->
-                                    <div class="card-body not_opacity" id="pro" >
-                                        <img src="{% static 'images/pro.png' %}"
-                                             alt="현재 브라우저에서는 지원하지 않는 형식입니다."
-                                             class="width_360px">
-                                        <h4>교수님</h4>
+                                    <div class="card-body not_opacity" id="pro">
+                                        <a href="{% url 'join' %}">
+                                            <!-- width_360px에 대한 내용은 std_or_pro.css에 정의되어 있음. -->
+                                            <img src="{% static 'images/pro.png' %}"
+                                                 alt="현재 브라우저에서는 지원하지 않는 형식입니다."
+                                                 class="width_360px">
+                                            <h4>교수님</h4>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
+                            <!-- big-card에 대한 내용은 std_or_pro.css에 정의되어 있음. -->
                             <div class="big-card">
-                                <div class="card mb-4 " onclick="clickBox(1)">
+                                <!-- card에 대한 내용은 std_or_pro.css에 정의되어 있음. -->
+                                <div class="card mb-4 ">
                                     <!-- card-body에 대한 내용은 std_or_pro.css에 정의되어 있음. -->
                                     <div class="card-body" id="std">
-                                        <img src="{% static 'images/std.png' %}"
-                                             alt="현재 브라우저에서는 지원하지 않는 형식입니다."
-                                             class="width_360px">
-                                        <h4>학생</h4>
+                                        <a href="{% url 'join' %}">
+                                            <!-- width_360px에 대한 내용은 std_or_pro.css에 정의되어 있음. -->
+                                            <img src="{% static 'images/std.png' %}"
+                                                 alt="현재 브라우저에서는 지원하지 않는 형식입니다."
+                                                 class="width_360px">
+                                            <h4>학생</h4>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
-                            <div id="explain-text-1" class="explain-text-cont " style="display: none">
-                                <p class="explain-text">
-                                    <span class="role_name">학생</span>을 선택하셨습니다.
-                                </p>
-                            </div>
-                            <div id="explain-text-0" class="explain-text-cont" style="display: none">
-                                <p class="explain-text">
-                                    <span class="role_name">교수</span>를 선택하셨습니다.
-                                </p>
-                            </div>
-                            <div>
-                                <form id="auth-btn-0" action="#" method="POST" style="display: none"> <!--교수일 때-->
-                                    <input type="hidden" name="user_auth" value="2">
-                                    <input type="submit" class="site-button button-md" value="계속"/>
-                                </form>
-                                <form id="auth-btn-1" action="#" method="POST" style="display: none"> <!--학생일 때-->
-                                    <input type="hidden" name="user_auth" value="4">
-                                    <input type="submit" class="site-button button-md" value="계속"/>
-                                </form>
-                            </div>
+                            <form id="auth-btn-0" action="#" method="POST" style="display: none"> <!--교수일 때-->
+                                <input type="hidden" name="user_auth" value="2">
+                                <input type="submit" class="site-button button-md" value="계속"/>
+                            </form>
+                            <form id="auth-btn-1" action="#" method="POST" style="display: none"> <!--학생일 때-->
+                                <input type="hidden" name="user_auth" value="4">
+                                <input type="submit" class="site-button button-md" value="계속"/>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Section Banner END -->
+</div>
+<!-- Section Banner END -->
 
 </div>
 <!-- Content END-->

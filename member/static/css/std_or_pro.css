@@ -64,43 +64,26 @@
     column-gap: 30px;
     flex-direction: column;
     width: 428px;
-    height: 430px;
+    height: 432px;
     align-items: center;
     justify-items: center;
     padding: 0;
     background-color: white;
     border-radius: 3px;
 }
-/* 하위 카드 부분에 마우스 올렸을 때*/
-.card-body:hover{
-    border: 5px solid #091069;
-    border-radius: 2px;
 
-
-}
 /* 동아리 로고 시작 div*/
 .padding-bottom_20px {
     padding-bottom: 20px;
 }
-
+/* 카드 안에 있는 이미지 크기 조정 위함. */
+/*사용된 것 : <img>*/
 .width_360px {
     width: 360px;
     }
 
-.explain-text-cont
-{
-    display: flex;
-    justify-content: center;
-    font-size: 18px;
 
-}
-.explain-text {
-    margin-bottom: 10px;
-}
-.role_name{
-    color: #012666;
-    font-weight: bold;
-}
+/*card 부분 / 보라색 div 안에 있는 큰 card임. */
 .big-card{
     width: 450px;
     height: 452px;
@@ -108,17 +91,29 @@
     background-color: #8487b4;
     display: flex;
     align-items: baseline;
-}
-.not_opacity{
-
+    opacity: 0.7;
 }
 
+/* 하위 카드 부분에 마우스 올렸을 때*/
+.big-card:hover{
+    opacity: 1.0;
+}
+/*회원 유형을 선택해주세요 부분의 조정 위함. */
 .type-title-text{
     margin-bottom: 40px;
     color: white;
 }
-
+/*기존에 있던 card css를 커스텀함. */
 .card {
     justify-content: center;
     align-content: center;
+    width: 428px;
+    height: 432px;
+
+}
+/*페이지 컨텐츠를 전체적으로 위로 올리기 위함. */
+.dlab-bnr-inr.dlab-bnr-inr-md .dlab-home {
+    height: 100vh;
+    padding-top: 55px;
+    padding-bottom: 120px;
 }
