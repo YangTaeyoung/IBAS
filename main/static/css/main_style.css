@@ -1,0 +1,19 @@
+.ibas_logo {
+  margin-top: 170px;
+  width: 350px;
+  height: 350px;
+}
+
+.ibas_logo:hover {
+  transform: scale(1.1);
+  transition: 0.5s;
+}
+
+.ibas_background{
+  width: 100%;
+  height: 100%;
+}
+
+.main_text{
+  margin-top: 50px;
+}

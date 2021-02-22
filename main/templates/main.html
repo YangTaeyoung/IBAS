@@ -33,6 +33,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/templete.css' %}">
     <link class="skin" rel="stylesheet" type="text/css" href="{% static 'css/skin/skin-1.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main_style.css' %}">
 
 
 </head>
@@ -40,90 +41,42 @@
 <div id="loading-area"></div>
 <div class="page-wraper">
     <!--임시로 넣어둠, 상단바 이후에 블럭처리해서 바꿀예정-->
-     <!-- header -->
+     <!--====================메뉴바 시작====================-->
+    <!-- header -->
     <header class="site-header header-transparent mo-left">
         <!-- main header -->
         <div class="sticky-header main-bar-wraper navbar-expand-lg">
             <div class="main-bar clearfix ">
                 <div class="container clearfix">
-                    <!-- website logo -->
+                    <!-- ====ibas 로고 들어가는 곳==== -->
                     <div class="logo-header mostion">
-                        <a href="index.html" class="logo-1"><img src="{% static 'images/logo_white.png' %}" alt=""></a>
-                        <a href="index.html" class="logo-2"><img src="{% static 'images/logo_puple.png' %}" alt=""></a>
+                        <!--드래그 안했을 때 나오는 로고/href 메이페이지 링크 연결해줘야 함-->
+                        <a href="#" class="logo-1"><img src="{% static 'images/logo_white.png' %}" style="margin-top: 4px; margin-bottom: 4px"></a>
+                        <!--밑으로 드래그 했을 때 나오는 로고/href 메이페이지 링크 연결해줘야 함-->
+                        <a href="#" class="logo-2"><img src="{% static 'images/logo_puple.png' %}" style="margin-top: 4px; margin-bottom: 4px"></a>
                     </div>
-                    <!-- nav toggle button -->
-                    <button class="navbar-toggler collapsed navicon justify-content-end" type="button"
-                            data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
-                            aria-expanded="false" aria-label="Toggle navigation">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </button>
 
 
-                    <!-- extra nav -->
-                    <div class="extra-nav">
-                        <div class="extra-cell">
-
-                            {% if request.session.user_stu is None %} {# 만약 로그인을 해서 is_activated가 있는 경우, Log out 버튼 보이게 #}
-                                <a href="#" class="site-button radius-xl m-l10">Log Out</a>
-                                <a href="#" class="site-button radius-xl m-l10">My Info</a>
-                                {# 여기 밑에 있는 부분은 로그인 한 후, 알람 창 코드임. 수정해야함. #}
-                                <div class="dropdown dropdown-btn">
-
-                                <svg id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                     aria-expanded="false" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="24"
-                                     height="24" viewBox="0 0 172 172"
-                                     style=" fill:#ffffff; margin-left: 10px; margin-top: 7px">
-                                    <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1"
-                                       stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"
-                                       stroke-dasharray="" stroke-dashoffset="0" font-family="none"
-                                       font-size="none" style="mix-blend-mode: normal">
-                                        <path d="M0,172v-172h172v172z" fill="none"></path>
-                                        <g fill="#4611a7">
-                                            <path d="M86,14.33333c-5.934,0 -10.75,4.816 -10.75,10.75v4.98307c-18.54017,4.78017 -32.25,21.56943 -32.25,41.60026v43l-14.33333,14.33333v7.16667h114.66667v-7.16667l-14.33333,-14.33333v-43c0,-20.03083 -13.70983,-36.8061 -32.25,-41.58626v-4.99707c0,-5.934 -4.816,-10.75 -10.75,-10.75zM71.66667,143.33333c0,7.91917 6.42133,14.33333 14.33333,14.33333c7.912,0 14.33333,-6.42133 14.33333,-14.33333z"></path>
-                                        </g>
-                                    </g>
-                                </svg>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a class="dropdown-item site-button-link" href="javascript:void(0);">
-                                        <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
-                                    <a class="dropdown-item site-button-link" href="javascript:void(0);">
-                                        <i class="fa fa-twitter"></i><span>아직 알림이 없습니다.</span></a>
-                                    <a class="dropdown-item site-button-link" href="javascript:void(0);">
-                                        <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
-                                    <a class="dropdown-item site-button-link" href="javascript:void(0);">
-                                        <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
-                                    <a class="dropdown-item site-button-link" href="javascript:void(0);">
-                                        <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
-                                    <a class="dropdown-item site-button-link" href="javascript:void(0);">
-                                        <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
-                                </div>
-                            </div>
-
-                            {% else %}
-                                {# 현재 로그인 된 상황이 아니므로 로그인과 sign up이 나와야 한다. #}
-                                <a href="#" class="site-button radius-xl m-l10" style="background-color: #091069;">Log In</a>
-                                <a href="#" class="site-button radius-xl m-l10" style="background-color: #091069">Sign Up</a>
-                            {% endif %}
-                        </div>
-                    </div>
-                    <!-- main nav -->
+                    <!--====================메뉴, 회원정보에 따른 버튼 시작====================-->
                     <div class="header-nav navbar-collapse collapse justify-content-end" id="navbarNavDropdown">
                         <ul class="nav navbar-nav">
-                            <li class="down active"><a href="#">IBAS <i class="fa fa-chevron-down"></i></a>
+                        <!--====================IBAS 상위메뉴로 가지고 있는 메뉴====================-->
+                            <li class="down active" style="padding-top: 6px"><a href="#">IBAS <i
+                                    class="fa fa-chevron-down"></i></a>
                                 <ul class="sub-menu">
                                     <li><a href="#">동아리 소개</a></li>
                                     <li><a href="#">동아리 활동</a></li>
 
                                     {# 밑에 있는 회계내역, 예산지원 신청은 회원들만 신청을 할 수 있음. #}
-                                    {% if request.session.user_stu is None %}
-                                    <li><a href="#">회계내역</a></li>
-                                    <li><a href="#">예산지원신청</a></li>
+                                    {% if request.session.user_stu is not None %}
+                                        <li><a href="#">회계내역</a></li>
+                                        <li><a href="#">예산지원신청</a></li>
                                     {% endif %}
                                 </ul>
                             </li>
-                            <li class="down"><a href="#">게시판 <i class="fa fa-chevron-down"></i></a>
+                        <!--====================게시판을 상위메뉴로 가지고 있는 메뉴====================-->
+                            <li class="down active" style="padding-top: 6px"><a href="#">게시판 <i
+                                    class="fa fa-chevron-down"></i></a>
                                 <ul class="sub-menu">
                                     <li><a href="#">공지사항</a></li>
                                     <li><a href="#">자유게시판</a></li>
@@ -131,7 +84,9 @@
                                     <li><a href="#">공모전게시판</a></li>
                                 </ul>
                             </li>
-                            <li class="down"><a href="#">강의실 <i class="fa fa-chevron-down"></i></a>
+                        <!--====================강의실을 상위메뉴로 가지고 있는 메뉴====================-->
+                            <li class="down active" style="padding-top: 7px"><a href="#">강의실 <i
+                                    class="fa fa-chevron-down"></i></a>
                                 <ul class="sub-menu">
                                     <li><a href="#">강의</a></li>
                                     <li><a href="#">스터디</a></li>
@@ -139,33 +94,100 @@
                                     <li><a href="#">강의개설신청</a></li>
                                 </ul>
                             </li>
+                        <!--====================로그인 여부에 따라 다르게 보이는 곳====================-->
+                        <!--====================로그인했을 때====================-->
+                            {% if request.session.user_stu is not None %}
+                                <!--======로그아웃 버튼======-->
+                                <li class="active" style="padding-top: 7px; padding-right: 10px">
+                                    <!--아래 href에 로그아웃하는 거 들어가야 함-->
+                                    <a href="#" style="padding: 19px 0px 0px 15px">Log Out</a>
+                                    <a class="ti-import rotate90" style="padding:15px 0px 20px 4px;"></a>
+                                </li>
+                                <!--======회원정보 뜨는 곳======-->
+                                <li class="active">
+                                    <!--아래 href에 마이페이지 링크 들어가야 함-->
+                                    <a href="#" style="padding-right: 7px;">
+                                        <!--==승인되지 않았을 때==-->
+                                        {% if request.session.is_activated == 0 %}
+                                        <img src="{{ request.session.user_pic }}" width="35" height="35" border="3"
+                                             style=" border: 2px solid #ff3d3d; border-radius: 17.5px; margin-right: 3px"
+                                             alt="현재 브라우저에서 지원하지 않는 형식입니다.">
+                                            {{ request.session.user_name }} 님
+                                            <ul class="sub-menu" style="text-align: center">
+                                                <a>아직 승인되지 않았습니다</a>
+                                            </ul>
+                                        <!--==승인되었을 때==-->
+                                        {% else %}
+                                        <img src="{{ request.session.user_pic }}" width="35" height="35" border="3"
+                                             style=" border: 2px solid #0078ff; border-radius: 17.5px; margin-right: 3px"
+                                             alt="현재 브라우저에서 지원하지 않는 형식입니다.">
+                                            {{ request.session.user_name }} 님
+                                        {% endif %}
+                                    </a>
+                                </li>
+                                <!--======알림 뜨는 부분======-->
+                                <li class="active dropdown dropdown-btn" style="padding:4px; margin-left: -13px">
+                                <a class="fa fa-bell" style="padding-top: 22px"
+                                               class="site-button dropdown-toggle" id="dropdownMenuButton"
+                                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <!--이거는 노란색 동그라미인데, 알림이 없으면 뜨지 않고, 알림이 있으면 뜨게해야 함-->
+                                    <div style="height: 6px; width: 6px; background-color: #e8af00; border-radius: 3px; margin: -18px 0px 0px 12px; position: relative; z-index: 2"></div>
+                                </a>
+                                <!--===종 버튼 누르면 아래가 뜸===-->
+                                <!--===DB에서 가져와야함... 용식 유감...===-->
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="right: 14px; width: 204px;">
+                                                <a class="dropdown-item site-button-link" href="javascript:void(0);">
+                                                    <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
+                                                <a class="dropdown-item site-button-link" href="javascript:void(0);">
+                                                    <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
+                                                <a class="dropdown-item site-button-link" href="javascript:void(0);">
+                                                    <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
+                                                <a class="dropdown-item site-button-link" href="javascript:void(0);">
+                                                    <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
+                                                <a class="dropdown-item site-button-link" href="javascript:void(0);">
+                                                    <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
+                                                <a class="dropdown-item site-button-link" href="javascript:void(0);">
+                                                    <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
+                                            </div>
+                                </li>
+                                <!--====================로그인 하지 않았을 때====================-->
+                            {% else %}
+                                {# 현재 로그인 된 상황이 아니므로 로그인과 sign up이 나와야 한다. #}
+                                <li class="active" style="padding-top: 5px;">
+                                    <a href="#">Log In</a>
+                                </li>
+                                <li class="active" style="padding-top: 5px;">
+                                    <a href="#">Sign Up</a>
+                                </li>
 
+                            {% endif %}
                         </ul>
                     </div>
+                <!--====================메뉴바, 회원정보에 따른 버튼 끝====================-->
                 </div>
             </div>
         </div>
         <!-- main header END -->
     </header>
     <!-- header END -->
+    <!--====================메뉴바 끝====================-->
+</div>
     <!-- Content -->
     <div class="page-content bg-white">
         <!-- Section Banner -->
         <!--메인페이지에 들어갈 이미지 들어가는 자리-->
-        <div class="dlab-bnr-inr dlab-bnr-inr-md"
-             style="background-image:url({% static 'images/ibas-main-background.jpg' %}); background-size: cover;">
+        <div class="dlab-bnr-inr"
+             style="background-image:url({% static 'images/ibas-main-background.jpg' %});">
+            <!--입부신청 바로가기 버튼-->
             <div class="container">
                 <div class="dlab-bnr-inr-entry align-m dlab-home">
-                    <div class="dlab-tabs search-filter">
-                        <ul class="nav nav-tabs" style="margin-top: 450px;">
-                            <!--강의 신청하러 가기 버튼, 누르면 강의 게시판으로 이동-->
-                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#" style="padding: 12px 80px;">
-                                <span class="title-head">강의 신청하러 가기</span></a></li>
-                            <!--내 강의실 바로가기 버튼, 누르면 마이페이지의 내 강의실로 이동한, 비회원은 누르면 권한이 없습니다 뜸-->
-                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#" style="padding: 12px 80px; margin-left: 50px">
-                                <span class="title-head">내 강의실 바로가기</span></a></li>
-                        </ul>
-                        </div>
+                        <img class="ibas_logo" src="{% static 'images/ibas_main_logo.png' %}" />
+                        <div class="main_text"><img src="{% static 'images/main-text.png' %}" /></div>
+                         <div class="category-bx" style="margin-top: 100px; margin-bottom: 150px">
+						    <a href="#" class="category" style="width: 500px;">
+							    <p  style=" font-weight: bolder; font-size: 20px; padding-top: 12px">입부신청 바로가기</p>
+						    </a>
+				         </div>
                     </div>
                 </div>
             </div>
