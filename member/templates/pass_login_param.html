@@ -1,12 +1,24 @@
-{% load socialaccount %} <!-- 소셜 로그인 user를 받기 위해 사용-->
-{% providers_media_js %} <!-- 소셜 미디어 로그인 페이지와 로그아웃 페이지를 따기 위해 사용 -->
+{% if request.session.user_stu is not None %}
+    {% load socialaccount %} <!-- 소셜 로그인 user를 받기 위해 사용-->
+    {% providers_media_js %} <!-- 소셜 미디어 로그인 페이지와 로그아웃 페이지를 따기 위해 사용 -->
 
-{% if user.password is None %} <!-- google 로그인 페이지로부터 넘어온 게 없으면, 즉, 로그인을 하지 않은 상태라면 -->
-    <script>location.href = "{% url 'index' %}";</script> <!-- 아무런 제약 없이 메인 페이지로 이동함 -->
-{% else %} <!--넘어온 것이 있으면-->
-    <form id="hd_form" action="{% url 'join' %}" method="post"> <!-- 주소창에 파라미터가 넘어가면 안되므로, POST 방식을 이용해서 파라미터를 넘김-->
-        {% csrf_token %} <!-- post 방식을 위한 토큰 -->
-        <input type="hidden" name="password" value="{{ user.password }}"> <!-- 구글에서 받은 개인용 토큰 hidden으로 넘김 -->
-        <script>document.getElementById("hd_form").submit();</script> <!-- 자동으로 제출, 즉, 사용자는 이 페이지의 정보를 인지하지 못함. -->
-    </form>
+    {% if user.password is None %} <!-- google 로그인 페이지로부터 넘어온 게 없으면, 즉, 로그인을 하지 않은 상태라면 -->
+        <script>location.href = "{% url 'index' %}";</script> <!-- 아무런 제약 없이 메인 페이지로 이동함 -->
+    {% else %} <!--넘어온 것이 있으면-->
+        <form id="hd_form" action="{% url 'join' %}" method="post"> <!-- 주소창에 파라미터가 넘어가면 안되므로, POST 방식을 이용해서 파라미터를 넘김-->
+            {% csrf_token %} <!-- post 방식을 위한 토큰 -->
+            <input type="hidden" name="password" value="{{ user.password }}"> <!-- 구글에서 받은 개인용 토큰 hidden으로 넘김 -->
+            <script>document.getElementById("hd_form").submit();</script> <!-- 자동으로 제출, 즉, 사용자는 이 페이지의 정보를 인지하지 못함. -->
+        </form>
+    {% endif %}
+{% else %}
+    <script>
+        window.onpageshow = function (event) {
+            if (event.persisted || (window.performance && window.performance.navigation.type == 2)) {
+// Back Forward Cache로 브라우저가 로딩될 경우 혹은 브라우저 뒤로가기 했을 경우
+                location.href = "{% url 'index' %}";
+                alert("왔냐!");
+            }
+        }
+    </script>
 {% endif %}
