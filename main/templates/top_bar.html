@@ -65,26 +65,17 @@
                         <div class="extra-cell">
 
                             {% if request.session.user_stu is not None %} {# 만약 로그인을 해서 is_activated가 있는 경우, Log out 버튼 보이게 #}
-                                <h3>{{ request.session.user_name }} 님</h3>
-                                <a href="#" class="site-button radius-xl m-l10">Log Out</a>
-                                <a href="#" class="site-button radius-xl m-l10">My Info</a>
+                                <a>{{ request.session.user_name }} 님</a>
+                                <img src="{{ request.session.user_pic }}" width="35" height="35" border="3" style=" border: 2px solid white; border-radius: 17.5px;" alt="현재 브라우저에서 지원하지 않는 형식입니다.">
+                                승인여부: {{ request.session.is_activated }}
+                                <a href="#" class="site-button radius-xl m-l10" >Log Out</a>
+                                <a href="#" class="site-button radius-xl m-l10">
+                                <img src="{{ request.session.user_pic }}" width="35" height="35" border="3" style=" border: 2px solid white; border-radius: 17.5px;" alt="현재 브라우저에서 지원하지 않는 형식입니다.">
+                                {{ request.session.user_name }} 님
+                                </a>
                                 {# 여기 밑에 있는 부분은 로그인 한 후, 알람 창 코드임. 수정해야함. #}
                                 <div class="dropdown dropdown-btn">
-
-                                <svg id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                     aria-expanded="false" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="24"
-                                     height="24" viewBox="0 0 172 172"
-                                     style=" fill:#ffffff; margin-left: 10px; margin-top: 7px">
-                                    <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1"
-                                       stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"
-                                       stroke-dasharray="" stroke-dashoffset="0" font-family="none"
-                                       font-size="none" style="mix-blend-mode: normal">
-                                        <path d="M0,172v-172h172v172z" fill="none"></path>
-                                        <g fill="#4611a7">
-                                            <path d="M86,14.33333c-5.934,0 -10.75,4.816 -10.75,10.75v4.98307c-18.54017,4.78017 -32.25,21.56943 -32.25,41.60026v43l-14.33333,14.33333v7.16667h114.66667v-7.16667l-14.33333,-14.33333v-43c0,-20.03083 -13.70983,-36.8061 -32.25,-41.58626v-4.99707c0,-5.934 -4.816,-10.75 -10.75,-10.75zM71.66667,143.33333c0,7.91917 6.42133,14.33333 14.33333,14.33333c7.912,0 14.33333,-6.42133 14.33333,-14.33333z"></path>
-                                        </g>
-                                    </g>
-                                </svg>
+									<i class="fa fa-bell" style="color: white; margin-left: 10px" class="site-button dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                     <a class="dropdown-item site-button-link" href="javascript:void(0);">
                                         <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
@@ -103,7 +94,7 @@
 
                             {% else %}
                                 {# 현재 로그인 된 상황이 아니므로 로그인과 sign up이 나와야 한다. #}
-                                <a href="#" class="site-button radius-xl m-l10">Log In</a>
+                                <a href="#" class="site-button radius-xl m-l10" >Log In</a>
                                 <a href="#" class="site-button radius-xl m-l10">Sign Up</a>
                             {% endif %}
                         </div>

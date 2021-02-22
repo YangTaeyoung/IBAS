@@ -83,7 +83,7 @@
 }
 .category-bx .category:hover{
 	background:#fff;
-	color:#4611a7;
+	color:#091069;
 }
 .category-bx .category p {
     margin: 4px 0 0 0;
@@ -133,7 +133,7 @@
 .dlab-tabs.search-filter .nav-tabs > li > a.active:hover,
 .dlab-tabs.search-filter .nav-tabs > li > a:focus,
 .dlab-tabs.search-filter .nav-tabs > li > a:hover {
-    background-color: #4611a7;
+    background-color: #091069;
     border-color: 0;
     border: 0;
 	box-shadow: 0 0 0 3px rgba(255,255,255,0.2);
@@ -152,7 +152,7 @@
 	-webkit-transform: translateX(-50%);
 	-ms-transform: translateX(-50%);
 	-o-transform: translateX(-50%);
-	color: #4611a7;
+	color: #091069;
 } */
 .dlab-tabs.search-filter .nav-tabs > li > a.active i,
 .dlab-tabs.search-filter .nav-tabs > li > a:focus i,
@@ -1729,8 +1729,8 @@ blockquote h6{
 
 /* .site-header.header-style2 */
 .site-header.header-style2 .is-fixed .extra-nav .site-button{
-	color: #4611a7;
-	border-color: #4611a7;
+	color: #091069;
+	border-color: #091069;
 }
 
 /* button-shadow */
@@ -2428,7 +2428,7 @@ font-size: 30px;
     font-family: poppins;
 }
 .trending-bx:hover .trending-media{
-	border-color: #4611a7;
+	border-color: #091069;
 }
 .trending-bx:hover .trending-media{
 	transform: scale(1.08);
@@ -2535,7 +2535,7 @@ font-size: 30px;
 }
 .client-box-area1 .client-box.style1 .quote-left {
     font-size: 45px;
-    color: #4611a7;
+    color: #091069;
     line-height: 45px;
     top: 30px;
     position: absolute;
@@ -2685,7 +2685,7 @@ font-size: 30px;
 .content-header .title i{
     font-size: 24px;
     line-height: 18px;
-    color: #4611a7;
+    color: #091069;
     opacity: 0.8;
     margin-right: 5px;
     margin-top: -2px;
@@ -2734,7 +2734,7 @@ font-size: 17px;
 .icon-box-list .icon-cell.bg-gray,
 .icon-box-info  .icon-cell.bg-gray{
 	background-color: #eee4ff;
-    color: #4611a7 !important;
+    color: #091069 !important;
 }
 .icon-box-list .icon-cell,
 .icon-box-info .icon-cell{
@@ -2786,7 +2786,7 @@ font-size: 17px;
     margin: 0 40px;
 }
 .sale-box .sale-date .title a{
-	color: #4611a7;
+	color: #091069;
 }
 .sale-box .sale-info .title {
 	color: #fc6363;
@@ -2829,7 +2829,7 @@ font-size: 17px;
 	font-size: 14px;
 }
 .average-reviews-info .average-reviews {
-    color: #4611a7;
+    color: #091069;
     line-height: 20px;
     font-weight: 400;
     margin-bottom: 0;
@@ -2847,7 +2847,7 @@ font-size: 17px;
 }
 .average-reviews-single .average-reviews-info .average-reviews-in ,
 .average-reviews-single .average-reviews-info span {
-    color: #4611a7;
+    color: #091069;
     font-size: 12px;
     margin-bottom: 0;
     font-family: Roboto,sans-serif;
@@ -3041,7 +3041,7 @@ font-size: 17px;
 
 /* listing-details-nav */
 .listing-details-nav{
-	background-color: #4611a7;
+	background-color: #091069;
 }
 .listing-nav li{
 	display: inline-block;
@@ -3054,7 +3054,7 @@ font-size: 17px;
 .listing-nav li a.active{
 	color: #000;
     background: #fff;
-	border-top-color: #4611a7;
+	border-top-color: #091069;
 }
 .listing-nav li a {
 	border-top: 3px solid transparent;
@@ -3493,7 +3493,7 @@ font-size: 17px;
 .login-form input[type=checkbox]:checked + label:after,
 .add-listing-form input[type=checkbox]:checked + label:after ,
 .dlab-form input[type=checkbox]:checked + label:after {
-    color: #4611a7;
+    color: #091069;
     font-size: 16px;
     z-index: 99;
     left: 3px;
@@ -3506,7 +3506,7 @@ font-size: 17px;
 .login-form .info-bottom a,
 .login-form-box .btn-link,
 .modal-bx-info .btn-link{
-	color: #4611a7;
+	color: #091069;
 }
 .login-form-box .facebook{
     display: flex;
@@ -3765,7 +3765,7 @@ font-size: 17px;
 .lg-actions .lg-prev,
 .lg-sub-html,
 .lg-toolbar{
-    background-color: #4611a7;
+    background-color: #091069;
 }
 .lg-outer .lg-toogle-thumb,
 .lg-outer .lg-thumb-outer,
@@ -3775,7 +3775,7 @@ font-size: 17px;
 }
 .lg-outer .lg-toogle-thumb,
 .lg-outer .lg-toogle-thumb:hover{
-	color: #4611a7;
+	color: #091069;
 }
 .lg-actions .lg-next,
 .lg-actions .lg-prev,
@@ -3788,7 +3788,7 @@ font-size: 17px;
 }
 .lg-outer .lg-thumb-item.active,
 .lg-outer .lg-thumb-item:hover {
-    border-color: #4611a7;
+    border-color: #091069;
 }
 
 /* share Btn */
@@ -3854,7 +3854,7 @@ font-size: 17px;
     border-radius: 4px;
 }
 .modal-bx-info .modal-header {
-	background-color: #4611a7;
+	background-color: #091069;
 	padding: 15px 20px;
     border-bottom: 1px solid #f3f3f6;
 }
@@ -3954,7 +3954,7 @@ font-size: 17px;
 	margin-bottom: 0;
 }
 .listing-time-list li.open{
-	color: #4611a7;
+	color: #091069;
 }
 .listing-time-list li {
     display: block;
@@ -3973,7 +3973,7 @@ font-size: 17px;
 	font-size: 10px;
 }
 .listing-timing-box .listing-timing-header{
-	background-color: #4611a7;
+	background-color: #091069;
 	color: #fff;
 	display: flex;
 	justify-content: space-between;
@@ -4059,7 +4059,7 @@ font-size: 17px;
 	color: #fff;
 }
 .fc-toolbar.fc-header-toolbar{
-	background-color: #4611a7;
+	background-color: #091069;
 }
 .fc .fc-toolbar h2 {
     font-size: 14px;
