@@ -2,21 +2,303 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <script src="{% static 'js/login.js' %}"></script>
-    <script src="{% static 'js/jquery-3.5.1.min.js' %}"></script>
-</head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="keywords" content=""/>
+    <meta name="author" content=""/>
+    <meta name="robots" content=""/>
+    <meta name="description" content="BizMap Directory & Listings HTML templates"/>
+    <meta property="og:title" content="BizMap Directory & Listings HTML templates"/>
+    <meta property="og:description" content="BizMap Directory & Listings HTML templates"/>
+    <meta property="og:image" content=""/>
+    <meta name="format-detection" content="telephone=no">
 
-<body onload="login_isFailed({{ lgn_is_failed }})">
-{% if request.session.user_stu is not None %}
-    로그인 한 이메일: {{ request.session.user_email }}<br/>
-    로그인 한 사용자 이름: {{ request.session.user_name }}<br/>
-    프로필 사진: <img src="{{ request.session.user_pic }}" alt="프로필 사진 없뜸"/><br>
-    <button type="button" onclick="printConfirm('정말 로그아웃 하시겠습니까?', '{% url 'logout' %}')">로그아웃</button>
-{% else %}
-    <a href="{% url 'login' %}">로그인 페이지로 이동</a><br/>
-{% endif %}
+    <!-- FAVICONS ICON -->
+    <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon"/>
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'images/favicon.png' %}"/>
+
+    <!-- PAGE TITLE HERE -->
+    <title>IBAS</title>
+
+    <!-- MOBILE SPECIFIC -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--[if lt IE 9]>
+	<script src="{% static 'js/html5shiv.min.js' %}"></script>
+	<script src="{% static 'js/respond.min.js' %}"></script>
+	<![endif]-->
+
+    <!-- STYLESHEETS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/plugins.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/templete.css' %}">
+    <link class="skin" rel="stylesheet" type="text/css" href="{% static 'css/skin/skin-1.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main_style.css' %}">
+
+
+</head>
+<body id="bg">
+<div id="loading-area"></div>
+<div class="page-wraper">
+    <!--임시로 넣어둠, 상단바 이후에 블럭처리해서 바꿀예정-->
+     <!--====================메뉴바 시작====================-->
+    <!-- header -->
+    <header class="site-header header-transparent mo-left">
+        <!-- main header -->
+        <div class="sticky-header main-bar-wraper navbar-expand-lg">
+            <div class="main-bar clearfix ">
+                <div class="container clearfix">
+                    <!-- ====ibas 로고 들어가는 곳==== -->
+                    <div class="logo-header mostion">
+                        <!--드래그 안했을 때 나오는 로고/href 메이페이지 링크 연결해줘야 함-->
+                        <a href="{% url 'index' %}" class="logo-1"><img src="{% static 'images/logo_white.png' %}" style="margin-top: 4px; margin-bottom: 4px"></a>
+                        <!--밑으로 드래그 했을 때 나오는 로고/href 메이페이지 링크 연결해줘야 함-->
+                        <a href="{% url 'index' %}" class="logo-2"><img src="{% static 'images/logo_puple.png' %}" style="margin-top: 4px; margin-bottom: 4px"></a>
+                    </div>
+
+
+                    <!--====================메뉴, 회원정보에 따른 버튼 시작====================-->
+                    <div class="header-nav navbar-collapse collapse justify-content-end" id="navbarNavDropdown">
+                        <ul class="nav navbar-nav">
+                        <!--====================IBAS 상위메뉴로 가지고 있는 메뉴====================-->
+                            <li class="down active" style="padding-top: 6px"><a href="#">IBAS <i
+                                    class="fa fa-chevron-down"></i></a>
+                                <ul class="sub-menu">
+                                    <li><a href="#">동아리 소개</a></li>
+                                    <li><a href="#">동아리 활동</a></li>
+
+                                    {# 밑에 있는 회계내역, 예산지원 신청은 회원들만 신청을 할 수 있음. #}
+                                    {% if request.session.user_stu is not None %}
+                                        <li><a href="#">회계내역</a></li>
+                                        <li><a href="#">예산지원신청</a></li>
+                                    {% endif %}
+                                </ul>
+                            </li>
+                        <!--====================게시판을 상위메뉴로 가지고 있는 메뉴====================-->
+                            <li class="down active" style="padding-top: 6px"><a href="#">게시판 <i
+                                    class="fa fa-chevron-down"></i></a>
+                                <ul class="sub-menu">
+                                    <li><a href="#">공지사항</a></li>
+                                    <li><a href="#">자유게시판</a></li>
+                                    <li><a href="#">질문게시판</a></li>
+                                    <li><a href="#">공모전게시판</a></li>
+                                </ul>
+                            </li>
+                        <!--====================강의실을 상위메뉴로 가지고 있는 메뉴====================-->
+                            <li class="down active" style="padding-top: 7px"><a href="#">강의실 <i
+                                    class="fa fa-chevron-down"></i></a>
+                                <ul class="sub-menu">
+                                    <li><a href="#">강의</a></li>
+                                    <li><a href="#">스터디</a></li>
+                                    <li><a href="#">취미모임</a></li>
+                                    <li><a href="#">강의개설신청</a></li>
+                                </ul>
+                            </li>
+                        <!--====================로그인 여부에 따라 다르게 보이는 곳====================-->
+                        <!--====================로그인했을 때====================-->
+                            {% if request.session.user_stu is not None %}
+                                <!--======로그아웃 버튼======-->
+                                <li class="active" onclick="printConfirm('정말 로그아웃 하시겠습니까?', '{% url "logout" %}')"  style="padding-top: 7px; padding-right: 10px">
+                                    <!--아래 href에 로그아웃하는 거 들어가야 함-->
+                                    <a href="#" style="padding: 19px 0px 0px 15px">Log Out</a>
+                                    <a class="ti-import rotate90" style="padding:15px 0px 20px 4px;"></a>
+                                </li>
+                                <!--======회원정보 뜨는 곳======-->
+                                <li class="active">
+                                    <!--아래 href에 마이페이지 링크 들어가야 함-->
+                                    <a href="#" style="padding-right: 7px;">
+                                        <!--==승인되지 않았을 때==-->
+                                        {% if request.session.is_activated == 0 %}
+                                        <img src="{{ request.session.user_pic }}" width="35" height="35" border="3"
+                                             style=" border: 2px solid #ff3d3d; border-radius: 17.5px; margin-right: 3px"
+                                             alt="현재 브라우저에서 지원하지 않는 형식입니다.">
+                                            {{ request.session.user_name }} 님
+                                            <ul class="sub-menu" style="text-align: center">
+                                                <a>아직 승인되지 않았습니다</a>
+                                            </ul>
+                                        <!--==승인되었을 때==-->
+                                        {% else %}
+                                        <img src="{{ request.session.user_pic }}" width="35" height="35" border="3"
+                                             style=" border: 2px solid #0078ff; border-radius: 17.5px; margin-right: 3px"
+                                             alt="현재 브라우저에서 지원하지 않는 형식입니다.">
+                                            {{ request.session.user_name }} 님
+                                        {% endif %}
+                                    </a>
+                                </li>
+                                <!--======알림 뜨는 부분======-->
+                                <li class="active dropdown dropdown-btn" style="padding:4px; margin-left: -13px">
+                                <a class="fa fa-bell" style="padding-top: 22px"
+                                               class="site-button dropdown-toggle" id="dropdownMenuButton"
+                                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <!--이거는 노란색 동그라미인데, 알림이 없으면 뜨지 않고, 알림이 있으면 뜨게해야 함-->
+                                    <div style="height: 6px; width: 6px; background-color: #e8af00; border-radius: 3px; margin: -18px 0px 0px 12px; position: relative; z-index: 2"></div>
+                                </a>
+                                <!--===종 버튼 누르면 아래가 뜸===-->
+                                <!--===DB에서 가져와야함... 용식 유감...===-->
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="right: 14px; width: 204px;">
+                                                <a class="dropdown-item site-button-link" href="javascript:void(0);">
+                                                    <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
+                                                <a class="dropdown-item site-button-link" href="javascript:void(0);">
+                                                    <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
+                                                <a class="dropdown-item site-button-link" href="javascript:void(0);">
+                                                    <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
+                                                <a class="dropdown-item site-button-link" href="javascript:void(0);">
+                                                    <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
+                                                <a class="dropdown-item site-button-link" href="javascript:void(0);">
+                                                    <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
+                                                <a class="dropdown-item site-button-link" href="javascript:void(0);">
+                                                    <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
+                                            </div>
+                                </li>
+                                <!--====================로그인 하지 않았을 때====================-->
+                            {% else %}
+                                {# 현재 로그인 된 상황이 아니므로 로그인과 sign up이 나와야 한다. #}
+                                <li class="active" style="padding-top: 5px;">
+                                    <a href="{% url 'login' %}">Log In</a>
+                                </li>
+{#                                <li class="active" style="padding-top: 5px;">#}
+{#                                    <a href="#">Sign Up</a>#}
+{#                                </li>#}
+
+                            {% endif %}
+                        </ul>
+                    </div>
+                <!--====================메뉴바, 회원정보에 따른 버튼 끝====================-->
+                </div>
+            </div>
+        </div>
+        <!-- main header END -->
+    </header>
+    <!-- header END -->
+    <!--====================메뉴바 끝====================-->
+</div>
+    <!-- Content -->
+    <div class="page-content bg-white" style="padding-bottom: 0px">
+        <!-- Section Banner -->
+        <!--메인페이지에 들어갈 이미지 들어가는 자리-->
+        <div class="dlab-bnr-inr"
+             style="background-image:url({% static 'images/ibas-main-background.jpg' %});">
+            <!--입부신청 바로가기 버튼-->
+            <div class="container">
+                <div class="dlab-bnr-inr-entry align-m dlab-home">
+                        <img  class="ibas_logo" onclick="location.href = '{% url "login" %}'" src="{% static 'images/ibas_main_logo.png' %}" />
+                        <div class="main_text"><img src="{% static 'images/main-text.png' %}" /></div>
+                         <div onclick="location.href = '{% url "login" %}'" class="category-bx" style="margin-top: 100px; margin-bottom: 150px">
+						    <a href="#" class="category" style="width: 500px;">
+							    <p style=" font-weight: bolder; font-size: 20px; padding-top: 12px">입부신청</p>
+						    </a>
+				         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Section Banner END -->
+
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-5 col-lg-4 col-md-12 col-sm-12">
+                        <div class="widget">
+                            <img src="{% static 'images/logo-white.png' %}" class="m-b15" alt="" width="180">
+                            <p class="text-capitalize m-b20">Lorem Ipsum is simply dummy text of the printing and
+                                typesetting industry has been the industry.</p>
+                            <div class="subscribe-form m-b20">
+                                <form class="dzSubscribe" action="{% static 'script/mailchamp.php' %}" method="post">
+                                    <div class="dzSubscribeMsg"></div>
+                                    <div class="input-group">
+                                        <input name="dzEmail" required="required" class="form-control"
+                                               placeholder="Your Email Address" type="email">
+                                        <span class="input-group-btn">
+											<button name="submit" value="Submit" type="submit"
+                                                    class="site-button radius-xl">Subscribe</button>
+										</span>
+                                    </div>
+                                </form>
+                            </div>
+                            <ul class="list-inline m-a0">
+                                <li><a href="javascript:void(0);" class="site-button facebook circle "><i
+                                        class="fa fa-facebook"></i></a></li>
+                                <li><a href="javascript:void(0);" class="site-button google-plus circle "><i
+                                        class="fa fa-google-plus"></i></a></li>
+                                <li><a href="javascript:void(0);" class="site-button linkedin circle "><i
+                                        class="fa fa-linkedin"></i></a></li>
+                                <li><a href="javascript:void(0);" class="site-button instagram circle "><i
+                                        class="fa fa-instagram"></i></a></li>
+                                <li><a href="javascript:void(0);" class="site-button twitter circle "><i
+                                        class="fa fa-twitter"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-5 col-md-7 col-sm-12 col-12">
+                        <div class="widget border-0">
+                            <h5 class="m-b30 text-white">Frequently Asked Questions</h5>
+                            <ul class="list-2 list-line">
+                                <li><a href="javascript:void(0);">Hotel</a></li>
+                                <li><a href="javascript:void(0);">Restaurant</a></li>
+                                <li><a href="javascript:void(0);">Appartment</a></li>
+                                <li><a href="javascript:void(0);">SPA & Beauty</a></li>
+                                <li><a href="javascript:void(0);">Atuomation</a></li>
+                                <li><a href="javascript:void(0);">Travel</a></li>
+                                <li><a href="javascript:void(0);">How It Works</a></li>
+                                <li><a href="javascript:void(0);">For Employers</a></li>
+                                <li><a href="javascript:void(0);">Underwriting</a></li>
+                                <li><a href="javascript:void(0);">Contact Us</a></li>
+                                <li><a href="javascript:void(0);">Lending Licnses</a></li>
+                                <li><a href="javascript:void(0);">Support</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-5 col-sm-12 col-12">
+                        <div class="widget widget_getintuch">
+                            <h5 class="m-b30 text-white">Contact us</h5>
+                            <ul>
+                                <li><i class="ti-location-pin"></i><strong>address</strong> demo address #8901 Marmora
+                                    Road Chi Minh City, Vietnam
+                                </li>
+                                <li><i class="ti-mobile"></i><strong>phone</strong>0800-123456 (24/7 Support)</li>
+                                <li><i class="ti-email"></i><strong>email</strong>info@example.com</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 text-center">
+                        <span class="fbottom-like">© 2020 Design With <a class="like-btn" href="javascript:void(0)"><i
+                                class="fa fa-heart"></i></a> By DexignZone </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer END-->
+    <button class="scroltop fa fa-chevron-up"></button>
+</div>
+<!-- 직접 만든 js-->
+<script src="{% static 'js/login.js' %}"></script>
+<!-- JAVASCRIPT FILES ========================================= -->
+<script src="{% static 'js/jquery.min.js' %}"></script><!-- JQUERY.MIN JS -->
+<script src="{% static 'plugins/bootstrap/js/popper.min.js' %}"></script><!-- BOOTSTRAP.MIN JS -->
+<script src="{% static 'plugins/bootstrap/js/bootstrap.min.js' %}"></script><!-- BOOTSTRAP.MIN JS -->
+<script src="{% static 'plugins/bootstrap-select/bootstrap-select.min.js' %}"></script><!-- FORM JS -->
+<script src="{% static 'plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.js' %}"></script><!-- FORM JS -->
+<script src="{% static 'plugins/magnific-popup/magnific-popup.js' %}"></script><!-- MAGNIFIC POPUP JS -->
+<script src="{% static 'plugins/counter/waypoints-min.js' %}"></script><!-- WAYPOINTS JS -->
+<script src="{% static 'plugins/counter/counterup.min.js' %}"></script><!-- COUNTERUP JS -->
+<script src="{% static 'plugins/imagesloaded/imagesloaded.js' %}"></script><!-- IMAGESLOADED -->
+<script src="{% static 'plugins/masonry/masonry-3.1.4.js' %}"></script><!-- MASONRY -->
+<script src="{% static 'plugins/masonry/masonry.filter.js' %}"></script><!-- MASONRY -->
+<script src="{% static 'plugins/rangeslider/rangeslider.js' %}"></script><!-- RANGESLIDER -->
+<script src="{% static 'plugins/owl-carousel/owl.carousel.js' %}"></script><!-- OWL SLIDER -->
+<script src="{% static 'js/custom.js' %}"></script><!-- CUSTOM FUCTIONS  -->
+<script src="{% static 'js/dz.carousel.js' %}"></script><!-- SORTCODE FUCTIONS  -->
+<script src="{% static 'js/dz.ajax.js' %}"></script><!-- CONTACT JS  -->
 
 </body>
 </html>

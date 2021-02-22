@@ -10,7 +10,7 @@ from django.core.paginator import Paginator
 #     return render(request, 'index.html', {})
 
 
-#임시 메인페이지 이동 함수
+# 메인페이지 이동 함수
 def index(request):
     context = {}
     return render(request, "index.html", context)
@@ -26,10 +26,10 @@ def test_top_bar(request):
     context = {}
     return render(request, "top_bar.html", context)
 
-# 메인 작업
-def test_main(request):
-    context = {}
-    return render(request, 'main.html', context)
+# 메인 작업 (적용됨.)
+# def test_main(request):
+#     context = {}
+#     return render(request, 'main.html', context)
 
 # 동아리 소개 작업할 것임
 def test_introduce(request):
