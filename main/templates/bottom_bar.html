@@ -47,14 +47,15 @@
                     <div class="col-xl-5 col-lg-4 col-md-12 col-sm-12">
                         <div class="widget">
                             <!-- 여기 부분이 이미지임 -->
-                            <img src="{{ request.session.user_pic }}" class="m-b15" alt="" width="180">
+                            <img src="{{ request.session.chief_pic }}" class="m-b15" alt="" width="180">
                             <p class="text-capitalize m-b20">여기가 IBAS 로고 들어갈 곳임.</p>
                         </div>
                     </div>
                     <div class="col-xl-3 col-lg-3 col-md-5 col-sm-12 col-12">
                         <h5 class="m-b30 text-white">INHA IBAS</h5>
-                        <h5 class="m-b30 text-white">회장 이름 {{ request.session.user_name }}</h5>
-                        <h5 class="m-b30 text-white">회장 전화번호 {{ request.session.user_phone }}</h5>
+                        <h5 class="m-b30 text-white">회장 이름 {{ request.session.chief_name }}</h5>
+                        <h5 class="m-b30 text-white">회장 전화번호 {{ request.session.chief_phone }}</h5>
+                        <h5 class="m-b30 text-white">회장 이메일 {{ request.session.chief_email }}</h5>
                     </div>
                 </div>
             </div>

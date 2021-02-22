@@ -29,5 +29,6 @@ def index3(request):
     return render(request, 'activaty.html', contest)
 
 def index4(request):
-    session.save_session(request,User.objects.filter(user_role=get_object_or_404(UserRole, role_no=1))[0])
+    chief = User.objects.filter(user_role=get_object_or_404(UserRole, role_no=1))[0]
+    session.save_chief(request, chief)
     return render(request, 'bottom_bar.html', {})
