@@ -69,7 +69,8 @@
                     <!-- main nav -->
                     <div class="header-nav navbar-collapse collapse justify-content-end" id="navbarNavDropdown">
                         <ul class="nav navbar-nav">
-                            <li class="down active" style="padding-top: 9px"><a href="#">IBAS <i class="fa fa-chevron-down"></i></a>
+                            <li class="down active" style="padding-top: 9px"><a href="#">IBAS <i
+                                    class="fa fa-chevron-down"></i></a>
                                 <ul class="sub-menu">
                                     <li><a href="#">동아리 소개</a></li>
                                     <li><a href="#">동아리 활동</a></li>
@@ -81,7 +82,8 @@
                                     {% endif %}
                                 </ul>
                             </li>
-                            <li class="down active" style="padding-top: 9px"><a href="#">게시판 <i class="fa fa-chevron-down"></i></a>
+                            <li class="down active" style="padding-top: 9px"><a href="#">게시판 <i
+                                    class="fa fa-chevron-down"></i></a>
                                 <ul class="sub-menu">
                                     <li><a href="#">공지사항</a></li>
                                     <li><a href="#">자유게시판</a></li>
@@ -89,7 +91,8 @@
                                     <li><a href="#">공모전게시판</a></li>
                                 </ul>
                             </li>
-                            <li class="down active" style="padding-top: 9px"><a href="#">강의실 <i class="fa fa-chevron-down"></i></a>
+                            <li class="down active" style="padding-top: 9px"><a href="#">강의실 <i
+                                    class="fa fa-chevron-down"></i></a>
                                 <ul class="sub-menu">
                                     <li><a href="#">강의</a></li>
                                     <li><a href="#">스터디</a></li>
@@ -98,17 +101,47 @@
                                 </ul>
                             </li>
                             {% if request.session.user_stu is not None %}
-                            <li class="active" >
-                                <a href="#" style="padding-right: 6px;">
-                                    <img src="{{ request.session.user_pic }}" width="35" height="35" border="3" style=" border: 2px solid #ffffff; border-radius: 17.5px;" alt="현재 브라우저에서 지원하지 않는 형식입니다.">
-                                    {{ request.session.user_name }} 님
-                                </a>
-                                <a style="padding: 0px 15px 0px 0px">
-                                    <div style="height: 8px; width: 8px; background-color: #ff3d3d; border-radius: 4px; margin-top: 13px;"></div>
-                                    <div style="height: 8px; width: 8px; background-color: #22db14; border-radius: 4px; margin-top: 13px;"></div>
-                                </a>
-                            </li>
+                                <li class="active">
+                                    <a href="#" style="padding-right: 6px;">
+                                        <img src="{{ request.session.user_pic }}" width="35" height="35" border="3"
+                                             style=" border: 2px solid #ffffff; border-radius: 17.5px;"
+                                             alt="현재 브라우저에서 지원하지 않는 형식입니다.">
+                                        {{ request.session.user_name }} 님
+                                    </a>
+                                    <a style="padding: 0px 15px 0px 0px">
+                                    <!-- 이 부분이 빨간불, 파란불 작업 한 곳임 -->
+                                        {% if request.session.is_activated == 0 %}
+                                            <div style="height: 8px; width: 8px; background-color: #ff3d3d; border-radius: 4px; margin-top: 13px;"></div>
+                                        {% else %}
+                                            <div style="height: 8px; width: 8px; background-color: #22db14; border-radius: 4px; margin-top: 13px;"></div>
+                                        {% endif %}
+                                    </a>
+                                </li>
 
+                                <li class="active dropdown dropdown-btn" style="padding-top: 9px;">
+                                    <a class="fa fa-bell" style="padding-top: 22px"
+                                       class="site-button dropdown-toggle" id="dropdownMenuButton"
+                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton"
+                                         style="right: 3px; width: 201px">
+                                        <a class="dropdown-item site-button-link" href="javascript:void(0);">
+                                            <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
+                                        <a class="dropdown-item site-button-link" href="javascript:void(0);">
+                                            <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
+                                        <a class="dropdown-item site-button-link" href="javascript:void(0);">
+                                            <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
+                                        <a class="dropdown-item site-button-link" href="javascript:void(0);">
+                                            <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
+                                        <a class="dropdown-item site-button-link" href="javascript:void(0);">
+                                            <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
+                                        <a class="dropdown-item site-button-link" href="javascript:void(0);">
+                                            <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
+                                    </div>
+                                </li>
+                                <li class="active" style="padding-top: 9px;">
+                                    <a href="#" style="padding: 19px 0px 0px 15px">Log Out</a>
+                                    <a class="ti-import rotate90" style="padding:7px 0px 6px;"></a>
+                                </li>
                             <li class="active dropdown dropdown-btn" style="padding-top: 9px;">
                                 <a class="fa fa-bell" style="padding-top: 22px"
                                                class="site-button dropdown-toggle" id="dropdownMenuButton"
