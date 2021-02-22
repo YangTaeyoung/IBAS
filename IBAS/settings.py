@@ -99,11 +99,11 @@ WSGI_APPLICATION = 'IBAS.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'IBAS',
+        'NAME': 'ibas_local',
         'USER': 'root',
-        'PASSWORD': 'bigdata1156--',
+        'PASSWORD': '1234',
         'HOST': 'localhost',
-        'PORT': '3356',
+        'PORT': '3306',
     }
 }
 
@@ -146,11 +146,11 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
-STATIC_URL = '/static/'
+STATIC_URL = 'main/static/'
 STATIC_ROOT = os.path.join(ROOT_DIR, '.static_root')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
-    '/home/ibas/Django/IBAS/static/',
+    '/home/ibas/Django/IBAS/main/static/',
 ]
 # social 로그인 패키지 설정
 AUTHENTICATION_BACKENDS = (
