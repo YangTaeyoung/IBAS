@@ -10,14 +10,14 @@ from member import session
 
 
 # 탑바 작업
-def top_bar(request):
+def test_top_bar(request):
     # 세션은 세션이 있다고 가정한 것
     session.save_session(request,User.objects.get(pk='12162359'))
     context = {}
     return render(request, "top_bar.html", context)
 
 # 메인 작업
-def main(request):
+def test_main(request):
     contest = {}
     return render(request, 'main.html', contest)
 
@@ -28,7 +28,7 @@ def test_activity(request):
     context = {'chief' : chief , 'sub_chief' : sub_chief}
     return render(request, 'introduce.html', context)
 
-def bottom_bar(request):
+def test_bottom_bar(request):
     chief = User.objects.filter(user_role=get_object_or_404(UserRole, role_no=1))[0]
     session.save_chief(request, chief)
     return render(request, 'bottom_bar.html', {})
