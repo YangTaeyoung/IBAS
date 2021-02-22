@@ -10,6 +10,11 @@ from django.core.paginator import Paginator
 #     return render(request, 'index.html', {})
 
 
+#임시 메인페이지 이동 함수
+def index(request):
+    context = {}
+    return render(request, "index.html", context)
+
 # 탑바 작업
 def test_top_bar(request):
     # 세션은 세션이 있다고 가정한 것

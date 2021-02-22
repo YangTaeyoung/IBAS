@@ -11,6 +11,6 @@ urlpatterns = [
     path('test/accounts/', include('allauth.urls')),
     path('test/test_activity/detail/', views.test_activity_detail, name='test_activity_detail'), # 동아리 활동 자세히 보기
     path('test/test_activity/register/', views.test_activity_register, name='test_activity_register'), # 동아리 등록하기
-    #path('', views.index, name="index"),  # 메인페이지 이동 링크
+    path('', views.index, name="index"),  # 메인페이지 이동 링크
 ]
 
