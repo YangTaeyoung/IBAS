@@ -64,7 +64,7 @@
                     <div class="extra-nav">
                         <div class="extra-cell">
 
-                            {% if request.session.user_stu is None %} {# 만약 로그인을 해서 is_activated가 있는 경우, Log out 버튼 보이게 #}
+                            {% if request.session.user_stu is not None %} {# 만약 로그인을 해서 is_activated가 있는 경우, Log out 버튼 보이게 #}
                                 <a href="#" class="site-button radius-xl m-l10">Log Out</a>
                                 <a href="#" class="site-button radius-xl m-l10">My Info</a>
                                 {# 여기 밑에 있는 부분은 로그인 한 후, 알람 창 코드임. 수정해야함. #}
@@ -118,7 +118,7 @@
                                     <li><a href="#">동아리 활동</a></li>
 
                                     {# 밑에 있는 회계내역, 예산지원 신청은 회원들만 신청을 할 수 있음. #}
-                                    {% if request.session.user_stu is None %}
+                                    {% if request.session.user_stu is not None %}
                                     <li><a href="#">회계내역</a></li>
                                     <li><a href="#">예산지원신청</a></li>
                                     {% endif %}
