@@ -15,7 +15,8 @@ def join(request):  # 회원 가입 페이지로 이동 할 것인지, 이미 �
     if request.method == "POST":
         if request.POST.get("password") is not None:  # pass페이지에서 password가 파라미터로 넘어왔을 경우에
             user_token = request.POST.get("password")
-            request.POST.clear()
+            request.close()
+
             if len(AuthUser.objects.filter(password=user_token)) == 0:  # 만약 넘어온 자료가 없으면
                 return redirect(reverse("index"))  # 홈으로 이동
             auth_user = AuthUser.objects.filter(password=user_token)[0]  # auth테이블에서 해당 패스워드가 있는지 조회.
