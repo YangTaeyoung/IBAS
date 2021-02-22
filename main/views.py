@@ -26,7 +26,7 @@ def index3(request):
     chief = get_object_or_404(User,user_role=1)
     sub_chief = get_object_or_404(User,user_role=2)
     contest = {'chief' : chief, 'sub_chief' : sub_chief}
-    return render(request, 'activaty.html', contest)
+    return render(request, 'introduce.html', contest)
 
 def index4(request):
     chief = User.objects.filter(user_role=get_object_or_404(UserRole, role_no=1))[0]
