@@ -1,4 +1,4 @@
-{% if request.session.user_stu is not None %}
+{% if request.session.user_stu is None %}
     {% load socialaccount %} <!-- 소셜 로그인 user를 받기 위해 사용-->
     {% providers_media_js %} <!-- 소셜 미디어 로그인 페이지와 로그아웃 페이지를 따기 위해 사용 -->
 
@@ -16,7 +16,7 @@
         window.onpageshow = function (event) {
             if (event.persisted || (window.performance && window.performance.navigation.type == 2)) {
 // Back Forward Cache로 브라우저가 로딩될 경우 혹은 브라우저 뒤로가기 했을 경우
-                location.replace("{% url 'index' %}");
+                location.href = "{% url 'index' %}";
                 alert("왔냐!");
             }
         }
