@@ -5,6 +5,61 @@
     <title>Title</title>
 </head>
 <body>
+<h1>동아리 활동 게시판 !</h1>
+
+<!-- ############## 이 코드 살려줘 ###### -->
+<!-- 이건 일단 작업 ㄴㄴ 페이지를 넘기는 식으로 가기때문에 JS로 들어가줘야함.-->
+{#<form action="{% url 'test_activity' %}" method="GET">#}
+{#    <input type="submit" value="이거 누르면 최신순에서 오래된 순으로 바뀜">#}
+{#</form>#}
+
+<br> <!-- 보기 편하기 위함 -->
+<br>
+
+<!-- 여기서부터 -->
+{% for board in board_list %}
+    {% for board_file in board_file_list %}
+        {% if board.board_no == board_file.board_no.board_no %}
+            <form action="{% url 'test_activity_detail' %}" method="POST">
+                {% csrf_token %}
+                <img src="{{ board_file.board_file_path }}" style="width: 300px; height: 300px">
+                    {{ board.board_title }}
+                    {{ board.board_created }}
+                    <input type="hidden" name="board_list" value="{{ board.board_no }}">
+                <input type="submit" value="보기">
+            </form>
+            <br>
+        {% endif %}
+    {% endfor %}
+{% endfor %}
+<!-- 여기까지가 파일을 하나씩 가져오는 코드 -->
+
+<!-- 세션 처리 해야함 -->
+<form action="{% url 'test_activity_register' %}" method="POST">
+    {% csrf_token %}
+    <input type="submit" value="글쓰기"><br>
+</form>
+
+<br><br>
+<!-- 페이지 이동하는 코드 -->
+<span>
+        {% if board_list.has_previous %}
+            <!-- 현재 페이지, 전 페이지가 있는지 리턴해주는 함수 -->
+            <a href="?page=1">&laquo;</a>
+            <a href="?page={{ board_list.previous_page_number }}"> {{ board_list.previous_page_number }}</a>
+        {% endif %}
+
+    <span>
+        {{ board_list.number }}
+    </span>
+
+    <span>
+        {% if board_list.has_next %}
+            <a href="?page={{ board_list.next_page_number }}"> {{ board_list.next_page_number }}</a>
+            <a href="?page={{ board_list.paginator.num_pages }}">&raquo;</a>
+        {% endif %}
+    </span>
+</span>
 
 </body>
 </html>
