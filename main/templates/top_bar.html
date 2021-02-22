@@ -65,6 +65,7 @@
                         <div class="extra-cell">
 
                             {% if request.session.user_stu is not None %} {# 만약 로그인을 해서 is_activated가 있는 경우, Log out 버튼 보이게 #}
+                                <h3>{{ request.session.user_name }} 님</h3>
                                 <a href="#" class="site-button radius-xl m-l10">Log Out</a>
                                 <a href="#" class="site-button radius-xl m-l10">My Info</a>
                                 {# 여기 밑에 있는 부분은 로그인 한 후, 알람 창 코드임. 수정해야함. #}
