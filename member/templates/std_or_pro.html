@@ -74,12 +74,11 @@
                         <!-- card-for-grid에 대한 내용은 std_or_pro.css에 정의되어 있음. -->
                         <div class="card-for-grid">
                             <!-- big-card에 대한 내용은 std_or_pro.css에 정의되어 있음. -->
-                            <div class="big-card">
+                            <div class="big-card" onclick="passAuth('2')">
                                 <!-- card에 대한 내용은 std_or_pro.css에 정의되어 있음. -->
                                 <div class="card mb-4 ">
                                     <!-- card-body에 대한 내용은 std_or_pro.css에 정의되어 있음. -->
                                     <div class="card-body not_opacity" id="pro">
-                                        <a href="{% url 'join' %}">
                                             <!-- width_360px에 대한 내용은 std_or_pro.css에 정의되어 있음. -->
                                             <img src="{% static 'images/pro.png' %}"
                                                  alt="현재 브라우저에서는 지원하지 않는 형식입니다."
@@ -90,12 +89,11 @@
                                 </div>
                             </div>
                             <!-- big-card에 대한 내용은 std_or_pro.css에 정의되어 있음. -->
-                            <div class="big-card">
+                            <div class="big-card" onclick="passAuth('4')">
                                 <!-- card에 대한 내용은 std_or_pro.css에 정의되어 있음. -->
                                 <div class="card mb-4 ">
                                     <!-- card-body에 대한 내용은 std_or_pro.css에 정의되어 있음. -->
                                     <div class="card-body" id="std">
-                                        <a href="{% url 'join' %}">
                                             <!-- width_360px에 대한 내용은 std_or_pro.css에 정의되어 있음. -->
                                             <img src="{% static 'images/std.png' %}"
                                                  alt="현재 브라우저에서는 지원하지 않는 형식입니다."
@@ -105,14 +103,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <form id="auth-btn-0" action="#" method="POST" style="display: none"> <!--교수일 때-->
-                                <input type="hidden" name="user_auth" value="2">
-                                <input type="submit" class="site-button button-md" value="계속"/>
-                            </form>
-                            <form id="auth-btn-1" action="#" method="POST" style="display: none"> <!--학생일 때-->
-                                <input type="hidden" name="user_auth" value="4">
-                                <input type="submit" class="site-button button-md" value="계속"/>
-                            </form>
                         </div>
                     </div>
                 </div>
@@ -121,11 +111,20 @@
     </div>
 </div>
 <!-- Section Banner END -->
+<!-- 구글에서 가져온 파라미터를 입부신청 페이지로 전송 -->
+<form id="hd_form" action="{% url 'join' %}" method="post">
+    {% csrf_token %}
+    <input id="user_auth" type="hidden" name="user_auth"/>
+    <input type="hidden" name="email" value="{{ email }}"/>
+    <input type="hidden" name="name" value="{{ name }}"/>
+    <input type="hidden" name="pic" value="{{ pic }}"/>
 
+
+</form>
 </div>
 <!-- Content END-->
 <!-- 직접 만든 회원 가입 관련 JS-->
-{#<script src="{% static 'js/std_or_pro.js' %}"></script>#}
+<script src="{% static 'js/pass_form.js' %}"></script> <!-- 회원가입 -->
 <!-- JAVASCRIPT FILES ========================================= -->
 <script src="{% static 'js/jquery.min.js' %}"></script><!-- JQUERY.MIN JS -->
 <script src="{% static 'plugins/bootstrap/js/popper.min.js' %}"></script><!-- BOOTSTRAP.MIN JS -->

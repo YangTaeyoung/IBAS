@@ -3,6 +3,7 @@ from . import views
 
 urlpatterns = [
     path('accounts/', include('allauth.urls')),
+    path('join/select', views.choose_std_or_pro, name="choose_std_or_pro"),
     path('join/', views.join, name="join"),
     path('login/', views.login, name="login"),
     path('logout/', views.logout, name="logout"),

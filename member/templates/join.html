@@ -116,7 +116,7 @@
                         </div>
 
                         <!-- 회원 가입 입력 폼 시작 -->
-                        <form action="{% if user_role == "5" %}{% url 'join_chk' %}{% else %}{% url 'quest_chk' %}{% endif %}"
+                        <form action="{% if user_auth == "4" %}{% url 'join_chk' %}{% else %}{% url 'quest_chk' %}{% endif %}"
                               method="post">
                             <!-- 회원 가입 확인 함수:join_chk()로 전송 -->
                             <!--POST전송을 위한 CSRF 토큰-->
@@ -124,8 +124,8 @@
                             <!-- 바로 사용하지 못하는 것들은 사전 설정함. -->
                             <!--사전 설정-->
                             <input type="hidden" id="user_token" name="user_token" value="{{ token }}"/>
-                            <input type="hidden" id="user_auth" name="user_auth" value="4"/> <!-- 기본 권한 -->
-                            <input type="hidden" id="user_role" name="user_role" value="{{ user_role }}"/>
+                            <input type="hidden" id="user_auth" name="user_auth" value="{{ user_auth }}"/> <!-- 기본 권한 -->
+                            <input type="hidden" id="user_role" name="user_role" value="5"/>
                             <input type="hidden" id="is_activated" name="is_activated" value="0"/>
                             <!-- 승인 전까지는 대기하도록 0으로 설정 -->
                             <input type="hidden" id="user_gen" name="user_gen" value="1"/> <!-- 기수, 바꿔주는게 필요할 듯. -->
@@ -176,7 +176,7 @@
                                     <!-- 학년, 학번 컨테이너 -->
                                     <div class="form-container-flex form-group mb-0">
                                         <!--학년 컨테이너-->
-                                        {% if user_role == "5" %}
+                                        {% if user_auth == "4" %}
                                             <div class="form-item-flex-std-grade">
                                                 <select name="user_grade" required="required">
                                                     <option value="1">
@@ -204,7 +204,7 @@
                                                     name="user_stu"
                                                     class="form-control"
                                                     required="required"
-                                                    {% if user_role == "5" %}
+                                                    {% if user_auth == "4" %}
                                                     placeholder="학번"
                                                     maxlength="8"
                                                     {% else %}
@@ -218,7 +218,7 @@
                                         </div>
 
                                     </div>
-                                    <p id="error_text" class="error-text-id">입력하신 {% if user_role == "5" %}학번이{% else %}교수번호가{% endif %} 가입되어 있습니다.</p>
+                                    <p id="error_text" class="error-text-id">입력하신 {% if user_auth == "4" %}학번이{% else %}교수번호가{% endif %} 이미 가입되어 있습니다.</p>
                                     <!-- 전공 input -->
                                     <div class="form-container-flex form-group mb-0">
                                         <div class="form-item-flex-major">
