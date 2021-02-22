@@ -18,7 +18,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="{% static 'images/logo.png' %}"/>
 
     <!-- PAGE TITLE HERE -->
-    <title>Welcome INHA BAS</title>
+    <title>Choice</title>
 
     <!-- MOBILE SPECIFIC -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -50,7 +50,7 @@
         <div
                 class="dlab-bnr-inr dlab-bnr-inr-md bnr-style1"
                 style="
-            background-color: #7133e2;
+            background-color: #091069;
             background-size: cover;
           "
                 id="dezParticles"
@@ -63,44 +63,57 @@
                 <div class="choose-content dlab-home">
                     <!-- card 중 제일 상위 div , 제일 큰 card 부분임.  -->
                     <!-- choose-div에 대한 내용은 std_or_pro.css에 정의되어 있음. -->
-                    <div class="card choose-div">
-                        <!--동아리 로고-->
-                        <!-- padding-bottom_20px에 대한 내용은 std_or_pro.css에 정의되어 있음. -->
-                        <div class="padding-bottom_20px">
-                            <!-- a 태그로 인해 동아리 로고 클릭하면 메인화면으로 감.  -->
-                            <div>
-                                <a href="{% url 'index' %}">
-                                    <img src="{% static 'images/logo.png' %}" alt="현재 브라우저에서는 지원하지 않는 형식입니다."
-                                         width="100" height="100">
-                                </a>
-                            </div>
+                    <div>
 
+                        <!-- padding-bottom_20px에 대한 내용은 std_or_pro.css에 정의되어 있음. -->
+                        <div>
+                            <div class="padding-bottom_20px">
+                                <h3 class = "type-title-text">회원 유형을 선택해 주세요. </h3>
+                            </div>
                         </div>
                         <!-- card-for-grid에 대한 내용은 std_or_pro.css에 정의되어 있음. -->
                         <div class="card-for-grid">
-                            <div class="card mb-4 ">
-                                <!-- card-body에 대한 내용은 std_or_pro.css에 정의되어 있음. -->
-                                <!-- a 태그로 인해 카드 클릭하면 교수님 회원가입 폼으로 감.  -->
-                                <!-- url 수정 필요! -->
-                                <!-- <a href= ""> -->
-                                <div class="card-body">
-                                    <img src="{% static 'images/teacher.png' %}" alt="현재 브라우저에서는 지원하지 않는 형식입니다.">
-                                    <h3>교수님</h3>
-                                </div>
-                                <!-- </a> -->
-                            </div>
-                            <div class="card mb-4 ">
-                                <!-- a 태그로 인해 카드 클릭하면 학생 회원가입 폼으로 감.  -->
-                                <!-- url 수정 필요! -->
-                                <a href="{% url 'join' %}">
+                            <div class="big-card opacity_50">
+                                <div class="card mb-4 " onclick="clickBox(0)">
                                     <!-- card-body에 대한 내용은 std_or_pro.css에 정의되어 있음. -->
-                                    <div class="card-body">
-
-                                        <img src="{% static 'images/programmer.png' %}" alt="현재 브라우저에서는 지원하지 않는 형식입니다.">
-                                        <h3>학생</h3>
-
+                                    <div class="card-body not_opacity" id="pro" >
+                                        <img src="{% static 'images/pro.png' %}"
+                                             alt="현재 브라우저에서는 지원하지 않는 형식입니다."
+                                             class="width_360px">
+                                        <h4>교수님</h4>
                                     </div>
-                                </a>
+                                </div>
+                            </div>
+                            <div class="big-card">
+                                <div class="card mb-4 " onclick="clickBox(1)">
+                                    <!-- card-body에 대한 내용은 std_or_pro.css에 정의되어 있음. -->
+                                    <div class="card-body" id="std">
+                                        <img src="{% static 'images/std.png' %}"
+                                             alt="현재 브라우저에서는 지원하지 않는 형식입니다."
+                                             class="width_360px">
+                                        <h4>학생</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="explain-text-1" class="explain-text-cont " style="display: none">
+                                <p class="explain-text">
+                                    <span class="role_name">학생</span>을 선택하셨습니다.
+                                </p>
+                            </div>
+                            <div id="explain-text-0" class="explain-text-cont" style="display: none">
+                                <p class="explain-text">
+                                    <span class="role_name">교수</span>를 선택하셨습니다.
+                                </p>
+                            </div>
+                            <div>
+                                <form id="auth-btn-0" action="#" method="POST" style="display: none"> <!--교수일 때-->
+                                    <input type="hidden" name="user_auth" value="2">
+                                    <input type="submit" class="site-button button-md" value="계속"/>
+                                </form>
+                                <form id="auth-btn-1" action="#" method="POST" style="display: none"> <!--학생일 때-->
+                                    <input type="hidden" name="user_auth" value="4">
+                                    <input type="submit" class="site-button button-md" value="계속"/>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -112,6 +125,8 @@
 
 </div>
 <!-- Content END-->
+<!-- 직접 만든 회원 가입 관련 JS-->
+{#<script src="{% static 'js/std_or_pro.js' %}"></script>#}
 <!-- JAVASCRIPT FILES ========================================= -->
 <script src="{% static 'js/jquery.min.js' %}"></script><!-- JQUERY.MIN JS -->
 <script src="{% static 'plugins/bootstrap/js/popper.min.js' %}"></script><!-- BOOTSTRAP.MIN JS -->

@@ -31,8 +31,8 @@
 .choose-div {
     background-color: white;
     width: 700px;
-    height: 500px;
-    padding: 10px 25px 10px 25px;
+    height: 550px;
+    padding: 25px;
     margin: 0 auto;
     align-items: center;
     justify-items: center;
@@ -49,7 +49,8 @@
     display: grid;
     grid-template-columns: repeat(2,1fr);
     row-gap: 30px;
-    column-gap: 30px;
+    column-gap: 20px;
+    margin-bottom: 50px;
 
 }
 
@@ -62,17 +63,62 @@
     row-gap: 30px;
     column-gap: 30px;
     flex-direction: column;
-    width: 300px;
-    height: 350px;
-
+    width: 428px;
+    height: 430px;
+    align-items: center;
+    justify-items: center;
+    padding: 0;
+    background-color: white;
+    border-radius: 3px;
 }
 /* 하위 카드 부분에 마우스 올렸을 때*/
 .card-body:hover{
-    border: 2px solid #7133e2;
-    border-radius: 3px;
+    border: 5px solid #091069;
+    border-radius: 2px;
+
 
 }
 /* 동아리 로고 시작 div*/
 .padding-bottom_20px {
     padding-bottom: 20px;
+}
+
+.width_360px {
+    width: 360px;
+    }
+
+.explain-text-cont
+{
+    display: flex;
+    justify-content: center;
+    font-size: 18px;
+
+}
+.explain-text {
+    margin-bottom: 10px;
+}
+.role_name{
+    color: #012666;
+    font-weight: bold;
+}
+.big-card{
+    width: 450px;
+    height: 452px;
+    padding: 10px;
+    background-color: #8487b4;
+    display: flex;
+    align-items: baseline;
+}
+.not_opacity{
+
+}
+
+.type-title-text{
+    margin-bottom: 40px;
+    color: white;
+}
+
+.card {
+    justify-content: center;
+    align-content: center;
 }
