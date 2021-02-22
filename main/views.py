@@ -23,7 +23,7 @@ def index2(request):
 
 # 동아리 소개 작업할 것임
 def index3(request):
-    chief = ChiefCarrier.objects.filter(user_role=1).select_related()
-    sub_chief = ChiefCarrier.objects.filter(user_role=2).select_related()
-    contest = {}
+    chief = get_object_or_404(User,user_role=1)
+    sub_chief = get_object_or_404(User,user_role=2)
+    contest = {'chief' : chief, 'sub_chief' : sub_chief}
     return render(request, 'activaty.html', contest)
