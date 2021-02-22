@@ -22,7 +22,7 @@ def test_main(request):
     return render(request, 'main.html', contest)
 
 # 동아리 소개 작업할 것임
-def test_activity(request):
+def test_introduce(request):
     chief = get_object_or_404(User, user_role=1)
     sub_chief = get_object_or_404(User, user_role=2)
     context = {'chief' : chief , 'sub_chief' : sub_chief}
@@ -32,3 +32,6 @@ def test_bottom_bar(request):
     chief = User.objects.filter(user_role=get_object_or_404(UserRole, role_no=1))[0]
     session.save_chief(request, chief)
     return render(request, 'bottom_bar.html', {})
+
+def test_activity(request):
+    return render(request, 'activity.html', {})
