@@ -21,11 +21,11 @@
     window.onpageshow = function (event) {
         if(event.persisted)
         {
-            location.href = {% url 'index' %};
+            location.href = "{% url 'index' %}";
         }
     }
     window.onpopstate = function(event) {
-         location.href = {% url 'index' %};
+         location.href = "{% url 'index' %}";
          console.log("됐냐?")
     }
 </script>
