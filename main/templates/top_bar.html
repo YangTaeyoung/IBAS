@@ -62,61 +62,26 @@
 
                     <!-- extra nav -->
                     <div class="extra-nav">
-                        <div class="extra-cell">
 
-                            {% if request.session.user_stu is not None %} {# 만약 로그인을 해서 is_activated가 있는 경우, Log out 버튼 보이게 #}
-                                <a>{{ request.session.user_name }} 님</a>
-                                <img src="{{ request.session.user_pic }}" width="35" height="35" border="3" style=" border: 2px solid white; border-radius: 17.5px;" alt="현재 브라우저에서 지원하지 않는 형식입니다.">
-                                승인여부: {{ request.session.is_activated }}
-                                <a href="#" class="site-button radius-xl m-l10" >Log Out</a>
-                                <a href="#" class="site-button radius-xl m-l10">
-                                <img src="{{ request.session.user_pic }}" width="35" height="35" border="3" style=" border: 2px solid white; border-radius: 17.5px;" alt="현재 브라우저에서 지원하지 않는 형식입니다.">
-                                {{ request.session.user_name }} 님
-                                </a>
-                                {# 여기 밑에 있는 부분은 로그인 한 후, 알람 창 코드임. 수정해야함. #}
-                                <div class="dropdown dropdown-btn">
-									<i class="fa fa-bell" style="color: white; margin-left: 10px" class="site-button dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a class="dropdown-item site-button-link" href="javascript:void(0);">
-                                        <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
-                                    <a class="dropdown-item site-button-link" href="javascript:void(0);">
-                                        <i class="fa fa-twitter"></i><span>아직 알림이 없습니다.</span></a>
-                                    <a class="dropdown-item site-button-link" href="javascript:void(0);">
-                                        <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
-                                    <a class="dropdown-item site-button-link" href="javascript:void(0);">
-                                        <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
-                                    <a class="dropdown-item site-button-link" href="javascript:void(0);">
-                                        <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
-                                    <a class="dropdown-item site-button-link" href="javascript:void(0);">
-                                        <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
-                                </div>
-                            </div>
-
-                            {% else %}
-                                {# 현재 로그인 된 상황이 아니므로 로그인과 sign up이 나와야 한다. #}
-                                <a href="#" class="site-button radius-xl m-l10" >Log In</a>
-                                <a href="#" class="site-button radius-xl m-l10">Sign Up</a>
-                            {% endif %}
-                        </div>
                     </div>
 
 
                     <!-- main nav -->
                     <div class="header-nav navbar-collapse collapse justify-content-end" id="navbarNavDropdown">
                         <ul class="nav navbar-nav">
-                            <li class="down active"><a href="#">IBAS <i class="fa fa-chevron-down"></i></a>
+                            <li class="down active" style="padding-top: 9px"><a href="#">IBAS <i class="fa fa-chevron-down"></i></a>
                                 <ul class="sub-menu">
                                     <li><a href="#">동아리 소개</a></li>
                                     <li><a href="#">동아리 활동</a></li>
 
                                     {# 밑에 있는 회계내역, 예산지원 신청은 회원들만 신청을 할 수 있음. #}
                                     {% if request.session.user_stu is not None %}
-                                    <li><a href="#">회계내역</a></li>
-                                    <li><a href="#">예산지원신청</a></li>
+                                        <li><a href="#">회계내역</a></li>
+                                        <li><a href="#">예산지원신청</a></li>
                                     {% endif %}
                                 </ul>
                             </li>
-                            <li class="down"><a href="#">게시판 <i class="fa fa-chevron-down"></i></a>
+                            <li class="down active" style="padding-top: 9px"><a href="#">게시판 <i class="fa fa-chevron-down"></i></a>
                                 <ul class="sub-menu">
                                     <li><a href="#">공지사항</a></li>
                                     <li><a href="#">자유게시판</a></li>
@@ -124,7 +89,7 @@
                                     <li><a href="#">공모전게시판</a></li>
                                 </ul>
                             </li>
-                            <li class="down"><a href="#">강의실 <i class="fa fa-chevron-down"></i></a>
+                            <li class="down active" style="padding-top: 9px"><a href="#">강의실 <i class="fa fa-chevron-down"></i></a>
                                 <ul class="sub-menu">
                                     <li><a href="#">강의</a></li>
                                     <li><a href="#">스터디</a></li>
@@ -132,8 +97,54 @@
                                     <li><a href="#">강의개설신청</a></li>
                                 </ul>
                             </li>
+                            {% if request.session.user_stu is not None %}
+                            <li class="active" >
+                                <a href="#" style="padding-right: 6px;">
+                                    <img src="{{ request.session.user_pic }}" width="35" height="35" border="3" style=" border: 2px solid #ffffff; border-radius: 17.5px;" alt="현재 브라우저에서 지원하지 않는 형식입니다.">
+                                    {{ request.session.user_name }} 님
+                                </a>
+                                <a style="padding: 0px 15px 0px 0px">
+                                    <div style="height: 8px; width: 8px; background-color: #ff3d3d; border-radius: 4px; margin-top: 13px;"></div>
+                                    <div style="height: 8px; width: 8px; background-color: #22db14; border-radius: 4px; margin-top: 13px;"></div>
+                                </a>
+                            </li>
 
+                            <li class="active dropdown dropdown-btn" style="padding-top: 9px;">
+                                <a class="fa fa-bell" style="padding-top: 22px"
+                                               class="site-button dropdown-toggle" id="dropdownMenuButton"
+                                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="right: 3px; width: 201px">
+                                                <a class="dropdown-item site-button-link" href="javascript:void(0);">
+                                                    <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
+                                                <a class="dropdown-item site-button-link" href="javascript:void(0);">
+                                                    <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
+                                                <a class="dropdown-item site-button-link" href="javascript:void(0);">
+                                                    <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
+                                                <a class="dropdown-item site-button-link" href="javascript:void(0);">
+                                                    <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
+                                                <a class="dropdown-item site-button-link" href="javascript:void(0);">
+                                                    <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
+                                                <a class="dropdown-item site-button-link" href="javascript:void(0);">
+                                                    <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
+                                            </div>
+                            </li>
+                            <li class="active" style="padding-top: 9px;">
+                                <a href="#" style="padding: 19px 0px 0px 15px">Log Out</a>
+                                <a class="ti-import rotate90" style="padding:7px 0px 6px;"></a>
+                            </li>
+
+                            {% else %}
+                                {# 현재 로그인 된 상황이 아니므로 로그인과 sign up이 나와야 한다. #}
+                                <li class="active" style="padding-top: 9px;">
+                                    <a href="#">Log In</a>
+                                </li>
+                                <li class="active" style="padding-top: 9px;">
+                                    <a href="#">Sign Up</a>
+                                </li>
+
+                            {% endif %}
                         </ul>
+
                     </div>
                 </div>
             </div>
@@ -142,8 +153,6 @@
     </header>
     <!-- header END -->
 </div>
-
-
 
 
 <!-- 이거는 그냥 배경 및 밑으로 스크롤 내렸을 때 잘 되는지 보기위해서 넣은 코드 -->
