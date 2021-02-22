@@ -22,8 +22,8 @@ def index2(request):
     return render(request, 'main.html', contest)
 
 # 동아리 소개 작업할 것임
-def index3(request):
+def test_activity(request):
     chief = ChiefCarrier.objects.filter(user_role=1).select_related()
     sub_chief = ChiefCarrier.objects.filter(user_role=2).select_related()
-    contest = {}
-    return render(request, 'activaty.html', contest)
+    context = {}
+    return render(request, 'activity.html', context)
