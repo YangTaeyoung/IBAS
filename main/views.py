@@ -27,3 +27,8 @@ def test_activity(request):
     sub_chief = ChiefCarrier.objects.filter(user_role=2).select_related()
     context = {}
     return render(request, 'activity.html', context)
+
+def index4(request):
+    chief = User.objects.filter(user_role=get_object_or_404(UserRole, role_no=1))[0]
+    session.save_chief(request, chief)
+    return render(request, 'bottom_bar.html', {})
