@@ -116,8 +116,8 @@ class Bank(models.Model):
     bank_used = models.DateTimeField(db_column='BANK_USED', blank=True, null=True)  # Field name made lowercase.
     bank_created = models.DateTimeField(db_column='BANK_CREATED')  # Field name made lowercase.
     bank_updated = models.DateTimeField(db_column='BANK_UPDATED', blank=True, null=True)  # Field name made lowercase.
-    bank_cfo = models.ForeignKey('User', models.DO_NOTHING, db_column='BANK_CFO', related_name="cfo")  # Field name made lowercase.
-    bank_used_user = models.ForeignKey('User', models.DO_NOTHING, db_column='BANK_USED_USER', related_name="used_user")  # Field name made lowercase.
+    bank_cfo = models.ForeignKey('User', models.DO_NOTHING, db_column='BANK_CFO', related_name='cfo')  # Field name made lowercase.
+    bank_used_user = models.ForeignKey('User', models.DO_NOTHING, db_column='BANK_USED_USER', related_name='used_user')  # Field name made lowercase.
     bank_apply = models.IntegerField(db_column='BANK_APPLY')  # Field name made lowercase.
     bank_reason = models.CharField(db_column='BANK_REASON', max_length=300, blank=True, null=True)  # Field name made lowercase.
     bank_reject_reason = models.CharField(db_column='BANK_REJECT_REASON', max_length=200, blank=True, null=True)  # Field name made lowercase.

@@ -18,3 +18,4 @@ def save_session(request, user):
     request.session["user_grade"] = user.user_grade
     request.session["user_role"] = user.user_role.role_no
     request.session["user_auth"] = user.user_auth.auth_no
+    request.session["is_activated"] = user.is_activated
