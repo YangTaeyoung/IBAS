@@ -15,10 +15,11 @@ def join(request):  # 회원 가입 페이지로 이동 할 것인지, 이미 �
     if request.method == "POST":
         if request.POST.get("password") is not None:  # pass페이지에서 password가 파라미터로 넘어왔을 경우에
             user_token = request.POST.get("password")
+            request.close()
+
             if len(AuthUser.objects.filter(password=user_token)) == 0:  # 만약 넘어온 자료가 없으면
                 return redirect(reverse("index"))  # 홈으로 이동
             auth_user = AuthUser.objects.filter(password=user_token)[0]  # auth테이블에서 해당 패스워드가 있는지 조회.
-
             # 있다면 social account에서 앞서서 Auth의 primary key를 통해 가입한 친구의 pk를 넣어서 조회
             tar_member = SocialAccount.objects.filter(user_id=auth_user.id)[0]  # quesyset의 첫번째 자료. 즉 로그인한 인원의 인스턴스 변수
             tar_token = SocialToken.objects.filter(account_id=tar_member.id)[0]
