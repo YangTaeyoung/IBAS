@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <script src="{% static 'js/login.js' %}"></script>
-    <script src="{% static 'js/jquery-3.5.1.min.js'%}"></script>
+    <script src="{% static 'js/jquery-3.5.1.min.js' %}"></script>
 </head>
 
 <body onload="login_isFailed({{ lgn_is_failed }})">
@@ -19,14 +19,11 @@
 {% endif %}
 <script>
     window.onpageshow = function (event) {
-        if(event.persisted)
-        {
+        if (event.persisted || (window.performance && window.performance.navigation.type == 2)) {
+// Back Forward Cache로 브라우저가 로딩될 경우 혹은 브라우저 뒤로가기 했을 경우
             location.href = "{% url 'index' %}";
+            alert("왔냐!");
         }
-    }
-    window.onpopstate = function(event) {
-         location.href = "{% url 'index' %}";
-         console.log("됐냐?")
     }
 </script>
 </body>
