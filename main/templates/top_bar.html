@@ -30,7 +30,7 @@
 
     <!-- STYLESHEETS -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/plugins.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style_1.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/template_1.css' %}">
     <link class="skin" rel="stylesheet" type="text/css" href="{% static 'css/skin/skin-1.css' %}">
 
@@ -39,37 +39,27 @@
 <body id="bg">
 <div id="loading-area"></div>
 <div class="page-wraper">
+    <!--====================메뉴바 시작====================-->
     <!-- header -->
     <header class="site-header header-transparent mo-left">
         <!-- main header -->
         <div class="sticky-header main-bar-wraper navbar-expand-lg">
             <div class="main-bar clearfix ">
                 <div class="container clearfix">
-                    <!-- website logo -->
+                    <!-- ====ibas 로고 들어가는 곳==== -->
                     <div class="logo-header mostion">
-                        <a href="index.html" class="logo-1"><img src="{% static 'images/logo_white.png' %}" alt=""></a>
-                        <a href="index.html" class="logo-2"><img src="{% static 'images/logo_puple.png' %}" alt=""></a>
-                    </div>
-                    <!-- nav toggle button -->
-                    <button class="navbar-toggler collapsed navicon justify-content-end" type="button"
-                            data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
-                            aria-expanded="false" aria-label="Toggle navigation">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </button>
-
-
-                    <!-- extra nav -->
-                    <div class="extra-nav">
-
+                        <!--드래그 안했을 때 나오는 로고/href 메이페이지 링크 연결해줘야 함-->
+                        <a href="#" class="logo-1"><img src="{% static 'images/logo_white.png' %}" style="margin-top: 4px"></a>
+                        <!--밑으로 드래그 했을 때 나오는 로고/href 메이페이지 링크 연결해줘야 함-->
+                        <a href="#" class="logo-2"><img src="{% static 'images/logo_puple.png' %}" style="margin-top: 4px"></a>
                     </div>
 
 
-                    <!-- main nav -->
+                    <!--====================메뉴, 회원정보에 따른 버튼 시작====================-->
                     <div class="header-nav navbar-collapse collapse justify-content-end" id="navbarNavDropdown">
                         <ul class="nav navbar-nav">
-                            <li class="down active" style="padding-top: 9px"><a href="#">IBAS <i
+                        <!--====================IBAS 상위메뉴로 가지고 있는 메뉴====================-->
+                            <li class="down active" style="padding-top: 6px"><a href="#">IBAS <i
                                     class="fa fa-chevron-down"></i></a>
                                 <ul class="sub-menu">
                                     <li><a href="#">동아리 소개</a></li>
@@ -82,7 +72,8 @@
                                     {% endif %}
                                 </ul>
                             </li>
-                            <li class="down active" style="padding-top: 9px"><a href="#">게시판 <i
+                        <!--====================게시판을 상위메뉴로 가지고 있는 메뉴====================-->
+                            <li class="down active" style="padding-top: 6px"><a href="#">게시판 <i
                                     class="fa fa-chevron-down"></i></a>
                                 <ul class="sub-menu">
                                     <li><a href="#">공지사항</a></li>
@@ -91,7 +82,8 @@
                                     <li><a href="#">공모전게시판</a></li>
                                 </ul>
                             </li>
-                            <li class="down active" style="padding-top: 9px"><a href="#">강의실 <i
+                        <!--====================강의실을 상위메뉴로 가지고 있는 메뉴====================-->
+                            <li class="down active" style="padding-top: 7px"><a href="#">강의실 <i
                                     class="fa fa-chevron-down"></i></a>
                                 <ul class="sub-menu">
                                     <li><a href="#">강의</a></li>
@@ -100,55 +92,47 @@
                                     <li><a href="#">강의개설신청</a></li>
                                 </ul>
                             </li>
+                        <!--====================로그인 여부에 따라 다르게 보이는 곳====================-->
+                        <!--====================로그인했을 때====================-->
                             {% if request.session.user_stu is not None %}
+                                <!--======로그아웃 버튼======-->
+                                <li class="active" style="padding-top: 7px; padding-right: 10px">
+                                    <!--아래 href에 로그아웃하는 거 들어가야 함-->
+                                    <a href="#" style="padding: 19px 0px 0px 15px">Log Out</a>
+                                    <a class="ti-import rotate90" style="padding:15px 0px 20px 4px;"></a>
+                                </li>
+                                <!--======회원정보 뜨는 곳======-->
                                 <li class="active">
-                                    <a href="#" style="padding-right: 6px;">
-                                        <img src="{{ request.session.user_pic }}" width="35" height="35" border="3"
-                                             style=" border: 2px solid #ffffff; border-radius: 17.5px;"
-                                             alt="현재 브라우저에서 지원하지 않는 형식입니다.">
-                                        {{ request.session.user_name }} 님
-                                    </a>
-                                    <a style="padding: 0px 15px 0px 0px">
-                                    <!-- 이 부분이 빨간불, 파란불 작업 한 곳임 -->
+                                    <!--아래 href에 마이페이지 링크 들어가야 함-->
+                                    <a href="#" style="padding-right: 7px;">
+                                        <!--==승인되지 않았을 때==-->
                                         {% if request.session.is_activated == 0 %}
-                                            <div style="height: 8px; width: 8px; background-color: #ff3d3d; border-radius: 4px; margin-top: 13px;"></div>
+                                        <img src="{{ request.session.user_pic }}" width="35" height="35" border="3"
+                                             style=" border: 2px solid #ff3d3d; border-radius: 17.5px; margin-right: 3px"
+                                             alt="현재 브라우저에서 지원하지 않는 형식입니다.">
+                                            {{ request.session.user_name }} 님
+                                            <ul class="sub-menu" style="text-align: center">
+                                                <a>아직 승인되지 않았습니다</a>
+                                            </ul>
+                                        <!--==승인되었을 때==-->
                                         {% else %}
-                                            <div style="height: 8px; width: 8px; background-color: #22db14; border-radius: 4px; margin-top: 13px;"></div>
+                                        <img src="{{ request.session.user_pic }}" width="35" height="35" border="3"
+                                             style=" border: 2px solid #22db14; border-radius: 17.5px; margin-right: 3px"
+                                             alt="현재 브라우저에서 지원하지 않는 형식입니다.">
+                                            {{ request.session.user_name }} 님
                                         {% endif %}
                                     </a>
                                 </li>
-
-                                <li class="active dropdown dropdown-btn" style="padding-top: 9px;">
-                                    <a class="fa fa-bell" style="padding-top: 22px"
-                                       class="site-button dropdown-toggle" id="dropdownMenuButton"
-                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
-                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton"
-                                         style="right: 3px; width: 201px">
-                                        <a class="dropdown-item site-button-link" href="javascript:void(0);">
-                                            <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
-                                        <a class="dropdown-item site-button-link" href="javascript:void(0);">
-                                            <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
-                                        <a class="dropdown-item site-button-link" href="javascript:void(0);">
-                                            <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
-                                        <a class="dropdown-item site-button-link" href="javascript:void(0);">
-                                            <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
-                                        <a class="dropdown-item site-button-link" href="javascript:void(0);">
-                                            <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
-                                        <a class="dropdown-item site-button-link" href="javascript:void(0);">
-                                            <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
-                                    </div>
-                                </li>
-                                <li class="active" style="padding-top: 9px;">
-                                    <a href="#" style="padding: 19px 0px 0px 15px">Log Out</a>
-                                    <a class="ti-import rotate90" style="padding:7px 0px 6px;"></a>
-                                </li>
-                            <li class="active dropdown dropdown-btn" style="padding-top: 9px;">
+                                <!--======알림 뜨는 부분======-->
+                                <li class="active dropdown dropdown-btn" style="padding:4px; margin-left: -13px">
                                 <a class="fa fa-bell" style="padding-top: 22px"
                                                class="site-button dropdown-toggle" id="dropdownMenuButton"
                                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <div style="height: 6px; width: 6px; background-color: #ffcd03; border-radius: 3px; margin: -18px 0px 0px 12px; position: relative; z-index: 2"></div>
+                                    <div style="height: 6px; width: 6px; background-color: #e8af00; border-radius: 3px; margin: -18px 0px 0px 12px; position: relative; z-index: 2"></div>
                                 </a>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="right: 3px; width: 201px">
+                                <!--===종 버튼 누르면 아래가 뜸===-->
+                                <!--===DB에서 가져와야함... 용식 유감...===-->
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="right: 14px; width: 204px;">
                                                 <a class="dropdown-item site-button-link" href="javascript:void(0);">
                                                     <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
                                                 <a class="dropdown-item site-button-link" href="javascript:void(0);">
@@ -162,31 +146,28 @@
                                                 <a class="dropdown-item site-button-link" href="javascript:void(0);">
                                                     <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
                                             </div>
-                            </li>
-                            <li class="active" style="padding-top: 9px;">
-                                <a href="#" style="padding: 19px 0px 0px 15px">Log Out</a>
-                                <a class="ti-import rotate90" style="padding:7px 0px 6px;"></a>
-                            </li>
-
+                                </li>
+                                <!--====================로그인 하지 않았을 때====================-->
                             {% else %}
                                 {# 현재 로그인 된 상황이 아니므로 로그인과 sign up이 나와야 한다. #}
-                                <li class="active" style="padding-top: 9px;">
+                                <li class="active" style="padding-top: 5px;">
                                     <a href="#">Log In</a>
                                 </li>
-                                <li class="active" style="padding-top: 9px;">
+                                <li class="active" style="padding-top: 5px;">
                                     <a href="#">Sign Up</a>
                                 </li>
 
                             {% endif %}
                         </ul>
-
                     </div>
+                <!--====================메뉴바, 회원정보에 따른 버튼 끝====================-->
                 </div>
             </div>
         </div>
         <!-- main header END -->
     </header>
     <!-- header END -->
+    <!--====================메뉴바 끝====================-->
 </div>
 
 
