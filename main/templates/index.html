@@ -17,5 +17,13 @@
 {% else %}
     <a href="{% url 'login' %}">로그인 페이지로 이동</a><br/>
 {% endif %}
+<script>
+    window.onpageshow = function (event) {
+        if(event.persisted)
+        {
+            location.href = {% url 'index' %}
+        }
+    }
+</script>
 </body>
 </html>
