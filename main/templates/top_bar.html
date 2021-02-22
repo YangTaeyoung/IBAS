@@ -54,7 +54,6 @@
                         <a href="#" class="logo-2"><img src="{% static 'images/logo_puple.png' %}" style="margin-top: 4px; margin-bottom: 4px"></a>
                     </div>
 
-
                     <!--====================메뉴, 회원정보에 따른 버튼 시작====================-->
                     <div class="header-nav navbar-collapse collapse justify-content-end" id="navbarNavDropdown">
                         <ul class="nav navbar-nav">
@@ -62,8 +61,8 @@
                             <li class="down active" style="padding-top: 6px"><a href="#">IBAS <i
                                     class="fa fa-chevron-down"></i></a>
                                 <ul class="sub-menu">
-                                    <li><a href="#">동아리 소개</a></li>
-                                    <li><a href="#">동아리 활동</a></li>
+                                    <li><a href="{% url 'test_introduce' %}">동아리 소개</a></li> <!-- url 걸어놨음. 나중에 수정 -->
+                                    <li><a href="{% url 'test_activity' %}">동아리 활동</a></li> <!-- url 걸어놨음. 나중에 수정 -->
 
                                     {# 밑에 있는 회계내역, 예산지원 신청은 회원들만 신청을 할 수 있음. #}
                                     {% if request.session.user_stu is not None %}
