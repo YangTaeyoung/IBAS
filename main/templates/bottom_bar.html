@@ -31,42 +31,64 @@
     <!-- STYLESHEETS -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/plugins.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/templete.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/template_1.css' %}">
     <link class="skin" rel="stylesheet" type="text/css" href="{% static 'css/skin/skin-1.css' %}">
+
+    <link class="skin" rel="stylesheet" type="text/css" href="{% static 'css/bottom_bar.css' %}">
 
 
 </head>
 <body id="bg">
-<div id="loading-area"></div>
+
 <div class="page-wraper">
     <!-- Footer -->
-    <footer class="site-footer">
+    <footer>
         <div class="footer-top">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-5 col-lg-4 col-md-12 col-sm-12">
-                        <div class="widget">
-                            <!-- 여기 부분이 이미지임 -->
-                            <img src="{{ request.session.chief_pic }}" class="m-b15" alt="" width="180">
-                            <p class="text-capitalize m-b20">여기가 IBAS 로고 들어갈 곳임.</p>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-3 col-md-5 col-sm-12 col-12">
-                        <h5 class="m-b30 text-white">INHA IBAS</h5>
-                        <h5 class="m-b30 text-white">회장 이름 {{ request.session.chief_name }}</h5>
-                        <h5 class="m-b30 text-white">회장 전화번호 {{ request.session.chief_phone }}</h5>
-                        <h5 class="m-b30 text-white">회장 이메일 {{ request.session.chief_email }}</h5>
-                    </div>
+            <div class="cont-grid">
+                <div class="logo-center">
+                    <!-- 여기 부분이 이미지임 -->
+                    <img src="{% static 'images/logo_white.png' %} " class="m-b15" alt="" width="300px">
                 </div>
+                <div>
+                    <h5 class="m-b30 text-white">Contact us</h5>
+                    <table style="padding: 0">
+                        <tr>
+                            <td class="td-size"><i class="fa fa-user"></i></td>
+                            <td><strong>회장이름: {{ request.session.chief_name }}</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="td-size"><i class="ti-location-pin"></i></td>
+                            <td><strong>address</strong> 인하대학교 22212 인천광역시 미추홀구 인하로 100</td>
+                        </tr>
+                        <tr>
+                            <td class="td-size"><i class="ti-mobile"></i></td>
+                            <td class="td-size"><strong>phone</strong>{{ request.session.chief_phone }}100</td>
+                        </tr>
+                        <tr>
+                            <td class="td-size"><i class="ti-email"></i></td>
+                            <td class="td-size"><strong>email</strong>{{ request.session.chief_email }}</td>
+                        </tr>
+                    </table>
+{#                    <ul class="no-dot cont-table">#}
+{#                        <li><i class="fa fa-user"></i></li>#}
+{#                        <li><strong>회장이름: {{ request.session.chief_name }}</strong></li>#}
+{#                        <li><i class="ti-location-pin"></i></li>#}
+{#                        <li><strong>address</strong> 인하대학교 22212 인천광역시 미추홀구 인하로 100</li>#}
+{#                        <li><i class="ti-mobile"></i></li>#}
+{#                        <li><strong>phone</strong>{{ request.session.chief_phone }}</li>#}
+{#                        <li><i class="ti-email"></i></li>#}
+{#                        <li><strong>email</strong>{{ request.session.chief_email }}</li>#}
+{#                    </ul>#}
+                </div>
+
             </div>
         </div>
         <div class="footer-bottom">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12 text-center">
-                        <span class="fbottom-like">© 2021 Design With <a class="like-btn" href="javascript:void(0)">
-                        </a> By 조용식 & 김채림 </span>
-                    </div>
+            <div>
+                <div>
+                    <p class="fbottom-like" style="margin: 0">© 2021 Design With <a class="like-btn"
+                                                                                    href="javascript:void(0)">
+                    </a> By 조용식 & 김채림 </p>
                 </div>
             </div>
         </div>
