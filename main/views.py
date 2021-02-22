@@ -59,7 +59,9 @@ def test_activity(request):
     return render(request, 'activity.html', {'board_list' : item, 'board_file_list' : board_file_list})
 
 def test_activity_detail(request):
-    return render(request, 'activity_detail.html', {})
+    if request.method == "POST":
+        board_info = get_object_or_404(Board,board_no=request.POST.get('board_list')) # 번호를 들고옴
+    return render(request, 'activity_detail.html', {'board_info' : board_info})
 
 def test_activity_register(request):
     return render(request, 'activity_register.html', {})
