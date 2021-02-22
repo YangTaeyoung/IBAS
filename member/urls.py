@@ -2,16 +2,13 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
-    path('accounts/', include('allauth.urls')),
-    path('join/select', views.choose_std_or_pro, name="choose_std_or_pro"),
-    path('join/', views.join, name="join"),
-    path('login/', views.login, name="login"),
-    path('logout/', views.logout, name="logout"),
-    path('quest/', views.join_chk, name="join_chk"),
-    path('join/chk', views.quest_chk, name="quest_chk"),
-    path('pass/', views.pass_param, name="pass"),
-    path('test/join1/', views.test_join1, name="test_join1"),
-    path('test/join2/', views.test_join2, name="test_join2"),
-    path('test/std_or_pro/', views.std_or_pro, name="std_or_pro"),
-    path('test/welcome', views.welcome, name="welcome"),
+    path('accounts/', include('allauth.urls')), # 소셜 로그인 관련 링크
+    path('join/select/', views.choose_std_or_pro, name="choose_std_or_pro"), # 학생, 교수 선택 페이지 이동 링크
+    path('join/', views.join, name="join"), # 조인 페이지 이동 링크
+    path('login/', views.login, name="login"), # 로그인 페이지 이동 링크
+    path('logout/', views.logout, name="logout"), # 로그아웃 링크
+    path('quest/', views.join_chk, name="join_chk"), # 회원가입 확인 페이지
+    path('join/chk', views.quest_chk, name="quest_chk"), # 질문 답변 확인 페이지크
+    path('pass/', views.pass_param, name="pass"), # 소셜 로그인으로 부터 받은 정보를 회원가입 페이지로 전송시키는 페이지 (노출X)
+    path('welcome/', views.welcome, name="welcome"), # 회원가입 완료 페이지 이동 링
 ]
