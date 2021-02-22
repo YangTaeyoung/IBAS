@@ -2,11 +2,12 @@
   margin-top: 170px;
   width: 350px;
   height: 350px;
+  -webkit-transition: 0.7s all;
 }
 
 .ibas_logo:hover {
   transform: scale(1.1);
-  transition: 0.5s;
+  transition: 0.7s;
 }
 
 .ibas_background{
