@@ -13,6 +13,10 @@ from member import session
 def test_top_bar(request):
     # 세션은 세션이 있다고 가정한 것
     session.save_session(request,User.objects.get(pk='12162359'))
+
+    # 세션이 없다고 가정한 것
+    #request.session.clear()
+
     context = {}
     return render(request, "top_bar.html", context)
 
