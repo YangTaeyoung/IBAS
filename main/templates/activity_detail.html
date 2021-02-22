@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,6 +7,10 @@
     <title>Title</title>
 </head>
 <body>
-디테일 ㅇㅇㅇ
+게시글 번호 : {{ board_info.board_no }} <br>
+작성자 : {{ board_info.board_writer.user_name }} <br>
+제목 : {{ board_info.board_title }} <br>
+내용 : {{ board_info.board_cont }} <br>
+작성시간 : {{ board_info.board_created }} <br>
 </body>
 </html>
