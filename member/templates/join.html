@@ -1,90 +1,359 @@
+{% load static %}
+
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>입부 신청</title>
+    <!-- 여기서부터 기존 템플릿에 있던 것 -->
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="keywords" content=""/>
+    <meta name="author" content=""/>
+    <meta name="robots" content=""/>
+    <meta
+            name="description"
+            content="BizMap Directory & Listings HTML templates"
+    />
+    <meta
+            property="og:title"
+            content="BizMap Directory & Listings HTML templates"
+    />
+    <meta
+            property="og:description"
+            content="BizMap Directory & Listings HTML templates"
+    />
+    <meta property="og:image" content=""/>
+    <meta name="format-detection" content="telephone=no"/>
+
+    <!-- 주소창 상단 아이바스 로고 아이콘 -->
+    <link
+            rel="icon"
+            href="{% static 'images/logo.png' %}"
+            type="image/x-icon"
+    />
+    <link
+            rel="shortcut icon"
+            type="image/x-icon"
+            href="{% static 'images/logo.png' %}"
+    />
+
+    <!-- PAGE TITLE HERE -->
+    <title>입부신청</title>
+
+    <!-- MOBILE SPECIFIC -->
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <!--[if lt IE 9]>
+      <script src="{% static 'js/html5shiv.min.js' %}"></script>
+      <script src="{% static 'js/respond.min.js' %}"></script>
+    <![endif]-->
+
+    <!-- STYLESHEETS -->
+    <link
+            rel="stylesheet"
+            type="text/css"
+            href="{% static 'css/plugins.css' %}"
+    />
+    <link
+            rel="stylesheet"
+            type="text/css"
+            href="{% static 'css/style.css' %}"
+    />
+    <link
+            rel="stylesheet"
+            type="text/css"
+            href="{% static 'css/templete_1.css' %}"
+    />
+    <link
+            class="skin"
+            rel="stylesheet"
+            type="text/css"
+            href="{% static 'css/skin/skin-1.css' %}"
+    />
+
+    <!-- 여기까지 기존 템플릿에 있던 것 -->
+    <!--외부 css파일 받는 링크 / 이 html에서만 쓰는 것. -->
+    <link rel="stylesheet" href="{% static 'css/join.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/logo.css' %}"/>
+    <script>
+        function stu_check() // 학번 중복 체크를 위한 함수
+        {
+
+            stu_chk = document.getElementById("user_stu");// 사용자가 입력한 학번 오브젝트
+            {% for user_stu in stu_list %}
+                if (stu_chk.value === "{{ user_stu }}") // 이미 데이터베이스와 일치하는 학번이 있을경
+                {
+                    document.getElementById("error_text").style.display = "block"; // 에러메시지 출력
+                    document.getElementById("btn-next").disabled = "disabled"; // 다음 버튼 비활성화
+
+                    return 0;
+                }
+            {% endfor %}
+        }
+    </script>
 </head>
-<body>
-<form action="{% url 'join_chk' %}" method="post">
-    <table border="1">
-        {% csrf_token %}
-        <input type="hidden" id="user_token" name="user_token" value="{{ token }}"/>
-        <input type="hidden" id="user_auth" name="user_auth" value="4"/>
-        <input type="hidden" id="user_role" name="user_role" value="5"/>
-        <input type="hidden" id="is_activated" name="is_activated" value="0"/>
-        <input type="hidden" id="user_gen" name="user_gen" value="1"/>
-        <tr>
-            <td>
-                <label> 이름 </label>
-            </td>
-            <td>
-                <input type="text" name="user_name" value="{{ name }}"/>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label> 이메일 </label>
-            </td>
-            <td>
-                <input type="text" name="user_email" value="{{ email }}"/>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label> 핸드폰 번호 </label>
-            </td>
-            <td>
-                <input type="text" name="user_phone" value=""/>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label> 학번 </label>
-            </td>
-            <td>
-                <input type="text" name="user_stu"/>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label> 전공 </label>
-            </td>
-            <td>
-                <input type="text" name="user_major"/>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label> 학년 </label>
-            </td>
-            <td>
-                <label for="user_grade">학년</label>
-                <p>
-                    1학년
-                    <input type="radio" id="user_grade" name="user_grade" value="1">
-                </p>
-                <p>
-                    2학년
-                    <input type="radio" id="user_grade" name="user_grade" value="2">
-                </p>
-                <p>
-                    3학년
-                    <input type="radio" id="user_grade" name="user_grade" value="3">
-                </p>
-                <p>
-                    4학년 이상
-                    <input type="radio" id="user_grade" name="user_grade" value="4">
-                </p>
-            </td>
-        </tr>
-        <tr>
+<body id="bg">
+<div id="loading-area"></div>
+<div class="page-wraper">
+    <!-- Content -->
+    <div class="page-content dlab-login bg-primary"
+         style="background-position: top right; background-blend-mode: screen">
+        <div class="container-flex">
+            <div class="item_flex_lgn login-form-box">
+                <!-- 여기서부터 로그인 양식 시작  -->
+                <!-- 세로로 길쭉한 컨테이너-->
+                <div class="login-form form-position-center" style="left: -1%">
+                    <!--길쭉한 컨테이너 속 컨텐츠 컨테이너-->
+                    <div class="join-frame">
+                        <!-- 동아리 로고  -->
+                        <div class="logo-container-flex">
+                            <!-- a 태그로 인해 동아리 로고 클릭하면 메인화면으로 감.  -->
+                            <a href="{% url 'index' %}">
+                                <div>
+                                    <img src="{% static 'images/logo.png' %}" alt="현재 브라우저에서는 지원하지 않는 형식입니다."
+                                         width="150" height="150">
+                                </div>
+                            </a>
+                        </div>
 
-            <td colspan="2">1
-                <input type="submit" value="입부 신청">
-            </td>
-        </tr>
+                        <!-- 회원 가입 입력 폼 시작 -->
+                        <form action="{% if user_auth == "4" %}{% url 'join_chk' %}{% else %}{% url 'quest_chk' %}{% endif %}"
+                              method="post">
+                            <!-- 회원 가입 확인 함수:join_chk()로 전송 -->
+                            <!--POST전송을 위한 CSRF 토큰-->
+                            {% csrf_token %}
+                            <!-- 바로 사용하지 못하는 것들은 사전 설정함. -->
+                            <!--사전 설정-->
+                            <input type="hidden" id="user_token" name="user_token" value="{{ token }}"/>
+                            <input type="hidden" id="user_auth" name="user_auth" value="{{ user_auth }}"/> <!-- 기본 권한 -->
+                            <input type="hidden" id="user_role" name="user_role" value="5"/>
+                            <input type="hidden" id="is_activated" name="is_activated" value="0"/>
+                            <!-- 승인 전까지는 대기하도록 0으로 설정 -->
+                            <input type="hidden" id="user_gen" name="user_gen" value="1"/> <!-- 기수, 바꿔주는게 필요할 듯. -->
+                            <input type="hidden" id="user_pic" name="user_pic" value="{{ pic }}">
+                            <!-- 프로필 사진, 받아온 것 그대로 넘기기 -->
+                            <input type="hidden" name="user_email" value="{{ email }}"/> <!-- 이메일, 받아온 것 그대로 넘기기 -->
+                            <!-- 토큰 끝  -->
 
-    </table>
-</form>
+                            <!-- 입부신청 작성란 시작 -->
+                            <!-- 단답 작성란 시작 -->
+                            <div class="tab-content nav">
+                                <!-- <div id="register" class="tab-pane fade"> -->
+                                <div id="register" class="tab-pane active">
+                                    <div class="hr-sect">기본정보</div>
+                                    <!--이름 input / 구글이나 네이버로부터 정보 받아옴-->
+                                    <div class="form-group">
+                                        <input
+                                                id="user_name"
+                                                type="text"
+                                                name="user_name"
+                                                value="{{ name }}"
+                                                placeholder="이름"
+                                                class="form-control"
+                                                required=""
+                                        />
+                                    </div>
+
+                                    <!--이메일은 수정하지 못하도록 고정 / 구글이나 네이버로부터 정보 받아옴-->
+                                    <!-- 안에 적힐 내용의 css는 form-control_instead에서 지정함.  -->
+                                    <div class="form-group form-control_instead" style="background-color: #bcbcbc">
+                                        <b>{{ email }}</b>
+                                    </div>
+
+                                    <!-- 핸드폰 번호 input -->
+                                    <div class="form-group">
+                                        <input
+                                                id="user_phone"
+                                                type="tel"
+                                                name="user_phone"
+                                                class="form-control"
+                                                placeholder="핸드폰번호"
+                                                maxlength="13"
+                                                required=""
+                                                value="010-"
+                                                onkeyup="inputPhoneNumber(this)"
+                                        />
+                                    </div>
+                                    <!-- 학년, 학번 컨테이너 -->
+                                    <div class="form-container-flex form-group mb-0">
+                                        <!--학년 컨테이너-->
+                                        {% if user_auth == "4" %}
+                                            <div class="form-item-flex-std-grade">
+                                                <select name="user_grade" required="required">
+                                                    <option value="1">
+                                                        1학년
+                                                    </option>
+                                                    <option value="2">
+                                                        2학년
+                                                    </option>
+                                                    <option value="3">
+                                                        3학년
+                                                    </option>
+                                                    <option value="4">
+                                                        4학년 이상
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        {% else %}
+                                            <input type="hidden" name="user_grade" value="5"/>
+                                        {% endif %}
+                                        <!-- 학번 input -->
+                                        <div class="form-group form-item-flex-std-no">
+                                            <input
+                                                    id="user_stu"
+                                                    type="text"
+                                                    name="user_stu"
+                                                    class="form-control"
+                                                    required="required"
+                                                    {% if user_auth == "4" %}
+                                                    placeholder="학번"
+                                                    maxlength="8"
+                                                    {% else %}
+                                                    placeholder="교수번호"
+                                                    maxlength="6"
+                                                    {% endif %}
+                                                    onfocusout="stu_check()"
+                                                    onfocusin="document.getElementById('error_text').style.display = 'none';document.getElementById('btn-next').disabled = '';"
+                                                    onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"
+                                            />
+                                        </div>
+
+                                    </div>
+                                    <p id="error_text" class="error-text-id">입력하신 {% if user_auth == "4" %}학번이{% else %}교수번호가{% endif %} 이미 가입되어 있습니다.</p>
+                                    <!-- 전공 input -->
+                                    <div class="form-container-flex form-group mb-0">
+                                        <div class="form-item-flex-major">
+                                            <input
+                                                    type="text"
+                                                    id="user_major"
+                                                    name="user_major"
+                                                    placeholder="전공을 검색하려면 클릭하세요."
+                                                    class="form-control_instead"
+                                                    required="required"
+                                                    readonly="readonly"
+                                                    onclick="popUp()"
+                                            />
+                                        </div>
+                                        <!-- 전공 검색 버튼 -->
+                                        <div class="form-group" onclick="popUp()">
+                                            <i class="fa fa-search fa-2x form-item-flex-major-icon search-btn"></i>
+                                        </div>
+                                    </div>
+
+                                    <!-- 입부신청 버튼 -->
+                                    <div class="form-group mt-5 mb-5">
+                                        <input id="btn-next" type="submit" value="다음"
+                                               class="site-button button-md btn-block"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 입부신청 작성란  -->
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 오른쪽 이미지를 넣을 장소 시작 -->
+            <div class="item_flex_bg">
+                <div class="content-info">
+                    <ul class="list-info">
+                        <li>
+                            <div class="dlab-box">
+                                <i class="fa fa-check"></i>
+                                <p>깔삼한 유료 이미지를 넣을 것</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!--오른쪽 이미지 넣을 장소 끝-->
+        </div>
+    </div>
+</div>
+<div id="gray_shadow" class="gray_shadow" onclick="popDown()"></div>
+<!-- 전공 검색 팝업창 -->
+<div id="major-search-popup" class="card major-search-popup ">
+    <div class="card-header" style="display: flex; align-items: center; justify-content: space-between">
+        <h4 class="card-title"> 전공 검색 </h4>
+        <!-- 닫기 버튼 -->
+        <i class="fa fa-close fa-2x btn-exit" onclick="popDown()"></i>
+    </div>
+    <div class="card-body">
+
+
+        <!-- 검색 영역 -->
+        <div class="searchBox">
+            <input class="form-control" type="text" id="search" onkeyup="filter()" placeholder="전공을 입력하세요"/>
+        </div>
+        <!-- 전공 리스트 영역 -->
+
+        <hr/>
+        <div class="listBox">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>학교명</th>
+                    <th>단과대학</th>
+                    <th>학과명</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!--전공 리스트를 단과대학, 학과명 순으로 가져옴-->
+                {% for major in major_list %}
+                    <tr class="listInner" onclick="printResult({{ major.major_no }})">
+                        <th>인하대학교</th>
+                        <td class="colleges">{{ major.major_colleage }}</td>
+                        <td id="major_name_{{ major.major_no }}" class="major_names">{{ major.major_name }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Content END-->
+<button class="scroltop fa fa-chevron-up"></button>
+
+
+<!-- JAVASCRIPT FILES ========================================= -->
+<!-- 직접 만든 회원 가입 관련 JS-->
+<script src="{% static 'js/join.js' %}"></script>
+
+
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<!-- JQUERY.MIN JS -->
+<script src="{% static 'plugins/bootstrap/js/popper.min.js' %}"></script>
+<!-- BOOTSTRAP.MIN JS -->
+<script src="{% static 'plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+<!-- BOOTSTRAP.MIN JS -->
+<script src="{% static 'plugins/bootstrap-select/bootstrap-select.min.js' %}"></script>
+<script src="{% static 'plugins/bootstrap-select/bootstrap-select.min.js' %}"></script>
+<!-- FORM JS -->
+<script src="{% static 'plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.js' %}"></script>
+<!-- FORM JS -->
+<script src="{% static 'plugins/magnific-popup/magnific-popup.js' %}"></script>
+<!-- MAGNIFIC POPUP JS -->
+<script src="{% static 'plugins/counter/waypoints-min.js' %}"></script>
+<!-- WAYPOINTS JS -->
+<script src="{% static 'plugins/counter/counterup.min.js' %}"></script>
+<!-- COUNTERUP JS -->
+<script src="{% static 'plugins/imagesloaded/imagesloaded.js' %}"></script>
+<!-- IMAGESLOADED -->
+<script src="{% static 'plugins/masonry/masonry-3.1.4.js' %}"></script>
+<!-- MASONRY -->
+<script src="{% static 'plugins/masonry/masonry.filter.js' %}"></script>
+<!-- MASONRY -->
+<script src="{% static 'plugins/rangeslider/rangeslider.js' %}"></script>
+<!-- RANGESLIDER -->
+<script src="{% static 'plugins/owl-carousel/owl.carousel.js' %}"></script>
+<!-- OWL SLIDER -->
+<script src="{% static 'js/custom.js' %}"></script>
+<!-- CUSTOM FUCTIONS  -->
+<script src="{% static 'js/dz.carousel.js' %}"></script>
+<!-- SORTCODE FUCTIONS  -->
+<script src="{% static 'js/dz.ajax.js' %}"></script>
+<!-- CONTACT JS  -->
+
+
 </body>
 </html>

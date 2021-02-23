@@ -1,0 +1,119 @@
+/*페이지 전체 보기(마진과 패딩 없이 꽉 차게)*/
+/* 사용된 곳 : 배경사이즈 바로 밑 div*/
+.choose-size {
+    margin-top: 0;
+    padding-bottom: 0;
+}
+
+/* 페이지의 내용을 담을 테이블 */
+/* 사용된 곳 : 로고 및 제목과 본문을 담는 div*/
+.choose-flex {
+    position: relative;
+    display: flex;
+    height: 100%;
+    width: 100%;
+    margin: 0 auto;
+    justify-content: center;
+    align-content: center;
+}
+
+
+/* 페이지 내용을 담는 셀 */
+/* 사용된 곳 : content담는 최상위 div*/
+.choose-content {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
+
+/* 제일 큰 카드 커스텀 하기 위한 용도임. */
+/* 사용된 곳 : card 중 제일 상위 div */
+.choose-div {
+    background-color: white;
+    width: 700px;
+    height: 550px;
+    padding: 25px;
+    margin: 0 auto;
+    align-items: center;
+    justify-items: center;
+}
+
+/*choose-div width 안먹음에 대비함. 기존 템플릿이 가지고 있던 css 커스텀. */
+.dlab-login .content-info {
+    width: 700px;
+}
+
+/* 상위 카드를 grid로 만들어 주기 위함임.  */
+/* 사용된 곳 : 아이콘 div와 하위 카드 시작부분 사이*/
+.card-for-grid {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    row-gap: 30px;
+    column-gap: 20px;
+    margin-bottom: 50px;
+
+}
+
+/* 기존 템플릿이 가지고 있던 css 커스텀함. */
+/* 사용된 곳 : 하위 카드 2개 */
+.card-body {
+    text-align: center;
+     display: flex;
+    grid-template-columns: repeat(2,1fr);
+    row-gap: 30px;
+    column-gap: 30px;
+    flex-direction: column;
+    width: 428px;
+    height: 432px;
+    align-items: center;
+    justify-items: center;
+    padding: 0;
+    background-color: white;
+    border-radius: 3px;
+}
+
+/* 동아리 로고 시작 div*/
+.padding-bottom_20px {
+    padding-bottom: 20px;
+}
+/* 카드 안에 있는 이미지 크기 조정 위함. */
+/*사용된 것 : <img>*/
+.width_360px {
+    width: 360px;
+    }
+
+
+/*card 부분 / 보라색 div 안에 있는 큰 card임. */
+.big-card{
+    width: 450px;
+    height: 452px;
+    padding: 10px;
+    background-color: #8487b4;
+    display: flex;
+    align-items: baseline;
+    opacity: 0.7;
+}
+
+/* 하위 카드 부분에 마우스 올렸을 때*/
+.big-card:hover{
+    opacity: 1.0;
+}
+/*회원 유형을 선택해주세요 부분의 조정 위함. */
+.type-title-text{
+    margin-bottom: 40px;
+    color: white;
+}
+/*기존에 있던 card css를 커스텀함. */
+.card {
+    justify-content: center;
+    align-content: center;
+    width: 428px;
+    height: 432px;
+
+}
+/*페이지 컨텐츠를 전체적으로 위로 올리기 위함. */
+.dlab-bnr-inr.dlab-bnr-inr-md .dlab-home {
+    height: 100vh;
+    padding-top: 55px;
+    padding-bottom: 120px;
+}

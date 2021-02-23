@@ -9,9 +9,14 @@ from django.http import HttpResponseRedirect
 
 # Create your views here.
 
-# def index(request): # 메인 홈페이지 단순 이동 # 이거 사용 안하는 중
+# def index(request): # 메인 홈페이지 단순 이동
 #     return render(request, 'index.html', {})
 
+
+# 메인페이지 이동 함수
+def index(request):
+    context = {}
+    return render(request, "index.html", context)
 
 # 탑바 작업
 def test_top_bar(request):
@@ -24,11 +29,10 @@ def test_top_bar(request):
     context = {}
     return render(request, "top_bar.html", context)
 
-
-# 메인 작업
-def test_main(request):
-    context = {}  # 메인은 가져올 게 없음
-    return render(request, 'main.html', context)
+# 메인 작업 (적용됨.)
+# def test_main(request):
+#     context = {}
+#     return render(request, 'main.html', context)
 
 
 # 동아리 소개 작업할 것임

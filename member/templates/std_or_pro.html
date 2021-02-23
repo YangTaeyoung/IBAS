@@ -1,0 +1,148 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="keywords" content=""/>
+    <meta name="author" content=""/>
+    <meta name="robots" content=""/>
+    <meta name="description" content="BizMap Directory & Listings HTML templates"/>
+    <meta property="og:title" content="BizMap Directory & Listings HTML templates"/>
+    <meta property="og:description" content="BizMap Directory & Listings HTML templates"/>
+    <meta property="og:image" content=""/>
+    <meta name="format-detection" content="telephone=no">
+
+    <!-- 주소창 상단 아이바스 로고 아이콘 -->
+    <link rel="icon" href="{% static 'images/logo.png' %}" type="image/x-icon"/>
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'images/logo.png' %}"/>
+
+    <!-- PAGE TITLE HERE -->
+    <title>Choice</title>
+
+    <!-- MOBILE SPECIFIC -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--[if lt IE 9]>
+	<script src="{% static 'js/html5shiv.min.js' %}"></script>
+	<script src="{% static 'js/respond.min.js' %}"></script>
+	<![endif]-->
+
+    <!-- STYLESHEETS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/plugins.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/templete_1.css' %}">
+    <link class="skin" rel="stylesheet" type="text/css" href="{% static 'css/skin/skin-2.css' %}">
+
+    <!--커스텀 css-->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/std_or_pro.css' %}">
+
+
+</head>
+<body id="bg">
+<div id="loading-area"></div>
+<div class="page-wraper font-roboto">
+    <!-- Content -->
+    <!-- 배경 사이즈 -->
+    <!-- choose-size에 대한 내용은 std_or_pro.css에 정의되어 있음. -->
+    <div class="choose-size">
+        <!-- 배경 색, 효과 / 커스텀 안함 -->
+        <div
+                class="dlab-bnr-inr dlab-bnr-inr-md bnr-style1"
+                style="
+            background-color: #091069;
+            background-size: cover;
+          "
+                id="dezParticles"
+        >
+            <!-- 로고 및 제목과 본문을 담는 div 시작 -->
+            <!-- choose-flex에 대한 내용은 std_or_pro.css에 정의되어 있음. -->
+            <div class="choose-flex">
+                <!-- content담는 최상위 div -->
+                <!-- choose-content에 대한 내용은 std_or_pro.css에 정의되어 있음. -->
+                <div class="choose-content dlab-home">
+                    <!-- card 중 제일 상위 div , 제일 큰 card 부분임.  -->
+                    <!-- choose-div에 대한 내용은 std_or_pro.css에 정의되어 있음. -->
+                    <div>
+
+                        <!-- padding-bottom_20px에 대한 내용은 std_or_pro.css에 정의되어 있음. -->
+                        <div>
+                            <div class="padding-bottom_20px">
+                                <h3 class="type-title-text">회원 유형을 선택해 주세요. </h3>
+                            </div>
+                        </div>
+                        <!-- card-for-grid에 대한 내용은 std_or_pro.css에 정의되어 있음. -->
+                        <div class="card-for-grid">
+                            <!-- big-card에 대한 내용은 std_or_pro.css에 정의되어 있음. -->
+                            <div class="big-card" onclick="passAuth('2')">
+                                <!-- card에 대한 내용은 std_or_pro.css에 정의되어 있음. -->
+                                <div class="card mb-4 ">
+                                    <!-- card-body에 대한 내용은 std_or_pro.css에 정의되어 있음. -->
+                                    <div class="card-body not_opacity" id="pro">
+                                            <!-- width_360px에 대한 내용은 std_or_pro.css에 정의되어 있음. -->
+                                            <img src="{% static 'images/pro.png' %}"
+                                                 alt="현재 브라우저에서는 지원하지 않는 형식입니다."
+                                                 class="width_360px">
+                                            <h4>교수님</h4>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- big-card에 대한 내용은 std_or_pro.css에 정의되어 있음. -->
+                            <div class="big-card" onclick="passAuth('4')">
+                                <!-- card에 대한 내용은 std_or_pro.css에 정의되어 있음. -->
+                                <div class="card mb-4 ">
+                                    <!-- card-body에 대한 내용은 std_or_pro.css에 정의되어 있음. -->
+                                    <div class="card-body" id="std">
+                                            <!-- width_360px에 대한 내용은 std_or_pro.css에 정의되어 있음. -->
+                                            <img src="{% static 'images/std.png' %}"
+                                                 alt="현재 브라우저에서는 지원하지 않는 형식입니다."
+                                                 class="width_360px">
+                                            <h4>학생</h4>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Section Banner END -->
+<!-- 구글에서 가져온 파라미터를 입부신청 페이지로 전송 -->
+<form id="hd_form" action="{% url 'join' %}" method="post">
+    {% csrf_token %}
+    <input id="user_auth" type="hidden" name="user_auth"/>
+    <input type="hidden" name="email" value="{{ email }}"/>
+    <input type="hidden" name="name" value="{{ name }}"/>
+    <input type="hidden" name="pic" value="{{ pic }}"/>
+
+
+</form>
+</div>
+<!-- Content END-->
+<!-- 직접 만든 회원 가입 관련 JS-->
+<script src="{% static 'js/pass_form.js' %}"></script> <!-- 회원가입 -->
+<!-- JAVASCRIPT FILES ========================================= -->
+<script src="{% static 'js/jquery.min.js' %}"></script><!-- JQUERY.MIN JS -->
+<script src="{% static 'plugins/bootstrap/js/popper.min.js' %}"></script><!-- BOOTSTRAP.MIN JS -->
+<script src="{% static 'plugins/bootstrap/js/bootstrap.min.js' %}"></script><!-- BOOTSTRAP.MIN JS -->
+<script src="{% static 'plugins/bootstrap-select/bootstrap-select.min.js' %}"></script><!-- FORM JS -->
+<script src="{% static 'plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.js' %}"></script><!-- FORM JS -->
+<script src="{% static 'plugins/magnific-popup/magnific-popup.js' %}"></script><!-- MAGNIFIC POPUP JS -->
+<script src="{% static 'plugins/counter/waypoints-min.js' %}"></script><!-- WAYPOINTS JS -->
+<script src="{% static 'plugins/counter/counterup.min.js' %}"></script><!-- COUNTERUP JS -->
+<script src="{% static 'plugins/imagesloaded/imagesloaded.js' %}"></script><!-- IMAGESLOADED -->
+<script src="{% static 'plugins/masonry/masonry-3.1.4.js' %}"></script><!-- MASONRY -->
+<script src="{% static 'plugins/masonry/masonry.filter.js' %}"></script><!-- MASONRY -->
+<script src="{% static 'plugins/rangeslider/rangeslider.js' %}"></script><!-- RANGESLIDER -->
+<script src="{% static 'plugins/owl-carousel/owl.carousel.js' %}"></script><!-- OWL SLIDER -->
+<script src="{% static 'js/custom.js' %}"></script><!-- CUSTOM FUCTIONS  -->
+<script src="{% static 'js/dz.carousel.js' %}"></script><!-- SORTCODE FUCTIONS  -->
+<script src="{% static 'js/dz.ajax.js' %}"></script><!-- CONTACT JS  -->
+<script src="{% static 'plugins/particles/particles.js' %}"></script>
+<script src="{% static 'plugins/particles/particles.app.js' %}"></script>
+</body>
+</html>
