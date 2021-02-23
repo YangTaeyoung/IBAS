@@ -41,56 +41,68 @@
 <body id="bg">
 
 <div class="page-wraper">
-    <!-- Footer -->
+    <!-- Footer 하단바 시작 -->
     <footer>
+        <!-- content 담는 부분이 footer-top -->
+        <!-- footer-top에 대한 정의는 bottom_bar.css에 정의되어 있음. (height 관련) -->
         <div class="footer-top">
+            <!-- content 시작 -->
+            <!-- cont-grid에 대한 정의는 bottom_bar.css에 정의되어 있음. (grid 관련) -->
             <div class="cont-grid">
+                <!-- 로고 div 시작 -->
+                <!-- logo-center에 대한 정의는 bottom_bar.css에 정의되어 있음. (grid 관련) -->
                 <div class="logo-center">
-                    <!-- 여기 부분이 이미지임 -->
-                    <img src="{% static 'images/logo_white.png' %} " class="m-b15" alt="" width="300px">
+                    <!-- 여기 부분이 이미지임   -->
+                    <!-- width_300에 대한 정의는 bottom_bar.css에 정의되어 있음. (width 관련) -->
+                    <img src="{% static 'images/logo_white.png' %} " class="m-b15 width_300" alt="">
                 </div>
-                <div>
-                    <h5 class="m-b30 text-white">Contact us</h5>
-                    <table style="padding: 0">
+                <!-- 로고 div 끝 -->
+                <!-- contact us div 시작 -->
+                <!-- margin-left_70에 대한 정의는 bottom_bar.css에 정의되어 있음. (margin 관련) -->
+                <div class="margin-left_70">
+                    <h5 class="mb-2 text-white">Contact us</h5>
+                    <!-- contact us table 시작 -->
+                    <!-- padding_0에 대한 정의는 bottom_bar.css에 정의되어 있음. (padding 관련) -->
+                    <table class="padding_0">
                         <tr>
-                            <td class="td-size"><i class="fa fa-user"></i></td>
-                            <td><strong>회장이름: {{ request.session.chief_name }}</strong></td>
+                            <!-- td-size_small에 대한 정의는 bottom_bar.css에 정의되어 있음. (size 관련) -->
+                            <td class="td-size_small"><i class="fa fa-user"></i></td>
+                            <!-- td-size_big에 대한 정의는 bottom_bar.css에 정의되어 있음. (size 관련) -->
+                            <td class="td-size_big">회장 : {{ request.session.chief_name }}</td>
                         </tr>
                         <tr>
-                            <td class="td-size"><i class="ti-location-pin"></i></td>
-                            <td><strong>address</strong> 인하대학교 22212 인천광역시 미추홀구 인하로 100</td>
+                            <td class="td-size_small"><i class="ti-location-pin"></i></td>
+                            <td class="td-size_big">인하대학교 22212 인천광역시 미추홀구 인하로 100</td>
                         </tr>
                         <tr>
-                            <td class="td-size"><i class="ti-mobile"></i></td>
-                            <td class="td-size"><strong>phone</strong>{{ request.session.chief_phone }}100</td>
+                            <td class="td-size_small"><i class="ti-mobile"></i></td>
+                            <td class="td-size_big">{{ request.session.chief_phone }}100</td>
                         </tr>
                         <tr>
-                            <td class="td-size"><i class="ti-email"></i></td>
-                            <td class="td-size"><strong>email</strong>{{ request.session.chief_email }}</td>
+                            <td class="td-size_small"><i class="ti-email"></i></td>
+                            <td class="td-size_big">{{ request.session.chief_email }}</td>
                         </tr>
                     </table>
-{#                    <ul class="no-dot cont-table">#}
-{#                        <li><i class="fa fa-user"></i></li>#}
-{#                        <li><strong>회장이름: {{ request.session.chief_name }}</strong></li>#}
-{#                        <li><i class="ti-location-pin"></i></li>#}
-{#                        <li><strong>address</strong> 인하대학교 22212 인천광역시 미추홀구 인하로 100</li>#}
-{#                        <li><i class="ti-mobile"></i></li>#}
-{#                        <li><strong>phone</strong>{{ request.session.chief_phone }}</li>#}
-{#                        <li><i class="ti-email"></i></li>#}
-{#                        <li><strong>email</strong>{{ request.session.chief_email }}</li>#}
-{#                    </ul>#}
                 </div>
+                <!-- contact us div 끝 -->
+                <!-- 인하대 로고 div 시작 -->
+                <!-- logo-center에 대한 정의는 bottom_bar.css에 정의되어 있음. (grid 관련) -->
+                <div class="logo-center">
+                    <!-- 여기 부분이 이미지임 -->
+                    <!-- width_300에 대한 정의는 bottom_bar.css에 정의되어 있음. (width 관련) -->
+                    <img src="{% static 'images/logo_inha2.png' %} " class="m-b15 width_300" alt="">
+                </div>
+                <!-- 인하대 로고 div 끝 -->
 
             </div>
         </div>
+        <!-- copyright 부분 시작 -->
+        <!-- footer-bottom에 대한 정의는 bottom_bar.css에 정의되어 있음. (flex 관련) -->
         <div class="footer-bottom">
-            <div>
-                <div>
-                    <p class="fbottom-like" style="margin: 0">© 2021 Design With <a class="like-btn"
-                                                                                    href="javascript:void(0)">
-                    </a> By 조용식 & 김채림 </p>
-                </div>
-            </div>
+            <!-- design-with에 대한 정의는 bottom_bar.css에 정의되어 있음. (font, margin 관련) -->
+            <p class="fbottom-like design-with">© 2021 Design With <a class="like-btn"
+                                                                      href="javascript:void(0)">
+            </a> By 양태영, 신승연, 조용식, 김채림, 윤예진 </p>
         </div>
     </footer>
     <!-- Footer END-->
