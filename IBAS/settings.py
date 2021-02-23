@@ -152,6 +152,8 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
     '/home/ibas/Django/IBAS/main/static/',
 ]
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.
 # social 로그인 패키지 설정
 AUTHENTICATION_BACKENDS = (
     # Needed to login by username in Django admin, regardless of `allauth`
