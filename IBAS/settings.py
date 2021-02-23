@@ -99,11 +99,11 @@ WSGI_APPLICATION = 'IBAS.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'ibas_local',
+        'NAME': 'IBAS',
         'USER': 'root',
-        'PASSWORD': '1234',
+        'PASSWORD': 'bigdata1156--',
         'HOST': 'localhost',
-        'PORT': '3306',
+        'PORT': '3356',
     }
 }
 
@@ -146,7 +146,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
-STATIC_URL = 'main/static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(ROOT_DIR, '.static_root')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
