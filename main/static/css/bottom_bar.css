@@ -6,7 +6,7 @@
 .cont-grid {
     display: grid;
     grid-template-columns: repeat(3,1fr);
-
+    min-width: 1400px;
 }
 
 /* 사이즈와 위치 조절을 위해 만들어짐. */
@@ -58,4 +58,8 @@
 .design-with {
     margin: 0;
     font-size: 12px;
+}
+/* 창 줄여도 모양 변하지 않게 하기 위해 필요함. */
+.min-width_1400 {
+    min-width: 1400px;
 }

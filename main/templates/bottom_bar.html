@@ -18,7 +18,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="{% static 'images/favicon.png' %}"/>
 
     <!-- PAGE TITLE HERE -->
-    <title>BizMap Directory & Listings HTML templates</title>
+    <title>bottom_bar</title>
 
     <!-- MOBILE SPECIFIC -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -30,7 +30,7 @@
 
     <!-- STYLESHEETS -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/plugins.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style_1.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/template_1.css' %}">
     <link class="skin" rel="stylesheet" type="text/css" href="{% static 'css/skin/skin-1.css' %}">
 
@@ -40,7 +40,7 @@
 </head>
 <body id="bg">
 
-<div class="page-wraper">
+
     <!-- Footer 하단바 시작 -->
     <footer>
         <!-- content 담는 부분이 footer-top -->
@@ -89,16 +89,17 @@
                 <!-- logo-center에 대한 정의는 bottom_bar.css에 정의되어 있음. (grid 관련) -->
                 <div class="logo-center">
                     <!-- 여기 부분이 이미지임 -->
+                    <a href="https://www.inha.ac.kr">
                     <!-- width_300에 대한 정의는 bottom_bar.css에 정의되어 있음. (width 관련) -->
-                    <img src="{% static 'images/logo_inha2.png' %} " class="m-b15 width_300" alt="">
+                        <img src="{% static 'images/logo_inha2.png' %} " class="m-b15 width_300" alt="">
+                    </a>
                 </div>
                 <!-- 인하대 로고 div 끝 -->
-
             </div>
         </div>
         <!-- copyright 부분 시작 -->
-        <!-- footer-bottom에 대한 정의는 bottom_bar.css에 정의되어 있음. (flex 관련) -->
-        <div class="footer-bottom">
+        <!-- footer-bottom, min-width_1400에 대한 정의는 bottom_bar.css에 정의되어 있음. (flex 관련)(min-with 관련) -->
+        <div class="footer-bottom min-width_1400" >
             <!-- design-with에 대한 정의는 bottom_bar.css에 정의되어 있음. (font, margin 관련) -->
             <p class="fbottom-like design-with">© 2021 Design With <a class="like-btn"
                                                                       href="javascript:void(0)">
@@ -106,8 +107,8 @@
         </div>
     </footer>
     <!-- Footer END-->
-    <button class="scroltop fa fa-chevron-up"></button>
-</div>
+
+
 <!-- JAVASCRIPT FILES ========================================= -->
 <script src="{% static 'js/jquery.min.js' %}"></script><!-- JQUERY.MIN JS -->
 <script src="{% static 'plugins/bootstrap/js/popper.min.js' %}"></script><!-- BOOTSTRAP.MIN JS -->
