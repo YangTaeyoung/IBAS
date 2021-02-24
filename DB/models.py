@@ -307,7 +307,7 @@ class User(models.Model):
     user_joined = models.DateTimeField(db_column='USER_JOINED', auto_now_add=True)  # Field name made lowercase.
     user_grade = models.IntegerField(db_column='USER_GRADE')  # Field name made lowercase.
     user_gen = models.IntegerField(db_column='USER_GEN')  # Field name made lowercase.
-    is_activated = models.IntegerField(db_column='IS_ACTIVATED')  # Field name made lowercase.
+    is_activated = models.IntegerField(db_column='IS_ACTIVATED', default=0)  # Field name made lowercase.
     user_phone = models.CharField(db_column='USER_PHONE', unique=True, max_length=15)  # Field name made lowercase.
 
     class Meta:
@@ -357,7 +357,7 @@ class AccountEmailaddress(models.Model):
     email = models.CharField(unique=True, max_length=254)
     verified = models.IntegerField()
     primary = models.IntegerField()
-    user = models.ForeignKey('AuthUser', models.DO_NOTHING)
+    user = models.ForeignKey('AuthUser', on_delete=models.CASCADE)
 
     class Meta:
         managed = False
