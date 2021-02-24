@@ -1,3 +1,42 @@
- .introduce-margin-top_20 {
-     margin-top: 20px;
- }
+@font-face {
+    src: url("../fonts/NanumBarunGothic.ttf");
+    font-family: "NanumBarunGothic";
+}
+
+.introduce-font_nanumBarunGothic {
+    font-family: "NanumBarunGothic";
+}
+.introduce-letter-spacing_5 {
+    letter-spacing: 5px;
+}
+.introduce-margin-top_20 {
+    margin-top: 20px;
+}
+/*.introduce-box-bgColor {*/
+/*    background-color: #091069;*/
+/*    opacity: 0.5;*/
+/*}*/
+.introduce-box-bg {
+    background: rgba(0,0,0,0.1);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 40px 30px;
+    border-radius: 6px;
+    color: #fff;
+}
+.introduce-color_black {
+    color: black;
+}
+.introduce-history-box {
+    width: 1135px;
+    height: 430px;
+}
+.list-style_none {
+    list-style: none;
+}
+.introduce-history-grid {
+    display: grid;
+    grid-template-columns: 300px 100px 670px;
+}
+.introduce-align-items_start {
+    align-items: start;
+}
