@@ -45,10 +45,8 @@ INSTALLED_APPS = [
     'member',
     # 메인 관련 앱
     'main',
-    
-    # 임시 어플리케이션. 실제 프로젝트 시작 시 사라질 예정.
-    #'first',
 
+    'lecture',
 
     # 소셜 로그인 패키지: allauth 관련
     'allauth',
@@ -76,7 +74,12 @@ ROOT_URLCONF = 'IBAS.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates', '/home/ibas/Django/IBAS/templates']
+        'DIRS': [
+                    os.path.join(BASE_DIR, "templates"),
+                    #'/home/ibas/Django/IBAS/templates',
+                    'C:/proj/Django/IBAS/templates/'
+
+                 ]
         ,
         'APP_DIRS': True,
         'OPTIONS': {
@@ -101,9 +104,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'IBAS',
         'USER': 'root',
-        'PASSWORD': 'bigdata1156--',
+        'PASSWORD': '1234',
         'HOST': 'localhost',
-        'PORT': '3356',
+        'PORT': '3306',
     }
 }
 
@@ -150,10 +153,8 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(ROOT_DIR, '.static_root')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
-    '/home/ibas/Django/IBAS/main/static/',
+    'C:/proj/Django/IBAS/static/',
 ]
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.
 # social 로그인 패키지 설정
 AUTHENTICATION_BACKENDS = (
     # Needed to login by username in Django admin, regardless of `allauth`

@@ -5,8 +5,7 @@ from DB.models import AuthUser, User, ChiefCarrier, UserRole, Board, BoardFile, 
 from member import session
 from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect
-
-
+from member import session
 # Create your views here.
 
 # def index(request): # 메인 홈페이지 단순 이동
@@ -16,6 +15,8 @@ from django.http import HttpResponseRedirect
 # 메인페이지 이동 함수
 def index(request):
     context = {}
+    session.save_session(request, User.objects.get(pk=12162359))
+    session.save_chief(request, User.objects.filter(user_role=UserRole.objects.get(pk=1))[0])
     return render(request, "index.html", context)
 
 # 탑바 작업

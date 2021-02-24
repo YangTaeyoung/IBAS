@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>강의리스트</title>
+</head>
+<body>
+<a href="{% url 'lect_register' %}">등록</a>
+<table border="1">
+    <tr>
+        <th>강의명</th>
+        <th>강의 내용</th>
+        <th>강의자</th>
+        <th>강의 썸네일</th>
+        <th>강의 종류</th>
+        <th>강의 생성일</th>
+        <th>강의 상태</th>
+        <th>강의 계획</th>
+        <th>최대 수용인원</th>
+        <th>강의 장소/강의 링크</th>
+        <th>강의 방식</th>
+        <th>강의 마감일</th>
+        <th>비고</th>
+    </tr>
+    {% for lect in lect_list %}
+        <tr>
+            <td>{{ lect.lect_title }}</td>
+            <td>{{ lect.lect_intro }}</td>
+            <td>{{ lect.lect_chief.user_name }}</td>
+            <td>{{ lect.lect_pic }}</td>
+            <td>{{ lect.lect_type.type_name }}</td>
+            <td>{{ lect.lect_created }}</td>
+            <td>{{ lect.lect_state.state_name }}</td>
+            <td>{{ lect.lect_curri }}</td>
+            <td>{{ lect.lect_limit_num }}</td>
+            <td>{{ lect.lect_place_or_link }}</td>
+            <td>{{ lect.lect_method.method_name }}</td>
+            <td>{{ lect.lect_deadline }}</td>
+            <th>
+                <form action="{% url 'lect_update' %}" method="get">
+                    <input type="hidden" name="lect_no" value="{{ lect.lect_no }}">
+                    <input type="submit" value="수정">
+                </form>
+                <form id="lect_delete_form_{{ lect.lect_no }}" action="{% url 'lect_delete' %}" method="post">
+                    <input type="hidden" name="lect_no" value="{{ lect.lect_no }}">
+                </form>
+                <button type="button" onclick="chkDelete('{{ lect.lect_no }}')"></button>
+            </th>
+        </tr>
+    {% endfor %}
+
+</table>
+</body>
+</html>

@@ -138,7 +138,7 @@ class Lect(models.Model):
     lect_type = models.ForeignKey('LectType', models.DO_NOTHING, db_column='LECT_TYPE')  # Field name made lowercase.
     lect_created = models.DateTimeField(db_column='LECT_CREATED', auto_now_add=True)  # Field name made lowercase.
     lect_intro = models.CharField(db_column='LECT_INTRO', max_length=300)  # Field name made lowercase.
-    lect_state = models.ForeignKey('StateInfo', models.DO_NOTHING, db_column='LECT_STATE')  # Field name made lowercase.
+    lect_state = models.ForeignKey('StateInfo', models.DO_NOTHING, db_column='LECT_STATE', default=1)  # Field name made lowercase.
     lect_curri = models.TextField(db_column='LECT_CURRI')  # Field name made lowercase.
     lect_limit_num = models.IntegerField(db_column='LECT_LIMIT_NUM')  # Field name made lowercase.
     lect_place_or_link = models.CharField(db_column='LECT_PLACE_OR_LINK', max_length=1000)  # Field name made lowercase.

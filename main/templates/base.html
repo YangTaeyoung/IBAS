@@ -60,7 +60,6 @@
                                                                         style="margin-top: 4px; margin-bottom: 4px"></a>
                     </div>
 
-
                     <!--====================메뉴, 회원정보에 따른 버튼 시작====================-->
                     <div class="header-nav navbar-collapse collapse justify-content-end" id="navbarNavDropdown">
                         <ul class="nav navbar-nav">
@@ -89,7 +88,7 @@
                                 </ul>
                             </li>
                             <!--====================강의실을 상위메뉴로 가지고 있는 메뉴====================-->
-                            <li class="down active" style="padding-top: 7px"><a href="#">강의실 <i
+                            <li class="down active" style="padding-top: 7px"><a href="{% url 'lect_list' %}">강의실 <i
                                     class="fa fa-chevron-down"></i></a>
                                 <ul class="sub-menu">
                                     <li><a href="#">강의</a></li>
@@ -209,7 +208,7 @@
                         <!-- td-size_small에 대한 정의는 bottom_bar.css에 정의되어 있음. (size 관련) -->
                         <td class="td-size_small"><i class="fa fa-user"></i></td>
                         <!-- td-size_big에 대한 정의는 bottom_bar.css에 정의되어 있음. (size 관련) -->
-                        <td class="td-size_big">회장 : {{ request.session.chief_name }}</td>
+                        <td class="td-size_big">{{ request.session.chief_name }}(회장)</td>
                     </tr>
                     <tr>
                         <td class="td-size_small"><i class="ti-location-pin"></i></td>
@@ -217,7 +216,7 @@
                     </tr>
                     <tr>
                         <td class="td-size_small"><i class="ti-mobile"></i></td>
-                        <td class="td-size_big">{{ request.session.chief_phone }}100</td>
+                        <td class="td-size_big">{{ request.session.chief_phone }}</td>
                     </tr>
                     <tr>
                         <td class="td-size_small"><i class="ti-email"></i></td>
