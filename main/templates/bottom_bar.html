@@ -18,7 +18,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="{% static 'images/favicon.png' %}"/>
 
     <!-- PAGE TITLE HERE -->
-    <title>BizMap Directory & Listings HTML templates</title>
+    <title>bottom_bar</title>
 
     <!-- MOBILE SPECIFIC -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -30,50 +30,85 @@
 
     <!-- STYLESHEETS -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/plugins.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/templete.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style_1.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/template_1.css' %}">
     <link class="skin" rel="stylesheet" type="text/css" href="{% static 'css/skin/skin-1.css' %}">
+    <!--직접 만든거-->
+    <link class="skin" rel="stylesheet" type="text/css" href="{% static 'css/bottom_bar.css' %}">
 
 
 </head>
 <body id="bg">
-<div id="loading-area"></div>
-<div class="page-wraper">
-    <!-- Footer -->
-    <footer class="site-footer">
+
+
+    <!-- Footer 하단바 시작 -->
+    <footer>
+        <!-- content 담는 부분이 footer-top -->
+        <!-- footer-top에 대한 정의는 bottom_bar.css에 정의되어 있음. (height 관련) -->
         <div class="footer-top">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-5 col-lg-4 col-md-12 col-sm-12">
-                        <div class="widget">
-                            <!-- 여기 부분이 이미지임 -->
-                            <img src="{{ request.session.chief_pic }}" class="m-b15" alt="" width="180">
-                            <p class="text-capitalize m-b20">여기가 IBAS 로고 들어갈 곳임.</p>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-3 col-md-5 col-sm-12 col-12">
-                        <h5 class="m-b30 text-white">INHA IBAS</h5>
-                        <h5 class="m-b30 text-white">회장 이름 {{ request.session.chief_name }}</h5>
-                        <h5 class="m-b30 text-white">회장 전화번호 {{ request.session.chief_phone }}</h5>
-                        <h5 class="m-b30 text-white">회장 이메일 {{ request.session.chief_email }}</h5>
-                    </div>
+            <!-- content 시작 -->
+            <!-- cont-grid에 대한 정의는 bottom_bar.css에 정의되어 있음. (grid 관련) -->
+            <div class="cont-grid">
+                <!-- 로고 div 시작 -->
+                <!-- logo-center에 대한 정의는 bottom_bar.css에 정의되어 있음. (grid 관련) -->
+                <div class="logo-center">
+                    <!-- 여기 부분이 이미지임   -->
+                    <!-- width_300에 대한 정의는 bottom_bar.css에 정의되어 있음. (width 관련) -->
+                    <img src="{% static 'images/logo_white.png' %} " class="m-b15 width_300" alt="">
                 </div>
+                <!-- 로고 div 끝 -->
+                <!-- contact us div 시작 -->
+                <!-- margin-left_70에 대한 정의는 bottom_bar.css에 정의되어 있음. (margin 관련) -->
+                <div class="margin-left_70">
+                    <h5 class="mb-2 text-white">Contact us</h5>
+                    <!-- contact us table 시작 -->
+                    <!-- padding_0에 대한 정의는 bottom_bar.css에 정의되어 있음. (padding 관련) -->
+                    <table class="padding_0">
+                        <tr>
+                            <!-- td-size_small에 대한 정의는 bottom_bar.css에 정의되어 있음. (size 관련) -->
+                            <td class="td-size_small"><i class="fa fa-user"></i></td>
+                            <!-- td-size_big에 대한 정의는 bottom_bar.css에 정의되어 있음. (size 관련) -->
+                            <td class="td-size_big">회장 : {{ request.session.chief_name }}</td>
+                        </tr>
+                        <tr>
+                            <td class="td-size_small"><i class="ti-location-pin"></i></td>
+                            <td class="td-size_big">인하대학교 22212 인천광역시 미추홀구 인하로 100</td>
+                        </tr>
+                        <tr>
+                            <td class="td-size_small"><i class="ti-mobile"></i></td>
+                            <td class="td-size_big">{{ request.session.chief_phone }}100</td>
+                        </tr>
+                        <tr>
+                            <td class="td-size_small"><i class="ti-email"></i></td>
+                            <td class="td-size_big">{{ request.session.chief_email }}</td>
+                        </tr>
+                    </table>
+                </div>
+                <!-- contact us div 끝 -->
+                <!-- 인하대 로고 div 시작 -->
+                <!-- logo-center에 대한 정의는 bottom_bar.css에 정의되어 있음. (grid 관련) -->
+                <div class="logo-center">
+                    <!-- 여기 부분이 이미지임 -->
+                    <a href="https://www.inha.ac.kr">
+                    <!-- width_300에 대한 정의는 bottom_bar.css에 정의되어 있음. (width 관련) -->
+                        <img src="{% static 'images/bottomBar_logo_inha.png' %} " class="m-b15 width_300" alt="">
+                    </a>
+                </div>
+                <!-- 인하대 로고 div 끝 -->
             </div>
         </div>
-        <div class="footer-bottom">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12 text-center">
-                        <span class="fbottom-like">© 2021 Design With <a class="like-btn" href="javascript:void(0)">
-                        </a> By 조용식 & 김채림 </span>
-                    </div>
-                </div>
-            </div>
+        <!-- copyright 부분 시작 -->
+        <!-- footer-bottom, min-width_1400에 대한 정의는 bottom_bar.css에 정의되어 있음. (flex 관련)(min-with 관련) -->
+        <div class="footer-bottom min-width_1400" >
+            <!-- design-with에 대한 정의는 bottom_bar.css에 정의되어 있음. (font, margin 관련) -->
+            <p class="fbottom-like design-with">© 2021 Design With <a class="like-btn"
+                                                                      href="javascript:void(0)">
+            </a> By 양태영, 신승연, 조용식, 김채림, 윤예진 </p>
         </div>
     </footer>
     <!-- Footer END-->
-    <button class="scroltop fa fa-chevron-up"></button>
-</div>
+
+
 <!-- JAVASCRIPT FILES ========================================= -->
 <script src="{% static 'js/jquery.min.js' %}"></script><!-- JQUERY.MIN JS -->
 <script src="{% static 'plugins/bootstrap/js/popper.min.js' %}"></script><!-- BOOTSTRAP.MIN JS -->
