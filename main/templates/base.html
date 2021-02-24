@@ -1,0 +1,274 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="keywords" content=""/>
+    <meta name="author" content=""/>
+    <meta name="robots" content=""/>
+    <meta name="description" content="BizMap Directory & Listings HTML templates"/>
+    <meta property="og:title" content="BizMap Directory & Listings HTML templates"/>
+    <meta property="og:description" content="BizMap Directory & Listings HTML templates"/>
+    <meta property="og:image" content=""/>
+    <meta name="format-detection" content="telephone=no">
+
+    <!-- FAVICONS ICON -->
+    <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon"/>
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'images/favicon.png' %}"/>
+
+    <!-- PAGE TITLE HERE -->
+    <title>IBAS</title>
+
+    <!-- MOBILE SPECIFIC -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--[if lt IE 9]>
+	<script src="{% static 'js/html5shiv.min.js' %}"></script>
+	<script src="{% static 'js/respond.min.js' %}"></script>
+	<![endif]-->
+
+    <!-- STYLESHEETS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/plugins.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style_1.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/templete_1.css' %}">
+    <link class="skin" rel="stylesheet" type="text/css" href="{% static 'css/skin/skin-1.css' %}">
+    <!--직접 만든거-->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main_style.css' %}">
+    <link class="skin" rel="stylesheet" type="text/css" href="{% static 'css/bottom_bar.css' %}">
+
+
+</head>
+<body id="bg">
+<div id="loading-area"></div>
+<div class="page-wraper">
+    <!--임시로 넣어둠, 상단바 이후에 블럭처리해서 바꿀예정-->
+    <!--====================메뉴바 시작====================-->
+    <!-- header -->
+    <header class="site-header header-transparent mo-left">
+        <!-- main header -->
+        <div class="sticky-header main-bar-wraper navbar-expand-lg">
+            <div class="main-bar clearfix ">
+                <div class="container clearfix">
+                    <!-- ====ibas 로고 들어가는 곳==== -->
+                    <div class="logo-header mostion">
+                        <!--드래그 안했을 때 나오는 로고/href 메이페이지 링크 연결해줘야 함-->
+                        <a href="{% url 'index' %}" class="logo-1"><img src="{% static 'images/logo_white.png' %}"
+                                                                        style="margin-top: 4px; margin-bottom: 4px"></a>
+                        <!--밑으로 드래그 했을 때 나오는 로고/href 메이페이지 링크 연결해줘야 함-->
+                        <a href="{% url 'index' %}" class="logo-2"><img src="{% static 'images/logo_puple.png' %}"
+                                                                        style="margin-top: 4px; margin-bottom: 4px"></a>
+                    </div>
+
+
+                    <!--====================메뉴, 회원정보에 따른 버튼 시작====================-->
+                    <div class="header-nav navbar-collapse collapse justify-content-end" id="navbarNavDropdown">
+                        <ul class="nav navbar-nav">
+                            <!--====================IBAS 상위메뉴로 가지고 있는 메뉴====================-->
+                            <li class="down active" style="padding-top: 6px"><a href="#">IBAS <i
+                                    class="fa fa-chevron-down"></i></a>
+                                <ul class="sub-menu">
+                                    <li><a href="#">동아리 소개</a></li>
+                                    <li><a href="#">동아리 활동</a></li>
+
+                                    {# 밑에 있는 회계내역, 예산지원 신청은 회원들만 신청을 할 수 있음. #}
+                                    {% if request.session.user_stu is not None %}
+                                        <li><a href="#">회계내역</a></li>
+                                        <li><a href="#">예산지원신청</a></li>
+                                    {% endif %}
+                                </ul>
+                            </li>
+                            <!--====================게시판을 상위메뉴로 가지고 있는 메뉴====================-->
+                            <li class="down active" style="padding-top: 6px"><a href="#">게시판 <i
+                                    class="fa fa-chevron-down"></i></a>
+                                <ul class="sub-menu">
+                                    <li><a href="#">공지사항</a></li>
+                                    <li><a href="#">자유게시판</a></li>
+                                    <li><a href="#">질문게시판</a></li>
+                                    <li><a href="#">공모전게시판</a></li>
+                                </ul>
+                            </li>
+                            <!--====================강의실을 상위메뉴로 가지고 있는 메뉴====================-->
+                            <li class="down active" style="padding-top: 7px"><a href="#">강의실 <i
+                                    class="fa fa-chevron-down"></i></a>
+                                <ul class="sub-menu">
+                                    <li><a href="#">강의</a></li>
+                                    <li><a href="#">스터디</a></li>
+                                    <li><a href="#">취미모임</a></li>
+                                    <li><a href="#">강의개설신청</a></li>
+                                </ul>
+                            </li>
+                            <!--====================로그인 여부에 따라 다르게 보이는 곳====================-->
+                            <!--====================로그인했을 때====================-->
+                            {% if request.session.user_stu is not None %}
+                                <!--======로그아웃 버튼======-->
+                                <li class="active" onclick="printConfirm('정말 로그아웃 하시겠습니까?', '{% url "logout" %}')"
+                                    style="padding-top: 7px; padding-right: 10px">
+                                    <!--아래 href에 로그아웃하는 거 들어가야 함-->
+                                    <a href="#" style="padding: 19px 0px 0px 15px">Log Out</a>
+                                    <a class="ti-import rotate90" style="padding:15px 0px 20px 4px;"></a>
+                                </li>
+                                <!--======회원정보 뜨는 곳======-->
+                                <li class="active">
+                                    <!--아래 href에 마이페이지 링크 들어가야 함-->
+                                    <a href="#" style="padding-right: 7px;">
+                                        <!--==승인되지 않았을 때==-->
+                                        {% if request.session.is_activated == 0 %}
+                                            <img src="{{ request.session.user_pic }}" width="35" height="35" border="3"
+                                                 style=" border: 2px solid #ff3d3d; border-radius: 17.5px; margin-right: 3px"
+                                                 alt="현재 브라우저에서 지원하지 않는 형식입니다.">
+                                            {{ request.session.user_name }} 님
+                                            <ul class="sub-menu" style="text-align: center">
+                                                <a>아직 승인되지 않았습니다</a>
+                                            </ul>
+                                            <!--==승인되었을 때==-->
+                                        {% else %}
+                                            <img src="{{ request.session.user_pic }}" width="35" height="35" border="3"
+                                                 style=" border: 2px solid #0078ff; border-radius: 17.5px; margin-right: 3px"
+                                                 alt="현재 브라우저에서 지원하지 않는 형식입니다.">
+                                            {{ request.session.user_name }} 님
+                                        {% endif %}
+                                    </a>
+                                </li>
+                                <!--======알림 뜨는 부분======-->
+                                <li class="active dropdown dropdown-btn" style="padding:4px; margin-left: -13px">
+                                    <a class="fa fa-bell" style="padding-top: 22px"
+                                       class="site-button dropdown-toggle" id="dropdownMenuButton"
+                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <!--이거는 노란색 동그라미인데, 알림이 없으면 뜨지 않고, 알림이 있으면 뜨게해야 함-->
+                                        <div style="height: 6px; width: 6px; background-color: #e8af00; border-radius: 3px; margin: -18px 0px 0px 12px; position: relative; z-index: 2"></div>
+                                    </a>
+                                    <!--===종 버튼 누르면 아래가 뜸===-->
+                                    <!--===DB에서 가져와야함... 용식 유감...===-->
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton"
+                                         style="right: 14px; width: 204px;">
+                                        <a class="dropdown-item site-button-link" href="javascript:void(0);">
+                                            <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
+                                        <a class="dropdown-item site-button-link" href="javascript:void(0);">
+                                            <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
+                                        <a class="dropdown-item site-button-link" href="javascript:void(0);">
+                                            <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
+                                        <a class="dropdown-item site-button-link" href="javascript:void(0);">
+                                            <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
+                                        <a class="dropdown-item site-button-link" href="javascript:void(0);">
+                                            <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
+                                        <a class="dropdown-item site-button-link" href="javascript:void(0);">
+                                            <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
+                                    </div>
+                                </li>
+                                <!--====================로그인 하지 않았을 때====================-->
+                            {% else %}
+                                {# 현재 로그인 된 상황이 아니므로 로그인과 sign up이 나와야 한다. #}
+                                <li class="active" style="padding-top: 5px;">
+                                    <a href="{% url 'login' %}">Log In</a>
+                                </li>
+                                {#                                <li class="active" style="padding-top: 5px;">#}
+                                {#                                    <a href="#">Sign Up</a>#}
+                                {#                                </li>#}
+
+                            {% endif %}
+                        </ul>
+                    </div>
+                    <!--====================메뉴바, 회원정보에 따른 버튼 끝====================-->
+                </div>
+            </div>
+        </div>
+        <!-- main header END -->
+    </header>
+    <!-- header END -->
+    <!--====================메뉴바 끝====================-->
+</div>
+
+{% block content %}
+{% endblock %}
+
+<!-- Footer 하단바 시작 -->
+<footer>
+    <!-- content 담는 부분이 footer-top -->
+    <!-- footer-top에 대한 정의는 bottom_bar.css에 정의되어 있음. (height 관련) -->
+    <div class="footer-top">
+        <!-- content 시작 -->
+        <!-- cont-grid에 대한 정의는 bottom_bar.css에 정의되어 있음. (grid 관련) -->
+        <div class="cont-grid">
+            <!-- 로고 div 시작 -->
+            <!-- logo-center에 대한 정의는 bottom_bar.css에 정의되어 있음. (grid 관련) -->
+            <div class="logo-center">
+                <!-- 여기 부분이 이미지임   -->
+                <!-- width_300에 대한 정의는 bottom_bar.css에 정의되어 있음. (width 관련) -->
+                <img src="{% static 'images/logo_white.png' %} " class="m-b15 width_300" alt="">
+            </div>
+            <!-- 로고 div 끝 -->
+            <!-- contact us div 시작 -->
+            <!-- margin-left_70에 대한 정의는 bottom_bar.css에 정의되어 있음. (margin 관련) -->
+            <div class="margin-left_70">
+                <h5 class="mb-2 text-white">Contact us</h5>
+                <!-- contact us table 시작 -->
+                <!-- padding_0에 대한 정의는 bottom_bar.css에 정의되어 있음. (padding 관련) -->
+                <table class="padding_0">
+                    <tr>
+                        <!-- td-size_small에 대한 정의는 bottom_bar.css에 정의되어 있음. (size 관련) -->
+                        <td class="td-size_small"><i class="fa fa-user"></i></td>
+                        <!-- td-size_big에 대한 정의는 bottom_bar.css에 정의되어 있음. (size 관련) -->
+                        <td class="td-size_big">회장 : {{ request.session.chief_name }}</td>
+                    </tr>
+                    <tr>
+                        <td class="td-size_small"><i class="ti-location-pin"></i></td>
+                        <td class="td-size_big">인하대학교 22212 인천광역시 미추홀구 인하로 100</td>
+                    </tr>
+                    <tr>
+                        <td class="td-size_small"><i class="ti-mobile"></i></td>
+                        <td class="td-size_big">{{ request.session.chief_phone }}100</td>
+                    </tr>
+                    <tr>
+                        <td class="td-size_small"><i class="ti-email"></i></td>
+                        <td class="td-size_big">{{ request.session.chief_email }}</td>
+                    </tr>
+                </table>
+            </div>
+            <!-- contact us div 끝 -->
+            <!-- 인하대 로고 div 시작 -->
+            <!-- logo-center에 대한 정의는 bottom_bar.css에 정의되어 있음. (grid 관련) -->
+            <div class="logo-center">
+                <!-- 여기 부분이 이미지임 -->
+                <a href="https://www.inha.ac.kr">
+                    <!-- width_300에 대한 정의는 bottom_bar.css에 정의되어 있음. (width 관련) -->
+                    <img src="{% static 'images/logo_inha2.png' %} " class="m-b15 width_300" alt="">
+                </a>
+            </div>
+            <!-- 인하대 로고 div 끝 -->
+        </div>
+    </div>
+    <!-- copyright 부분 시작 -->
+    <!-- footer-bottom, min-width_1400에 대한 정의는 bottom_bar.css에 정의되어 있음. (flex 관련)(min-with 관련) -->
+    <div class="footer-bottom min-width_1400">
+        <!-- design-with에 대한 정의는 bottom_bar.css에 정의되어 있음. (font, margin 관련) -->
+        <p class="fbottom-like design-with">© 2021 Design With <a class="like-btn"
+                                                                  href="javascript:void(0)">
+        </a> By 양태영, 신승연, 조용식, 김채림, 윤예진 </p>
+    </div>
+</footer>
+<!-- Footer END-->
+<button class="scroltop fa fa-chevron-up"></button>
+</div>
+<!-- 직접 만든 js-->
+<script src="{% static 'js/login.js' %}"></script>
+<!-- JAVASCRIPT FILES ========================================= -->
+<script src="{% static 'js/jquery.min.js' %}"></script><!-- JQUERY.MIN JS -->
+<script src="{% static 'plugins/bootstrap/js/popper.min.js' %}"></script><!-- BOOTSTRAP.MIN JS -->
+<script src="{% static 'plugins/bootstrap/js/bootstrap.min.js' %}"></script><!-- BOOTSTRAP.MIN JS -->
+<script src="{% static 'plugins/bootstrap-select/bootstrap-select.min.js' %}"></script><!-- FORM JS -->
+<script src="{% static 'plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.js' %}"></script><!-- FORM JS -->
+<script src="{% static 'plugins/magnific-popup/magnific-popup.js' %}"></script><!-- MAGNIFIC POPUP JS -->
+<script src="{% static 'plugins/counter/waypoints-min.js' %}"></script><!-- WAYPOINTS JS -->
+<script src="{% static 'plugins/counter/counterup.min.js' %}"></script><!-- COUNTERUP JS -->
+<script src="{% static 'plugins/imagesloaded/imagesloaded.js' %}"></script><!-- IMAGESLOADED -->
+<script src="{% static 'plugins/masonry/masonry-3.1.4.js' %}"></script><!-- MASONRY -->
+<script src="{% static 'plugins/masonry/masonry.filter.js' %}"></script><!-- MASONRY -->
+<script src="{% static 'plugins/rangeslider/rangeslider.js' %}"></script><!-- RANGESLIDER -->
+<script src="{% static 'plugins/owl-carousel/owl.carousel.js' %}"></script><!-- OWL SLIDER -->
+<script src="{% static 'js/custom.js' %}"></script><!-- CUSTOM FUCTIONS  -->
+<script src="{% static 'js/dz.carousel.js' %}"></script><!-- SORTCODE FUCTIONS  -->
+<script src="{% static 'js/dz.ajax.js' %}"></script><!-- CONTACT JS  -->
+
+</body>
+</html>
