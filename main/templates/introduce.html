@@ -2,12 +2,12 @@
 {% load static %}
 {% block content %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/yejin.css' %}">
-
+<div class="">
     <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"
          style=" background-image: url('{% static 'images/main-name-background.jpg' %}')" ;>
         <div class="container">
             <div class="dlab-bnr-inr-entry">
-                <h1 class="text-white introduce-letter-spacing_5 ">동아리 소개</h1>
+                <h1 class="text-white introduce-letter-spacing_5">동아리 소개</h1>
                 <p class="introduce-margin-top_20">비즈니스 빅데이터 탐구 동아리 IBAS</p>
             </div>
         </div>
@@ -22,8 +22,8 @@
                 <p>경영대학 빅데이터 탐구동아리 Inha BAS(Bigdata Analyst Society)입니다. Inha BAS는 빅데이터에 관심이 있는 학생들이 모여 기초부터 하나씩 쌓아가기위해
                     만든 빅데이터 탐구동아리 입니다.</p>
             </div>
-            <div class="row">
-                <div class="col-lg-4 col-md-4">
+            <div class="introduce-contact-flex-container">
+                <div class="">
                     <div class="icon-bx-wraper center m-b30 introduce-box-bg">
                         <div class="icon-bx-lg radius bg-white m-b20">
                             <i class="fa fa-file-code-o introduce-color_black "></i>
@@ -36,7 +36,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-4">
+                <div class="">
                     <div class="icon-bx-wraper center m-b30 introduce-box-bg">
                         <div class="icon-bx-lg radius bg-white m-b20">
                             <i class="ti-pencil introduce-color_black "></i></div>
@@ -48,7 +48,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-4">
+                <div class="">
                     <div class="icon-bx-wraper center m-b30 introduce-box-bg">
                         <div class="icon-bx-lg radius bg-white m-b20"><i
                                 class="ti-game introduce-color_black "></i></div>
@@ -72,9 +72,9 @@
                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
                     labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud.</p>
             </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="row">
+
+
+                    <div>
                         <div id="owl-demo"
                              class="testimonial-one owl-loaded owl-theme owl-carousel owl-btn-center-lr owl-btn-3 owl-dots-primary-big">
                             <div class="item">
@@ -85,13 +85,13 @@
                                                  height="100" alt="">
                                         </div>
                                         <div class="client-info">
-                                            <h5 class="client-name">이준명</h5>
-                                            <span>경영학과</span>
+                                            <h5 class="client-name">{{ chief.user_name }}</h5>
+                                            <span>{{ chief.user_major.major_name }}</span>
                                         </div>
                                     </div>
                                     <div class="client-info-bx">
-                                        <h5>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                                            nisi ut aliquip. </h5>
+                                        <h5>{{ chief.user_phone }}</h5>
+                                        <h5>{{ chief.user_email }}</h5>
                                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
                                             eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
                                             ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
@@ -142,8 +142,8 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
+
+
         </div>
     </div>
     {#    #}
@@ -157,23 +157,107 @@
                     et dolore magna aliqua.</p>
             </div>
 
-            <div class="icon-bx-wraper center introduce-box-bg introduce-history-box introduce-history-grid introduce-color_black">
-                <div>
-                    2020년
+            <div class="icon-bx-wraper center introduce-box-bg introduce-history-box
+            introduce-history-grid introduce-color_black introduce-overflow_auto">
+                <div class="introduce-border-bottom">
+                    <p>2022년</p>
                 </div>
-                <div>
-                    09
+                <div class="introduce-border-bottom">
+                    <p>12</p>
+                    <p>11</p>
+                    <p>10</p>
+                    <p>09</p>
                 </div>
-                <div>
-                    동아리 개설
-                </div>
+                <div class="introduce-padding-bottom_24 introduce-border-bottom">
+                    <p class="introduce-align-items_start ">Lorem ipsum dolor sit amet</p>
+                    <p class="introduce-align-items_start ">Lorem ipsum dolor sit amet</p>
+                    <p class="introduce-align-items_start ">Lorem ipsum dolor sit amet</p>
+                    <p class="introduce-align-items_start ">Lorem ipsum dolor sit amet</p>
 
+                </div>
+                <div class="introduce-border-bottom introduce-margin-top_20">
+                    <p>2021년</p>
+                </div>
+                <div class="introduce-border-bottom introduce-margin-top_20">
+                    <p>12</p>
+                    <p>11</p>
+                    <p>10</p>
+                    <p>09</p>
+                </div>
+                <div class="introduce-padding-bottom_24 introduce-border-bottom introduce-margin-top_20">
+                    <p class="introduce-align-items_start ">Lorem ipsum dolor sit amet</p>
+                    <p class="introduce-align-items_start ">Lorem ipsum dolor sit amet</p>
+                    <p class="introduce-align-items_start ">Lorem ipsum dolor sit amet</p>
+                    <p class="introduce-align-items_start ">Lorem ipsum dolor sit amet</p>
+                </div>
+                <div class="introduce-margin-top_20">
+                    <p>2020년</p>
+                </div>
+                <div class=" introduce-margin-top_20">
+                    <p>12</p>
+                    <p>11</p>
+                    <p>10</p>
+                    <p>09</p>
+                </div>
+                <div class="introduce-padding-bottom_24 introduce-margin-top_20">
+                    <p class="introduce-align-items_start ">Lorem ipsum dolor sit amet</p>
+                    <p class="introduce-align-items_start ">Lorem ipsum dolor sit amet</p>
+                    <p class="introduce-align-items_start ">동아리 활동 시작</p>
+                    <p class="introduce-align-items_start ">동아리 개설</p>
+                </div>
             </div>
-
-
         </div>
     </div>
+    {#    #}
+    <div class="section-full content-inner " style="background-color: #f5f9ff;">
+        <div class="container">
 
+            <div class="section-head text-center">
+                <h2 class="box-title">회장단 소개</h2>
+                <div class="dlab-separator bg-primary" style="background-color: #091069"></div>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
+                    labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud.</p>
+            </div>
+            <div class="introduce-contact-flex-container">
+                <div class="row dzseth m-b50">
+                    <div class="m-b30">
+                        <div class="icon-bx-wraper p-lr20 p-tb50 center seth contact-bx introduce-contact-flex-item introduce-height_310">
+                            <div class="icon-bx-sm radius m-b20 bg-primary m-b20">
+                                <a href="#" class="icon-cell"><i class="ti-location-pin"></i></a>
+                            </div>
+                            <div class="icon-content">
+                                <h5 class="dlab-tilte text-uppercase">Address</h5>
+                                <p>인하대학교<br/>22212<br/>인천광역시 미추홀구 인하로 100</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-b30">
+                        <div class="icon-bx-wraper p-lr20 p-tb50 center seth contact-bx introduce-contact-flex-item introduce-height_310">
+                            <div class="icon-bx-sm radius m-b20 bg-primary m-b20">
+                                <a href="#" class="icon-cell"><i class="ti-email"></i></a>
+                            </div>
+                            <div class="icon-content">
+                                <h5 class="dlab-tilte text-uppercase">Email</h5>
+                                <p>{{ chief.user_email }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-b30">
+                        <div class="icon-bx-wraper p-lr20 p-tb50 center seth contact-bx introduce-contact-flex-item introduce-height_310">
+                            <div class="icon-bx-sm radius m-b20 bg-primary m-b20">
+                                <a href="#" class="icon-cell"><i class="ti-mobile"></i></a>
+                            </div>
+                            <div class="icon-content">
+                                <h5 class="dlab-tilte text-uppercase">Phone</h5>
+                                <p>{{ chief.user_phone }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 
