@@ -99,3 +99,6 @@ def test_activity_register(request):
         # activity_register
 
     return render(request, 'activity_register.html', {})
+
+def test_activity_v1(request):  # 입부신청 완료 페이지로 이동
+    return render(request, 'test_activity_v1.html', {})
