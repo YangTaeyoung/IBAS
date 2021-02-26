@@ -7,12 +7,6 @@ from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect
 
 
-# Create your views here.
-
-# def index(request): # 메인 홈페이지 단순 이동
-#     return render(request, 'index.html', {})
-
-
 # 메인페이지 이동 함수
 def index(request):
     # 세션은 세션이 있다고 가정한 것
@@ -27,21 +21,6 @@ def index(request):
     context = {}
     return render(request, "index.html", context)
 
-# 탑바 작업
-def test_top_bar(request):
-    # 세션은 세션이 있다고 가정한 것
-    session.save_session(request, User.objects.get(pk='12162359'))
-
-    # 세션이 없다고 가정한 것
-    # request.session.clear()
-    return render(request, "top_bar.html", {})
-
-# 메인 작업 (적용됨.)
-# def test_main(request):
-#     context = {}
-#     return render(request, 'main.html', context)
-
-
 # 동아리 소개 작업할 것임
 def test_introduce(request):
     chief = get_object_or_404(User, user_role=1)  # 회장의 역할(1) 인 사람의 객채를 가져옴
@@ -49,13 +28,7 @@ def test_introduce(request):
     context = {'chief': chief, 'sub_chief': sub_chief}  # context 에 넣어준다.
     return render(request, 'introduce.html', context)  # introduce 에 실어서 보내분다.
 
-
-def test_bottom_bar(request):
-    chief = User.objects.filter(user_role=get_object_or_404(UserRole, role_no=1))[0]  # 하단바에서 회장꺼만 들고오면 됌
-    session.save_chief(request, chief)  # 회장꺼 세션에 저장시켜줬음. save_chief 함수는 session 에 있음.
-    return render(request, 'bottom_bar.html', {})  # 세션만 적용하는 거라 딱히 보내줄 게 없음
-
-
+# 동아리 활동 게시판
 def test_activity(request):
     board_file_list = BoardFile.objects.all()
     # board_no 와 같은 파일 경로를 가져오기 위해서 사용했음.
@@ -77,14 +50,15 @@ def test_activity(request):
     return render(request, 'activity.html', {'board_list': item, 'board_file_list': board_file_list})
 
 
-def test_activity_detail(request):  # 자세히 보기를 위함
+# 동아리 활동 게시판 상세보기
+def test_activity_detail(request):
     if request.method == "POST":  # 자세히 보기를 하면
         board_info = get_object_or_404(Board, board_no=request.POST.get('board_list'))  # 게시글 번호로 게시글 내용을 들고옴
         return render(request, 'activity_detail.html', {'board_info': board_info})
     else:  # 파라미터가 제대로 넘어오지 않은 경우, 즉 비정상적인 경로를 통해 들어간 경우 바로 나오게 해준다.
         return HttpResponseRedirect('/test/test_activity/')
 
-
+# 동아리 활동 등록하기
 def test_activity_register(request):
     if request.method == "POST":
         type_no = BoardType.objects.get(pk=5)
