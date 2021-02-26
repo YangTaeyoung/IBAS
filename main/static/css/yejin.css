@@ -81,7 +81,7 @@
 }
 .introduce-navi {
     z-index: 1;
-    position: fixed;
+    position: absolute;
     text-align: center;
     /*left:10px;*/
     height: 280px;

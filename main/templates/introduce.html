@@ -3,55 +3,36 @@
 {% block content %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/yejin.css' %}">
     <script src="{% static 'js/yejin.js' %}"></script><!-- CONTACT JS  -->
-    <div class="">
+    <div class="clearfix">
         <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"
              style=" background-image: url('{% static 'images/main-name-background.jpg' %}')" ;>
-            <div class="container">
+            <div class="container clearfix">
                 <div class="dlab-bnr-inr-entry">
                     <h1 class="text-white introduce-letter-spacing_5">동아리 소개</h1>
                     <p class="introduce-margin-top_20">비즈니스 빅데이터 탐구 동아리 IBAS</p>
                 </div>
             </div>
         </div>
-        <!-- main header -->
-        {#        <div class="sticky-header main-bar-wraper navbar-expand-lg" >#}
-        {#            <div class="clearfix ">#}
-        {#                <div class="container clearfix">#}
-        <!--====================메뉴, 회원정보에 따른 버튼 시작====================-->
+
+        <!--====================네비게이션바 버튼 시작====================-->
         <div class="header-nav navbar-collapse " id="sideNav">
             <ul class="list-style_none nav introduce-navi introduce-width_130">
                 <li class="down active" style="padding-top: 5px"><i
-                                    class="fa fa-bars fa-4x" style="font-size: 4em; margin: 30px"></i>
-                                <ul class="sub-menu">
-                                    <li><a href="#introduce">동아리 소개</a></li>
-                                    <li><a href="#introduce_cm">운영진 소개</a></li>
-                                    <li><a href="#history">동아리 연혁</a></li>
-                                    <li><a href="#contact">Contact Us</a></li>
-                                </ul>
-                            </li>
-
+                        class="fa fa-bars fa-4x" style="font-size: 4em; margin: 30px"></i>
+                    <ul class="sub-menu">
+                        <li><a href="#introduce">동아리 소개</a></li>
+                        <li><a href="#introduce_cm">운영진 소개</a></li>
+                        <li><a href="#history">동아리 연혁</a></li>
+                        <li><a href="#contact">Contact Us</a></li>
+                    </ul>
+                </li>
             </ul>
         </div>
-        <!--====================메뉴바, 회원정보에 따른 버튼 끝====================-->
-        {#                </div>#}
-        {#            </div>#}
-        {#        </div>#}
-
-        {#        <div style="position: fixed">#}
-        {#            <ul class="introduce-display_inline-block introduce-border list-style_none">#}
-        {#                <li class="introduce-border-bottom"><a href="#">대메뉴1</a></li>#}
-        {#                <li class="introduce-border-bottom"><a href="#">대메뉴2</a></li>#}
-        {#                <li class="introduce-border-bottom"><a href="#">대메뉴3</a></li>#}
-        {#                <li><a href="#">대메뉴4</a></li>#}
-        {#            </ul>#}
-        {#        </div>#}
-        {#        #}
-
 
         {#    #}
         <div id="introduce" class="section-full bg-img-fix most-visited content-inner"
              style="background-image:url('{% static 'images/main-introduce.jpg' %}')" ;>
-            <div class="container" >
+            <div class="container">
                 <div class="section-head text-center">
                     <h2 class="box-title">동아리 소개</h2>
                     <div class="dlab-separator" style="background-color: #091069"></div>
@@ -103,6 +84,22 @@
                 </div>
             </div>
         </div>
+{#        #}
+        <!--====================네비게이션바 버튼 시작====================-->
+        <div class="header-nav navbar-collapse " id="sideNav">
+            <ul class="list-style_none nav introduce-navi introduce-width_130">
+                <li class="down active" style="padding-top: 5px"><i
+                        class="fa fa-bars fa-4x" style="font-size: 4em; margin: 30px"></i>
+                    <ul class="sub-menu">
+                        <li><a href="#introduce">동아리 소개</a></li>
+                        <li><a href="#introduce_cm">운영진 소개</a></li>
+                        <li><a href="#history">동아리 연혁</a></li>
+                        <li><a href="#contact">Contact Us</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
         {#    #}
         <div id="introduce_cm" class="section-full content-inner " style="background-color: #f5f9ff;">
             <div class="container">
@@ -183,6 +180,21 @@
             </div>
         </div>
         {#    #}
+        <!--====================네비게이션바 버튼 시작====================-->
+        <div class="header-nav navbar-collapse " id="sideNav">
+            <ul class="list-style_none nav introduce-navi introduce-width_130">
+                <li class="down active" style="padding-top: 5px"><i
+                        class="fa fa-bars fa-4x" style="font-size: 4em; margin: 30px"></i>
+                    <ul class="sub-menu">
+                        <li><a href="#introduce">동아리 소개</a></li>
+                        <li><a href="#introduce_cm">운영진 소개</a></li>
+                        <li><a href="#history">동아리 연혁</a></li>
+                        <li><a href="#contact">Contact Us</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+{##}
         <div id="history" class="section-full bg-img-fix most-visited content-inner "
              style="background-image:url('{% static 'images/main-introduce.jpg' %}')" ;>
             <div class="container">
@@ -246,6 +258,21 @@
             </div>
         </div>
         {#    #}
+        <!--====================네비게이션바 버튼 시작====================-->
+        <div class="header-nav navbar-collapse " id="sideNav">
+            <ul class="list-style_none nav introduce-navi introduce-width_130">
+                <li class="down active" style="padding-top: 5px"><i
+                        class="fa fa-bars fa-4x" style="font-size: 4em; margin: 30px"></i>
+                    <ul class="sub-menu">
+                        <li><a href="#introduce">동아리 소개</a></li>
+                        <li><a href="#introduce_cm">운영진 소개</a></li>
+                        <li><a href="#history">동아리 연혁</a></li>
+                        <li><a href="#contact">Contact Us</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+{##}
         <div id="contact" class="section-full content-inner " style="background-color: #f5f9ff;">
             <div class="container">
 
