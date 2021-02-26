@@ -73,7 +73,7 @@
                     labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud.</p>
             </div>
 
-
+                    <!--=============================회장==================-->
                     <div>
                         <div id="owl-demo"
                              class="testimonial-one owl-loaded owl-theme owl-carousel owl-btn-center-lr owl-btn-3 owl-dots-primary-big">
@@ -92,12 +92,12 @@
                                     <div class="client-info-bx">
                                         <h5>{{ chief.user_phone }}</h5>
                                         <h5>{{ chief.user_email }}</h5>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                                            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-                                            ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
+                                        <p>이건 회장 정보 꺼내오는 쿼리문</p>
                                     </div>
                                 </div>
                             </div>
+
+                            <!--=============부회장=========================-->
                             <div class="item">
                                 <div class="client-box">
                                     <div class="client-detail">
@@ -106,16 +106,14 @@
                                                  height="100" alt="">
                                         </div>
                                         <div class="client-info">
-                                            <h5 class="client-name">김동욱</h5>
-                                            <span>경영학과</span>
+                                            <h5 class="client-name">{{ sub_chief.user_name }}</h5>
+                                            <span>{{ sub_chief.user_major.major_name }}</span>
                                         </div>
                                     </div>
                                     <div class="client-info-bx">
                                         <h5>{{ sub_chief.user_phone }}</h5>
                                         <h5>{{ sub_chief.user_email }}</h5>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                                            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-                                            ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
+                                        <p>이건 부회장 정보 꺼내오는 쿼리문</p>
                                     </div>
                                 </div>
                             </div>
