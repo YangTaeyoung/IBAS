@@ -71,15 +71,13 @@ def test_activity_register(request):
             board_writer=user_stu)
         activity_register.save()
 
-        # activity_register = {
-        #     'board_type_no' : 5,
-        #     'board_title' : request.POST.get('activity_title') ,
-        #     'board_cont' : request.POST.get('activity_cont'),
-        #     'board_writer' : request.session.get('user_stu'),
-        # }
-        # activity_register
-
-    return render(request, 'activity_register.html', {})
+        # 조용식이 만지고 있는 중
+        for img in request.FILES.getlist('activity_file'):
+            board_file = BoardFile()
+            board_file.board_no = Board.objects.get(pk=activity_register.board_no)
+            board_file.board_file_path = img
+            board_file.save()
+    return render(request, 'activity.html', {})
 
 def test_activity_v1(request):  # 입부신청 완료 페이지로 이동
     return render(request, 'test_activity_v1.html', {})
