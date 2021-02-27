@@ -152,6 +152,12 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
     '/home/ibas/Django/IBAS/main/static/',
 ]
+
+# 미디어 파일을 관리할 루트 media 디렉터리
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# 각 media file에 대한 URL prefix
+MEDIA_URL = '/media/'
+
 # social 로그인 패키지 설정
 AUTHENTICATION_BACKENDS = (
     # Needed to login by username in Django admin, regardless of `allauth`
