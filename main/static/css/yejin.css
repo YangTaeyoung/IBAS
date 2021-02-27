@@ -1,0 +1,96 @@
+@font-face {
+    src: url("../fonts/NanumBarunGothic.ttf");
+    font-family: "NanumBarunGothic";
+}
+
+
+.introduce-font_nanumBarunGothic {
+    font-family: "NanumBarunGothic";
+}
+.introduce-letter-spacing_5 {
+    letter-spacing: 5px;
+}
+.introduce-margin-top_20 {
+    margin-top: 20px;
+}
+/*.introduce-box-bgColor {*/
+/*    background-color: #091069;*/
+/*    opacity: 0.5;*/
+/*}*/
+.introduce-box-bg {
+    background: rgba(0,0,0,0.1);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 30px 50px;
+    border-radius: 6px;
+    color: #fff;
+    margin: 0 25px;
+}
+.introduce-color_black {
+    color: black;
+}
+.introduce-history-box {
+    width: 1135px;
+    height: 430px;
+}
+.list-style_none {
+    list-style: none;
+}
+.introduce-history-grid {
+    display: grid;
+    grid-template-columns: 300px 100px 630px;
+}
+.introduce-align-items_start {
+    display: flex;
+    align-items: start;
+}
+.introduce-overflow_auto {
+    overflow: auto;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+.introduce-overflow_auto::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+}
+.introduce-padding-bottom_24 {
+    padding-bottom: 24px;
+}
+.introduce-border-bottom {
+    border-bottom: #8f8f8f solid 1px;
+}
+.introduce-contact-flex-container {
+    display: flex;
+    justify-content: center;
+}
+.introduce-contact-flex-item {
+    width: 270px;
+    margin: 0 20px
+}
+.introduce-height_310 {
+    height: 310px;
+}
+.introduce-height_380 {
+    max-height: 380px;
+    min-height: 380px;
+}
+.introduce-display_inline-block {
+    display: inline-block;
+}
+.introduce-border {
+     border: #8f8f8f solid 1px;
+}
+.introduce-navi {
+    z-index: 1;
+    position: absolute;
+    text-align: center;
+    /*left:10px;*/
+    height: 280px;
+    /*margin: 90px 20px ;*/
+}
+.introduce-width_130 {
+    width: 130px;
+}
+/*.active {*/
+/*  position: fixed;*/
+/*  top: 0px;*/
+/*}*/

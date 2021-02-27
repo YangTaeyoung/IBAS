@@ -68,8 +68,10 @@
                             <li class="down active" style="padding-top: 6px"><a href="#">IBAS <i
                                     class="fa fa-chevron-down"></i></a>
                                 <ul class="sub-menu">
-                                    <li><a href="#">동아리 소개</a></li>
-                                    <li><a href="#">동아리 활동</a></li>
+                                <!-- 동아리 소개를 누를 경우 url로 넘어간다. -->
+                                    <li><a href="{% url 'test_introduce' %}">동아리 소개</a></li>
+                                <!-- 동아리 활동를 누를 경우 url로 넘어간다. -->
+                                    <li><a href="{% url 'test_activity' %}">동아리 활동</a></li>
 
                                     {# 밑에 있는 회계내역, 예산지원 신청은 회원들만 신청을 할 수 있음. #}
                                     {% if request.session.user_stu is not None %}
@@ -165,10 +167,9 @@
                                 <li class="active" style="padding-top: 5px;">
                                     <a href="{% url 'login' %}">Log In</a>
                                 </li>
-                                {#                                <li class="active" style="padding-top: 5px;">#}
-                                {#                                    <a href="#">Sign Up</a>#}
-                                {#                                </li>#}
-
+{#                                                                <li class="active" style="padding-top: 5px;">#}
+{#                                                                    <a href="#">Sign Up</a>#}
+{#                                                                </li>#}
                             {% endif %}
                         </ul>
                     </div>
@@ -220,7 +221,7 @@
                     </tr>
                     <tr>
                         <td class="td-size_small"><i class="ti-mobile"></i></td>
-                        <td class="td-size_big">{{ request.session.chief_phone }}100</td>
+                        <td class="td-size_big">{{ request.session.chief_phone }}</td>
                     </tr>
                     <tr>
                         <td class="td-size_small"><i class="ti-email"></i></td>
@@ -235,7 +236,7 @@
                 <!-- 여기 부분이 이미지임 -->
                 <a href="https://www.inha.ac.kr">
                     <!-- width_300에 대한 정의는 bottom_bar.css에 정의되어 있음. (width 관련) -->
-                    <img src="{% static 'images/logo_inha2.png' %} " class="m-b15 width_300" alt="">
+                    <img src="{% static 'images/logo_inha.png' %} " class="m-b15 width_300" alt="">
                 </a>
             </div>
             <!-- 인하대 로고 div 끝 -->

@@ -37,6 +37,13 @@
 {% endfor %}
 <!-- 여기까지가 파일을 하나씩 가져오는 코드 -->
 
+<!-- ===============용식====================-->
+<!--파일 업로드 테스트 중 -->
+{% for pho in board.board_file_list_set.all %}
+    <img src="{{ pho.image.url }}"><br>
+{% endfor %}
+
+
 <!-- 세션 처리 해야함 -->
     <a href="{% url 'test_activity_register' %}">글쓰기</a><br>
 
