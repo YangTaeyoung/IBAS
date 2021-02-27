@@ -10,7 +10,7 @@ from django.http import HttpResponseRedirect
 # 메인페이지 이동 함수
 def index(request):
     # 세션은 세션이 있다고 가정한 것
-    session.save_session(request, User.objects.get(pk='12162359'))
+    session.save_session(request, User.objects.get(pk='1002'))
 
     # 세션이 없다고 가정한 것
     # request.session.clear()
@@ -77,7 +77,8 @@ def test_activity_register(request):
             board_file.board_no = Board.objects.get(pk=activity_register.board_no)
             board_file.board_file_path = img
             board_file.save()
-    return render(request, 'activity.html', {})
+        return render(request, 'activity.html', {})
+    return render(request, 'activity_register.html', {})
 
 def test_activity_v1(request):  # 입부신청 완료 페이지로 이동
     return render(request, 'test_activity_v1.html', {})
