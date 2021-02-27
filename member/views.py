@@ -7,6 +7,8 @@ from DB.models import AuthUser, User, UserAuth, UserRole, QuestForm, Answer, \
 from django.http import HttpResponseRedirect
 # 내가 만든 세션 모듈 불러오기
 from . import session
+from urllib.request import urlretrieve # 인터넷에 있는 파일 다운로드
+
 
 
 # Create your views here.
@@ -31,7 +33,9 @@ def choose_std_or_pro(request):  # 학생인지, 교수인지 고르게 하는 �
                 pic = tar_member.extra_data.get('picture')  # extra_data 테이블에서 꺼내는 변수를 picture로 설정
             elif tar_member.provider == "naver":  # 사용자가 네이버를 통해 로그인 한 경우
                 pic = tar_member.extra_data.get('profile_image')  # extra_data 테이블에서 꺼내는 변수를 profile_image로 설정
-
+            if pic != "0":
+                urlretrieve(pic, "/home/ibas/Django/IBAS/member/media/user/" + email + "_" + name + ".jpg")
+                pic = "/home/ibas/Django/IBAS/member/media/user/" + email + "_" + name + ".jpg"
             # 소셜 로그인으로 부터 받은 정보는 저장하지 않기 위해 해당 정보 삭제
             tar_token.delete()
             tar_member.delete()
