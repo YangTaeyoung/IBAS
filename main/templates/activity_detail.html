@@ -7,6 +7,14 @@
     <title>Title</title>
 </head>
 <body>
+
+
+{% for image in board_info.boardfile_set.all %}
+    {{ image.board_file_path }}
+    <img src="../../media/{{ image.board_file_path }}" style="width: 300px; height: 300px"><br>
+    <br>
+{% endfor %}
+
 게시글 번호 : {{ board_info.board_no }} <br>
 작성자 : {{ board_info.board_writer.user_name }} <br>
 제목 : {{ board_info.board_title }} <br>

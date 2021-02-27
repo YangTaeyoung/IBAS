@@ -24,7 +24,7 @@
         {% if board.board_no == board_file.board_no.board_no %}
             <form action="{% url 'test_activity_detail' %}" method="POST">
                 {% csrf_token %}
-                <img src="{{ board_file.board_file_path }}" style="width: 300px; height: 300px"><br>
+                <img src="../../media/{{ board_file.board_file_path }}" style="width: 300px; height: 300px"><br>
                     제목 : {{ board.board_title }} <br>
                     작성시간 : {{ board.board_created }} <br>
                     작성자 : {{ board.board_writer.user_name }} <br>
@@ -36,12 +36,6 @@
     {% endfor %}
 {% endfor %}
 <!-- 여기까지가 파일을 하나씩 가져오는 코드 -->
-
-<!-- ===============용식====================-->
-<!--파일 업로드 테스트 중 -->
-{% for pho in board.board_file_list_set.all %}
-    <img src="{{ pho.image.url }}"><br>
-{% endfor %}
 
 
 <!-- 세션 처리 해야함 -->
