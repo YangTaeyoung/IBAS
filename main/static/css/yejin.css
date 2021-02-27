@@ -69,3 +69,28 @@
 .introduce-height_310 {
     height: 310px;
 }
+.introduce-height_380 {
+    max-height: 380px;
+    min-height: 380px;
+}
+.introduce-display_inline-block {
+    display: inline-block;
+}
+.introduce-border {
+     border: #8f8f8f solid 1px;
+}
+.introduce-navi {
+    z-index: 1;
+    position: absolute;
+    text-align: center;
+    /*left:10px;*/
+    height: 280px;
+    /*margin: 90px 20px ;*/
+}
+.introduce-width_130 {
+    width: 130px;
+}
+/*.active {*/
+/*  position: fixed;*/
+/*  top: 0px;*/
+/*}*/
