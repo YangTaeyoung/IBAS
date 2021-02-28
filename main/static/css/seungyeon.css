@@ -1,3 +1,13 @@
-.test {
-    height: 300px;
+/* activity 게시판 게시글 사진 크기 */
+.act-img-size {
+    height: 350px;
+}
+
+/* 한 줄이 넘어가는 제목에 대해서는 ...으로 표시 */
+.line1 {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: white;
 }
