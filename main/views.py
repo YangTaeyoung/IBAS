@@ -16,10 +16,10 @@ from django.http import HttpResponseRedirect
 # 메인페이지 이동 함수
 def index(request):
     # 세션은 세션이 있다고 가정한 것
-    session.save_session(request, User.objects.get(pk='12162359'))
+    # session.save_session(request, User.objects.get(pk='12162359'))
 
     # 세션이 없다고 가정한 것
-    # request.session.clear()
+    request.session.clear()
 
     chief = User.objects.filter(user_role=get_object_or_404(UserRole, role_no=1))[0]  # 하단바에서 회장꺼만 들고오면 됌
     session.save_chief(request, chief)  # 회장꺼 세션에 저장시켜줬음. save_chief 함수는 session 에 있음.
