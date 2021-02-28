@@ -11,8 +11,7 @@
 
 /* 사이즈와 위치 조절을 위해 만들어짐. */
 .footer-top {
-    height: 200px;
-    padding: 30px 0;
+    height: auto;
 }
 
 /* 로고 위치 조정을 위해 만들어짐. */

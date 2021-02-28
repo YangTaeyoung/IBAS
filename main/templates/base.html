@@ -114,7 +114,8 @@
                                     <a href="#" style="padding-right: 7px;">
                                         <!--==승인되지 않았을 때==-->
                                         {% if request.session.is_activated == 0 %}
-                                            <img src="/media/{{ request.session.user_pic }}" width="35" height="35" border="3"
+                                            <img src="/media/{{ request.session.user_pic }}" width="35" height="35"
+                                                 border="3"
                                                  style=" border: 2px solid #ff3d3d; border-radius: 17.5px; margin-right: 3px"
                                                  alt="현재 브라우저에서 지원하지 않는 형식입니다.">
                                             {{ request.session.user_name }} 님
@@ -239,15 +240,16 @@
             </div>
             <!-- 인하대 로고 div 끝 -->
         </div>
+        <!-- copyright 부분 시작 -->
+        <!-- footer-bottom, min-width_1400에 대한 정의는 bottom_bar.css에 정의되어 있음. (flex 관련)(min-with 관련) -->
+        <div class="footer-bottom min-width_1400 bg-transparent">
+            <!-- design-with에 대한 정의는 bottom_bar.css에 정의되어 있음. (font, margin 관련) -->
+            <p class="fbottom-like design-with">© 2021 Design With <a class="like-btn"
+                                                                      href="javascript:void(0)">
+            </a> By 양태영, 신승연, 조용식, 김채림, 윤예진 </p>
+        </div>
     </div>
-    <!-- copyright 부분 시작 -->
-    <!-- footer-bottom, min-width_1400에 대한 정의는 bottom_bar.css에 정의되어 있음. (flex 관련)(min-with 관련) -->
-    <div class="footer-bottom min-width_1400">
-        <!-- design-with에 대한 정의는 bottom_bar.css에 정의되어 있음. (font, margin 관련) -->
-        <p class="fbottom-like design-with">© 2021 Design With <a class="like-btn"
-                                                                  href="javascript:void(0)">
-        </a> By 양태영, 신승연, 조용식, 김채림, 윤예진 </p>
-    </div>
+
 </footer>
 <!-- Footer END-->
 <button class="scroltop fa fa-chevron-up"></button>
