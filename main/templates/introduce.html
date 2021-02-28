@@ -2,225 +2,324 @@
 {% load static %}
 {% block content %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/yejin.css' %}">
+    <script src="{% static 'js/yejin.js' %}"></script><!-- CONTACT JS  -->
+    <div class="clearfix">
+        <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"
+             style=" background-image: url('{% static 'images/main-name-background.jpg' %}')" ;>
+            <div class="container clearfix">
+                <div class="dlab-bnr-inr-entry">
+                    <h1 class="text-white introduce-letter-spacing_5">동아리 소개</h1>
+                    <p class="introduce-margin-top_20">비즈니스 빅데이터 탐구 동아리 IBAS</p>
+                </div>
+            </div>
+        </div>
 
-    <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"
-         style=" background-image: url('{% static 'images/main-name-background.jpg' %}')" ;>
-        <div class="container">
-            <div class="dlab-bnr-inr-entry">
-                <h1 class="text-white introduce-letter-spacing_5 ">동아리 소개</h1>
-                <p class="introduce-margin-top_20">비즈니스 빅데이터 탐구 동아리 IBAS</p>
-            </div>
+        <!--====================네비게이션바 버튼 시작====================-->
+        <div class="header-nav navbar-collapse " id="sideNav">
+            <ul class="list-style_none nav introduce-navi introduce-width_130">
+                <li class="down active" style="padding-top: 5px"><i
+                        class="fa fa-bars fa-4x" style="font-size: 4em; margin: 30px"></i>
+                    <ul class="sub-menu">
+                        <li><a href="#introduce">동아리 소개</a></li>
+                        <li><a href="#introduce_cm">운영진 소개</a></li>
+                        <li><a href="#history">동아리 연혁</a></li>
+                        <li><a href="#contact">Contact Us</a></li>
+                    </ul>
+                </li>
+            </ul>
         </div>
-    </div>
-    {#    #}
-    <div class="section-full bg-img-fix most-visited content-inner"
-         style="background-image:url('{% static 'images/main-introduce.jpg' %}')" ;>
-        <div class="container">
-            <div class="section-head text-center">
-                <h2 class="box-title">동아리 소개</h2>
-                <div class="dlab-separator" style="background-color: #091069"></div>
-                <p>경영대학 빅데이터 탐구동아리 Inha BAS(Bigdata Analyst Society)입니다. Inha BAS는 빅데이터에 관심이 있는 학생들이 모여 기초부터 하나씩 쌓아가기위해
-                    만든 빅데이터 탐구동아리 입니다.</p>
-            </div>
-            <div class="row">
-                <div class="col-lg-4 col-md-4">
-                    <div class="icon-bx-wraper center m-b30 introduce-box-bg">
-                        <div class="icon-bx-lg radius bg-white m-b20">
-                            <i class="fa fa-file-code-o introduce-color_black "></i>
-                        </div>
-                        <div class="icon-content">
-                            <h3 class="dlab-tilte">Explore Amazing Places</h3>
-                            <p class="introduce-color_black ">Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                                sed do eiusmod tempor
-                                incididunt ut labore.</p>
-                        </div>
-                    </div>
+
+        {#    #}
+        <div id="introduce" class="section-full bg-img-fix most-visited content-inner"
+             style="background-image:url('{% static 'images/main-introduce.jpg' %}')" ;>
+            <div class="container">
+                <div class="section-head text-center">
+                    <h2 class="box-title">동아리 소개</h2>
+                    <div class="dlab-separator" style="background-color: #091069"></div>
+                    <p>인하대학교 빅데이터 탐구동아리 Inha BAS(Bigdata Analyst Society)입니다. Inha BAS는 빅데이터에 관심이 있는 학생들이 모여 기초부터 하나씩
+                        쌓아가기위해
+                        만든 빅데이터 탐구동아리 입니다.</p>
                 </div>
-                <div class="col-lg-4 col-md-4">
-                    <div class="icon-bx-wraper center m-b30 introduce-box-bg">
-                        <div class="icon-bx-lg radius bg-white m-b20">
-                            <i class="ti-pencil introduce-color_black "></i></div>
-                        <div class="icon-content">
-                            <h3 class="dlab-tilte">Explore Amazing Places</h3>
-                            <p class="introduce-color_black ">Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                                sed do eiusmod tempor
-                                incididunt ut labore.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-4">
-                    <div class="icon-bx-wraper center m-b30 introduce-box-bg">
-                        <div class="icon-bx-lg radius bg-white m-b20"><i
-                                class="ti-game introduce-color_black "></i></div>
-                        <div class="icon-content">
-                            <h3 class="dlab-tilte">Explore Amazing Places</h3>
-                            <p class="introduce-color_black ">Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                                sed do eiusmod tempor
-                                incididunt ut labore.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    {#    #}
-    <div class="section-full content-inner " style="background-color: #f5f9ff;">
-        <div class="container">
-            <div class="section-head text-center">
-                <h2 class="box-title">회장단 소개</h2>
-                <div class="dlab-separator bg-primary" style="background-color: #091069"></div>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                    labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud.</p>
-            </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="row">
-                        <div id="owl-demo"
-                             class="testimonial-one owl-loaded owl-theme owl-carousel owl-btn-center-lr owl-btn-3 owl-dots-primary-big">
-                            <div class="item">
-                                <div class="client-box">
-                                    <div class="client-detail">
-                                        <div class="client-img">
-                                            <img src="{% static 'images/testimonials/pic2.jpg' %}" width="100"
-                                                 height="100" alt="">
-                                        </div>
-                                        <div class="client-info">
-                                            <h5 class="client-name">이준명</h5>
-                                            <span>경영학과</span>
-                                        </div>
-                                    </div>
-                                    <div class="client-info-bx">
-                                        <h5>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                                            nisi ut aliquip. </h5>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                                            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-                                            ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
-                                    </div>
-                                </div>
+                <div class="introduce-contact-flex-container">
+                    <div class="">
+                        <div class="icon-bx-wraper center m-b30 introduce-box-bg">
+                            <div class="icon-bx-lg radius bg-white m-b20">
+                                <i class="fa fa-file-code-o introduce-color_black "></i>
                             </div>
-                            <div class="item">
-                                <div class="client-box">
-                                    <div class="client-detail">
-                                        <div class="client-img">
-                                            <img src="{% static 'images/testimonials/pic2.jpg' %}" width="100"
-                                                 height="100" alt="">
-                                        </div>
-                                        <div class="client-info">
-                                            <h5 class="client-name">김동욱</h5>
-                                            <span>경영학과</span>
-                                        </div>
-                                    </div>
-                                    <div class="client-info-bx">
-                                        <h5>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                                            nisi ut aliquip. </h5>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                                            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-                                            ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
-                                    </div>
-                                </div>
+                            <div class="icon-content">
+                                <h3 class="dlab-tilte">Explore Amazing Places</h3>
+                                <p class="introduce-color_black ">Lorem ipsum dolor sit amet, consectetur adipisicing
+                                    elit,
+                                    sed do eiusmod tempor
+                                    incididunt ut labore.</p>
                             </div>
-                            <div class="item">
-                                <div class="client-box">
-                                    <div class="client-detail">
-                                        <div class="client-img">
-                                            <img src="{% static 'images/testimonials/pic2.jpg' %}" width="100"
-                                                 height="100" alt="">
-                                        </div>
-                                        <div class="client-info">
-                                            <h5 class="client-name">양태영</h5>
-                                            <span>경영학과</span>
-                                        </div>
-                                    </div>
-                                    <div class="client-info-bx">
-                                        <h5>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                                            nisi ut aliquip. </h5>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                                            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-                                            ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
-                                    </div>
-                                </div>
+                        </div>
+                    </div>
+                    <div class="">
+                        <div class="icon-bx-wraper center m-b30 introduce-box-bg">
+                            <div class="icon-bx-lg radius bg-white m-b20">
+                                <i class="ti-pencil introduce-color_black "></i></div>
+                            <div class="icon-content">
+                                <h3 class="dlab-tilte">Explore Amazing Places</h3>
+                                <p class="introduce-color_black ">Lorem ipsum dolor sit amet, consectetur adipisicing
+                                    elit,
+                                    sed do eiusmod tempor
+                                    incididunt ut labore.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="">
+                        <div class="icon-bx-wraper center m-b30 introduce-box-bg">
+                            <div class="icon-bx-lg radius bg-white m-b20"><i
+                                    class="ti-game introduce-color_black "></i></div>
+                            <div class="icon-content">
+                                <h3 class="dlab-tilte">Explore Amazing Places</h3>
+                                <p class="introduce-color_black ">Lorem ipsum dolor sit amet, consectetur adipisicing
+                                    elit,
+                                    sed do eiusmod tempor
+                                    incididunt ut labore.</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    {#    #}
-    <div class="section-full bg-img-fix most-visited content-inner "
-         style="background-image:url('{% static 'images/main-introduce.jpg' %}')" ;>
-        <div class="container">
-            <div class="section-head text-center">
-                <h2 class="box-title">동아리 연혁</h2>
-                <div class="dlab-separator" style="background-color: #091069"></div>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore
-                    et dolore magna aliqua.</p>
+{#        #}
+        <!--====================네비게이션바 버튼 시작====================-->
+        <div class="header-nav navbar-collapse " id="sideNav">
+            <ul class="list-style_none nav introduce-navi introduce-width_130">
+                <li class="down active" style="padding-top: 5px"><i
+                        class="fa fa-bars fa-4x" style="font-size: 4em; margin: 30px"></i>
+                    <ul class="sub-menu">
+                        <li><a href="#introduce">동아리 소개</a></li>
+                        <li><a href="#introduce_cm">운영진 소개</a></li>
+                        <li><a href="#history">동아리 연혁</a></li>
+                        <li><a href="#contact">Contact Us</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        {#    #}
+        <div id="introduce_cm" class="section-full content-inner " style="background-color: #f5f9ff;">
+            <div class="container">
+                <div class="section-head text-center">
+                    <h2 class="box-title">운영진 소개</h2>
+                    <div class="dlab-separator bg-primary" style="background-color: #091069"></div>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
+                        labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud.</p>
+                </div>
+
+                <!--=============================회장==================-->
+                <div>
+                    <div id="owl-demo"
+                         class="testimonial-one owl-loaded owl-theme owl-carousel owl-btn-center-lr owl-btn-3 owl-dots-primary-big">
+                        <div class="item">
+                            <div class="client-box introduce-height_380">
+                                <div class="client-detail">
+                                    <div class="client-img">
+                                        <img src="{% static 'images/testimonials/pic2.jpg' %}" width="100"
+                                             height="100" alt="">
+                                    </div>
+                                    <div class="client-info">
+                                        <h5 class="client-name">{{ chief.user_name }}</h5>
+                                        <span>{{ chief.user_major.major_name }}</span>
+                                    </div>
+                                </div>
+                                <div class="client-info-bx">
+                                    <h5>{{ chief.user_phone }}</h5>
+                                    <h5>{{ chief.user_email }}</h5>
+                                    <p>이건 회장 정보 꺼내오는 쿼리문/자기소개도 여기에 적어야 합니다. 예를 들어서 나는 바보다. 나는 멍청이다. 화이팅. 사랑해요 연예가중계</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--=============부회장=========================-->
+                        <div class="item">
+                            <div class="client-box introduce-height_380">
+                                <div class="client-detail">
+                                    <div class="client-img">
+                                        <img src="{% static 'images/testimonials/pic2.jpg' %}" width="100"
+                                             height="100" alt="">
+                                    </div>
+                                    <div class="client-info">
+                                        <h5 class="client-name">{{ sub_chief.user_name }}</h5>
+                                        <span>{{ sub_chief.user_major.major_name }}</span>
+                                    </div>
+                                </div>
+                                <div class="client-info-bx">
+                                    <h5>{{ sub_chief.user_phone }}</h5>
+                                    <h5>{{ sub_chief.user_email }}</h5>
+                                    <p>이건 부회장 정보 꺼내오는 쿼리문</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="client-box introduce-height_380">
+                                <div class="client-detail">
+                                    <div class="client-img">
+                                        <img src="{% static 'images/testimonials/pic2.jpg' %}" width="100"
+                                             height="100" alt="">
+                                    </div>
+                                    <div class="client-info">
+                                        <h5 class="client-name">양태영</h5>
+                                        <span>경영학과</span>
+                                    </div>
+                                </div>
+                                <div class="client-info-bx">
+                                    <h5>{{ sub_chief.user_phone }}</h5>
+                                    <h5>{{ sub_chief.user_email }}</h5>
+                                    <p>쿼리문 수정 해야 함/ </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
             </div>
+        </div>
+        {#    #}
+        <!--====================네비게이션바 버튼 시작====================-->
+        <div class="header-nav navbar-collapse " id="sideNav">
+            <ul class="list-style_none nav introduce-navi introduce-width_130">
+                <li class="down active" style="padding-top: 5px"><i
+                        class="fa fa-bars fa-4x" style="font-size: 4em; margin: 30px"></i>
+                    <ul class="sub-menu">
+                        <li><a href="#introduce">동아리 소개</a></li>
+                        <li><a href="#introduce_cm">운영진 소개</a></li>
+                        <li><a href="#history">동아리 연혁</a></li>
+                        <li><a href="#contact">Contact Us</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+{##}
+        <div id="history" class="section-full bg-img-fix most-visited content-inner "
+             style="background-image:url('{% static 'images/main-introduce.jpg' %}')" ;>
+            <div class="container">
+                <div class="section-head text-center">
+                    <h2 class="box-title">동아리 연혁</h2>
+                    <div class="dlab-separator" style="background-color: #091069"></div>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
+                        labore
+                        et dolore magna aliqua.</p>
+                </div>
 
-            <div class="icon-bx-wraper center introduce-box-bg introduce-history-box introduce-history-grid introduce-color_black">
-                <div>
-                    2020년
-                </div>
-                <div>
-                    09
-                </div>
-                <div>
-                    동아리 개설
-                </div>
+                <div class="icon-bx-wraper center introduce-box-bg introduce-history-box
+            introduce-history-grid introduce-color_black introduce-overflow_auto">
+                    <div class="introduce-border-bottom">
+                        <p>2022년</p>
+                    </div>
+                    <div class="introduce-border-bottom">
+                        <p>12</p>
+                        <p>11</p>
+                        <p>10</p>
+                        <p>09</p>
+                    </div>
+                    <div class="introduce-padding-bottom_24 introduce-border-bottom">
+                        <p class="introduce-align-items_start ">Lorem ipsum dolor sit amet</p>
+                        <p class="introduce-align-items_start ">Lorem ipsum dolor sit amet</p>
+                        <p class="introduce-align-items_start ">Lorem ipsum dolor sit amet</p>
+                        <p class="introduce-align-items_start ">Lorem ipsum dolor sit amet</p>
 
+                    </div>
+                    <div class="introduce-border-bottom introduce-margin-top_20">
+                        <p>2021년</p>
+                    </div>
+                    <div class="introduce-border-bottom introduce-margin-top_20">
+                        <p>12</p>
+                        <p>11</p>
+                        <p>10</p>
+                        <p>09</p>
+                    </div>
+                    <div class="introduce-padding-bottom_24 introduce-border-bottom introduce-margin-top_20">
+                        <p class="introduce-align-items_start ">Lorem ipsum dolor sit amet</p>
+                        <p class="introduce-align-items_start ">Lorem ipsum dolor sit amet</p>
+                        <p class="introduce-align-items_start ">Lorem ipsum dolor sit amet</p>
+                        <p class="introduce-align-items_start ">Lorem ipsum dolor sit amet</p>
+                    </div>
+                    <div class="introduce-margin-top_20">
+                        <p>2020년</p>
+                    </div>
+                    <div class=" introduce-margin-top_20">
+                        <p>12</p>
+                        <p>11</p>
+                        <p>10</p>
+                        <p>09</p>
+                    </div>
+                    <div class="introduce-padding-bottom_24 introduce-margin-top_20">
+                        <p class="introduce-align-items_start ">Lorem ipsum dolor sit amet</p>
+                        <p class="introduce-align-items_start ">Lorem ipsum dolor sit amet</p>
+                        <p class="introduce-align-items_start ">동아리 활동 시작</p>
+                        <p class="introduce-align-items_start ">동아리 개설</p>
+                    </div>
+                </div>
             </div>
+        </div>
+        {#    #}
+        <!--====================네비게이션바 버튼 시작====================-->
+        <div class="header-nav navbar-collapse " id="sideNav">
+            <ul class="list-style_none nav introduce-navi introduce-width_130">
+                <li class="down active" style="padding-top: 5px"><i
+                        class="fa fa-bars fa-4x" style="font-size: 4em; margin: 30px"></i>
+                    <ul class="sub-menu">
+                        <li><a href="#introduce">동아리 소개</a></li>
+                        <li><a href="#introduce_cm">운영진 소개</a></li>
+                        <li><a href="#history">동아리 연혁</a></li>
+                        <li><a href="#contact">Contact Us</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+{##}
+        <div id="contact" class="section-full content-inner " style="background-color: #f5f9ff;">
+            <div class="container">
 
-
+                <div class="section-head text-center">
+                    <h2 class="box-title">Contact Us</h2>
+                    <div class="dlab-separator bg-primary" style="background-color: #091069"></div>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
+                        labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud.</p>
+                </div>
+                <div class="introduce-contact-flex-container">
+                    <div class="row dzseth m-b50">
+                        <div class="m-b30">
+                            <div class="icon-bx-wraper p-lr20 p-tb50 center seth contact-bx introduce-contact-flex-item introduce-height_310">
+                                <div class="icon-bx-sm radius m-b20 bg-primary m-b20">
+                                    <a href="#" class="icon-cell"><i class="ti-location-pin"></i></a>
+                                </div>
+                                <div class="icon-content">
+                                    <h5 class="dlab-tilte text-uppercase">Address</h5>
+                                    <p>인하대학교<br/>22212<br/>인천광역시 미추홀구 인하로 100</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="m-b30">
+                            <div class="icon-bx-wraper p-lr20 p-tb50 center seth contact-bx introduce-contact-flex-item introduce-height_310">
+                                <div class="icon-bx-sm radius m-b20 bg-primary m-b20">
+                                    <a href="#" class="icon-cell"><i class="ti-email"></i></a>
+                                </div>
+                                <div class="icon-content">
+                                    <h5 class="dlab-tilte text-uppercase">Email</h5>
+                                    <p>{{ chief.user_email }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="m-b30">
+                            <div class="icon-bx-wraper p-lr20 p-tb50 center seth contact-bx introduce-contact-flex-item introduce-height_310">
+                                <div class="icon-bx-sm radius m-b20 bg-primary m-b20">
+                                    <a href="#" class="icon-cell"><i class="ti-mobile"></i></a>
+                                </div>
+                                <div class="icon-content">
+                                    <h5 class="dlab-tilte text-uppercase">Phone</h5>
+                                    <p>{{ chief.user_phone }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-
 {% endblock %}
-
-
-
-
-<!-- Content -->
-
-{#        <!-- inner page banner -->#}
-{#        <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"#}
-{#             style="background-image:{% static 'images/banner/bnr3.jpg' %};">#}
-{#            <div class="container">#}
-{#                <div class="dlab-bnr-inr-entry">#}
-{#                    <h1 class="text-white">동아리 소개</h1>#}
-{#                    <p>여기에는 동아리 소개 말 들어갈것임</p>#}
-{#                </div>#}
-{#            </div>#}
-{#        </div>#}
-{#        <!-- inner page banner END -->#}
-{#        <!-- Contact area -->#}
-{#        <div class="content-block">#}
-{#            <div class="section-full content-inner bg-white">#}
-{#                <div class="container">#}
-{#                    <div class="row">#}
-{#                        <div class="col-lg-4 col-md-6 col-sm-6 m-b30">#}
-{#                            <div class="listing-bx overlap">#}
-{#                                <div class="listing-media">#}
-{#                                    <img src="{{ chief.user_pic }}" alt="">#}
-{#                                    <p>회장 이름 : {{ chief.user_name }}</p>#}
-{#                                    <p>회장 학과 : {{ chief.user_major.major_name }}</p>#}
-{#                                    <p>회장 번호 : {{ chief.user_phone }}</p>#}
-{#                                    <p>회장 이메일 : {{ chief.user_email }} </p>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                        <div class="col-lg-4 col-md-6 col-sm-6 m-b30">#}
-{#                            <div class="listing-bx overlap">#}
-{#                                <div class="listing-media">#}
-{#                                    <img src="{{ sub_chief.user_pic }}" alt="">#}
-{#                                    <p>부회장 이름 : {{ sub_chief.user_name }}</p>#}
-{#                                    <p>부회장 학과 : {{ sub_chief.user_major.major_name }}</p>#}
-{#                                    <p>부회장 번호 : {{ sub_chief.user_phone }}</p>#}
-{#                                    <p>부회장 이메일 : {{ sub_chief.user_email }} </p>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
-{#            </div>#}
-{#        </div>#}
-<!-- Contact area END -->
