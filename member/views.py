@@ -7,14 +7,15 @@ from DB.models import AuthUser, User, UserAuth, UserRole, QuestForm, Answer, \
 from django.http import HttpResponseRedirect
 # 내가 만든 세션 모듈 불러오기
 from . import session
+from urllib.request import urlretrieve
 
 
 # Create your views here.
 
 def choose_std_or_pro(request):  # 학생인지, 교수인지 고르게 하는 것.
-    if request.method == "POST": # POST로 온 요청의 경우, 즉 정상적인 요청인 경우
+    if request.method == "POST":  # POST로 온 요청의 경우, 즉 정상적인 요청인 경우
         if request.POST.get("password") is not None:  # pass페이지에서 password가 파라미터로 넘어왔을 경우, 즉 정상적으로 구글 로그인을 마친 경우
-            user_token = request.POST.get("password") # 토큰 정보를 받음
+            user_token = request.POST.get("password")  # 토큰 정보를 받음
             if len(AuthUser.objects.filter(password=user_token)) == 0:  # 토큰 정보로 AuthUser정보를 조회 만약 없다면 비정상 적인 접근.
                 return redirect(reverse("index"))  # 비정상적인 접근의 경우 강제로 홈으로 이동
             auth_user = AuthUser.objects.filter(password=user_token)[0]  # auth테이블에서 해당 패스워드가 있는지 조회.
@@ -31,6 +32,8 @@ def choose_std_or_pro(request):  # 학생인지, 교수인지 고르게 하는 �
                 pic = tar_member.extra_data.get('picture')  # extra_data 테이블에서 꺼내는 변수를 picture로 설정
             elif tar_member.provider == "naver":  # 사용자가 네이버를 통해 로그인 한 경우
                 pic = tar_member.extra_data.get('profile_image')  # extra_data 테이블에서 꺼내는 변수를 profile_image로 설정
+
+
 
             # 소셜 로그인으로 부터 받은 정보는 저장하지 않기 위해 해당 정보 삭제
             tar_token.delete()
@@ -63,19 +66,19 @@ def choose_std_or_pro(request):  # 학생인지, 교수인지 고르게 하는 �
         return render(request, "index.html", {'lgn_is_failed': 1})  # 자바 스크립트 경고를 띄우기 위한 변수 지정 후 index로 보냄.
 
 
-def join(request): # 회원 가입 페이지를 랜더링 하는 함수
-    stu_list = list() # 학생 리스트를 받아옴
+def join(request):  # 회원 가입 페이지를 랜더링 하는 함수
+    stu_list = list()  # 학생 리스트를 받아옴
     for user in User.objects.all():
-        stu_list.append(user.user_stu) # 학생 리스트에서 학번만 뽑아서 학번 리스트 생성
+        stu_list.append(user.user_stu)  # 학생 리스트에서 학번만 뽑아서 학번 리스트 생성
 
-    context = { # hidden을 통해서 받은 회원들의 정보를 받아서 붙여넣음.
-        "email": request.POST.get("email"), #이메일
-        "name": request.POST.get("name"), #이름
-        "pic": request.POST.get("pic"), #프로필 사진
-        "user_auth": request.POST.get("user_auth"), # 회원 권한
-        "stu_list": stu_list, # 학번 리스트
-        "quest_list": QuestForm.objects.all(), # 질문 양식
-        "major_list": MajorInfo.objects.all() # 전공 리스트(전공 검색을 위해)
+    context = {  # hidden을 통해서 받은 회원들의 정보를 받아서 붙여넣음.
+        "email": request.POST.get("email"),  # 이메일
+        "name": request.POST.get("name"),  # 이름
+        "pic": request.POST.get("pic"),  # 프로필 사진
+        "user_auth": request.POST.get("user_auth"),  # 회원 권한
+        "stu_list": stu_list,  # 학번 리스트
+        "quest_list": QuestForm.objects.all(),  # 질문 양식
+        "major_list": MajorInfo.objects.all()  # 전공 리스트(전공 검색을 위해)
     }
     return render(request, "join.html", context)
 
@@ -84,7 +87,7 @@ def join_chk(request):  # 회원 가입 페이지로 부터 정보를 받
     if request.method == "POST":  # POST로 데이터가 들어왔을 경우, 안들어 왔다면 -> 비정상 적인 접근임. 일반적으로 GET을 통해서는 접근이 불가능 해야함.
         # 사용자 정보를 받아옴
 
-        context = { # 회원 가입 정보를 받아서 질문 폼으로 전송
+        context = {  # 회원 가입 정보를 받아서 질문 폼으로 전송
             "user_auth": request.POST.get("user_auth"),
             "user_role": request.POST.get("user_role"),
             "user_email": request.POST.get("user_email"),
@@ -106,6 +109,7 @@ def join_chk(request):  # 회원 가입 페이지로 부터 정보를 받
 def quest_chk(request):
     if request.method == "POST":  # POST로 데이터가 들어왔을 경우, 안들어 왔다면 -> 비정상 적인 접근임. 일반적으로 GET을 통해서는 접근이 불가능 해야함.
         # 사용자 정보를 받아옴
+
         user_auth = request.POST.get("user_auth")
         user_role = request.POST.get("user_role")
         user_email = request.POST.get("user_email")
@@ -116,19 +120,21 @@ def quest_chk(request):
         user_gen = request.POST.get("user_gen")
         user_phone = request.POST.get("user_phone")
         user_pic = request.POST.get("user_pic")
+        if user_pic != "0":  # 프로필 사진에 들어온 값이 0이 아니면
+            urlretrieve(user_pic, '/home/ibas/Django/IBAS/media/member/' + user_stu + ".jpg")  # 웹 페이지에서 프로필 사진을 다운로드 받아 저장
+            user_pic = "member/" + user_stu + ".jpg"  # 사진을 불러올 경로 설정
         # 받은 정보로 user 모델 인스턴스 변수 생성
-        user = User.objects.create(
-            user_name=user_name,  # 이름
-            user_stu=user_stu,  # 학번
-            user_email=user_email,  # 이메일
-            user_grade=user_grade,  # 학년
-            user_auth=get_object_or_404(UserAuth, pk=user_auth),  # 권한 번호
-            user_gen=user_gen,  # 기수
-            user_major=user_major,  # 전공
-            user_role=get_object_or_404(UserRole, pk=user_role),  # 역할 정보
-            user_phone=user_phone,  # 핸드폰 번호
-            user_pic=user_pic  # 프로필 사진
-        )
+        user = User()
+        user.user_name = user_name  # 이름
+        user.user_stu = user_stu
+        user.user_email = user_email  # 이메일
+        user.user_grade = user_grade  # 학년
+        user.user_auth = UserAuth.objects.get(pk=user_auth)  # 권한 번호
+        user.user_gen = user_gen  # 기수
+        user.user_major = user_major  # 전공
+        user.user_role = UserRole.objects.get(pk=user_role)  # 역할 정보
+        user.user_phone = user_phone  # 핸드폰 번호
+        user.user_pic = user_pic  # 프로필 사진
         # 사용자 정보를 DB에 저장
         user.save()
 
@@ -144,12 +150,11 @@ def quest_chk(request):
                     answer_cont=request.POST.get("answer_" + str(quest.quest_no)),
                     answer_user=user,
                 )
-
                 answer.save()
 
-        session.save_session(request, user) # 자동 로그인을 위해 세션 등록
+        session.save_session(request, user)  # 자동 로그인을 위해 세션 등록
         return redirect(reverse("welcome"))  # 정상 회원가입 완료시 회원 가입 완료 페이지로 이동.
-    return render(request, "index.html", {'lgn_is_failed': 1}) #비정상 적인 접근 시 로그인 실패 메시지 출력과 함께 메인페이지 이동.
+    return render(request, "index.html", {'lgn_is_failed': 1})  # 비정상 적인 접근 시 로그인 실패 메시지 출력과 함께 메인페이지 이동.
 
 
 def pass_param(request):  # 구글 로그인으로 부터 파라미터를 받아 넘기는 페이지, 사용자에겐 보이지 않음.

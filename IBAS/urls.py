@@ -16,7 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from . import views
-
+from django.conf.urls.static import static
+from django.conf import settings
 urlpatterns = [
     # path('', include('first.urls')),
     path('user/', include('member.urls')),
@@ -43,3 +44,6 @@ urlpatterns = [
     path('test/listing/right/sidebar/', views.listing_right_sidebar, name="coming_soon"),
     path('test/register', views.register, name="coming_soon"),
 ]
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+print(urlpatterns)
