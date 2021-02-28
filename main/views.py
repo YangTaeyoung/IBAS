@@ -15,8 +15,12 @@ from django.http import HttpResponseRedirect
 
 # 메인페이지 이동 함수
 def index(request):
-    context = {}
-    return render(request, "index.html", context)
+
+    if len(User.objects.filter(user_role=1)) != 0:  # 회장정보가 유저 DB에 존재하는 경우
+        chief = User.objects.filter(user_role=1)[0]  # 회장의 역할(1) 인 사람의 객채를 가져옴
+        session.save_chief(chief)
+    return render(request, "index.html", {})
+
 
 # 탑바 작업
 def test_top_bar(request):
@@ -28,6 +32,7 @@ def test_top_bar(request):
 
     context = {}
     return render(request, "top_bar.html", context)
+
 
 # 메인 작업 (적용됨.)
 # def test_main(request):
