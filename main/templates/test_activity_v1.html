@@ -3,388 +3,169 @@
 {% block content %}
     <!--커스텀 css-->
     <link rel="stylesheet" type="text/css" href="{% static 'css/seungyeon.css' %}">
-    <div class="page-wraper">
-        <!-- header -->
 
-        <!-- header END -->
-        <!-- 상단제목 -->
+
+    <!--=====================================제목 및 게시글 시작=====================================-->
+    <div class="page-wraper">
         <div class="page-content bg-white">
-            <!-- inner page banner -->
+            <!----------상단 제목부분----------->
+            <!--제목을 감싸는 배경-->
             <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"
-                 style="background-image:{% static 'images/banner/bnr3.jpg' %};">
+                 style=" background-image: url('{% static 'images/main-name-background.jpg' %}')">
+                <!--제목 및 부제목을 담는 컨테이너-->
                 <div class="container">
                     <div class="dlab-bnr-inr-entry">
+                        <!--제목-->
                         <h1 class="text-white">활동 게시판</h1>
+                        <!--부제목-->
                         <p>동아리 수상 및 활동 내역에 대한 게시판입니다.</p>
-                        <!-- Breadcrumb row -->
-
-                        <!-- Breadcrumb row END -->
                     </div>
                 </div>
             </div>
-            <!-- inner page banner END -->
-            <!-- Contact area -->
+            <!--=====================================게시글 시작=====================================-->
             <div class="content-block">
                 <div class="section-full content-inner bg-white">
                     <div class="container">
-                        <div class="listing-filter m-b40">
-                            <div class="d-flex">
-                                <div class="mr-auto">
-                                    <ul class="filter m-b0">
-                                        <li>
-                                            <select>
-                                                <option>Default Filters</option>
-                                                <option>Construction</option>
-                                                <option>Corodinator</option>
-                                                <option>Employer</option>
-                                                <option>Financial Career</option>
-                                                <option>Information Technology</option>
-                                                <option>Marketing</option>
-                                                <option>Quality check</option>
-                                                <option>Real Estate</option>
-                                                <option>Sales</option>
-                                                <option>Supporting</option>
-                                                <option>Teaching</option>
-                                            </select>
-                                        </li>
-                                        <li>
-                                            <select>
-                                                <option>Distance Radius</option>
-                                                <option>Construction</option>
-                                                <option>Corodinator</option>
-                                                <option>Employer</option>
-                                                <option>Financial Career</option>
-                                                <option>Information Technology</option>
-                                                <option>Marketing</option>
-                                                <option>Quality check</option>
-                                                <option>Real Estate</option>
-                                                <option>Sales</option>
-                                                <option>Supporting</option>
-                                                <option>Teaching</option>
-                                            </select>
-                                        </li>
-                                        <li>
-                                            <select>
-                                                <option>More Filters</option>
-                                                <option>Construction</option>
-                                                <option>Corodinator</option>
-                                                <option>Employer</option>
-                                                <option>Financial Career</option>
-                                                <option>Information Technology</option>
-                                                <option>Marketing</option>
-                                                <option>Quality check</option>
-                                                <option>Real Estate</option>
-                                                <option>Sales</option>
-                                                <option>Supporting</option>
-                                                <option>Teaching</option>
-                                            </select>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div>
-                                    <ul class="filter-icon m-b0">
-                                        <li><a href="javascript:void(0)"><i class="fa fa-th"></i></a></li>
-                                        <li><a href="javascript:void(0)"><i class="fa fa-th-list"></i></a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
                         <div class="row">
+                            <!--=====게시글 1=====-->
                             <div class="col-lg-4 col-md-6 col-sm-6 m-b30">
                                 <div class="listing-bx overlap">
-                                    <div class="listing-media test">
+                                    <!--=====게시글 2=====-->
+                                    <div class="listing-media act-img-size">
                                         <img src="{% static 'images/listing/pic1.jpg' %}" alt="">
                                     </div>
+                                    <!--게시글 제목 및 작성자, 작성시간 div 시작-->
                                     <div class="listing-info">
-                                        <h3 class="title "><a href="listing-details.html">호이호이호이123호이호이호이123</a></h3>
+                                        <!--게시글 제목-->
+                                        <div class="line1">
+                                            <h3 class="title line1"><a href="listing-details.html">용식이 여자친구 생긴 기념 사진</a>
+                                            </h3>
+                                        </div>
+                                        <div class="dlab-post-meta">
+                                            <ul class="d-flex align-items-center">
+                                                <!--게시글 작성자-->
+                                                <li class="post-author" style="color: white"><i class="ti-user"
+                                                                                                style="color: white"></i>By
+                                                    <a
+                                                    >John Doe</a></li>
+                                                <!--게시글 작성시간-->
+                                                <li class="post-date" style="color: white"><i class="ti-alarm-clock"
+                                                                                              style="color: white"></i><strong>12
+                                                    July</strong><span> 2020</span></li>
+                                            </ul>
+                                        </div>
                                     </div>
-
                                 </div>
                             </div>
+                            <!--=====게시글 2=====-->
                             <div class="col-lg-4 col-md-6 col-sm-6 m-b30">
                                 <div class="listing-bx overlap">
-                                    <div class="listing-media test">
+                                    <!--게시글의 대표 이미지-->
+                                    <div class="listing-media act-img-size">
                                         <img src="{% static 'images/listing/pic2.jpg' %}" alt="">
                                     </div>
+                                    <!--게시글 제목 및 작성자, 작성시간 div 시작-->
                                     <div class="listing-info">
-                                        <ul class="featured-star">
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-
-                                        </ul>
-                                        <h3 class="title"><a href="listing-details.html">호이회이</a></h3>
+                                        <!--게시글 제목-->
+                                        <h3 class="title line1"><a href="listing-details.html">이 편지는 영국에서 시작되어 한국을 거쳐
+                                            미국으로까지 전해지게 되는데</a></h3>
+                                        <div class="dlab-post-meta">
+                                            <ul class="d-flex align-items-center">
+                                                <!--게시글 작성자-->
+                                                <li class="post-author" style="color: white"><i class="ti-user"
+                                                                                                style="color: white"></i>By
+                                                    <a
+                                                    >John Doe</a></li>
+                                                <!--게시글 작성시간-->
+                                                <li class="post-date" style="color: white"><i class="ti-alarm-clock"
+                                                                                              style="color: white"></i><strong>12
+                                                    July</strong><span> 2020</span></li>
+                                            </ul>
+                                        </div>
                                     </div>
-                                    <ul class="wish-bx">
-                                        <li><a class="like-btn" href="javascript:void(0)"><i
-                                                class="fa fa-heart"></i></a></li>
-                                        <li><a class="info-btn" href="javascript:void(0)"><i class="fa fa-leaf"></i></a>
-                                        </li>
-                                    </ul>
                                 </div>
                             </div>
+                            <!--=====게시글 3=====-->
                             <div class="col-lg-4 col-md-6 col-sm-6 m-b30">
-                                <div class="listing-bx overlap">
+                                <div class="listing-bx overlap act-img-size">
+                                    <!--게시글의 대표 이미지-->
                                     <div class="listing-media">
-                                        <img src="{% static 'images/listing/pic3.jpg' %}" alt="">
+                                        <img src="{% static 'images/test2.png' %}" alt="">
                                     </div>
+                                    <!--게시글 제목 및 작성자, 작성시간 div 시작-->
                                     <div class="listing-info">
-                                        <ul class="featured-star">
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-
-                                        </ul>
-                                        <h3 class="title"><a href="listing-details.html">King Organic Shop</a></h3>
+                                        <!--게시글 제목-->
+                                        <h3 class="title line1"><a href="listing-details.html">이 편지는 영국에서 시작되어 한국을 거쳐
+                                            미국으로까지 전해지게 되는데</a></h3>
+                                        <div class="dlab-post-meta">
+                                            <ul class="d-flex align-items-center">
+                                                <!--게시글 작성자-->
+                                                <li class="post-author" style="color: white"><i class="ti-user"
+                                                                                                style="color: white"></i>By
+                                                    <a
+                                                    >John Doe</a></li>
+                                                <!--게시글 작성시간-->
+                                                <li class="post-date" style="color: white"><i class="ti-alarm-clock"
+                                                                                              style="color: white"></i><strong>12
+                                                    July</strong><span> 2020</span></li>
+                                            </ul>
+                                        </div>
                                     </div>
-                                    <ul class="wish-bx">
-                                        <li><a class="like-btn" href="javascript:void(0)"><i
-                                                class="fa fa-heart"></i></a></li>
-                                        <li><a class="info-btn" href="javascript:void(0)"><i class="fa fa-leaf"></i></a>
-                                        </li>
-                                    </ul>
                                 </div>
                             </div>
+                            <!--=====게시글 4=====-->
                             <div class="col-lg-4 col-md-6 col-sm-6 m-b30">
                                 <div class="listing-bx overlap">
-                                    <div class="listing-media">
+                                    <!--게시글의 대표 이미지-->
+                                    <div class="listing-media act-img-size">
                                         <img src="{% static 'images/listing/pic4.jpg' %}" alt="">
                                     </div>
+                                    <!--게시글 제목 및 작성자, 작성시간 div 시작-->
                                     <div class="listing-info">
-                                        <ul class="featured-star">
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-
-                                        </ul>
-                                        <h3 class="title"><a href="listing-details.html">King Organic Shop</a></h3>
+                                        <!--게시글 제목-->
+                                        <h3 class="title line1"><a href="listing-details.html">이 편지는 영국에서 시작되어 한국을 거쳐
+                                            미국으로까지 전해지게 되는데</a></h3>
+                                        <div class="dlab-post-meta">
+                                            <ul class="d-flex align-items-center">
+                                                <!--게시글 작성자-->
+                                                <li class="post-author" style="color: white"><i class="ti-user"
+                                                                                                style="color: white"></i>By
+                                                    <a
+                                                    >John Doe</a></li>
+                                                <!--게시글 작성시간-->
+                                                <li class="post-date" style="color: white"><i class="ti-alarm-clock"
+                                                                                              style="color: white"></i><strong>12
+                                                    July</strong><span> 2020</span></li>
+                                            </ul>
+                                        </div>
                                     </div>
-                                    <ul class="wish-bx">
-                                        <li><a class="like-btn" href="javascript:void(0)"><i
-                                                class="fa fa-heart"></i></a></li>
-                                        <li><a class="info-btn" href="javascript:void(0)"><i class="fa fa-leaf"></i></a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6 col-sm-6 m-b30">
-                                <div class="listing-bx overlap">
-                                    <div class="listing-media">
-                                        <img src="{% static 'images/listing/pic5.jpg' %}" alt="">
-                                    </div>
-                                    <div class="listing-info">
-                                        <ul class="featured-star">
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-
-                                        </ul>
-                                        <h3 class="title"><a href="listing-details.html">King Organic Shop</a></h3>
-                                    </div>
-                                    <ul class="wish-bx">
-                                        <li><a class="like-btn" href="javascript:void(0)"><i
-                                                class="fa fa-heart"></i></a></li>
-                                        <li><a class="info-btn" href="javascript:void(0)"><i class="fa fa-leaf"></i></a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6 col-sm-6 m-b30">
-                                <div class="listing-bx overlap">
-                                    <div class="listing-media">
-                                        <img src="{% static 'images/listing/pic6.jpg' %}" alt="">
-                                    </div>
-                                    <div class="listing-info">
-                                        <ul class="featured-star">
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-
-                                        </ul>
-                                        <h3 class="title"><a href="listing-details.html">King Organic Shop</a></h3>
-                                    </div>
-                                    <ul class="wish-bx">
-                                        <li><a class="like-btn" href="javascript:void(0)"><i
-                                                class="fa fa-heart"></i></a></li>
-                                        <li><a class="info-btn" href="javascript:void(0)"><i class="fa fa-leaf"></i></a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6 col-sm-6 m-b30">
-                                <div class="listing-bx overlap">
-                                    <div class="listing-media">
-                                        <img src="{% static 'images/listing/pic7.jpg' %}" alt="">
-                                    </div>
-                                    <div class="listing-info">
-                                        <ul class="featured-star">
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-
-                                        </ul>
-                                        <h3 class="title"><a href="listing-details.html">King Organic Shop</a></h3>
-                                    </div>
-                                    <ul class="wish-bx">
-                                        <li><a class="like-btn" href="javascript:void(0)"><i
-                                                class="fa fa-heart"></i></a></li>
-                                        <li><a class="info-btn" href="javascript:void(0)"><i class="fa fa-leaf"></i></a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6 col-sm-6 m-b30">
-                                <div class="listing-bx overlap">
-                                    <div class="listing-media">
-                                        <img src="{% static 'images/listing/pic8.jpg' %}" alt="">
-                                    </div>
-                                    <div class="listing-info">
-                                        <ul class="featured-star">
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-
-                                        </ul>
-                                        <h3 class="title"><a href="listing-details.html">King Organic Shop</a></h3>
-                                    </div>
-                                    <ul class="wish-bx">
-                                        <li><a class="like-btn" href="javascript:void(0)"><i
-                                                class="fa fa-heart"></i></a></li>
-                                        <li><a class="info-btn" href="javascript:void(0)"><i class="fa fa-leaf"></i></a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6 col-sm-6 m-b30">
-                                <div class="listing-bx overlap">
-                                    <div class="listing-media">
-                                        <img src="{% static 'images/listing/pic9.jpg' %}" alt="">
-                                    </div>
-                                    <div class="listing-info">
-                                        <ul class="featured-star">
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-
-                                        </ul>
-                                        <h3 class="title"><a href="listing-details.html">King Organic Shop</a></h3>
-                                    </div>
-                                    <ul class="wish-bx">
-                                        <li><a class="like-btn" href="javascript:void(0)"><i
-                                                class="fa fa-heart"></i></a></li>
-                                        <li><a class="info-btn" href="javascript:void(0)"><i class="fa fa-leaf"></i></a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6 col-sm-6 m-b30">
-                                <div class="listing-bx overlap">
-                                    <div class="listing-media">
-                                        <img src="{% static 'images/listing/pic10.jpg' %}" alt="">
-                                    </div>
-                                    <div class="listing-info">
-                                        <ul class="featured-star">
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-
-                                        </ul>
-                                        <h3 class="title"><a href="listing-details.html">King Organic Shop</a></h3>
-                                    </div>
-                                    <ul class="wish-bx">
-                                        <li><a class="like-btn" href="javascript:void(0)"><i
-                                                class="fa fa-heart"></i></a></li>
-                                        <li><a class="info-btn" href="javascript:void(0)"><i class="fa fa-leaf"></i></a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6 col-sm-6 m-b30">
-                                <div class="listing-bx overlap">
-                                    <div class="listing-media">
-                                        <img src="{% static 'images/listing/pic11.jpg' %}" alt="">
-                                    </div>
-                                    <div class="listing-info">
-                                        <ul class="featured-star">
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-
-                                        </ul>
-                                        <h3 class="title"><a href="listing-details.html">King Organic Shop</a></h3>
-                                    </div>
-                                    <ul class="wish-bx">
-                                        <li><a class="like-btn" href="javascript:void(0)"><i
-                                                class="fa fa-heart"></i></a></li>
-                                        <li><a class="info-btn" href="javascript:void(0)"><i class="fa fa-leaf"></i></a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6 col-sm-6 m-b30">
-                                <div class="listing-bx overlap">
-                                    <div class="listing-media">
-                                        <img src="{% static 'images/listing/pic12.jpg' %}" alt="">
-                                    </div>
-                                    <div class="listing-info">
-                                        <ul class="featured-star">
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-                                            <li><i class="fa fa-star"></i></li>
-
-                                        </ul>
-                                        <h3 class="title"><a href="listing-details.html">King Organic Shop</a></h3>
-                                    </div>
-                                    <ul class="wish-bx">
-                                        <li><a class="like-btn" href="javascript:void(0)"><i
-                                                class="fa fa-heart"></i></a></li>
-                                        <li><a class="info-btn" href="javascript:void(0)"><i class="fa fa-leaf"></i></a>
-                                        </li>
-                                    </ul>
                                 </div>
                             </div>
                         </div>
-                        <!-- Pagination start -->
-                        <div class="pagination-bx clearfix text-center">
-                            <ul class="pagination">
-                                <li class="previous"><a href="javascript:void(0)"><i class="fa fa-arrow-left"></i></a>
-                                </li>
-                                <li><a href="javascript:void(0)">1</a></li>
-                                <li><a href="javascript:void(0)">2</a></li>
-                                <li><a href="javascript:void(0)">...</a></li>
-                                <li class="active"><a href="javascript:void(0)">7</a></li>
-                                <li class="next"><a href="javascript:void(0)"><i class="fa fa-arrow-right"></i></a></li>
-                            </ul>
+                        <!--게시글 등록 버튼 div-->
+                        <div class="extra-cell text-right" style="">
+                            <a href="add-listing.html" class="site-button radius-xl m-l10"><i
+                                    class="fa fa-plus m-r5"></i>
+                                게시글 등록</a>
                         </div>
-                        <!-- Pagination END -->
+                    </div>
+                    <!-- 페이지네이션 -->
+                    <div class="pagination-bx clearfix text-center">
+                        <ul class="pagination">
+                            <li class="previous"><a href="javascript:void(0)"><i class="fa fa-arrow-left"></i></a>
+                            </li>
+                            <li><a href="javascript:void(0)">1</a></li>
+                            <li><a href="javascript:void(0)">2</a></li>
+                            <li><a href="javascript:void(0)">...</a></li>
+                            <li class="active"><a href="javascript:void(0)">7</a></li>
+                            <li class="next"><a href="javascript:void(0)"><i class="fa fa-arrow-right"></i></a></li>
+                        </ul>
                     </div>
                 </div>
-            </div>튼
-            <!-- Contact area END -->
+            </div>
         </div>
-        <!-- 상단으로 한번에 올라가게 하는 버튼 -->
-        <button class="scroltop fa fa-chevron-up"></button>
+    </div>
+    <!-- 상단으로 한번에 올라가게 하는 버튼 -->
+    <button class="scroltop fa fa-chevron-up"></button>
     </div>
 {% endblock %}

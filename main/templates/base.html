@@ -34,7 +34,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/templete_1.css' %}">
     <link class="skin" rel="stylesheet" type="text/css" href="{% static 'css/skin/skin-1.css' %}">
     <!--직접 만든거-->
-    <link rel="stylesheet" type="text/css" href="{% static 'css/main_style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/chaerim.css' %}">
     <link class="skin" rel="stylesheet" type="text/css" href="{% static 'css/bottom_bar.css' %}">
 
 
@@ -116,8 +116,8 @@
                                     <a href="#" style="padding-right: 7px;">
                                         <!--==승인되지 않았을 때==-->
                                         {% if request.session.is_activated == 0 %}
-                                            <img src="{{ request.session.user_pic }}" width="35" height="35"
-                                                 style=" border: 2px solid #ff3d3d; border-radius: 17.5px; margin-right: 3px"
+                                            <img src="{{ request.session.user_pic }}" width="35px" height="35px"
+                                                 style=" border: 2px solid #ff3d3d; border-radius: 17.5px; margin-right: 3px; max-height: 35px; max-width: 35px"
                                                  alt="현재 브라우저에서 지원하지 않는 형식입니다.">
                                             {{ request.session.user_name }} 님
                                             <ul class="sub-menu" style="text-align: center">
@@ -190,7 +190,7 @@
 <footer>
     <!-- content 담는 부분이 footer-top -->
     <!-- footer-top에 대한 정의는 bottom_bar.css에 정의되어 있음. (height 관련) -->
-    <div class="footer-top">
+    <div class="ibas-footer-top" style="background-image: {% static 'images/botton_bar.jpg' %}">
         <!-- content 시작 -->
         <!-- cont-grid에 대한 정의는 bottom_bar.css에 정의되어 있음. (grid 관련) -->
         <div class="cont-grid">
@@ -199,12 +199,12 @@
             <div class="logo-center">
                 <!-- 여기 부분이 이미지임   -->
                 <!-- width_300에 대한 정의는 bottom_bar.css에 정의되어 있음. (width 관련) -->
-                <img src="{% static 'images/logo_white.png' %} " class="m-b15 width_300" alt="">
+                <img src="{% static 'images/logo_white.png' %} " class="m-b15" alt="" style="width: 350px">
             </div>
             <!-- 로고 div 끝 -->
             <!-- contact us div 시작 -->
             <!-- margin-left_70에 대한 정의는 bottom_bar.css에 정의되어 있음. (margin 관련) -->
-            <div class="margin-left_70">
+            <div style="margin-top: 10px; width: 390px; margin-right: 50px;">
                 <h5 class="mb-2 text-white">Contact us</h5>
                 <!-- contact us table 시작 -->
                 <!-- padding_0에 대한 정의는 bottom_bar.css에 정의되어 있음. (padding 관련) -->
@@ -236,7 +236,7 @@
                 <!-- 여기 부분이 이미지임 -->
                 <a href="https://www.inha.ac.kr">
                     <!-- width_300에 대한 정의는 bottom_bar.css에 정의되어 있음. (width 관련) -->
-                    <img src="{% static 'images/logo_inha.png' %} " class="m-b15 width_300" alt="">
+                    <img src="{% static 'images/inha_en_logo.png' %} " class="m-b15" alt="" style="width: 450px; margin-right: 50px">
                 </a>
             </div>
             <!-- 인하대 로고 div 끝 -->
