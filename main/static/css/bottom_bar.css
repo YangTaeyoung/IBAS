@@ -7,12 +7,14 @@
     display: grid;
     grid-template-columns: repeat(3,1fr);
     min-width: 1400px;
+    justify-items: center;
 }
 
 /* 사이즈와 위치 조절을 위해 만들어짐. */
-.footer-top {
+.ibas-footer-top {
     height: 250px;
     padding: 30px 0;
+    background-image: url("../images/botton_bar.jpg");
 }
 
 /* 로고 위치 조정을 위해 만들어짐. */
@@ -29,7 +31,11 @@
 
 /* contact us 위치 조정을 위해 만들어짐. */
 .margin-left_70 {
-    margin-left: 70px;
+    margin-left: 100px;
+}
+
+.center{
+    align-content: center;
 }
 /* contact us 테이블 조정을 위해 만들어짐. */
 .padding_0 {
@@ -52,6 +58,7 @@
     display: flex;
     justify-content: center;
     padding: 15px 0;
+    background-color: #070a11;
 }
 
 /* copyright 부분의 폰트사이즈를 위해 만들어짐. */
