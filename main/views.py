@@ -5,10 +5,12 @@ from DB.models import AuthUser, User, ChiefCarrier, UserRole, Board, BoardFile, 
 from member import session
 from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect
+import os
 
 
 # 메인페이지 이동 함수
 def index(request):
+
     # 세션은 세션이 있다고 가정한 것
     session.save_session(request, User.objects.get(pk='1002'))
 
@@ -33,12 +35,6 @@ def test_activity(request):
     board_file_list = BoardFile.objects.all()
     # board_no 와 같은 파일 경로를 가져오기 위해서 사용했음.
 
-    # 시간 순으로 보이게끔 하려했는데 실패함.
-    # if request.method == 'GET' :
-    #     board_list = Board.objects.filter(board_type_no=5).order_by('board_created')
-    # else:
-    #     board_list = Board.objects.filter(board_type_no=5).order_by('-board_created')
-
     board_list = Board.objects.filter(board_type_no=5).order_by('-board_created')
     # board 에서 board_type_no = 5 인 것만 들고옴. 최신 순으로 보여주는 코드는 order_by
     # board_type_no = 5 <- 동아리게시판에 관련한 글만 가져오기 위해서 만들어짐
@@ -60,25 +56,50 @@ def test_activity_detail(request):
 
 # 동아리 활동 등록하기
 def test_activity_register(request):
-    if request.method == "POST":
-        type_no = BoardType.objects.get(pk=5)
-        user_stu = User.objects.get(pk=request.session.get('user_stu'))
 
-        activity_register = Board(
+    # 글쓰기 들어와서 등록 버튼을 누르면 실행이 되는 부분
+    if request.method == "POST":
+        type_no = BoardType.objects.get(pk=5) # 동아리 활동 게시판이므로 pk=5임
+        user_stu = User.objects.get(pk=request.session.get('user_stu')) # 유저 학번 들고오는 것임
+
+        activity_register = Board( # 객체로 저장을 할 것이오
             board_type_no=type_no,
             board_title=request.POST.get('activity_title'),
             board_cont=request.POST.get('activity_cont'),
             board_writer=user_stu)
-        activity_register.save()
+        activity_register.save() # DB 에 차곡차곡 저장을 함
 
-        # 조용식이 만지고 있는 중
+        # ============================= 이미지 저장시키는 코드 =========================
         for img in request.FILES.getlist('activity_file'):
-            board_file = BoardFile()
-            board_file.board_no = Board.objects.get(pk=activity_register.board_no)
-            board_file.board_file_path = img
-            board_file.save()
-        return render(request, 'activity.html', {})
+            board_file = BoardFile() # 객체 생성
+            board_file.board_no = Board.objects.get(pk=activity_register.board_no) # FK 키 가져오기
+            board_file.board_file_path = img # 파일 경로 넣어주고
+            board_file.save() # DB 에 저장 시켜줌
+            # 여기서, pk 는 auto_incre 라서 상관 X
+
+        return render(request, 'activity.html', {}) # render 해주기
+
+    # POST가 아닌 그냥 보여주는 방식
     return render(request, 'activity_register.html', {})
+
+def test_activity_delete(request):
+    if request.method == "POST":
+        activity = get_object_or_404(Board, pk=request.POST.get('board_no'))
+
+        try :
+            os.remove('media/'+str(BoardFile.objects.get(board_no=activity.board_no).board_file_path))
+        except FileNotFoundError:
+            pass
+
+        activity.delete()
+        return HttpResponseRedirect('/test/test_activity/')
+
+    else:  # 파라미터가 제대로 넘어오지 않은 경우, 즉 비정상적인 경로를 통해 들어간 경우 바로 나오게 해준다.
+        return HttpResponseRedirect('/test/test_activity/')
 
 def test_activity_v1(request):  # 입부신청 완료 페이지로 이동
     return render(request, 'test_activity_v1.html', {})
+
+def activity_comment(request):
+    return HttpResponseRedirect('/test/test_activity/detail/')
+    # return render(request, 'activity_detail.html', {})

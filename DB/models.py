@@ -66,6 +66,8 @@ class Board(models.Model):
 class BoardFile(models.Model):
     board_no = models.ForeignKey(Board, on_delete=models.CASCADE, db_column='BOARD_NO', null=True)  # Field name made lowercase.
     board_file_id = models.AutoField(db_column='BOARD_FILE_ID', primary_key=True)  # Field name made lowercase.
+
+
     # 조용식이 만진 부분
     board_file_path = models.ImageField(db_column='BOARD_FILE_PATH', upload_to='images/', blank=True, null=True)  # Field name made lowercase.
 
