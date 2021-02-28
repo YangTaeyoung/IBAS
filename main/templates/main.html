@@ -30,16 +30,18 @@
 
     <!-- STYLESHEETS -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/plugins.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/style_1.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/template_1.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/templete.css' %}">
     <link class="skin" rel="stylesheet" type="text/css" href="{% static 'css/skin/skin-1.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main_style.css' %}">
 
 
 </head>
 <body id="bg">
 <div id="loading-area"></div>
 <div class="page-wraper">
-    <!--====================메뉴바 시작====================-->
+    <!--임시로 넣어둠, 상단바 이후에 블럭처리해서 바꿀예정-->
+     <!--====================메뉴바 시작====================-->
     <!-- header -->
     <header class="site-header header-transparent mo-left">
         <!-- main header -->
@@ -54,6 +56,7 @@
                         <a href="#" class="logo-2"><img src="{% static 'images/logo_puple.png' %}" style="margin-top: 4px; margin-bottom: 4px"></a>
                     </div>
 
+
                     <!--====================메뉴, 회원정보에 따른 버튼 시작====================-->
                     <div class="header-nav navbar-collapse collapse justify-content-end" id="navbarNavDropdown">
                         <ul class="nav navbar-nav">
@@ -61,8 +64,8 @@
                             <li class="down active" style="padding-top: 6px"><a href="#">IBAS <i
                                     class="fa fa-chevron-down"></i></a>
                                 <ul class="sub-menu">
-                                    <li><a href="{% url 'test_introduce' %}">동아리 소개</a></li> <!-- url 걸어놨음. 나중에 수정 -->
-                                    <li><a href="{% url 'test_activity' %}">동아리 활동</a></li> <!-- url 걸어놨음. 나중에 수정 -->
+                                    <li><a href="#">동아리 소개</a></li>
+                                    <li><a href="#">동아리 활동</a></li>
 
                                     {# 밑에 있는 회계내역, 예산지원 신청은 회원들만 신청을 할 수 있음. #}
                                     {% if request.session.user_stu is not None %}
@@ -169,194 +172,114 @@
     <!-- header END -->
     <!--====================메뉴바 끝====================-->
 </div>
-
-
-<!-- 이거는 그냥 배경 및 밑으로 스크롤 내렸을 때 잘 되는지 보기위해서 넣은 코드 -->
-<div class="dlab-bnr-inr dlab-bnr-inr-md"
-     style="background-image:url({% static 'images/main-slider/slide1.jpg' %}); background-size: cover;">
-</div>
-<div class="section-full bg-gray content-inner about-us">
-    <div class="container-fluid">
-        <div class="section-head text-black text-center">
-            <h2 class="box-title">Top Trending Places</h2>
-            <div class="dlab-separator bg-primary"></div>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud.</p>
-        </div>
-        <div class="most-visite owl-carousel owl-btn-center-lr owl-btn-1 primary">
-            <div class="item">
-                <div class="listing-bx featured-star-left m-b30">
-                    <div class="listing-media">
-                        <img src="{% static 'images/listing/pic1.jpg' %}" alt="">
-                        <ul class="featured-star">
-                            <li><i class="fa fa-star"></i></li>
-                            <li><i class="fa fa-star"></i></li>
-                            <li><i class="fa fa-star"></i></li>
-                            <li><i class="fa fa-star"></i></li>
-                            <li><i class="fa fa-star"></i></li>
-                        </ul>
+    <!-- Content -->
+    <div class="page-content bg-white">
+        <!-- Section Banner -->
+        <!--메인페이지에 들어갈 이미지 들어가는 자리-->
+        <div class="dlab-bnr-inr"
+             style="background-image:url({% static 'images/ibas-main-background.jpg' %});">
+            <!--입부신청 바로가기 버튼-->
+            <div class="container">
+                <div class="dlab-bnr-inr-entry align-m dlab-home">
+                        <img class="ibas_logo" src="{% static 'images/ibas_main_logo.png' %}" />
+                        <div class="main_text"><img src="{% static 'images/main-text.png' %}" /></div>
+                         <div class="category-bx" style="margin-top: 100px; margin-bottom: 150px">
+						    <a href="#" class="category" style="width: 500px;">
+							    <p  style=" font-weight: bolder; font-size: 20px; padding-top: 12px">입부신청 바로가기</p>
+						    </a>
+				         </div>
                     </div>
-                    <div class="listing-info">
-                        <h3 class="title"><a href="listing-details.html">King Organic Shop</a></h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusm.</p>
-                        <ul class="place-info">
-                            <li class="place-location"><i class="fa fa-map-marker"></i>12/a, New</li>
-                            <li class="open"><i class="fa fa-check"></i>Open Now</li>
-                        </ul>
-                    </div>
-                    <ul class="wish-bx">
-                        <li><a class="like-btn" href="javascript:void(0)"><i class="fa fa-heart"></i></a>
-                        </li>
-                        <li><a class="info-btn" href="javascript:void(0)"><i class="fa fa-leaf"></i></a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="item">
-                <div class="listing-bx featured-star-left m-b30">
-                    <div class="listing-media">
-                        <img src="{% static 'images/listing/pic2.jpg' %}" alt="">
-                        <ul class="featured-star">
-                            <li><i class="fa fa-star"></i></li>
-                            <li><i class="fa fa-star"></i></li>
-                            <li><i class="fa fa-star"></i></li>
-                            <li><i class="fa fa-star"></i></li>
-                            <li><i class="fa fa-star"></i></li>
-                        </ul>
-                    </div>
-                    <div class="listing-info">
-                        <h3 class="title"><a href="listing-details.html">Dorado Health Care</a></h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusm.</p>
-                        <ul class="place-info">
-                            <li class="place-location"><i class="fa fa-map-marker"></i>12/a, New</li>
-                            <li class="open"><i class="fa fa-check"></i>Open Now</li>
-                        </ul>
-                    </div>
-                    <ul class="wish-bx">
-                        <li><a class="like-btn" href="javascript:void(0)"><i class="fa fa-heart"></i></a>
-                        </li>
-                        <li><a class="info-btn" href="javascript:void(0)"><i class="fa fa-leaf"></i></a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="item">
-                <div class="listing-bx featured-star-left m-b30">
-                    <div class="listing-media">
-                        <img src="{% static 'images/listing/pic3.jpg' %}" alt="">
-                        <ul class="featured-star">
-                            <li><i class="fa fa-star"></i></li>
-                            <li><i class="fa fa-star"></i></li>
-                            <li><i class="fa fa-star"></i></li>
-                            <li><i class="fa fa-star"></i></li>
-                            <li><i class="fa fa-star"></i></li>
-                        </ul>
-                    </div>
-                    <div class="listing-info">
-                        <h3 class="title"><a href="listing-details.html">Tam Farfhume Shop</a></h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusm.</p>
-                        <ul class="place-info">
-                            <li class="place-location"><i class="fa fa-map-marker"></i>12/a, New</li>
-                            <li class="open"><i class="fa fa-check"></i>Open Now</li>
-                        </ul>
-                    </div>
-                    <ul class="wish-bx">
-                        <li><a class="like-btn" href="javascript:void(0)"><i class="fa fa-heart"></i></a>
-                        </li>
-                        <li><a class="info-btn" href="javascript:void(0)"><i class="fa fa-leaf"></i></a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="item">
-                <div class="listing-bx featured-star-left m-b30">
-                    <div class="listing-media">
-                        <img src="{% static 'images/listing/pic4.jpg' %}" alt="">
-                        <ul class="featured-star">
-                            <li><i class="fa fa-star"></i></li>
-                            <li><i class="fa fa-star"></i></li>
-                            <li><i class="fa fa-star"></i></li>
-                            <li><i class="fa fa-star"></i></li>
-                            <li><i class="fa fa-star"></i></li>
-                        </ul>
-                    </div>
-                    <div class="listing-info">
-                        <h3 class="title"><a href="listing-details.html">King Organic Shop</a></h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusm.</p>
-                        <ul class="place-info">
-                            <li class="place-location"><i class="fa fa-map-marker"></i>12/a, New</li>
-                            <li class="open"><i class="fa fa-check"></i>Open Now</li>
-                        </ul>
-                    </div>
-                    <ul class="wish-bx">
-                        <li><a class="like-btn" href="javascript:void(0)"><i class="fa fa-heart"></i></a>
-                        </li>
-                        <li><a class="info-btn" href="javascript:void(0)"><i class="fa fa-leaf"></i></a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="item">
-                <div class="listing-bx featured-star-left m-b30">
-                    <div class="listing-media">
-                        <img src="{% static 'images/listing/pic5.jpg' %}" alt="">
-                        <ul class="featured-star">
-                            <li><i class="fa fa-star"></i></li>
-                            <li><i class="fa fa-star"></i></li>
-                            <li><i class="fa fa-star"></i></li>
-                            <li><i class="fa fa-star"></i></li>
-                            <li><i class="fa fa-star"></i></li>
-                        </ul>
-                    </div>
-                    <div class="listing-info">
-                        <h3 class="title"><a href="listing-details.html">Venzil Hingo Zoo</a></h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusm.</p>
-                        <ul class="place-info">
-                            <li class="place-location"><i class="fa fa-map-marker"></i>12/a, New</li>
-                            <li class="open"><i class="fa fa-check"></i>Open Now</li>
-                        </ul>
-                    </div>
-                    <ul class="wish-bx">
-                        <li><a class="like-btn" href="javascript:void(0)"><i class="fa fa-heart"></i></a>
-                        </li>
-                        <li><a class="info-btn" href="javascript:void(0)"><i class="fa fa-leaf"></i></a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="item">
-                <div class="listing-bx featured-star-left m-b30">
-                    <div class="listing-media">
-                        <img src="{% static 'images/listing/pic6.jpg' %}" alt="">
-                        <ul class="featured-star">
-                            <li><i class="fa fa-star"></i></li>
-                            <li><i class="fa fa-star"></i></li>
-                            <li><i class="fa fa-star"></i></li>
-                            <li><i class="fa fa-star"></i></li>
-                            <li><i class="fa fa-star"></i></li>
-                        </ul>
-                    </div>
-                    <div class="listing-info">
-                        <h3 class="title"><a href="listing-details.html">KFC Pijja Shop</a></h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusm.</p>
-                        <ul class="place-info">
-                            <li class="place-location"><i class="fa fa-map-marker"></i>12/a, New</li>
-                            <li class="open"><i class="fa fa-check"></i>Open Now</li>
-                        </ul>
-                    </div>
-                    <ul class="wish-bx">
-                        <li><a class="like-btn" href="javascript:void(0)"><i class="fa fa-heart"></i></a>
-                        </li>
-                        <li><a class="info-btn" href="javascript:void(0)"><i class="fa fa-leaf"></i></a>
-                        </li>
-                    </ul>
                 </div>
             </div>
         </div>
-    </div>
+        <!-- Section Banner END -->
+
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-5 col-lg-4 col-md-12 col-sm-12">
+                        <div class="widget">
+                            <img src="{% static 'images/logo-white.png' %}" class="m-b15" alt="" width="180">
+                            <p class="text-capitalize m-b20">Lorem Ipsum is simply dummy text of the printing and
+                                typesetting industry has been the industry.</p>
+                            <div class="subscribe-form m-b20">
+                                <form class="dzSubscribe" action="{% static 'script/mailchamp.php' %}" method="post">
+                                    <div class="dzSubscribeMsg"></div>
+                                    <div class="input-group">
+                                        <input name="dzEmail" required="required" class="form-control"
+                                               placeholder="Your Email Address" type="email">
+                                        <span class="input-group-btn">
+											<button name="submit" value="Submit" type="submit"
+                                                    class="site-button radius-xl">Subscribe</button>
+										</span>
+                                    </div>
+                                </form>
+                            </div>
+                            <ul class="list-inline m-a0">
+                                <li><a href="javascript:void(0);" class="site-button facebook circle "><i
+                                        class="fa fa-facebook"></i></a></li>
+                                <li><a href="javascript:void(0);" class="site-button google-plus circle "><i
+                                        class="fa fa-google-plus"></i></a></li>
+                                <li><a href="javascript:void(0);" class="site-button linkedin circle "><i
+                                        class="fa fa-linkedin"></i></a></li>
+                                <li><a href="javascript:void(0);" class="site-button instagram circle "><i
+                                        class="fa fa-instagram"></i></a></li>
+                                <li><a href="javascript:void(0);" class="site-button twitter circle "><i
+                                        class="fa fa-twitter"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-5 col-md-7 col-sm-12 col-12">
+                        <div class="widget border-0">
+                            <h5 class="m-b30 text-white">Frequently Asked Questions</h5>
+                            <ul class="list-2 list-line">
+                                <li><a href="javascript:void(0);">Hotel</a></li>
+                                <li><a href="javascript:void(0);">Restaurant</a></li>
+                                <li><a href="javascript:void(0);">Appartment</a></li>
+                                <li><a href="javascript:void(0);">SPA & Beauty</a></li>
+                                <li><a href="javascript:void(0);">Atuomation</a></li>
+                                <li><a href="javascript:void(0);">Travel</a></li>
+                                <li><a href="javascript:void(0);">How It Works</a></li>
+                                <li><a href="javascript:void(0);">For Employers</a></li>
+                                <li><a href="javascript:void(0);">Underwriting</a></li>
+                                <li><a href="javascript:void(0);">Contact Us</a></li>
+                                <li><a href="javascript:void(0);">Lending Licnses</a></li>
+                                <li><a href="javascript:void(0);">Support</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-5 col-sm-12 col-12">
+                        <div class="widget widget_getintuch">
+                            <h5 class="m-b30 text-white">Contact us</h5>
+                            <ul>
+                                <li><i class="ti-location-pin"></i><strong>address</strong> demo address #8901 Marmora
+                                    Road Chi Minh City, Vietnam
+                                </li>
+                                <li><i class="ti-mobile"></i><strong>phone</strong>0800-123456 (24/7 Support)</li>
+                                <li><i class="ti-email"></i><strong>email</strong>info@example.com</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 text-center">
+                        <span class="fbottom-like">© 2020 Design With <a class="like-btn" href="javascript:void(0)"><i
+                                class="fa fa-heart"></i></a> By DexignZone </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer END-->
+    <button class="scroltop fa fa-chevron-up"></button>
 </div>
-
-
 <!-- JAVASCRIPT FILES ========================================= -->
 <script src="{% static 'js/jquery.min.js' %}"></script><!-- JQUERY.MIN JS -->
 <script src="{% static 'plugins/bootstrap/js/popper.min.js' %}"></script><!-- BOOTSTRAP.MIN JS -->

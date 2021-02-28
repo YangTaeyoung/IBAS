@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -36,10 +38,7 @@
 <!-- 여기까지가 파일을 하나씩 가져오는 코드 -->
 
 <!-- 세션 처리 해야함 -->
-<form action="{% url 'test_activity_register' %}" method="POST">
-    {% csrf_token %}
-    <input type="submit" value="글쓰기"><br>
-</form>
+    <a href="{% url 'test_activity_register' %}">글쓰기</a><br>
 
 <br><br>
 <!-- 페이지 이동하는 코드 -->

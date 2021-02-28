@@ -10,7 +10,7 @@ from django.db import models
 
 class Answer(models.Model):
     answer_id = models.AutoField(db_column='ANSWER_ID', primary_key=True)  # Field name made lowercase.
-    answer_user = models.ForeignKey('User', models.DO_NOTHING, db_column='ANSWER_USER')  # Field name made lowercase.
+    answer_user = models.ForeignKey('User', on_delete=models.CASCADE, db_column='ANSWER_USER')  # Field name made lowercase.
     answer_quest = models.ForeignKey('QuestForm', models.DO_NOTHING, db_column='ANSWER_QUEST')  # Field name made lowercase.
     answer_cont = models.CharField(db_column='ANSWER_CONT', max_length=5000)  # Field name made lowercase.
     answer_created = models.DateTimeField(db_column='ANSWER_CREATED', auto_now_add=True)  # Field name made lowercase.
@@ -26,8 +26,8 @@ class Bank(models.Model):
     bank_minus = models.IntegerField(db_column='BANK_MINUS', blank=True, null=True)  # Field name made lowercase.
     bank_title = models.CharField(db_column='BANK_TITLE', max_length=100, blank=True, null=True)  # Field name made lowercase.
     bank_used = models.DateTimeField(db_column='BANK_USED', blank=True, null=True)  # Field name made lowercase.
-    bank_created = models.DateTimeField(db_column='BANK_CREATED', auto_now_add=True)  # Field name made lowercase.
-    bank_updated = models.DateTimeField(db_column='BANK_UPDATED', blank=True, null=True, auto_now=True)  # Field name made lowercase.
+    bank_created = models.DateTimeField(db_column='BANK_CREATED' ,auto_now_add=True)  # Field name made lowercase.
+    bank_updated = models.DateTimeField(db_column='BANK_UPDATED', auto_now=True, blank=True, null=True)  # Field name made lowercase.
     bank_cfo = models.ForeignKey('User', models.DO_NOTHING, db_column='BANK_CFO', related_name="cfo")  # Field name made lowercase.
     bank_used_user = models.ForeignKey('User', models.DO_NOTHING, db_column='BANK_USED_USER', related_name="used_user")  # Field name made lowercase.
     bank_apply = models.IntegerField(db_column='BANK_APPLY')  # Field name made lowercase.
@@ -41,7 +41,7 @@ class Bank(models.Model):
 
 
 class BankFile(models.Model):
-    bank_no = models.ForeignKey(Bank, models.DO_NOTHING, db_column='BANK_NO')  # Field name made lowercase.
+    bank_no = models.ForeignKey(Bank, on_delete=models.CASCADE, db_column='BANK_NO')  # Field name made lowercase.
     bank_file_id = models.AutoField(db_column='BANK_FILE_ID', primary_key=True)  # Field name made lowercase.
     bank_file_path = models.CharField(db_column='BANK_FILE_PATH', max_length=1000)  # Field name made lowercase.
 
@@ -55,7 +55,7 @@ class Board(models.Model):
     board_type_no = models.ForeignKey('BoardType', models.DO_NOTHING, db_column='BOARD_TYPE_NO')  # Field name made lowercase.
     board_title = models.CharField(db_column='BOARD_TITLE', max_length=100)  # Field name made lowercase.
     board_cont = models.CharField(db_column='BOARD_CONT', max_length=5000)  # Field name made lowercase.
-    board_writer = models.ForeignKey('User', on_delete=models.CASCADE , db_column='BOARD_WRITER')  # Field name made lowercase.
+    board_writer = models.ForeignKey('User', models.DO_NOTHING, db_column='BOARD_WRITER')  # Field name made lowercase.
     board_created = models.DateTimeField(db_column='BOARD_CREATED', auto_now_add=True)  # Field name made lowercase.
 
     class Meta:
@@ -64,7 +64,7 @@ class Board(models.Model):
 
 
 class BoardFile(models.Model):
-    board_no = models.ForeignKey(Board, models.DO_NOTHING, db_column='BOARD_NO')  # Field name made lowercase.
+    board_no = models.ForeignKey(Board, on_delete=models.CASCADE, db_column='BOARD_NO')  # Field name made lowercase.
     board_file_id = models.AutoField(db_column='BOARD_FILE_ID', primary_key=True)  # Field name made lowercase.
     board_file_path = models.CharField(db_column='BOARD_FILE_PATH', max_length=1000)  # Field name made lowercase.
 
@@ -95,7 +95,7 @@ class ChiefCarrier(models.Model):
 class Comment(models.Model):
     comment_id = models.AutoField(db_column='COMMENT_ID', primary_key=True)  # Field name made lowercase.
     comment_board_no = models.ForeignKey(Board, models.DO_NOTHING, db_column='COMMENT_BOARD_NO')  # Field name made lowercase.
-    comment_writer = models.ForeignKey('User', on_delete=models.CASCADE, db_column='COMMENT_WRITER')  # Field name made lowercase.
+    comment_writer = models.ForeignKey('User', models.DO_NOTHING, db_column='COMMENT_WRITER')  # Field name made lowercase.
     comment_cont = models.CharField(db_column='COMMENT_CONT', max_length=5000)  # Field name made lowercase.
     comment_cont_ref = models.ForeignKey('self', models.DO_NOTHING, db_column='COMMENT_CONT_REF', blank=True, null=True)  # Field name made lowercase.
     comment_created = models.DateTimeField(db_column='COMMENT_CREATED', auto_now_add=True)  # Field name made lowercase.
@@ -113,7 +113,7 @@ class ContestBoard(models.Model):
     contest_asso = models.CharField(db_column='CONTEST_ASSO', max_length=100)  # Field name made lowercase.
     contest_deadline = models.DateTimeField(db_column='CONTEST_DEADLINE')  # Field name made lowercase.
     contest_created = models.DateTimeField(db_column='CONTEST_CREATED', auto_now_add=True)  # Field name made lowercase.
-    contest_writer = models.ForeignKey('User', on_delete=models.CASCADE, db_column='CONTEST_WRITER')
+    contest_writer = models.IntegerField(db_column='CONTEST_WRITER')  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -122,7 +122,7 @@ class ContestBoard(models.Model):
 
 class ContestFile(models.Model):
     contest_file_id = models.AutoField(db_column='CONTEST_FILE_ID', primary_key=True)  # Field name made lowercase.
-    contest_no = models.ForeignKey(ContestBoard, models.DO_NOTHING, db_column='CONTEST_NO')  # Field name made lowercase.
+    contest_no = models.ForeignKey(ContestBoard, on_delete=models.CASCADE, db_column='CONTEST_NO')  # Field name made lowercase.
     contest_file_path = models.CharField(db_column='CONTEST_FILE_PATH', max_length=1000)  # Field name made lowercase.
 
     class Meta:
@@ -134,7 +134,7 @@ class Lect(models.Model):
     lect_no = models.AutoField(db_column='LECT_NO', primary_key=True)  # Field name made lowercase.
     lect_title = models.CharField(db_column='LECT_TITLE', max_length=100)  # Field name made lowercase.
     lect_chief = models.ForeignKey('User', models.DO_NOTHING, db_column='LECT_CHIEF')  # Field name made lowercase.
-    lect_pic = models.CharField(db_column='LECT_PIC', max_length=1000)  # Field name made lowercase.
+    lect_pic = models.ImageField(db_column='LECT_PIC', max_length=1000, upload_to='lect/')  # Field name made lowercase.
     lect_type = models.ForeignKey('LectType', models.DO_NOTHING, db_column='LECT_TYPE')  # Field name made lowercase.
     lect_created = models.DateTimeField(db_column='LECT_CREATED', auto_now_add=True)  # Field name made lowercase.
     lect_intro = models.CharField(db_column='LECT_INTRO', max_length=300)  # Field name made lowercase.
@@ -153,7 +153,7 @@ class Lect(models.Model):
 class LectBoard(models.Model):
     lect_board_no = models.AutoField(db_column='LECT_BOARD_NO', primary_key=True)  # Field name made lowercase.
     lect_board_title = models.CharField(db_column='LECT_BOARD_TITLE', max_length=100)  # Field name made lowercase.
-    lect_board_created = models.DateTimeField(db_column='LECT_BOARD_CREATED', auto_now_add=True)  # Field name made lowercase.
+    lect_board_created = models.DateTimeField(db_column='LECT_BOARD_CREATED',auto_now_add=True)  # Field name made lowercase.
     lect_board_cont = models.TextField(db_column='LECT_BOARD_CONT')  # Field name made lowercase.
     lect_board_writer = models.ForeignKey('User', models.DO_NOTHING, db_column='LECT_BOARD_WRITER')  # Field name made lowercase.
     lect_no = models.ForeignKey(Lect, models.DO_NOTHING, db_column='LECT_NO')  # Field name made lowercase.
@@ -178,7 +178,7 @@ class LectBoardAnswer(models.Model):
 
 class LectBoardAnswerFile(models.Model):
     lect_ans_file_id = models.AutoField(db_column='LECT_ANS_FILE_ID', primary_key=True)  # Field name made lowercase.
-    lect_ans_no = models.ForeignKey(LectBoardAnswer, models.DO_NOTHING, db_column='LECT_ANS_NO')  # Field name made lowercase.
+    lect_ans_no = models.ForeignKey(LectBoardAnswer, on_delete=models.CASCADE, db_column='LECT_ANS_NO')  # Field name made lowercase.
     lect_ans_file_path = models.CharField(db_column='LECT_ANS_FILE_PATH', max_length=1000)  # Field name made lowercase.
 
     class Meta:
@@ -188,11 +188,11 @@ class LectBoardAnswerFile(models.Model):
 
 class LectBoardComment(models.Model):
     lect_board_comment_id = models.AutoField(db_column='LECT_BOARD_COMMENT_ID', primary_key=True)  # Field name made lowercase.
-    lect_board_board_no = models.ForeignKey(LectBoard, models.DO_NOTHING, db_column='LECT_BOARD_BOARD_NO')  # Field name made lowercase.
+    lect_board_board_no = models.ForeignKey(LectBoard, on_delete=models.CASCADE, db_column='LECT_BOARD_BOARD_NO')  # Field name made lowercase.
     lect_board_comment_cont = models.TextField(db_column='LECT_BOARD_COMMENT_CONT')  # Field name made lowercase.
-    lect_board_comment_writer = models.ForeignKey('User', models.DO_NOTHING, db_column='LECT_BOARD_COMMENT_WRITER')  # Field name made lowercase.
-    lect_board_comment_date = models.DateTimeField(db_column='LECT_BOARD_COMMENT_DATE', auto_now_add=True)  # Field name made lowercase.
-    lect_board_comment_ref = models.ForeignKey('self', models.DO_NOTHING, db_column='LECT_BOARD_COMMENT_REF', blank=True, null=True)  # Field name made lowercase.
+    lect_board_comment_writer = models.ForeignKey('User', on_delete=models.CASCADE, db_column='LECT_BOARD_COMMENT_WRITER')  # Field name made lowercase.
+    lect_board_comment_date = models.DateTimeField(db_column='LECT_BOARD_COMMENT_DATE')  # Field name made lowercase.
+    lect_board_comment_ref = models.ForeignKey('self', on_delete=models.CASCADE, db_column='LECT_BOARD_COMMENT_REF', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -201,7 +201,7 @@ class LectBoardComment(models.Model):
 
 class LectBoardEx(models.Model):
     lect_board_ex_no = models.AutoField(db_column='LECT_BOARD_EX_NO', primary_key=True)  # Field name made lowercase.
-    lect_board_no = models.ForeignKey(LectBoard, models.DO_NOTHING, db_column='LECT_BOARD_NO')  # Field name made lowercase.
+    lect_board_no = models.ForeignKey(LectBoard, on_delete=models.CASCADE, db_column='LECT_BOARD_NO')  # Field name made lowercase.
     lect_board_ex_content = models.TextField(db_column='LECT_BOARD_EX_CONTENT', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
@@ -211,7 +211,7 @@ class LectBoardEx(models.Model):
 
 class LectBoardExFile(models.Model):
     lect_board_ex_file_id = models.AutoField(db_column='LECT_BOARD_EX_FILE_ID', primary_key=True)  # Field name made lowercase.
-    lect_board_ex_no = models.ForeignKey(LectBoardEx, models.DO_NOTHING, db_column='LECT_BOARD_EX_NO')  # Field name made lowercase.
+    lect_board_ex_no = models.ForeignKey(LectBoardEx, on_delete=models.CASCADE, db_column='LECT_BOARD_EX_NO')  # Field name made lowercase.
     lect_board_ex_file_path = models.CharField(db_column='LECT_BOARD_EX_FILE_PATH', max_length=1000)  # Field name made lowercase.
 
     class Meta:
@@ -221,7 +221,7 @@ class LectBoardExFile(models.Model):
 
 class LectBoardFile(models.Model):
     lect_board_file_id = models.AutoField(db_column='LECT_BOARD_FILE_ID', primary_key=True)  # Field name made lowercase.
-    lect_board_no = models.ForeignKey(LectBoard, models.DO_NOTHING, db_column='LECT_BOARD_NO')  # Field name made lowercase.
+    lect_board_no = models.ForeignKey(LectBoard, on_delete=models.CASCADE, db_column='LECT_BOARD_NO')  # Field name made lowercase.
     lect_board_file_path = models.CharField(db_column='LECT_BOARD_FILE_PATH', max_length=1000)  # Field name made lowercase.
 
     class Meta:
@@ -301,7 +301,7 @@ class User(models.Model):
     user_stu = models.IntegerField(db_column='USER_STU', primary_key=True)  # Field name made lowercase.
     user_name = models.CharField(db_column='USER_NAME', max_length=50)  # Field name made lowercase.
     user_major = models.ForeignKey(MajorInfo, models.DO_NOTHING, db_column='USER_MAJOR')  # Field name made lowercase.
-    user_pic = models.CharField(db_column='USER_PIC', max_length=1000, blank=True, null=True)  # Field name made lowercase.
+    user_pic = models.ImageField(db_column='USER_PIC', upload_to='member/', blank=True, null=True)  # Field name made lowercase.
     user_auth = models.ForeignKey('UserAuth', models.DO_NOTHING, db_column='USER_AUTH')  # Field name made lowercase.
     user_role = models.ForeignKey('UserRole', models.DO_NOTHING, db_column='USER_ROLE')  # Field name made lowercase.
     user_joined = models.DateTimeField(db_column='USER_JOINED', auto_now_add=True)  # Field name made lowercase.
@@ -326,12 +326,22 @@ class UserAuth(models.Model):
 
 class UserDeleteFile(models.Model):
     user_delete_id = models.AutoField(db_column='USER_DELETE_ID', primary_key=True)  # Field name made lowercase.
-    user_stu = models.ForeignKey(User, models.DO_NOTHING, db_column='USER_STU')  # Field name made lowercase.
+    user_stu = models.ForeignKey(User, on_delete=models.CASCADE, db_column='USER_STU')  # Field name made lowercase.
     user_delete_file_path = models.CharField(db_column='USER_DELETE_FILE_PATH', max_length=1000)  # Field name made lowercase.
 
     class Meta:
         managed = False
         db_table = 'USER_DELETE_FILE'
+
+
+class UserEmail(models.Model):
+    email_no = models.AutoField(primary_key=True)
+    user_email = models.CharField(max_length=100)
+    user_stu = models.ForeignKey(User, on_delete=models.CASCADE, db_column='user_stu')
+
+    class Meta:
+        managed = False
+        db_table = 'USER_EMAIL'
 
 
 class UserRole(models.Model):
@@ -358,7 +368,7 @@ class AccountEmailconfirmation(models.Model):
     created = models.DateTimeField()
     sent = models.DateTimeField(blank=True, null=True)
     key = models.CharField(unique=True, max_length=64)
-    email_address = models.ForeignKey(AccountEmailaddress, on_delete=models.CASCADE)
+    email_address = models.ForeignKey(AccountEmailaddress, models.DO_NOTHING)
 
     class Meta:
         managed = False
