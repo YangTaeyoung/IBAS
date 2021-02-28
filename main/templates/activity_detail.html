@@ -8,10 +8,8 @@
 </head>
 <body>
 
-
 {% for image in board_info.boardfile_set.all %}
-    {{ image.board_file_path }}
-    <img src="../../media/{{ image.board_file_path }}" style="width: 300px; height: 300px"><br>
+    <img src="/media/{{ image.board_file_path }}" style="width: 300px; height: 300px"><br>
     <br>
 {% endfor %}
 
@@ -20,5 +18,19 @@
 제목 : {{ board_info.board_title }} <br>
 내용 : {{ board_info.board_cont }} <br>
 작성시간 : {{ board_info.board_created }} <br>
+
+<form action="{% url 'test_activity_delete' %}" METHOD="POST">
+    {% csrf_token %}
+    <input type="hidden" name="board_no" value="{{ board_info.board_no }}">
+    <input type="submit" value="삭제" onclick="return confirm('정말 삭제하시겠습니까?')">
+</form>
+
+{# ################## 밑은 댓글쓰기 만드는 곳 ##################### #}
+<form action="{% url 'activity_comment' %}" method="POST">
+    {% csrf_token %}
+    댓글 : <input name="activity_comment">
+    <input type="submit" value="댓글쓰기"><br>
+</form>
+
 </body>
 </html>
