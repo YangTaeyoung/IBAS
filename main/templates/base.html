@@ -189,7 +189,7 @@
 <footer>
     <!-- content 담는 부분이 footer-top -->
     <!-- footer-top에 대한 정의는 bottom_bar.css에 정의되어 있음. (height 관련) -->
-    <div class="footer-top">
+    <div class="footer-top" style="padding-top: 50px">
         <!-- content 시작 -->
         <!-- cont-grid에 대한 정의는 bottom_bar.css에 정의되어 있음. (grid 관련) -->
         <div class="cont-grid">
@@ -212,7 +212,7 @@
                         <!-- td-size_small에 대한 정의는 bottom_bar.css에 정의되어 있음. (size 관련) -->
                         <td class="td-size_small"><i class="fa fa-user"></i></td>
                         <!-- td-size_big에 대한 정의는 bottom_bar.css에 정의되어 있음. (size 관련) -->
-                        <td class="td-size_big">회장 : {{ request.session.chief_name }}</td>
+                        <td class="td-size_big">{{ request.session.chief_name }}(회장)</td>
                     </tr>
                     <tr>
                         <td class="td-size_small"><i class="ti-location-pin"></i></td>
