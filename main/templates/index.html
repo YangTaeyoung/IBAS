@@ -12,7 +12,7 @@
                 <div class="dlab-bnr-inr-entry align-m dlab-home">
                         <img  class="ibas_logo" onclick="location.href = '{% url "login" %}'" src="{% static 'images/ibas_main_logo.png' %}" />
                         <div class="main_text"><img src="{% static 'images/main-text.png' %}" /></div>
-                         <div onclick="location.href = '{% url "login" %}'" class="category-bx" style="margin-top: 100px; margin-bottom: 150px">
+                         <div onclick=" {% if request.session.user_stu is None %}location.href ='{% url "login" %}'{% endif %}" class="category-bx" style="margin-top: 100px; margin-bottom: 150px">
 						    <a href="#" class="category" style="width: 500px;">
 							    <p style=" font-weight: bolder; font-size: 20px; padding-top: 12px">입부신청</p>
 						    </a>
