@@ -2,8 +2,8 @@
 	Premery bg color 
 =====================*/
 :root {
-  --text-color: #4611a7;
-  --bg-color: #4611a7;
+  --text-color: #091069;
+  --bg-color: #091069;
   --bg-color-ho: #7133e2;
 }
 /* Hex */
@@ -78,7 +78,7 @@
   a,
 .site-header.header-style1 .header-nav .nav > li.active:after,
 .tag-new {
-  background-color: #4611a7;
+  background-color: #091069;
 }
 /*Hex color :hover */
 .site-button:active,
@@ -179,13 +179,13 @@ a.text-primary:focus,
 a.text-primary:hover,
 .sr-box.style-1:hover .count,
 .blog-post.style1 .dlab-post-meta .post-date {
-  color: #4611a7;
+  color: #091069;
 }
 @media only screen and (max-width: 991px) {
   .nav-dark.header-nav .nav > li > a:hover,
   .nav-dark.header-nav .nav > li > a:active,
   .nav-dark.header-nav .nav > li > a:focus {
-    color: #4611a7;
+    color: #091069;
   }
 }
 /*===================== 
@@ -209,24 +209,24 @@ input[type="radio"] + label:hover:before,
 .owl-theme.dots-style-3 .owl-dots .owl-dot.active,
 .owl-theme.dots-style-3 .owl-dots .owl-dot:hover,
 .side-bar .widget_tag_cloud a:hover {
-  border-color: #4611a7;
+  border-color: #091069;
 }
 .owl-item.active.center .testimonial-8 .testimonial-text:after {
-  border-top: 15px solid #4611a7;
+  border-top: 15px solid #091069;
 }
 .dlab-tabs.border-top .nav-tabs > li > a.active,
 .header-nav .nav > li .sub-menu,
 .header-nav .nav > li .mega-menu {
-  border-top-color: #4611a7;
+  border-top-color: #091069;
 }
 .port-style1 .port-box {
-  border-left: 3px solid #4611a7;
+  border-left: 3px solid #091069;
 }
 .choseus-tabs .nav li a.active {
-  border-bottom: 2px solid #4611a7;
+  border-bottom: 2px solid #091069;
 }
 svg.radial-progress:nth-of-type(6n + 1) circle {
-  stroke: #4611a7;
+  stroke: #091069;
 }
 /*===================== 
 	Secondery bg color
@@ -242,7 +242,7 @@ svg.radial-progress:nth-of-type(6n + 1) circle {
   color: #2d3239;
 }
 .center .testimonial-2.testimonial-bg .testimonial-text:after {
-  border-top-color: #4611a7;
+  border-top-color: #091069;
 }
 /* new */
 .modal-bx-info .modal-header,
@@ -261,7 +261,7 @@ svg.radial-progress:nth-of-type(6n + 1) circle {
 .dlab-tabs.search-filter .nav-tabs > li > a.active:hover,
 .dlab-tabs.search-filter .nav-tabs > li > a:focus,
 .dlab-tabs.search-filter .nav-tabs > li > a:hover {
-  background-color: #4611a7;
+  background-color: #091069;
 }
 .login-form .info-bottom a,
 .login-form-box .btn-link,
@@ -276,18 +276,18 @@ svg.radial-progress:nth-of-type(6n + 1) circle {
 .blog-post.style2 .dlab-post-meta ul li i,
 .work-box.style1:hover .box-count,
 .site-filters.listing-filters ul li.active a {
-  color: #4611a7;
+  color: #091069;
 }
 .icon-box-list .icon-cell.bg-gray,
 .icon-box-info .icon-cell.bg-gray {
-  color: #4611a7 !important;
+  color: #091069 !important;
 }
 .work-box.style1 {
-  border: 4px solid #4611a7;
+  border: 4px solid #091069;
 }
 .listing-nav li a.active,
 .center .testimonial-2.testimonial-bg .testimonial-text:after {
-  border-top-color: #4611a7;
+  border-top-color: #091069;
 }
 .icon-box-list .icon-cell.bg-gray,
 .icon-box-info .icon-cell.bg-gray {

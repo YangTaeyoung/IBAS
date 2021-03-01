@@ -45,9 +45,9 @@ INSTALLED_APPS = [
     'member',
     # 메인 관련 앱
     'main',
-
+    
     # 임시 어플리케이션. 실제 프로젝트 시작 시 사라질 예정.
-    # 'first',
+    #'first',
 
 
     # 소셜 로그인 패키지: allauth 관련
