@@ -99,11 +99,11 @@ WSGI_APPLICATION = 'IBAS.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'IBAS',
+        'NAME': 'ibas_local',
         'USER': 'root',
-        'PASSWORD': 'bigdata1156--',
+        'PASSWORD': '1234',
         'HOST': 'localhost',
-        'PORT': '3356',
+        'PORT': '3306',
     }
 }
 
