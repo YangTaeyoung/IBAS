@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from allauth.socialaccount.models import SocialAccount  # 소셜 계정 DB, socialaccount_socialaccount 테이블을 사용하기 위함.
 from DB.models import AuthUser, User, ChiefCarrier, UserRole, Board, BoardFile, \
-    BoardType  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
+    BoardType, Comment  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
 from member import session
 from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect
@@ -77,7 +77,7 @@ def test_activity_register(request):
             board_file.save() # DB 에 저장 시켜줌
             # 여기서, pk 는 auto_incre 라서 상관 X
 
-        return render(request, 'activity.html', {}) # render 해주기
+        return HttpResponseRedirect('/test/test_activity/')
 
     # POST가 아닌 그냥 보여주는 방식
     return render(request, 'activity_register.html', {})
@@ -87,19 +87,33 @@ def test_activity_delete(request):
         activity = get_object_or_404(Board, pk=request.POST.get('board_no'))
 
         try :
-            os.remove('media/'+str(BoardFile.objects.get(board_no=activity.board_no).board_file_path))
+            print(BoardFile.objects.filter(board_no=activity.board_no))
+            # print(BoardFile.objects.get(board_no=activity.board_no))
+            #print(str(BoardFile.objects.get(board_no=activity.board_no).board_file_path))
+            #os.remove('media/'+str(BoardFile.objects.get(board_no=activity.board_no).board_file_path))
         except FileNotFoundError:
             pass
 
-        activity.delete()
+        # activity.delete()
         return HttpResponseRedirect('/test/test_activity/')
 
     else:  # 파라미터가 제대로 넘어오지 않은 경우, 즉 비정상적인 경로를 통해 들어간 경우 바로 나오게 해준다.
         return HttpResponseRedirect('/test/test_activity/')
 
 def test_activity_v1(request):  # 입부신청 완료 페이지로 이동
-    return render(request, 'test_activity_v1.html', {})
+    return render(request, 'activity.html', {})
 
 def activity_comment(request):
+    if request.method == "POST" :
+        user_stu = User.objects.get(pk=request.session.get('user_stu'))  # 유저 학번 들고오는 것임
+        board_no = request.POST.get('board_no')
+
+        comment_register = Comment (
+            comment_board_no= request.POST.get('board_no'),
+            comment_writer=user_stu,
+            comment_cont=request.POST.get('activity_comment')
+        )
+        print(comment_register)
+        return HttpResponseRedirect('/test/test_activity/detail/')
     return HttpResponseRedirect('/test/test_activity/detail/')
     # return render(request, 'activity_detail.html', {})

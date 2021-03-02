@@ -301,7 +301,7 @@
 }
 
 /* 비밀번호가 틀릴 경우 나오는 경고메시지 스타일 */
-.error-text-id {
+.error-text{
     position: relative;
     bottom: 14px;
     left: 5px;
