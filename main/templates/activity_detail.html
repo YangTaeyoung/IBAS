@@ -29,6 +29,7 @@
 <form action="{% url 'activity_comment' %}" method="POST">
     {% csrf_token %}
     댓글 : <input name="activity_comment">
+    <input type="hidden" name="board_no" value="{{ board_info.board_no }}">
     <input type="submit" value="댓글쓰기"><br>
 </form>
 
