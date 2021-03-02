@@ -5,7 +5,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/seungyeon.css' %}">
 
 
-    <!--=====================================제목 및 게시글 시작=====================================-->
+    <!--===================================== 제목 및 부제목 부 시작 =====================================-->
     <div class="page-wraper">
         <div class="page-content bg-white">
             <!----------상단 제목부분----------->
@@ -22,101 +22,94 @@
                     </div>
                 </div>
             </div>
-            <!--=====================================게시글 시작=====================================-->
+            <!--===================================== 게시글 부 시작 =====================================-->
             <div class="content-block">
                 <div class="section-full content-inner bg-white">
-
-                    <!-- 도저히.....생각이 안남ㅁ..... for문 두개 돌리는 상황에서 board_no 가 같으면 가져오는 건데, 모르겠음 ㅠㅠ -->
-                    {% for board in board_list %}
-                        {% for board_file in board_file_list %}
-                            {% if board == board_file.board_no %}
-                                <!--=====게시글 1=====-->
-                                <div class="container">
-                                <div class="row">
-                                <form action="{% url 'test_activity_detail' %}" method="POST">
-                                {% csrf_token %}
-                                <div class="col-lg-4 col-md-6 col-sm-6 m-b30">
-                                    <div class="listing-bx overlap">
-                                        <div class="listing-media act-img-size">
-                                            <img src="/media/{{ board_file.board_file_path }}"
-                                                 style="width: 300px; height: 300px" alt=""> <!-- 사진 -->
-                                        </div>
-                                        <!--게시글 제목 및 작성자, 작성시간 div 시작-->
-                                        <div class="listing-info">
-                                            <!--게시글 제목-->
-                                            <div class="line1">
-                                                <!-- ======================임시방편으로 만들어 놓았음. 수정해야해 ================================ -->
-                                                <!-- ================여기 부분은 제목 누르면 자세히 보기로 들어가는 글 ================== -->
-                                                <input type="submit" class="title line1"
-                                                       value="{{ board.board_title }}"
-                                                       style="background-color:transparent; border:0px transparent solid;">
+                    <div class="container">
+                        <div class="row">
+                            <!-- 도저히.....생각이 안남ㅁ..... for문 두개 돌리는 상황에서 board_no 가 같으면 가져오는 건데, 모르겠음 ㅠㅠ -->
+                            {% for board in board_list %}
+                                {% for board_file in board_file_list %}
+                                    {% if board == board_file.board_no %}
+                                        <!--============ 게시글 박스 시작 ============-->
+                                        <div class="col-lg-4 col-md-6 col-sm-6 m-b30">
+                                            <div class="listing-bx overlap">
+                                                <form action="{% url 'test_activity_detail' %}" method="POST">
+                                                    {% csrf_token %}
+                                                    <!-- 게시글 박스에 보이는 대표사진 -->
+                                                    <div class="listing-media act-img-size">
+                                                        <img src="/media/{{ board_file.board_file_path }}" alt="">
+                                                    </div>
+                                                    <!--게시글 제목, 작성자 및 작성시간을 담 div 시작-->
+                                                    <div class="listing-info">
+                                                        <!--게시글 제목-->
+                                                        <div class="line1">
+                                                            <input type="submit" class="title line1"
+                                                                   value="{{ board.board_title }}"
+                                                                   style="background-color:transparent; border:0px transparent solid;">
+                                                        </div>
+                                                        <!-- 게시글 작성자 및 작성시간는 div -->
+                                                        <div class="dlab-post-meta">
+                                                            <ul class="d-flex align-items-center">
+                                                                <!-- 게시글 작성자 -->
+                                                                <li class="post-author" style="color: white"><i
+                                                                        class="ti-user"
+                                                                        style="color: white"></i>By
+                                                                    <a
+                                                                    >{{ board.board_writer.user_name }}</a></li>
+                                                                <!--게시글 작성시간-->
+                                                                <li class="post-date" style="color: white"><i
+                                                                        class="ti-alarm-clock"
+                                                                        style="color: white"></i>{{ board.board_created }}
+                                                                </li>
+                                                                <!-- 히든으로 넘기는 것, board_no 넘김 -->
+                                                                <input type="hidden" name="board_list"
+                                                                       value="{{ board.board_no }}">
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </form>
                                             </div>
-                                            <div class="dlab-post-meta">
-                                                <ul class="d-flex align-items-center">
-                                                    <!--게시글 작성자-->
-                                                    <li class="post-author" style="color: white"><i
-                                                            class="ti-user"
-                                                            style="color: white"></i>By
-                                                        <a
-                                                        >{{ board.board_writer.user_name }}</a></li> <!-- 유저 이름 -->
-                                                    <!--게시글 작성시간-->
-                                                    <li class="post-date" style="color: white"><i
-                                                            class="ti-alarm-clock"
-                                                            style="color: white"></i>{{ board.board_created }}
-                                                        <!-- 작성시간 -->
-                                                    </li>
-                                                    <input type="hidden" name="board_list"
-                                                           value="{{ board.board_no }}">
-                                                    <!-- 히든으로 넘기는 것, board_no 넘김 -->
-                                                </ul>
-                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                    {% endfor %}
-                    </form>
-
-                    <!--게시글 등록 버튼 div-->
-                    <!-- ===============세션처리 했음, 회장, 부회장, 운영팀이 user_role 1, 2, 3 임. 나중에 user_role == 5 만 지우면 됌-->
-                    {% if request.session.user_role == 1 or request.session.user_role == 2 or request.session.user_role == 3 or request.session.user_role == 5 %}
-                        <div class="extra-cell text-right" style="">
-                            <a href="{% url 'test_activity_register' %}" class="site-button radius-xl m-l10"><i
-                                    class="fa fa-plus m-r5"></i>
-                                게시글 등록</a>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
                         </div>
-                    {% endif %}
-
-
-                    <!-- ========================== 페이지네이터 ================= -->
-                    <span>
-                        {% if board_list.has_previous %}
+                        <!-- ===============세션처리 했음, 회장, 부회장, 운영팀이 user_role 1, 2, 3 임. 나중에 user_role == 5 만 지우면 됌-->
+                        <!-- 게시글 등록버튼(권한자만 보임) -->
+                        <div class="extra-cell text-right">
                             <!-- 현재 페이지, 전 페이지가 있는지 리턴해주는 함수 -->
-                            <a href="?page=1">&laquo;</a>
-                            <a href="?page={{ board_list.previous_page_number }}"> {{ board_list.previous_page_number }}</a>
-                        {% endif %}
-
-                        <span>
-                        {{ board_list.number }}
-                        </span>
-
-                        <span>
-                            {% if board_list.has_next %}
-                                <a href="?page={{ board_list.next_page_number }}"> {{ board_list.next_page_number }}</a>
-                                <a href="?page={{ board_list.paginator.num_pages }}">&raquo;</a>
+                            {% if request.session.user_role == 1 or request.session.user_role == 2 or request.session.user_role == 3 or request.session.user_role == 5 %}
+                                <a href="{% url 'test_activity_register' %}" class="site-button radius-xl m-l10"><i
+                                        class="fa fa-plus m-r5"></i>
+                                    게시글 등록</a>
                             {% endif %}
-                        </span>
-
-                    </span>
-                    <!-- ==============페이지 네이터 끝 ============ -->
-
-                    </div>
+                        </div>
+                        <div class="pagination-bx clearfix text-center">
+                            <ul class="pagination">
+                                {% if board_list.has_previous %}
+                                    <li class="previous"><a href="?page=1"><i class="fa fa-arrow-left"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href="?page={{ board_list.previous_page_number }}"> {{ board_list.previous_page_number }}</a>
+                                    </li>
+                                {% endif %}
+                                <li><a href="javascript:void(0)">{{ board_list.number }}</a></li>
+                                {% if board_list.has_next %}
+                                    <li>
+                                        <a href="?page={{ board_list.next_page_number }}"> {{ board_list.next_page_number }}</a>
+                                    </li>
+                                    <li class="next"><a href="?page={{ board_list.paginator.num_pages }}"><i
+                                            class="fa fa-arrow-right"></i></a></li>
+                                {% endif %}
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
-            <!-- 상단으로 한번에 올라가게 하는 버튼 -->
-            <button class="scroltop fa fa-chevron-up"></button>
         </div>
+        <!-- 상단으로 한번에 올라가게 하는 버튼 -->
+        <button class="scroltop fa fa-chevron-up"></button>
+    </div>
     </div>
 {% endblock %}
