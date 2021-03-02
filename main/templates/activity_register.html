@@ -7,11 +7,28 @@
 <body>
 <form action="{% url 'test_activity_register' %}" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
-    제목 : <input name="activity_title"><br>
-    첨부파일 : <input name="activity_file" type="file" multiple>아직 구현 ㄴ<br>
-    본문작성란 : <input name="activity_cont"><br>
-    <input type="hidden" name="activity_stu" value="{{ request.session.user_stu }}">
-    <input type="submit" value="등록">
+    <table border="1">
+        <tr>
+            <th><label for="activity_title">제목</label></th>
+            <td>
+                <input id="activity_title" type="text" name="activity_title">
+            </td>
+        </tr>
+        <tr>
+            <th><label for="activity_cont">내용</label></th>
+            <td><textarea id="activity_cont" name="activity_cont"></textarea></td>
+        </tr>
+        <tr>
+            <th>첨부파일</th>
+            <td><input name="activity_file" type="file" multiple></td>
+        </tr>
+        <tr>
+            <th colspan="2">
+                <input type="submit" value="등록">
+            </th>
+        </tr>
+    </table>
+
 
 </form>
 </body>
