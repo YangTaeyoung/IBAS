@@ -50,6 +50,10 @@
                                                 <input type="submit" class="title line1"
                                                        value="{{ board.board_title }}"
                                                        style="background-color:transparent; border:0px transparent solid;">
+                                                <input type="hidden" name="board_list"
+                                                           value="{{ board.board_no }}">
+                                                    <!-- 히든으로 넘기는 것, board_no 넘김 -->
+                                                {{ board.board_no }}
                                             </div>
                                             <div class="dlab-post-meta">
                                                 <ul class="d-flex align-items-center">
@@ -65,9 +69,6 @@
                                                             style="color: white"></i>{{ board.board_created }}
                                                         <!-- 작성시간 -->
                                                     </li>
-                                                    <input type="hidden" name="board_list"
-                                                           value="{{ board.board_no }}">
-                                                    <!-- 히든으로 넘기는 것, board_no 넘김 -->
                                                 </ul>
                                             </div>
                                         </div>
