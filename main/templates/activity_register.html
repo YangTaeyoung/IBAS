@@ -5,13 +5,14 @@
     <title>Title</title>
 </head>
 <body>
-<form action="{% url 'test_activity_register' %}" method="POST">
+<form action="{% url 'test_activity_register' %}" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     제목 : <input name="activity_title"><br>
-    첨부파일 : <input name="activity_file">아직 구현 ㄴ<br>
+    첨부파일 : <input name="activity_file" type="file" multiple>아직 구현 ㄴ<br>
     본문작성란 : <input name="activity_cont"><br>
     <input type="hidden" name="activity_stu" value="{{ request.session.user_stu }}">
     <input type="submit" value="등록">
+
 </form>
 </body>
 </html>

@@ -14,16 +14,9 @@
     <meta name="format-detection" content="telephone=no">
 
     <!-- FAVICONS ICON -->
-    <link
-      rel="icon"
-      href="{% static 'images/member_logo.png' %}"
-      type="image/x-icon"
-    />
-    <link
-      rel="shortcut icon"
-      type="image/x-icon"
-      href="{% static 'images/member_logo.png' %}"
-    />
+    <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon"/>
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'images/favicon.png' %}"/>
+
     <!-- PAGE TITLE HERE -->
     <title>IBAS</title>
 
@@ -41,7 +34,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/templete_1.css' %}">
     <link class="skin" rel="stylesheet" type="text/css" href="{% static 'css/skin/skin-1.css' %}">
     <!--직접 만든거-->
-    <link rel="stylesheet" type="text/css" href="{% static 'css/main_style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/chaerim.css' %}">
     <link class="skin" rel="stylesheet" type="text/css" href="{% static 'css/bottom_bar.css' %}">
 
 
@@ -75,8 +68,10 @@
                             <li class="down active" style="padding-top: 6px"><a href="#">IBAS <i
                                     class="fa fa-chevron-down"></i></a>
                                 <ul class="sub-menu">
-                                    <li><a href="#">동아리 소개</a></li>
-                                    <li><a href="#">동아리 활동</a></li>
+                                <!-- 동아리 소개를 누를 경우 url로 넘어간다. -->
+                                    <li><a href="{% url 'test_introduce' %}">동아리 소개</a></li>
+                                <!-- 동아리 활동를 누를 경우 url로 넘어간다. -->
+                                    <li><a href="{% url 'test_activity' %}">동아리 활동</a></li>
 
                                     {# 밑에 있는 회계내역, 예산지원 신청은 회원들만 신청을 할 수 있음. #}
                                     {% if request.session.user_stu is not None %}
@@ -121,9 +116,8 @@
                                     <a href="#" style="padding-right: 7px;">
                                         <!--==승인되지 않았을 때==-->
                                         {% if request.session.is_activated == 0 %}
-                                            <img src="/media/{{ request.session.user_pic }}" width="35" height="35"
-                                                 border="3"
-                                                 style=" border: 2px solid #ff3d3d; border-radius: 17.5px; margin-right: 3px"
+                                            <img src="{{ request.session.user_pic }}" width="35px" height="35px"
+                                                 style=" border: 2px solid #ff3d3d; border-radius: 17.5px; margin-right: 3px; max-height: 35px; max-width: 35px"
                                                  alt="현재 브라우저에서 지원하지 않는 형식입니다.">
                                             {{ request.session.user_name }} 님
                                             <ul class="sub-menu" style="text-align: center">
@@ -131,10 +125,13 @@
                                             </ul>
                                             <!--==승인되었을 때==-->
                                         {% else %}
-                                            <img src="{{ request.session.user_pic }}" width="35" height="35" border="3"
-                                                 style=" border: 2px solid #0078ff; border-radius: 17.5px; margin-right: 3px"
+                                            <img src="{{ request.session.user_pic }}" width="35" height="35"
+                                                 style=" border: 2px solid #3cff44; border-radius: 17.5px; margin-right: 3px"
                                                  alt="현재 브라우저에서 지원하지 않는 형식입니다.">
                                             {{ request.session.user_name }} 님
+                                            <ul class="sub-menu" style="text-align: center">
+                                                <a>가입이 승인되었습니다.</a>
+                                            </ul>
                                         {% endif %}
                                     </a>
                                 </li>
@@ -170,10 +167,9 @@
                                 <li class="active" style="padding-top: 5px;">
                                     <a href="{% url 'login' %}">Log In</a>
                                 </li>
-                                {#                                <li class="active" style="padding-top: 5px;">#}
-                                {#                                    <a href="#">Sign Up</a>#}
-                                {#                                </li>#}
-
+{#                                                                <li class="active" style="padding-top: 5px;">#}
+{#                                                                    <a href="#">Sign Up</a>#}
+{#                                                                </li>#}
                             {% endif %}
                         </ul>
                     </div>
@@ -188,15 +184,13 @@
 </div>
 
 {% block content %}
-
-
 {% endblock %}
 
 <!-- Footer 하단바 시작 -->
 <footer>
     <!-- content 담는 부분이 footer-top -->
     <!-- footer-top에 대한 정의는 bottom_bar.css에 정의되어 있음. (height 관련) -->
-    <div class="footer-top">
+    <div class="ibas-footer-top" style="background-image: {% static 'images/botton_bar.jpg' %}">
         <!-- content 시작 -->
         <!-- cont-grid에 대한 정의는 bottom_bar.css에 정의되어 있음. (grid 관련) -->
         <div class="cont-grid">
@@ -205,12 +199,12 @@
             <div class="logo-center">
                 <!-- 여기 부분이 이미지임   -->
                 <!-- width_300에 대한 정의는 bottom_bar.css에 정의되어 있음. (width 관련) -->
-                <img src="{% static 'images/logo_white.png' %} " class="m-b15 width_300" alt="">
+                <img src="{% static 'images/logo_white.png' %} " class="m-b15" alt="" style="width: 350px">
             </div>
             <!-- 로고 div 끝 -->
             <!-- contact us div 시작 -->
             <!-- margin-left_70에 대한 정의는 bottom_bar.css에 정의되어 있음. (margin 관련) -->
-            <div class="margin-left_70">
+            <div style="margin-top: 10px; width: 390px; margin-right: 50px;">
                 <h5 class="mb-2 text-white">Contact us</h5>
                 <!-- contact us table 시작 -->
                 <!-- padding_0에 대한 정의는 bottom_bar.css에 정의되어 있음. (padding 관련) -->
@@ -219,7 +213,7 @@
                         <!-- td-size_small에 대한 정의는 bottom_bar.css에 정의되어 있음. (size 관련) -->
                         <td class="td-size_small"><i class="fa fa-user"></i></td>
                         <!-- td-size_big에 대한 정의는 bottom_bar.css에 정의되어 있음. (size 관련) -->
-                        <td class="td-size_big">{{ request.session.chief_name }}(회장)</td>
+                        <td class="td-size_big">회장 : {{ request.session.chief_name }}</td>
                     </tr>
                     <tr>
                         <td class="td-size_small"><i class="ti-location-pin"></i></td>
@@ -242,21 +236,20 @@
                 <!-- 여기 부분이 이미지임 -->
                 <a href="https://www.inha.ac.kr">
                     <!-- width_300에 대한 정의는 bottom_bar.css에 정의되어 있음. (width 관련) -->
-                    <img src="{% static 'images/logo_inha2.png' %} " class="m-b15 width_300" alt="">
+                    <img src="{% static 'images/inha_en_logo.png' %} " class="m-b15" alt="" style="width: 450px; margin-right: 50px">
                 </a>
             </div>
             <!-- 인하대 로고 div 끝 -->
         </div>
-        <!-- copyright 부분 시작 -->
-        <!-- footer-bottom, min-width_1400에 대한 정의는 bottom_bar.css에 정의되어 있음. (flex 관련)(min-with 관련) -->
-        <div class="footer-bottom min-width_1400 bg-transparent">
-            <!-- design-with에 대한 정의는 bottom_bar.css에 정의되어 있음. (font, margin 관련) -->
-            <p class="fbottom-like design-with">© 2021 Design With <a class="like-btn"
-                                                                      href="javascript:void(0)">
-            </a> By 양태영, 신승연, 조용식, 김채림, 윤예진 </p>
-        </div>
     </div>
-
+    <!-- copyright 부분 시작 -->
+    <!-- footer-bottom, min-width_1400에 대한 정의는 bottom_bar.css에 정의되어 있음. (flex 관련)(min-with 관련) -->
+    <div class="footer-bottom min-width_1400">
+        <!-- design-with에 대한 정의는 bottom_bar.css에 정의되어 있음. (font, margin 관련) -->
+        <p class="fbottom-like design-with">© 2021 Design With <a class="like-btn"
+                                                                  href="javascript:void(0)">
+        </a> By 양태영, 신승연, 조용식, 김채림, 윤예진 </p>
+    </div>
 </footer>
 <!-- Footer END-->
 <button class="scroltop fa fa-chevron-up"></button>

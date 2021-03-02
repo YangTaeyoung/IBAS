@@ -3,7 +3,7 @@ from . import views
 
 urlpatterns = [
     path('accounts/', include('allauth.urls')), # 소셜 로그인 관련 링크
-    path('join/select/', views.choose_std_or_pro, name="choose_std_or_pro"), # 학생, 교수 선택 페이지 이동 링크
+    path('join/sop/', views.choose_std_or_pro, name="choose_std_or_pro"), # 학생, 교수 선택 페이지 이동 링크
     path('join/', views.join, name="join"), # 조인 페이지 이동 링크
     path('login/', views.login, name="login"), # 로그인 페이지 이동 링크
     path('logout/', views.logout, name="logout"), # 로그아웃 링크
