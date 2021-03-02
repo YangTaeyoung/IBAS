@@ -1,10 +1,175 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
 <!DOCTYPE html>
 <html lang="en">
+
+<script type="text/javascript" src="{% static 'smarteditor2-master/smarteditor2-master/workspace/static/js/service/HuskyEZCreator.js' %}" charset="utf-8"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'plugins/editor/jquery-te-1.4.0.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'plugins/drop/imageuploadify.min.css' %}"
+    />
+    <link rel="stylesheet" href="{% static 'plugins/tag-editor/jquery.tag-editor.css' %}" />
+
+
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
+<div class="clearfix">
+       <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"
+             style=" background-image: url('{% static 'images/board_name_img.jpg' %}'); height: 350px">
+            <div class="container clearfix">
+                <div class="dlab-bnr-inr-entry">
+                    <h1 class="text-white introduce-letter-spacing_5">동아리 활동</h1>
+                    <p class="introduce-margin-top_20">IBAS 활동 내용을 볼 수 있습니다(수정)</p>
+                </div>
+            </div>
+        </div>
 <body>
+<!--========================================================================================================-->
+<div class="section-full content-inner" >
+                    <div class="col-lg-12">
+                    <div class="col-xl-8 col-lg-7 col-md-12 m-b30">
+						<form class="add-listing-form">
+							<div class="content-box">
+								<div class="content-header">
+									<h3 class="title"> PRIMARY LISTING DETAILS
+											<i data-toggle="tooltip" data-placement="top" title="Primary Listing Details" class="tooltip-bx fa fa-question-circle"></i>
+									</h3>
+								</div>
+								<div class="content-body">
+									<div class="form-group">
+										<label>Directory Name</label>
+										<input type="text" class="form-control m-b10" placeholder="Staple & Fancy Hotel">
+										<div data-toggle="collapse" data-target="#tagline" role="button" aria-expanded="false" aria-controls="tagline">
+											<input id="check1" type="checkbox">
+											<label for="check1">Does Your Business have a tagline?</label>
+										</div>
+									</div>
+									<div class="form-group collapse" id="tagline">
+										<label>Tagline</label>
+										<input type="text" class="form-control" placeholder="Tagline Example: Best Express Mexican Grill">
+									</div>
+									<div class="form-group">
+										<label>Directory URL</label>
+										<input type="text" class="form-control" placeholder="http://">
+									</div>
+								</div>
+							</div>
+                            <table>
+                                <tr>
+                                <th>내용</th>
+                                <td><textarea id="popContent" name="popContent" cols="108" rows="15"></textarea></td>
+                                </tr>
+                            </table>
+							<div class="content-box">
+								<div class="content-header">
+									<h3 class="title"> CATEGORY & SERVICES
+									<i data-toggle="tooltip" data-placement="top" title="Category & Services" class="tooltip-bx fa fa-question-circle"></i>
+									</h3>
+								</div>
+								<div class="content-body">
+									<div class="form-group">
+										<label>Industry Or Niche </label>
+										<select>
+											<option>Arts &amp; Entertainment</option>
+											<option>Sport &amp; Fitness</option>
+											<option>Local Businesses</option>
+											<option>Tours &amp; Travel</option>
+											<option>Hospitality</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="content-box">
+								<div class="content-header">
+									<h3 class="title"> SOCIAL MEDIA
+									<i data-toggle="tooltip" data-placement="top" title="Social Media" class="tooltip-bx fa fa-question-circle"></i>
+									</h3>
+								</div>
+								<div class="content-body">
+									<div class="add-social-link social-btn-container">
+										<div class="input-group">
+											<select id="mySelect">
+												<option>Instagram</option>
+												<option>LinkedIn</option>
+												<option>Facebook</option>
+											</select>
+											<input type="text" class="form-control" placeholder="http://">
+											<div class="input-group-prepend">
+												<button class="site-button btn-block add-social-btn" type="button"><i class="fa fa-plus"></i> Add</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="content-box">
+								<div class="content-header">
+									<h3 class="title">MORE INFO
+									<i data-toggle="tooltip" data-placement="top" title="More Info" class="tooltip-bx fa fa-question-circle"></i>
+									</h3>
+								</div>
+								<div class="content-body editor">
+									<div class="form-group ">
+										<label>Description </label>
+										<input name="input" type="text" value="<b>My contents are from <u><span style=&quot;color:rgb(0, 148, 133);&quot;>INPUT</span></u></b>" class="jqte-test">
+									</div>
+									<div class="form-group">
+										<label>Tags Or Keywords (Comma Separated)</label>
+										<textarea class="form-control" id="input-tags">example tags, sortable, autocomplete, edit in place,</textarea>
+									</div>
+								</div>
+							</div>
+							<div class="content-box">
+								<div class="content-header">
+									<h3 class="title"> MEDIA
+										<i data-toggle="tooltip" data-placement="top" title="Social Media" class="tooltip-bx fa fa-question-circle"></i>
+									</h3>
+								</div>
+								<div class="content-body">
+									<div class="form-group">
+										<label>Your Business Video(Optional)</label>
+										<input type="text" class="form-control" placeholder="https://www.youtube.com/">
+									</div>
+									<div class="form-group">
+										<label>Upload Business Logo</label>
+										<input type="file" accept=".xlsx,.xls,image/*,.doc,audio/*,.docx,video/*,.ppt,.pptx,.txt,.pdf" multiple>
+									</div>
+								</div>
+							</div>
+							<div class="content-box">
+								<div class="content-header">
+									<h3 class="title"> EMAIL ADDRESS
+										<i data-toggle="tooltip" data-placement="top" title=" Email Address" class="tooltip-bx fa fa-question-circle"></i>
+									</h3>
+								</div>
+								<div class="content-body">
+									<div class="form-group">
+										<input type="text" class="form-control" placeholder="your contact email">
+										<div class="input-block m-t20">
+											<input id="already-account" type="checkbox">
+											<label for="already-account">Already Have Account?</label>
+										</div>
+									</div>
+								</div>
+							</div>
+							<button class="site-button btn-block button-md">Listing Preview</button>
+						</form>
+					</div>
+                </div>
+    </div>
+					<!-- blog END -->
+
+<!--========================================================================================================-->
 <form action="{% url 'test_activity_register' %}" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     <table border="1">
@@ -32,4 +197,7 @@
 
 </form>
 </body>
+</div>
 </html>
+
+{% endblock %}
