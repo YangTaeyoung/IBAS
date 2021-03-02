@@ -2,6 +2,7 @@
 from django.urls import path, include
 from . import views
 
+
 urlpatterns = [
     # path('test/', views.test_main, name="main"), #메인
     path('test/top_bar/', views.test_top_bar, name='top_bar'), # 탑바 작업
@@ -12,4 +13,3 @@ urlpatterns = [
     path('test/test_activity/register/', views.test_activity_register, name='test_activity_register'), # 동아리 등록하기
     path('', views.index, name="index"),  # 메인페이지 이동 링크
 ]
-

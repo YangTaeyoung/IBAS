@@ -134,7 +134,7 @@ class Lect(models.Model):
     lect_no = models.AutoField(db_column='LECT_NO', primary_key=True)  # Field name made lowercase.
     lect_title = models.CharField(db_column='LECT_TITLE', max_length=100)  # Field name made lowercase.
     lect_chief = models.ForeignKey('User', models.DO_NOTHING, db_column='LECT_CHIEF')  # Field name made lowercase.
-    lect_pic = models.CharField(db_column='LECT_PIC', max_length=1000)  # Field name made lowercase.
+    lect_pic = models.ImageField(db_column='LECT_PIC', max_length=1000, upload_to='lect/')  # Field name made lowercase.
     lect_type = models.ForeignKey('LectType', models.DO_NOTHING, db_column='LECT_TYPE')  # Field name made lowercase.
     lect_created = models.DateTimeField(db_column='LECT_CREATED', auto_now_add=True)  # Field name made lowercase.
     lect_intro = models.CharField(db_column='LECT_INTRO', max_length=300)  # Field name made lowercase.
@@ -301,7 +301,7 @@ class User(models.Model):
     user_stu = models.IntegerField(db_column='USER_STU', primary_key=True)  # Field name made lowercase.
     user_name = models.CharField(db_column='USER_NAME', max_length=50)  # Field name made lowercase.
     user_major = models.ForeignKey(MajorInfo, models.DO_NOTHING, db_column='USER_MAJOR')  # Field name made lowercase.
-    user_pic = models.CharField(db_column='USER_PIC', max_length=1000, blank=True, null=True)  # Field name made lowercase.
+    user_pic = models.ImageField(db_column='USER_PIC', upload_to='member/', blank=True, null=True)  # Field name made lowercase.
     user_auth = models.ForeignKey('UserAuth', models.DO_NOTHING, db_column='USER_AUTH')  # Field name made lowercase.
     user_role = models.ForeignKey('UserRole', models.DO_NOTHING, db_column='USER_ROLE')  # Field name made lowercase.
     user_joined = models.DateTimeField(db_column='USER_JOINED', auto_now_add=True)  # Field name made lowercase.
