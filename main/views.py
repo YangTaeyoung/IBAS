@@ -77,7 +77,7 @@ def test_activity_register(request):
             board_file.save() # DB 에 저장 시켜줌
             # 여기서, pk 는 auto_incre 라서 상관 X
 
-        return render(request, 'activity.html', {}) # render 해주기
+        return HttpResponseRedirect('/test/test_activity/')
 
     # POST가 아닌 그냥 보여주는 방식
     return render(request, 'activity_register.html', {})
@@ -98,7 +98,7 @@ def test_activity_delete(request):
         return HttpResponseRedirect('/test/test_activity/')
 
 def test_activity_v1(request):  # 입부신청 완료 페이지로 이동
-    return render(request, 'test_activity_v1.html', {})
+    return render(request, 'activity.html', {})
 
 def activity_comment(request):
     return HttpResponseRedirect('/test/test_activity/detail/')
