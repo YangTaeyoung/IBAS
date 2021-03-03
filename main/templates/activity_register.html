@@ -32,7 +32,9 @@
             <!--제목을 감싸는 배경-->
            <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"
              style=" background-image: url('{% static 'images/board_name_img.jpg' %}'); height: 350px">
-            <div class="container clearfix">
+            <!--상단 제목부분을 누르면 해당 게시판 목록으로 이동-->
+            <a href="{% url 'test_activity' %}">
+                <div class="container clearfix">
                 <div class="dlab-bnr-inr-entry">
                     <!--제목-->
                     <h1 class="text-white introduce-letter-spacing_5">동아리 활동</h1>
@@ -40,6 +42,7 @@
                     <p class="introduce-margin-top_20">동아리 수상 및 활동 내역에 대한 게시판입니다.</p>
                 </div>
             </div>
+            </a>
         </div>
         <!--===============================================입력란=========================================================-->
         <form action="{% url 'test_activity_register' %}" class="add-listing-form" method="POST" enctype="multipart/form-data">
@@ -62,15 +65,13 @@
                                 </div>
                                 <!--이미지 업로드란-->
                                 <div class="form-group">
-										<label>Upload Business Logo</label>
+										<label>파일 업로드</label>
 										<input type="file" accept=".xlsx,.xls,image/*,.doc,audio/*,.docx,video/*,.ppt,.pptx,.txt,.pdf" multiple>
 									</div>
                                 <!--내용입력란-->
                                 <div class="form-group ">
                                     <label>본문</label>
-                                   <div class="form-group">
-                                       <textarea name="input" type="text" value="<b>My contents are from <u><span style=&quot;color:rgb(0, 148, 133);&quot;>INPUT</span></u></b>" class="jqte-test" style="height: 500px"></textarea>
-									</div>
+                                    <textarea name="input" type="text" class="jqte-test"></textarea>
                                 </div>
                             </div>
                         </div>
