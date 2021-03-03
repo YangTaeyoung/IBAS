@@ -66,12 +66,12 @@
                                 <!--이미지 업로드란-->
                                 <div class="form-group">
 										<label>파일 업로드</label>
-										<input type="file" accept=".xlsx,.xls,image/*,.doc,audio/*,.docx,video/*,.ppt,.pptx,.txt,.pdf" multiple>
+										<input type="file" name="activity_file" accept=".xlsx,.xls,image/*,.doc,audio/*,.docx,video/*,.ppt,.pptx,.txt,.pdf" multiple>
 									</div>
                                 <!--내용입력란-->
                                 <div class="form-group ">
                                     <label>본문</label>
-                                    <textarea name="input" type="text" class="jqte-test"></textarea>
+                                    <textarea name="activity_cont" type="text" class="jqte-test"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -80,7 +80,7 @@
                         <!--등록하기 버튼, 누르면 게시글 상세보기로-->
                         <!--최초 글작성 시 나오는 버튼-->
                         <div style="display: grid; justify-items: center">
-                        <button class="site-button btn-block button-md" href="#" style="width: 30%">등록하기</button>
+                        <button class="site-button btn-block button-md" type="submit" href="#" style="width: 30%">등록하기</button>
                         <!--게시글 수정 시 나오는 버튼-->
                         <button class="site-button btn-block button-md" href="#" style="width: 30%">수정하기</button>
                         </div>
