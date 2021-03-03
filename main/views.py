@@ -116,3 +116,6 @@ def activity_comment(request):
         return HttpResponseRedirect('/test/test_activity/detail/')
     return HttpResponseRedirect('/test/test_activity/detail/')
     # return render(request, 'activity_detail.html', {})
+
+def activity_detail_v1(request):
+    return render(request, 'activity_detail_v1.html', {})

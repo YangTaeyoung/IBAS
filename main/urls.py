@@ -13,5 +13,6 @@ urlpatterns = [
     path('test/test_activity/register/', views.test_activity_register, name='test_activity_register'),  # 동아리 등록하기
     path('test/test_activity/delete/', views.test_activity_delete, name='test_activity_delete'), # 동아리 활동 글 삭제하기
     path('test/test_activity/comment/', views.activity_comment, name='activity_comment'), # 동아리 댓글 쓰는 것
+    path('test/test_activity/detail_v1', views.activity_detail_v1, name='activity_detail_vi'), # 동아리활동 자세히보기 꾸민ver
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
