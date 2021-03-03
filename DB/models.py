@@ -88,7 +88,7 @@ class BoardFile(models.Model):
     board_file_id = models.AutoField(db_column='BOARD_FILE_ID', primary_key=True)  # Field name made lowercase.
 
     # 조용식이 만진 부분
-    #upload_to에 대한 인자를 위에 정의한 함수로 대체해야 경로를 커스터마이징 할 수 있음.
+    # upload_to에 대한 인자를 위에 정의한 함수로 대체해야 경로를 커스터마이징 할 수 있음.
     board_file_path = models.ImageField(db_column='BOARD_FILE_PATH', upload_to=board_file_upload_to, blank=True,
                                         null=True)  # Field name made lowercase.
 

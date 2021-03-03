@@ -11,7 +11,7 @@ import os
 # 메인페이지 이동 함수
 def index(request):
     # 세션은 세션이 있다고 가정한 것
-    session.save_session(request, User.objects.get(pk='545484'))
+    session.save_session(request, User.objects.get(pk='12162359'))
 
     # 세션이 없다고 가정한 것
     # request.session.clear()
@@ -68,7 +68,6 @@ def test_activity_register(request):
 
         # ============================= 이미지 저장시키는 코드 =========================
         for activity_file in request.FILES.getlist('activity_file'):
-            print(activity_file)
             board_file = BoardFile.objects.create(
                 board_no=activity,  # FK 키 가져오기
                 board_file_path=activity_file,
@@ -80,29 +79,26 @@ def test_activity_register(request):
     # POST가 아닌 그냥 보여주는 방식
     return render(request, 'activity_register.html', {})
 
-
+# 동아리 활동 상세페이지에서 삭제하는 코드
 def test_activity_delete(request):
-    if request.method == "POST":
+    if request.method == "POST": # 포스트로 넘어오는 경우
         activity = get_object_or_404(Board, pk=request.POST.get('board_no'))
-
         try:
-            print(BoardFile.objects.filter(board_no=activity.board_no))
-            # print(BoardFile.objects.get(board_no=activity.board_no))
-            # print(str(BoardFile.objects.get(board_no=activity.board_no).board_file_path))
-            # os.remove('media/'+str(BoardFile.objects.get(board_no=activity.board_no).board_file_path))
+            file_list = list(BoardFile.objects.filter(board_no=activity.board_no))
+            # file_list 라는 변수 선언 (여러개의 파일을 올릴 수 있으므로 list 로 변환)
+            for i in range(len(file_list)):
+                # file_list 의 크기 만큼 for 문으로 돌려서 파일 삭제 후 폴더 삭제
+                os.remove('media/' + str(file_list[i].board_file_path))
+            os.rmdir('media/board/' + str(activity.board_no))
+            # 파일이 안에 있는 삭제에서 폴더를 삭제할 경우 오류 만남.
         except FileNotFoundError:
-            pass
+            pass # 파일이 없는 경우 그냥 통과시킨다.
 
-        # activity.delete()
+        activity.delete() # 파일과 폴더 삭제 후, 게시글 DB 에서 삭제
         return HttpResponseRedirect('/test/test_activity/')
 
     else:  # 파라미터가 제대로 넘어오지 않은 경우, 즉 비정상적인 경로를 통해 들어간 경우 바로 나오게 해준다.
         return HttpResponseRedirect('/test/test_activity/')
-
-
-def test_activity_v1(request):  # 입부신청 완료 페이지로 이동
-    return render(request, 'activity.html', {})
-
 
 def activity_comment(request):
     if request.method == "POST":
