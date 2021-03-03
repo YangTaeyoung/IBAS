@@ -105,14 +105,14 @@ def test_activity_delete(request):
 def activity_comment(request):
     if request.method == "POST":
         user_stu = User.objects.get(pk=request.session.get('user_stu'))  # 유저 학번 들고오는 것임
-        board_no = request.POST.get('board_no')
-
+        board_no = Board.objects.get(pk=request.POST.get('board_no'))
         comment_register = Comment(
-            comment_board_no=request.POST.get('board_no'),
+            comment_board_no=board_no,
             comment_writer=user_stu,
             comment_cont=request.POST.get('activity_comment')
         )
-        print(comment_register)
+        comment_register.save()
+
         return HttpResponseRedirect('/test/test_activity/detail/')
     return HttpResponseRedirect('/test/test_activity/detail/')
     # return render(request, 'activity_detail.html', {})
