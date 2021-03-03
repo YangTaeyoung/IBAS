@@ -22,7 +22,6 @@ def save_session(request, user):
 
 # 회장(하단바)를 보여주기 위한 세션을 등록하는 함수
 def save_chief(request, user):
-    request.session["chief_pic"] = user.user_pic
     request.session["chief_name"] = user.user_name
     request.session["chief_phone"] = user.user_phone
     request.session["chief_email"] = user.user_email

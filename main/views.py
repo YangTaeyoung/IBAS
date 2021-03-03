@@ -37,7 +37,7 @@ def test_introduce(request):
 # 동아리 활동 게시판
 def test_activity(request):
     # 최신순으로 정렬하고, 1:M 관계로 가져오기 위해 prefetch_related 함수 사용
-    board_list = Board.objects.order_by('board_created').prefetch_related("boardfile_set")
+    board_list = Board.objects.order_by('-board_created').prefetch_related("boardfile_set")
     # board 에서 board_type_no = 5 인 것만 들고옴. 최신 순으로 보여주는 코드는 order_by
     # board_type_no = 5 <- 동아리게시판에 관련한 글만 가져오기 위해서 만들어짐
     paginator = Paginator(board_list, 6)  # 페이지네이터로 10개씩 보이게끔. 나중에 수정하면 됌
@@ -51,7 +51,8 @@ def test_activity(request):
 def test_activity_detail(request):
     if request.method == "POST":  # 자세히 보기를 하면
         board_info = get_object_or_404(Board, board_no=request.POST.get('board_list'))  # 게시글 번호로 게시글 내용을 들고옴
-        return render(request, 'activity_detail.html', {'board_info': board_info})
+        comment_info = Comment.objects.filter(comment_board_no=request.POST.get('board_list')) # 게시글 번호로 댓글 내용
+        return render(request, 'activity_detail.html', {'board_info': board_info, 'comment_info': comment_info})
     else:  # 파라미터가 제대로 넘어오지 않은 경우, 즉 비정상적인 경로를 통해 들어간 경우 바로 나오게 해준다.
         return HttpResponseRedirect('/test/test_activity/')
 
@@ -102,20 +103,41 @@ def test_activity_delete(request):
     else:  # 파라미터가 제대로 넘어오지 않은 경우, 즉 비정상적인 경로를 통해 들어간 경우 바로 나오게 해준다.
         return HttpResponseRedirect('/test/test_activity/')
 
+# 댓글 달기 코드
 def activity_comment(request):
-    if request.method == "POST":
+    if request.method == "GET":
         user_stu = User.objects.get(pk=request.session.get('user_stu'))  # 유저 학번 들고오는 것임
-        board_no = Board.objects.get(pk=request.POST.get('board_no'))
+        board_no = Board.objects.get(pk=request.GET.get('board_no')) # 게시글 번호 들고오는 것임
+
+        # 객체로 받아서 저장할 예정
         comment_register = Comment(
             comment_board_no=board_no,
             comment_writer=user_stu,
-            comment_cont=request.POST.get('activity_comment')
+            comment_cont=request.GET.get('activity_comment')
         )
         comment_register.save()
-
+        # 데이터 베이스에 저장
         return HttpResponseRedirect('/test/test_activity/detail/')
     return HttpResponseRedirect('/test/test_activity/detail/')
-    # return render(request, 'activity_detail.html', {})
+
+# 댓글 삭제 코드
+def activity_comment_delete(request):
+    if request.method == "POST": # 댓글 삭제를 누를 경우
+        comment = get_object_or_404(Comment, pk=request.POST.get('comment_id'))
+        # 그 댓글의 pk 를 찾아서 DB 에서 지운다.
+        comment.delete()
+        return HttpResponseRedirect('/test/test_activity/detail/')
+    # 비정상적인 경로를 통해 들어간 경우 바로 나오게 해준다.
+    return HttpResponseRedirect('/test/test_activity/detail/')
+
+# 동아리 글 삭제 코드
+def test_activity_update(request):
+    if request.method == 'GET':
+        item = get_object_or_404(Board, pk=request.POST.get('board_no'))
+        activity = Board(instance=item)
+
+        # return render(request, '임시.html', activity)
+    return render(request, 'activity_register.html', {})
 
 def activity_detail_v1(request):
     return render(request, 'activity_detail_v1.html', {})

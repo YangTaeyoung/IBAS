@@ -119,8 +119,8 @@ class ChiefCarrier(models.Model):
 
 class Comment(models.Model):
     comment_id = models.AutoField(db_column='COMMENT_ID', primary_key=True)  # Field name made lowercase.
-    comment_board_no = models.ForeignKey(Board, models.DO_NOTHING,
-                                         db_column='COMMENT_BOARD_NO')  # Field name made lowercase.
+    comment_board_no = models.ForeignKey(Board,
+                                         db_column='COMMENT_BOARD_NO', on_delete=models.CASCADE)  # Field name made lowercase.
     comment_writer = models.ForeignKey('User', models.DO_NOTHING,
                                        db_column='COMMENT_WRITER')  # Field name made lowercase.
     comment_cont = models.CharField(db_column='COMMENT_CONT', max_length=5000)  # Field name made lowercase.

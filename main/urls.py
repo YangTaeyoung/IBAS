@@ -11,8 +11,10 @@ urlpatterns = [
     path('test/test_activity/', views.test_activity, name='test_activity'),  # 동아리 활동 게시판
     path('test/test_activity/detail/', views.test_activity_detail, name='test_activity_detail'),  # 동아리 활동 자세히 보기
     path('test/test_activity/register/', views.test_activity_register, name='test_activity_register'),  # 동아리 등록하기
+    path('test/test_activity/update/', views.test_activity_update, name='test_activity_update'),  # 동아리 글 수정하기
     path('test/test_activity/delete/', views.test_activity_delete, name='test_activity_delete'), # 동아리 활동 글 삭제하기
     path('test/test_activity/comment/', views.activity_comment, name='activity_comment'), # 동아리 댓글 쓰는 것
     path('test/test_activity/detail_v1', views.activity_detail_v1, name='activity_detail_vi'), # 동아리활동 자세히보기 꾸민ver
+    path('test/test_activity/comment/delete', views.activity_comment_delete, name='activity_comment_delete'), # 동아리 댓글 삭제하는 것
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
