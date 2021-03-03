@@ -16,9 +16,11 @@ def index(request):
     # 세션이 없다고 가정한 것
     # request.session.clear()
 
-    if len(User.objects.filter(user_role=get_object_or_404(UserRole, role_no=1))) != 0:
-        chief = User.objects.filter(user_role=get_object_or_404(UserRole, role_no=1))[0]  # 하단바에서 회장꺼만 들고오면 됌
-        session.save_chief(request, chief)  # 회장꺼 세션에 저장시켜줬음. save_chief 함수는 session 에 있음.
+    # if len(User.objects.filter(user_role=get_object_or_404(UserRole, role_no=1))) != 0:
+    #     chief = User.objects.filter(user_role=get_object_or_404(UserRole, role_no=1))[0]  # 하단바에서 회장꺼만 들고오면 됌
+    #     session.save_chief(request, chief)  # 회장꺼 세션에 저장시켜줬음. save_chief 함수는 session 에 있음.
+  #  chief = User.objects.filter(user_role=get_object_or_404(UserRole, role_no=1))[0]  # 하단바에서 회장꺼만 들고오면 됌
+   # session.save_chief(request, chief)  # 회장꺼 세션에 저장시켜줬음. save_chief 함수는 session 에 있음.
 
     context = {}
     return render(request, "index.html", context)

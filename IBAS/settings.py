@@ -79,7 +79,7 @@ TEMPLATES = [
         'DIRS': [
             BASE_DIR / 'templates',
             #'/home/ibas/Django/IBAS/templates',
-            'C:/proj/Django/IBAS/templates/'
+            'C:/WebProject/Django/IBAS/templates'
         ]
         ,
         'APP_DIRS': True,
@@ -155,8 +155,7 @@ STATIC_ROOT = os.path.join(ROOT_DIR, '.static_root')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
     #'/home/ibas/Django/IBAS/static/',
-    'C:/proj/Django/IBAS/static/'
-
+    'C:/WebProject/Django/IBAS/static/'
 ]
 # social 로그인 패키지 설정
 AUTHENTICATION_BACKENDS = (
@@ -176,4 +175,3 @@ SITE_ID = 1
 LOGIN_REDIRECT_URL = '/user/pass'  # 로그인 성공시 리다이렉션 되는 URL 바꿀 필요가 있을 듯..
 ACCOUNT_EMAIL_REQUIRED = True # 이메일은 꼭 받게 만들기.
 ACCOUNT_LOGOUT_ON_GET = True # 로그 아웃 시 example.com사이트로 자동이동 하는 것 제거
-
