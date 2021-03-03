@@ -27,52 +27,53 @@
                 <div class="section-full content-inner bg-white">
                     <div class="container">
                         <div class="row">
-                            <!-- 도저히.....생각이 안남ㅁ..... for문 두개 돌리는 상황에서 board_no 가 같으면 가져오는 건데, 모르겠음 ㅠㅠ -->
+                            <!-- 게시글 리스트 출력부분 -->
                             {% for board in board_list %}
-                                {% for board_file in board_file_list %}
-                                    {% if board == board_file.board_no %}
-                                        <!--============ 게시글 박스 시작 ============-->
-                                        <div class="col-lg-4 col-md-6 col-sm-6 m-b30">
-                                            <div class="listing-bx overlap">
-                                                <form action="{% url 'test_activity_detail' %}" method="POST">
-                                                    {% csrf_token %}
-                                                    <!-- 게시글 박스에 보이는 대표사진 -->
-                                                    <div class="listing-media act-img-size">
-                                                        <img src="/media/{{ board_file.board_file_path }}" alt="">
-                                                    </div>
-                                                    <!--게시글 제목, 작성자 및 작성시간을 담 div 시작-->
-                                                    <div class="listing-info">
-                                                        <!--게시글 제목-->
-                                                        <div class="line1">
-                                                            <input type="submit" class="title line1"
-                                                                   value="{{ board.board_title }}"
-                                                                   style="background-color:transparent; border:0px transparent solid;">
-                                                        </div>
-                                                        <!-- 게시글 작성자 및 작성시간는 div -->
-                                                        <div class="dlab-post-meta">
-                                                            <ul class="d-flex align-items-center">
-                                                                <!-- 게시글 작성자 -->
-                                                                <li class="post-author" style="color: white"><i
-                                                                        class="ti-user"
-                                                                        style="color: white"></i>By
-                                                                    <a
-                                                                    >{{ board.board_writer.user_name }}</a></li>
-                                                                <!--게시글 작성시간-->
-                                                                <li class="post-date" style="color: white"><i
-                                                                        class="ti-alarm-clock"
-                                                                        style="color: white"></i>{{ board.board_created }}
-                                                                </li>
-                                                                <!-- 히든으로 넘기는 것, board_no 넘김 -->
-                                                                <input type="hidden" name="board_list"
-                                                                       value="{{ board.board_no }}">
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </form>
+                                <!--============ 게시글 박스 시작 ============-->
+                                <div class="col-lg-4 col-md-6 col-sm-6 m-b30">
+                                    <div class="listing-bx overlap">
+                                        <form action="{% url 'test_activity_detail' %}" method="POST">
+                                            {% csrf_token %}
+
+
+                                            <!-- 게시글 박스에 보이는 대표사진 -->
+                                            <div class="listing-media act-img-size">
+                                                <!-- 첫번째 사진만 가져오기 -->
+                                                <img src="/media/{{ board.boardfile_set.first.board_file_path }}"
+                                                     alt="">
                                             </div>
-                                        </div>
-                                    {% endif %}
-                                {% endfor %}
+                                            <!--게시글 제목, 작성자 및 작성시간을 담 div 시작-->
+                                            <div class="listing-info">
+                                                <!--게시글 제목-->
+                                                <div class="line1">
+                                                    <input type="submit" class="title line1"
+                                                           value="{{ board.board_title }}"
+                                                           style="background-color:transparent; border:0px transparent solid;">
+                                                </div>
+                                                <!-- 게시글 작성자 및 작성시간는 div -->
+                                                <div class="dlab-post-meta">
+                                                    <ul class="d-flex align-items-center">
+                                                        <!-- 게시글 작성자 -->
+                                                        <li class="post-author" style="color: white"><i
+                                                                class="ti-user"
+                                                                style="color: white"></i>By
+                                                            <a
+                                                            >{{ board.board_writer.user_name }}</a></li>
+                                                        <!--게시글 작성시간-->
+                                                        <li class="post-date" style="color: white"><i
+                                                                class="ti-alarm-clock"
+                                                                style="color: white"></i>{{ board.board_created }}
+                                                        </li>
+                                                        <!-- 히든으로 넘기는 것, board_no 넘김 -->
+                                                        <input type="hidden" name="board_list"
+                                                               value="{{ board.board_no }}">
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+
                             {% endfor %}
                         </div>
                         <!-- ===============세션처리 했음, 회장, 부회장, 운영팀이 user_role 1, 2, 3 임. 나중에 user_role == 5 만 지우면 됌-->
