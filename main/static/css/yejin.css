@@ -7,26 +7,31 @@
 .introduce-font_nanumBarunGothic {
     font-family: "NanumBarunGothic";
 }
+
 .introduce-letter-spacing_5 {
     letter-spacing: 5px;
 }
+
 /* 쓰인 곳: 동아리 연혁 안 박스 부분의 내용 중 첫번째 연도를 제외한 나머지*/
 .introduce-margin-top_20 {
     margin-top: 20px;
 }
+
 /* 쓰인 곳: 동아리 소개 안 카드 부분, 동아리 연혁 안 박스 부분*/
 .introduce-box-bg {
-    background: rgba(0,0,0,0.1);
-    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     padding: 30px 50px;
     border-radius: 6px;
     color: #fff;
     margin: 0 25px;
 }
+
 /* 쓰인 곳: 동아리 소개 안 카드 부분의 아이콘, 동아리 소개 안 카드 부분의 설명부분, 동아리 연혁 안 박스 부분*/
 .introduce-color_black {
     color: black;
 }
+
 /* 쓰인 곳: 동아리 연혁 안 박스 부분*/
 .introduce-history-box {
     width: 1135px;
@@ -36,51 +41,61 @@
 /* 쓰인 곳: 동아리 연혁 안 박스 부분*/
 .introduce-history-grid {
     display: grid;
-    grid-template-columns: 300px 100px 630px;
-/*    3칸이 그리드로 짜여 있음. 각 칸은 300 100 630 px씩 차지함. */
+    grid-template-columns: 300px 600px 100px;
+    max-height: 370px;
+
+    /*    3칸이 그리드로 짜여 있음. 각 칸은 300 100 630 px씩 차지함. */
 }
+
 /* 쓰인 곳: 동아리 연혁 안 박스 부분의 내용 설명*/
 .introduce-align-items_start {
     display: flex;
     align-items: start;
 }
+
 /* 쓰인 곳: 동아리 연혁 안 박스 부분*/
 .introduce-overflow_auto {
     overflow: auto;
     -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
 }
 
 .introduce-overflow_auto::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera*/
 }
+
 /* 쓰인 곳: 동아리 연혁 안 박스부분의 연혁 내용 부분. */
 .introduce-padding-bottom_24 {
     padding-bottom: 24px;
 }
+
 /* 쓰인 곳: 동아리 연혁 안 박스부분의 내용부분. */
 .introduce-border-bottom {
     border-bottom: #8f8f8f solid 1px;
 }
+
 /* 쓰인 곳: 동아리 소개부분 카드, Contact Us의 내용부분*/
 .introduce-contact-flex-container {
     display: flex;
     justify-content: center;
 }
+
 /* 쓰인 곳: 동아리 소개부분 카드, Contact Us의 내용부분*/
 .introduce-contact-flex-item {
     width: 270px;
     margin: 0 20px
 }
+
 /* 쓰인 곳: Contact Us 카드 부분*/
 .introduce-height_310 {
     height: 310px;
 }
+
 /* 쓰인 곳: 운영진 소개의 회장, 부회장, 회장단 카드부분*/
 .introduce-height_380 {
     max-height: 380px;
     min-height: 380px;
 }
+
 /* 쓰인 곳: 동아리 소개의 네비게이션 최 상단 div, 동아리 소개 최상위 div */
 .introduce-display_inline-block {
     display: inline-block;
@@ -88,28 +103,135 @@
 
 /* 쓰인 곳: Contact Us의 구글맵 부분*/
 .introduce-google-map {
-    box-shadow: 0 4px 6px 0 rgba(0,0,0,0.05);
-	border-radius: 4px;
-	border: 1px solid #e1e6eb;
+    box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+    border: 1px solid #e1e6eb;
     margin: 0 35px;
 }
+
 /* 쓰인 곳: 동아리 소개 네비게이션 바에 적용되는 부분. */
 .introduce-nav-bar {
-    display: inline-block;  width: 160px; text-align: center;
+    display: inline-block;
+    width: 160px;
+    text-align: center;
+    background-color: white;
+    border: #dedede solid thin;
 }
+
 /* 쓰인 곳 : 동아리 소개 최상위 div*/
 .introduce-padding-top_0 {
     padding-top: 0;
 }
+
 /* 쓰인 곳 : Contact Us 이메일 부분*/
 .introduce-margin-bottom_0 {
     margin-bottom: 0px;
 }
+
 /* 쓰인 곳 : Contact Us 구글맵// 수정해야함. */
-.introduce-width_1135 {
-    width: 1135px;
+.introduce-google-map-size {
+    width: 900px;
+    height: 420px;
 }
+
 /* 쓰인 곳 : introduce.html 콘텐츠 최상위 div*/
 .introduce-padding-bottom_0 {
     padding-bottom: 0;
+}
+
+.introduce-text-align_center {
+    text-align: center;
+}
+
+.introduce-nav-txt {
+    text-decoration: none;
+    color: black;
+    font-size: 15px;
+}
+
+/* 쓰인 곳 : Nav 부분*/
+.introduce-margin-bottom_5 {
+    margin-bottom: 5px;
+}
+
+/* 쓰인 곳 : Nav 부분*/
+.introduce-margin-bottom_10 {
+    margin-bottom: 10px;
+}
+
+.introduce-font-size_15 {
+    font-size: 15pt;
+}
+
+.introduce-history-box-flex {
+    display: flex;
+    flex-direction: column;
+
+}
+
+.introduce-button-style {
+    border: none;
+    font-weight: bolder;
+    background-color: transparent;
+}
+
+.introduce-width_1135 {
+    width: 1135px;
+}
+
+.introduce-margin-bottom_20 {
+    margin-bottom: 20px;
+}
+
+.introduce-update-input-date {
+    background-color: inherit;
+    border: none;
+    width: 100px;
+    padding: 0;
+    height: auto;
+    outline: none;
+}
+
+.introduce-update-input-txt {
+    background-color: inherit;
+    border: none;
+    width: 500px;
+    padding: 0;
+    height: auto;
+    resize: none;
+    outline: none;
+}
+
+.introduce-history-add-grid {
+    display: grid;
+    grid-template-columns: 300px 630px 200px;
+    padding: 7px 20px 0px;
+}
+
+.introduce-add-input-txt {
+    background-color: inherit;
+    border: #9d9d9d solid thin;
+    width: 550px;
+    padding: 0;
+    height: 36.4px;
+    resize: none;
+    outline: none;
+}
+
+.introduce-submit-btn {
+    width: 200px;
+    background-color: inherit;
+    font-weight: bolder;
+    border: none;
+    outline: none;
+}
+.introduce-color-btn {
+    border: #091069 solid;
+    width: 180px;
+    background-color: #091069;
+    border-radius: 3px;
+    color: white;
+}
+.backgroundColor {
+
 }
