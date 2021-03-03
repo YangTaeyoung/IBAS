@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    <!--커스텀 css-->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/seungyeon.css' %}">
+
+    <div class="page-wraper">
+        <div class="page-content bg-white">
+            <div class="page-content bg-white">
+                <!----------============= 상단 제목 시작 ================----------->
+                <!--제목을 감싸는 배경-->
+                <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"
+                     style=" background-image: url('{% static 'images/board_name_img.jpg' %}'); height: 350px">
+                    <div class="container clearfix">
+                        <div class="dlab-bnr-inr-entry">
+                            <!--제목-->
+                            <h1 class="text-white introduce-letter-spacing_5">동아리 활동</h1>
+                            <!--부제목-->
+                            <p class="introduce-margin-top_20">동아리 수상 및 활동 내역에 대한 게시판입니다.</p>
+                        </div>
+                    </div>
+                </div>
+                <!----------============= 본문 시작 ================----------->
+                <div class="section-full content-inner">
+                    <div class="container">
+                        <div class="row" style="justify-content: center">
+                            <div class="col-lg-8 col-xl-8 p-b30">
+                                <div class="blog-post blog-single">
+                                    <!-- 게시글 작성자 및 작성시간을 담는 div -->
+                                    <div class="dlab-post-meta m-b20">
+                                        <ul class="d-flex align-items-center">
+                                            <!-- 게시글 작성자 -->
+                                            <li class="post-author"><i class="ti ti-user"></i>By <a
+                                                    href="javascript:void(0);">Hubla
+                                                Dobby</a></li>
+                                            <!-- 게시글 작성시간 -->
+                                            <li class="post-comment"><i class="ti ti-alarm-clock"></i> <a
+                                                    href="javascript:void(0);">19 hours ago</a></li>
+                                        </ul>
+                                    </div>
+                                    <!-- 게시글 제목 -->
+                                    <div class="dlab-post-title ">
+                                        <h2 class="post-title m-t0">
+                                            <a href="javascript:void(0);">With our vastly improved notifications system,
+                                                users
+                                                have more control on your mind.</a>
+                                        </h2>
+                                    </div>
+                                    <!--============================== 게시글 본문 시작 ==============================-->
+                                    <div class="dlab-post-text">
+                                        <!-- 본문 입력 내용 -->
+                                        <p class="font-weight-400">Lorem ipsum dolor sit amet, consectetur adipisicing
+                                            elit, sed
+                                            do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+                                            minim
+                                            veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+                                            commodo amet
+                                            set for your cool happiness for lyour loyal city.</p>
+
+                                        <p class="font-weight-300">Lorem ipsum dolor sit amet, consectetur adipisicing
+                                            elit, sed
+                                            do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+                                            minim
+                                            veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+                                            commodo
+                                            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                                            cillum
+                                            dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                                            proident,
+                                            sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut
+                                            perspiciatis
+                                            unde omnis iste natus error sit voluptatem accusantium doloremque
+                                            laudantium, totam
+                                            rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto
+                                            beatae
+                                            vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit
+                                            aspernatur
+                                            aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione
+                                            voluptatem
+                                            sequi nesciunt. Neque porro quisquam est.</p>
+                                            <!-- 게시글 속 사진 모음 -->
+                                            <div class="widget widget_gallery gallery-grid-4 lightgallery">
+                                                <ul>
+                                                    <li>
+													<span data-exthumbimage="images/gallery/gallery-box/pic1.jpg"
+                                                          data-src="images/gallery/gallery-box/pic1.jpg"
+                                                          class="check-km " title="Light Gallery Grid 1">
+														<a href="javascript:void(0);">
+															<div class="dlab-post-thum act-detail-img-size"><img
+                                                                    style="height: 190px"
+                                                                    src="/static/images/listing/grid/pic1.jpg"
+                                                                    alt=""></div>
+														</a>
+													</span>
+                                                    </li>
+                                                    <li>
+													<span data-exthumbimage="images/gallery/gallery-box/pic2.jpg"
+                                                          data-src="images/gallery/gallery-box/pic2.jpg"
+                                                          class="check-km act-detail-img-siz"
+                                                          title="Light Gallery Grid 1">
+														<a href="javascript:void(0);">
+															<div class="dlab-post-thum"><img
+                                                                    style="height: 190px"
+                                                                    src="/static/images/blog/default/thum1.jpg"
+                                                                    alt=""></div>
+														</a>
+													</span>
+                                                    </li>
+                                                    <li>
+													<span data-exthumbimage="images/gallery/gallery-box/pic3.jpg"
+                                                          data-src="images/gallery/gallery-box/pic3.jpg"
+                                                          class="check-km act-detail-img-siz"
+                                                          title="Light Gallery Grid 1">
+														<a href="javascript:void(0);">
+															<div class="dlab-post-thum"><img
+                                                                    style="height: 190px"
+                                                                    src="/static/images/blog/default/thum1.jpg"
+                                                                    alt=""></div>
+														</a>
+													</span>
+                                                    </li>
+                                                    <li>
+													<span data-exthumbimage="images/gallery/gallery-box/pic4.jpg"
+                                                          data-src="images/gallery/gallery-box/pic4.jpg"
+                                                          class="check-km act-detail-img-siz"
+                                                          title="Light Gallery Grid 1">
+														<a href="javascript:void(0);">
+															<div class="dlab-post-thum "><img
+                                                                    style="height: 190px"
+                                                                    src="/static/images/blog/default/thum1.jpg"
+                                                                    alt=""></div>
+															<div class="more-images">
+																<div>
+																	<strong>6</strong>
+																	<span>Images</span>
+																</div>
+															</div>
+														</a>
+													</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+
+                                    </div>
+                                    <!-- 게시글 삭제 및 수정 div -->
+                                    <div class="extra-cell text-right">
+                                        <!-- 게시글 수정 버튼 -->
+                                        <a href="{% url 'test_activity_register' %}"
+                                           class="site-button radius-xl m-l10"><i
+                                                class="fa fa-pencil m-r5"></i>
+                                            게시글 수정</a>
+                                        <!-- 게시글 삭제 버튼 -->
+                                        <a href="{% url 'test_activity_register' %}"
+                                           class="site-button red radius-xl m-l10"><i
+                                                class="fa fa-trash m-r5"></i>
+                                            게시글 삭제</a>
+                                    </div>
+                                    <!-- 게시글과 댓글을 구분짓는 구분선 -->
+                                    <div class="dlab-divider bg-gray-dark"></div>
+                                </div>
+                                <div>댓글위치</div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 상단으로 올라가는 버튼 -->
+        <button class="scroltop fa fa-chevron-up"></button>
+    </div>
+{% endblock %}

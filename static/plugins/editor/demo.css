@@ -60,7 +60,8 @@ a:link, a:visited {
 	font-size:13px;
 }
 textarea.jqte-test, div.jqte-test, span.jqte-test {
-	min-height:100px;
+	min-height:500px;
+	height: 500px;
 }
 button {
 	display:block;
