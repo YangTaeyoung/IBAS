@@ -212,7 +212,7 @@
     /* 무슨일이 있더라도 width를 고정시키기 */
     width: 500px;
     max-width: 500px;
-    min-width: 500px;
+    min-width: 350px;
     height: 100vh;
     display: flex;
     justify-content: center;
