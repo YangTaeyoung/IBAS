@@ -18,11 +18,20 @@
 내용 : {{ board_info.board_cont }} <br>
 작성시간 : {{ board_info.board_created }} <br>
 
+{# ############################ 수정 삭제 버튼 구간 ######################### #}
+<div>
+<form action="{% url 'test_activity_update' %}" METHOD="POST">
+    {% csrf_token %}
+    <input type="hidden" name="board_no" value="{{ board_info.board_no }}">
+    <input type="submit" value="게시글 수정" onclick="return confirm('수정하시겠습니까?')">
+</form>
+
 <form action="{% url 'test_activity_delete' %}" METHOD="POST">
     {% csrf_token %}
     <input type="hidden" name="board_no" value="{{ board_info.board_no }}">
-    <input type="submit" value="삭제" onclick="return confirm('정말 삭제하시겠습니까?')">
+    <input type="submit" value="게시글 삭제" onclick="return confirm('정말 삭제하시겠습니까?')">
 </form>
+</div>
 
 {# ###################### 댓글 출력 구간 ############################ #}
 {% for comment in comment_info %}
