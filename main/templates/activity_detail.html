@@ -13,7 +13,6 @@
     <br>
 {% endfor %}
 
-게시글 번호 : {{ board_info.board_no }} <br>
 작성자 : {{ board_info.board_writer.user_name }} <br>
 제목 : {{ board_info.board_title }} <br>
 내용 : {{ board_info.board_cont }} <br>
@@ -25,9 +24,23 @@
     <input type="submit" value="삭제" onclick="return confirm('정말 삭제하시겠습니까?')">
 </form>
 
+{# ###################### 댓글 출력 구간 ############################ #}
+{% for comment in comment_info %}
+    작성자 : {{ comment.comment_writer.user_name }} //
+    내용 : {{ comment.comment_cont }} //
+    작성시간 : {{ comment.comment_created }}
+    {% if request.session.user_stu == comment.comment_writer.user_stu %}
+        <form action="{% url 'activity_comment_delete' %}" method="POST">
+            {% csrf_token %}
+            <input type="submit" value="댓글 삭제" onclick="return confirm('정말 삭제하시겠습니까?')">
+            <input type="hidden" value="{{ comment.comment_id }}" name="comment_id">
+        </form>
+    {% endif %}
+    <br>
+{% endfor %}
+
 {# ################## 밑은 댓글쓰기 만드는 곳 ##################### #}
-<form action="{% url 'activity_comment' %}" method="POST">
-    {% csrf_token %}
+<form action="{% url 'activity_comment' %}" method="GET">
     댓글 : <input name="activity_comment">
     <input type="hidden" name="board_no" value="{{ board_info.board_no }}">
     <input type="submit" value="댓글쓰기"><br>
