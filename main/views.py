@@ -77,6 +77,7 @@ def test_activity_register(request):
             )  # 객체 생성
             board_file.save()  # DB 에 저장 시켜줌
             # 여기서, pk 는 auto_incre 라서 상관 X
+        print(request.FILES.getlist('activity_file'))
         return redirect(reverse("test_activity"))
 
     # POST가 아닌 그냥 보여주는 방식
@@ -130,14 +131,19 @@ def activity_comment_delete(request):
     # 비정상적인 경로를 통해 들어간 경우 바로 나오게 해준다.
     return HttpResponseRedirect('/test/test_activity/detail/')
 
-# 동아리 글 삭제 코드
+# 동아리 글 수정 코드
 def test_activity_update(request):
-    if request.method == 'GET':
-        item = get_object_or_404(Board, pk=request.POST.get('board_no'))
-        activity = Board(instance=item)
+    # 수정을 누르면 GET 방식으로 DB 에 있는 것을 꺼내 온다.
+    if request.method == "GET" :
+        item = get_object_or_404(Board, pk=request.GET.get('board_no')) # 맞는 것을 가져온다.
+        return render(request, 'activity_register.html', {'item' : item}) # 이거로 보내줘서 작업 가능
 
-        # return render(request, '임시.html', activity)
-    return render(request, 'activity_register.html', {})
+    # 수정을 하고 난 후 수정 버튼을 누를 경우 이걸로 진행 됌
+    if request.method == 'POST' :
+        return redirect(reverse("test_activity"))
+
+    # 잘못 왔을 경우
+    return render(request, 'activity.html', {})
 
 def activity_detail_v1(request):
     return render(request, 'activity_detail_v1.html', {})
