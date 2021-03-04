@@ -60,18 +60,20 @@
                             <div class="content-body">
                                 <!--제목 입력란-->
                                 <div class="form-group">
-                                    <label>제목</label>
+
                                     <input type="text" name="activity_title" class="form-control" placeholder="제목을 입력하세요" style="font-size: 25px; height: 70px;">
                                 </div>
                                 <!--이미지 업로드란-->
                                 <div class="form-group">
-										<label>파일 업로드</label>
+
 										<input type="file" name="activity_file" accept=".xlsx,.xls,image/*,.doc,audio/*,.docx,video/*,.ppt,.pptx,.txt,.pdf" multiple>
 									</div>
                                 <!--내용입력란-->
                                 <div class="form-group ">
-                                    <label>본문</label>
+                                    <!--textarea-->
                                     <textarea name="activity_cont" type="text" class="jqte-test"></textarea>
+                                    <!--input-->
+                                    <input name="input" type="text" class="jqte-test"/>
                                 </div>
                             </div>
                         </div>
@@ -95,24 +97,6 @@
         </div>
         <!--========================================================================================================-->
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script>
-            {#파일명 뜨게해주는 코드#}
-            $("#file").on('change',function(){
-            var fileName = $("#file").val();
-            $(".upload-name").val(fileName);
-            });
-        </script>
-
-{#        <script type="text/javascript">#}
-{#            var oEditors = [];#}
-{#            nhn.husky.EZCreator.createInIFrame({#}
-{#                oAppRef: oEditors,#}
-{#                elPlaceHolder: "ir1",#}
-{#                sSkinURI: "{% static 'NaverSmartEditor/SmartEditor2Skin.html'%}",#}
-{#                fCreator: "createSEditor2"#}
-{#            });#}
-{#        </script>#}
         </body>
     </div>
     </html>
