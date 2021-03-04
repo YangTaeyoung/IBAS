@@ -78,12 +78,12 @@
                                             aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione
                                             voluptatem
                                             sequi nesciunt. Neque porro quisquam est.</p>
-                                            <!-- 게시글 속 사진 모음 -->
-                                            <div class="widget widget_gallery gallery-grid-4 lightgallery">
-                                                <ul>
-                                                    <li>
-													<span data-exthumbimage="images/gallery/gallery-box/pic1.jpg"
-                                                          data-src="images/gallery/gallery-box/pic1.jpg"
+                                        <!-- 게시글 속 사진 모음 -->
+                                        <div class="widget widget_gallery gallery-grid-4 lightgallery">
+                                            <ul>
+                                                <li>
+													<span data-exthumbimage="/static/images/listing/grid/pic1.jpg"
+                                                          data-src="/static/images/listing/grid/pic1.jpg"
                                                           class="check-km " title="Light Gallery Grid 1">
 														<a href="javascript:void(0);">
 															<div class="dlab-post-thum act-detail-img-size"><img
@@ -92,10 +92,10 @@
                                                                     alt=""></div>
 														</a>
 													</span>
-                                                    </li>
-                                                    <li>
-													<span data-exthumbimage="images/gallery/gallery-box/pic2.jpg"
-                                                          data-src="images/gallery/gallery-box/pic2.jpg"
+                                                </li>
+                                                <li>
+													<span data-exthumbimage="/static/images/blog/default/thum1.jpg"
+                                                          data-src="/static/images/blog/default/thum1.jpg"
                                                           class="check-km act-detail-img-siz"
                                                           title="Light Gallery Grid 1">
 														<a href="javascript:void(0);">
@@ -105,10 +105,10 @@
                                                                     alt=""></div>
 														</a>
 													</span>
-                                                    </li>
-                                                    <li>
-													<span data-exthumbimage="images/gallery/gallery-box/pic3.jpg"
-                                                          data-src="images/gallery/gallery-box/pic3.jpg"
+                                                </li>
+                                                <li>
+													<span data-exthumbimage="/static/images/blog/default/thum1.jpg"
+                                                          data-src="/static/images/blog/default/thum1.jpg"
                                                           class="check-km act-detail-img-siz"
                                                           title="Light Gallery Grid 1">
 														<a href="javascript:void(0);">
@@ -118,10 +118,10 @@
                                                                     alt=""></div>
 														</a>
 													</span>
-                                                    </li>
-                                                    <li>
-													<span data-exthumbimage="images/gallery/gallery-box/pic4.jpg"
-                                                          data-src="images/gallery/gallery-box/pic4.jpg"
+                                                </li>
+                                                <li>
+													<span data-exthumbimage="/static/images/blog/default/thum1.jpg"
+                                                          data-src="/static/images/blog/default/thum1.jpg"
                                                           class="check-km act-detail-img-siz"
                                                           title="Light Gallery Grid 1">
 														<a href="javascript:void(0);">
@@ -137,9 +137,9 @@
 															</div>
 														</a>
 													</span>
-                                                    </li>
-                                                </ul>
-                                            </div>
+                                                </li>
+                                            </ul>
+                                        </div>
 
                                     </div>
                                     <!-- 게시글 삭제 및 수정 div -->
@@ -158,7 +158,82 @@
                                     <!-- 게시글과 댓글을 구분짓는 구분선 -->
                                     <div class="dlab-divider bg-gray-dark"></div>
                                 </div>
-                                <div>댓글위치</div>
+                                <div class="clear" id="comment-list">
+                                    <div class="comments-area" id="comments">
+                                        <h3 class="font-26">댓글
+                                        </h3>
+                                        <div class="clearfix">
+                                            <!-- comment list END -->
+                                            <ol class="comment-list">
+                                                <li class="comment">
+                                                    <div class="comment-body">
+                                                        <div class="comment-author vcard"><cite class="fn">Rosalina
+                                                            Kelian</cite> <span class="says">says:</span></div>
+                                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
+                                                            do eiusmod tempor incididunt ut labore et dolore magna
+                                                            aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                                                            ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                                                        <div class="reply-btn-div">
+                                                            <a href="#"
+                                                               class="m-r20"><i
+                                                                    class="fa fa-commenting m-r5"></i>답글쓰기</a>
+                                                            <a href="#"
+                                                               class="m-r10"><i
+                                                                    class="fa fa-pencil m-r5"></i>게시글 수정</a>
+                                                            <a href="#"
+                                                               class="m-r10"><i
+                                                                    class="fa fa-trash m-r5"></i>
+                                                                게시글 삭제</a>
+                                                        </div>
+
+                                                    </div>
+                                                </li>
+                                                <li class="comment">
+                                                    <div class="comment-body">
+                                                        <div class="comment-author vcard"><cite class="fn">Arista
+                                                            Williamson</cite> <span class="says">says:</span></div>
+                                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
+                                                            do eiusmod tempor incididunt ut labore et dolore magna
+                                                            aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                                                            ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                                                        <div class="reply-btn-div">
+                                                             <a href="#"
+                                                               class="m-r20"><i
+                                                                    class="fa fa-commenting m-r5"></i>답글쓰기</a>
+                                                            <a href="#"
+                                                               class="m-r10"><i
+                                                                    class="fa fa-pencil m-r5"></i>게시글 수정</a>
+                                                            <a href="#"
+                                                               class="m-r10"><i
+                                                                    class="fa fa-trash m-r5"></i>
+                                                                게시글 삭제</a>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ol>
+                                            <!-- comment list END -->
+                                            <!-- Form -->
+                                            <div class="dlab-divider bg-gray-dark"></div>
+                                            <div class="" id="respond">
+                                                <form class="comment-form" id="commentform" method="post" action="#">
+                                                    <p class="comment-form-comment">
+                                                        <label for="comment">Comments</label>
+                                                        <textarea rows="8" name="comment"
+                                                                  placeholder="댓글을 남겨보세요!"
+                                                                  id="comment"></textarea>
+                                                    </p>
+
+
+                                                    <p class="form-submit">
+                                                        <input type="submit" value="댓글등록"
+                                                               class="submit site-button" id="submit" name="submit">
+                                                    </p>
+                                                </form>
+                                            </div>
+                                            <!-- Form -->
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -169,4 +244,5 @@
         <!-- 상단으로 올라가는 버튼 -->
         <button class="scroltop fa fa-chevron-up"></button>
     </div>
+
 {% endblock %}
