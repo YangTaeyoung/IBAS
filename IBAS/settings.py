@@ -45,10 +45,6 @@ INSTALLED_APPS = [
     'member',
     # 메인 관련 앱
     'main',
-    
-    # 임시 어플리케이션. 실제 프로젝트 시작 시 사라질 예정.
-    #'first',
-
 
     # 소셜 로그인 패키지: allauth 관련
     'allauth',
@@ -79,7 +75,7 @@ TEMPLATES = [
         'DIRS': [
             BASE_DIR / 'templates',
             #'/home/ibas/Django/IBAS/templates',
-            'C:/WebProject/Django/IBAS/templates'
+            'C:/proj/Django/IBAS/templates'
         ]
         ,
         'APP_DIRS': True,
@@ -103,7 +99,7 @@ WSGI_APPLICATION = 'IBAS.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'ibas_local',
+        'NAME': 'IBAS',
         'USER': 'root',
         'PASSWORD': '1234',
         'HOST': 'localhost',
@@ -155,7 +151,7 @@ STATIC_ROOT = os.path.join(ROOT_DIR, '.static_root')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
     #'/home/ibas/Django/IBAS/static/',
-    'C:/WebProject/Django/IBAS/static/'
+    'C:/proj/Django/IBAS/static/'
 ]
 # social 로그인 패키지 설정
 AUTHENTICATION_BACKENDS = (

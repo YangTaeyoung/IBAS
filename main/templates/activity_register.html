@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-
+    <script src="{% static 'js/register.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/register.css' %}"/>
     <!DOCTYPE html>
     <html lang="en">
 
@@ -25,101 +26,138 @@
 
     </head>
 
-        <body>
-        <div class="page-wraper">
+    <body>
+    <div class="page-wraper">
         <div class="page-content bg-white">
-        <!----------상단 제목부분----------->
+            <!----------상단 제목부분----------->
             <!--제목을 감싸는 배경-->
-           <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"
-             style=" background-image: url('{% static 'images/board_name_img.jpg' %}'); height: 350px">
-            <!--상단 제목부분을 누르면 해당 게시판 목록으로 이동-->
-            <a href="{% url 'test_activity' %}">
-                <div class="container clearfix">
-                <div class="dlab-bnr-inr-entry">
-                    <!--제목-->
-                    <h1 class="text-white introduce-letter-spacing_5">동아리 활동</h1>
-                    <!--부제목-->
-                    <p class="introduce-margin-top_20">동아리 수상 및 활동 내역에 대한 게시판입니다.</p>
-                </div>
-            </div>
-            </a>
-        </div>
-        <!--===============================================입력란=========================================================-->
-        <form action="{% url 'test_activity_register' %}" class="add-listing-form" method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-        <div class="content-block">
-			<div class="section-full content-inner bg-white">
-				<div class="container">
-					<form class="add-listing-form">
-                        <!--=====================-->
-                        <div class="content-box editor">
-                            <!--글쓰기-->
-                            <div class="content-header">
-                                <h3 class="title">게시글 작성</h3>
-                            </div>
-                            <div class="content-body">
-                                <!--제목 입력란-->
-                                <div class="form-group">
-                                    <input type="text" name="activity_title" value="{{ item.board_title }}" class="form-control" placeholder="제목을 입력하세요" style="font-size: 25px; height: 70px;">
-                                </div>
-                                <!--이미지 업로드란-->
-                                <div class="form-group">
-
-										<input type="file" name="activity_file" accept=".xlsx,.xls,image/*,.doc,audio/*,.docx,video/*,.ppt,.pptx,.txt,.pdf" multiple>
-									</div>
-                                <!--내용입력란-->
-                                <div class="form-group ">
-                                    <textarea name="activity_cont" type="text" class="jqte-test">{{ item.board_cont }}</textarea>
-                                    <!--input-->
-                                </div>
-                            </div>
+            <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"
+                 style=" background-image: url('{% static 'images/board_name_img.jpg' %}'); height: 350px">
+                <!--상단 제목부분을 누르면 해당 게시판 목록으로 이동-->
+                <a href="{% url 'test_activity' %}">
+                    <div class="container clearfix">
+                        <div class="dlab-bnr-inr-entry">
+                            <!--제목-->
+                            <h1 class="text-white introduce-letter-spacing_5">동아리 활동</h1>
+                            <!--부제목-->
+                            <p class="introduce-margin-top_20">동아리 수상 및 활동 내역에 대한 게시판입니다.</p>
                         </div>
+                    </div>
+                </a>
+            </div>
+            <!--===============================================입력란=========================================================-->
 
-                        <!--=====================-->
-                        <!--등록하기 버튼, 누르면 게시글 상세보기로-->
-                        <!--최초 글작성 시 나오는 버튼-->
-                        <div style="display: grid; justify-items: center">
-                            <button class="site-button btn-block button-md" type="submit" style="width: 30%">등록하기</button>
+            <form action="
 
 
-                            <!--게시글 수정 시 나오는 버튼-->
-                            <form action="{% url 'test_activity_update' %}" method="POST">
-                                {% csrf_token %}
-                                <button type="submit" class="site-button btn-block button-md" style="width: 30%">수정하기</button>
-                                <!-- ########## 여기서 뭔가 input hidden 을 사용해야 할 것 같음 -->
+                    {% if board is None %}{% url 'test_activity_register' %}{% else %}{% url 'test_activity_update' %}{% endif %}"
+                  class="add-listing-form" method="POST" enctype="multipart/form-data">
+
+                {% csrf_token %}
+                <div class="content-block">
+                    <div class="section-full content-inner bg-white">
+                        <div class="container">
+                            <form class="add-listing-form">
+                                <!--=====================-->
+                                <div class="content-box editor">
+                                    <!--글쓰기-->
+                                    <div class="content-header">
+                                        <h3 class="title">게시글 작성</h3>
+                                    </div>
+
+                                    <div class="content-body">
+                                        <!--제목 입력란-->
+                                        <div class="form-group">
+                                            <input type="text" name="board_title" value="{{ board.board_title }}"
+                                                   class="form-control" placeholder="제목을 입력하세요"
+                                                   style="font-size: 25px; height: 70px;">
+
+                                            <!--이미지, 파일 업로드란-->
+                                            <div class="form-group">
+                                                <input type="file" name="board_file"
+                                                       accept=".xlsx,.xls,image/*,.doc,.docx,video/*,.ppt,.pptx,.txt,.pdf,.py,.java"
+                                                       multiple>
+                                            </div>
+                                        </div>
+                                        <!-- 이미 존재하고 있던 이미지: 삭제 가능 (수정모드)-->
+                                        {% if board is not None %}
+                                            <div class="form-group">
+                                                <div id="image-cont" class="image-cont">
+                                                    {% for board_file in board_file_list %}
+                                                        <div id="image-card-{{ board_file.board_file_id }}"
+                                                             class="image-card">
+                                                            <!-- 취소 버튼, 취소를 누를 시 image-card 컨테이너가 통채로 사라짐. -->
+                                                            <button type="button"
+                                                                    class="btn btn-danger fa fa-times btn-cancel"
+                                                                    onclick="delImg(document.getElementById('image-card-{{ board_file.board_file_id }}'))"></button>
+                                                            <!-- 이미지 컨테이너 이미지 파일일 경우 img태그가, 이미지 파일이 아닐 경우 파일 모양의 아이콘이 붙음. -->
+                                                            <div id="image-{{ board_file.board_file_id }}"
+                                                                 class="image-container"></div>
+                                                            <!--기존 파일링크를 이동시키기 위한 히든 링크 -->
+                                                            <input type="hidden"
+                                                                   name="exist_file_path_{{ board_file.board_file_id }}"
+                                                                   value="{{ board_file.board_file_path }}"/>
+                                                        </div>
+                                                        <script>
+                                                            // 페이지가 로딩 될 때 해당 함수도 자동으로 실행되도록 설정함. (아이콘 or img 결정)
+                                                            onload = decisionIcon(document.getElementById("image-{{ board_file.board_file_id }}"), '{{ board_file.board_file_path }}');
+                                                        </script>
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                        <!--내용입력란-->
+                                        <div class="form-group">
+                                            <textarea name="board_cont" type="text"
+                                                      class="jqte-test">{{ board.board_cont }}</textarea>
+                                            <!--input-->
+                                        </div>
+                                    </div>
+                                </div>
+                                {% if board is not None %}
+                                    <input type="hidden" name="board_no" value="{{ board.board_no }}">
+                                {% endif %}
+                                <!--=====================-->
+                                <!--등록하기 버튼, 누르면 게시글 상세보기로-->
+                                <!--최초 글작성 시 나오는 버튼-->
+                                <div style="display: grid; justify-items: center">
+                                    <button class="site-button btn-block button-md" type="submit" style="width: 30%">
+                                        {% if board is None %}
+                                            등록하기
+                                        {% else %}
+                                            수정하기
+                                        {% endif %}
+                                    </button>
+                                </div>
                             </form>
-
+                            <!-- Pagination END -->
                         </div>
-                    </form>
-
-					<!-- Pagination END -->
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
-        </form>
-        </div>
-        </div>
-        <!--========================================================================================================-->
+    </div>
+    <!--========================================================================================================-->
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script>
-            {#파일명 뜨게해주는 코드#}
-            $("#file").on('change',function(){
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        {#파일명 뜨게해주는 코드#}
+        $("#file").on('change', function () {
             var fileName = $("#file").val();
             $(".upload-name").val(fileName);
-            });
-        </script>
+        });
+    </script>
 
-{#        <script type="text/javascript">#}
-{#            var oEditors = [];#}
-{#            nhn.husky.EZCreator.createInIFrame({#}
-{#                oAppRef: oEditors,#}
-{#                elPlaceHolder: "ir1",#}
-{#                sSkinURI: "{% static 'NaverSmartEditor/SmartEditor2Skin.html'%}",#}
-{#                fCreator: "createSEditor2"#}
-{#            });#}
-{#        </script>#}
-        </body>
+    {#        <script type="text/javascript">#}
+    {#            var oEditors = [];#}
+    {#            nhn.husky.EZCreator.createInIFrame({#}
+    {#                oAppRef: oEditors,#}
+    {#                elPlaceHolder: "ir1",#}
+    {#                sSkinURI: "{% static 'NaverSmartEditor/SmartEditor2Skin.html'%}",#}
+    {#                fCreator: "createSEditor2"#}
+    {#            });#}
+    {#        </script>#}
+    </body>
     </div>
     </html>
 
