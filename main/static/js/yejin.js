@@ -31,7 +31,10 @@ function update() {
     document.getElementById('history-txt').disabled = false;
 
     document.getElementById('date').focus();
-
+    if (document.getElementById('date').disabled === false) {
+        document.getElementById('date').style.textUnderlinePosition = 'solid'
+        document.getElementById('history-txt').style.textUnderlinePosition = 'solid'
+    }
     
     document.getElementById('update').value = '등록';
 }
@@ -44,7 +47,20 @@ function del() {
 }
 
 
-//
+function introduce_add() {
+
+    var modalBg = document.getElementById('introduce-modal-bg');
+
+    modalBg.style.display = 'flex';
+
+}
+
+function introduce_close() {
+    var modalBg = document.getElementById('introduce-modal-bg');
+
+    modalBg.style.display = 'none';
+}
+
 // function create2() {
 //     var divGroup = document.getElementById("divGroup");
 //     var divDate = document.createElement("div");
