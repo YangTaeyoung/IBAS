@@ -280,8 +280,7 @@
 <script src="{% static 'js/custom.js' %}"></script><!-- CUSTOM FUCTIONS  -->
 <script src="{% static 'js/dz.carousel.js' %}"></script><!-- SORTCODE FUCTIONS  -->
 <script src="{% static 'js/dz.ajax.js' %}"></script><!-- CONTACT JS  -->
-<script src="{% static 'js/jquery.star-rating-svg.js' %}"></script><!-- STAR RATI
-NG SVG -->
+<script src="{% static 'js/jqueƒry.star-rating-svg.js' %}"></script><!-- STAR RATING SVG -->
 <script src="https://maps.google.com/maps/api/js?key=AIzaSyBjirg3UoMD5oUiFuZt3P9sErZD-2Rxc68&sensor=false"  ></script><!-- GOOGLE MAP -->
 <script src='https://www.google.com/recaptcha/api.js'></script> <!-- Google API For Recaptcha  -->
 <script src="{% static 'js/map.script.js' %}"></script><!-- CONTACT JS  -->
@@ -289,43 +288,9 @@ NG SVG -->
 <script src="{% static 'plugins/drop/imageuploadify.min.js' %}"></script><!-- CONTACT JS  -->
 <script src="{% static 'plugins/tag-editor/jquery.caret.min.js' %}"></script>
 <script src="{% static 'plugins/tag-editor/jquery.tag-editor.js' %}"></script>
+<script src="{% static 'plugins/lightgallery/js/lightgallery-all.min.js' %}"></script><!-- Lightgallery -->
 
 
-<script>
-jQuery(document).ready(function(){
-
-	$('.jqte-test').jqte();
-
-	// settings of status
-	var jqteStatus = true;
-	$(".status").on('click',function()
-	{
-		jqteStatus = jqteStatus ? false : true;
-		$('.jqte-test').jqte({"status" : jqteStatus})
-	});
-
-	$('[data-toggle="tooltip"]').tooltip()
-
-
-	jQuery(document).on('click','.add-social-btn',function(){
-		var copy_data = '<div class="input-group"><select id="mySelect"><option>Instagram</option><option>LinkedIn</option><option>Facebook</option></select><input type="text" class="form-control" placeholder="http://"><div class="input-group-prepend"><button class="site-button btn-block add-social-btn" type="button"><i class="fa fa-plus"></i> Add</button><button class="site-button btn-block remove-social-btn red" type="button"><i class="fa fa-times"></i> Close</button></div></div>';
-		jQuery('.social-btn-container').append(copy_data);
-		jQuery('select').selectpicker();
-	});
-
-	jQuery(document).on('click','.remove-social-btn',function(){
-			jQuery(this).parents('.input-group').remove();
-	});
-
-	$('input[type="file"]').imageuploadify();
-
-	$('#input-tags').tagEditor({
-		placeholder: 'Enter tags ...',
-	});
-
-});
-
-</script>
 
 
 </body>
