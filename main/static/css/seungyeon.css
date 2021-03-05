@@ -38,5 +38,18 @@ ol.comment-list li.comment .reply a {
 }
 
 * {
-outline: none;
+    outline: none;
+}
+
+.comment-btn {
+    padding: 0;
+    color: #4611a7;
+    border-color: transparent;
+    background-color: white;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.comment-btn:hover{
+    color: #0e91e3;
 }

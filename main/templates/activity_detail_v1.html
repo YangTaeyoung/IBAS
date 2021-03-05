@@ -3,8 +3,40 @@
 {% block content %}
     <!--커스텀 css-->
     <link rel="stylesheet" type="text/css" href="{% static 'css/seungyeon.css' %}">
+    <script src="{% static 'js/jquery.min.js' %}"></script><!-- JQUERY.MIN JS -->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.btnAdd').click(function () { // input 클래스 btnAdd를 클릭하면
+                $('.reply-btn-div').append( // div 클래스 인풋태그 뒤에 삽입
+                    '<div class="btnRemove">' +
+                    '<div class=" dlab-divider bg-gray-dark"></div>' +
+                    '<div class="" id="respond"> ' +
+                    '<form class="comment-form" id="commentform" method="post" action="#"> ' +
+                    '<p class="comment-form-comment"> ' +
+                    '<label for="comment">Comments</label> ' +
+                    '<textarea rows="8" name="comment" placeholder="답글을 입력하세요!" id="comment"></textarea> ' +
+                    '</p> ' +
+                    '<p class="form-submit"> ' +
+                    '<div class="extra-cell text-right"> ' +
+                    '<button id="comment-delete" type="button" class="site-button red radius-xl m-l10"><i class="fa fa-trash m-r5"></i>작성취소</button>' +
+                    '<a href="#" class="site-button radius-xl m-l10 m-r15">답글작성</a>' +
+                    '</div>' +
+                    '</p> ' +
+                    '</form> ' +
+                    '</div>' +
+                    '</div>'
+                ); // end append
+                $(this).hide('fast');
+                $('#comment-delete').on('click', function () {
+                    $('div').remove('.btnRemove'); // remove the button
+                    $(".btnAdd").show();
+                });
+            }); // end click
+        }); // end ready
+    </script>
 
     <div class="page-wraper">
+
         <div class="page-content bg-white">
             <div class="page-content bg-white">
                 <!----------============= 상단 제목 시작 ================----------->
@@ -49,6 +81,7 @@
                                     <!--============================== 게시글 본문 시작 ==============================-->
                                     <div class="dlab-post-text">
                                         <!-- 본문 입력 내용 -->
+
                                         <p class="font-weight-400">Lorem ipsum dolor sit amet, consectetur adipisicing
                                             elit, sed
                                             do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
@@ -145,11 +178,13 @@
                                     <!-- 게시글 삭제 및 수정 div -->
                                     <div class="extra-cell text-right">
                                         <!-- 게시글 수정 버튼 -->
+
                                         <a href="{% url 'test_activity_register' %}"
                                            class="site-button radius-xl m-l10"><i
                                                 class="fa fa-pencil m-r5"></i>
                                             게시글 수정</a>
                                         <!-- 게시글 삭제 버튼 -->
+
                                         <a href="{% url 'test_activity_register' %}"
                                            class="site-button red radius-xl m-l10"><i
                                                 class="fa fa-trash m-r5"></i>
@@ -167,49 +202,73 @@
                                             <ol class="comment-list">
                                                 <li class="comment">
                                                     <div class="comment-body">
-                                                        <div class="comment-author vcard"><cite class="fn">Rosalina
-                                                            Kelian</cite> <span class="says">says:</span></div>
+                                                        <div class="comment-author vcard"><cite class="fn"><i
+                                                                class="ti ti-user m-r10"></i>양태영</cite></div>
+                                                        <div class="dlab-post-meta m-l10">
+                                                            <ul class="d-flex">
+                                                                <!-- 게시글 작성일자 -->
+                                                                <li class="post-author"><a
+                                                                        href="javascript:void(0);">경영학과 16학번</a></li>
+                                                                <!-- 게시글 작성시간 -->
+                                                                <li class="post-comment"><i
+                                                                        class="ti ti-alarm-clock"></i> <a
+                                                                        href="javascript:void(0);">19 hours ago</a></li>
+                                                            </ul>
+                                                        </div>
                                                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
                                                             do eiusmod tempor incididunt ut labore et dolore magna
                                                             aliqua. Ut enim ad minim veniam, quis nostrud exercitation
                                                             ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
                                                         <div class="reply-btn-div">
-                                                            <a href="#"
-                                                               class="m-r20"><i
-                                                                    class="fa fa-commenting m-r5"></i>답글쓰기</a>
+                                                            <button type="button" class="btnAdd comment-btn m-r20"><i
+                                                                    class="fa fa-commenting m-r5"></i>답글쓰기
+                                                            </button>
                                                             <a href="#"
                                                                class="m-r10"><i
-                                                                    class="fa fa-pencil m-r5"></i>게시글 수정</a>
+                                                                    class="fa fa-pencil m-r5"></i>댓글 수정</a>
                                                             <a href="#"
                                                                class="m-r10"><i
                                                                     class="fa fa-trash m-r5"></i>
-                                                                게시글 삭제</a>
+                                                                댓글 삭제</a>
                                                         </div>
 
                                                     </div>
                                                 </li>
-                                                <li class="comment">
-                                                    <div class="comment-body">
-                                                        <div class="comment-author vcard"><cite class="fn">Arista
-                                                            Williamson</cite> <span class="says">says:</span></div>
-                                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
-                                                            do eiusmod tempor incididunt ut labore et dolore magna
-                                                            aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                                                            ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                                                        <div class="reply-btn-div">
-                                                             <a href="#"
-                                                               class="m-r20"><i
-                                                                    class="fa fa-commenting m-r5"></i>답글쓰기</a>
-                                                            <a href="#"
-                                                               class="m-r10"><i
-                                                                    class="fa fa-pencil m-r5"></i>게시글 수정</a>
-                                                            <a href="#"
-                                                               class="m-r10"><i
-                                                                    class="fa fa-trash m-r5"></i>
-                                                                게시글 삭제</a>
-                                                        </div>
-                                                    </div>
-                                                </li>
+                                                <!-- 오류 참고용... -->
+                                                                                                <li class="comment">
+                                                                                                    <div class="comment-body">
+                                                                                                        <div class="comment-author vcard"><cite class="fn"><i
+                                                                                                                class="ti ti-user m-r10"></i>신승연</cite></div>
+
+                                                                                                        <div class="dlab-post-meta m-l10">
+                                                                                                            <ul class="d-flex">
+                                                                                                                <!-- 게시글 작성일자 -->
+                                                                                                                <li class="post-author"><a
+                                                                                                                        href="javascript:void(0);">경영학과 17학번</a></li>
+                                                                                                                <!-- 게시글 작성시간 -->
+                                                                                                                <li class="post-comment"><i
+                                                                                                                        class="ti ti-alarm-clock"></i> <a
+                                                                                                                        href="javascript:void(0);">19 hours ago</a></li>
+                                                                                                            </ul>
+                                                                                                        </div>
+                                                                                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
+                                                                                                            do eiusmod tempor incididunt ut labore et dolore magna
+                                                                                                            aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                                                                                                            ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                                                                                                        <div class="reply-btn-div">
+                                                                                                            <a href="#"
+                                                                                                               class="m-r20"><i
+                                                                                                                    class="fa fa-commenting m-r5"></i>답글쓰기</a>
+                                                                                                            <a href="#"
+                                                                                                               class="m-r10"><i
+                                                                                                                    class="fa fa-pencil m-r5"></i>게시글 수정</a>
+                                                                                                            <a href="#"
+                                                                                                               class="m-r10"><i
+                                                                                                                    class="fa fa-trash m-r5"></i>
+                                                                                                                게시글 삭제</a>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </li>
                                             </ol>
                                             <!-- comment list END -->
                                             <!-- Form -->
