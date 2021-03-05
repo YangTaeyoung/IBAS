@@ -77,28 +77,31 @@ function introduce_close() {
 }
 
 //네비게이션 바 색 바꾸기
+//매개변수는 id. 매개변수 이름은 네비게이션 바 아이디와 동일.
 function section_mouse_in(id){
+    //id가 매개변수인 네비게이션바 요소를 찾음
     secObj = document.getElementById(id)
-    secObj.style.fontSize = "16px";
+    //스타일 변경경    secObj.style.fontSize = "16px";
     secObj.style.fontWeight = "bolder";
     secObj.style.color = "#091069";
 }
+//네비게이션 바 색 원래대로 바꾸기
+//매개변수는 id. 매개변수 이름은 네비게이션 바 아이디와 동일.
 function section_mouse_out(id){
+    // 네비게이션 바 id를 리스트로 만든다.
     secNameList = ["intro-a","intro-cm-a","his-a","con-a"];
 
+    // i는 id 개수 만큼 돌려짐.
     for(i = 0; i < secNameList.length; i++)
     {
+        //네비게이션 바 id 리스트와 매개변수로 받아온 id가 동일하지 않으면
         if(secNameList[i] !== id)
         {
+            //원래대로 스타일 돌아온다.
             document.getElementById(secNameList[i]).style.fontSize = "15px";
             document.getElementById(secNameList[i]).style.color = "black";
             document.getElementById(secNameList[i]).style.fontWeight = "normal";
         }
     }
 }
-
-introObj = document.getElementById('introduce');
-    introCmObj = document.getElementById('introduce_cm');
-    hisObj = document.getElementById('history');
-    conObj = document.getElementById('contact');
 
