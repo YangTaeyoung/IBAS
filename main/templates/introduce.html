@@ -30,7 +30,7 @@
 
     <!-- ===========================동아리 소개================================ -->
     <!--introduce-display_inline-block, introduce-padding-top_0는 yejin.css에 정의되어 있음. -->
-    <div data-spy="scroll" data-target=".introduce-nav-bar" data-offset="50">
+
         <section id="introduce" onmouseover="section_mouse_in('intro-a')" onmouseout="section_mouse_out('intro-a')"
                  style="height: 763px;">
             <div
@@ -295,10 +295,10 @@
                                 </div>
                                 <div class="introduce-contact-flex-container" style="justify-content: space-around">
 
-                                    <div><input type="submit" hidden><i class="fa fa-pencil" id="update"
-                                                                        onclick="introduce_update()"></i></div>
-                                    <div><input type="submit" hidden><i class="fa fa-trash" id="delete"
-                                                                        onclick="introduce_del()"></i></div>
+                                    <div onclick="introduce_update()"><input type="submit" hidden><i class="fa fa-pencil" id="update"
+                                                                        ></i></div>
+                                    <div ><input type="submit" hidden><i class="fa fa-trash" id="delete"
+                                                                        ></i></div>
                                 </div>
                             </div>
                         </div>
@@ -335,7 +335,7 @@
                 </div>
             </div>
         </section>
-    </div>
+    
 
     {#        </div>#}
 
