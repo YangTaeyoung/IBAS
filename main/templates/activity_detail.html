@@ -1,59 +1,196 @@
+{% extends "base.html" %}
 {% load static %}
+{% block content %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+    <!--커스텀 css-->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/seungyeon.css' %}">
 
-{% for image in board_info.boardfile_set.all %}
-    <img src="/media/{{ image.board_file_path }}" style="width: 300px; height: 300px"><br>
-    <br>
-{% endfor %}
+    <div class="page-wraper">
+        <div class="page-content bg-white">
+            <div class="page-content bg-white">
+                <!----------============= 상단 제목 시작 ================----------->
+                <!--제목을 감싸는 배경-->
+                <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"
+                     style=" background-image: url('{% static 'images/board_name_img.jpg' %}'); height: 350px">
+                    <div class="container clearfix">
+                        <div class="dlab-bnr-inr-entry">
+                            <!--제목-->
+                            <h1 class="text-white introduce-letter-spacing_5">동아리 활동</h1>
+                            <!--부제목-->
+                            <p class="introduce-margin-top_20">동아리 수상 및 활동 내역에 대한 게시판입니다.</p>
+                        </div>
+                    </div>
+                </div>
 
-작성자 : {{ board_info.board_writer.user_name }} <br>
-제목 : {{ board_info.board_title }} <br>
-내용 : {{ board_info.board_cont }} <br>
-작성시간 : {{ board_info.board_created }} <br>
+                <!----------============= 본문 시작 ================----------->
 
-{# ############################ 수정 삭제 버튼 구간 ######################### #}
-<div>
-    <form action="{% url 'test_activity_update' %}" method="GET">
-        <button type="submit" name="board_no" onclick="return confirm('수정하시겠습니까?')"> 수정
-            <input type="hidden" name="board_no" value="{{ board_info.board_no }}">
-        </button>
-    </form>
+                <div class="section-full content-inner">
+                    <div class="container">
+                        <div class="row" style="justify-content: center">
+                            <div class="col-lg-8 col-xl-8 p-b30">
+                                <div class="blog-post blog-single">
+                                    <!-- 게시글 작성자 및 작성시간을 담는 div -->
+                                    <div class="dlab-post-meta m-b20">
+                                        <ul class="d-flex align-items-center">
 
-    <form action="{% url 'test_activity_delete' %}" METHOD="POST">
-        {% csrf_token %}
-        <input type="hidden" name="board_no" value="{{ board_info.board_no }}">
-        <input type="submit" value="게시글 삭제" onclick="return confirm('정말 삭제하시겠습니까?')">
-    </form>
-</div>
+                                            <!-- 게시글 작성자 -->
+                                            <li class="post-author"><i class="ti ti-user"></i>By <a
+                                                    href="javascript:void(0);">{{ board_info.board_writer.user_name }}
+                                                </a></li>
 
-{# ###################### 댓글 출력 구간 ############################ #}
-{% for comment in comment_info %}
-    작성자 : {{ comment.comment_writer.user_name }} //
-    내용 : {{ comment.comment_cont }} //
-    작성시간 : {{ comment.comment_created }}
-    {% if request.session.user_stu == comment.comment_writer.user_stu %}
-        <form action="{% url 'activity_comment_delete' %}" method="POST">
-            {% csrf_token %}
-            <input type="submit" value="댓글 삭제" onclick="return confirm('정말 삭제하시겠습니까?')">
-            <input type="hidden" value="{{ comment.comment_id }}" name="comment_id">
-        </form>
-    {% endif %}
-    <br>
-{% endfor %}
 
-{# ################## 밑은 댓글쓰기 만드는 곳 ##################### #}
-<form action="{% url 'activity_comment' %}" method="GET">
-    댓글 : <input name="activity_comment">
-    <input type="hidden" name="board_no" value="{{ board_info.board_no }}">
-    <input type="submit" value="댓글쓰기"><br>
-</form>
+                                            <!-- 게시글 작성시간 -->
+                                            <li class="post-comment"><i class="ti ti-alarm-clock"></i> <a
+                                                    href="javascript:void(0);">{{ board_info.board_created }}</a></li>
 
-</body>
-</html>
+                                        </ul>
+                                    </div>
+
+
+                                    <!-- 게시글 제목 -->
+                                    <div class="dlab-post-title ">
+                                        <h2 class="post-title m-t0">
+                                            <a href="javascript:void(0);">{{ board_info.board_title }}</a>
+                                        </h2>
+                                    </div>
+
+
+                                    <!--============================== 게시글 본문 시작 ==============================-->
+                                    <div class="dlab-post-text">
+                                        <!-- 본문 입력 내용 -->
+
+
+                                        <!--  =============== 게시글 내용 ====== -->
+                                        {% autoescape off %}
+                                        <p id="post-text-cont" class="font-weight-400">
+                                            {{ board_info.board_cont }}
+                                        </p>
+                                        {% endautoescape %}
+
+                                        <!-- 게시글 속 사진 모음 -->
+                                        <div class="widget widget_gallery gallery-grid-4 lightgallery">
+                                            <ul>
+
+                                                <li>
+													<span data-exthumbimage="/static/images/listing/grid/pic1.jpg"
+                                                          data-src="/static/images/listing/grid/pic1.jpg"
+                                                          class="check-km " title="Light Gallery Grid 1">
+														<a href="javascript:void(0);">
+															<div class="dlab-post-thum act-detail-img-size"><img
+                                                                    style="height: 190px"
+                                                                    src="/static/images/listing/grid/pic1.jpg"
+                                                                    alt=""></div>
+														</a>
+													</span>
+                                                </li>
+
+                                            </ul>
+                                        </div>
+
+                                    </div>
+                                    <!-- 게시글 삭제 및 수정 div -->
+                                    <div class="extra-cell text-right">
+
+                                        <!-- 게시글 수정 버튼 -->
+                                        <a href="{% url 'test_activity_register' %}"
+                                           class="site-button radius-xl m-l10"><i
+                                                class="fa fa-pencil m-r5"></i>
+                                            게시글 수정</a>
+
+                                        <!-- 게시글 삭제 버튼 -->
+                                        <a href="{% url 'test_activity_delete' %}"
+                                           class="site-button red radius-xl m-l10"><i
+                                                class="fa fa-trash m-r5"></i>
+                                            게시글 삭제</a>
+
+                                    </div>
+                                    <!-- 게시글과 댓글을 구분짓는 구분선 -->
+                                    <div class="dlab-divider bg-gray-dark"></div>
+                                </div>
+                                <div class="clear" id="comment-list">
+                                    <div class="comments-area" id="comments">
+                                        <h3 class="font-26">댓글
+                                        </h3>
+                                        <div class="clearfix">
+                                            <!-- comment list END -->
+                                            <ol class="comment-list">
+                                                <li class="comment">
+                                                    <div class="comment-body">
+                                                        <div class="comment-author vcard"><cite class="fn">Rosalina
+                                                            Kelian</cite> <span class="says">says:</span></div>
+                                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
+                                                            do eiusmod tempor incididunt ut labore et dolore magna
+                                                            aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                                                            ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                                                        <div class="reply-btn-div">
+                                                            <a href="#"
+                                                               class="m-r20"><i
+                                                                    class="fa fa-commenting m-r5"></i>답글쓰기</a>
+                                                            <a href="#"
+                                                               class="m-r10"><i
+                                                                    class="fa fa-pencil m-r5"></i>게시글 수정</a>
+                                                            <a href="#"
+                                                               class="m-r10"><i
+                                                                    class="fa fa-trash m-r5"></i>
+                                                                게시글 삭제</a>
+                                                        </div>
+
+                                                    </div>
+                                                </li>
+                                                <li class="comment">
+                                                    <div class="comment-body">
+                                                        <div class="comment-author vcard"><cite class="fn">Arista
+                                                            Williamson</cite> <span class="says">says:</span></div>
+                                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
+                                                            do eiusmod tempor incididunt ut labore et dolore magna
+                                                            aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                                                            ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                                                        <div class="reply-btn-div">
+                                                             <a href="#"
+                                                               class="m-r20"><i
+                                                                    class="fa fa-commenting m-r5"></i>답글쓰기</a>
+                                                            <a href="#"
+                                                               class="m-r10"><i
+                                                                    class="fa fa-pencil m-r5"></i>게시글 수정</a>
+                                                            <a href="#"
+                                                               class="m-r10"><i
+                                                                    class="fa fa-trash m-r5"></i>
+                                                                게시글 삭제</a>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ol>
+                                            <!-- comment list END -->
+                                            <!-- Form -->
+                                            <div class="dlab-divider bg-gray-dark"></div>
+                                            <div class="" id="respond">
+                                                <form class="comment-form" id="commentform" method="post" action="#">
+                                                    <p class="comment-form-comment">
+                                                        <label for="comment">Comments</label>
+                                                        <textarea rows="8" name="comment"
+                                                                  placeholder="댓글을 남겨보세요!"
+                                                                  id="comment"></textarea>
+                                                    </p>
+
+
+                                                    <p class="form-submit">
+                                                        <input type="submit" value="댓글등록"
+                                                               class="submit site-button" id="submit" name="submit">
+                                                    </p>
+                                                </form>
+                                            </div>
+                                            <!-- Form -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 상단으로 올라가는 버튼 -->
+        <button class="scroltop fa fa-chevron-up"></button>
+    </div>
+
+{% endblock %}
