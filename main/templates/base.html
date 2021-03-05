@@ -253,9 +253,9 @@
     <!-- footer-bottom, min-width_1400에 대한 정의는 bottom_bar.css에 정의되어 있음. (flex 관련)(min-with 관련) -->
     <div class="footer-bottom min-width_1400">
         <!-- design-with에 대한 정의는 bottom_bar.css에 정의되어 있음. (font, margin 관련) -->
-        <p class="fbottom-like design-with">© 2021 Design With <a class="like-btn"
+        <p class="fbottom-like design-with">© 2021 Developed By <a class="like-btn"
                                                                   href="javascript:void(0)">
-        </a> By 양태영, 신승연, 조용식, 김채림, 윤예진 </p>
+        </a> 양태영, 신승연, 조용식, 김채림, 윤예진 </p>
     </div>
 </footer>
 <!-- Footer END-->
@@ -294,4 +294,40 @@
 
 
 </body>
+<script>
+jQuery(document).ready(function(){
+
+	$('.jqte-test').jqte();
+
+	// settings of status
+	var jqteStatus = true;
+	$(".status").on('click',function()
+	{
+		jqteStatus = jqteStatus ? false : true;
+		$('.jqte-test').jqte({"status" : jqteStatus})
+	});
+
+	$('[data-toggle="tooltip"]').tooltip()
+
+
+	jQuery(document).on('click','.add-social-btn',function(){
+		var copy_data = '<div class="input-group"><select id="mySelect"><option>Instagram</option><option>LinkedIn</option><option>Facebook</option></select><input type="text" class="form-control" placeholder="http://"><div class="input-group-prepend"><button class="site-button btn-block add-social-btn" type="button"><i class="fa fa-plus"></i> Add</button><button class="site-button btn-block remove-social-btn red" type="button"><i class="fa fa-times"></i> Close</button></div></div>';
+		jQuery('.social-btn-container').append(copy_data);
+		jQuery('select').selectpicker();
+	});
+
+	jQuery(document).on('click','.remove-social-btn',function(){
+			jQuery(this).parents('.input-group').remove();
+	});
+
+	$('input[type="file"]').imageuploadify();
+
+	$('#input-tags').tagEditor({
+		placeholder: 'Enter tags ...',
+	});
+
+});
+
+</script>
 </html>
+

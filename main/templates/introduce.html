@@ -2,54 +2,44 @@
 {% load static %}
 {% block content %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/yejin.css' %}">
+    <script src="{% static 'js/yejin.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/star-rating-svg.css' %}"/>
+    <link
+            rel="stylesheet"
+            type="text/css"
+            href="{% static 'plugins/editor/jquery-te-1.4.0.css' %}"
+    />
+
+    <link
+            rel="stylesheet"
+            type="text/css"
+            href="{% static 'plugins/drop/imageuploadify.min.css' %}"
+    />
 
     <!-- ===========================페이지 전체 div================================ -->
-    <div class="clearfix">
-        <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"
-             style=" background-image: url('{% static 'images/board_name_img.jpg' %}'); height: 350px">
-            <div class="container clearfix">
-                <div class="dlab-bnr-inr-entry">
-                    <h1 class="text-white introduce-letter-spacing_5">동아리 소개</h1>
-                    <p class="introduce-margin-top_20">비즈니스 빅데이터 탐구 동아리 IBAS</p>
-                </div>
-            </div>
-        </div>
+    <!----------상단 제목부분----------->
+    <!--제목을 감싸는 배경-->
+    <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"
+         style=" background-image: url('{% static 'images/board_name_img.jpg' %}'); height: 74px; z-index: 0">
+    </div>
 
+    <div id="bg"></div>
+    <!-- ===========================페이지 콘텐츠 전체를 감싸는 div================================ -->
+    {#        <div  class=" bg-img-fix most-visited content-inner introduce-padding-bottom_0 "#}
+    {#             style="background-image:url('{% static 'images/main-introduce.jpg' %}');" ;>#}
 
-        <!-- ===========================페이지 콘텐츠 전체를 감싸는 div================================ -->
-        <div id="introduce" class="section-full bg-img-fix most-visited content-inner introduce-padding-bottom_0"
-             style="background-image:url('{% static 'images/main-introduce.jpg' %}'); " ;>
-            <!-- ===========================네비게이션바================================ -->
-            <!--introduce-display_inline-block는 yejin.css에 정의되어 있음. -->
-            <div class="sticky-top introduce-display_inline-block">
-                <!--introduce-nav-bar는 yejin.css에 정의되어 있음. -->
-                <div class="listing-filter-sidebar introduce-nav-bar">
-                    <h4 class="title m-b30">IBAS</h4>
-                    <!-- 글자 누르면 해당하는 영역으로 이동함. id를 통해 찾아가는 것임.  -->
-                    <div class="form-group">
-                        <a href="#introduce"><h6>동아리 소개</h6></a>
-                    </div>
-                    <div class="form-group">
-                        <a href="#introduce_cm"><h6>회장단 소개</h6></a>
-                    </div>
-                    <div class="form-group">
-                        <a href="#history"><h6>동아리 연혁</h6></a>
-                    </div>
-                    <div class="form-group">
-                        <a href="#contact"><h6>Contact Us</h6></a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ===========================동아리 소개================================ -->
-            <!--introduce-display_inline-block, introduce-padding-top_0는 yejin.css에 정의되어 있음. -->
-            <div id="introduce"
-                 class="section-full bg-img-fix most-visited content-inner introduce-display_inline-block introduce-padding-top_0"
-                 style="background-image:url('{% static 'images/main-introduce.jpg' %}');">
-                <div class="container">
-                    <div class="section-head text-center">
+    <!-- ===========================동아리 소개================================ -->
+    <!--introduce-display_inline-block, introduce-padding-top_0는 yejin.css에 정의되어 있음. -->
+    <div data-spy="scroll" data-target=".introduce-nav-bar" data-offset="50">
+        <section id="introduce" onmouseover="section_mouse_in('intro-a')" onmouseout="section_mouse_out('intro-a')"
+                 style="height: 763px;">
+            <div
+                    class=" bg-img-fix most-visited content-inner introduce-contact-flex-container"
+                    style="background-image:url('{% static 'images/main-introduce.jpg' %}'); z-index: 0; display: flex; justify-content: center; align-items: center">
+                <div id="introduce" class="container" style="margin: 0">
+                    <div class="introduce-for-del-margin text-center" style="padding-bottom: 40px">
                         <h2 class="box-title">동아리 소개</h2>
-                        <div class="dlab-separator" style="background-color: #091069"></div>
+                        <div class="dlab-separator" style="background-color: #091069; z-index: 0"></div>
                         <p>인하대학교 빅데이터 탐구동아리 Inha BAS(Bigdata Analyst Society)입니다. Inha BAS는 빅데이터에 관심이 있는 학생들이 모여 기초부터
                             하나씩 쌓아가기위해 만든 빅데이터 탐구동아리 입니다.</p>
                     </div>
@@ -105,21 +95,24 @@
                     </div>
                 </div>
             </div>
-            {#        #}
+        </section>
 
-
-            <!-- ===========================운영진 소개================================ -->
-            <div id="introduce_cm" class="section-full content-inner " style="background-color: #f5f9ff;">
-                <div class="container">
-                    <div class="section-head text-center">
-                        <h2 class="box-title">운영진 소개</h2>
-                        <div class="dlab-separator" style="background-color: #091069"></div>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
+        <!-- ===========================회장단 소개================================ -->
+        <section id="introduce_cm" onmouseover="section_mouse_in('intro-cm-a')"
+                 onmouseout="section_mouse_out('intro-cm-a')" style="height: 798px;">
+            <div
+                    class=" content-inner introduce-contact-flex-container"
+                    style=" z-index: 0; background-color: #f5f9ff;">
+                <div class="container" style="margin: 0">
+                    <div class="introduce-for-del-margin text-center" style="padding-bottom: 40px">
+                        <h2 class="box-title">회장단 소개</h2>
+                        <div class="dlab-separator" style="z-index: 0; background-color: #091069"></div>
+                        <p style="margin: 0;">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
                             labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud.</p>
                     </div>
 
                     <!-- ===========================회장================================ -->
-                    <div>
+                    <div style="z-index: 0">
                         <div id="owl-demo"
                              class="testimonial-one owl-loaded owl-theme owl-carousel owl-btn-center-lr owl-btn-3 owl-dots-primary-big">
                             <div class="item">
@@ -204,156 +197,171 @@
                                 </div>
                             </div>
                             <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!! 위쪽까지 복붙 !!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+
                         </div>
                     </div>
                 </div>
             </div>
-            {#    #}
+        </section>
 
 
-            <!-- ===========================동아리 연혁================================ -->
-            <div id="history" class="section-full bg-img-fix most-visited content-inner "
-                 style="background-image:url('{% static 'images/main-introduce.jpg' %}')" ;>
-                <div class="container">
-                    <div class="section-head text-center">
+        <!-- ===========================동아리 연혁================================ -->
+        <section id="history" onmouseover="section_mouse_in('his-a')" onmouseout="section_mouse_out('his-a')"
+                 style="height: 800px">
+            <div class=" bg-img-fix most-visited content-inner introduce-padding-bottom_0 introduce-contact-flex-container"
+                 style="background-image:url('{% static 'images/main-introduce.jpg' %}'); z-index: 0" ;>
+                <div
+                        class="container" style="margin: 0">
+                    <div class="introduce-for-del-margin text-center" style="padding-bottom: 40px">
                         <h2 class="box-title">동아리 연혁</h2>
-                        <div class="dlab-separator" style="background-color: #091069"></div>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            labore
-                            et dolore magna aliqua.</p>
-                    </div>
-                    <!-- ===========================동아리 연혁부분 박스================================ -->
-                    <!--introduce-box-bg introduce-history-box
-                    introduce-history-grid introduce-color_black introduce-overflow_auto는 yejin.css에 정의되어 있음. -->
-                    <div class="icon-bx-wraper center introduce-box-bg introduce-history-box
-                    introduce-history-grid introduce-color_black introduce-overflow_auto">
-                        <!-- introduce-border-bottom는 yejin.css에 정의되어 있음. -->
-                        <div class="introduce-border-bottom">
-                            <p>2022년</p>
-                        </div>
-                        <!-- introduce-border-bottom는 yejin.css에 정의되어 있음. -->
-                        <div class="introduce-border-bottom">
-                            <p>12</p>
-                            <p>11</p>
-                            <p>10</p>
-                            <p>09</p>
-                        </div>
-                        <!-- introduce-padding-bottom_24 introduce-border-bottom는 yejin.css에 정의되어 있음. -->
-                        <div class="introduce-padding-bottom_24 introduce-border-bottom">
-                            <!-- introduce-align-items_start는 yejin.css에 정의되어 있음. -->
-                            <p class="introduce-align-items_start">Lorem ipsum dolor sit amet</p>
-                            <p class="introduce-align-items_start">Lorem ipsum dolor sit amet</p>
-                            <p class="introduce-align-items_start ">Lorem ipsum dolor sit amet</p>
-                            <p class="introduce-align-items_start ">Lorem ipsum dolor sit amet</p>
+                        <div class="dlab-separator" style="z-index: 0; background-color: #091069"></div>
+                        <p>이것은 동아리 연혁입니다. 아직 아무것도 없어서 허전해요. 곧 써지겠죠. 집에있는데도 집에가고싶은 기분이랄까.
+                            집에있는데도 집에가고싶은 기분이랄까. 집에있는데도 집에가고싶은 기분이랄까. 집에있는데도 집에가고싶은 기분이랄까.</p>
 
+                        <div>
+                            <p id="introduce-modal-btn" class="introduce-color-btn introduce-modal-btn"
+                               style="color: white"
+                               onclick="introduce_add()">동아리 연혁 추가하기</p>
                         </div>
 
-                        <!-- introduce-border-bottom introduce-margin-top_20는 yejin.css에 정의되어 있음. -->
-                        <div class="introduce-border-bottom introduce-margin-top_20">
-                            <p>2021년</p>
+                        <div id="introduce-modal-bg" class="introduce-modal-bg" tabindex="-1">
+                            <div class="introduce-modal">
+                                <div class="content-box">
+                                    <div class="content-header">
+                                        <h3 class="title"><i class="la la-map-signs m-r5"
+                                                             style="color: #091069; font-size: 16pt">
+                                        </i>동아리 연혁 추가하기</h3>
+                                    </div>
+                                    <div class="content-body">
+                                        <ul class="icon-box-list">
+                                            <li style="width: 100%; display: grid; grid-template-columns: 50px 170px">
+                                                <div class="icon-cell bg-gray">
+                                                    <i class="la la-calendar" style="justify-content: center"></i>
+                                                </div>
+
+                                                <div class="introduce-li-flex"><input type="date"
+                                                                                      class="introduce-border_none"/>
+                                                </div>
+                                            </li>
+                                            <li style="width: 100%; display: grid; grid-template-columns:50px 307px">
+                                                <div class="icon-cell bg-gray">
+                                                    <i class="la la-pencil"></i>
+                                                </div>
+
+                                                <div class="introduce-li-flex"><textarea type="text"
+                                                                                         class="form-control"
+                                                                                         style="resize: none; font-size: 12pt"
+                                                                                         placeholder="내용을 입력하세요."></textarea>
+                                                </div>
+                                            </li>
+                                        </ul>
+
+                                    </div>
+                                    <div class="content-footer">
+                                        <button type="button" class="btn btn-primary" style="background-color: #091069">
+                                            등록
+                                        </button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                                onclick="introduce_close()">Close
+                                        </button>
+                                    </div>
+                                </div>
+
+
+                            </div>
                         </div>
-                        <!-- introduce-border-bottom introduce-margin-top_20는 yejin.css에 정의되어 있음. -->
-                        <div class="introduce-border-bottom introduce-margin-top_20">
-                            <p>12</p>
-                            <p>11</p>
-                            <p>10</p>
-                            <p>09</p>
-                        </div>
-                        <!-- introduce-padding-bottom_24 introduce-border-bottom introduce-margin-top_20는 yejin.css에 정의되어 있음. -->
-                        <div class="introduce-padding-bottom_24 introduce-border-bottom introduce-margin-top_20">
-                            <p class="introduce-align-items_start ">Lorem ipsum dolor sit amet</p>
-                            <p class="introduce-align-items_start ">Lorem ipsum dolor sit amet</p>
-                            <p class="introduce-align-items_start ">Lorem ipsum dolor sit amet</p>
-                            <p class="introduce-align-items_start ">Lorem ipsum dolor sit amet</p>
-                        </div>
-                        <!-- introduce-margin-top_20는 yejin.css에 정의되어 있음. -->
-                        <div class="introduce-margin-top_20">
-                            <p>2020년</p>
-                        </div>
-                        <!-- introduce-margin-top_20는 yejin.css에 정의되어 있음. -->
-                        <div class=" introduce-margin-top_20">
-                            <p>12</p>
-                            <p>11</p>
-                            <p>10</p>
-                            <p>09</p>
-                        </div>
-                        <!-- introduce-padding-bottom_24 introduce-margin-top_20는 yejin.css에 정의되어 있음.
-                        introduce-border-bottom 는 마지막 연혁에는 사용하지 않는다. -->
-                        <div class="introduce-padding-bottom_24 introduce-margin-top_20">
-                            <p class="introduce-align-items_start ">Lorem ipsum dolor sit amet</p>
-                            <p class="introduce-align-items_start ">Lorem ipsum dolor sit amet</p>
-                            <p class="introduce-align-items_start ">동아리 활동 시작</p>
-                            <p class="introduce-align-items_start ">동아리 개설</p>
+
+                        <!-- ===========================동아리 연혁부분 박스================================ -->
+                        <!--introduce-box-bg introduce-history-box
+                        introduce-history-grid introduce-color_black introduce-overflow_auto는 yejin.css에 정의되어 있음. -->
+                        <div class="icon-bx-wraper introduce-box-bg introduce-history-box
+                    introduce-color_black introduce-margin-bottom_10" style="z-index: 0; margin-left: 0">
+
+                            <div id="divGroup" class="introduce-history-grid introduce-overflow_auto ">
+                                <!-- introduce-border-bottom introduce-text-align_center는 yejin.css에 정의되어 있음. -->
+
+                                <div class="introduce-text-align_center">
+                                    <input id="date" type="date" value="2020-09-09" disabled="disabled"
+                                           class="introduce-update-input-date introduce-margin-bottom_10"
+                                           style="width: 170px">
+                                </div>
+                                <!-- introduce-border-bottom는 yejin.css에 정의되어 있음. -->
+
+                                <!-- introduce-padding-bottom_24 introduce-border-bottom는 yejin.css에 정의되어 있음. -->
+                                <div id="history_txt" class="introduce-history-box-flex ">
+                                    <!-- introduce-align-items_start는 yejin.css에 정의되어 있음. -->
+                                    <input id="history-txt" value="Lorem ipsum dolor sit amet" disabled="disabled"
+                                           class="introduce-update-input-txt">
+                                </div>
+                                <div class="introduce-contact-flex-container" style="justify-content: space-around">
+
+                                    <div><input type="submit" hidden><i class="fa fa-pencil" id="update"
+                                                                        onclick="introduce_update()"></i></div>
+                                    <div><input type="submit" hidden><i class="fa fa-trash" id="delete"
+                                                                        onclick="introduce_del()"></i></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </section>
 
-            <!-- ===========================Contact Us================================ -->
-            <div id="contact" class="section-full content-inner " style="background-color: #f5f9ff;">
-                <div class="container">
-                    <div class="section-head text-center">
+
+        <!-- ===========================Contact Us================================ -->
+        <section id="contact" onmouseover="section_mouse_in('con-a')" onmouseout="section_mouse_out('con-a')">
+            <div
+                    class="content-inner introduce-contact-flex-container"
+                    style="background-color: #f5f9ff; z-index: 0">
+                <div class="container" style="margin: 0">
+                    <div class="introduce-for-del-margin text-center" style="padding-bottom: 40px">
                         <h2 class="box-title">Contact Us</h2>
-                        <div class="dlab-separator" style="background-color: #091069"></div>
-                        <p class="introduce-margin-bottom_0"><i class="ti-email"></i> {{ chief.user_email }}</p>
-                        <p><i class="ti-mobile"></i> {{ chief.user_phone }}</p>
+                        <div class="dlab-separator" style="background-color: #091069; z-index: 0; "></div>
+                        <p class="introduce-margin-bottom_5 introduce-font-size_15">
+                            <i class="ti-email"></i>
+                            {{ chief.user_email }}
+                        </p>
+                        <p class="introduce-font-size_15"><i class="ti-mobile"></i> {{ chief.user_phone }}</p>
                     </div>
 
-                    <!-- ===========================Contact Us 카드 부분================================ -->
-
-                    <!-- introduce-google-map introduce-width_1135는 yejin.css에 정의되어 있음. -->
-                    <div style="justify-content: center">
-                        <iframe class="introduce-width_1135"
+                    <!-- introduce-google-map introduce-google-map-size 는 yejin.css에 정의되어 있음. -->
+                    <div class="introduce-contact-flex-container "
+                         style="justify-content: center; margin-bottom: 0; z-index: 0">
+                        <iframe class=" introduce-google-map-size "
                                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3167.4531204275!2d126.65129931528445!3d37.45002207981986!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x357b79ab3057fc7f%3A0xe3e29f05aba35eb0!2z7J247ZWY64yA7ZWZ6rWQIOyaqe2YhOy6oO2NvOyKpA!5e0!3m2!1sko!2skr!4v1610804139555!5m2!1sko!2skr"
-                                width="1920" height="390" frameborder="0" style="border:0;" allowfullscreen=""></iframe>
+                                width="500" height="390" frameborder="0" style="border:0;"
+                                allowfullscreen=""></iframe>
                     </div>
-
-{#                   어떤 것이 더 나을지 생각해봐야함. #}
-                    {#                    <!-- ===========================Contact Us 카드 부분================================ -->#}
-                    {#                    <!-- introduce-contact-flex-container는 yejin.css에 정의되어 있음. -->#}
-                    {#                    <div class="introduce-contact-flex-container">#}
-                    {#                        <div class="row dzseth m-b50">#}
-                    {#                            <div class="m-b30">#}
-                    {#                                <div class="introduce-google-map">#}
-                    {#                                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3167.4531204275!2d126.65129931528445!3d37.45002207981986!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x357b79ab3057fc7f%3A0xe3e29f05aba35eb0!2z7J247ZWY64yA7ZWZ6rWQIOyaqe2YhOy6oO2NvOyKpA!5e0!3m2!1sko!2skr!4v1610804139555!5m2!1sko!2skr"#}
-                    {#                                            width="270" height="303" frameborder="0" style="border:0;"#}
-                    {#                                            allowfullscreen=""></iframe>#}
-                    {#                                </div>#}
-                    {#                            </div>#}
-                    {#                        </div>#}
-                    {##}
-                    {#                        <div class="m-b30">#}
-                    {#                            <!-- introduce-contact-flex-item introduce-height_310는 yejin.css에 정의되어 있음. -->#}
-                    {#                            <div class="icon-bx-wraper p-lr20 p-tb50 center seth contact-bx introduce-contact-flex-item introduce-height_310">#}
-                    {#                                <div class="icon-bx-sm radius m-b20 bg-primary m-b20">#}
-                    {#                                    <i class="ti-email" style="color: white"></i>#}
-                    {#                                </div>#}
-                    {#                                <div class="icon-content">#}
-                    {#                                    <h5 class="dlab-tilte text-uppercase">Email</h5>#}
-                    {#                                    <!-- 회장 이메일 -->#}
-                    {#                                    <p>{{ chief.user_email }}</p>#}
-                    {#                                </div>#}
-                    {#                            </div>#}
-                    {#                        </div>#}
-                    {##}
-                    {#                        <div class="m-b30">#}
-                    {#                            <!-- introduce-contact-flex-item introduce-height_310는 yejin.css에 정의되어 있음. -->#}
-                    {#                            <div class="icon-bx-wraper p-lr20 p-tb50 center seth contact-bx introduce-contact-flex-item introduce-height_310">#}
-                    {#                                <div class="icon-bx-sm radius m-b20 bg-primary m-b20">#}
-                    {#                                    <i class="ti-mobile" style="color: white"></i>#}
-                    {#                                </div>#}
-                    {#                                <div class="icon-content">#}
-                    {#                                    <h5 class="dlab-tilte text-uppercase">Phone</h5>#}
-                    {#                                    <!-- 회장 전화번호 -->#}
-                    {#                                    <p>{{ chief.user_phone }}</p>#}
-                    {#                                </div>#}
-                    {#                            </div>#}
-                    {#                        </div>#}
-                    {##}
-                    {#                    </div>#}
                 </div>
             </div>
-        </div>
+        </section>
     </div>
 
+    {#        </div>#}
+
+    <!-- ===========================네비게이션바================================ -->
+    <!--introduce-display_inline-block는 yejin.css에 정의되어 있음. -->
+    <nav class="sticky-top introduce-contact-flex-container introduce-display_inline-block introduce-nav"
+         style="justify-content: start; z-index: 0;">
+        <!--introduce-nav-bar는 yejin.css에 정의되어 있음. -->
+        <div class="listing-filter-sidebar introduce-nav-bar">
+            <h4 class="title m-b30 introduce-margin-bottom_10">IBAS</h4>
+            <!-- 글자 누르면 해당하는 영역으로 이동함. id를 통해 찾아가는 것임.  -->
+            <a id="intro-a" href="#introduce" class="introduce-nav-txt menu-item" onclick="clickMenu(0)">
+                <p class="introduce-margin-bottom_5">동아리 소개</p>
+            </a>
+            <a id="intro-cm-a" href="#introduce_cm" class="introduce-nav-txt menu-item" onclick="clickMenu(1)">
+                <p class="introduce-margin-bottom_5">회장단 소개</p>
+            </a>
+            <a id="his-a" href="#history" class="introduce-nav-txt menu-item" onclick="clickMenu(2)">
+                <p class="introduce-margin-bottom_5">동아리 연혁</p>
+            </a>
+            <a id="con-a" href="#contact" class="introduce-nav-txt menu-item" onclick="clickMenu(3)">
+                <p class="introduce-margin-bottom_5">Contact Us</p>
+            </a>
+        </div>
+    </nav>
+
+
 {% endblock %}
+
