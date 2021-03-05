@@ -1,3 +1,7 @@
+* {
+    scroll-behavior: smooth;
+
+}
 @font-face {
     src: url("../fonts/NanumBarunGothic.ttf");
     font-family: "NanumBarunGothic";
@@ -288,4 +292,32 @@
 }
 .introduce-border_none {
     border: none;
+}
+
+.introduce-js-input {
+    border: #909090 thin solid;
+    width: 500px;
+    background-color: inherit;
+    border-radius: 5px;
+    text-underline: #909090 ;
+}
+.introduce-js-textarea {
+    border: #909090 thin solid;
+    width: 500px;
+    background-color: inherit;
+    border-radius: 5px;
+}
+
+.introduce-margin-top_0 {
+    margin-top: 0;
+}
+.introduce-padding_174 {
+    padding: 0 175px;
+}
+.introduce-for-del-margin {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
