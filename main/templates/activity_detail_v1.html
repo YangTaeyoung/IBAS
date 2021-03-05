@@ -7,7 +7,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('.btnAdd').click(function () { // input 클래스 btnAdd를 클릭하면
-                $('.reply-btn-div').append( // div 클래스 인풋태그 뒤에 삽입
+                $('#comment_no_1').append( // div 클래스 인풋태그 뒤에 삽입
                     '<div class="btnRemove">' +
                     '<div class=" dlab-divider bg-gray-dark"></div>' +
                     '<div class="" id="respond"> ' +
@@ -31,7 +31,19 @@
                     $('div').remove('.btnRemove'); // remove the button
                     $(".btnAdd").show();
                 });
-            }); // end click
+            });
+            $("input.autosize").on('keydown keyup', function () {
+                $(this).height(1).height($(this).prop('scrollHeight') + 12);
+            });// end click
+            $('#re-comment').click(function () {
+                $("#comment_no_2").attr("disabled", false);
+                $('.btnAdd').hide('fast')
+                $('input#comment_no_2').addClass('happy');
+                var len = $('#comment_no_2').val().length;
+                $('#comment_no_2').focus();
+                $('#comment_no_2')[0].setSelectionRange(len, len);
+            });
+
         }); // end ready
     </script>
 
@@ -202,8 +214,10 @@
                                             <ol class="comment-list">
                                                 <li class="comment">
                                                     <div class="comment-body">
-                                                        <div class="comment-author vcard"><cite class="fn"><i
-                                                                class="ti ti-user m-r10"></i>양태영</cite></div>
+                                                        <div class="comment-author vcard"><cite class="fn"><img
+                                                                src="{{ request.session.user_pic }}" width="35"
+                                                                height="35" class="comment-profile-size"
+                                                                alt="현재 브라우저에서 지원하지 않는 형식입니다.">양태영</cite></div>
                                                         <div class="dlab-post-meta m-l10">
                                                             <ul class="d-flex">
                                                                 <!-- 게시글 작성일자 -->
@@ -215,60 +229,61 @@
                                                                         href="javascript:void(0);">19 hours ago</a></li>
                                                             </ul>
                                                         </div>
-                                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
-                                                            do eiusmod tempor incididunt ut labore et dolore magna
-                                                            aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                                                            ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                                                        <div class="reply-btn-div">
+                                                        <input type="text" disabled="disabled" style="width: 706px"
+                                                               class="comments-area" id="comment_no_2"
+                                                               value="호호아줌마 아나 존나 힘드네 시바라아아ㅏㅇ앙">
+                                                        <div id="comment_no_1" class="reply-btn-div">
                                                             <button type="button" class="btnAdd comment-btn m-r20"><i
                                                                     class="fa fa-commenting m-r5"></i>답글쓰기
                                                             </button>
-                                                            <a href="#"
-                                                               class="m-r10"><i
-                                                                    class="fa fa-pencil m-r5"></i>댓글 수정</a>
-                                                            <a href="#"
-                                                               class="m-r10"><i
+                                                            <button type="button" class="comment-btn m-r10"><i
                                                                     class="fa fa-trash m-r5"></i>
-                                                                댓글 삭제</a>
+                                                                댓글 삭제</button>
+                                                            <button id="re-comment" class="comment-btn m-r10"><i
+                                                                    class="fa fa-pencil m-r5"></i>댓글 수정
+                                                            </button>
+
                                                         </div>
 
                                                     </div>
                                                 </li>
                                                 <!-- 오류 참고용... -->
-                                                                                                <li class="comment">
-                                                                                                    <div class="comment-body">
-                                                                                                        <div class="comment-author vcard"><cite class="fn"><i
-                                                                                                                class="ti ti-user m-r10"></i>신승연</cite></div>
+                                                <li class="comment">
+                                                    <div class="comment-body">
+                                                        <div class="comment-author vcard"><cite class="fn"><img
+                                                                src="{{ request.session.user_pic }}" width="35"
+                                                                height="35" class="comment-profile-size"
+                                                                alt="현재 브라우저에서 지원하지 않는 형식입니다.">신승연</cite></div>
 
-                                                                                                        <div class="dlab-post-meta m-l10">
-                                                                                                            <ul class="d-flex">
-                                                                                                                <!-- 게시글 작성일자 -->
-                                                                                                                <li class="post-author"><a
-                                                                                                                        href="javascript:void(0);">경영학과 17학번</a></li>
-                                                                                                                <!-- 게시글 작성시간 -->
-                                                                                                                <li class="post-comment"><i
-                                                                                                                        class="ti ti-alarm-clock"></i> <a
-                                                                                                                        href="javascript:void(0);">19 hours ago</a></li>
-                                                                                                            </ul>
-                                                                                                        </div>
-                                                                                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
-                                                                                                            do eiusmod tempor incididunt ut labore et dolore magna
-                                                                                                            aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                                                                                                            ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                                                                                                        <div class="reply-btn-div">
-                                                                                                            <a href="#"
-                                                                                                               class="m-r20"><i
-                                                                                                                    class="fa fa-commenting m-r5"></i>답글쓰기</a>
-                                                                                                            <a href="#"
-                                                                                                               class="m-r10"><i
-                                                                                                                    class="fa fa-pencil m-r5"></i>게시글 수정</a>
-                                                                                                            <a href="#"
-                                                                                                               class="m-r10"><i
-                                                                                                                    class="fa fa-trash m-r5"></i>
-                                                                                                                게시글 삭제</a>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                </li>
+                                                        <div class="dlab-post-meta m-l10">
+                                                            <ul class="d-flex">
+                                                                <!-- 게시글 작성일자 -->
+                                                                <li class="post-author"><a
+                                                                        href="javascript:void(0);">경영학과 17학번</a></li>
+                                                                <!-- 게시글 작성시간 -->
+                                                                <li class="post-comment"><i
+                                                                        class="ti ti-alarm-clock"></i> <a
+                                                                        href="javascript:void(0);">19 hours ago</a></li>
+                                                            </ul>
+                                                        </div>
+                                                        <input type="text" disabled="disabled" style="width: 706px"
+                                                               class="comments-area" id="comment_no_2"
+                                                               value="댓글 구현하기 정말 잣같구만,,,, 시부렐">
+                                                        <div class="reply-btn-div">
+                                                            <a href="#"
+                                                               class="m-r20"><i
+                                                                    class="fa fa-commenting m-r5"></i>답글쓰기</a>
+                                                            <button id="" class="comment-btn m-r10"><i
+                                                                    class="fa fa-pencil m-r5"></i>댓글 수정
+                                                            </button>
+                                                            <a href="#"
+                                                               class="m-r10"><i
+                                                                    class="fa fa-trash m-r5"></i>
+                                                                게시글 삭제</a>
+                                                        </div>
+                                                        <div class="dlab-divider bg-gray-dark"></div>
+                                                    </div>
+                                                </li>
                                             </ol>
                                             <!-- comment list END -->
                                             <!-- Form -->
