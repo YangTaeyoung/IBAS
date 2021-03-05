@@ -98,12 +98,18 @@
                                             게시글 수정</a>
 
                                         <!-- 게시글 삭제 버튼 -->
-                                        <a href="{% url 'test_activity_delete' %}"
-                                           class="site-button red radius-xl m-l10"><i
-                                                class="fa fa-trash m-r5"></i>
-                                            게시글 삭제</a>
+                                        <form action="{% url 'test_activity_delete' %}" method="POST">
+                                            {% csrf_token %}
 
+                                            <a href="{% url 'test_activity_delete' %}"
+                                               type="submit" class="site-button red radius-xl m-l10"><i
+                                                    class="fa fa-trash m-r5"></i>
+                                                게시글 삭제</a>
+
+                                            <input type="hidden" name="board_no" value="{{ board_info.board_no }}">
+                                        </form>
                                     </div>
+
                                     <!-- 게시글과 댓글을 구분짓는 구분선 -->
                                     <div class="dlab-divider bg-gray-dark"></div>
                                 </div>
