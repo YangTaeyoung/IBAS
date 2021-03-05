@@ -72,7 +72,10 @@ def test_activity_register(request):
         activity.save()  # DB 에 차곡차곡 저장을 함
 
         # ============================= 이미지 저장시키는 코드 =========================
-
+        for updated_file in request.FILES.getlist("board_file"):
+            # DB 저장
+            new_board_file = BoardFile.objects.create(board_no=Board.objects.get(pk=activity.board_no) ,board_file_path=updated_file)
+            new_board_file.save()
         return redirect(reverse("test_activity"))
 
     # POST가 아닌 그냥 보여주는 방식
@@ -114,6 +117,7 @@ def activity_comment(request):
             comment_cont=request.GET.get('activity_comment')
         )
         comment_register.save()
+
         # 데이터 베이스에 저장
         return HttpResponseRedirect('/test/test_activity/detail/')
     return HttpResponseRedirect('/test/test_activity/detail/')
