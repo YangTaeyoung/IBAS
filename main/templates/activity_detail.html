@@ -72,18 +72,19 @@
                                             <ul>
 
                                                 <li>
-													<span data-exthumbimage="/static/images/listing/grid/pic1.jpg"
-                                                          data-src="/static/images/listing/grid/pic1.jpg"
+                                                    {% for image in board_info.boardfile_set.all %}
+													<span data-exthumbimage="/media/{{ image.board_file_path }}"
+                                                          data-src="/media/{{ image.board_file_path }}"
                                                           class="check-km " title="Light Gallery Grid 1">
 														<a href="javascript:void(0);">
 															<div class="dlab-post-thum act-detail-img-size"><img
                                                                     style="height: 190px"
-                                                                    src="/static/images/listing/grid/pic1.jpg"
+                                                                    src="/media/{{ image.board_file_path }}"
                                                                     alt=""></div>
 														</a>
 													</span>
+                                                    {% endfor %}
                                                 </li>
-
                                             </ul>
                                         </div>
 
