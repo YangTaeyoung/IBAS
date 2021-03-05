@@ -70,9 +70,8 @@
                                         <!-- 게시글 속 사진 모음 -->
                                         <div class="widget widget_gallery gallery-grid-4 lightgallery">
                                             <ul>
-
+                                                {% for image in board_info.boardfile_set.all %}
                                                 <li>
-                                                    {% for image in board_info.boardfile_set.all %}
 													<span data-exthumbimage="/media/{{ image.board_file_path }}"
                                                           data-src="/media/{{ image.board_file_path }}"
                                                           class="check-km " title="Light Gallery Grid 1">
@@ -83,8 +82,8 @@
                                                                     alt=""></div>
 														</a>
 													</span>
-                                                    {% endfor %}
                                                 </li>
+                                                {% endfor %}
                                             </ul>
                                         </div>
 
