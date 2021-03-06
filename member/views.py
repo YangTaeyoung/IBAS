@@ -33,9 +33,7 @@ def choose_std_or_pro(request):  # 학생인지, 교수인지 고르게 하는 �
                 pic = tar_member.extra_data.get('picture')  # extra_data 테이블에서 꺼내는 변수를 picture로 설정
             elif tar_member.provider == "naver":  # 사용자가 네이버를 통해 로그인 한 경우
                 pic = tar_member.extra_data.get('profile_image')  # extra_data 테이블에서 꺼내는 변수를 profile_image로 설정
-            if pic != "0":
-                urlretrieve(pic, "/home/ibas/Django/IBAS/member/media/user/" + email + "_" + name + ".jpg")
-                pic = "/home/ibas/Django/IBAS/member/media/user/" + email + "_" + name + ".jpg"
+
             # 소셜 로그인으로 부터 받은 정보는 저장하지 않기 위해 해당 정보 삭제
             tar_token.delete()
             tar_member.delete()
@@ -119,7 +117,11 @@ def quest_chk(request):
         user_grade = request.POST.get("user_grade")
         user_gen = request.POST.get("user_gen")
         user_phone = request.POST.get("user_phone")
+
         user_pic = request.POST.get("user_pic")
+        if user_pic is not None:
+            urlretrieve(user_pic, "/home/ibas/Django/IBAS/media/" + user_stu + ".jpg")
+            user_pic = "member/" + user_stu + ".jpg"
         # 받은 정보로 user 모델 인스턴스 변수 생성
         user = User.objects.create(
             user_name=user_name,  # 이름

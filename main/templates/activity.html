@@ -12,7 +12,7 @@
             <!--제목을 감싸는 배경-->
            <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"
              style=" background-image: url('{% static 'images/board_name_img.jpg' %}'); height: 350px">
-            <a href="{% url 'test_activity' %}">
+            <a href="{% url 'activity' %}">
             <div class="container clearfix">
                 <div class="dlab-bnr-inr-entry">
                     <!--제목-->
@@ -36,7 +36,7 @@
                                 <!--============ 게시글 박스 시작 ============-->
                                 <div class="col-lg-4 col-md-6 col-sm-6 m-b30">
                                     <div class="listing-bx overlap">
-                                        <form action="{% url 'test_activity_detail' %}" method="POST">
+                                        <form action="{% url 'activity_detail' %}" method="POST">
                                             {% csrf_token %}
 
 
@@ -85,7 +85,7 @@
                         <div class="extra-cell text-right">
                             <!-- 현재 페이지, 전 페이지가 있는지 리턴해주는 함수 -->
                             {% if request.session.user_role == 1 or request.session.user_role == 2 or request.session.user_role == 3 or request.session.user_role == 5 %}
-                                <a href="{% url 'test_activity_register' %}" class="site-button radius-xl m-l10"><i
+                                <a href="{% url 'activity_register' %}" class="site-button radius-xl m-l10"><i
                                         class="fa fa-plus m-r5"></i>
                                     게시글 등록</a>
                             {% endif %}
