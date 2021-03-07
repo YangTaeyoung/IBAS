@@ -20,7 +20,7 @@ def index(request):
 # 동아리 소개 작업할 것임
 def introduce(request):
     context = {}
-    if len(User.objects.filter(user_role=1)) != 0 and len(User.objects.filter(user_role=2) != 0):
+    if len(User.objects.filter(user_role=1)) != 0 and len(User.objects.filter(user_role=2)) != 0:
         chief = get_object_or_404(User, user_role=1)  # 회장의 역할(1) 인 사람의 객채를 가져옴
         sub_chief = get_object_or_404(User, user_role=2)  # 부회장의 역할(2) 인 사람의 객체를 가져옴
         context = {'chief': chief, 'sub_chief': sub_chief}  # context 에 넣어준다.

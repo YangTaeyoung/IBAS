@@ -30,7 +30,7 @@
                 class=" bg-img-fix most-visited content-inner introduce-contact-flex-container"
                 style="background-image:url('{% static 'images/main-introduce.jpg' %}'); z-index: 0; display: flex; justify-content: center; align-items: center">
             <!-- 네비게이션바 색전환의 정상적 작동을 위해 스타일에서 margin을 0으로 설정함.  -->
-            <div id="introduce" class="container" style="margin: 0">
+            <div class="container" style="margin: 0">
                 <!--introduce-for-del-margin 는 yejin.css에 정의되어 있음. -->
                 <!-- 동아리 소개 밑 공간을 주기 위해 padding-bottom을 40px로 설정함.  -->
                 <div class="introduce-for-del-margin text-center" style="padding-bottom: 40px">
@@ -108,7 +108,7 @@
                 <div class="introduce-for-del-margin text-center" style="padding-bottom: 40px">
                     <h2 class="box-title">회장단 소개</h2>
                     <div class="dlab-separator" style="z-index: 0; background-color: #091069"></div>
-                    <p style="margin: 0;">IBAS를 이끄는 회장단입니다. .</p>
+                    <p style="margin: 0;">IBAS를 이끄는 회장단입니다.</p>
                 </div>
 
                 <!-- ===========================회장================================ -->
@@ -211,8 +211,7 @@
         <!--introduce-padding-bottom_0 introduce-contact-flex-container는 yejin.css에 정의되어 있음. -->
         <div class=" bg-img-fix most-visited content-inner introduce-padding-bottom_0 introduce-contact-flex-container"
              style="background-image:url('{% static 'images/main-introduce.jpg' %}'); z-index: 0" ;>
-            <div
-                    class="container" style="margin: 0">
+            <div class="container" style="margin: 0">
                 <!--introduce-for-del-margin는 yejin.css에 정의되어 있음. -->
                 <div class="introduce-for-del-margin text-center" style="padding-bottom: 40px">
                     <h2 class="box-title">동아리 연혁</h2>
@@ -258,10 +257,11 @@
                                             </div>
 
                                             <!--introduce-li-flex는 yejin.css에 정의되어 있음. -->
-                                            <div class="introduce-li-flex"><textarea type="text"
-                                                                                     class="form-control"
-                                                                                     style="resize: none; font-size: 12pt"
-                                                                                     placeholder="내용을 입력하세요."></textarea>
+                                            <div class="introduce-li-flex">
+                                                <textarea type="text"
+                                                          class="form-control"
+                                                          style="resize: none; font-size: 12pt"
+                                                          placeholder="내용을 입력하세요."></textarea>
                                             </div>
                                         </li>
                                     </ul>
@@ -314,8 +314,9 @@
                                                                                                  id="update"
                                 ></i></div>
                                 <!-- 삭제버튼 -->
-                                 <!-- introduce_update()는 yejin.js에 정의되어 있음. -->
-                                <div onclick="introduce_del()"><input type="submit" hidden><i class="fa fa-trash" id="delete"
+                                <!-- introduce_update()는 yejin.js에 정의되어 있음. -->
+                                <div onclick="introduce_del()"><input type="submit" hidden><i class="fa fa-trash"
+                                                                                              id="delete"
                                 ></i></div>
                             </div>
                         </div>
@@ -329,7 +330,7 @@
     <!-- ===========================Contact Us================================ -->
     <!-- section id는 네비게이션바를 위해 사용함. -->
     <section id="contact">
-         <!-- introduce-contact-flex-container는 yejin.css에 정의되어 있음. -->
+        <!-- introduce-contact-flex-container는 yejin.css에 정의되어 있음. -->
         <div
                 class="content-inner introduce-contact-flex-container"
                 style="background-color: #f5f9ff; z-index: 0">
@@ -347,7 +348,7 @@
                 </div>
 
                 <!-- introduce-contact-flex-container  introduce-google-map-size 는 yejin.css에 정의되어 있음. -->
-                <div class="introduce-contact-flex-container "
+                <div class="introduce-contact-flex-container"
                      style="justify-content: center; margin-bottom: 0; z-index: 0">
                     <iframe class=" introduce-google-map-size "
                             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3167.4531204275!2d126.65129931528445!3d37.45002207981986!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x357b79ab3057fc7f%3A0xe3e29f05aba35eb0!2z7J247ZWY64yA7ZWZ6rWQIOyaqe2YhOy6oO2NvOyKpA!5e0!3m2!1sko!2skr!4v1610804139555!5m2!1sko!2skr"
@@ -361,7 +362,8 @@
 
     <!-- ===========================네비게이션바================================ -->
     <!--introduce-contact-flex-container introduce-display_inline-block introduce-nav는 yejin.css에 정의되어 있음. -->
-    <nav id="introduce-nav" class="sticky-top introduce-contact-flex-container introduce-display_inline-block introduce-nav"
+    <nav id="introduce-nav"
+         class="sticky-top introduce-contact-flex-container introduce-display_inline-block introduce-nav"
          style="justify-content: start; z-index: 0;">
         <!--introduce-nav-bar는 yejin.css에 정의되어 있음. -->
         <div class="listing-filter-sidebar introduce-nav-bar">
@@ -370,7 +372,8 @@
             <!-- 글자 누르면 해당하는 영역으로 이동함. id를 통해 찾아가는 것임.  -->
             <!--introduce-nav-txt는 yejin.css에 정의되어 있음. -->
             <!--clickMenu()는 yejin.js에 정의되어 있음. 클릭했을 때 글자 색 변하는 것. -->
-            <a id="intro-a" href="#introduce" class="intro introduce-nav-txt menu-item introduce-change-nav" onclick="clickMenu(0)">
+            <a id="intro-a" href="#introduce" class="intro introduce-nav-txt menu-item introduce-change-nav"
+               onclick="clickMenu(0)">
                 <p class="introduce-margin-bottom_5">동아리 소개</p>
             </a>
             <a id="intro-cm-a" href="#introduce_cm" class="intro_cm introduce-nav-txt menu-item" onclick="clickMenu(1)">
@@ -386,62 +389,63 @@
     </nav>
 
     <!-- ===========================네비게이션바 JS================================ -->
-<script type="text/javascript">
-    // 동아리 소개, 회장단 소개, 동아리 연혁, contact us의 section과 그 자식요소를 선택하는 변수 선언
-    let intro = document.querySelector("#introduce");
-    let intro_cm = document.querySelector("#introduce_cm");
-    let his = document.querySelector("#history");
-    let con = document.querySelector("#contact");
+    <script type="text/javascript">
+        // 동아리 소개, 회장단 소개, 동아리 연혁, contact us의 section과 그 자식요소의 첫번째를 선택하는 변수 선언
+        let intro = document.getElementById("introduce");
+        let intro_cm = document.getElementById("introduce_cm");
+        let his = document.getElementById("history");
+        let con = document.getElementById("contact");
 
-    // 스크롤 할 때 이벤트
-    window.addEventListener("scroll", qualifiedName=> {
-        // 스크롤 내렸을 때 위치를 screen으로 선언
-        let screen = window.pageYOffset;
+        // 스크롤 할 때 이벤트
+        window.addEventListener("scroll", qualifiedName => {
+            // 스크롤 내렸을 때 위치를 screen으로 선언
+            let screen = window.pageYOffset;
 
-        // 회장단 소개의 위치가 window 크기 보다는 작거나 같고, 동아리 연혁의 위치가 window 크기 보다는 클 때
-        // -100을 한 이유는 위치 조정을 위해서임
-        if ((intro_cm.offsetTop-100 <= screen) && his.offsetTop > screen) {
-            // 콘솔에 introduce_cm을 출력하고
-            console.log("introduce_cm");
-            // 네비게이션바에서 intro-cm-a만 introduce-change-nav 클래스를 추가하고 나머지는 지운다. 글자 커지고, 색 바뀌는 것 관련.
-            document.querySelector("#intro-cm-a").classList.add('introduce-change-nav');
-            document.querySelector("#his-a").classList.remove('introduce-change-nav');
-            document.querySelector("#con-a").classList.remove('introduce-change-nav');
-            document.querySelector("#intro-a").classList.remove('introduce-change-nav');
-        }
-        // 동아리 연혁의 위치가 window 크기 보다는 작거나 같고, contact us의 위치가 window 크기 보다는 클 때
-        else if ((his.offsetTop-400<= screen )&& con.offsetTop > screen) {
-            // 콘솔에 history를 출력하고
-            console.log("history");
-            // 네비게이션바에서 his-a만 introduce-change-nav 클래스를 추가하고 나머지는 지운다. 글자 커지고, 색 바뀌는 것 관련.
-            document.querySelector("#his-a").classList.add('introduce-change-nav');
-            document.querySelector("#intro-cm-a").classList.remove('introduce-change-nav');
-            document.querySelector("#con-a").classList.remove('introduce-change-nav');
-            document.querySelector("#intro-a").classList.remove('introduce-change-nav');
+            // 회장단 소개의 위치가 window 크기 보다는 작거나 같고, 동아리 연혁의 위치가 window 크기 보다는 클 때
+            // -100을 한 이유는 위치 조정을 위해서임
+            if ((intro_cm.offsetTop - 100 <= screen) && his.offsetTop > screen) {
+                // 콘솔에 introduce_cm을 출력하고
+                console.log("introduce_cm");
+                // 네비게이션바에서 intro-cm-a만 introduce-change-nav 클래스를 추가하고 나머지는 지운다. 글자 커지고, 색 바뀌는 것 관련.
+                document.querySelector("#intro-cm-a").classList.add('introduce-change-nav');
+                document.querySelector("#his-a").classList.remove('introduce-change-nav');
+                document.querySelector("#con-a").classList.remove('introduce-change-nav');
+                document.querySelector("#intro-a").classList.remove('introduce-change-nav');
+            }
+            // 동아리 연혁의 위치가 window 크기 보다는 작거나 같고, contact us의 위치가 window 크기 보다는 클 때
+            else if ((his.offsetTop - 400 <= screen) && con.offsetTop > screen) {
+                // 콘솔에 history를 출력하고
+                console.log("history");
+                // 네비게이션바에서 his-a만 introduce-change-nav 클래스를 추가하고 나머지는 지운다. 글자 커지고, 색 바뀌는 것 관련.
+                document.querySelector("#his-a").classList.add('introduce-change-nav');
+                document.querySelector("#intro-cm-a").classList.remove('introduce-change-nav');
+                document.querySelector("#con-a").classList.remove('introduce-change-nav');
+                document.querySelector("#intro-a").classList.remove('introduce-change-nav');
 
-        // contact us의 위치가 window 크기 보다는 작거나 같을 때
-        } else if (con.offsetTop-400 <= screen) {
-            // 콘솔에 contact을 출력하고
-            console.log("contact");
-            // 네비게이션바에서 con-a만 introduce-change-nav 클래스를 추가하고 나머지는 지운다. 글자 커지고, 색 바뀌는 것 관련.
-            document.querySelector("#con-a").classList.add('introduce-change-nav');
-            document.querySelector("#his-a").classList.remove('introduce-change-nav');
-            document.querySelector("#intro-cm-a").classList.remove('introduce-change-nav');
-            document.querySelector("#intro-a").classList.remove('introduce-change-nav');
+                // contact us의 위치가 window 크기 보다는 작거나 같을 때
+            } else if (con.offsetTop - 400 <= screen) {
+                // 콘솔에 contact을 출력하고
+                console.log("contact");
+                // 네비게이션바에서 con-a만 introduce-change-nav 클래스를 추가하고 나머지는 지운다. 글자 커지고, 색 바뀌는 것 관련.
+                document.querySelector("#con-a").classList.add('introduce-change-nav');
+                document.querySelector("#his-a").classList.remove('introduce-change-nav');
+                document.querySelector("#intro-cm-a").classList.remove('introduce-change-nav');
+                document.querySelector("#intro-a").classList.remove('introduce-change-nav');
 
-        }
-        // 나머지 경우, 동아리 소개의 경우
-        else {
-            // 콘솔에 introduce을 출력하고
-            console.log("introduce");
-            // 네비게이션바에서 intro-a만 introduce-change-nav 클래스를 추가하고 나머지는 지운다. 글자 커지고, 색 바뀌는 것 관련.
-            document.querySelector("#intro-a").classList.add('introduce-change-nav');
-            document.querySelector("#his-a").classList.remove('introduce-change-nav');
-            document.querySelector("#con-a").classList.remove('introduce-change-nav');
-            document.querySelector("#intro-cm-a").classList.remove('introduce-change-nav');
+            }
+            // 나머지 경우, 동아리 소개의 경우
+            else {
+                // 콘솔에 introduce을 출력하고
+                console.log("introduce");
+                // 네비게이션바에서 intro-a만 introduce-change-nav 클래스를 추가하고 나머지는 지운다. 글자 커지고, 색 바뀌는 것 관련.
+                document.querySelector("#intro-a").classList.add('introduce-change-nav');
+                document.querySelector("#his-a").classList.remove('introduce-change-nav');
+                document.querySelector("#con-a").classList.remove('introduce-change-nav');
+                document.querySelector("#intro-cm-a").classList.remove('introduce-change-nav');
 
-        }
-    })
-</script>
+            }
+        })
+
+    </script>
 {% endblock %}
 
