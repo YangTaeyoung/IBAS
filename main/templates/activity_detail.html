@@ -36,7 +36,7 @@
                                             <!-- 게시글 작성자 -->
                                             <li class="post-author"><i class="ti ti-user"></i>By <a
                                                     href="javascript:void(0);">{{ board_info.board_writer.user_name }}
-                                                </a></li>
+                                            </a></li>
 
 
                                             <!-- 게시글 작성시간 -->
@@ -62,16 +62,16 @@
 
                                         <!--  =============== 게시글 내용 ====== -->
                                         {% autoescape off %}
-                                        <p id="post-text-cont" class="font-weight-400">
-                                            {{ board_info.board_cont }}
-                                        </p>
+                                            <p id="post-text-cont" class="font-weight-400">
+                                                {{ board_info.board_cont }}
+                                            </p>
                                         {% endautoescape %}
 
                                         <!-- 게시글 속 사진 모음 -->
                                         <div class="widget widget_gallery gallery-grid-4 lightgallery">
                                             <ul>
                                                 {% for image in board_info.boardfile_set.all %}
-                                                <li>
+                                                    <li>
 													<span data-exthumbimage="/media/{{ image.board_file_path }}"
                                                           data-src="/media/{{ image.board_file_path }}"
                                                           class="check-km " title="Light Gallery Grid 1">
@@ -82,7 +82,7 @@
                                                                     alt=""></div>
 														</a>
 													</span>
-                                                </li>
+                                                    </li>
                                                 {% endfor %}
                                             </ul>
                                         </div>
@@ -91,25 +91,23 @@
                                     <!-- 게시글 삭제 및 수정 div -->
                                     <div class="extra-cell text-right">
 
-                                        <!-- 게시글 수정 버튼 a tag 를 input 태그로 변경해야함. 디자인 고쳐주세요 -->
-{#                                        <a href="{% url 'test_activity_register' %}"#}
-{#                                           class="site-button radius-xl m-l10"><i#}
-{#                                                class="fa fa-pencil m-r5"></i>#}
-{#                                            게시글 수정</a>#}
-
-                                        <form action="{% url 'test_activity_update' %}" method="GET">
-                                                <button type="submit" name="board_no" onclick="return confirm('수정하시겠습니까?')"> 수정
-                                                    <input type="hidden" name="board_no" value="{{ board_info.board_no }}">
-                                                </button>
+                                        <!-- 여기 부분 고쳐야함 -->
+                                        <form action="{% url 'activity_update' %}" method="GET">
+                                            <button type="submit" name="board_no" class="site-button radius-xl m-l10"
+                                                    onclick="return confirm('수정하시겠습니까?')"> 게시글 수정
+                                                <i class="fa fa-pencil m-r5"></i><input type="hidden" name="board_no"
+                                                                                        value="{{ board_info.board_no }}">
+                                            </button>
                                         </form>
 
                                         <!-- 게시글 삭제 버튼 -->
-                                        <form action="{% url 'test_activity_delete' %}" method="POST">
+                                        <form action="{% url 'activity_delete' %}" method="POST">
                                             {% csrf_token %}
-                                                <button type="submit" class="site-button red radius-xl m-l10" onclick="return confirm('정말 삭제하시겠습니까?')">게시글 삭제
-                                                    <i class="fa fa-trash m-r5"></i>
-                                                    <input type="hidden" name="board_no" value="{{ board_info.board_no }}">
-                                                </button>
+                                            <button type="submit" class="site-button red radius-xl m-l10"
+                                                    onclick="return confirm('정말 삭제하시겠습니까?')">게시글 삭제
+                                                <i class="fa fa-trash m-r5"></i>
+                                                <input type="hidden" name="board_no" value="{{ board_info.board_no }}">
+                                            </button>
                                         </form>
                                     </div>
 
@@ -123,71 +121,87 @@
                                         <div class="clearfix">
                                             <!-- comment list END -->
                                             <ol class="comment-list">
-                                                <li class="comment">
-                                                    <div class="comment-body">
-                                                        <div class="comment-author vcard"><cite class="fn">Rosalina
-                                                            Kelian</cite> <span class="says">says:</span></div>
-                                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
-                                                            do eiusmod tempor incididunt ut labore et dolore magna
-                                                            aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                                                            ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                                                        <div class="reply-btn-div">
-                                                            <a href="#"
-                                                               class="m-r20"><i
-                                                                    class="fa fa-commenting m-r5"></i>답글쓰기</a>
-                                                            <a href="#"
-                                                               class="m-r10"><i
-                                                                    class="fa fa-pencil m-r5"></i>게시글 수정</a>
-                                                            <a href="#"
-                                                               class="m-r10"><i
-                                                                    class="fa fa-trash m-r5"></i>
-                                                                게시글 삭제</a>
-                                                        </div>
 
-                                                    </div>
-                                                </li>
-                                                <li class="comment">
-                                                    <div class="comment-body">
-                                                        <div class="comment-author vcard"><cite class="fn">Arista
-                                                            Williamson</cite> <span class="says">says:</span></div>
-                                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
-                                                            do eiusmod tempor incididunt ut labore et dolore magna
-                                                            aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                                                            ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                                                        <div class="reply-btn-div">
-                                                             <a href="#"
-                                                               class="m-r20"><i
-                                                                    class="fa fa-commenting m-r5"></i>답글쓰기</a>
-                                                            <a href="#"
-                                                               class="m-r10"><i
-                                                                    class="fa fa-pencil m-r5"></i>게시글 수정</a>
-                                                            <a href="#"
-                                                               class="m-r10"><i
-                                                                    class="fa fa-trash m-r5"></i>
-                                                                게시글 삭제</a>
+                                                {% for comment in comment_info %}
+                                                    <li class="comment">
+                                                        <div class="comment-body">
+
+                                                            <!-- ############ 사진 #############-->
+                                                            <img src="{{ comment.comment_writer.user_pic }}" width="35"
+                                                                 height="35"
+                                                                 style=" border: 2px solid #3cff44; border-radius: 17.5px; margin-right: 3px"
+                                                                 alt="현재 브라우저에서 지원하지 않는 형식입니다.">
+
+                                                            <!-- ######### 이름 출력 ############### -->
+                                                            <div class="comment-author vcard"><cite
+                                                                    class="fn">{{ comment.comment_writer.user_name }}
+                                                                //// {{ comment.comment_created }}
+                                                            </cite> <span class="says">says:</span></div>
+                                                            <!-- ############## 내용 출력 ################ -->
+                                                            <p>{{ comment.comment_cont }} </p>
+
+                                                            <div class="reply-btn-div">
+
+                                                                <a href="#"
+                                                                   class="m-r20"><i
+                                                                        class="fa fa-commenting m-r5"></i>답글쓰기</a>
+
+
+                                                                <a href="#"
+                                                                   class="m-r10"><i
+                                                                        class="fa fa-pencil m-r5"></i>댓글 수정</a>
+
+                                                                {% if request.session.user_stu == comment.comment_writer.user_stu %}
+                                                                    <form action="{% url 'activity_comment_delete' %}"
+                                                                          method="POST">
+                                                                        {% csrf_token %}
+                                                                        <button type="submit"
+                                                                                onclick="return confirm('정말 삭제하시겠습니까?')"
+                                                                                class="m-r10"><i
+                                                                                class="fa fa-trash m-r5"></i>
+
+                                                                            <input type="hidden"
+                                                                                   value="{{ comment.comment_id }}"
+                                                                                   name="comment_id">
+                                                                            댓글 삭제
+                                                                        </button>
+                                                                    </form>
+                                                                {% endif %}
+
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </li>
+                                                    </li>
+                                                {% endfor %}
+
                                             </ol>
                                             <!-- comment list END -->
                                             <!-- Form -->
-                                            <div class="dlab-divider bg-gray-dark"></div>
-                                            <div class="" id="respond">
-                                                <form class="comment-form" id="commentform" method="post" action="#">
-                                                    <p class="comment-form-comment">
-                                                        <label for="comment">Comments</label>
-                                                        <textarea rows="8" name="comment"
-                                                                  placeholder="댓글을 남겨보세요!"
-                                                                  id="comment"></textarea>
-                                                    </p>
+
+                                            <!-- 회원들만 댓글을 달 수 있게 해야함. -->
+                                            {% if request.session.user_auth == 4 %}
+                                                <div class="dlab-divider bg-gray-dark"></div>
+                                                <div class="" id="respond">
+                                                    <!-- ##################### 댓글 등록 파트 ################# -->
+                                                    <form class="comment-form" id="commentform" method="GET"
+                                                          action="{% url 'activity_comment' %}">
+                                                        <p class="comment-form-comment">
+                                                            <label for="comment">Comments</label>
+                                                            <textarea rows="8" name="activity_comment"
+                                                                      placeholder="댓글을 남겨보세요!"
+                                                                      id="comment"></textarea>
+                                                        </p>
+
+                                                        <p class="form-submit">
+                                                            <input type="submit" value="댓글등록"
+                                                                   class="submit site-button" id="submit" name="submit">
+                                                            <input type="hidden" name="board_no"
+                                                                   value="{{ board_info.board_no }}">
+                                                        </p>
+                                                    </form>
+                                                </div>
+                                            {% endif %}
 
 
-                                                    <p class="form-submit">
-                                                        <input type="submit" value="댓글등록"
-                                                               class="submit site-button" id="submit" name="submit">
-                                                    </p>
-                                                </form>
-                                            </div>
                                             <!-- Form -->
                                         </div>
                                     </div>
