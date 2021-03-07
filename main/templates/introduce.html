@@ -402,8 +402,8 @@
             let screen = window.pageYOffset;
 
             // 회장단 소개의 위치가 window 크기 보다는 작거나 같고, 동아리 연혁의 위치가 window 크기 보다는 클 때
-            // -100을 한 이유는 위치 조정을 위해서임
-            if ((intro_cm.offsetTop - 100 <= screen) && his.offsetTop > screen) {
+            // -100과 +100을 한 이유는 스크롤 위치 조정을 위해서임
+            if ((intro_cm.offsetTop - 100 <= screen) && (his.offsetTop > screen + 100)) {
                 // 콘솔에 introduce_cm을 출력하고
                 console.log("introduce_cm");
                 // 네비게이션바에서 intro-cm-a만 introduce-change-nav 클래스를 추가하고 나머지는 지운다. 글자 커지고, 색 바뀌는 것 관련.
@@ -413,7 +413,8 @@
                 document.querySelector("#intro-a").classList.remove('introduce-change-nav');
             }
             // 동아리 연혁의 위치가 window 크기 보다는 작거나 같고, contact us의 위치가 window 크기 보다는 클 때
-            else if ((his.offsetTop - 400 <= screen) && con.offsetTop > screen) {
+            // -200과 +200을 한 이유는 스크롤 위치 조정을 위해서임
+            else if ((his.offsetTop - 200 <= screen) && (con.offsetTop > screen + 200)) {
                 // 콘솔에 history를 출력하고
                 console.log("history");
                 // 네비게이션바에서 his-a만 introduce-change-nav 클래스를 추가하고 나머지는 지운다. 글자 커지고, 색 바뀌는 것 관련.
@@ -423,7 +424,8 @@
                 document.querySelector("#intro-a").classList.remove('introduce-change-nav');
 
                 // contact us의 위치가 window 크기 보다는 작거나 같을 때
-            } else if (con.offsetTop - 400 <= screen) {
+                // -300과 +300을 한 이유는 스크롤 위치 조정을 위해서임
+            } else if (con.offsetTop - 300 <= screen + 300) {
                 // 콘솔에 contact을 출력하고
                 console.log("contact");
                 // 네비게이션바에서 con-a만 introduce-change-nav 클래스를 추가하고 나머지는 지운다. 글자 커지고, 색 바뀌는 것 관련.
