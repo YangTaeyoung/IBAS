@@ -66,7 +66,8 @@
                                                         <!--게시글 작성시간-->
                                                         <li class="post-date" style="color: white"><i
                                                                 class="ti-alarm-clock"
-                                                                style="color: white"></i>{{ board.board_created }}
+                                                                style="color: white"></i>
+                                                            {{ board.board_created | date:"Y/m/d"}}
                                                         </li>
                                                         <!-- 히든으로 넘기는 것, board_no 넘김 -->
                                                         <input type="hidden" name="board_list"
