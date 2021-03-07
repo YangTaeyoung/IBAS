@@ -4,6 +4,7 @@ function clickMenu(idx) {
     menuItemList[idx].style.fontWeight = 'bolder'; // 글씨체: 굵게
     menuItemList[idx].style.fontSize = '16px'; // 글씨 크기: 16px
     menuItemList[idx].style.color = '#091069'; // 글씨 색상: 남색
+    menuItemList[idx].style.transition = '0.1s'; // 바뀌는 속도: 0.1s
     for (i = 0; i < menuItemList.length; i++) {
         // 메뉴 아이템 순회, 다른 메뉴 아이템의 색상은 클릭 시에 아무런 문제가 없어야 하므로 클릭된 요소를 제외한 모든 메뉴를 일반 상태로 돌림
         if (i == idx) {
@@ -11,7 +12,7 @@ function clickMenu(idx) {
             continue; // 넘어감
         }
         menuItemList[i].style.color = 'black'; // 글씨 색: 검정
-        menuItemList[i].style.fontWeight = null; // 폰트 굵기: 일반
+        menuItemList[i].style.fontWeight = 'normal'; // 폰트 굵기: 일반
         menuItemList[i].style.fontSize = '15px'; // 폰트 크기: 15px
     }
 }
@@ -48,7 +49,7 @@ function introduce_update() {
 
     //check 아이콘 클릭 시 confirm 알림나옴.
     check_icon.onclick = function () {
-        confirm("등록하시겠습니까?")
+        confirm("수정하시겠습니까?")
     }
 }
 
@@ -76,32 +77,36 @@ function introduce_close() {
     modalBg.style.display = 'none';
 }
 
-//네비게이션 바 색 바꾸기
-//매개변수는 id. 매개변수 이름은 네비게이션 바 아이디와 동일.
-function section_mouse_in(id){
-    //id가 매개변수인 네비게이션바 요소를 찾음
-    secObj = document.getElementById(id)
-    //스타일 변경경    secObj.style.fontSize = "16px";
-    secObj.style.fontWeight = "bolder";
-    secObj.style.color = "#091069";
-}
-//네비게이션 바 색 원래대로 바꾸기
-//매개변수는 id. 매개변수 이름은 네비게이션 바 아이디와 동일.
-function section_mouse_out(id){
-    // 네비게이션 바 id를 리스트로 만든다.
-    secNameList = ["intro-a","intro-cm-a","his-a","con-a"];
+// //네비게이션 바 색 바꾸기
+// //매개변수는 id. 매개변수 이름은 네비게이션 바 아이디와 동일.
+// function section_mouse_in(id){
+//     //id가 매개변수인 네비게이션바 요소를 찾음
+//     secObj = document.getElementById(id)
+//     //스타일 변경경    secObj.style.fontSize = "16px";
+//     secObj.style.fontWeight = "bolder";
+//     secObj.style.color = "#091069";
+// }
+// //네비게이션 바 색 원래대로 바꾸기
+// //매개변수는 id. 매개변수 이름은 네비게이션 바 아이디와 동일.
+// function section_mouse_out(id){
+//     // 네비게이션 바 id를 리스트로 만든다.
+//     secNameList = ["intro-a","intro-cm-a","his-a","con-a"];
+//
+//     // i는 id 개수 만큼 돌려짐.
+//     for(i = 0; i < secNameList.length; i++)
+//     {
+//         //네비게이션 바 id 리스트와 매개변수로 받아온 id가 동일하지 않으면
+//         if(secNameList[i] !== id)
+//         {
+//             //원래대로 스타일 돌아온다.
+//             document.getElementById(secNameList[i]).style.fontSize = "15px";
+//             document.getElementById(secNameList[i]).style.color = "black";
+//             document.getElementById(secNameList[i]).style.fontWeight = "normal";
+//         }
+//     }
+// }
 
-    // i는 id 개수 만큼 돌려짐.
-    for(i = 0; i < secNameList.length; i++)
-    {
-        //네비게이션 바 id 리스트와 매개변수로 받아온 id가 동일하지 않으면
-        if(secNameList[i] !== id)
-        {
-            //원래대로 스타일 돌아온다.
-            document.getElementById(secNameList[i]).style.fontSize = "15px";
-            document.getElementById(secNameList[i]).style.color = "black";
-            document.getElementById(secNameList[i]).style.fontWeight = "normal";
-        }
-    }
-}
+
+
+
 

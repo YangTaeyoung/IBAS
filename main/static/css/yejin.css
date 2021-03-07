@@ -1,6 +1,7 @@
 * {
     scroll-behavior: smooth;
 
+
 }
 @font-face {
     src: url("../fonts/NanumBarunGothic.ttf");
@@ -141,11 +142,11 @@
 .introduce-padding-bottom_0 {
     padding-bottom: 0;
 }
-
+/* 쓰인 곳 : 동아리 연혁부분 박스*/
 .introduce-text-align_center {
     text-align: center;
 }
-
+/* 쓰인 곳 : 네비게이션 바 a 태그 부분*/
 .introduce-nav-txt {
     text-decoration: none;
     color: black;
@@ -161,31 +162,18 @@
 .introduce-margin-bottom_10 {
     margin-bottom: 10px;
 }
-
+/* 쓰인 곳 : contact us 이메일과 연락처 부분*/
 .introduce-font-size_15 {
     font-size: 15pt;
 }
 
+/* 쓰인 곳 : 연혁박스 안 내용 시작부분*/
 .introduce-history-box-flex {
     display: flex;
     flex-direction: column;
 
 }
-
-.introduce-button-style {
-    border: none;
-    font-weight: bolder;
-    background-color: transparent;
-}
-
-.introduce-width_1135 {
-    width: 1135px;
-}
-
-.introduce-margin-bottom_20 {
-    margin-bottom: 20px;
-}
-
+/* 쓰인 곳: 연혁 수정 날짜 부분*/
 .introduce-update-input-date {
     background-color: inherit;
     border: none;
@@ -194,7 +182,7 @@
     height: auto;
     outline: none;
 }
-
+/* 쓰인 곳: 연혁 수정 내용 부분*/
 .introduce-update-input-txt {
     background-color: inherit;
     border: none;
@@ -204,30 +192,7 @@
     resize: none;
     outline: none;
 }
-
-.introduce-history-add-grid {
-    display: grid;
-    grid-template-columns: 300px 630px 200px;
-    padding: 7px 20px 0px;
-}
-
-.introduce-add-input-txt {
-    background-color: inherit;
-    border: #9d9d9d solid thin;
-    width: 550px;
-    padding: 0;
-    height: 36.4px;
-    resize: none;
-    outline: none;
-}
-
-.introduce-submit-btn {
-    width: 200px;
-    background-color: inherit;
-    font-weight: bolder;
-    border: none;
-    outline: none;
-}
+/* 쓰인 곳: 동아리 연혁 추가하기 버튼*/
 .introduce-color-btn {
     border: #091069 solid;
     width: 180px;
@@ -236,6 +201,8 @@
     color: white;
 }
 /*///////////////////////////////////////////////////////////*/
+/*모달*/
+/*쓰인 곳: 모달 시작 div, 모달 배경 부분임. */
 .introduce-modal-bg {
     position: fixed;;
     width: 100%;
@@ -249,7 +216,7 @@
     z-index: 9999;
 ;
 }
-
+/* 쓰인 곳: 모달 배경div 밑, (실질적 모달부분)*/
 .introduce-modal {
     border-radius: 5px;
     background-color: white;
@@ -262,58 +229,20 @@
     /*display: none;*/
 
 }
-.introduce-modal-p{
-    height: 100px;
-    padding: 24px 60px 24px 30px;
-    color: #676781;
-    font-size: 14px;
-    line-height: 20px;
-    resize: none;
-    border-radius: 30px;
-    box-shadow: 0 3px 10px 0 rgba(0 0 0 0.05);
-}
-.introduce-textarea {
-    border-color: #e1e6eb;
-    box-shadow: none;
-    width: 150px;
-    height: 40px;
-    font-size: 13px;
-    line-height: 20px;
-    padding: 9px 12px;
-}
-.introduce-li-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr
-}
+
+/* 쓰인 곳: 모달 날짜 내용 input 감싸는 div*/
 .introduce-li-flex {
     display: flex;
     justify-content: start;
     align-items: center;
 }
+/* 쓰인 곳: 모달 날짜 input*/
 .introduce-border_none {
     border: none;
 }
 
-.introduce-js-input {
-    border: #909090 thin solid;
-    width: 500px;
-    background-color: inherit;
-    border-radius: 5px;
-    text-underline: #909090 ;
-}
-.introduce-js-textarea {
-    border: #909090 thin solid;
-    width: 500px;
-    background-color: inherit;
-    border-radius: 5px;
-}
 
-.introduce-margin-top_0 {
-    margin-top: 0;
-}
-.introduce-padding_174 {
-    padding: 0 175px;
-}
+/* 쓰인 곳: 동아리 소개, 회장단 소개, 동아리 연혁, Contact Us*/
 .introduce-for-del-margin {
     margin: 0;
     display: flex;
@@ -321,3 +250,11 @@
     justify-content: center;
     align-items: center;
 }
+/* 쓰인 곳: introduce.html에서 제일 밑 js 부분, */
+.introduce-change-nav {
+    font-size: 16px;
+    font-weight: bolder;
+    color: #091069;
+    transition: 0.2s;
+}
+
