@@ -6,13 +6,14 @@ from member import session
 from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect
 from django.conf import settings
+from IBAS.user_controller import is_chief_there
 import os
 from IBAS.file_controller import get_filename, get_filename_with_ext
 
 
 # 메인페이지 이동 함수
 def index(request):
-    if len(User.objects.filter(user_role=get_object_or_404(UserRole, role_no=1))) != 0:
+    if is_chief_there():
         chief = User.objects.filter(user_role=get_object_or_404(UserRole, role_no=1))[0]  # 하단바에서 회장꺼만 들고오면 됌
         session.save_chief(request, chief)  # 회장꺼 세션에 저장시켜줬음. save_chief 함수는 session 에 있음.
     context = {}
@@ -22,9 +23,9 @@ def index(request):
 # 동아리 소개 작업할 것임
 def introduce(request):
     context = {}
-    if len(User.objects.filter(user_role=1)) != 0 and len(User.objects.filter(user_role=2)) != 0:
-        chief = get_object_or_404(User, user_role=1)  # 회장의 역할(1) 인 사람의 객채를 가져옴
-        sub_chief = get_object_or_404(User, user_role=2)  # 부회장의 역할(2) 인 사람의 객체를 가져옴
+    if is_chief_there():
+        chief = User.objects.filter(user_role=1)[0]  # 회장의 역할(1) 인 사람의 객채를 가져옴
+        sub_chief = User.objects.filter(user_role=2)[0]  # 부회장의 역할(2) 인 사람의 객체를 가져옴
         context = {'chief': chief, 'sub_chief': sub_chief}  # context 에 넣어준다.
     return render(request, 'introduce.html', context)  # introduce 에 실어서 보내분다.
 
