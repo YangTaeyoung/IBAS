@@ -33,7 +33,7 @@
            <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"
              style=" background-image: url('{% static 'images/board_name_img.jpg' %}'); height: 350px">
             <!--상단 제목부분을 누르면 해당 게시판 목록으로 이동-->
-            <a href="{% url 'test_activity' %}">
+            <a href="{% url 'activity' %}">
                 <div class="container clearfix">
                 <div class="dlab-bnr-inr-entry">
                     <!--제목-->
@@ -45,7 +45,7 @@
             </a>
         </div>
         <!--===============================================입력란=========================================================-->
-        <form action="{% url 'test_activity_register' %}" class="add-listing-form" method="POST" enctype="multipart/form-data">
+        <form action="{% url 'activity_register' %}" class="add-listing-form" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
         <div class="content-block">
 			<div class="section-full content-inner bg-white">
@@ -83,7 +83,7 @@
 
 
                             <!--게시글 수정 시 나오는 버튼-->
-                            <form action="{% url 'test_activity_update' %}" method="POST">
+                            <form action="{% url 'activity_update' %}" method="POST">
                                 {% csrf_token %}
                                 <button type="submit" class="site-button btn-block button-md" style="width: 30%">수정하기</button>
                                 <!-- ########## 여기서 뭔가 input hidden 을 사용해야 할 것 같음 -->
