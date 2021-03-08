@@ -38,6 +38,4 @@ $(document).ready(function () {
                 $(this).text(" 등록하기").addClass('fa fa-check');
             });
 
-            });
-
         }); // end ready
