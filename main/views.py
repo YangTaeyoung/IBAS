@@ -127,6 +127,21 @@ def activity_comment_delete(request):
     # 비정상적인 경로를 통해 들어간 경우 바로 나오게 해준다.
     return redirect(reverse('activity_detail'))
 
+# 댓글 수정 코드
+def activity_comment_update(request):
+    if request.method == "POST": # 정상적으로 파라미터가 넘어왔을 경우
+        comment = get_object_or_404(Comment, pk=request.POST.get('comment_id')) # 가져온 comment_id를 토대로 수정 내역을 적용
+
+        # 필요하면 사용하려고 복붙함
+        # user_stu = User.objects.get(pk=request.session.get('user_stu'))  # 유저 학번 들고오는 것임
+        # board_no = Board.objects.get(pk=request.POST.get('board_no'))  # 게시글 번호 들고오는 것임
+
+        comment.comment_cont = request.POST.get('comment_cont') # 수정할 내용을 가져옴
+        comment.save() # DB 저장
+        return HttpResponseRedirect('/test/test_activity/detail/')
+
+    return HttpResponseRedirect('/test/test_activity/')
+
 
 # 동아리 글 수정 코드
 def activity_update(request):
