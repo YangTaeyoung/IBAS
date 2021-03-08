@@ -36,7 +36,7 @@
                 <div class="introduce-for-del-margin text-center" style="padding-bottom: 40px">
                     <h2 class="box-title">동아리 소개</h2>
                     <div class="dlab-separator" style="background-color: #091069; z-index: 0"></div>
-                    <p>인하대학교 빅데이터 탐구동아리 Inha BAS(Bigdata Analyst Society)입니다. Inha BAS는 빅데이터에 관심이 있는 학생들이 모여 기초부터
+                    <p>인하대학교 빅데이터 탐구동아리 IBAS(Inha Bigdata Analyst Society)입니다. <br/>IBAS는 빅데이터에 관심이 있는 학생들이 모여 기초부터
                         하나씩 쌓아가기위해 만든 빅데이터 탐구동아리 입니다.</p>
                 </div>
                 <!-- ===========================동아리 소개 안 카드부분================================ -->
@@ -52,11 +52,11 @@
                             <i class="fa fa-file-code-o introduce-color_black "></i>
                         </div>
                         <div class="icon-content">
-                            <h3 class="dlab-tilte">Explore Amazing Places</h3>
+                            <h3 class="dlab-tilte">Big Data Analysis</h3>
                             <!--introduce-color_black는 yejin.css에 정의되어 있음. -->
                             <p class="introduce-color_black ">
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                                incididunt ut labore.</p>
+                                통계적 분석도구를 통해 데이터가 어떤 의미를 갖는지, 한 변수와 다른 변수는 어떤 관계에 있는지를 규명합니다. 의미있는 결과를 도출하고, 이를 실생활에 접목할
+                                방법을 모색합니다.</p>
                         </div>
                     </div>
 
@@ -67,11 +67,11 @@
                             <!--introduce-color_black는 yejin.css에 정의되어 있음. -->
                             <i class="ti-pencil introduce-color_black "></i></div>
                         <div class="icon-content">
-                            <h3 class="dlab-tilte">Explore Amazing Places</h3>
+                            <h3 class="dlab-tilte">Big Data Visualization</h3>
                             <!--introduce-color_black는 yejin.css에 정의되어 있음. -->
                             <p class="introduce-color_black ">
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                                incididunt ut labore.</p>
+                                텍스트로 되어 있는 여러 데이터들을 인간이 이해하기 쉬운 형태로 변환합니다. 데이터의 전체적인 모습과 각각의 정량적인 척도를 시각적으로 가늠하게
+                                합니다.</p>
                         </div>
                     </div>
 
@@ -82,10 +82,10 @@
                             <!--introduce-color_black는 yejin.css에 정의되어 있음. -->
                             <i class="ti-game introduce-color_black "></i></div>
                         <div class="icon-content">
-                            <h3 class="dlab-tilte">Explore Amazing Places</h3>
+                            <h3 class="dlab-tilte">Big Data Engineering</h3>
                             <!--introduce-color_black는 yejin.css에 정의되어 있음. -->
-                            <p class="introduce-color_black ">Lorem ipsum dolor sit amet, consectetur adipisicing
-                                elit, sed do eiusmod tempor incididunt ut labore.</p>
+                            <p class="introduce-color_black ">빅데이터 알고리즘의 효율성을 고민하며, 개념으로 존재했던 빅데이터 알고리즘을 실제 프로그램으로 구현하여
+                                현실세계에 나타나게 합니다.</p>
                         </div>
                     </div>
                 </div>
@@ -216,8 +216,7 @@
                 <div class="introduce-for-del-margin text-center" style="padding-bottom: 40px">
                     <h2 class="box-title">동아리 연혁</h2>
                     <div class="dlab-separator" style="z-index: 0; background-color: #091069"></div>
-                    <p>이것은 동아리 연혁입니다. 아직 아무것도 없어서 허전해요. 곧 써지겠죠. 집에있는데도 집에가고싶은 기분이랄까.
-                        집에있는데도 집에가고싶은 기분이랄까. 집에있는데도 집에가고싶은 기분이랄까. 집에있는데도 집에가고싶은 기분이랄까.</p>
+                    <p>IBAS는 이런 역사를 가지고 있습니다.</p>
 
                     <div>
                         <!--introduce-color-btn는 yejin.css에 정의되어 있음. -->
@@ -237,45 +236,49 @@
                                                          style="color: #091069; font-size: 16pt">
                                     </i>동아리 연혁 추가하기</h3>
                                 </div>
-                                <div class="content-body">
-                                    <ul class="icon-box-list">
-                                        <!--요소 간 간격을 조절하기 위해서 그리드로 짜줌. 바로 밑 형제요소와 사이즈 다르니 주의 요망 -->
-                                        <li style="width: 100%; display: grid; grid-template-columns: 50px 170px">
-                                            <div class="icon-cell bg-gray">
-                                                <i class="la la-calendar" style="justify-content: center"></i>
-                                            </div>
+                                <form action="{% url 'history_register' %}" method="post">
+                                    {% csrf_token %}
+                                    <div class="content-body">
+                                        <ul class="icon-box-list">
+                                            <!--요소 간 간격을 조절하기 위해서 그리드로 짜줌. 바로 밑 형제요소와 사이즈 다르니 주의 요망 -->
+                                            <li style="width: 100%; display: grid; grid-template-columns: 50px 170px">
+                                                <div class="icon-cell bg-gray">
+                                                    <i class="la la-calendar" style="justify-content: center"></i>
+                                                </div>
 
-                                            <!--introduce-li-flex introduce-border_none는 yejin.css에 정의되어 있음. -->
-                                            <div class="introduce-li-flex"><input type="date"
-                                                                                  class="introduce-border_none"/>
-                                            </div>
-                                        </li>
-                                        <!--요소 간 간격을 조절하기 위해서 그리드로 짜줌. 바로 위 형제요소와 사이즈 다르니 주의 요망 -->
-                                        <li style="width: 100%; display: grid; grid-template-columns:50px 307px">
-                                            <div class="icon-cell bg-gray">
-                                                <i class="la la-pencil"></i>
-                                            </div>
+                                                <!--introduce-li-flex introduce-border_none는 yejin.css에 정의되어 있음. -->
+                                                <div class="introduce-li-flex">
+                                                    <input type="date" name="history_date"
+                                                           class="introduce-border_none"/>
+                                                </div>
+                                            </li>
+                                            <!--요소 간 간격을 조절하기 위해서 그리드로 짜줌. 바로 위 형제요소와 사이즈 다르니 주의 요망 -->
+                                            <li style="width: 100%; display: grid; grid-template-columns:50px 307px">
+                                                <div class="icon-cell bg-gray">
+                                                    <i class="la la-pencil"></i>
+                                                </div>
 
-                                            <!--introduce-li-flex는 yejin.css에 정의되어 있음. -->
-                                            <div class="introduce-li-flex">
-                                                <textarea type="text"
+                                                <!--introduce-li-flex는 yejin.css에 정의되어 있음. -->
+                                                <div class="introduce-li-flex">
+                                                <textarea name="history_cont"
+                                                          type="text"
                                                           class="form-control"
                                                           style="resize: none; font-size: 12pt"
                                                           placeholder="내용을 입력하세요."></textarea>
-                                            </div>
-                                        </li>
-                                    </ul>
+                                                </div>
+                                            </li>
+                                        </ul>
 
-                                </div>
-                                <div class="content-footer">
-                                    <button type="button" class="btn btn-primary" style="background-color: #091069">
-                                        등록
-                                    </button>
-                                    <!-- introduce_close()는 yejin.js에 정의되어 있음. 동아리 연혁 추가 모달을 닫기 위한 함수임.  -->
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                                            onclick="introduce_close()">Close
-                                    </button>
-                                </div>
+                                    </div>
+                                    <div class="content-footer">
+                                        <input type="submit" class="btn btn-primary" style="background-color: #091069"
+                                               value="등록"/>
+                                        <!-- introduce_close()는 yejin.js에 정의되어 있음. 동아리 연혁 추가 모달을 닫기 위한 함수임.  -->
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                                onclick="introduce_close()">Close
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -285,41 +288,61 @@
                     <div class="icon-bx-wraper introduce-box-bg introduce-history-box
                     introduce-color_black introduce-margin-bottom_10" style="z-index: 0; margin-left: 0">
                         <!-- introduce-history-grid introduce-overflow_auto는 yejin.css에 정의되어 있음. -->
-                        <div id="divGroup" class="introduce-history-grid introduce-overflow_auto ">
-                            <!-- introduce-text-align_center는 yejin.css에 정의되어 있음. -->
+                        {% for history in history_list %}
+                            <form id="history-update-{{ history.history_no }}" action="{% url 'history_update' %}"
+                                  method="post">
+                                <input type="hidden" name="history_no" value="{{ history.history_no }}"/>
+                                {% csrf_token %}
 
-                            <!-- ===========================여기서부터 introduce_update() introduce_del() 쓰임. ================================ -->
-                            <!-- =========================== 연혁 박스 안 내용 시작 ================================ -->
-                            <!-- 날짜 -->
-                            <div class="introduce-text-align_center">
-                                <!-- introduce-update-input-date introduce-margin-bottom_10는 yejin.css에 정의되어 있음. -->
-                                <!-- introduce_update()에서 disabled를 false로 만들어야 하므로 꼭 필요해여 -->
-                                <input id="date" type="date" value="2020-09-09" disabled="disabled"
-                                       class="introduce-update-input-date introduce-margin-bottom_10"
-                                       style="width: 170px">
-                            </div>
-                            <!-- 내용 -->
-                            <!-- introduce-history-box-flex 는 yejin.css에 정의되어 있음. -->
-                            <div id="history_txt" class="introduce-history-box-flex ">
-                                <!-- introduce-update-input-txt는 yejin.css에 정의되어 있음. -->
-                                <!-- introduce_update()에서 disabled를 false로 만들어야 하므로 꼭 필요해여 -->
-                                <input id="history-txt" value="Lorem ipsum dolor sit amet" disabled="disabled"
-                                       class="introduce-update-input-txt">
-                            </div>
-                            <!-- introduce-align-items_start는 yejin.css에 정의되어 있음. -->
-                            <div class="introduce-contact-flex-container" style="justify-content: space-around">
-                                <!-- 수정버튼 -->
-                                <!-- introduce_update()는 yejin.js에 정의되어 있음. -->
-                                <div onclick="introduce_update()"><input type="submit" hidden><i class="fa fa-pencil"
-                                                                                                 id="update"
-                                ></i></div>
-                                <!-- 삭제버튼 -->
-                                <!-- introduce_update()는 yejin.js에 정의되어 있음. -->
-                                <div onclick="introduce_del()"><input type="submit" hidden><i class="fa fa-trash"
-                                                                                              id="delete"
-                                ></i></div>
-                            </div>
-                        </div>
+                                <div id="divGroup" class="introduce-history-grid introduce-overflow_auto ">
+                                    <!-- introduce-text-align_center는 yejin.css에 정의되어 있음. -->
+
+                                    <!-- ===========================여기서부터 introduce_update() introduce_del() 쓰임. ================================ -->
+                                    <!-- =========================== 연혁 박스 안 내용 시작 ================================ -->
+                                    <!-- 날짜 -->
+                                    <div class="introduce-text-align_center">
+                                        <!-- introduce-update-input-date introduce-margin-bottom_10는 yejin.css에 정의되어 있음. -->
+                                        <!-- introduce_update()에서 disabled를 false로 만들어야 하므로 꼭 필요해여 -->
+                                        <input id="date-{{ history.history_no }}" type="date"
+                                               name="history_date"
+                                               value="{{ history.history_date|date:'Y-m-d' }}"
+                                               disabled="disabled"
+                                               class="introduce-update-input-date introduce-margin-bottom_10"
+                                               style="width: 170px">
+                                    </div>
+                                    <!-- 내용 -->
+                                    <!-- introduce-history-box-flex 는 yejin.css에 정의되어 있음. -->
+                                    <div id="history_txt" class="introduce-history-box-flex ">
+                                        <!-- introduce-update-input-txt는 yejin.css에 정의되어 있음. -->
+                                        <!-- introduce_update()에서 disabled를 false로 만들어야 하므로 꼭 필요해여 -->
+                                        <input id="history-txt-{{ history.history_no }}"
+                                               name="history_cont"
+                                               value="{{ history.history_cont }}" disabled="disabled"
+                                               class="introduce-update-input-txt">
+                                    </div>
+                                    <!-- introduce-align-items_start는 yejin.css에 정의되어 있음. -->
+                                    <div class="introduce-contact-flex-container" style="justify-content: space-around">
+                                        <!-- 수정버튼 -->
+                                        <!-- introduce_update()는 yejin.js에 정의되어 있음. -->
+                                        <div onclick="introduce_update({{ history.history_no }})"><input
+                                                id="btn-history-update-{{ history.history_no }}" type="submit" hidden>
+                                            <i class="fa fa-pencil" id="update-{{ history.history_no }}"></i>
+                                        </div>
+                                        <!-- 삭제버튼 -->
+                                        <!-- introduce_update()는 yejin.js에 정의되어 있음. -->
+                                        <div onclick="introduce_del({{ history.history_no }})">
+                                            <input type="submit" hidden>
+                                            <i class="fa fa-trash" id="delete"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <form id="history-delete-{{ history.history_no }}" action="{% url 'history_delete' %}"
+                                  method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="history_no" value="{{ history.history_no }}">
+                            </form>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
@@ -412,7 +435,7 @@
                 document.querySelector("#con-a").classList.remove('introduce-change-nav');
                 document.querySelector("#intro-a").classList.remove('introduce-change-nav');
             }
-            // 동아리 연혁의 위치가 window 크기 보다는 작거나 같고, contact us의 위치가 window 크기 보다는 클 때
+                // 동아리 연혁의 위치가 window 크기 보다는 작거나 같고, contact us의 위치가 window 크기 보다는 클 때
             // -200과 +200을 한 이유는 스크롤 위치 조정을 위해서임
             else if ((his.offsetTop - 200 <= screen) && (con.offsetTop > screen + 200)) {
                 // 콘솔에 history를 출력하고

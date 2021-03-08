@@ -1,20 +1,20 @@
 from django.shortcuts import render, get_object_or_404, reverse, redirect
 from allauth.socialaccount.models import SocialAccount  # 소셜 계정 DB, socialaccount_socialaccount 테이블을 사용하기 위함.
 from DB.models import AuthUser, User, ChiefCarrier, UserRole, Board, BoardFile, \
-    BoardType, Comment  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
+    BoardType, Comment, History  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
 from member import session
 from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect
 from django.conf import settings
-from IBAS.user_controller import is_chief_there
+from IBAS.user_controller import is_chief_exist, is_sub_chief_exist, get_sub_chief, get_chief
 import os
 from IBAS.file_controller import get_filename, get_filename_with_ext
 
 
 # 메인페이지 이동 함수
 def index(request):
-    if is_chief_there():
-        chief = User.objects.filter(user_role=get_object_or_404(UserRole, role_no=1))[0]  # 하단바에서 회장꺼만 들고오면 됌
+    if is_chief_exist():
+        chief = get_chief()  # 하단바에서 회장꺼만 들고오면 됌
         session.save_chief(request, chief)  # 회장꺼 세션에 저장시켜줬음. save_chief 함수는 session 에 있음.
     context = {}
     return render(request, "index.html", context)
@@ -22,11 +22,12 @@ def index(request):
 
 # 동아리 소개 작업할 것임
 def introduce(request):
-    context = {}
-    if is_chief_there():
-        chief = User.objects.filter(user_role=1)[0]  # 회장의 역할(1) 인 사람의 객채를 가져옴
-        sub_chief = User.objects.filter(user_role=2)[0]  # 부회장의 역할(2) 인 사람의 객체를 가져옴
-        context = {'chief': chief, 'sub_chief': sub_chief}  # context 에 넣어준다.
+    context = {'history_list': History.objects.all().order_by("history_date")}
+    if is_chief_exist() and is_sub_chief_exist():
+        chief = get_chief()  # 회장의 역할(1) 인 사람의 객채를 가져옴
+        sub_chief = get_sub_chief()  # 부회장의 역할(2) 인 사람의 객체를 가져옴
+        context['chief'] = chief
+        context['sub_chief'] = sub_chief  # context 에 넣어준다.
     return render(request, 'introduce.html', context)  # introduce 에 실어서 보내분다.
 
 
@@ -46,9 +47,9 @@ def activity(request):
 # 동아리 활동 게시판 상세보기
 def activity_detail(request):
     if request.method == "POST":  # 자세히 보기를 하면
-        board_info = get_object_or_404(Board, board_no=request.POST.get('board_list'))  # 게시글 번호로 게시글 내용을 들고옴
-        comment_info = Comment.objects.filter(comment_board_no=request.POST.get('board_list'))  # 게시글 번호로 댓글 내용
-        return render(request, 'activity_detail.html', {'board_info': board_info, 'comment_info': comment_info})
+        board = Board.objects.get(pk=request.POST.get('board_list'))  # 게시글 번호로 게시글 내용을 들고옴
+        comment_list = Comment.objects.filter(comment_board_no=request.POST.get('board_list'))  # 게시글 번호로 댓글 내용
+        return render(request, 'activity_detail_v1.html', {'board': board, 'comment_list': comment_list})
     else:  # 파라미터가 제대로 넘어오지 않은 경우, 즉 비정상적인 경로를 통해 들어간 경우 바로 나오게 해준다.
         return redirect(reverse('activity'))
 
@@ -68,13 +69,13 @@ def activity_register(request):
         # ============================= 이미지 저장시키는 코드 =========================
         for updated_file in request.FILES.getlist("board_file"):
             # DB 저장
-            new_board_file = BoardFile.objects.create(board_no=Board.objects.get(pk=activity.board_no) ,board_file_path=updated_file)
+            new_board_file = BoardFile.objects.create(board_no=Board.objects.get(pk=activity.board_no),
+                                                      board_file_path=updated_file)
             new_board_file.save()
         return redirect(reverse("activity"))
 
     # POST가 아닌 그냥 보여주는 방식
     return render(request, 'activity_register.html', {})
-
 
 
 # 동아리 활동 상세페이지에서 삭제하는 코드
@@ -99,7 +100,6 @@ def activity_delete(request):
         return redirect(reverse('activity'))
 
 
-
 # 댓글 달기 코드
 def activity_comment(request):
     if request.method == "GET":
@@ -119,8 +119,6 @@ def activity_comment(request):
     return redirect(reverse('activity_detail'))
 
 
-
-
 # 댓글 삭제 코드
 def activity_comment_delete(request):
     if request.method == "POST":  # 댓글 삭제를 누를 경우
@@ -132,17 +130,18 @@ def activity_comment_delete(request):
     # 비정상적인 경로를 통해 들어간 경우 바로 나오게 해준다.
     return redirect(reverse('activity_detail'))
 
+
 # 댓글 수정 코드
 def activity_comment_update(request):
-    if request.method == "POST": # 정상적으로 파라미터가 넘어왔을 경우
-        comment = get_object_or_404(Comment, pk=request.POST.get('comment_id')) # 가져온 comment_id를 토대로 수정 내역을 적용
+    if request.method == "POST":  # 정상적으로 파라미터가 넘어왔을 경우
+        comment = get_object_or_404(Comment, pk=request.POST.get('comment_id'))  # 가져온 comment_id를 토대로 수정 내역을 적용
 
         # 필요하면 사용하려고 복붙함
         # user_stu = User.objects.get(pk=request.session.get('user_stu'))  # 유저 학번 들고오는 것임
         # board_no = Board.objects.get(pk=request.POST.get('board_no'))  # 게시글 번호 들고오는 것임
 
-        comment.comment_cont = request.POST.get('comment_cont') # 수정할 내용을 가져옴
-        comment.save() # DB 저장
+        comment.comment_cont = request.POST.get('comment_cont')  # 수정할 내용을 가져옴
+        comment.save()  # DB 저장
         return HttpResponseRedirect('/test/test_activity/detail/')
 
 
@@ -186,7 +185,40 @@ def activity_update(request):
     return render(request, 'activity.html', {})
 
 
-
 def activity_detail_v1(request):
     return render(request, 'activity_detail_v1.html', {})
 
+
+def history_register(request):  # 연혁 등록
+    if request.method == "POST":  # 정상적으로 값이 넘어왔을 경우
+        history = History.objects.create(  # history 객체 생성 후 받은 값을 집어넣음.
+            history_cont=request.POST.get("history_cont"),
+            history_date=request.POST.get("history_date"),
+            history_writer=User.objects.get(pk=request.session.get("user_stu"))
+        )
+        history.save()
+        return redirect(reverse("introduce"))  # 소개 페이지로 리다이렉트
+    else:  # 비 정상적인 경로로 접근하였을 경우 (해킹 시도)
+        print("비정상적인 접근: ", request.session.get("user_stu"))
+        return render(request, "index.html", {'lgn_is_failed': 1})
+
+
+def history_update(request):  # 연혁 수정
+    if request.method == "POST":  # 정상적으로 파라미터가 넘어왔을 경우
+        history = History.objects.get(pk=request.POST.get("history_no"))  # 가져온 history_no를 토대로 수정 내역을 적용
+        history.history_cont = request.POST.get("history_cont")
+        history.history_date = request.POST.get("history_date")
+        history.history_writer = User.objects.get(pk=request.session.get("user_stu"))
+        history.save()
+        return redirect(reverse("introduce"))
+    else:  # 비정상적인 접근의 경우 (해킹시도)
+        return render(request, "index.html", {'lgn_is_failed': 1})  # 메인페이지로 보내버림
+
+
+def history_delete(request):  # 연혁 삭제
+    if request.method == "POST":  # 정상적으로 파라미터가 넘어왔을 경우
+        history = History.objects.get(pk=request.POST.get("history_no"))  # 가져온 history_no를 토대로 삭제할 대상을 가져옴
+        history.delete()  # 삭제
+        return redirect(reverse("introduce"))  # 소개 페이지로 리다이렉팅
+    else:  # 비정상적인 접근의 경우(해킹시도)
+        return render(request, "index.html", {'lgn_is_failed': 1})  # 메인페이지로 보내버림

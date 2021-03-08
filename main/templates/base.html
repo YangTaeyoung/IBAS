@@ -123,7 +123,7 @@
                                     <a href="#" style="padding-right: 7px;">
                                         <!--==승인되지 않았을 때==-->
                                         {% if request.session.is_activated == 0 %}
-                                            <img src="{{ request.session.user_pic }}" width="35px" height="35px"
+                                            <img src="/media/{{ request.session.user_pic }}" width="35px" height="35px"
                                                  style=" border: 2px solid #ff3d3d; border-radius: 17.5px; margin-right: 3px; max-height: 35px; max-width: 35px"
                                                  alt="현재 브라우저에서 지원하지 않는 형식입니다.">
                                             {{ request.session.user_name }} 님

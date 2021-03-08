@@ -120,11 +120,12 @@ class ChiefCarrier(models.Model):
 class Comment(models.Model):
     comment_id = models.AutoField(db_column='COMMENT_ID', primary_key=True)  # Field name made lowercase.
     comment_board_no = models.ForeignKey(Board,
-                                         db_column='COMMENT_BOARD_NO', on_delete=models.CASCADE)  # Field name made lowercase.
+                                         db_column='COMMENT_BOARD_NO',
+                                         on_delete=models.CASCADE)  # Field name made lowercase.
     comment_writer = models.ForeignKey('User', models.DO_NOTHING,
                                        db_column='COMMENT_WRITER')  # Field name made lowercase.
     comment_cont = models.CharField(db_column='COMMENT_CONT', max_length=5000)  # Field name made lowercase.
-    comment_cont_ref = models.ForeignKey('self', on_delete=models.CASCADE , db_column='COMMENT_CONT_REF', blank=True,
+    comment_cont_ref = models.ForeignKey('self', on_delete=models.CASCADE, db_column='COMMENT_CONT_REF', blank=True,
                                          null=True)  # Field name made lowercase.
     comment_created = models.DateTimeField(db_column='COMMENT_CREATED', auto_now_add=True)  # Field name made lowercase.
 
@@ -402,6 +403,17 @@ class UserRole(models.Model):
     class Meta:
         managed = False
         db_table = 'USER_ROLE'
+
+
+class History(models.Model):
+    history_no = models.AutoField(db_column="HISTORY_NO", primary_key=True)
+    history_cont = models.CharField(db_column="HISTORY_CONT", max_length=500)
+    history_writer = models.ForeignKey(User, models.DO_NOTHING, db_column="HISTORY_WRITER")
+    history_date = models.DateTimeField(db_column="HISTORY_DATE")
+
+    class Meta:
+        managed = False
+        db_table = "HISTORY"
 
 
 class AccountEmailaddress(models.Model):
