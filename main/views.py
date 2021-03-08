@@ -29,15 +29,17 @@ def index(request):
 
 
 # 동아리 소개 작업할 것임
-def test_introduce(request):
-    chief = get_object_or_404(User, user_role=1)  # 회장의 역할(1) 인 사람의 객채를 가져옴
-    sub_chief = get_object_or_404(User, user_role=2)  # 부회장의 역할(2) 인 사람의 객체를 가져옴
-    context = {'chief': chief, 'sub_chief': sub_chief}  # context 에 넣어준다.
+def introduce(request):
+    context = {}
+    if len(User.objects.filter(user_role=1)) != 0 and len(User.objects.filter(user_role=2)) != 0:
+        chief = get_object_or_404(User, user_role=1)  # 회장의 역할(1) 인 사람의 객채를 가져옴
+        sub_chief = get_object_or_404(User, user_role=2)  # 부회장의 역할(2) 인 사람의 객체를 가져옴
+        context = {'chief': chief, 'sub_chief': sub_chief}  # context 에 넣어준다.
     return render(request, 'introduce.html', context)  # introduce 에 실어서 보내분다.
 
 
 # 동아리 활동 게시판
-def test_activity(request):
+def activity(request):
     # 최신순으로 정렬하고, 1:M 관계로 가져오기 위해 prefetch_related 함수 사용
     board_list = Board.objects.order_by('-board_created').prefetch_related("boardfile_set")
     # board 에서 board_type_no = 5 인 것만 들고옴. 최신 순으로 보여주는 코드는 order_by
@@ -50,17 +52,17 @@ def test_activity(request):
 
 
 # 동아리 활동 게시판 상세보기
-def test_activity_detail(request):
+def activity_detail(request):
     if request.method == "POST":  # 자세히 보기를 하면
         board_info = get_object_or_404(Board, board_no=request.POST.get('board_list'))  # 게시글 번호로 게시글 내용을 들고옴
         comment_info = Comment.objects.filter(comment_board_no=request.POST.get('board_list'))  # 게시글 번호로 댓글 내용
         return render(request, 'activity_detail.html', {'board_info': board_info, 'comment_info': comment_info})
     else:  # 파라미터가 제대로 넘어오지 않은 경우, 즉 비정상적인 경로를 통해 들어간 경우 바로 나오게 해준다.
-        return redirect(reverse("test_activity"))
+        return redirect(reverse("activity"))
 
 
 # 동아리 활동 등록하기
-def test_activity_register(request):
+def activity_register(request):
     # 글쓰기 들어와서 등록 버튼을 누르면 실행이 되는 부분
     if request.method == "POST":
         activity = Board(  # 객체로 저장을 할 것이오
@@ -76,14 +78,14 @@ def test_activity_register(request):
             # DB 저장
             new_board_file = BoardFile.objects.create(board_no=Board.objects.get(pk=activity.board_no) ,board_file_path=updated_file)
             new_board_file.save()
-        return redirect(reverse("test_activity"))
+        return redirect(reverse("activity"))
 
     # POST가 아닌 그냥 보여주는 방식
     return render(request, 'activity_register.html', {})
 
 
 # 동아리 활동 상세페이지에서 삭제하는 코드
-def test_activity_delete(request):
+def activity_delete(request):
     if request.method == "POST":  # 포스트로 넘어오는 경우
         activity = get_object_or_404(Board, pk=request.POST.get('board_no'))
         try:
@@ -98,10 +100,10 @@ def test_activity_delete(request):
             pass  # 파일이 없는 경우 그냥 통과시킨다.
 
         activity.delete()  # 파일과 폴더 삭제 후, 게시글 DB 에서 삭제
-        return HttpResponseRedirect('/test/test_activity/')
+        return redirect(reverse('activity'))
 
     else:  # 파라미터가 제대로 넘어오지 않은 경우, 즉 비정상적인 경로를 통해 들어간 경우 바로 나오게 해준다.
-        return HttpResponseRedirect('/test/test_activity/')
+        return redirect(reverse('activity'))
 
 
 # 댓글 달기 코드
@@ -119,8 +121,8 @@ def activity_comment(request):
         comment_register.save()
 
         # 데이터 베이스에 저장
-        return HttpResponseRedirect('/test/test_activity/detail/')
-    return HttpResponseRedirect('/test/test_activity/detail/')
+        return redirect(reverse('activity_detail'))
+    return redirect(reverse('activity_detail'))
 
 
 # 댓글 삭제 코드
@@ -129,13 +131,14 @@ def activity_comment_delete(request):
         comment = get_object_or_404(Comment, pk=request.POST.get('comment_id'))
         # 그 댓글의 pk 를 찾아서 DB 에서 지운다.
         comment.delete()
-        return HttpResponseRedirect('/test/test_activity/detail/')
+
+        return redirect(reverse('activity_detail'))
     # 비정상적인 경로를 통해 들어간 경우 바로 나오게 해준다.
-    return HttpResponseRedirect('/test/test_activity/detail/')
+    return redirect(reverse('activity_detail'))
 
 
 # 동아리 글 수정 코드
-def test_activity_update(request):
+def activity_update(request):
     # 수정을 누르면 GET 방식으로 DB 에 있는 것을 꺼내 온다.
     if request.method == "GET":
         board = Board.objects.get(pk=request.GET.get('board_no'))  # 맞는 것을 가져온다.
@@ -145,7 +148,7 @@ def test_activity_update(request):
         if board.board_writer.user_stu == request.session.get("user_stu"):
             return render(request, 'activity_register.html', context)  # 이거로 보내줘서 작업 가능
         else:
-            return redirect(reverse("test_activity"))
+            return redirect(reverse("activity"))
 
     # 수정을 하고 난 후 수정 버튼을 누를 경우 이걸로 진행 됌
     if request.method == 'POST':
@@ -160,7 +163,7 @@ def test_activity_update(request):
                 # exist_file_path_{파일id}가 없는 경우: 사용자가 기존에 있던 파일을 삭제하기로 결정하였음 (input tag가 없어지면서 값이 전송되지 않음)
                 if request.POST.get("exist_file_path_" + str(board_file.board_file_id)) is None:
                     # 기존에 있던 저장소에 파일 삭제
-                    os.remove(settings.MEDIA_ROOT + "\\" + str(board_file.board_file_path).replace("/", "\\"))
+                    os.remove(settings.MEDIA_ROOT + "/" + str(board_file.board_file_path))
                     # db 기록 삭제
                     board_file.delete()
             # 새로 사용자가 파일을 첨부한 경우
@@ -169,7 +172,7 @@ def test_activity_update(request):
                 new_board_file = BoardFile.objects.create(board_no=board, board_file_path=updated_file)
                 new_board_file.save()
                 # 목록 페이지 이동 (수정 필요)
-            return redirect(reverse("test_activity"))
+            return redirect(reverse("activity"))
     # 잘못 왔을 경우
     return render(request, 'activity.html', {})
 

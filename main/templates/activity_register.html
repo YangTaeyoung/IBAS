@@ -34,7 +34,7 @@
             <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"
                  style=" background-image: url('{% static 'images/board_name_img.jpg' %}'); height: 350px">
                 <!--상단 제목부분을 누르면 해당 게시판 목록으로 이동-->
-                <a href="{% url 'test_activity' %}">
+                <a href="{% url 'activity' %}">
                     <div class="container clearfix">
                         <div class="dlab-bnr-inr-entry">
                             <!--제목-->
@@ -50,7 +50,7 @@
             <form action="
 
 
-                    {% if board is None %}{% url 'test_activity_register' %}{% else %}{% url 'test_activity_update' %}{% endif %}"
+                    {% if board is None %}{% url 'activity_register' %}{% else %}{% url 'activity_update' %}{% endif %}"
                   class="add-listing-form" method="POST" enctype="multipart/form-data">
 
                 {% csrf_token %}

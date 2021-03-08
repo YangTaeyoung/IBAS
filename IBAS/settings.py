@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'member',
     # 메인 관련 앱
     'main',
-
+    'board',
     # 소셜 로그인 패키지: allauth 관련
     'allauth',
     'allauth.account',
@@ -74,8 +74,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             BASE_DIR / 'templates',
-            #'/home/ibas/Django/IBAS/templates',
-            'C:/proj/Django/IBAS/templates'
+            '/home/ibas/Django/IBAS/templates',
         ]
         ,
         'APP_DIRS': True,
@@ -101,9 +100,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'IBAS',
         'USER': 'root',
-        'PASSWORD': '1234',
+        'PASSWORD': 'bigdata1156--',
         'HOST': 'localhost',
-        'PORT': '3306',
+        'PORT': '3356',
     }
 }
 
@@ -150,8 +149,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(ROOT_DIR, '.static_root')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
-    #'/home/ibas/Django/IBAS/static/',
-    'C:/proj/Django/IBAS/static/'
+    '/home/ibas/Django/IBAS/static/'
 ]
 # social 로그인 패키지 설정
 AUTHENTICATION_BACKENDS = (

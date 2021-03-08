@@ -96,14 +96,14 @@
 {#                                                class="fa fa-pencil m-r5"></i>#}
 {#                                            게시글 수정</a>#}
 
-                                        <form action="{% url 'test_activity_update' %}" method="GET">
+                                        <form action="{% url 'activity_update' %}" method="GET">
                                                 <button type="submit" name="board_no" onclick="return confirm('수정하시겠습니까?')"> 수정
                                                     <input type="hidden" name="board_no" value="{{ board_info.board_no }}">
                                                 </button>
                                         </form>
 
                                         <!-- 게시글 삭제 버튼 -->
-                                        <form action="{% url 'test_activity_delete' %}" method="POST">
+                                        <form action="{% url 'activity_delete' %}" method="POST">
                                             {% csrf_token %}
 
                                                 <!-- 삭제 파트 a tag 를 input 태그로 변경해야함. 디자인 고쳐주세요. -->
