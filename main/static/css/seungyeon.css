@@ -84,3 +84,13 @@ input:disabled {
     padding-top: 2px;
     padding-bottom: 1px;
 }
+
+.demo{
+    margin-left: 100px;
+}
+
+.reply-line {
+    height: 1px;
+    position: relative;
+    margin: 20px 0;
+}
