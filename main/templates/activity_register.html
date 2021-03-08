@@ -137,28 +137,7 @@
             </form>
         </div>
     </div>
-    <!--========================================================================================================-->
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script>
-        {#파일명 뜨게해주는 코드#}
-        $("#file").on('change', function () {
-            var fileName = $("#file").val();
-            $(".upload-name").val(fileName);
-        });
-    </script>
-
-    {#        <script type="text/javascript">#}
-    {#            var oEditors = [];#}
-    {#            nhn.husky.EZCreator.createInIFrame({#}
-    {#                oAppRef: oEditors,#}
-    {#                elPlaceHolder: "ir1",#}
-    {#                sSkinURI: "{% static 'NaverSmartEditor/SmartEditor2Skin.html'%}",#}
-    {#                fCreator: "createSEditor2"#}
-    {#            });#}
-    {#        </script>#}
     </body>
-    </div>
     </html>
 
 {% endblock %}

@@ -60,13 +60,14 @@
                                                         <!-- 게시글 작성자 -->
                                                         <li class="post-author" style="color: white"><i
                                                                 class="ti-user"
-                                                                style="color: white"></i>By
+                                                                style="color: white"></i>
                                                             <a
                                                             >{{ board.board_writer.user_name }}</a></li>
                                                         <!--게시글 작성시간-->
                                                         <li class="post-date" style="color: white"><i
                                                                 class="ti-alarm-clock"
-                                                                style="color: white"></i>{{ board.board_created }}
+                                                                style="color: white"></i>
+                                                            {{ board.board_created | date:"Y/m/d"}}
                                                         </li>
                                                         <!-- 히든으로 넘기는 것, board_no 넘김 -->
                                                         <input type="hidden" name="board_list"

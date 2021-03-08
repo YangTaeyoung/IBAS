@@ -12,18 +12,9 @@ from IBAS.file_controller import get_filename, get_filename_with_ext
 
 # 메인페이지 이동 함수
 def index(request):
-    # 세션은 세션이 있다고 가정한 것
-    session.save_session(request, User.objects.get(pk='12162359'))
-
-    # 세션이 없다고 가정한 것
-    # request.session.clear()
-
-    # if len(User.objects.filter(user_role=get_object_or_404(UserRole, role_no=1))) != 0:
-    #     chief = User.objects.filter(user_role=get_object_or_404(UserRole, role_no=1))[0]  # 하단바에서 회장꺼만 들고오면 됌
-    #     session.save_chief(request, chief)  # 회장꺼 세션에 저장시켜줬음. save_chief 함수는 session 에 있음.
-    #  chief = User.objects.filter(user_role=get_object_or_404(UserRole, role_no=1))[0]  # 하단바에서 회장꺼만 들고오면 됌
-    # session.save_chief(request, chief)  # 회장꺼 세션에 저장시켜줬음. save_chief 함수는 session 에 있음.
-
+    if len(User.objects.filter(user_role=get_object_or_404(UserRole, role_no=1))) != 0:
+        chief = User.objects.filter(user_role=get_object_or_404(UserRole, role_no=1))[0]  # 하단바에서 회장꺼만 들고오면 됌
+        session.save_chief(request, chief)  # 회장꺼 세션에 저장시켜줬음. save_chief 함수는 session 에 있음.
     context = {}
     return render(request, "index.html", context)
 
@@ -58,7 +49,7 @@ def activity_detail(request):
         comment_info = Comment.objects.filter(comment_board_no=request.POST.get('board_list'))  # 게시글 번호로 댓글 내용
         return render(request, 'activity_detail.html', {'board_info': board_info, 'comment_info': comment_info})
     else:  # 파라미터가 제대로 넘어오지 않은 경우, 즉 비정상적인 경로를 통해 들어간 경우 바로 나오게 해준다.
-        return redirect(reverse("activity"))
+        return redirect(reverse('activity'))
 
 
 # 동아리 활동 등록하기
@@ -84,6 +75,7 @@ def activity_register(request):
     return render(request, 'activity_register.html', {})
 
 
+
 # 동아리 활동 상세페이지에서 삭제하는 코드
 def activity_delete(request):
     if request.method == "POST":  # 포스트로 넘어오는 경우
@@ -106,6 +98,7 @@ def activity_delete(request):
         return redirect(reverse('activity'))
 
 
+
 # 댓글 달기 코드
 def activity_comment(request):
     if request.method == "GET":
@@ -125,6 +118,8 @@ def activity_comment(request):
     return redirect(reverse('activity_detail'))
 
 
+
+
 # 댓글 삭제 코드
 def activity_comment_delete(request):
     if request.method == "POST":  # 댓글 삭제를 누를 경우
@@ -135,6 +130,19 @@ def activity_comment_delete(request):
         return redirect(reverse('activity_detail'))
     # 비정상적인 경로를 통해 들어간 경우 바로 나오게 해준다.
     return redirect(reverse('activity_detail'))
+
+# 댓글 수정 코드
+def activity_comment_update(request):
+    if request.method == "POST": # 정상적으로 파라미터가 넘어왔을 경우
+        comment = get_object_or_404(Comment, pk=request.POST.get('comment_id')) # 가져온 comment_id를 토대로 수정 내역을 적용
+
+        # 필요하면 사용하려고 복붙함
+        # user_stu = User.objects.get(pk=request.session.get('user_stu'))  # 유저 학번 들고오는 것임
+        # board_no = Board.objects.get(pk=request.POST.get('board_no'))  # 게시글 번호 들고오는 것임
+
+        comment.comment_cont = request.POST.get('comment_cont') # 수정할 내용을 가져옴
+        comment.save() # DB 저장
+        return HttpResponseRedirect('/test/test_activity/detail/')
 
 
 # 동아리 글 수정 코드
@@ -177,5 +185,7 @@ def activity_update(request):
     return render(request, 'activity.html', {})
 
 
+
 def activity_detail_v1(request):
     return render(request, 'activity_detail_v1.html', {})
+

@@ -124,7 +124,7 @@ class Comment(models.Model):
     comment_writer = models.ForeignKey('User', models.DO_NOTHING,
                                        db_column='COMMENT_WRITER')  # Field name made lowercase.
     comment_cont = models.CharField(db_column='COMMENT_CONT', max_length=5000)  # Field name made lowercase.
-    comment_cont_ref = models.ForeignKey('self', models.DO_NOTHING, db_column='COMMENT_CONT_REF', blank=True,
+    comment_cont_ref = models.ForeignKey('self', on_delete=models.CASCADE , db_column='COMMENT_CONT_REF', blank=True,
                                          null=True)  # Field name made lowercase.
     comment_created = models.DateTimeField(db_column='COMMENT_CREATED', auto_now_add=True)  # Field name made lowercase.
 

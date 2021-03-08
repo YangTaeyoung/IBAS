@@ -38,5 +38,59 @@ ol.comment-list li.comment .reply a {
 }
 
 * {
-outline: none;
+    outline: none;
+}
+
+.comment-btn {
+    padding: 0;
+    color: #4611a7;
+    border-color: transparent;
+    background-color: white;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.comment-btn:hover {
+    color: #0e91e3;
+}
+
+.comment-profile-size {
+    width: 35px;
+    height: 35px;
+    border: 2px solid #606269;
+    border-radius: 17.5px;
+    margin-right: 10px;
+
+}
+
+input:disabled {
+    padding: 0px;
+    cursor: auto;
+    font-size: 14px;
+    width: 706px;
+    display: block;
+    color: #606269;
+    cursor: alias;
+    background-color: transparent;
+    border-width: 0px;
+}
+
+.happy{
+    border: 0px;
+    color: black;
+    border-radius: 2px;
+    background-color: #E6E6E6;
+    padding-left: 10px;
+    padding-top: 2px;
+    padding-bottom: 1px;
+}
+
+.demo{
+    margin-left: 100px;
+}
+
+.reply-line {
+    height: 1px;
+    position: relative;
+    margin: 20px 0;
 }
