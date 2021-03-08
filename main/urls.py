@@ -16,5 +16,7 @@ urlpatterns = [
     path('activity/comment/', views.activity_comment, name='activity_comment'),  # 동아리 댓글 쓰는 것
     path('activity/detail_v1/', views.activity_detail_v1, name='activity_detail_vi'),  # 동아리활동 자세히보기 꾸민ver
     path('activity/comment/delete/', views.activity_comment_delete, name='activity_comment_delete'),  # 동아리 댓글 삭제하는 것
+    path('activity/comment/update/', views.activity_comment_update, name='activity_comment_update'),  # 동아리 댓글 수정하는 것
+
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

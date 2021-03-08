@@ -7,9 +7,9 @@
     <script src="{% static 'js/sy.js' %}"></script>
 
     <div class="page-wraper">
-
         <div class="page-content bg-white">
             <div class="page-content bg-white">
+
                 <!----------============= 상단 제목 시작 ================----------->
                 <!--제목을 감싸는 배경-->
                 <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"
@@ -23,6 +23,8 @@
                         </div>
                     </div>
                 </div>
+
+
                 <!----------============= 본문 시작 ================----------->
                 <div class="section-full content-inner">
                     <div class="container">
@@ -34,8 +36,7 @@
                                         <ul class="d-flex align-items-center">
                                             <!-- 게시글 작성자 -->
                                             <li class="post-author"><i class="ti ti-user"></i>By <a
-                                                    href="javascript:void(0);">Hubla
-                                                Dobby</a></li>
+                                                    href="javascript:void(0);">{{ board_info.board_writer.user_name }}</a></li>
                                             <!-- 게시글 작성시간 -->
                                             <li class="post-comment"><i class="ti ti-alarm-clock"></i> <a
                                                     href="javascript:void(0);">19 hours ago</a></li>
@@ -188,15 +189,19 @@
                                                                         href="javascript:void(0);">19 hours ago</a></li>
                                                             </ul>
                                                         </div>
+
                                                         <input type="text" disabled="disabled" style="width: 706px"
                                                                class="comments-area" id="comment_no_2"
                                                                value="호호아줌마 아나 존나 힘드네 시바라아아ㅏㅇ앙">
                                                         <div id="comment_no_1" class="reply-btn-div">
                                                             <!-- comment-no-1은 comment 테이블에서 COMMENT_ID(덧글번호)를 의미함 -->
-                                                            <button id="comment-no-1" type="button" class="btnAdd comment-btn m-r20"><i
+                                                            <button id="comment-no-1" type="button"
+                                                                    class="btnAdd comment-btn m-r20"><i
                                                                     class="fa fa-commenting m-r5"></i>답글쓰기
                                                             </button>
-                                                            <button type="submit" onclick="return confirm('정말 삭제하시겠습니까?')" class="comment-btn m-r10"><i
+                                                            <button type="submit"
+                                                                    onclick="return confirm('정말 삭제하시겠습니까?')"
+                                                                    class="comment-btn m-r10"><i
                                                                     class="fa fa-trash m-r5"></i>
                                                                 댓글 삭제
                                                             </button>

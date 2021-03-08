@@ -44,7 +44,8 @@ def activity(request):
 def activity_detail(request):
     if request.method == "POST":  # 자세히 보기를 하면
         board_info = get_object_or_404(Board, board_no=request.POST.get('board_list'))  # 게시글 번호로 게시글 내용을 들고옴
-        comment_info = Comment.objects.filter(comment_board_no=request.POST.get('board_list'))  # 게시글 번호로 댓글 내용
+        comment_info = Comment.objects.filter(comment_board_no=request.POST.get('board_list')).prefetch_related("comment_cont_ref") # 게시글 번호로 댓글 내용
+
         return render(request, 'activity_detail.html', {'board_info': board_info, 'comment_info': comment_info})
     else:  # 파라미터가 제대로 넘어오지 않은 경우, 즉 비정상적인 경로를 통해 들어간 경우 바로 나오게 해준다.
         return redirect(reverse('activity'))
@@ -113,8 +114,8 @@ def activity_comment(request):
         )
         comment_register.save()
         # 데이터 베이스에 저장
-        return HttpResponseRedirect('/test/test_activity/detail/')
-    return HttpResponseRedirect('/test/test_activity/detail/')
+        return redirect(reverse('activity_detail'))
+    return redirect(reverse('activity_detail'))
 
 
 # 댓글 삭제 코드
@@ -137,10 +138,10 @@ def activity_comment_update(request):
         # board_no = Board.objects.get(pk=request.POST.get('board_no'))  # 게시글 번호 들고오는 것임
 
         comment.comment_cont = request.POST.get('comment_cont') # 수정할 내용을 가져옴
-        comment.save() # DB 저장
-        return HttpResponseRedirect('/test/test_activity/detail/')
+        # comment.save() # DB 저장
+        #return redirect(reverse('activity_detail'))
 
-    return HttpResponseRedirect('/test/test_activity/')
+    return redirect(reverse('activity'))
 
 
 # 동아리 글 수정 코드

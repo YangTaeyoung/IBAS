@@ -20,14 +20,17 @@ $(document).ready(function () {
                     '</div>'
                 ); // end append
                 $(this).hide('fast');
+
                 $('#comment-delete').on('click', function () {
                     $('div').remove('.btnRemove'); // remove the button
                     $(".btnAdd").show();
                 });
             });
+
             $("input.autosize").on('keydown keyup', function () {
                 $(this).height(1).height($(this).prop('scrollHeight') + 12);
             });// end click
+
             $('#re-comment').click(function () {
                 $("#comment_no_2").attr("disabled", false);
                 $('.btnAdd').hide('fast')
