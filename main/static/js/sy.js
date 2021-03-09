@@ -21,6 +21,7 @@ $(document).ready(function () {
                     '</div>' +
                     '</div>'
                 );
+                $(this).hide('fast')
                 // 답글달기 클릭 후 작성취소 버튼 클릭 시, 답글작성란이 사라지게 함
                 $('#comment-delete').on('click', function () {
                     $('div').remove('.btnRemove'); // remove the button
