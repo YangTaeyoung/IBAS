@@ -1,3 +1,4 @@
 from django.shortcuts import render
 
-# Create your views here.
+def board(request):  # 입부신청 완료 페이지로 이동
+    return render(request, 'board.html', {})
