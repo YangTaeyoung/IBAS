@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    <script src="{% static 'js/bank_chaerim.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/bank_chaerim.css' %}"/>
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+
+        <link rel="stylesheet" type="text/css" href="{% static 'css/star-rating-svg.css' %}"/>
+        <link
+                rel="stylesheet"
+                type="text/css"
+                href="{% static 'plugins/editor/jquery-te-1.4.0.css' %}"
+        />
+
+        <link
+                rel="stylesheet"
+                type="text/css"
+                href="{% static 'plugins/drop/imageuploadify.min.css' %}"
+        />
+        <link rel="stylesheet" href="{% static 'plugins/tag-editor/jquery.tag-editor.css' %}"/>
+
+    </head>
+
+    <body>
+    <div class="page-wraper">
+        <div class="page-content bg-white">
+            <!----------상단 제목부분----------->
+            <!--제목을 감싸는 배경-->
+            <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"
+                 style=" background-image: url('{% static 'images/board_name_img.jpg' %}'); height: 350px">
+                <!--상단 제목부분을 누르면 해당 게시판 목록으로 이동-->
+                <a href="{% url 'activity' %}">
+                    <div class="container clearfix">
+                        <div class="dlab-bnr-inr-entry">
+                            <!--제목-->
+                            <h1 class="text-white introduce-letter-spacing_5">예산 지원 신청</h1>
+                            <!--부제목-->
+                            <p class="introduce-margin-top_20">동아리 활동에 사용된 예산 지원을 신청하는 게시판입니다.</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <!--===============================================입력란=========================================================-->
+
+            <form action="#"
+                  class="add-listing-form" method="POST" enctype="multipart/form-data">
+
+                <div class="content-block">
+                    <div class="section-full content-inner bg-white">
+                        <div class="container">
+                            <form class="add-listing-form">
+                                <!--=====================-->
+                            <!--====================================제목 입력 시작==============================================-->
+                                <div class="content-box">
+                                    <div class="content-header">
+                                        <h3 class="title">제목</h3>
+                                    </div>
+                                    <div class="content-body">
+                                        <div class="form-group">
+                                            <input type="text" name="board_title" value="{{ board.board_title }}"
+                                                   class="form-control" placeholder="제목을 입력하세요"
+                                                   style="font-size: 25px; height: 70px;">
+                                        </div>
+                                    </div>
+                                </div>
+                            <!--====================================제목 입력 끝=============================================-->
+                            <!--====================================지출 날짜 시작==============================================-->
+                                <div class="content-box">
+                                    <div class="content-header">
+                                        <h3 class="title">지출날짜</h3>
+                                    </div>
+                                    <div class="content-body">
+                                        <div class="form-group">
+                                            <input type="date" class="form-control"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            <!--====================================지출 날짜 끝=============================================-->
+                            <!--====================================지출 내용 시작==============================================-->
+                                <div class="content-box">
+                                    <div class="content-header">
+                                        <h3 class="title">지출내용</h3>
+                                    </div>
+                                    <div class="content-body">
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" placeholder="지출 목적 및 사용 내용을 입력해주세요"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            <!--====================================지출내용 끝=============================================-->
+                            <!--====================================지출금액 시작==============================================-->
+                                <div class="content-box">
+                                    <div class="content-header">
+                                        <h3 class="title">지출금액</h3>
+                                    </div>
+                                    <div class="content-body">
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" placeholder="정확한 지출금액을 입력해주세요"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            <!--====================================지출금액 끝=============================================-->
+                            <!--====================================사용인 시작==============================================-->
+                                <div class="content-box">
+                                    <div class="content-header">
+                                        <h3 class="title">사용인</h3>
+                                    </div>
+                                    <div class="content-body">
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" placeholder="결제인의 이름을 적어주세요"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            <!--====================================사용인 끝=============================================-->
+                            <!--====================================입금계좌 시작==============================================-->
+                                <div class="content-box">
+                                    <div class="content-header">
+                                        <h3 class="title">입금받을 계좌</h3>
+                                    </div>
+                                    <div class="content-body">
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" placeholder="은행명, 계좌번호, 예금주를 입력해주세요"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            <!--====================================입금계좌 끝=============================================-->
+                            <!--====================================영수증 입력 시작=============================================-->
+
+                                <div class="content-box">
+                                    <div class="content-header">
+                                        <h3 class="title">영수증 업로드</h3>
+                                    </div>
+                                    <div class="content-body">
+                                        <div class="form-group">
+                                            <input
+                                            type="file"
+                                            accept=".xlsx,.xls,image/*,.doc,audio/*,.docx,video/*,.ppt,.pptx,.txt,.pdf"
+                                            multiple
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+
+                            <!--====================================영수증 입력 시작=============================================-->
+
+                                {% if board is not None %}
+                                    <input type="hidden" name="board_no" value="{{ board.board_no }}">
+                                {% endif %}
+                                <!--=====================-->
+                                <!--등록하기 버튼, 누르면 게시글 상세보기로-->
+                                <!--최초 글작성 시 나오는 버튼-->
+                                <div style="display: grid; justify-items: center">
+                                    <button class="site-button btn-block button-md" type="submit" style="width: 30%">
+                                        {% if board is None %}
+                                            신청하기
+                                        {% else %}
+                                            수정하기
+                                        {% endif %}
+                                    </button>
+                                </div>
+                            </form>
+                            <!-- Pagination END -->
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    </body>
+    </html>
+
+{% endblock %}
