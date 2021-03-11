@@ -1,0 +1,29 @@
+.bank-flex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.bank-grid {
+    display: grid;
+    grid-template-columns: repeat(6,1fr);
+    justify-content: center;
+    align-items: center;
+    row-gap: 10px;
+}
+.bank-prove-btn {
+    background-color: #4611a7;
+    border: 0;
+    border-radius: 30px;
+    padding: 5px 10px;
+    color: white; font-weight: 400;
+    font-size: 14px;
+    width: 65px;
+}
+.bank-input-date {
+    border: none;
+    background-color: inherit;
+    text-align: center;
+}
+.bank-margin-right {
+
+}
