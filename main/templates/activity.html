@@ -85,7 +85,7 @@
                         <!-- 게시글 등록버튼(권한자만 보임) -->
                         <div class="extra-cell text-right">
                             <!-- 현재 페이지, 전 페이지가 있는지 리턴해주는 함수 -->
-                            {% if request.session.user_role == 1 or request.session.user_role == 2 or request.session.user_role == 3 or request.session.user_role == 5 %}
+                            {% if request.session.user_role == 1 or request.session.user_role == 2 or request.session.user_role == 3 %}
                                 <a href="{% url 'activity_register' %}" class="site-button radius-xl m-l10"><i
                                         class="fa fa-plus m-r5"></i>
                                     게시글 등록</a>
