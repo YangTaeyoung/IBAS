@@ -94,3 +94,10 @@ input:disabled {
     position: relative;
     margin: 20px 0;
 }
+
+/* 첨부파일 다운로드를 감싸는 박스 */
+.download-box {
+    border: 2px solid #ecebf5;
+    margin: 50px;
+    padding: 20px 20px 20px 20px;
+}
