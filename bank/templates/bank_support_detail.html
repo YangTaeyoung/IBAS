@@ -1,10 +1,286 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    <script src="{% static 'js/bank_chaerim.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/bank_chaerim.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/yejin.css' %}">
+    <script src="{% static 'js/yejin.js' %}"></script>
+    <!DOCTYPE html>
+    <html lang="en">
 
-</body>
-</html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+
+        <link rel="stylesheet" type="text/css" href="{% static 'css/star-rating-svg.css' %}"/>
+        <link
+                rel="stylesheet"
+                type="text/css"
+                href="{% static 'plugins/editor/jquery-te-1.4.0.css' %}"
+        />
+
+        <link
+                rel="stylesheet"
+                type="text/css"
+                href="{% static 'plugins/drop/imageuploadify.min.css' %}"
+        />
+        <link rel="stylesheet" href="{% static 'plugins/tag-editor/jquery.tag-editor.css' %}"/>
+
+    </head>
+
+    <body>
+    <div class="page-wraper">
+        <div class="page-content bg-white">
+            <!----------상단 제목부분----------->
+            <!--제목을 감싸는 배경-->
+            <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"
+                 style=" background-image: url('{% static 'images/board_name_img.jpg' %}'); height: 350px">
+                <!--상단 제목부분을 누르면 해당 게시판 목록으로 이동-->
+                <a href="{% url 'bank_support_board' %}">
+                    <div class="container clearfix">
+                        <div class="dlab-bnr-inr-entry">
+                            <!--제목-->
+                            <h1 class="text-white introduce-letter-spacing_5">예산 지원 신청</h1>
+                            <!--부제목-->
+                            <p class="introduce-margin-top_20">동아리 활동에 사용된 예산 지원을 신청하는 게시판입니다.</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <!--===============================================입력란=========================================================-->
+
+                <div class="content-block">
+                    <div class="section-full content-inner bg-white">
+                        <div class="container">
+                                <!--=====================-->
+                            <!--승인을 대기 중일 때 뜨는 알람-->
+                            <div class="alert alert-secondary" role="alert" style="text-align: center">
+                                <i>승인대기중</i>
+                            </div>
+                            <!--승인 완료 시 뜨는 알람-->
+                            <div class="alert alert-success" role="alert" style="text-align: center">
+                                <i>승인완료</i>
+                            </div>
+                            <!--승인 거절 시 뜨는 알람, 거절 사유 입력하면 같이 뜨게 만들기-->
+                            <div class="alert alert-danger" role="alert" style="text-align: center">
+                                <i>승인거절 ( 거절사유 : 마음에 안들어서 )</i>
+                            </div>
+
+                            <!--====================================제목 시작==============================================-->
+                                <div class="content-box">
+                                    <!--게시글 작성자, 작성시간 나옴-->
+                                    <div class="content-header">
+                                        <div class="dlab-post-meta" style="margin: 0px">
+                                            <ul class="d-flex align-items-center">
+                                                <!-- 게시글 작성자 -->
+                                                <li class="post-author"><i class="ti ti-user"></i>By 김채림</li>
+                                                <!-- 게시글 작성시간 -->
+                                                <li class="post-comment"><i class="ti ti-alarm-clock"></i> 2021-03-05 23:00 </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <!--여기까지-->
+                                    <div class="content-body">
+                                        <div class="form-group">
+                                            <h2 class="post-title " style="margin-top: 10px; margin-bottom: 10px">예산지원 신청합니다.제목제목</h2>
+                                        </div>
+                                    </div>
+                                </div>
+                            <!--====================================제목끝=============================================-->
+                            <!--====================================지출 날짜 시작==============================================-->
+                                <div class="content-box">
+                                    <div class="content-header">
+                                        <h3 class="title">지출날짜</h3>
+                                    </div>
+                                    <div class="content-body">
+                                        <div class="form-group">
+                                            <a>2021-01-03</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            <!--====================================지출 날짜 끝=============================================-->
+                            <!--====================================지출 내용 시작==============================================-->
+                                <div class="content-box">
+                                    <div class="content-header">
+                                        <h3 class="title">지출내용</h3>
+                                    </div>
+                                    <div class="content-body">
+                                        <div class="form-group">
+                                            <a>~~를 위해 ~~가 필요하여 예산을 지출하였음</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            <!--====================================지출내용 끝=============================================-->
+                            <!--====================================지출금액 시작==============================================-->
+                                <div class="content-box">
+                                    <div class="content-header">
+                                        <h3 class="title">지출금액</h3>
+                                    </div>
+                                    <div class="content-body">
+                                        <div class="form-group">
+                                            <a>200,000,000원</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            <!--====================================지출금액 끝=============================================-->
+                            <!--====================================사용인 시작==============================================-->
+                                <div class="content-box">
+                                    <div class="content-header">
+                                        <h3 class="title">사용인</h3>
+                                    </div>
+                                    <div class="content-body">
+                                        <div class="form-group">
+                                            <a>김채림</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            <!--====================================사용인 끝=============================================-->
+                            <!--====================================입금계좌 시작==============================================-->
+                                <div class="content-box">
+                                    <div class="content-header">
+                                        <h3 class="title">입금받을 계좌</h3>
+                                    </div>
+                                    <div class="content-body">
+                                        <div class="form-group">
+                                            <a>카카오뱅크 111-333-445-67765 김채림</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            <!--====================================입금계좌 끝=============================================-->
+                            <!--====================================영수증 시작=============================================-->
+
+                                <div class="content-box">
+                                    <div class="content-header">
+                                        <h3 class="title">영수증 업로드</h3>
+                                    </div>
+                                    <div class="widget widget_gallery gallery-grid-4 lightgallery">
+                                            <ul>
+                                                <li>
+													<span data-exthumbimage="/static/images/listing/grid/pic1.jpg"
+                                                          data-src="/static/images/listing/grid/pic1.jpg"
+                                                          class="check-km " title="Light Gallery Grid 1">
+														<a href="javascript:void(0);">
+															<div class="dlab-post-thum act-detail-img-size"><img
+                                                                    style="height: 190px"
+                                                                    src="/static/images/listing/grid/pic1.jpg"
+                                                                    alt=""></div>
+														</a>
+													</span>
+                                                </li>
+                                                <li>
+													<span data-exthumbimage="/static/images/blog/default/thum1.jpg"
+                                                          data-src="/static/images/blog/default/thum1.jpg"
+                                                          class="check-km act-detail-img-siz"
+                                                          title="Light Gallery Grid 1">
+														<a href="javascript:void(0);">
+															<div class="dlab-post-thum"><img
+                                                                    style="height: 190px"
+                                                                    src="/static/images/blog/default/thum1.jpg"
+                                                                    alt=""></div>
+														</a>
+													</span>
+                                                </li>
+                                                <li>
+													<span data-exthumbimage="/static/images/blog/default/thum1.jpg"
+                                                          data-src="/static/images/blog/default/thum1.jpg"
+                                                          class="check-km act-detail-img-siz"
+                                                          title="Light Gallery Grid 1">
+														<a href="javascript:void(0);">
+															<div class="dlab-post-thum"><img
+                                                                    style="height: 190px"
+                                                                    src="/static/images/blog/default/thum1.jpg"
+                                                                    alt=""></div>
+														</a>
+													</span>
+                                                </li>
+                                                <li>
+													<span data-exthumbimage="/static/images/blog/default/thum1.jpg"
+                                                          data-src="/static/images/blog/default/thum1.jpg"
+                                                          class="check-km act-detail-img-siz"
+                                                          title="Light Gallery Grid 1">
+														<a href="javascript:void(0);">
+															<div class="dlab-post-thum "><img
+                                                                    style="height: 190px"
+                                                                    src="/static/images/blog/default/thum1.jpg"
+                                                                    alt=""></div>
+															<div class="more-images">
+																<div>
+																	<strong>6</strong>
+																	<span>Images</span>
+																</div>
+															</div>
+														</a>
+													</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                </div>
+
+                            <!--====================================영수증 끝=============================================-->
+                            <!-- 게시글 삭제 및 수정 div -->
+                                    <div class="extra-cell text-right">
+                                        <!-- 게시글 수정 버튼 -->
+
+                                        <a href="{% url 'bank_support_register' %}"
+                                           class="site-button radius-xl m-l10"><i
+                                                class="fa fa-pencil m-r5"></i>
+                                            게시글 수정</a>
+                                        <!-- 게시글 삭제 버튼 -->
+
+                                        <a href="#"
+                                           class="site-button red radius-xl m-l10"><i
+                                                class="fa fa-trash m-r5"></i>
+                                            게시글 삭제</a>
+                                    </div>
+                            <!--=======승인/거절 버튼======-->
+                                <div style="display: flex; justify-content: center">
+                                    <!--승인-->
+                                    <button type="button" class="btn btn-outline-success btn-lg" style="width: 200px; font-weight: bold" onclick="return confirm('승인하시겠습니까?')">승인</button>
+                                    <!--거절-->
+                                    <button type="button" class="btn btn-outline-danger btn-lg" style="width: 200px; margin-left: 10px; font-weight: bold" onclick="return confirm('승인을 거절하시겠습니까?')"
+                                    href="javascript:void(0);" data-toggle="modal" data-target="#favorite" class="site-button gray">
+                                        거절
+                                    </button>
+                                </div>
+                            <!---->
+                            <!-- 거절 버튼 누르면 나오는 창 -->
+		                    <div class="modal fade modal-bx-info" id="favorite" tabindex="-1" role="dialog" aria-labelledby="FavoriteModalLongTitle" aria-hidden="true">
+			                    <div class="modal-dialog " role="document">
+				                    <div class="modal-content">
+					                    <div class="modal-header">
+						                    <h5 class="modal-title" id="FavoriteModalLongTitle">승인거절 사유</h5>
+						                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							                    <span aria-hidden="true"><i class="la la-close"></i></span>
+						                    </button>
+					                    </div>
+					                <div class="modal-body">
+						                <div class="tab-content nav">
+							                <div id="login" class="tab-pane active" style="margin-bottom: -25px; margin-top: 10px">
+								                <form class="dlab-form">
+                                                    <!--승인 거절 사유 입력창-->
+									                <div class="form-group">
+										                <input name="dzName" class="form-control" placeholder="승인거절 사유를 입력해주세요" type="text"/>
+									                </div>
+                                                    <!--거절버튼-->
+                                                    <div class="form-group">
+                                                        <button class="site-button btn-block button-md" onclick="return alert('승인이 거절되었습니다')">입력</button>
+                                                    </div>
+								                </form>
+							                </div>
+
+						                </div>
+					                </div>
+				                </div>
+			                </div>
+		                </div>
+		<!-- Modal End -->
+
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+    </body>
+    </html>
+
+{% endblock %}
