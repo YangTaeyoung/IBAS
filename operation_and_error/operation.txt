@@ -17,3 +17,6 @@ git update-index --assume-unchanged IBAS/settings.py
 
 - mac 에서는 매번 mariadb 켜야함ㅎㅎ
 mysql.server start
+
+- 데이터베이스 복제
+mysqldump -uroot -pbigdata1156-- IBAS > IBAS.sql
