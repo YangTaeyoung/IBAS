@@ -46,10 +46,15 @@ def activity(request):
 
 # 동아리 활동 게시판 상세보기
 def activity_detail(request):
+    context = {}
     if request.method == "POST":  # 자세히 보기를 하면
-        board = Board.objects.get(pk=request.POST.get('board_list'))  # 게시글 번호로 게시글 내용을 들고옴
-        comment_list = Comment.objects.filter(comment_board_no=request.POST.get('board_list'))  # 게시글 번호로 댓글 내용
-        return render(request, 'activity_detail_v1.html', {'board': board, 'comment_list': comment_list})
+        board = Board.objects.get(pk=request.POST.get('board_no'))  # 게시글 번호로 게시글 내용을 들고옴
+        context["board"] = board
+        board_file_list = BoardFile.objects.filter(board_no=board)
+        context["board_file_list"] = board_file_list
+        comment_list = Comment.objects.filter(comment_board_no=request.POST.get('board_list')).order_by('comment_created').prefetch_related('comment_set')  # 게시글 번호로 댓글 내용
+        context["comment_list"] = comment_list
+        return render(request, 'activity_detail_v1.html', context)
     else:  # 파라미터가 제대로 넘어오지 않은 경우, 즉 비정상적인 경로를 통해 들어간 경우 바로 나오게 해준다.
         return redirect(reverse('activity'))
 
