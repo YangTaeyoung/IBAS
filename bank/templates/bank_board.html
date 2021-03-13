@@ -2,22 +2,20 @@
 {% load static %}
 {% block content %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/bank_yejin.css' %}">
-    <script src="{% static 'js/yejin.js' %}"></script>
+    <script src="{% static 'js/bank_yejin.js' %}"></script>
     <!----------상단 제목부분----------->
     <!--제목을 감싸는 배경-->
     <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"
          style=" background-image: url('{% static 'images/board_name_img.jpg' %}'); height: 350px">
-        <!--상단 제목부분을 누르면 해당 게시판 목록으로 이동-->
-        <a href="{% url 'activity' %}">
-            <div class="container clearfix">
-                <div class="dlab-bnr-inr-entry">
-                    <!--제목-->
-                    <h1 class="text-white introduce-letter-spacing_5">회계 내역</h1>
-                    <!--부제목-->
-                    <p class="introduce-margin-top_20">회계 내역에 대한 게시판입니다.</p>
-                </div>
+        <div class="container clearfix">
+            <div class="dlab-bnr-inr-entry">
+                <!--제목-->
+                <h1 class="text-white introduce-letter-spacing_5">회계 내역</h1>
+                <!--부제목-->
+                <p class="introduce-margin-top_20">회계 내역에 대한 게시판입니다.</p>
             </div>
-        </a>
+        </div>
+
     </div>
     {#////////////////////////////////////////////////////#}
     <!-- Content -->
@@ -127,7 +125,7 @@
                         </div>
                     </div>
 
-                    <div id="introduce-modal-bg" class="introduce-modal-bg" tabindex="-1">
+                    <div id="introduce-modal-bg" class="introduce-modal-bg" tabindex="-1" style="display: none">
                         <!--introduce-modal는 yejin.css에 정의되어 있음. -->
                         <div class="introduce-modal">
                             <div class="content-box">
@@ -138,46 +136,48 @@
                                 </div>
 
 
-                                    <div class="content-body">
-                                        <div style="width: 100%; display: grid; grid-template-columns: 50px 170px; margin-bottom: 10px">
-                                            <!--요소 간 간격을 조절하기 위해서 그리드로 짜줌. 바로 밑 형제요소와 사이즈 다르니 주의 요망 -->
+                                <div class="content-body">
+                                    <div style="width: 100%; display: grid; grid-template-columns: 50px 170px; margin-bottom: 10px">
+                                        <!--요소 간 간격을 조절하기 위해서 그리드로 짜줌. 바로 밑 형제요소와 사이즈 다르니 주의 요망 -->
 
-                                            <div>
-                                                <i class="la la-calendar-check-o" style="justify-content: center; font-size: 25px"></i>
-                                            </div>
-
-                                            <!--introduce-li-flex introduce-border_none는 yejin.css에 정의되어 있음. -->
-                                            <div class="introduce-li-flex">
-                                                2020-02-02
-                                            </div>
-
-                                        </div>
-                                        <!--요소 간 간격을 조절하기 위해서 그리드로 짜줌. 바로 위 형제요소와 사이즈 다르니 주의 요망 -->
-                                        <div style="width: 100%; display: grid; grid-template-columns:50px 300px">
-
-                                            <div>
-                                                <i class="la la-pencil" style="justify-content: center; font-size: 25px"></i>
-                                            </div>
-
-                                            <!--introduce-li-flex는 yejin.css에 정의되어 있음. -->
-                                            <div class="introduce-li-flex">
-                                                동아리 회비
-                                            </div>
-
-                                        </div>
                                         <div>
-                                            <img src="{% static 'images/bank-test.jpg' %}">
+                                            <i class="la la-calendar-check-o"
+                                               style="justify-content: center; font-size: 25px"></i>
+                                        </div>
+
+                                        <!--introduce-li-flex introduce-border_none는 yejin.css에 정의되어 있음. -->
+                                        <div class="introduce-li-flex">
+                                            2020-02-02
                                         </div>
 
                                     </div>
-                                    <div class="content-footer">
-                                        <input type="submit" class="btn btn-primary" style="background-color: #091069"
-                                               value="등록"/>
-                                        <!-- introduce_close()는 yejin.js에 정의되어 있음. 동아리 연혁 추가 모달을 닫기 위한 함수임.  -->
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                                                onclick="introduce_close()">Close
-                                        </button>
+                                    <!--요소 간 간격을 조절하기 위해서 그리드로 짜줌. 바로 위 형제요소와 사이즈 다르니 주의 요망 -->
+                                    <div style="width: 100%; display: grid; grid-template-columns:50px 300px">
+
+                                        <div>
+                                            <i class="la la-pencil"
+                                               style="justify-content: center; font-size: 25px"></i>
+                                        </div>
+
+                                        <!--introduce-li-flex는 yejin.css에 정의되어 있음. -->
+                                        <div class="introduce-li-flex">
+                                            동아리 회비
+                                        </div>
+
                                     </div>
+                                    <div>
+                                        <img src="{% static 'images/bank-test.jpg' %}">
+                                    </div>
+
+                                </div>
+                                <div class="content-footer">
+                                    <input type="submit" class="btn btn-primary" style="background-color: #091069"
+                                           value="등록"/>
+                                    <!-- introduce_close()는 yejin.js에 정의되어 있음. 동아리 연혁 추가 모달을 닫기 위한 함수임.  -->
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                            onclick="introduce_close()">Close
+                                    </button>
+                                </div>
 
                             </div>
                         </div>
