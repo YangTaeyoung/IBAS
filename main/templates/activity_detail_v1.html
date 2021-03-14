@@ -199,7 +199,9 @@
                                                         <!-- 하단의 comment_no_1은 꼭 {{ comment.comment_id }}로 바꿔줄 것 -->
                                                         <div id="comment_no_1" class="reply-btn-div">
                                                             <!-- 답글쓰기버튼 클릭 시, jqury로 버튼을 담는 div 밑에 대댓글 작성 란 생김 -->
-                                                            <button type="button" class="btnAdd comment-btn m-r20"><i
+                                                            <button type="button"
+                                                                    onclick="reply_comment()"
+                                                                    class="btnAdd comment-btn m-r20"><i
                                                                     class="fa fa-commenting m-r5"></i>답글쓰기
                                                             </button>
                                                             <!-- 댓글삭제 버튼 -->
