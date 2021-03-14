@@ -74,10 +74,15 @@
     border-bottom: #8f8f8f solid 1px;
 }
 
-/* 쓰인 곳: 동아리 소개부분 카드, Contact Us의 내용부분*/
+/* 쓰인 곳:Contact Us의 내용부분*/
 .introduce-contact-flex-container {
     display: flex;
     justify-content: center;
+}
+/* 쓰인 곳: 동아리 소개부분 카드*/
+.introduce-flex-container {
+    display: flex;
+    justify-content: space-around;
 }
 
 /* 쓰인 곳: 동아리 소개부분 카드, Contact Us의 내용부분*/
@@ -258,3 +263,47 @@
     transition: 0.2s;
 }
 
+/* 쓰인 곳: 동아리 소개 card */
+.introduce-card {
+    width: 340px;
+    height: 520px;
+}
+/* 쓰인 곳: 동아리 소개 card 사진*/
+.introduce-card-pic {
+    background-color: white;
+    height: 290px
+}
+/*모바일로 볼 때를 위한 미디어쿼리*/
+@media (min-width: 481px) and (max-width: 767px) {
+    /*동아리 소개 부분은 플랙스로, 디렉션을 컬럼으로 한다. */
+    .introduce-flex-container{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+    }
+    /* 네비게이션 바는 안보이게*/
+    .introduce-nav-bar{
+        display: none;
+    }
+    /*동아리 소개 부분 카드 마진을 줘서 간격을 벌린다.*/
+    .introduce-card {
+        margin-bottom: 20px;
+    }
+    /*회장단 소개는 안보이게*/
+    #introduce_cm {
+        display: none;
+    }
+    /*동아리 연혁 부분 박스 사이즈를 줄이기 위해*/
+    .introduce-history-grid {
+        display: grid;
+        grid-template-columns: 150px 300px 50px;
+        max-height: 370px;
+    }
+    /*동아리 연혁 부분 박스 사이즈를 줄이기 위해*/
+    .introduce-history-box {
+    width: 500px;
+    height: 430px;
+    }
+
+}

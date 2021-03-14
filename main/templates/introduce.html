@@ -44,48 +44,66 @@
 
                 <!-- ===========================동아리 소개 안 왼쪽 카드================================ -->
                 <!--introduce-contact-flex-container는 yejin.css에 정의되어 있음. -->
-                <div class="introduce-contact-flex-container">
-                    <!--introduce-box-bg는 yejin.css에 정의되어 있음. -->
-                    <div class="icon-bx-wraper center m-b30 introduce-box-bg">
-                        <div class="icon-bx-lg radius bg-white m-b20">
-                            <!--introduce-color_black는 yejin.css에 정의되어 있음. -->
-                            <i class="fa fa-file-code-o introduce-color_black "></i>
-                        </div>
-                        <div class="icon-content">
-                            <h3 class="dlab-tilte">Big Data Analysis</h3>
-                            <!--introduce-color_black는 yejin.css에 정의되어 있음. -->
-                            <p class="introduce-color_black ">
-                                통계적 분석도구를 통해 데이터가 어떤 의미를 갖는지, 한 변수와 다른 변수는 어떤 관계에 있는지를 규명합니다. 의미있는 결과를 도출하고, 이를 실생활에 접목할
-                                방법을 모색합니다.</p>
+                <div class="introduce-flex-container">
+                    <!--introduce-card는 yejin.css에 정의되어 있음. -->
+                    <div class="item introduce-card">
+                        <div class="blog-post dez-blog">
+                            <!--introduce-card-pic는 yejin.css에 정의되어 있음. -->
+                            <div class="dlab-post-media introduce-card-pic" >
+                               <img src="{% static 'images/introduce_card_left.png' %}"
+                                                                 alt="현재 브라우저에서 지원하지 않는 형식입니다."/>
+                            </div>
+                            <div class="dlab-info" style="height: 229px;">
+                                <div class="dlab-post-title ">
+                                    <h5 class="post-title">Big Data Analysis</h5>
+                                </div>
+                                <div class="dlab-post-text">
+                                    <p>통계적 분석도구를 통해 데이터가 어떤 의미를 갖는지, 한 변수와 다른 변수는 어떤 관계에 있는지를
+                                        규명합니다. 의미있는 결과를 도출하고, 이를 실생활에 접목할 방법을 모색합니다.</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <!-- ===========================동아리 소개 안 중앙 카드================================ -->
-                    <!--introduce-box-bg는 yejin.css에 정의되어 있음. -->
-                    <div class="icon-bx-wraper center m-b30 introduce-box-bg">
-                        <div class="icon-bx-lg radius bg-white m-b20">
-                            <!--introduce-color_black는 yejin.css에 정의되어 있음. -->
-                            <i class="ti-pencil introduce-color_black "></i></div>
-                        <div class="icon-content">
-                            <h3 class="dlab-tilte">Big Data Visualization</h3>
-                            <!--introduce-color_black는 yejin.css에 정의되어 있음. -->
-                            <p class="introduce-color_black ">
-                                텍스트로 되어 있는 여러 데이터들을 인간이 이해하기 쉬운 형태로 변환합니다. 데이터의 전체적인 모습과 각각의 정량적인 척도를 시각적으로 가늠하게
-                                합니다.</p>
+                    <!--introduce-card는 yejin.css에 정의되어 있음. -->
+                    <div class="item introduce-card">
+                        <div class="blog-post dez-blog">
+                            <!--introduce-card-pic는 yejin.css에 정의되어 있음. -->
+                            <div class="dlab-post-media introduce-card-pic">
+                                <img src="{% static 'images/introduce_card_center_2.png' %}"
+                                                                 alt="현재 브라우저에서 지원하지 않는 형식입니다."/>
+                            </div>
+                            <div class="dlab-info"  style="height: 229px;">
+                                <div class="dlab-post-title ">
+                                    <h5 class="post-title">Big Data Visualization</h5>
+                                </div>
+                                <div class="dlab-post-text">
+                                    <p> 텍스트로 되어 있는 여러 데이터들을 인간이 이해하기 쉬운 형태로 변환합니다. 데이터의 전체적인
+                                        모습과 각각의 정량적인 척도를 시각적으로 가늠하게 합니다.</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <!-- ===========================동아리 소개 안 오른쪽 카드================================ -->
-                    <!--introduce-box-bg는 yejin.css에 정의되어 있음. -->
-                    <div class="icon-bx-wraper center m-b30 introduce-box-bg">
-                        <div class="icon-bx-lg radius bg-white m-b20">
-                            <!--introduce-color_black는 yejin.css에 정의되어 있음. -->
-                            <i class="ti-game introduce-color_black "></i></div>
-                        <div class="icon-content">
-                            <h3 class="dlab-tilte">Big Data Engineering</h3>
-                            <!--introduce-color_black는 yejin.css에 정의되어 있음. -->
-                            <p class="introduce-color_black ">빅데이터 알고리즘의 효율성을 고민하며, 개념으로 존재했던 빅데이터 알고리즘을 실제 프로그램으로 구현하여
-                                현실세계에 나타나게 합니다.</p>
+                    <!--introduce-card는 yejin.css에 정의되어 있음. -->
+                    <div class="item introduce-card">
+                        <div class="blog-post dez-blog">
+                            <!--introduce-card-pic는 yejin.css에 정의되어 있음. -->
+                            <div class="dlab-post-media introduce-card-pic">
+                                <img src="{% static 'images/introduce_card_right.png' %}"
+                                                                 alt="현재 브라우저에서 지원하지 않는 형식입니다."/>
+                            </div>
+                            <div class="dlab-info"  style="height: 229px;">
+                                <div class="dlab-post-title ">
+                                    <h5 class="post-title">Big Data Engineering</h5>
+                                </div>
+                                <div class="dlab-post-text">
+                                    <p>빅데이터 알고리즘의 효율성을 고민하며, 개념으로 존재했던 빅데이터 알고리즘을 실제 프로그램으로
+                                        구현하여 현실세계에 나타나게 합니다.</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -217,14 +235,15 @@
                     <h2 class="box-title">동아리 연혁</h2>
                     <div class="dlab-separator" style="z-index: 0; background-color: #091069"></div>
                     <p>IBAS는 이런 역사를 가지고 있습니다.</p>
-
-                    <div>
-                        <!--introduce-color-btn는 yejin.css에 정의되어 있음. -->
-                        <!--introduce_add()는 yejin.js에 정의되어 있음. 동아리 연혁 추가하기 위한 모달을 보여주는 함수임. -->
-                        <p class="introduce-color-btn "
-                           style="color: white"
-                           onclick="introduce_add()">동아리 연혁 추가하기</p>
-                    </div>
+                    {% if request.session.user_role == 1 or request.session.user_role == 2 or request.session.user_role == 3 %}
+                        <div>
+                            <!--introduce-color-btn는 yejin.css에 정의되어 있음. -->
+                            <!--introduce_add()는 yejin.js에 정의되어 있음. 동아리 연혁 추가하기 위한 모달을 보여주는 함수임. -->
+                            <p class="introduce-color-btn "
+                               style="color: white"
+                               onclick="introduce_add()">동아리 연혁 추가하기</p>
+                        </div>
+                    {% endif %}
                     <!-- ===================================모달부분======================================== -->
                     <!--introduce-modal-bg는 yejin.css에 정의되어 있음. -->
                     <div id="introduce-modal-bg" class="introduce-modal-bg" tabindex="-1">
@@ -324,16 +343,19 @@
                                     <div class="introduce-contact-flex-container" style="justify-content: space-around">
                                         <!-- 수정버튼 -->
                                         <!-- introduce_update()는 yejin.js에 정의되어 있음. -->
-                                        <div onclick="introduce_update({{ history.history_no }})"><input
-                                                id="btn-history-update-{{ history.history_no }}" type="submit" hidden>
-                                            <i class="fa fa-pencil" id="update-{{ history.history_no }}"></i>
-                                        </div>
-                                        <!-- 삭제버튼 -->
-                                        <!-- introduce_update()는 yejin.js에 정의되어 있음. -->
-                                        <div onclick="introduce_del({{ history.history_no }})">
-                                            <input type="submit" hidden>
-                                            <i class="fa fa-trash" id="delete"></i>
-                                        </div>
+                                        {% if request.session.user_role == 1 or request.session.user_role == 2 or request.session.user_role == 3 %}
+                                            <div onclick="introduce_update({{ history.history_no }})"><input
+                                                    id="btn-history-update-{{ history.history_no }}" type="submit"
+                                                    hidden>
+                                                <i class="fa fa-pencil" id="update-{{ history.history_no }}"></i>
+                                            </div>
+                                            <!-- 삭제버튼 -->
+                                            <!-- introduce_update()는 yejin.js에 정의되어 있음. -->
+                                            <div onclick="introduce_del({{ history.history_no }})">
+                                                <input type="submit" hidden>
+                                                <i class="fa fa-trash" id="delete"></i>
+                                            </div>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </form>

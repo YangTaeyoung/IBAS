@@ -78,9 +78,17 @@ function reply_comment(){
                     '</div>';
 
 
-}
+            // $('#re-comment').click(function () {
+            //     $("#comment_no_2").attr("disabled", false);
+            //     $('.btnAdd').hide('fast')
+            //     $('input#comment_no_2').addClass('happy')
+            //     var len = $('#comment_no_2').val().length;
+            //     $('#comment_no_2').focus();
+            //     $('#comment_no_2')[0].setSelectionRange(len, len);
+            //     $(this).text(" 등록하기").addClass('fa fa-check');
+            // });
 
-
+        }); // end ready
 
 // 댓글수정
 function correcting_comment(comment_id) {

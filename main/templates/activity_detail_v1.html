@@ -37,54 +37,22 @@
                                         <ul class="d-flex align-items-center">
                                             <!-- 게시글 작성자 -->
                                             <li class="post-author"><i class="ti ti-user"></i>By <a
-                                                    href="javascript:void(0);">Hubla
-                                                Dobby</a></li>
+                                                    href="javascript:void(0);">{{ board.board_writer.user_name }}</a></li>
                                             <!-- 게시글 작성시간 -->
                                             <li class="post-comment"><i class="ti ti-alarm-clock"></i> <a
-                                                    href="javascript:void(0);">19 hours ago</a></li>
+                                                    href="javascript:void(0);">{{ board.board_created}}</a></li>
                                         </ul>
                                     </div>
                                     <!-- 게시글 제목 -->
                                     <div class="dlab-post-title ">
                                         <h2 class="post-title m-t0">
-                                            <a href="javascript:void(0);">With our vastly improved notifications system,
-                                                users
-                                                have more control on your mind.</a>
+                                            <a href="javascript:void(0);">{{ board.board_title }}</a>
                                         </h2>
                                     </div>
                                     <!--============================== 게시글 본문 시작 ==============================-->
                                     <div class="dlab-post-text">
                                         <!-- 본문 입력 내용 -->
-
-                                        <p class="font-weight-400">Lorem ipsum dolor sit amet, consectetur adipisicing
-                                            elit, sed
-                                            do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-                                            minim
-                                            veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                                            commodo amet
-                                            set for your cool happiness for lyour loyal city.</p>
-
-                                        <p class="font-weight-300">Lorem ipsum dolor sit amet, consectetur adipisicing
-                                            elit, sed
-                                            do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-                                            minim
-                                            veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                                            commodo
-                                            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                            cillum
-                                            dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                            proident,
-                                            sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut
-                                            perspiciatis
-                                            unde omnis iste natus error sit voluptatem accusantium doloremque
-                                            laudantium, totam
-                                            rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto
-                                            beatae
-                                            vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit
-                                            aspernatur
-                                            aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione
-                                            voluptatem
-                                            sequi nesciunt. Neque porro quisquam est.</p>
+                                            {{ board.board_cont }}
                                         <!-- 게시글 속 사진 모음 -->
                                         <div class="widget widget_gallery gallery-grid-4 lightgallery">
                                             <ul>
