@@ -1,94 +1,62 @@
-// 답글삽입
-// $(document).ready(function () {
-//             // 답글쓰기 버튼을 클릭하면, 해당 댓글 칸 아래에 답글작성란이 삽입되는 함수
-//             $('.btnAdd').click(function () {
-//                 $('#comment_no_1').append( // id 때문에, 답글달기를 누른 댓글 칸 뒤에만 삽입됨. (추후 id를 comment.comment_id로 변경할것)
-//                     '<div class="btnRemove">' +
-//                     '<div class=" dlab-divider bg-gray-dark"></div>' +
-//                     '<div class="" id="respond"> ' +
-//                     '<form class="comment-form" id="commentform" method="post" action="#"> ' +
-//                     '<p class="comment-form-comment"> ' +
-//                     '<label for="comment">Comments</label> ' +
-//                     '<textarea rows="8" name="comment" placeholder="답글을 입력하세요!" id="comment"></textarea> ' +
-//                     '</p> ' +
-//                     '<p class="form-submit"> ' +
-//                     '<div class="extra-cell text-right"> ' +
-//                     '<button id="comment-delete" type="button" class="site-button red radius-xl m-l10"><i class="fa fa-trash m-r5"></i>작성취소</button>' +
-//                     '<button id="re-comment-submit" type="submit" class="site-button radius-xl m-l10 m-r15">답글작성</button>'+
-//                     '</div>' +
-//                     '</p> ' +
-//                     '</form> ' +
-//                     '</div>' +
-//                     '</div>'
-//                 );
-//                 $(this).hide('fast')
-//                 // 답글달기 클릭 후 작성취소 버튼 클릭 시, 답글작성란이 사라지게 함
-//                 $('#comment-delete').on('click', function () {
-//                     $('div').remove('.btnRemove'); // remove the button
-//                     $(".btnAdd").show();
-//                 });
-//             });
-//
-//             // $('#re-comment').click(function () {
-//             //     $("#comment_no_2").attr("disabled", false);
-//             //     $('.btnAdd').hide('fast')
-//             //     $('input#comment_no_2').addClass('happy')
-//             //     var len = $('#comment_no_2').val().length;
-//             //     $('#comment_no_2').focus();
-//             //     $('#comment_no_2')[0].setSelectionRange(len, len);
-//             //     $(this).text(" 등록하기").addClass('fa fa-check');
-//             // });
-//
-//         }); // end ready
+// 대댓글창 삽입
+function addReply() {
+    // 답글달기 버튼 안보이게
+    const btnAdd = document.getElementById('btnAdd');
+    btnAdd.style.display = 'none';
 
-function reply_comment(){
-    // var comment = '<div class="btnRemove">' +
-    //                 '<div class=" dlab-divider bg-gray-dark"></div>' +
-    //                 '<div class="" id="respond"> ' +
-    //                 '<form class="comment-form" id="commentform" method="post" action="#"> ' +
-    //                 '<p class="comment-form-comment"> ' +
-    //                 '<label for="comment">Comments</label> ' +
-    //                 '<textarea rows="8" name="comment" placeholder="답글을 입력하세요!" id="comment"></textarea> ' +
-    //                 '</p> ' +
-    //                 '<p class="form-submit"> ' +
-    //                 '<div class="extra-cell text-right"> ' +
-    //                 '<button id="comment-delete" type="button" class="site-button red radius-xl m-l10"><i class="fa fa-trash m-r5"></i>작성취소</button>' +
-    //                 '<button id="re-comment-submit" type="submit" class="site-button radius-xl m-l10 m-r15">답글작성</button>'+
-    //                 '</div>' +
-    //                 '</p> ' +
-    //                 '</form> ' +
-    //                 '</div>' +
-    //                 '</div>';
-    document.getElementById('comment_no_1').innerHTML = '<div class="btnRemove">' +
-                    '<div class=" dlab-divider bg-gray-dark"></div>' +
-                    '<div class="" id="respond"> ' +
-                    '<form class="comment-form" id="commentform" method="post" action="#"> ' +
-                    '<p class="comment-form-comment"> ' +
-                    '<label for="comment">Comments</label> ' +
-                    '<textarea rows="8" name="comment" placeholder="답글을 입력하세요!" id="comment"></textarea> ' +
-                    '</p> ' +
-                    '<p class="form-submit"> ' +
-                    '<div class="extra-cell text-right"> ' +
-                    '<button id="comment-delete" type="button" class="site-button red radius-xl m-l10"><i class="fa fa-trash m-r5"></i>작성취소</button>' +
-                    '<button id="re-comment-submit" type="submit" class="site-button radius-xl m-l10 m-r15">답글작성</button>'+
-                    '</div>' +
-                    '</p> ' +
-                    '</form> ' +
-                    '</div>' +
-                    '</div>';
+    // 대댓글 입력창에 추가되는 모든걸 담는 div를 생성
+    const reply_box = document.createElement('div');
+    reply_box.classList.add("btnRemove");
+    document.getElementById('comment_no_1').appendChild(reply_box);
 
+    // 대댓글 입력창 윗쪽 구분선
+    const line = document.createElement('div');
+    line.classList.add("dlab-divider", "bg-gray-dark");
+    reply_box.appendChild(line);
 
-            // $('#re-comment').click(function () {
-            //     $("#comment_no_2").attr("disabled", false);
-            //     $('.btnAdd').hide('fast')
-            //     $('input#comment_no_2').addClass('happy')
-            //     var len = $('#comment_no_2').val().length;
-            //     $('#comment_no_2').focus();
-            //     $('#comment_no_2')[0].setSelectionRange(len, len);
-            //     $(this).text(" 등록하기").addClass('fa fa-check');
-            // });
+    // 대댓글 입력 form 태그
+    const form = document.createElement('form');
+    form.classList.add('comment-form');
+    reply_box.appendChild(form);
 
-        }); // end ready
+    // 대댓글 창을 꾸미는 p태그
+    const p = document.createElement('p');
+    p.classList.add('comment-form-comment');
+    form.appendChild(p);
+
+    // 대댓글 입력란 text area
+    const textarea = document.createElement('textarea');
+    textarea.setAttribute('placeholder', '답글을 입력하세요!');
+    textarea.setAttribute('row', '8');
+    p.appendChild(textarea);
+
+    // 대댓글 작성취소 및 답글작성을 담는 버튼 div
+    const btndiv = document.createElement('div');
+    btndiv.classList.add('extra-cell', 'text-right');
+    form.appendChild(btndiv);
+
+    // 작성취소 버튼
+    const btn1 = document.createElement('button');
+    btn1.setAttribute('id', 'comment-delete');
+    btn1.setAttribute('type', 'button');
+    btn1.classList.add('site-button', 'radius-xl', 'm-l10', 'red');
+    btn1.innerText = "작성취소";
+    btndiv.appendChild(btn1);
+    // 작성취소 버튼을 클릭하면, 대댓글을 담는 div는 사라지고, 가려진 답글쓰기 버튼도 다시 보임
+    btn1.onclick = function (){
+        reply_box.parentNode.removeChild(reply_box); // 생성된 답글쓰기 div 삭제
+        btnAdd.style.display = 'inline-block'; // 숨겨둔 답글쓰기 버튼 보이게 하기
+    }
+
+    // 답글작성 버튼
+    const btn2 = document.createElement('button');
+    btn2.setAttribute('id', 're-comment-submit');
+    btn2.setAttribute('type', 'submit');
+    btn2.classList.add('site-button', 'radius-xl', 'm-l10', 'm-r15');
+    btn2.innerText = "답글작성"
+    btndiv.appendChild(btn2);
+
+}
 
 // 댓글수정
 function correcting_comment(comment_id) {

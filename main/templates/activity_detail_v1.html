@@ -37,10 +37,11 @@
                                         <ul class="d-flex align-items-center">
                                             <!-- 게시글 작성자 -->
                                             <li class="post-author"><i class="ti ti-user"></i>By <a
-                                                    href="javascript:void(0);">{{ board.board_writer.user_name }}</a></li>
+                                                    href="javascript:void(0);">{{ board.board_writer.user_name }}</a>
+                                            </li>
                                             <!-- 게시글 작성시간 -->
                                             <li class="post-comment"><i class="ti ti-alarm-clock"></i> <a
-                                                    href="javascript:void(0);">{{ board.board_created}}</a></li>
+                                                    href="javascript:void(0);">{{ board.board_created }}</a></li>
                                         </ul>
                                     </div>
                                     <!-- 게시글 제목 -->
@@ -52,7 +53,7 @@
                                     <!--============================== 게시글 본문 시작 ==============================-->
                                     <div class="dlab-post-text">
                                         <!-- 본문 입력 내용 -->
-                                            {{ board.board_cont }}
+                                        {{ board.board_cont }}
                                         <!-- 게시글 속 사진 모음 -->
                                         <div class="widget widget_gallery gallery-grid-4 lightgallery">
                                             <ul>
@@ -168,7 +169,8 @@
                                                         <div id="comment_no_1" class="reply-btn-div">
                                                             <!-- 답글쓰기버튼 클릭 시, jqury로 버튼을 담는 div 밑에 대댓글 작성 란 생김 -->
                                                             <button type="button"
-                                                                    onclick="reply_comment()"
+                                                                    id="btnAdd"
+                                                                    onclick="addReply()"
                                                                     class="btnAdd comment-btn m-r20"><i
                                                                     class="fa fa-commenting m-r5"></i>답글쓰기
                                                             </button>
@@ -215,7 +217,7 @@
                                                                value="댓글 구현하기 정말 잣같구만,,,, 시부렐">
                                                         <div class="reply-btn-div">
                                                             <!-- 답글쓰기버튼 클릭 시, jqury로 버튼을 담는 div 밑에 대댓글 작성 란 생김 -->
-                                                            <button type="button" class="btnAdd comment-btn m-r20"><i
+                                                            <button type="button" class="comment-btn m-r20"><i
                                                                     class="fa fa-commenting m-r5"></i>답글쓰기
                                                             </button>
                                                             <!-- 댓글삭제 버튼 -->
