@@ -161,11 +161,16 @@
                                                             </ul>
                                                         </div>
                                                         <!-- 댓글내용란, 댓글 데이터 가져오는 곳 -->
+                                                        <!-- DB 적용할 때는 id 부분을 id="correcting-{{ comment.comment_id }}"로 변경바람 -->
+                                                        <!-- 테스트를 위해 id를 다음과 같이 함. js도 똑같이 주석 달아줬으니 참고해야 함.  -->
                                                         <input type="text" disabled="disabled" style="width: 706px"
                                                                class="comments-area"
-                                                               id="correcting-{{ commnet.commnet_id }}"
-                                                               value="호호아줌마 아나 존나 힘드네 시바라아아ㅏㅇ앙">
-                                                        <!-- 하단의 comment_no_1은 꼭 {{ comment.comment_id }}로 바꿔줄 것 -->
+                                                               id="correcting-no-1"
+                                                               value="이 댓글을 기준으로 봐주세요."
+                                                               autofocus>
+                                                        <!-- 하단의 comment_no_1은 꼭 id= "commentbtnDiv-{{ comment.comment_id }}"로 바꿔줄 것 -->
+                                                        <!-- 댓글수정 버튼을 누르면, 기존 댓글수정 버튼이 사라지고, 수정완료 버튼이 생기도록 구현했는데, -->
+                                                        <!-- 수정완료 버튼이 commentbtnDiv에 자식요소로 붙게하기 때문에, id 값 필요 -->
                                                         <div id="comment_no_1" class="reply-btn-div">
                                                             <!-- 답글쓰기버튼 클릭 시, jqury로 버튼을 담는 div 밑에 대댓글 작성 란 생김 -->
                                                             <button type="button"
@@ -175,6 +180,7 @@
                                                                     class="fa fa-commenting m-r5"></i>답글쓰기
                                                             </button>
                                                             <!-- 댓글삭제 버튼 -->
+                                                            <!-- id="comment-delete-{{ comment.comment_id }}" -->
                                                             <button type="submit"
                                                                     onclick="comment_del({{ comment.comment_id }})"
                                                                     id="comment-delete-{{ comment.comment_id }}"
@@ -183,14 +189,15 @@
                                                                 댓글 삭제
                                                             </button>
                                                             <!-- 댓글수정 버튼 -->
-                                                            <button onclick="correcting_comment({{ commnet.commnet_id }})"
+                                                            <button onclick="correcting_comment({{ comment.comment_id }})"
+                                                                    id="correctingBtn"
                                                                     class="comment-btn m-r10"><i
                                                                     class="fa fa-pencil m-r5"></i>댓글 수정
                                                             </button>
                                                         </div>
                                                     </div>
                                                 </li>
-                                                <!--===================== 하단은 대댓글 예시임 참고용 ========================-->
+                                                <!--===================== 하단은 대댓글 예시임 참고용 (작동하지 않음) ========================-->
                                                 <!-- 댓글 2 -->
                                                 <li class="comment">
                                                     <div class="comment-body">
@@ -214,7 +221,7 @@
                                                         <!-- 댓글 내용란 (DB에서 가져옴) -->
                                                         <input type="text" disabled="disabled" style="width: 706px"
                                                                class="comments-area" id="comment_no_2"
-                                                               value="댓글 구현하기 정말 잣같구만,,,, 시부렐">
+                                                               value="작동하지 않는 참고용 댓글 입니다.">
                                                         <div class="reply-btn-div">
                                                             <!-- 답글쓰기버튼 클릭 시, jqury로 버튼을 담는 div 밑에 대댓글 작성 란 생김 -->
                                                             <button type="button" class="comment-btn m-r20"><i
@@ -258,7 +265,7 @@
                                                             <!-- DB에서 가져온 댓글정보 -->
                                                             <input type="text" disabled="disabled" style="width: 706px"
                                                                    class="comments-area" id="comment_no_2"
-                                                                   value="댓글 구현하기 정말 잣같구만,,,, 시부렐">
+                                                                   value="작동하지 않는 참고용 대댓글입니다.">
                                                             <div class="reply-btn-div">
                                                                 <button id="" class="comment-btn m-r10"><i
                                                                         class="fa fa-pencil m-r5"></i>댓글 수정

@@ -12,10 +12,12 @@
     color: white;
 }
 
+/* 탬플릿에 설정된 기본form 디자인은 제로로 만들어줌 */
 form {
 
 }
 
+/* 동아리 활동게시판 상세의 이미지 사이즈  */
 .act-detail-img-size {
     height: 190px;
     width: 100%;

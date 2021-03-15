@@ -43,7 +43,7 @@ function addReply() {
     btn1.innerText = "작성취소";
     btndiv.appendChild(btn1);
     // 작성취소 버튼을 클릭하면, 대댓글을 담는 div는 사라지고, 가려진 답글쓰기 버튼도 다시 보임
-    btn1.onclick = function (){
+    btn1.onclick = function () {
         reply_box.parentNode.removeChild(reply_box); // 생성된 답글쓰기 div 삭제
         btnAdd.style.display = 'inline-block'; // 숨겨둔 답글쓰기 버튼 보이게 하기
     }
@@ -58,12 +58,68 @@ function addReply() {
 
 }
 
-// 댓글수정
-function correcting_comment(comment_id) {
-    document.getElementById('correcting-' + comment_id).disabled = false; // input창 disabled속성을 해제.
-    document.getElementById('correcting-' + comment_id).setAttribute("class", 'happy'); // input창 css 변경
-    document.getElementById('correcting-' + comment_id).focus(); //마우스 포커스
+// // 댓글수정 (DB 적용 ver)
+// // DB 버전은 총 세 군데 수정이 필요할 것으로 예상
+// // 수정 1 (아래와 다른 부분)
+// function correcting_comment(comment_id) {
+//     // 수정2 (아래와 다른 부분)
+//     const reply_comment = document.getElementById('correcting-' + comment_id);
+//     reply_comment.disabled = false;
+//     reply_comment.setAttribute('class', 'happy');
+//
+//     // 댓글수정 버튼 안보이게 하기
+//     const correctingBtn = document.getElementById('correctingBtn');
+//     correctingBtn.style.display = 'none';
+//
+//     // 댓글수정완료 버튼 생성
+//     const correctingresultBtn = document.createElement('button');
+//     correctingresultBtn.classList.add('comment-btn', 'm-r10');
+//     const checkicon = document.createElement('i');
+//     checkicon.classList.add('fa', 'fa-check', 'm-r10');
+//     checkicon.innerText = " 수정완료";
+//     correctingresultBtn.appendChild(checkicon);
+//     // 수정완료 버튼 타입을 submit으로 지정
+//     correctingresultBtn.setAttribute('type', 'submit');
+//     // 수정 3 (아래와 다른부분)
+//     document.getElementById('commentbtnDiv' + comment_id).appendChild(correctingresultBtn); // 아래와 다른부분
+//
+//     // 마우스포커스 맨 뒤로 가게 하기
+//     var len = $(reply_comment).val().length;
+//     $(reply_comment).focus();
+//     $(reply_comment)[0].setSelectionRange(len, len);
+// }
+
+// 댓글수정 (DB 적용X - 테스트용 ver)
+// 위에 주석처리된 것을 참고하여 수정
+// 수정필요한 부분1
+function correcting_comment() {
+    // 수정필요한 부분2
+    const reply_comment = document.getElementById('correcting-no-1');
+    reply_comment.disabled = false;
+    reply_comment.setAttribute('class', 'happy');
+
+    // 댓글수정 버튼 안보이게 하기
+    const correctingBtn = document.getElementById('correctingBtn');
+    correctingBtn.style.display = 'none';
+
+    // 댓글수정완료 버튼 생성
+    const correctingresultBtn = document.createElement('button');
+    correctingresultBtn.classList.add('comment-btn', 'm-r10');
+    const checkicon = document.createElement('i');
+    checkicon.classList.add('fa', 'fa-check', 'm-r10');
+    checkicon.innerText = " 수정완료";
+    correctingresultBtn.appendChild(checkicon);
+    // 수정완료 버튼 타입을 submit으로 지정
+    correctingresultBtn.setAttribute('type', 'submit');
+    // 수정필요한 부분3
+    document.getElementById('comment_no_1').appendChild(correctingresultBtn);
+
+    // 마우스포커스 맨 뒤로 가게 하기
+    var len = $(reply_comment).val().length;
+    $(reply_comment).focus();
+    $(reply_comment)[0].setSelectionRange(len, len);
 }
+
 
 // 댓글삭제
 function comment_del(comment_id) {
