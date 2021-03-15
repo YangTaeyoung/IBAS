@@ -49,9 +49,9 @@
                     <div class="item introduce-card">
                         <div class="blog-post dez-blog">
                             <!--introduce-card-pic는 yejin.css에 정의되어 있음. -->
-                            <div class="dlab-post-media introduce-card-pic" >
-                               <img src="{% static 'images/introduce_card_left.png' %}"
-                                                                 alt="현재 브라우저에서 지원하지 않는 형식입니다."/>
+                            <div class="dlab-post-media introduce-card-pic">
+                                <img src="{% static 'images/introduce_card_left.png' %}"
+                                     alt="현재 브라우저에서 지원하지 않는 형식입니다."/>
                             </div>
                             <div class="dlab-info" style="height: 229px;">
                                 <div class="dlab-post-title ">
@@ -72,9 +72,9 @@
                             <!--introduce-card-pic는 yejin.css에 정의되어 있음. -->
                             <div class="dlab-post-media introduce-card-pic">
                                 <img src="{% static 'images/introduce_card_center_2.png' %}"
-                                                                 alt="현재 브라우저에서 지원하지 않는 형식입니다."/>
+                                     alt="현재 브라우저에서 지원하지 않는 형식입니다."/>
                             </div>
-                            <div class="dlab-info"  style="height: 229px;">
+                            <div class="dlab-info" style="height: 229px;">
                                 <div class="dlab-post-title ">
                                     <h5 class="post-title">Big Data Visualization</h5>
                                 </div>
@@ -93,9 +93,9 @@
                             <!--introduce-card-pic는 yejin.css에 정의되어 있음. -->
                             <div class="dlab-post-media introduce-card-pic">
                                 <img src="{% static 'images/introduce_card_right.png' %}"
-                                                                 alt="현재 브라우저에서 지원하지 않는 형식입니다."/>
+                                     alt="현재 브라우저에서 지원하지 않는 형식입니다."/>
                             </div>
-                            <div class="dlab-info"  style="height: 229px;">
+                            <div class="dlab-info" style="height: 229px;">
                                 <div class="dlab-post-title ">
                                     <h5 class="post-title">Big Data Engineering</h5>
                                 </div>
@@ -128,94 +128,39 @@
                     <div class="dlab-separator" style="z-index: 0; background-color: #091069"></div>
                     <p style="margin: 0;">IBAS를 이끄는 회장단입니다.</p>
                 </div>
-
-                <!-- ===========================회장================================ -->
                 <div style="z-index: 0">
                     <div id="owl-demo"
                          class="testimonial-one owl-loaded owl-theme owl-carousel owl-btn-center-lr owl-btn-3 owl-dots-primary-big">
-                        <div class="item">
-                            <!--introduce-height_380는 yejin.css에 정의되어 있음. -->
-                            <div class="client-box introduce-height_380">
-                                <div class="client-detail">
-                                    <!-- 회장 프로필 사진 -->
-                                    <div class="client-img">
-                                        <img src="{% static 'images/testimonials/pic2.jpg' %}" width="100"
-                                             height="100" alt="현재 브라우저에서 지원하지 않는 형식입니다.">
+                <!-- ===========================회장단 소개 시작 ================================ -->
+                        {% for chief_crew in chief_crews %}
+                            <div class="item">
+                                <!--introduce-height_380는 yejin.css에 정의되어 있음. -->
+                                <div class="client-box introduce-height_380">
+                                    <div class="client-detail">
+                                        <div class="client-img">
+                                            <!-- 회장단 프로필사진 -->
+                                            <img src="/media/{{ chief_crew.user_pic }}" width="100"
+                                                 height="100" alt="">
+                                        </div>
+                                        <div class="client-info">
+                                            <!-- 회장단 이름 -->
+                                            <h5 class="client-name">{{ chief_crew.user_name }}</h5>
+                                            <!-- 회장단 전공 -->
+                                            <span>{{ chief_crew.user_role.role_name }}, {{ chief_crew.user_major.major_name }}</span>
+                                        </div>
                                     </div>
-                                    <div class="client-info">
-                                        <!-- 회장 이름 -->
-                                        <h5 class="client-name">{{ chief.user_name }}</h5>
-                                        <!-- 회장 전공 -->
-                                        <span>{{ chief.user_major.major_name }}</span>
+                                    <div class="client-info-bx">
+                                        <!-- 회장단 전화번호 -->
+                                        <h5>{{ chief_crew.user_phone }}</h5>
+                                        <!-- 회장단 이메일 -->
+                                        <h5>{{ chief_crew.user_email }}</h5>
+                                        {% for chief_crew_carrier in chief_crew.chiefcarrier_set.all %}
+                                            <p>{{ chief_crew_carrier.carrier_content }}</p>
+                                        {% endfor %}
                                     </div>
-                                </div>
-                                <div class="client-info-bx">
-                                    <!-- 회장 전화번호 -->
-                                    <h5>{{ chief.user_phone }}</h5>
-                                    <!-- 회장 이메일 -->
-                                    <h5>{{ chief.user_email }}</h5>
-                                    <p>이건 회장 정보 꺼내오는 쿼리문/자기소개도 여기에 적어야 합니다. 예를 들어서 나는 바보다. 나는 멍청이다. 화이팅. 사랑해요
-                                        연예가중계</p>
                                 </div>
                             </div>
-                        </div>
-
-                        <!-- ===========================부회장================================ -->
-                        <div class="item">
-                            <!--introduce-height_380는 yejin.css에 정의되어 있음. -->
-                            <div class="client-box introduce-height_380">
-                                <div class="client-detail">
-                                    <div class="client-img">
-                                        <!-- 부회장 프로필 사진 -->
-                                        <img src="{% static 'images/testimonials/pic2.jpg' %}" width="100"
-                                             height="100" alt="현재 브라우저에서 지원하지 않는 형식입니다.">
-                                    </div>
-                                    <div class="client-info">
-                                        <!-- 부회장 이름 -->
-                                        <h5 class="client-name">{{ sub_chief.user_name }}</h5>
-                                        <!-- 부회장 전공 -->
-                                        <span>{{ sub_chief.user_major.major_name }}</span>
-                                    </div>
-                                </div>
-                                <div class="client-info-bx">
-                                    <!-- 부회장 전화번호 -->
-                                    <h5>{{ sub_chief.user_phone }}</h5>
-                                    <!-- 부회장 이메일 -->
-                                    <h5>{{ sub_chief.user_email }}</h5>
-                                    <p>이건 부회장 정보 꺼내오는 쿼리문</p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- ===========================회장단================================ -->
-                        <!-- 회장단 수에 맞추어서 카드 숫자 조정해야함. -->
-                        <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!! 이쪽부터 복붙 !!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
-                        <div class="item">
-                            <!--introduce-height_380는 yejin.css에 정의되어 있음. -->
-                            <div class="client-box introduce-height_380">
-                                <div class="client-detail">
-                                    <div class="client-img">
-                                        <!-- 회장단 프로필사진 -->
-                                        <img src="{% static 'images/testimonials/pic2.jpg' %}" width="100"
-                                             height="100" alt="">
-                                    </div>
-                                    <div class="client-info">
-                                        <!-- 회장단 이름 -->
-                                        <h5 class="client-name">양태영</h5>
-                                        <!-- 회장단 전공 -->
-                                        <span>경영학과</span>
-                                    </div>
-                                </div>
-                                <div class="client-info-bx">
-                                    <!-- 회장단 전화번호 -->
-                                    <h5>{{ sub_chief.user_phone }}</h5>
-                                    <!-- 회장단 이메일 -->
-                                    <h5>{{ sub_chief.user_email }}</h5>
-                                    <p>쿼리문 수정 해야 함/ </p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!! 위쪽까지 복붙 !!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
-
+                        {% endfor %}
                     </div>
                 </div>
             </div>
@@ -228,7 +173,7 @@
     <section id="history">
         <!--introduce-padding-bottom_0 introduce-contact-flex-container는 yejin.css에 정의되어 있음. -->
         <div class=" bg-img-fix most-visited content-inner introduce-padding-bottom_0 introduce-contact-flex-container"
-             style="background-image:url('{% static 'images/main-introduce.jpg' %}'); z-index: 0" ;>
+             style="background-image:url('{% static 'images/main-introduce.jpg' %}'); z-index: 0">
             <div class="container" style="margin: 0">
                 <!--introduce-for-del-margin는 yejin.css에 정의되어 있음. -->
                 <div class="introduce-for-del-margin text-center" style="padding-bottom: 40px">

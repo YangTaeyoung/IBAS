@@ -2,11 +2,13 @@ from django.shortcuts import render, get_object_or_404, reverse, redirect
 from allauth.socialaccount.models import SocialAccount  # 소셜 계정 DB, socialaccount_socialaccount 테이블을 사용하기 위함.
 from DB.models import AuthUser, User, ChiefCarrier, UserRole, Board, BoardFile, \
     BoardType, Comment, History  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
+from django.db.models import Q
 from member import session
 from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect
 from django.conf import settings
-from IBAS.user_controller import is_chief_exist, is_sub_chief_exist, get_sub_chief, get_chief
+from IBAS.user_controller import is_chief_exist, is_sub_chief_exist, get_sub_chief, get_chief, get_banker, \
+    get_chief_crews
 import os
 from IBAS.file_controller import get_filename, get_filename_with_ext
 
@@ -22,12 +24,14 @@ def index(request):
 
 # 동아리 소개 작업할 것임
 def introduce(request):
+    # 히스토리 내역을 가져옴
     context = {'history_list': History.objects.all().order_by("history_date")}
-    if is_chief_exist() and is_sub_chief_exist():
-        chief = get_chief()  # 회장의 역할(1) 인 사람의 객채를 가져옴
-        sub_chief = get_sub_chief()  # 부회장의 역할(2) 인 사람의 객체를 가져옴
-        context['chief'] = chief
-        context['sub_chief'] = sub_chief  # context 에 넣어준다.
+
+    if len(User.objects.filter(~Q(user_role=UserRole.objects.get(pk=5))).prefetch_related(
+            'chiefcarrier_set').all()) != 0:
+        # 회장단인 사람의 객체를 가져오고 등록, Chief_carrier에서 이력 정보도 함께 가져옴
+        context['chief_crews'] = User.objects.filter(~Q(user_role=UserRole.objects.get(pk=5))).prefetch_related(
+            'chiefcarrier_set').all()
     return render(request, 'introduce.html', context)  # introduce 에 실어서 보내분다.
 
 
@@ -52,7 +56,8 @@ def activity_detail(request):
         context["board"] = board
         board_file_list = BoardFile.objects.filter(board_no=board)
         context["board_file_list"] = board_file_list
-        comment_list = Comment.objects.filter(comment_board_no=request.POST.get('board_list')).order_by('comment_created').prefetch_related('comment_set')  # 게시글 번호로 댓글 내용
+        comment_list = Comment.objects.filter(comment_board_no=request.POST.get('board_list')).order_by(
+            'comment_created').prefetch_related('comment_set')  # 게시글 번호로 댓글 내용
         context["comment_list"] = comment_list
         return render(request, 'activity_detail_v1.html', context)
     else:  # 파라미터가 제대로 넘어오지 않은 경우, 즉 비정상적인 경로를 통해 들어간 경우 바로 나오게 해준다.
