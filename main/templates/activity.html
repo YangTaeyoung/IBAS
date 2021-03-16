@@ -36,7 +36,7 @@
                                 <!--============ 게시글 박스 시작 ============-->
                                 <div class="col-lg-4 col-md-6 col-sm-6 m-b30">
                                     <div class="listing-bx overlap">
-                                        <form action="{% url 'activity_detail' %}" method="POST">
+                                        <form action="{% url 'activity_detail' board_no=board.board_no %}" method="POST">
                                             {% csrf_token %}
 
 
