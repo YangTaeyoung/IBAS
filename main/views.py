@@ -5,8 +5,9 @@ from DB.models import AuthUser, User, ChiefCarrier, UserRole, Board, BoardFile, 
 from django.db.models import Q
 from member import session
 from django.core.paginator import Paginator
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.conf import settings
+
 from IBAS.user_controller import is_chief_exist, is_sub_chief_exist, get_sub_chief, get_chief, get_banker, \
     get_chief_crews
 import os
@@ -49,18 +50,19 @@ def activity(request):
 
 
 # 동아리 활동 게시판 상세보기
-def activity_detail(request):
-    context = {}
-    if request.method == "POST":  # 자세히 보기를 하면
-        board = Board.objects.get(pk=request.POST.get('board_no'))  # 게시글 번호로 게시글 내용을 들고옴
+def activity_detail(request, board_no):
+    if board_no is not None:
+        context = {}
+        board = Board.objects.get(pk=board_no)  # 게시글 번호로 게시글 내용을 들고옴
         context["board"] = board
         board_file_list = BoardFile.objects.filter(board_no=board)
         context["board_file_list"] = board_file_list
-        comment_list = Comment.objects.filter(comment_board_no=request.POST.get('board_list')).order_by(
-            'comment_created').prefetch_related('comment_set')  # 게시글 번호로 댓글 내용
+        comment_list = Comment.objects.filter(comment_board_no=board).filter(
+            comment_cont_ref__isnull=True).order_by(
+            'comment_created').prefetch_related('comment_set').all()  # 게시글 번호로 댓글 내용
         context["comment_list"] = comment_list
         return render(request, 'activity_detail_v1.html', context)
-    else:  # 파라미터가 제대로 넘어오지 않은 경우, 즉 비정상적인 경로를 통해 들어간 경우 바로 나오게 해준다.
+    else:
         return redirect(reverse('activity'))
 
 
@@ -118,34 +120,43 @@ def activity_delete(request):
 
 
 # 댓글 달기 코드
-def activity_comment(request):
-    if request.method == "GET":
-        user_stu = User.objects.get(pk=request.session.get('user_stu'))  # 유저 학번 들고오는 것임
-        board_no = Board.objects.get(pk=request.GET.get('board_no'))  # 게시글 번호 들고오는 것임
+def activity_comment_register(request):
+    user_stu = User.objects.get(pk=request.session.get('user_stu'))  # 유저 학번 들고오는 것임
+    if request.method == "POST":
+
+        board_no = Board.objects.get(pk=request.POST.get('board_no'))  # 게시글 번호 들고오는 것임
 
         # 객체로 받아서 저장할 예정
-        comment_register = Comment(
+        comment = Comment(
             comment_board_no=board_no,
             comment_writer=user_stu,
-            comment_cont=request.GET.get('activity_comment')
+            comment_cont=request.POST.get('comment_cont')
         )
-        comment_register.save()
-
+        comment.save()
+    else:
+        board_no = Board.objects.get(pk=request.GET.get('board_no'))  # 게시글 번호 들고오는 것임
+        # 객체로 받아서 저장할 예정
+        comment = Comment(
+            comment_board_no=board_no,
+            comment_writer=user_stu,
+            comment_cont=request.GET.get('comment_cont'),
+            comment_cont_ref=Comment.objects.get(pk=request.GET.get("comment_ref"))
+        )
+        comment.save()
         # 데이터 베이스에 저장
-        return redirect(reverse('activity_detail'))
-    return redirect(reverse('activity_detail'))
+    return HttpResponse(
+        "<script>location.href='/activity/" + str(board_no.board_no) + "/detail/';</script>")  # 게시글 상세페이지로 이동
 
 
 # 댓글 삭제 코드
 def activity_comment_delete(request):
+    board_no = request.POST.get("board_no")
     if request.method == "POST":  # 댓글 삭제를 누를 경우
         comment = get_object_or_404(Comment, pk=request.POST.get('comment_id'))
         # 그 댓글의 pk 를 찾아서 DB 에서 지운다.
         comment.delete()
 
-        return redirect(reverse('activity_detail'))
-    # 비정상적인 경로를 통해 들어간 경우 바로 나오게 해준다.
-    return redirect(reverse('activity_detail'))
+    return HttpResponse("<script>location.href='/activity/" + str(board_no) + "/detail/';</script>")  # 게시글 상세페이지로 이동
 
 
 # 댓글 수정 코드
@@ -159,7 +170,8 @@ def activity_comment_update(request):
 
         comment.comment_cont = request.POST.get('comment_cont')  # 수정할 내용을 가져옴
         comment.save()  # DB 저장
-        return HttpResponseRedirect('/test/test_activity/detail/')
+        return HttpResponse(
+            "<script>location.href='/activity/" + str(comment.comment_board_no.board_no) + "/detail/';</script>")
 
 
 # 동아리 글 수정 코드
