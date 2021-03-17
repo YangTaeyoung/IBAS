@@ -29,14 +29,13 @@
                         <div class="bank-flex">
                             <div class="mr-auto">
                                 <div>
-                                    <h3 class="title bank-margin-bottom_0">2020</h3>
+                                    <h3 id="bank-year" class="title bank-margin-bottom_0">2021</h3>
                                 </div>
                             </div>
                             <div>
                                 <ul class="filter m-b0">
                                     <li>
-                                        <select>
-                                            <option>2020</option>
+                                        <select id="bank-select" onchange="bank_select()">
                                             <option>2021</option>
                                             <option>2022</option>
                                             <option>2023</option>
@@ -120,7 +119,7 @@
 
                         <tr class="bank-text-align_center">
                             <!-- 날짜 -->
-                            <td scope="row"><input id="bank-date-1" class="bank-input-con" type="date"
+                            <td scope="row"><input id="bank-date-2" class="bank-input-con" type="date"
                                                    value="2021-02-02"
                                                    style="width: 150px;" disabled="disabled"></td>
                             <!-- 내용 -->
@@ -149,7 +148,7 @@
                         </tr>
                         <tr class="bank-text-align_center">
                             <!-- 날짜 -->
-                            <td scope="row"><input id="bank-date-1" class="bank-input-con" type="date"
+                            <td scope="row"><input id="bank-date-3" class="bank-input-con" type="date"
                                                    value="2021-02-02"
                                                    style="width: 150px;" disabled="disabled"></td>
                             <!-- 내용 -->
@@ -178,7 +177,7 @@
                         </tr>
                         <tr class="bank-text-align_center">
                             <!-- 날짜 -->
-                            <td scope="row"><input id="bank-date-1" class="bank-input-con" type="date"
+                            <td scope="row"><input id="bank-date-4" class="bank-input-con" type="date"
                                                    value="2021-02-02"
                                                    style="width: 150px;" disabled="disabled"></td>
                             <!-- 내용 -->
@@ -207,7 +206,7 @@
                         </tr>
                         <tr class="bank-text-align_center">
                             <!-- 날짜 -->
-                            <td scope="row"><input id="bank-date-1" class="bank-input-con" type="date"
+                            <td scope="row"><input id="bank-date-5" class="bank-input-con" type="date"
                                                    value="2021-02-02"
                                                    style="width: 150px;" disabled="disabled"></td>
                             <!-- 내용 -->
@@ -366,14 +365,18 @@
                                                    type="text"/>
                                         </div>
                                         <div class="form-group">
-                                            <label class="form-control">
-                                                파일첨부
-                                                <input type="file" multiple="multiple">
-                                            </label>
-                                            <input type="text" readonly="readonly" title="File Route">
-{##}
-{#                                            <label class="form-control " for="bank-file">파일첨부</label>#}
-{#                                            <input id="bank-file" type="file" style="display:none;"/>#}
+                                            <div class="form-group">
+
+                                                <label style="font-size: 13px; font-weight: 100">증빙자료 첨부</label>
+                                                <input type="file"
+                                                       accept=".xlsx,.xls,image/*,.doc,audio/*,.docx,video/*,.ppt,.pptx,.txt,.pdf"
+                                                       multiple>
+                                            </div>
+
+
+                                            {##}
+                                            {#                                            <label class="form-control " for="bank-file">파일첨부</label>#}
+                                            {#                                            <input id="bank-file" type="file" style="display:none;"/>#}
                                         </div>
                                         <div class="form-group">
                                             <button class="site-button btn-block button-md">login</button>
