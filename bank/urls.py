@@ -6,8 +6,6 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-
     path('list/', views.bank_board, name='bank_board'),  # 회계 게시판 작업
-
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

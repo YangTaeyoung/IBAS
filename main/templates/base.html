@@ -82,7 +82,7 @@
 
                                     {# 밑에 있는 회계내역, 예산지원 신청은 회원들만 신청을 할 수 있음. #}
                                     {% if request.session.user_stu is not None %}
-                                        <li><a href="#">회계내역</a></li>
+                                        <li><a href="{% url 'bank_board' %}">회계내역</a></li>
                                         <li><a href="#">예산지원신청</a></li>
                                     {% endif %}
                                 </ul>

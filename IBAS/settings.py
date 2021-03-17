@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     # 메인 관련 앱
     'main',
     # 회계 관련 앱
-    'bank'
+    'bank',
     # 게시판 관련 앱
     'board',
     # 소셜 로그인 패키지: allauth 관련
