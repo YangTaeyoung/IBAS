@@ -71,8 +71,7 @@ def activity_register(request):
     # 글쓰기 들어와서 등록 버튼을 누르면 실행이 되는 부분
     if request.method == "POST":
         if request.session.get("user_stu") is not None:
-            if request.session.get('user_role') == "1" or request.session.get(
-                    'user_role') == "2" or request.session.get('user_role') == "3":
+            if request.session.get('user_role') > 5:
                 activity = Board(  # 객체로 저장을 할 것이오
                     board_type_no=BoardType.objects.get(pk=5),
                     board_title=request.POST.get('board_title'),
@@ -85,8 +84,7 @@ def activity_register(request):
                 for updated_file in request.FILES.getlist("board_file"):
                     # DB 저장
                     new_board_file = BoardFile.objects.create(board_no=Board.objects.get(pk=activity.board_no),
-                                                              board_file_path=updated_file
-                                                              )
+                                                              board_file_path=updated_file)
                     new_board_file.save()
                 return redirect(reverse("activity"))
             else:
