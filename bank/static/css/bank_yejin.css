@@ -33,6 +33,12 @@
     width: 170px;
     height: 22px;
 }
+.bank-input-con {
+    border: none;
+    background-color: inherit;
+    width: 100px;
+    text-align: center;
+}
 .bank-input-add {
     border: 1px solid #e7e7ed;
     background-color: white;
@@ -108,4 +114,10 @@
     display: grid;
     grid-template-columns: 50px 170px;
     margin-bottom: 10px;
+}
+.bank-text-align_center {
+    text-align: center;
+}
+.bank-text-align_start {
+    text-align: start;
 }
