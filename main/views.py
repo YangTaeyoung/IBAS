@@ -85,7 +85,7 @@ def activity_register(request):
                 new_board_file = BoardFile.objects.create(board_no=activity, board_file_path=updated_file)
                 new_board_file.save()
             return redirect(reverse("activity"))
-    return redirect(reverse("activity"))
+    return render(request,"activity_register.html", {})
 
 
 # 동아리 활동 상세페이지에서 삭제하는 코드
