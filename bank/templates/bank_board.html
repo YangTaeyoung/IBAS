@@ -1,0 +1,292 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bank_yejin.css' %}">
+    <script src="{% static 'js/bank_yejin.js' %}"></script>
+    <!----------상단 제목부분----------->
+    <!--제목을 감싸는 배경-->
+    <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"
+         style=" background-image: url('{% static 'images/board_name_img.jpg' %}'); height: 350px">
+        <div class="container clearfix">
+            <div class="dlab-bnr-inr-entry">
+                <!--제목-->
+                <h1 class="text-white introduce-letter-spacing_5">회계 내역</h1>
+                <!--부제목-->
+                <p class="introduce-margin-top_20">회계 내역에 대한 게시판입니다.</p>
+            </div>
+        </div>
+
+    </div>
+    {#////////////////////////////////////////////////////#}
+    <!-- Content -->
+    <div class="page-content bg-white">
+        <!-- inner page banner END -->
+        <!-- Contact area -->
+        <div class="content-block">
+            <div class="section-full content-inner bg-white">
+                <div class="container">
+                    <div class="listing-filter m-b40">
+                        <div class="bank-flex">
+                            <div class="mr-auto">
+                                <div>
+                                    <h3 class="title bank-margin-bottom_0">2020</h3>
+                                </div>
+                            </div>
+                            <div>
+                                <ul class="filter m-b0">
+                                    <li>
+                                        <select>
+                                            <option>2020</option>
+                                            <option>2021</option>
+                                            <option>2022</option>
+                                            <option>2023</option>
+                                            <option>2024</option>
+                                            <option>2025</option>
+                                            <option>2026</option>
+                                            <option>2027</option>
+                                            <option>2028</option>
+                                            <option>2029</option>
+                                            <option>2030</option>
+                                        </select>
+                                    </li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div id="listing_description" class="tab-pane">
+                        <div class="content-box">
+                            <div class="content-header bank-grid">
+                                <div class="bank-flex"><h6 class="bank-margin-bottom_0">날짜</h6></div>
+                                <div class="bank-flex"><h6 class="bank-margin-bottom_0">내용</h6></div>
+                                <div class="bank-flex"><h6 class="bank-margin-bottom_0">수입액</h6></div>
+                                <div class="bank-flex"><h6 class="bank-margin-bottom_0">지출액</h6></div>
+                                <div class="bank-flex"><h6 class="bank-margin-bottom_0">누적합계</h6></div>
+                                <div class="bank-flex"><h6 class="bank-margin-bottom_0">지출증빙</h6></div>
+                            </div>
+
+                            <!--================================================================================================================-->
+                            <div id="conDiv" class="content-body bank-grid">
+
+                                <div class="bank-flex">
+                                    <div onclick="bank_update()"><i id="bank-update" class="fa fa-pencil "
+                                                                    style="font-size: 18px; justify-content: flex-start; "></i>
+                                    </div>
+                                    <div onclick="bank_del()"><i class="fa fa-trash"
+                                                                 style="font-size: 18px; justify-content: flex-start;"></i>
+                                    </div>
+                                    <input id="bank-date-1" class="bank-input bank-margin-left_10" type="date"
+                                           value="2020-02-02"
+                                           disabled="disabled"
+                                    ></div>
+                                <div class="bank-flex"><input id="bank-txt-1" class="bank-input" type="text"
+                                                              value="동아리 회비"
+                                                              disabled="disabled">
+                                </div>
+                                <div class="bank-flex"><input id="bank-earn-1" class="bank-input" type="text"
+                                                              value="50,000,000"
+                                                              disabled="disabled"></div>
+                                <div class="bank-flex"><input id="bank-spend-1" class="bank-input" type="text" value="0"
+                                                              disabled="disabled"
+                                ></div>
+                                <div class="bank-flex"><input id="bank-money-1" class="bank-input" type="text"
+                                                              value="50,000,000"
+                                                              disabled="disabled"
+                                ></div>
+
+                                <div class="bank-flex">
+                                    <a data-toggle="modal" data-target="#bank-modal-bg" href="javascript:void(0);"
+                                       class="site-button-link black"><i class="fa fa-search"></i></a>
+
+                                </div>
+
+                                <!--===================================================-->
+
+
+                            </div>
+                        </div>
+                        <div class="bank-btn-add-div">
+                            <div>
+                                <a data-toggle="modal" data-target="#bank-add-modal" href="javascript:void(0);"
+                                   class="site-button-link black"><i class="fa fa-plus"
+                                                                     style="color: #787878; font-size: 20px"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--=======================영수증 모달============================-->
+                    <div class="modal fade modal-bx-info" id="bank-modal-bg" tabindex="-1" role="dialog"
+                         aria-labelledby="FavoriteModalLongTitle" aria-hidden="true">
+                        <div class="modal-dialog " role="document">
+                            <div class="modal-content">
+                                <div class="content-header" style="display: flex">
+                                    <h3 class="title"><i class="la la-commenting fa-flip-horizontal m-r10"
+                                                         style="color: #091069; font-size: 16pt">
+                                    </i>제출 증빙</h3>
+                                </div>
+
+                                <div class="content-body">
+                                    <div style="width: 100%; display: grid; grid-template-columns: 50px 170px; margin-bottom: 10px">
+                                        <!--요소 간 간격을 조절하기 위해서 그리드로 짜줌. 바로 밑 형제요소와 사이즈 다르니 주의 요망 -->
+
+                                        <div>
+                                            <i class="la la-calendar-check-o"
+                                               style="justify-content: center; font-size: 25px"></i>
+                                        </div>
+
+                                        <!--introduce-li-flex introduce-border_none는 yejin.css에 정의되어 있음. -->
+                                        <div class="introduce-li-flex">
+                                            2020-02-02
+                                        </div>
+
+                                    </div>
+                                    <!--요소 간 간격을 조절하기 위해서 그리드로 짜줌. 바로 위 형제요소와 사이즈 다르니 주의 요망 -->
+                                    <div style="width: 100%; display: grid; grid-template-columns:50px 300px; ">
+
+                                        <div>
+                                            <i class="la la-pencil"
+                                               style="justify-content: center; font-size: 25px"></i>
+                                        </div>
+
+                                        <!--introduce-li-flex는 yejin.css에 정의되어 있음. -->
+                                        <div class="introduce-li-flex">
+                                            동아리 회비
+                                        </div>
+
+                                    </div>
+                                    <div class="bank-flex">
+                                        <img src="{% static 'images/bank-test.jpg' %}">
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--=========================추가 모달==========================-->
+                    <div class="modal fade modal-bx-info" id="bank-add-modal" tabindex="-1" role="dialog"
+                         aria-labelledby="FavoriteModalLongTitle" aria-hidden="true">
+                        <div class="modal-dialog " role="document">
+                            <div class="modal-content">
+                                <div class="content-header" style="display: flex; font-size: 16px">
+                                    <i class="fa fa-plus fa-flip-horizontal"
+                                       style="color: #091069; font-size: 16pt">
+                                    </i>
+                                    <h3 class="title bank-margin-left_10">회계 내역 추가</h3>
+                                </div>
+
+                                <div class="content-body">
+                                    <div class="bank-modal-input-grid">
+                                        <!--요소 간 간격을 조절하기 위해서 그리드로 짜줌. -->
+
+                                        <div class="bank-flex">
+                                            <i class="la la-calendar-check-o"
+                                               style="justify-content: center; font-size: 25px"></i>
+                                        </div>
+
+                                        <!--introduce-li-flex introduce-border_none는 yejin.css에 정의되어 있음. -->
+                                        <div class="introduce-li-flex">
+                                            <input type="date" class="bank-modal-input-add">
+                                        </div>
+
+                                    </div>
+                                    <!--요소 간 간격을 조절하기 위해서 그리드로 짜줌.  -->
+                                    <div class="bank-modal-input-grid">
+
+                                        <div class="bank-flex">
+                                            <i class="la la-pencil"
+                                               style="justify-content: center; font-size: 25px"></i>
+                                        </div>
+
+                                        <!--introduce-li-flex는 yejin.css에 정의되어 있음. -->
+                                        <div class="introduce-li-flex">
+                                            <input type="text" class="bank-modal-input-add" placeholder="내용을 입력해주세요.">
+                                        </div>
+
+                                    </div>
+                                    <div class="bank-modal-input-grid">
+
+                                        <div class="bank-flex">
+                                            <i class="la la-money"
+                                               style="justify-content: center; font-size: 25px"></i>
+                                        </div>
+
+                                        <!--introduce-li-flex는 yejin.css에 정의되어 있음. -->
+                                        <div class="introduce-li-flex">
+                                            <input type="text" class="bank-modal-input-add" placeholder="수입액을 입력해주세요.">
+                                        </div>
+
+                                    </div>
+                                    <div class="bank-modal-input-grid">
+
+                                        <div class="bank-flex">
+                                            <i class="la la-money"
+                                               style="justify-content: center; font-size: 25px"></i>
+                                        </div>
+
+                                        <!--introduce-li-flex는 yejin.css에 정의되어 있음. -->
+                                        <div class="introduce-li-flex">
+                                            <input type="text" class="bank-modal-input-add" placeholder="지출액을 입력해주세요.">
+                                        </div>
+
+                                    </div>
+                                    <div class="bank-modal-input-grid">
+
+                                        <div class="bank-flex">
+                                            <i class="la la-money"
+                                               style="justify-content: center; font-size: 25px;"></i>
+                                        </div>
+
+                                        <!--introduce-li-flex는 yejin.css에 정의되어 있음. -->
+                                        <div class="introduce-li-flex">
+                                            <input type="text" class="bank-modal-input-add" placeholder="누적합계를 입력해주세요.">
+                                        </div>
+
+                                    </div>
+                                    <div class="bank-modal-input-grid">
+
+                                        <div class="bank-flex" style="height: 35px">
+                                            <i class="fa fa-plus"
+                                               style="justify-content: center; font-size: 25px;"></i>
+                                        </div>
+
+                                        <!--introduce-li-flex는 yejin.css에 정의되어 있음. -->
+                                        <div class="introduce-li-flex">
+                                            <label for="bank-add-file" class="bank-modal-input-add"
+                                                   style="padding-top: 5px">영수증 첨부하기</label>
+                                            <input id="bank-add-file" type="file" style="display: none">
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="content-footer bank-flex" style="justify-content: flex-end">
+                                    <input type="submit" class="btn btn-primary" style="background-color: #091069"
+                                           value="등록"/>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Pagination start -->
+                    <div class="pagination-bx clearfix text-center">
+                        <ul class="pagination">
+                            <li class="previous"><a href="javascript:void(0)"><i class="fa fa-arrow-left"></i></a></li>
+                            <li><a href="javascript:void(0)">1</a></li>
+                            <li><a href="javascript:void(0)">2</a></li>
+                            <li><a href="javascript:void(0)">...</a></li>
+                            <li class="active"><a href="javascript:void(0)">7</a></li>
+                            <li class="next"><a href="javascript:void(0)"><i class="fa fa-arrow-right"></i></a></li>
+                        </ul>
+                    </div>
+                    <!-- Pagination END -->
+                </div>
+            </div>
+        </div>
+        <!-- Contact area END -->
+    </div>
+    <!-- Content END-->
+
+{% endblock %}
