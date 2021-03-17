@@ -39,82 +39,33 @@ function bank_del() {
 
 }
 
-function bank_add() {
-    var conDiv = document.getElementById("conDiv");
-
-    var dateDiv = document.createElement("div");
-    var dateInput = document.createElement("input");
-
-    var txtDiv = document.createElement("div");
-    var txtInput = document.createElement("input");
-
-    var earnDiv = document.createElement("div");
-    var earnInput = document.createElement("input");
-
-    var spendDiv = document.createElement("div");
-    var spendInput = document.createElement("input");
-
-    var moneyDiv = document.createElement("div");
-    var moneyInput = document.createElement("input");
-
-    var fileDiv = document.createElement("div");
-    var fileInput = document.createElement("input");
-    var fileLabel = document.createElement("label");
 
 
-    dateInput.classList = "bank-input-add";
-    dateInput.type = "date";
-    dateInput.placeholder = "내용을 입력해주세요."
+function bank_select() {
+    var select = document.getElementById("bank-select");
+    var selectTxt = select.options[select.selectedIndex].text;
+    var bankYear = document.getElementById("bank-year");
 
-    txtInput.classList = "bank-input-add";
-    txtInput.type = "text";
-    txtInput.placeholder = "내용을 입력해주세요."
+    bankYear.innerHTML = selectTxt;
 
-    earnInput.classList = "bank-input-add";
-    earnInput.type = "text";
-    earnInput.placeholder = "내용을 입력해주세요."
+    //-----------------------------------------------------------------------
 
-    spendInput.classList = "bank-input-add";
-    spendInput.type = "text";
-    spendInput.placeholder = "내용을 입력해주세요."
+    var dateValue = document.getElementById("bank-date-1").value;
+    var tr_0 = document.getElementById("bank-tr-0");
+    var tr_1 = document.getElementById("bank-tr-1");
 
-    moneyInput.classList = "bank-input-add";
-    moneyInput.type = "text";
-    moneyInput.placeholder = "내용을 입력해주세요.";
+    var dateYear = String(dateValue.split("-"));
+    var selectString = String(document.getElementById("bank-select").value);
 
-    fileLabel.classList = "input-file-button bank-margin-bottom_0 bank-margin-left_10";
-    fileLabel.htmlFor = "input-file-2";
-    fileLabel.innerHTML = "첨부";
+    if ((dateYear[0] + dateYear[1] + dateYear[2] + dateYear[3]) !== selectString) {
+        // tr_0.style.display = "table";
+        tr_1.style.display = "none";
 
-    fileInput.type = "file";
-    fileInput.id = "input-file-2.";
-    fileInput.style.display = "none";
-
-    dateDiv.classList = "bank-flex";
-    txtDiv.classList = "bank-flex";
-    earnDiv.classList = "bank-flex";
-    spendDiv.classList = "bank-flex";
-    moneyDiv.classList = "bank-flex";
-    fileDiv.classList = "bank-flex";
-
-
-    dateDiv.appendChild(dateInput);
-    txtDiv.appendChild(txtInput);
-    earnDiv.appendChild(earnInput);
-    spendDiv.appendChild(spendInput);
-    moneyDiv.appendChild(moneyInput);
-    fileDiv.appendChild(fileInput);
-    fileDiv.appendChild(fileLabel);
-
-
-
-    conDiv.appendChild(dateDiv);
-    conDiv.appendChild(txtDiv);
-    conDiv.appendChild(earnDiv);
-    conDiv.appendChild(spendDiv);
-    conDiv.appendChild(moneyDiv);
-    conDiv.appendChild(fileDiv);
-
-
+    }
+    else {
+        tr_0.style.display = "table";
+        tr_1.style.border = "none"; //이 스타일은 첫번째 row(제일 최근 row)만 지정해 주어야 함.
+        tr_1.style.display = "table";
+    }
+    
 }
-

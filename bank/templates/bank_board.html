@@ -73,208 +73,100 @@
                     <table class="table">
                         <!-- 테이블의 제목(1행) -->
                         <thead>
-                        <tr style="text-align: center">
-                            <th scope="col">날짜</th>
+                        <tr id = "bank-tr-0" style="text-align: center">
+                            <th scope="col" style="width: 175px;">날짜</th>
                             <th scope="col" style="width: 400px">내용</th>
-                            <th scope="col">수입액</th>
-                            <th scope="col">지출액</th>
-                            <th scope="col">누적합계</th>
-                            <th scope="col">증빙자료</th>
-                            <th scope="col">수정</th>
-                            <th scope="col">삭제</th>
+                            <th scope="col" style="width: 123px;">수입액</th>
+                            <th scope="col" style="width: 123px;">지출액</th>
+                            <th scope="col" style="width: 124px;">누적합계</th>
+                            <th scope="col" style="width: 86px;">증빙자료</th>
+                            <th scope="col" style="width: 54px;">수정</th>
+                            <th scope="col" style="width: 55px;">삭제</th>
                         </tr>
                         </thead>
                         <!-- 끌고오는 게시글 파트 -->
                         <tbody>
                         <!-- 게시글 1 -->
-                        <tr class="bank-text-align_center">
-                            <!-- 날짜 -->
-                            <td scope="row"><input id="bank-date-1" class="bank-input-con" type="date"
-                                                   value="2021-02-02"
-                                                   style="width: 150px;" disabled="disabled"></td>
-                            <!-- 내용 -->
-                            <td class="bank-text-align_start"><input id="bank-txt-1" class="bank-input-con" type="text"
-                                                                     value="동아리 회비" disabled="disabled"></td>
-                            <!-- 수입액 -->
-                            <td><input id="bank-earn-1" class="bank-input-con" type="text" value="5,000,000"
-                                       disabled="disabled"></td>
-                            <!-- 지출액 -->
-                            <td><input id="bank-spend-1" class="bank-input-con" type="text" value="5,000,000"
-                                       disabled="disabled"></td>
-                            <!-- 누적합계 -->
-                            <td><input id="bank-money-1" class="bank-input-con" type="text" value="5,000,000"
-                                       disabled="disabled"></td>
-                            <!-- 증빙자료 -->
-                            <td><a data-toggle="modal" data-target="#bank-modal-bg" href="javascript:void(0);"
-                                   class="site-button-link black bank-flex"><i class="fa fa-file-text-o"></i></a></td>
-                            <!-- 수정 -->
-                            <td onclick="bank_update()" style="padding-left: 20px;"><i id="bank-update"
-                                                                                       class="fa fa-pencil "></i></td>
-                            <!-- 삭제 -->
-                            <td onclick="bank_del()" style="padding-left: 20px;"><i class="fa fa-trash"
-                                                                                    style="font-size: 18px; justify-content: flex-start;"></i>
-                            </td>
+                        <tr id = "bank-tr-1" class="bank-text-align_center">
+                            <form>
+                                <!-- 날짜 -->
+                                <td scope="row" style="width: 175px;"><input id="bank-date-1" class="bank-input-con" type="date"
+                                                       value="2021-02-02"
+                                                       style="width: 150px;" disabled="disabled"></td>
+                                <!-- 내용 -->
+                                <td class="bank-text-align_start" style="width: 400px;"><input id="bank-txt-1" class="bank-input-con"
+                                                                         type="text"
+                                                                         value="동아리 회비" disabled="disabled"></td>
+                                <!-- 수입액 -->
+                                <td style="width: 123px;"><input id="bank-earn-1" class="bank-input-con" type="text" value="5,000,000"
+                                           disabled="disabled"></td>
+                                <!-- 지출액 -->
+                                <td style="width: 123px;"><input id="bank-spend-1" class="bank-input-con" type="text" value="5,000,000"
+                                           disabled="disabled"></td>
+                                <!-- 누적합계 -->
+                                <td style="width: 124px;"><input id="bank-money-1" class="bank-input-con" type="text" value="5,000,000"
+                                           disabled="disabled"></td>
+                                <!-- 증빙자료 -->
+                                <td style="width: 86px;"><a data-toggle="modal" data-target="#bank-modal-bg" href="javascript:void(0);"
+                                       class="site-button-link black bank-flex"><i class="fa fa-file-text-o"></i></a>
+                                </td>
+                                <!-- 수정 -->
+                                <td onclick="bank_update()" style="width: 55px; padding-left: 20px;"><i id="bank-update"
+                                                                                           class="fa fa-pencil "></i>
+                                </td>
+                            </form>
+
+                            <form>
+                                <!-- 삭제 -->
+                                <td onclick="bank_del()" style="padding-left: 20px;"><i class="fa fa-trash"
+                                                                                        style="font-size: 18px; justify-content: flex-start;"></i>
+                                </td>
+                            </form>
 
                         </tr>
 
-                        <tr class="bank-text-align_center">
-                            <!-- 날짜 -->
-                            <td scope="row"><input id="bank-date-2" class="bank-input-con" type="date"
-                                                   value="2021-02-02"
-                                                   style="width: 150px;" disabled="disabled"></td>
-                            <!-- 내용 -->
-                            <td class="bank-text-align_start"><input id="bank-txt-1" class="bank-input-con" type="text"
-                                                                     value="동아리 회비" disabled="disabled"></td>
-                            <!-- 수입액 -->
-                            <td><input id="bank-earn-1" class="bank-input-con" type="text" value="5,000,000"
-                                       disabled="disabled"></td>
-                            <!-- 지출액 -->
-                            <td><input id="bank-spend-1" class="bank-input-con" type="text" value="5,000,000"
-                                       disabled="disabled"></td>
-                            <!-- 누적합계 -->
-                            <td><input id="bank-money-1" class="bank-input-con" type="text" value="5,000,000"
-                                       disabled="disabled"></td>
-                            <!-- 증빙자료 -->
-                            <td><a data-toggle="modal" data-target="#bank-modal-bg" href="javascript:void(0);"
-                                   class="site-button-link black bank-flex"><i class="fa fa-file-text-o"></i></a></td>
-                            <!-- 수정 -->
-                            <td onclick="bank_update()" style="padding-left: 20px;"><i id="bank-update"
-                                                                                       class="fa fa-pencil "></i></td>
-                            <!-- 삭제 -->
-                            <td onclick="bank_del()" style="padding-left: 20px;"><i class="fa fa-trash"
-                                                                                    style="font-size: 18px; justify-content: flex-start;"></i>
-                            </td>
-
-                        </tr>
-                        <tr class="bank-text-align_center">
-                            <!-- 날짜 -->
-                            <td scope="row"><input id="bank-date-3" class="bank-input-con" type="date"
-                                                   value="2021-02-02"
-                                                   style="width: 150px;" disabled="disabled"></td>
-                            <!-- 내용 -->
-                            <td class="bank-text-align_start"><input id="bank-txt-1" class="bank-input-con" type="text"
-                                                                     value="동아리 회비" disabled="disabled"></td>
-                            <!-- 수입액 -->
-                            <td><input id="bank-earn-1" class="bank-input-con" type="text" value="5,000,000"
-                                       disabled="disabled"></td>
-                            <!-- 지출액 -->
-                            <td><input id="bank-spend-1" class="bank-input-con" type="text" value="5,000,000"
-                                       disabled="disabled"></td>
-                            <!-- 누적합계 -->
-                            <td><input id="bank-money-1" class="bank-input-con" type="text" value="5,000,000"
-                                       disabled="disabled"></td>
-                            <!-- 증빙자료 -->
-                            <td><a data-toggle="modal" data-target="#bank-modal-bg" href="javascript:void(0);"
-                                   class="site-button-link black bank-flex"><i class="fa fa-file-text-o"></i></a></td>
-                            <!-- 수정 -->
-                            <td onclick="bank_update()" style="padding-left: 20px;"><i id="bank-update"
-                                                                                       class="fa fa-pencil "></i></td>
-                            <!-- 삭제 -->
-                            <td onclick="bank_del()" style="padding-left: 20px;"><i class="fa fa-trash"
-                                                                                    style="font-size: 18px; justify-content: flex-start;"></i>
-                            </td>
-
-                        </tr>
-                        <tr class="bank-text-align_center">
-                            <!-- 날짜 -->
-                            <td scope="row"><input id="bank-date-4" class="bank-input-con" type="date"
-                                                   value="2021-02-02"
-                                                   style="width: 150px;" disabled="disabled"></td>
-                            <!-- 내용 -->
-                            <td class="bank-text-align_start"><input id="bank-txt-1" class="bank-input-con" type="text"
-                                                                     value="동아리 회비" disabled="disabled"></td>
-                            <!-- 수입액 -->
-                            <td><input id="bank-earn-1" class="bank-input-con" type="text" value="5,000,000"
-                                       disabled="disabled"></td>
-                            <!-- 지출액 -->
-                            <td><input id="bank-spend-1" class="bank-input-con" type="text" value="5,000,000"
-                                       disabled="disabled"></td>
-                            <!-- 누적합계 -->
-                            <td><input id="bank-money-1" class="bank-input-con" type="text" value="5,000,000"
-                                       disabled="disabled"></td>
-                            <!-- 증빙자료 -->
-                            <td><a data-toggle="modal" data-target="#bank-modal-bg" href="javascript:void(0);"
-                                   class="site-button-link black bank-flex"><i class="fa fa-file-text-o"></i></a></td>
-                            <!-- 수정 -->
-                            <td onclick="bank_update()" style="padding-left: 20px;"><i id="bank-update"
-                                                                                       class="fa fa-pencil "></i></td>
-                            <!-- 삭제 -->
-                            <td onclick="bank_del()" style="padding-left: 20px;"><i class="fa fa-trash"
-                                                                                    style="font-size: 18px; justify-content: flex-start;"></i>
-                            </td>
-
-                        </tr>
-                        <tr class="bank-text-align_center">
-                            <!-- 날짜 -->
-                            <td scope="row"><input id="bank-date-5" class="bank-input-con" type="date"
-                                                   value="2021-02-02"
-                                                   style="width: 150px;" disabled="disabled"></td>
-                            <!-- 내용 -->
-                            <td class="bank-text-align_start"><input id="bank-txt-1" class="bank-input-con" type="text"
-                                                                     value="동아리 회비" disabled="disabled"></td>
-                            <!-- 수입액 -->
-                            <td><input id="bank-earn-1" class="bank-input-con" type="text" value="5,000,000"
-                                       disabled="disabled"></td>
-                            <!-- 지출액 -->
-                            <td><input id="bank-spend-1" class="bank-input-con" type="text" value="5,000,000"
-                                       disabled="disabled"></td>
-                            <!-- 누적합계 -->
-                            <td><input id="bank-money-1" class="bank-input-con" type="text" value="5,000,000"
-                                       disabled="disabled"></td>
-                            <!-- 증빙자료 -->
-                            <td><a data-toggle="modal" data-target="#bank-modal-bg" href="javascript:void(0);"
-                                   class="site-button-link black bank-flex"><i class="fa fa-file-text-o"></i></a></td>
-                            <!-- 수정 -->
-                            <td onclick="bank_update()" style="padding-left: 20px;"><i id="bank-update"
-                                                                                       class="fa fa-pencil "></i></td>
-                            <!-- 삭제 -->
-                            <td onclick="bank_del()" style="padding-left: 20px;"><i class="fa fa-trash"
-                                                                                    style="font-size: 18px; justify-content: flex-start;"></i>
-                            </td>
-
-                        </tr>
-
+{#                        <!-- 게시글 2 -->#}
+{#                        <tr id = "bank-tr-2" class="bank-text-align_center">#}
+{#                            <form>#}
+{#                                <!-- 날짜 -->#}
+{#                                <td scope="row"><input id="bank-date-2" class="bank-input-con" type="date"#}
+{#                                                       value="2022-02-02"#}
+{#                                                       style="width: 150px;" disabled="disabled"></td>#}
+{#                                <!-- 내용 -->#}
+{#                                <td class="bank-text-align_start"><input id="bank-txt-2" class="bank-input-con"#}
+{#                                                                         type="text"#}
+{#                                                                         value="동아리 회비" disabled="disabled"></td>#}
+{#                                <!-- 수입액 -->#}
+{#                                <td><input id="bank-earn-2" class="bank-input-con" type="text" value="5,000,000"#}
+{#                                           disabled="disabled"></td>#}
+{#                                <!-- 지출액 -->#}
+{#                                <td><input id="bank-spend-2" class="bank-input-con" type="text" value="5,000,000"#}
+{#                                           disabled="disabled"></td>#}
+{#                                <!-- 누적합계 -->#}
+{#                                <td><input id="bank-money-2" class="bank-input-con" type="text" value="5,000,000"#}
+{#                                           disabled="disabled"></td>#}
+{#                                <!-- 증빙자료 -->#}
+{#                                <td><a data-toggle="modal" data-target="#bank-modal-bg" href="javascript:void(0);"#}
+{#                                       class="site-button-link black bank-flex"><i class="fa fa-file-text-o"></i></a>#}
+{#                                </td>#}
+{#                                <!-- 수정 -->#}
+{#                                <td onclick="bank_update()" style="padding-left: 20px;"><i id="bank-update-2"#}
+{#                                                                                           class="fa fa-pencil "></i>#}
+{#                                </td>#}
+{#                            </form>#}
+{##}
+{#                            <form>#}
+{#                                <!-- 삭제 -->#}
+{#                                <td onclick="bank_del()" style="padding-left: 20px;"><i class="fa fa-trash"#}
+{#                                                                                        style="font-size: 18px; justify-content: flex-start;"></i>#}
+{#                                </td>#}
+{#                            </form>#}
+{##}
+{#                        </tr>#}
 
                         </tbody>
                     </table>
 
-
-                    {#                                <div class="bank-flex">#}
-                    {#                                    <div onclick="bank_update()"><i id="bank-update" class="fa fa-pencil "#}
-                    {#                                                                    style="font-size: 18px; justify-content: flex-start; "></i>#}
-                    {#                                    </div>#}
-                    {#                                    <div onclick="bank_del()"><i class="fa fa-trash"#}
-                    {#                                                                 style="font-size: 18px; justify-content: flex-start;"></i>#}
-                    {#                                    </div>#}
-                    {#                                    <input id="bank-date-1" class="bank-input bank-margin-left_10" type="date"#}
-                    {#                                           value="2020-02-02"#}
-                    {#                                           disabled="disabled"#}
-                    {#                                    ></div>#}
-                    {#                                <div class="bank-flex"><input id="bank-txt-1" class="bank-input" type="text"#}
-                    {#                                                              value="동아리 회비"#}
-                    {#                                                              disabled="disabled">#}
-                    {#                                </div>#}
-                    {#                                <div class="bank-flex"><input id="bank-earn-1" class="bank-input" type="text"#}
-                    {#                                                              value="50,000,000"#}
-                    {#                                                              disabled="disabled"></div>#}
-                    {#                                <div class="bank-flex"><input id="bank-spend-1" class="bank-input" type="text" value="0"#}
-                    {#                                                              disabled="disabled"#}
-                    {#                                ></div>#}
-                    {#                                <div class="bank-flex"><input id="bank-money-1" class="bank-input" type="text"#}
-                    {#                                                              value="50,000,000"#}
-                    {#                                                              disabled="disabled"#}
-                    {#                                ></div>#}
-                    {##}
-                    {#                                <div class="bank-flex">#}
-                    {#                                    <a data-toggle="modal" data-target="#bank-modal-bg" href="javascript:void(0);"#}
-                    {#                                       class="site-button-link black"><i class="fa fa-search"></i></a>#}
-                    {##}
-                    {#                                </div>#}
-
-                    <!--===================================================-->
-
-                    {#                                </div>#}
-                    {#                            </div>#}
                     <div class="bank-btn-add-div">
                         <div>
                             <a data-toggle="modal" data-target="#bank-add-modal" href="javascript:void(0);"
@@ -366,17 +258,11 @@
                                         </div>
                                         <div class="form-group">
                                             <div class="form-group">
-
                                                 <label style="font-size: 13px; font-weight: 100">증빙자료 첨부</label>
                                                 <input type="file"
                                                        accept=".xlsx,.xls,image/*,.doc,audio/*,.docx,video/*,.ppt,.pptx,.txt,.pdf"
                                                        multiple>
                                             </div>
-
-
-                                            {##}
-                                            {#                                            <label class="form-control " for="bank-file">파일첨부</label>#}
-                                            {#                                            <input id="bank-file" type="file" style="display:none;"/>#}
                                         </div>
                                         <div class="form-group">
                                             <button class="site-button btn-block button-md">login</button>
@@ -389,19 +275,21 @@
                     </div>
 
 
-                    <!-- Pagination start -->
+                    <!--========== 페이지네이션 시작 ===========-->
+                    <!-- 1페이지에 15개 게시글 끌고오고, 게시글이 그보다 적으면, 페이지네이션 안보이게 처리 -->
                     <div class="pagination-bx clearfix text-center">
                         <ul class="pagination">
-                            <li class="previous"><a href="javascript:void(0)"><i class="fa fa-arrow-left"></i></a>
-                            </li>
+                            <li class="previous"><a href="javascript:void(0)"><i
+                                    class="fa fa-arrow-left"></i></a></li>
                             <li><a href="javascript:void(0)">1</a></li>
                             <li><a href="javascript:void(0)">2</a></li>
                             <li><a href="javascript:void(0)">...</a></li>
                             <li class="active"><a href="javascript:void(0)">7</a></li>
-                            <li class="next"><a href="javascript:void(0)"><i class="fa fa-arrow-right"></i></a></li>
+                            <li class="next"><a href="javascript:void(0)"><i class="fa fa-arrow-right"></i></a>
+                            </li>
                         </ul>
                     </div>
-                    <!-- Pagination END -->
+                    <!--========== 페이지네이션 끝 ===========-->
                 </div>
             </div>
         </div>
