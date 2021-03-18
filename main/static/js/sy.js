@@ -16,11 +16,10 @@ function addReply(comment_id, url, board_no, csrf_token) {
 
     // 대댓글 입력 form 태그
     const form = document.createElement('form');
-    form.innerHTML = csrf_token;
     form.classList.add('comment-form');
     form.id = "comment-ref-register-" + comment_id;
     form.action = url;
-    form.method = "post";
+    form.method = "get";
     reply_box.appendChild(form);
 
     const inputCommentId = document.createElement("input");

@@ -85,84 +85,7 @@ def activity_register(request):
                 new_board_file = BoardFile.objects.create(board_no=activity, board_file_path=updated_file)
                 new_board_file.save()
             return redirect(reverse("activity"))
-    return render(request,"activity_register.html", {})
-
-
-# 동아리 활동 상세페이지에서 삭제하는 코드
-def activity_delete(request):
-    if request.method == "POST":  # 포스트로 넘어오는 경우
-        activity = get_object_or_404(Board, pk=request.POST.get('board_no'))
-        try:
-            file_list = list(BoardFile.objects.filter(board_no=activity.board_no))
-            # file_list 라는 변수 선언 (여러개의 파일을 올릴 수 있으므로 list 로 변환)
-            for i in range(len(file_list)):
-                # file_list 의 크기 만큼 for 문으로 돌려서 파일 삭제 후 폴더 삭제
-                os.remove('media/' + str(file_list[i].board_file_path))
-            os.rmdir('media/board/' + str(activity.board_no))
-            # 파일이 안에 있는 삭제에서 폴더를 삭제할 경우 오류 만남.
-        except FileNotFoundError:
-            pass  # 파일이 없는 경우 그냥 통과시킨다.
-
-        activity.delete()  # 파일과 폴더 삭제 후, 게시글 DB 에서 삭제
-        return redirect(reverse('activity'))
-
-    else:  # 파라미터가 제대로 넘어오지 않은 경우, 즉 비정상적인 경로를 통해 들어간 경우 바로 나오게 해준다.
-        return redirect(reverse('activity'))
-
-
-# 댓글 달기 코드
-def activity_comment_register(request):
-    user_stu = User.objects.get(pk=request.session.get('user_stu'))  # 유저 학번 들고오는 것임
-    if request.method == "POST":
-
-        board_no = Board.objects.get(pk=request.POST.get('board_no'))  # 게시글 번호 들고오는 것임
-
-        # 객체로 받아서 저장할 예정
-        comment = Comment(
-            comment_board_no=board_no,
-            comment_writer=user_stu,
-            comment_cont=request.POST.get('comment_cont')
-        )
-        comment.save()
-    else:
-        board_no = Board.objects.get(pk=request.GET.get('board_no'))  # 게시글 번호 들고오는 것임
-        # 객체로 받아서 저장할 예정
-        comment = Comment(
-            comment_board_no=board_no,
-            comment_writer=user_stu,
-            comment_cont=request.GET.get('comment_cont'),
-            comment_cont_ref=Comment.objects.get(pk=request.GET.get("comment_ref"))
-        )
-        comment.save()
-        # 데이터 베이스에 저장
-    return HttpResponse(
-        "<script>location.href='/activity/" + str(board_no.board_no) + "/detail/';</script>")  # 게시글 상세페이지로 이동
-
-
-# 댓글 삭제 코드
-def activity_comment_delete(request):
-    board_no = request.POST.get("board_no")
-    if request.method == "POST":  # 댓글 삭제를 누를 경우
-        comment = get_object_or_404(Comment, pk=request.POST.get('comment_id'))
-        # 그 댓글의 pk 를 찾아서 DB 에서 지운다.
-        comment.delete()
-
-    return HttpResponse("<script>location.href='/activity/" + str(board_no) + "/detail/';</script>")  # 게시글 상세페이지로 이동
-
-
-# 댓글 수정 코드
-def activity_comment_update(request):
-    if request.method == "POST":  # 정상적으로 파라미터가 넘어왔을 경우
-        comment = get_object_or_404(Comment, pk=request.POST.get('comment_id'))  # 가져온 comment_id를 토대로 수정 내역을 적용
-
-        # 필요하면 사용하려고 복붙함
-        # user_stu = User.objects.get(pk=request.session.get('user_stu'))  # 유저 학번 들고오는 것임
-        # board_no = Board.objects.get(pk=request.POST.get('board_no'))  # 게시글 번호 들고오는 것임
-
-        comment.comment_cont = request.POST.get('comment_cont')  # 수정할 내용을 가져옴
-        comment.save()  # DB 저장
-        return HttpResponse(
-            "<script>location.href='/activity/" + str(comment.comment_board_no.board_no) + "/detail/';</script>")
+    return render(request, "activity_register.html", {})
 
 
 # 동아리 글 수정 코드
@@ -203,6 +126,76 @@ def activity_update(request):
             return redirect(reverse("activity"))
     # 잘못 왔을 경우
     return render(request, 'activity.html', {})
+
+
+# 동아리 활동 상세페이지에서 삭제하는 코드
+def activity_delete(request):
+    if request.method == "POST":  # 포스트로 넘어오는 경우
+        board = Board.objects.get(pk=request.POST.get('board_no'))
+        try:
+            file_list = list(BoardFile.objects.filter(board_no=board))
+            # file_list 라는 변수 선언 (여러개의 파일을 올릴 수 있으므로 list 로 변환)
+            for i in range(len(file_list)):
+                # file_list 의 크기 만큼 for 문으로 돌려서 파일 삭제 후 폴더 삭제
+                os.remove('media/' + str(file_list[i].board_file_path))
+            os.rmdir('media/board/' + str(board.board_no))
+            # 파일이 안에 있는 삭제에서 폴더를 삭제할 경우 오류 만남.
+        except FileNotFoundError:
+            pass  # 파일이 없는 경우 그냥 통과시킨다.
+        board.delete()  # 파일과 폴더 삭제 후, 게시글 DB 에서 삭제
+        return redirect(reverse('activity'))
+
+    else:  # 파라미터가 제대로 넘어오지 않은 경우, 즉 비정상적인 경로를 통해 들어간 경우 바로 나오게 해준다.
+        return redirect(reverse('activity'))
+
+
+# 댓글 달기 코드
+def activity_comment_register(request):
+    user_stu = User.objects.get(pk=request.session.get('user_stu'))  # 유저 학번 들고오는 것임
+    if request.method == "POST":
+
+        board_no = Board.objects.get(pk=request.POST.get('board_no'))  # 게시글 번호 들고오는 것임
+
+        # 객체로 받아서 저장할 예정
+        comment = Comment(  # 받은 정보로 덧글 생성
+            comment_board_no=board_no,  # 해당 게시글에
+            comment_writer=user_stu,  # 해당 학번이
+            comment_cont=request.POST.get('comment_cont')  # 사용자가 쓴 내용을 가져옴
+        )
+        comment.save()
+    else:
+        board_no = Board.objects.get(pk=request.GET.get('board_no'))  # 게시글 번호 들고오는 것임
+        # 객체로 받아서 저장할 예정
+        comment = Comment(
+            comment_board_no=board_no,
+            comment_writer=user_stu,
+            comment_cont=request.GET.get('comment_cont'),
+            comment_cont_ref=Comment.objects.get(pk=request.GET.get("comment_ref"))
+        )
+        comment.save()
+        # 데이터 베이스에 저장
+    return HttpResponse(  # 게시글 상세 페이지로 다시 돌아감, 리다이렉트를 이용한 것은 실행 안해봄. 아마 이게 제일 정확하지 않을까 싶음.
+        "<script>location.href='/activity/" + str(board_no.board_no) + "/detail/';</script>")  # 게시글 상세페이지로 이동
+
+
+# 댓글 삭제 코드
+def activity_comment_delete(request):
+    board_no = request.POST.get("board_no")
+    if request.method == "POST":  # 댓글 삭제를 누를 경우
+        comment = Comment.objects.get(pk=request.POST.get('comment_id'))
+        # 그 댓글의 pk 를 찾아서 DB 에서 지운다.
+        comment.delete()
+    return HttpResponse("<script>location.href='/activity/" + str(board_no) + "/detail/';</script>")  # 게시글 상세페이지로 이동
+
+
+# 댓글 수정 코드
+def activity_comment_update(request):
+    if request.method == "POST":  # 정상적으로 파라미터가 넘어왔을 경우
+        comment = get_object_or_404(Comment, pk=request.POST.get('comment_id'))  # 가져온 comment_id를 토대로 수정 내역을 적용
+        comment.comment_cont = request.POST.get('comment_cont')  # 수정할 내용을 가져옴
+        comment.save()  # DB 저장
+        return HttpResponse(  # 게시글 상세 페이지로 돌아감
+            "<script>location.href='/activity/" + str(comment.comment_board_no.board_no) + "/detail/';</script>")
 
 
 def activity_detail_v1(request):
