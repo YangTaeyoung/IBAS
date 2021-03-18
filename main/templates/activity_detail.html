@@ -53,7 +53,9 @@
                                     <!--============================== 게시글 본문 시작 ==============================-->
                                     <div class="dlab-post-text">
                                         <!-- 본문 입력 내용 -->
-                                        {{ board.board_cont }}
+                                        {% autoescape off %}
+                                            {{ board.board_cont }}
+                                        {% endautoescape %}
                                         <!-- 게시글 속 사진 모음 -->
                                         <div class="widget widget_gallery gallery-grid-4 lightgallery">
                                             <ul>
