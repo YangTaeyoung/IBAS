@@ -74,8 +74,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             BASE_DIR / 'templates',
-            # '/home/ibas/Django/IBAS/templates/',
-            'c:/proj/Django/IBAS/templates/'
+            '/home/ibas/Django/IBAS/templates/',
         ]
         ,
         'APP_DIRS': True,
@@ -103,7 +102,7 @@ DATABASES = {
         'USER': 'root',
         'PASSWORD': '1234',
         'HOST': 'localhost',
-        'PORT': '3306',
+        'PORT': '3356',
     }
 }
 
@@ -150,8 +149,8 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(ROOT_DIR, '.static_root')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
-    # '/home/ibas/Django/IBAS/static/'
-    'C:/proj/Django/IBAS/static/'
+    '/home/ibas/Django/IBAS/static/'
+
 ]
 # social 로그인 패키지 설정
 AUTHENTICATION_BACKENDS = (
