@@ -145,7 +145,7 @@
                                             {% csrf_token %}
                                             <input type="hidden" name="board_no" value="{{ board.board_no }}"/>
                                         </form>
-                                        <form id="form-activity-update" action="{% url 'activity_delete' %}"
+                                        <form id="form-activity-delete" action="{% url 'activity_delete' %}"
                                               method="post">
                                             {% csrf_token %}
                                             <input type="hidden" name="board_no" value="{{ board.board_no }}"/>
