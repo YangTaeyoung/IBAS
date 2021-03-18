@@ -61,7 +61,7 @@ def activity_detail(request, board_no):
             comment_cont_ref__isnull=True).order_by(
             'comment_created').prefetch_related('comment_set').all()  # 게시글 번호로 댓글 내용
         context["comment_list"] = comment_list
-        return render(request, 'activity_detail_v1.html', context)
+        return render(request, 'activity_detail.html', context)
     else:
         return redirect(reverse('activity'))
 
@@ -196,10 +196,6 @@ def activity_comment_update(request):
         comment.save()  # DB 저장
         return HttpResponse(  # 게시글 상세 페이지로 돌아감
             "<script>location.href='/activity/" + str(comment.comment_board_no.board_no) + "/detail/';</script>")
-
-
-def activity_detail_v1(request):
-    return render(request, 'activity_detail_v1.html', {})
 
 
 def history_register(request):  # 연혁 등록
