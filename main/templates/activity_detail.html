@@ -86,11 +86,11 @@
                                                                             style="height: 190px"
                                                                             src="/media/{{ board_file.board_file_path }}"
                                                                             alt=""></div>
-                                                                    {% if forloop.revcounter0 > 0 %}
+                                                                    {% if forloop.revcounter0 > 0 %} <!-- 사용자가 업로드한 사진이 딱 4개인 경우 남은 이미지 개수를 출력하지 않음.-->
                                                                         <div class="more-images">
                                                                             <div>
                                                                                 <strong>{{ forloop.revcounter0 }}</strong>
-                                                                                <span>Images</span>
+                                                                                <span>More Images</span>
                                                                             </div>
                                                                         </div>
                                                                     {% endif %}
@@ -122,8 +122,6 @@
                                     </div>
                                     <!-- 게시글 삭제 및 수정 div -->
                                     <div class="extra-cell text-right">
-
-                                        <!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!여기 작업 중이었음!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
                                         {% if request.session.user_stu == board.board_writer.user_stu %}
                                             <!-- 게시글 수정 버튼 -->
                                             <button type="button" class="site-button radius-xl m-l10"
