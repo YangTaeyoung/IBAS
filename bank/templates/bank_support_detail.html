@@ -61,6 +61,7 @@
                             <div class="alert alert-danger" role="alert" style="text-align: center">
                                 <i>승인거절 ( 거절사유 : 마음에 안들어서 )</i>
                             </div>
+                            <!--지급완료 시 뜨는 알람-->
                             <div class="alert alert-primary" role="alert" style="text-align: center">
                                 <i>지급완료</i>
                             </div>
@@ -81,7 +82,7 @@
                                     <!--여기까지-->
                                     <div class="content-body">
                                         <div class="form-group">
-                                            <h2 class="post-title " style="margin-top: 10px; margin-bottom: 10px">예산지원 신청합니다.제목제목</h2>
+                                            <h4 class="post-title " style="margin-top: 10px; margin-bottom: 8px">예산지원 신청합니다.제목제목</h4>
                                         </div>
                                     </div>
                                 </div>
@@ -237,14 +238,14 @@
                             <form>
                                 <div style="display: flex; justify-content: center; ">
                                     <!--승인-->
-                                    <button type="button" class="btn btn-outline-success btn-lg" style="width: 200px; font-weight: bold" onclick="return confirm('승인하시겠습니까?') && location.reload()">승인</button>
+                                    <button type="button" class="btn btn-outline-success btn-lg" style="width: 200px; font-weight: bold" onclick="return confirm('승인하시겠습니까?') && alert('승인이 완료되었습니다. 입금 후 지급완료 버튼을 눌러주세요.')">승인</button>
                                     <!--거절-->
                                     <button type="button" class="btn btn-outline-danger btn-lg" style="width: 200px; margin-left: 10px; font-weight: bold" onclick="return confirm('승인을 거절하시겠습니까?')"
                                     href="javascript:void(0);" data-toggle="modal" data-target="#favorite" class="site-button gray">
                                         거절
                                     </button>
                                      <!--지급완료, 승인버튼 누르기 전에는 안나오고, 승인버튼 누르면 승인,거절 버튼은 없어지고 이 버튼만 보이게 함-->
-                                    <button type="button" class="btn btn-outline-primary btn-lg" style="width: 200px; font-weight: bold" onclick="return confirm('지급을 완료하시겠습니까?')&& location.reload()">지급완료</button>
+                                    <button type="button" class="btn btn-outline-primary btn-lg" style="width: 200px; font-weight: bold" onclick="return confirm('지급을 완료하시겠습니까?')">지급완료</button>
                                 </div>
                             </form>
                             <!---->
@@ -252,10 +253,10 @@
 		                    <div class="modal fade modal-bx-info" id="favorite" tabindex="-1" role="dialog" aria-labelledby="FavoriteModalLongTitle" aria-hidden="true">
 			                    <div class="modal-dialog " role="document">
 				                    <div class="modal-content">
-					                    <div class="modal-header" style="background-color: white">
-						                    <h5 class="modal-title" id="FavoriteModalLongTitle" style="color: black">승인거절 사유</h5>
+					                    <div class="modal-header">
+						                    <h5 class="modal-title" id="FavoriteModalLongTitle">승인거절 사유</h5>
 						                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							                    <span aria-hidden="true"><i class="la la-close" style="color: black"></i></span>
+							                    <span aria-hidden="true"><i class="la la-close"></i></span>
 						                    </button>
 					                    </div>
 					                <div class="modal-body">
