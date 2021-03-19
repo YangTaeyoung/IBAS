@@ -338,29 +338,33 @@
                                                 {% endfor %}
                                             </ol>
                                             <!-- 작성된 댓글과 댓글입력 부분을 나누는 구분선 -->
-                                            <div class="dlab-divider bg-gray-dark"></div>
-                                            <!--========================= 댓글 입력 form 태그 =========================-->
-                                            <div class="" id="respond">
-                                                <form class="comment-form" id="commentform" method="post"
-                                                      action="{% url 'activity_comment_register' %}">
-                                                    {% csrf_token %}
-                                                    <input type="hidden" name="board_no" value="{{ board.board_no }}"/>
-                                                    <!-- 댓글입력창 -->
-                                                    {% if request.session.user_stu is not None %}
-                                                    <p class="comment-form-comment">
-                                                        <label for="comment">Comments</label>
-                                                        <textarea rows="8" name="comment_cont"
-                                                                  placeholder="댓글을 남겨보세요!"
-                                                                  id="comment"></textarea>
-                                                    </p>
+                                            {% if request.session.user_stu is not None %}
+                                                <div class="dlab-divider bg-gray-dark"></div>
+                                                <!--========================= 댓글 입력 form 태그 =========================-->
+
+                                                <div class="" id="respond">
+                                                    <form class="comment-form" id="commentform" method="post"
+                                                          action="{% url 'activity_comment_register' %}">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="board_no"
+                                                               value="{{ board.board_no }}"/>
+                                                        <!-- 댓글입력창 -->
+
+                                                        <p class="comment-form-comment">
+                                                            <label for="comment">Comments</label>
+                                                            <textarea rows="8" name="comment_cont"
+                                                                      placeholder="댓글을 남겨보세요!"
+                                                                      id="comment"></textarea>
+                                                        </p>
                                                         <!-- 댓글작성 버튼 -->
                                                         <p class="form-submit" style="text-align: right">
                                                             <input type="submit" value="댓글등록"
                                                                    class="submit site-button" id="submit" name="submit">
                                                         </p>
-                                                    {% endif %}
-                                                </form>
-                                            </div>
+
+                                                    </form>
+                                                </div>
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </div>
