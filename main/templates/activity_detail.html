@@ -346,13 +346,13 @@
                                                     {% csrf_token %}
                                                     <input type="hidden" name="board_no" value="{{ board.board_no }}"/>
                                                     <!-- 댓글입력창 -->
+                                                    {% if request.session.user_stu is not None %}
                                                     <p class="comment-form-comment">
                                                         <label for="comment">Comments</label>
                                                         <textarea rows="8" name="comment_cont"
                                                                   placeholder="댓글을 남겨보세요!"
                                                                   id="comment"></textarea>
                                                     </p>
-                                                    {% if request.session.user_stu is not None %}
                                                         <!-- 댓글작성 버튼 -->
                                                         <p class="form-submit" style="text-align: right">
                                                             <input type="submit" value="댓글등록"
