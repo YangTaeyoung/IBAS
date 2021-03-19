@@ -1,27 +1,27 @@
 //수정 아이콘을 클릭하면 등록 아이콘으로 바뀌고, 등록 아이콘을 클릭했을 때 메세지 뜨기
 
-function bank_update() {
+function bank_update(bank_no) {
     // 각각의 인풋마다 숫자가 주어져야 함. for문 돌려야 하고, 태영이 오빠 방식 참고(main 폴더에서 yejin.js)하면 될 듯
 
-    document.getElementById('bank-date-1').disabled = false; // input창 disabled속성을 해제, disabled 속성을 거짓이라 둠.
-    document.getElementById('bank-date-1').classList.add("bank-input-add"); // class 추가하여 스타일 추가해줌.
+    document.getElementById('bank-date-' + bank_no).disabled = false; // input창 disabled속성을 해제, disabled 속성을 거짓이라 둠.
+    document.getElementById('bank-date-' + bank_no).classList.add("bank-input-add"); // class 추가하여 스타일 추가해줌.
 
-    document.getElementById('bank-txt-1').disabled = false; // input창 disabled속성을 해제, disabled 속성을 거짓이라 둠.
-    document.getElementById('bank-txt-1').classList.add("bank-input-add"); // class 추가하여 스타일 추가해줌.
+    document.getElementById('bank-txt-' + bank_no).disabled = false; // input창 disabled속성을 해제, disabled 속성을 거짓이라 둠.
+    document.getElementById('bank-txt-' + bank_no).classList.add("bank-input-add"); // class 추가하여 스타일 추가해줌.
 
-    document.getElementById('bank-earn-1').disabled = false; // input창 disabled속성을 해제, disabled 속성을 거짓이라 둠.
-    document.getElementById('bank-earn-1').classList.add("bank-input-add"); // class 추가하여 스타일 추가해줌.
+    document.getElementById('bank-earn-' + bank_no).disabled = false; // input창 disabled속성을 해제, disabled 속성을 거짓이라 둠.
+    document.getElementById('bank-earn-' + bank_no).classList.add("bank-input-add"); // class 추가하여 스타일 추가해줌.
 
-    document.getElementById('bank-spend-1').disabled = false; // input창 disabled속성을 해제, disabled 속성을 거짓이라 둠.
-    document.getElementById('bank-spend-1').classList.add("bank-input-add"); // class 추가하여 스타일 추가해줌.
+    document.getElementById('bank-spend-' + bank_no).disabled = false; // input창 disabled속성을 해제, disabled 속성을 거짓이라 둠.
+    document.getElementById('bank-spend-' + bank_no).classList.add("bank-input-add"); // class 추가하여 스타일 추가해줌.
 
-    document.getElementById('bank-money-1').disabled = false; // input창 disabled속성을 해제, disabled 속성을 거짓이라 둠.
-    document.getElementById('bank-money-1').classList.add("bank-input-add");// class 추가하여 스타일 추가해줌.
+    document.getElementById('bank-money-' + bank_no).disabled = false; // input창 disabled속성을 해제, disabled 속성을 거짓이라 둠.
+    document.getElementById('bank-money-' + bank_no).classList.add("bank-input-add");// class 추가하여 스타일 추가해줌.
 
 
     //아이콘 바꾸어 주기 위해 변수 선언. 수정 아이콘을 바꾸어 주어야 하므로 id로 bank-update를 가져옴.
     // bank-update는 수정 버튼 아이콘 (i태그)의 id로 정의되어 있음.
-    var icon = document.getElementById('bank-update')
+    var icon = document.getElementById('update-' + bank_no)
     // 아이콘 class 속성을 바꾸어 주어 아이콘 변경하기
     icon.setAttribute("class", "fa fa-check")
 
@@ -31,14 +31,18 @@ function bank_update() {
 
     //check 아이콘 클릭 시 confirm 알림나옴.
     check_icon.onclick = function () {
-        confirm("수정하시겠습니까?")
+        if (confirm("수정하시겠습니까?")) {
+            document.getElementById('btn-bank-update-' + bank_no).click()
         }
+    }
 
 }
 
 // 아이콘 눌렀을 때 삭제 comfirm 알림 나옴.
-function bank_del() {
-    confirm('정말로 삭제하시겠습니까?')
+function bank_del(bank_no) {
+    if (confirm('정말로 삭제하시겠습니까?')) {
+        document.getElementById('bank-delete-' + bank_no).submit()
+    }
 
 }
 
