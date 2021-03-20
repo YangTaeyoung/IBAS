@@ -47,12 +47,8 @@
             </div>
             <!--===============================================입력란=========================================================-->
 
-            <form action="
-
-
-                    {% if board is None %}{% url 'activity_register' %}{% else %}{% url 'activity_update' %}{% endif %}"
-                  class="add-listing-form" method="POST" enctype="multipart/form-data">
-
+            <form action="{% if board is None %}{% url 'activity_register' %}{% else %}{% url 'activity_update' %}{% endif %}"
+                  class="add-listing-form" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="content-block">
                     <div class="section-full content-inner bg-white">
@@ -70,7 +66,9 @@
                                         <div class="form-group">
                                             <input type="text" name="board_title" value="{{ board.board_title }}"
                                                    class="form-control" placeholder="제목을 입력하세요"
-                                                   style="font-size: 25px; height: 70px;">
+                                                   style="font-size: 25px; height: 70px;"
+                                                   maxlength="95"
+                                            >
                                             <br/>
                                             <!--이미지, 파일 업로드란-->
                                             <div class="form-group">
@@ -109,7 +107,7 @@
                                         <!--내용입력란-->
                                         <div class="form-group">
                                             <textarea name="board_cont" type="text"
-                                                      class="jqte-test">{{ board.board_cont }}</textarea>
+                                                      class="jqte-test" maxlength="4900">{{ board.board_cont }}</textarea>
                                             <!--input-->
                                         </div>
                                     </div>

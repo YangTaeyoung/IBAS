@@ -332,9 +332,9 @@
                     <!-- introduce-margin-bottom_5 introduce-font-size_15는 yejin.css에 정의되어 있음. -->
                     <p class="introduce-margin-bottom_5 introduce-font-size_15">
                         <i class="ti-email"></i>
-                        {{ chief.user_email }}
+                        {{ request.session.chief_email }}
                     </p>
-                    <p class="introduce-font-size_15"><i class="ti-mobile"></i> {{ chief.user_phone }}</p>
+                    <p class="introduce-font-size_15"><i class="ti-mobile"></i> {{ request.session.chief_phone }}</p>
                 </div>
 
                 <!-- introduce-contact-flex-container  introduce-google-map-size 는 yejin.css에 정의되어 있음. -->

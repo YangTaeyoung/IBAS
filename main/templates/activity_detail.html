@@ -53,24 +53,27 @@
                                     <!--============================== 게시글 본문 시작 ==============================-->
                                     <div class="dlab-post-text">
                                         <!-- 본문 입력 내용 -->
-                                        {{ board.board_cont }}
+                                        {% autoescape off %}
+                                            <!-- DB에서 꺼내온 것들 중 해당 블럭 안에 있는 것을 HTML 태그로 인식하게 함-->
+                                            {{ board.board_cont }}
+                                        {% endautoescape %}
                                         <!-- 게시글 속 사진 모음 -->
                                         <div class="widget widget_gallery gallery-grid-4 lightgallery">
                                             <ul>
                                                 {% for board_file in board_file_list %}
                                                     {% if forloop.counter < 4 %}
                                                         <li>
-                                                        <span data-exthumbimage="/media/{{ board_file.board_file_path }}"
-                                                              data-src="/media/{{ board_file.board_file_path }}"
-                                                              class="check-km " title="Light Gallery Grid 1">
-                                                            <a href="javascript:void(0);">
-                                                                <div class="dlab-post-thum act-detail-img-size">
-                                                                    <img style="height: 190px"
-                                                                         src="/media/{{ board_file.board_file_path }}"
-                                                                         alt=""/>
-                                                                </div>
-                                                            </a>
-                                                        </span>
+                                                            <span data-exthumbimage="/media/{{ board_file.board_file_path }}"
+                                                                  data-src="/media/{{ board_file.board_file_path }}"
+                                                                  class="check-km " title="Light Gallery Grid 1">
+                                                                <a href="javascript:void(0);">
+                                                                    <div class="dlab-post-thum act-detail-img-size">
+                                                                        <img style="height: 190px"
+                                                                             src="/media/{{ board_file.board_file_path }}"
+                                                                             alt=""/>
+                                                                    </div>
+                                                                </a>
+                                                            </span>
                                                         </li>
                                                     {% elif forloop.counter == 4 %}
                                                         <li>
@@ -83,17 +86,31 @@
                                                                             style="height: 190px"
                                                                             src="/media/{{ board_file.board_file_path }}"
                                                                             alt=""></div>
-                                                                    <div class="more-images">
-                                                                        <div>
-                                                                            <strong>{{ forloop.revcounter0 }}</strong>
-                                                                            <span>Images</span>
+                                                                    {% if forloop.revcounter0 > 0 %} <!-- 사용자가 업로드한 사진이 딱 4개인 경우 남은 이미지 개수를 출력하지 않음.-->
+                                                                        <div class="more-images">
+                                                                            <div>
+                                                                                <strong>{{ forloop.revcounter0 }}</strong>
+                                                                                <span>More Images</span>
+                                                                            </div>
                                                                         </div>
-                                                                    </div>
+                                                                    {% endif %}
                                                                 </a>
                                                             </span>
                                                         </li>
                                                     {% else %}
-
+                                                        <li style="display: none;">
+                                                            <span data-exthumbimage="/media/{{ board_file.board_file_path }}"
+                                                                  data-src="/media/{{ board_file.board_file_path }}"
+                                                                  class="check-km " title="Light Gallery Grid 1">
+                                                                <a href="javascript:void(0);">
+                                                                    <div class="dlab-post-thum act-detail-img-size">
+                                                                        <img style="height: 190px"
+                                                                             src="/media/{{ board_file.board_file_path }}"
+                                                                             alt=""/>
+                                                                    </div>
+                                                                </a>
+                                                            </span>
+                                                        </li>
                                                     {% endif %}
 
                                                 {% endfor %}
@@ -105,19 +122,35 @@
                                     </div>
                                     <!-- 게시글 삭제 및 수정 div -->
                                     <div class="extra-cell text-right">
-                                        <!-- 게시글 수정 버튼 -->
-                                        <!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!여기 작업 중이었음!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
-                                        <form action="{% url 'activity_update' %}" method="get">
-                                            <input type="hidden" name="board_no" value="{{ board.board_no }}"/>
-                                            <button class="site-button radius-xl m-l10"><i
-                                                    class="fa fa-pencil m-r5"></i>게시글 수정
+                                        {% if request.session.user_stu == board.board_writer.user_stu %}
+                                            <!-- 게시글 수정 버튼 -->
+                                            <button type="button" class="site-button radius-xl m-l10"
+                                                    onclick="document.getElementById('form-activity-update').submit()">
+                                                <i
+                                                        class="fa fa-pencil m-r5"></i>게시글 수정
                                             </button>
-                                        </form>
+                                            <!--게시글 수정 폼-->
 
-                                        <!-- 게시글 삭제 버튼 -->
-                                        <button class="site-button red radius-xl m-l10"><i
-                                                class="fa fa-trash m-r5"></i>게시글 삭제
-                                        </button>
+                                        {% endif %}
+                                        {% if request.session.user_role <= 3 or request.session.user_stu == board.board_writer.user_stu %}
+                                            <!-- 게시글 삭제 버튼 -->
+                                            <button type="button" class="site-button red radius-xl m-l10"
+                                                    onclick="if(confirm('정말 삭제하시겠습니까?')){document.getElementById('form-activity-delete').submit();}">
+                                                <i
+                                                        class="fa fa-trash m-r5"></i>게시글 삭제
+                                            </button>
+                                            <!--게식글 삭제 폼-->
+                                        {% endif %}
+                                        <form id="form-activity-update" action="{% url 'activity_update' %}"
+                                              method="get">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="board_no" value="{{ board.board_no }}"/>
+                                        </form>
+                                        <form id="form-activity-delete" action="{% url 'activity_delete' %}"
+                                              method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="board_no" value="{{ board.board_no }}"/>
+                                        </form>
                                     </div>
                                     <!-- 게시글과 댓글을 구분짓는 구분선 -->
                                     <div class="dlab-divider bg-gray-dark"></div>
@@ -184,34 +217,42 @@
                                                                 <form id="form-comment-delete-{{ comment.comment_id }}"
                                                                       action="{% url 'activity_comment_delete' %}"
                                                                       method="post">
-                                                                    <button type="button"
-                                                                            id="btnAdd-{{ comment.comment_id }}"
-                                                                            onclick="addReply({{ comment.comment_id }},'{% url "activity_comment_register" %}', {{ board.board_no }})"
-                                                                            class="btnAdd comment-btn m-r20"><i
-                                                                            class="fa fa-commenting m-r5"></i>답글쓰기
-                                                                    </button>
+
+                                                                    {% if request.session.user_stu is not None %}
+                                                                        <button type="button"
+                                                                                id="btnAdd-{{ comment.comment_id }}"
+                                                                                onclick="addReply({{ comment.comment_id }},'{% url "activity_comment_register" %}', {{ board.board_no }})"
+                                                                                class="btnAdd comment-btn m-r20"><i
+                                                                                class="fa fa-commenting m-r5"></i>답글쓰기
+                                                                        </button>
+                                                                    {% endif %}
                                                                     <!-- 댓글삭제 버튼 -->
                                                                     <!-- id="comment-delete-{{ comment.comment_id }}" -->
-                                                                    <button type="button"
-                                                                            onclick="comment_del({{ comment.comment_id }})"
-                                                                            class="comment-btn m-r10"><i
-                                                                            class="fa fa-trash m-r5"></i>
-                                                                        댓글 삭제
-                                                                    </button>
+                                                                    {% if request.session.user_stu == comment.comment_writer.user_stu or request.session.user_role <= 3 %}
+                                                                        {% csrf_token %}
+                                                                        <input type="hidden" name="comment_id"
+                                                                               value="{{ comment.comment_id }}"/>
+                                                                        <input type="hidden" name="board_no"
+                                                                               value="{{ board.board_no }}"/>
+                                                                        <button type="button"
+                                                                                onclick="comment_del({{ comment.comment_id }})"
+                                                                                class="comment-btn m-r10"><i
+                                                                                class="fa fa-trash m-r5"></i>
+                                                                            댓글 삭제
+                                                                        </button>
+                                                                    {% endif %}
                                                                     <!-- 덧글 삭제 폼 -->
 
-                                                                    {% csrf_token %}
-                                                                    <input type="hidden" name="comment_id"
-                                                                           value="{{ comment.comment_id }}"/>
-                                                                    <input type="hidden" name="board_no"
-                                                                           value="{{ board.board_no }}"/>
-                                                                    <!-- 댓글수정 버튼 -->
-                                                                    <button onclick="comment_update({{ comment.comment_id }})"
-                                                                            id="correctingBtn-{{ comment.comment_id }}"
-                                                                            type="button"
-                                                                            class="comment-btn m-r10"><i
-                                                                            class="fa fa-pencil m-r5"></i>댓글 수정
-                                                                    </button>
+                                                                    {% if request.session.user_stu == comment.comment_writer.user_stu %}
+
+                                                                        <!-- 댓글수정 버튼 -->
+                                                                        <button onclick="comment_update({{ comment.comment_id }})"
+                                                                                id="correctingBtn-{{ comment.comment_id }}"
+                                                                                type="button"
+                                                                                class="comment-btn m-r10"><i
+                                                                                class="fa fa-pencil m-r5"></i>댓글 수정
+                                                                        </button>
+                                                                    {% endif %}
                                                                 </form>
                                                             </div>
                                                             <!-- for 문 들어갈 자리 (대댓글)-->
@@ -267,19 +308,24 @@
                                                                                    value="{{ comment_ref.comment_id }}"/>
                                                                             <input type="hidden" name="board_no"
                                                                                    value="{{ board.board_no }}"/>
-                                                                            <button type="button"
-                                                                                    onclick="comment_del({{ comment_ref.comment_id }})"
-                                                                                    id="btn-del-{{ comment_ref.comment_id }}"
-                                                                                    class="comment-btn m-r10"><i
-                                                                                    class="fa fa-trash m-r5"></i>
-                                                                                댓글 삭제
-                                                                            </button>
-                                                                            <button type="button"
-                                                                                    id="correctingBtn-{{ comment_ref.comment_id }}"
-                                                                                    class="comment-btn m-r10"
-                                                                                    onclick="comment_update({{ comment_ref.comment_id }})">
-                                                                                <i class="fa fa-pencil m-r5"></i>댓글 수정
-                                                                            </button>
+                                                                            {% if request.session.user_role <= 3 or request.session.user_stu == comment_ref.comment_writer.user_stu %}
+                                                                                <button type="button"
+                                                                                        onclick="comment_del({{ comment_ref.comment_id }})"
+                                                                                        id="btn-del-{{ comment_ref.comment_id }}"
+                                                                                        class="comment-btn m-r10"><i
+                                                                                        class="fa fa-trash m-r5"></i>
+                                                                                    댓글 삭제
+                                                                                </button>
+                                                                            {% endif %}
+                                                                            {% if request.session.user_stu == comment_ref.comment_writer.user_stu %}
+                                                                                <button type="button"
+                                                                                        id="correctingBtn-{{ comment_ref.comment_id }}"
+                                                                                        class="comment-btn m-r10"
+                                                                                        onclick="comment_update({{ comment_ref.comment_id }})">
+                                                                                    <i class="fa fa-pencil m-r5"></i>댓글
+                                                                                    수정
+                                                                                </button>
+                                                                            {% endif %}
                                                                         </form>
 
                                                                     </div>
@@ -290,27 +336,33 @@
                                                 {% endfor %}
                                             </ol>
                                             <!-- 작성된 댓글과 댓글입력 부분을 나누는 구분선 -->
-                                            <div class="dlab-divider bg-gray-dark"></div>
-                                            <!--========================= 댓글 입력 form 태그 =========================-->
-                                            <div class="" id="respond">
-                                                <form class="comment-form" id="commentform" method="post"
-                                                      action="{% url 'activity_comment_register' %}">
-                                                    {% csrf_token %}
-                                                    <input type="hidden" name="board_no" value="{{ board.board_no }}"/>
-                                                    <!-- 댓글입력창 -->
-                                                    <p class="comment-form-comment">
-                                                        <label for="comment">Comments</label>
-                                                        <textarea rows="8" name="comment_cont"
-                                                                  placeholder="댓글을 남겨보세요!"
-                                                                  id="comment"></textarea>
-                                                    </p>
-                                                    <!-- 댓글작성 버튼 -->
-                                                    <p class="form-submit" style="text-align: right">
-                                                        <input type="submit" value="댓글등록"
-                                                               class="submit site-button" id="submit" name="submit">
-                                                    </p>
-                                                </form>
-                                            </div>
+                                            {% if request.session.user_stu is not None %}
+                                                <div class="dlab-divider bg-gray-dark"></div>
+                                                <!--========================= 댓글 입력 form 태그 =========================-->
+
+                                                <div class="" id="respond">
+                                                    <form class="comment-form" id="commentform" method="post"
+                                                          action="{% url 'activity_comment_register' %}">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="board_no"
+                                                               value="{{ board.board_no }}"/>
+                                                        <!-- 댓글입력창 -->
+
+                                                        <p class="comment-form-comment">
+                                                            <label for="comment">Comments</label>
+                                                            <textarea rows="8" name="comment_cont"
+                                                                      placeholder="댓글을 남겨보세요!"
+                                                                      id="comment"></textarea>
+                                                        </p>
+                                                        <!-- 댓글작성 버튼 -->
+                                                        <p class="form-submit" style="text-align: right">
+                                                            <input type="submit" value="댓글등록"
+                                                                   class="submit site-button" id="submit" name="submit">
+                                                        </p>
+
+                                                    </form>
+                                                </div>
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </div>

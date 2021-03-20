@@ -35,7 +35,7 @@
                             {% for board in board_list %}
                                 <!--============ 게시글 박스 시작 ============-->
                                 <div class="col-lg-4 col-md-6 col-sm-6 m-b30">
-                                    <div class="listing-bx overlap">
+                                    <div class="listing-bx board-item overlap" onclick="location.href='{% url "activity_detail" board_no=board.board_no%}'">
                                         <form action="{% url 'activity_detail' board_no=board.board_no %}" method="POST">
                                             {% csrf_token %}
 

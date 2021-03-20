@@ -16,7 +16,10 @@
 form {
 
 }
-
+.board-item:hover /* 게시글 위에 마우스 커서를 올리면 투명도를 조정하게 함 */
+{
+    opacity: 0.8;
+}
 /* 동아리 활동게시판 상세의 이미지 사이즈  */
 .act-detail-img-size {
     height: 190px;
