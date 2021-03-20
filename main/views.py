@@ -46,7 +46,7 @@ def activity(request):
     page = request.GET.get('page')  # 페이지 이름 ㅇㅇ 여기서 변경하면 됌
     item = paginator.get_page(page)
 
-    return render(request, 'activity.html', {'board_list': item})
+    return render(request, 'activity_list.html', {'board_list': item})
 
 
 # 동아리 활동 게시판 상세보기
@@ -125,7 +125,7 @@ def activity_update(request):
                 # 목록 페이지 이동 (수정 필요)
             return redirect(reverse("activity"))
     # 잘못 왔을 경우
-    return render(request, 'activity.html', {})
+    return render(request, 'activity_list.html', {})
 
 
 # 동아리 활동 상세페이지에서 삭제하는 코드
