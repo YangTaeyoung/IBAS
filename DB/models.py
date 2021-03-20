@@ -24,8 +24,8 @@ class Answer(models.Model):
 
 class Bank(models.Model):
     bank_no = models.AutoField(db_column='BANK_NO', primary_key=True)  # Field name made lowercase.
-    bank_plus = models.IntegerField(db_column='BANK_PLUS', blank=True, null=True)  # Field name made lowercase.
-    bank_minus = models.IntegerField(db_column='BANK_MINUS', blank=True, null=True)  # Field name made lowercase.
+    bank_plus = models.IntegerField(db_column='BANK_PLUS', blank=True, default=0)  # Field name made lowercase.
+    bank_minus = models.IntegerField(db_column='BANK_MINUS', blank=True, default=0)  # Field name made lowercase.
     bank_title = models.CharField(db_column='BANK_TITLE', max_length=100, blank=True,
                                   null=True)  # Field name made lowercase.
     bank_used = models.DateTimeField(db_column='BANK_USED', blank=True, null=True)  # Field name made lowercase.
@@ -49,10 +49,14 @@ class Bank(models.Model):
         db_table = 'BANK'
 
 
+def bank_file_upload_to(instance, filename):
+    return f'bank/{instance.bank.bnak_no}/{filename}'
+
+
 class BankFile(models.Model):
     bank_no = models.ForeignKey(Bank, on_delete=models.CASCADE, db_column='BANK_NO')  # Field name made lowercase.
     bank_file_id = models.AutoField(db_column='BANK_FILE_ID', primary_key=True)  # Field name made lowercase.
-    bank_file_path = models.CharField(db_column='BANK_FILE_PATH', max_length=1000)  # Field name made lowercase.
+    bank_file_path = models.CharField(db_column='BANK_FILE_PATH', max_length=1000, upload_to=bank_file_upload_to)  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -110,7 +114,8 @@ class ChiefCarrier(models.Model):
     carrier_no = models.AutoField(db_column='CARRIER_NO', primary_key=True)  # Field name made lowercase.
     carrier_content = models.CharField(db_column='CARRIER_CONTENT', max_length=300, blank=True,
                                        null=True)  # Field name made lowercase.
-    chief_user = models.ForeignKey('User', on_delete=models.CASCADE, db_column='CHIEF_USER')  # Field name made lowercase.
+    chief_user = models.ForeignKey('User', on_delete=models.CASCADE,
+                                   db_column='CHIEF_USER')  # Field name made lowercase.
 
     class Meta:
         managed = False

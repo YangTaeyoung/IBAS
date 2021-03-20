@@ -10,28 +10,43 @@ from IBAS.user_controller import is_chief_exist, is_sub_chief_exist, get_sub_chi
 import os
 from IBAS.file_controller import get_filename, get_filename_with_ext
 
+
 # Create your views here.
 # 동아리 소개 작업할 것임
 def bank_board(request):
     bank_list = Bank.objects.order_by('-bank_created').prefetch_related('bankfile_set')
+    sum_list = list()
+    for i in range(len(bank_list)):
+        if i == 0:
+            sum_list = bank_list[i].bank_plus - bank_list[i].bank_minus
+        else:
+            sum_list.append(sum_list[i] + bank_list[i].bank_plus - bank_list[i].bank_minus)
+    year_list = list()
+    for bank in bank_list:
+        year_list.append(str(bank.bank_created).split('-')[0])
 
-    # 페이지네이터 코드
-    paginator = Paginator(bank_list, 6)
-    page = request.GET.get('page')
-    item = paginator.get_page(page)
+    year_list = list(set(year_list))
+    year_list.sort()
 
-    return render(request, 'bank_board.html', {'bank_list' : item})
+    context = {
+        "bank_list": bank_list,
+        "year_list": year_list,
+        "sum_list": sum_list
+    }
+    return render(request, 'bank_board.html', context)
+
 
 def bank_delete(request):
     if request.method == "POST":
-        bank = Bank.objects.get(pk=request.POST.get("bank_no")) # 가져온 bank_no 사용
+        bank = Bank.objects.get(pk=request.POST.get("bank_no"))  # 가져온 bank_no 사용
         bank.delete()
-        return redirect(reverse("bank_board")) # 뱅크 페이지로 리다이렉팅
+        return redirect(reverse("bank_board"))  # 뱅크 페이지로 리다이렉팅
     else:
         return render(request, "index.html", {'lgn_is_failed': 1})  # 메인페이지로 보내버림
 
+
 def bank_update(request):
-    if request.method == "POST" :
+    if request.method == "POST":
         bank = Bank.objects.get(pk=request.POST.get("bank_no"))
         bank.bank_created = request.POST.get('bank_created')
         bank.bank_title = request.POST.get('bank_title')
@@ -41,6 +56,7 @@ def bank_update(request):
         return redirect(reverse('bank_board'))
     else:  # 비정상적인 접근의 경우 (해킹시도)
         return render(request, "index.html", {'lgn_is_failed': 1})  # 메인페이지로 보내버림
+
 
 def bank_register(request):
     if request.method == "POST":
@@ -62,5 +78,5 @@ def bank_register(request):
                                                     bank_file_path=updated_file)
             new_bank_file.save()
         return redirect(reverse('bank_board'))
-    else :
+    else:
         return render(request, "index.html", {'lgn_is_failed': 1})
