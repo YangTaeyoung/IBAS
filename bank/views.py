@@ -16,9 +16,9 @@ def bank_board(request):
     context = {}
     return render(request, 'bank_board.html', context)  # introduce 에 실어서 보내분다.
 
-def bank_support_board(request):
+def bank_support_list(request):
     context = {}
-    return render(request, 'bank_support_board.html', context)  #게시판 목록
+    return render(request, 'bank_support_list.html', context)  #게시판 목록
 
 def bank_support_register(request):
     context = {}

@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-    <script src="{% static 'js/bank_chaerim.js' %}"></script>
     <link rel="stylesheet" href="{% static 'css/bank_chaerim.css' %}"/>
     <!DOCTYPE html>
     <html lang="en">
@@ -34,7 +33,7 @@
             <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"
                  style=" background-image: url('{% static 'images/board_name_img.jpg' %}'); height: 350px">
                 <!--상단 제목부분을 누르면 해당 게시판 목록으로 이동-->
-                <a href="{% url 'bank_support_board' %}">
+                <a href="{% url 'bank_support_list' %}">
                     <div class="container clearfix">
                         <div class="dlab-bnr-inr-entry">
                             <!--제목-->
