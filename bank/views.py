@@ -12,6 +12,6 @@ from IBAS.file_controller import get_filename, get_filename_with_ext
 
 # Create your views here.
 # 동아리 소개 작업할 것임
-def bank_board(request):
+def bank_list(request):
     context = {}
-    return render(request, 'bank_board.html', context)  # introduce 에 실어서 보내분다.
+    return render(request, 'bank_list.html', context)  # introduce 에 실어서 보내분다.
