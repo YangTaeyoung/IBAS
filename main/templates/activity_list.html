@@ -35,8 +35,8 @@
                             {% for board in board_list %}
                                 <!--============ 게시글 박스 시작 ============-->
                                 <div class="col-lg-4 col-md-6 col-sm-6 m-b30">
-                                    <div class="listing-bx overlap">
-                                        <form action="{% url 'activity_detail' %}" method="POST">
+                                    <div class="listing-bx board-item overlap" onclick="location.href='{% url "activity_detail" board_no=board.board_no%}'">
+                                        <form action="{% url 'activity_detail' board_no=board.board_no %}" method="POST">
                                             {% csrf_token %}
 
 
@@ -70,7 +70,7 @@
                                                             {{ board.board_created | date:"Y/m/d"}}
                                                         </li>
                                                         <!-- 히든으로 넘기는 것, board_no 넘김 -->
-                                                        <input type="hidden" name="board_list"
+                                                        <input type="hidden" name="board_no"
                                                                value="{{ board.board_no }}">
                                                     </ul>
                                                 </div>
@@ -85,7 +85,7 @@
                         <!-- 게시글 등록버튼(권한자만 보임) -->
                         <div class="extra-cell text-right">
                             <!-- 현재 페이지, 전 페이지가 있는지 리턴해주는 함수 -->
-                            {% if request.session.user_role == 1 or request.session.user_role == 2 or request.session.user_role == 3 or request.session.user_role == 5 %}
+                            {% if request.session.user_role == 1 or request.session.user_role == 2 or request.session.user_role == 3 %}
                                 <a href="{% url 'activity_register' %}" class="site-button radius-xl m-l10"><i
                                         class="fa fa-plus m-r5"></i>
                                     게시글 등록</a>

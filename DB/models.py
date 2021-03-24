@@ -111,7 +111,7 @@ class ChiefCarrier(models.Model):
     carrier_no = models.AutoField(db_column='CARRIER_NO', primary_key=True)  # Field name made lowercase.
     carrier_content = models.CharField(db_column='CARRIER_CONTENT', max_length=300, blank=True,
                                        null=True)  # Field name made lowercase.
-    chief_user = models.ForeignKey('User', models.DO_NOTHING, db_column='CHIEF_USER')  # Field name made lowercase.
+    chief_user = models.ForeignKey('User', on_delete=models.CASCADE, db_column='CHIEF_USER')  # Field name made lowercase.
 
     class Meta:
         managed = False
