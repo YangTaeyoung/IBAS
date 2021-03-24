@@ -50,13 +50,13 @@ class Bank(models.Model):
 
 
 def bank_file_upload_to(instance, filename):
-    return f'bank/{instance.bank.bnak_no}/{filename}'
+    return f'bank/{instance.bank_no.bank_no}/{filename}'
 
 
 class BankFile(models.Model):
     bank_no = models.ForeignKey(Bank, on_delete=models.CASCADE, db_column='BANK_NO')  # Field name made lowercase.
     bank_file_id = models.AutoField(db_column='BANK_FILE_ID', primary_key=True)  # Field name made lowercase.
-    bank_file_path = models.CharField(db_column='BANK_FILE_PATH', max_length=1000, upload_to=bank_file_upload_to)  # Field name made lowercase.
+    bank_file_path = models.FileField(db_column='BANK_FILE_PATH', max_length=1000, upload_to=bank_file_upload_to)  # Field name made lowercase.
 
     class Meta:
         managed = False

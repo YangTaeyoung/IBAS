@@ -16,6 +16,8 @@ from IBAS.file_controller import get_filename, get_filename_with_ext
 
 # 메인페이지 이동 함수
 def index(request):
+    # 임시 로그인
+    session.save_session(request, User.objects.get(pk=12162359))
     if is_chief_exist():
         chief = get_chief()  # 하단바에서 회장꺼만 들고오면 됌
         session.save_chief(request, chief)  # 회장꺼 세션에 저장시켜줬음. save_chief 함수는 session 에 있음.

@@ -15,12 +15,6 @@ from IBAS.file_controller import get_filename, get_filename_with_ext
 # 동아리 소개 작업할 것임
 def bank_board(request):
     bank_list = Bank.objects.order_by('-bank_created').prefetch_related('bankfile_set')
-    sum_list = list()
-    for i in range(len(bank_list)):
-        if i == 0:
-            sum_list = bank_list[i].bank_plus - bank_list[i].bank_minus
-        else:
-            sum_list.append(sum_list[i] + bank_list[i].bank_plus - bank_list[i].bank_minus)
     year_list = list()
     for bank in bank_list:
         year_list.append(str(bank.bank_created).split('-')[0])
@@ -31,7 +25,6 @@ def bank_board(request):
     context = {
         "bank_list": bank_list,
         "year_list": year_list,
-        "sum_list": sum_list
     }
     return render(request, 'bank_board.html', context)
 
