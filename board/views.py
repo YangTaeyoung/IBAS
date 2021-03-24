@@ -99,6 +99,7 @@ def board_register(request):
                                                       board_file_name=str(updated_file).rsplit("/")[0])
             new_board_file.save()
         return HttpResponse(go_board_detail(board.board_no))
+
     else:  # 게시글 등록 버튼을 눌렀을 때
         board_type_no = request.GET.get("board_type_no")
         context = {

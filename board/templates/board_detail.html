@@ -79,66 +79,61 @@
                                         <div class="widget widget_gallery gallery-grid-4 lightgallery">
                                             <ul>
                                                 {% for board_img in board_img_list %}
-                                                <li>
-													<span data-exthumbimage="/media/{{ board_img.board_file_path }}"
-                                                          data-src="/media/{{ board_img.board_file_path }}"
-                                                          class="check-km " title="">
-														<a href="javascript:void(0);">
-															<div class="dlab-post-thum act-detail-img-size"><img
-                                                                    style="height: 190px"
-                                                                    src="/media/{{ board_img.board_file_path }}"
-                                                                    alt=""></div>
-														</a>
-													</span>
-                                                </li>
+                                                    {% if forloop.counter < 4 %}
+                                                        <li>
+                                                            <span data-exthumbimage="/media/{{ board_img.board_file_path }}"
+                                                                  data-src="/media/{{ board_img.board_file_path }}"
+                                                                  class="check-km " title="">
+                                                                <a href="javascript:void(0);">
+                                                                    <div class="dlab-post-thum act-detail-img-size">
+                                                                        <img style="height: 190px"
+                                                                             src="/media/{{ board_img.board_file_path }}"
+                                                                             alt=""/>
+                                                                    </div>
+                                                                </a>
+                                                            </span>
+                                                        </li>
+                                                    {% elif forloop.counter == 4 %}
+                                                        <li>
+                                                            <span data-exthumbimage="/media/{{ board_img.board_file_path }}"
+                                                                  data-src="/media/{{ board_img.board_file_path }}"
+                                                                  class="check-km act-detail-img-siz"
+                                                                  title="">
+                                                                <a href="javascript:void(0);">
+                                                                    <div class="dlab-post-thum "><img
+                                                                            style="height: 190px"
+                                                                            src="/media/{{ board_img.board_file_path }}"
+                                                                            alt=""></div>
+                                                                    {% if forloop.revcounter0 > 0 %}
+                                                                        <!-- 사용자가 업로드한 사진이 딱 4개인 경우 남은 이미지 개수를 출력하지 않음.-->
+                                                                        <div class="more-images">
+                                                                            <div>
+                                                                                <strong>{{ forloop.revcounter0 }}</strong>
+                                                                                <span>More Images</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    {% endif %}
+                                                                </a>
+                                                            </span>
+                                                        </li>
+                                                    {% else %}
+                                                        <li style="display: none;">
+                                                            <span data-exthumbimage="/media/{{ board_img.board_file_path }}"
+                                                                  data-src="/media/{{ board_img.board_file_path }}"
+                                                                  class="check-km " title="Light Gallery Grid 1">
+                                                                <a href="javascript:void(0);">
+                                                                    <div class="dlab-post-thum act-detail-img-size">
+                                                                        <img style="height: 190px"
+                                                                             src="/media/{{ board_img.board_file_path }}"
+                                                                             alt=""/>
+                                                                    </div>
+                                                                </a>
+                                                            </span>
+                                                        </li>
+                                                    {% endif %}
                                                 {% endfor %}
-                                                <li>
-													<span data-exthumbimage="/static/images/blog/default/thum1.jpg"
-                                                          data-src="/static/images/blog/default/thum1.jpg"
-                                                          class="check-km act-detail-img-siz"
-                                                          title="Light Gallery Grid 1">
-														<a href="javascript:void(0);">
-															<div class="dlab-post-thum"><img
-                                                                    style="height: 190px"
-                                                                    src="/static/images/blog/default/thum1.jpg"
-                                                                    alt=""></div>
-														</a>
-													</span>
-                                                </li>
-                                                <li>
-													<span data-exthumbimage="/static/images/blog/default/thum1.jpg"
-                                                          data-src="/static/images/blog/default/thum1.jpg"
-                                                          class="check-km act-detail-img-siz"
-                                                          title="Light Gallery Grid 1">
-														<a href="javascript:void(0);">
-															<div class="dlab-post-thum"><img
-                                                                    style="height: 190px"
-                                                                    src="/static/images/blog/default/thum1.jpg"
-                                                                    alt=""></div>
-														</a>
-													</span>
-                                                </li>
-                                                <li>
-													<span data-exthumbimage="/static/images/blog/default/thum1.jpg"
-                                                          data-src="/static/images/blog/default/thum1.jpg"
-                                                          class="check-km act-detail-img-siz"
-                                                          title="Light Gallery Grid 1">
-														<a href="javascript:void(0);">
-															<div class="dlab-post-thum "><img
-                                                                    style="height: 190px"
-                                                                    src="/static/images/blog/default/thum1.jpg"
-                                                                    alt=""></div>
-                                                            <!-- 마지막 사진 부분 -->
-															<div class="more-images">
-																<div>
-                                                                    <!-- DB에서 총 사진 갯수 불러오기 -->
-																	<strong>6</strong>
-																	<span>Images</span>
-																</div>
-															</div>
-														</a>
-													</span>
-                                                </li>
+
+
                                             </ul>
                                         </div>
 
