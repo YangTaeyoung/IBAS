@@ -3,9 +3,6 @@
 function bank_update() {
     // 각각의 인풋마다 숫자가 주어져야 함. for문 돌려야 하고, 태영이 오빠 방식 참고(main 폴더에서 yejin.js)하면 될 듯
 
-    document.getElementById('bank-date-1').disabled = false; // input창 disabled속성을 해제, disabled 속성을 거짓이라 둠.
-    document.getElementById('bank-date-1').classList.add("bank-input-add"); // class 추가하여 스타일 추가해줌.
-
     document.getElementById('bank-txt-1').disabled = false; // input창 disabled속성을 해제, disabled 속성을 거짓이라 둠.
     document.getElementById('bank-txt-1').classList.add("bank-input-add"); // class 추가하여 스타일 추가해줌.
 
