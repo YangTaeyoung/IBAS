@@ -70,7 +70,8 @@ def activity_register(request):
         for updated_file in request.FILES.getlist("board_file"):
             # DB 저장
             new_board_file = BoardFile.objects.create(board_no=Board.objects.get(pk=activity.board_no),
-                                                      board_file_path=updated_file)
+                                                      board_file_path=updated_file,
+                                                      board_file_name=str(updated_file).rsplit("/")[0])
             new_board_file.save()
         return redirect(reverse("activity"))
 

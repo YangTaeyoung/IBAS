@@ -45,6 +45,9 @@ INSTALLED_APPS = [
     'member',
     # 메인 관련 앱
     'main',
+    # 회계 관련 앱
+    'bank',
+    # 게시판 관련 앱
     'board',
     # 소셜 로그인 패키지: allauth 관련
     'allauth',
@@ -74,7 +77,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             BASE_DIR / 'templates',
-            '/home/ibas/Django/IBAS/templates',
+            '/home/taeyoung/Django/IBAS/templates/',
         ]
         ,
         'APP_DIRS': True,
@@ -102,7 +105,7 @@ DATABASES = {
         'USER': 'root',
         'PASSWORD': 'bigdata1156--',
         'HOST': 'localhost',
-        'PORT': '3356',
+        'PORT': '3306',
     }
 }
 
@@ -149,7 +152,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(ROOT_DIR, '.static_root')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
-    '/home/ibas/Django/IBAS/static/'
+    '/home/taeyoung/Django/IBAS/static/'
 ]
 # social 로그인 패키지 설정
 AUTHENTICATION_BACKENDS = (

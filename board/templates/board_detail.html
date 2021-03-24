@@ -14,16 +14,17 @@
                 <!--제목을 감싸는 배경-->
                 <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"
                      style=" background-image: url('{% static 'images/board_name_img.jpg' %}'); height: 350px">
-                    <!-- 상단 제목을 클릭하면, 상위 게시판으로 돌아감 -->
-                    <a href="{% url 'activity' %}">
+                    <!-- 상단 제목을 클릭하면, 상위 게시판으로 이동 -->
+                    <!-- (ex.자유게시판의 '용식이의 학식일기'글의 상세 페이지에서 상위 제목을 클릭하면, 자유게시판으로 이동) -->
+                    <a href="{% url 'board_view' board_type_no=board_type_no %}">
                         <div class="container clearfix">
                             <div class="dlab-bnr-inr-entry">
                                 <!--제목-->
-                                <!-- 해당 게시글이 속한 게시판이 보여야 함 -->
-                                <h1 class="text-white introduce-letter-spacing_5">OO게시판</h1>
+                                <!-- DB에서 제목 꺼내와야 함 -->
+                                <h1 class="text-white introduce-letter-spacing_5">{{ board_name }}</h1>
                                 <!--부제목-->
-                                <!-- DB에서 소개도 가지고 올 수 있나? -->
-                                <p class="introduce-margin-top_20">@@과 관련된 게시판입니다.</p>
+                                <!-- DB에서 제목 꺼내와야 함 -->
+                                <p class="introduce-margin-top_20">{{ board_exp }}</p>
                             </div>
                         </div>
                     </a>
@@ -39,79 +40,58 @@
                                         <ul class="d-flex align-items-center">
                                             <!-- 게시글 작성자 -->
                                             <li class="post-author"><i class="ti ti-user"></i>By <a
-                                                    href="javascript:void(0);">신승연</a></li>
+                                                    href="javascript:void(0);">{{ board.board_writer.user_name }}</a>
+                                            </li>
                                             <!-- 게시글 작성시간 -->
                                             <li class="post-comment"><i class="ti ti-alarm-clock"></i> <a
-                                                    href="javascript:void(0);">2021.03.15 15:00</a></li>
+                                                    href="javascript:void(0);">{{ board.board_created|date:'Y.m.d h:i' }}</a>
+                                            </li>
                                         </ul>
                                     </div>
                                     <!-- 게시글 제목 -->
                                     <div class="dlab-post-title ">
                                         <h2 class="post-title m-t0">
-                                            <a href="javascript:void(0);">With our vastly improved notifications system,
-                                                users
-                                                have more control on your mind.</a>
+                                            <a href="javascript:void(0);">{{ board.board_title }}</a>
                                         </h2>
                                     </div>
                                     <!--============================== 게시글 본문 시작 ==============================-->
                                     <div class="dlab-post-text">
                                         <!-- 본문 입력 내용 -->
 
-                                        <p class="font-weight-400">Lorem ipsum dolor sit amet, consectetur adipisicing
-                                            elit, sed
-                                            do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-                                            minim
-                                            veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                                            commodo amet
-                                            set for your cool happiness for lyour loyal city.</p>
+                                        {% autoescape off %}
+                                            {{ board.board_cont }}
+                                        {% endautoescape %}
 
-                                        <p class="font-weight-300">Lorem ipsum dolor sit amet, consectetur adipisicing
-                                            elit, sed
-                                            do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-                                            minim
-                                            veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                                            commodo
-                                            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                            cillum
-                                            dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                            proident,
-                                            sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut
-                                            perspiciatis
-                                            unde omnis iste natus error sit voluptatem accusantium doloremque
-                                            laudantium, totam
-                                            rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto
-                                            beatae
-                                            vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit
-                                            aspernatur
-                                            aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione
-                                            voluptatem
-                                            sequi nesciunt. Neque porro quisquam est.</p>
                                         <!-- 첨부된 파일 불러오는 곳 -->
                                         <!-- download 쪽에 파일 경로 설정 -->
+
                                         <div class="download-box">
-                                            <!-- 첨부파일 1 -->
-                                             <i class="fa fa-download m-r15 "></i><a class="line2" href="#" download="www.naver.com">빅데이터빅데이터빅데이터빅데이터빅데이터빅데이터빅데이터빅데이터빅데이터빅데이터 관련 논문자료.pdf</a>
-                                            <!-- 파일 간 구분선 -->
-                                            <div class="dlab-divider tb10 bg-gray-dark"></div>
-                                            <!-- 첨부파일 2 -->
-                                             <i class="fa fa-download m-r15"></i><a class="line2" href="#" download="www.naver.com">통계학 수업자료.ppt</a>
+                                            {% for board_file in board_file_list %}
+                                                <!-- 첨부파일 1 -->
+                                                 <i class="fa fa-download m-r15 "></i><a class="line2" href="#"
+                                                                                         download="/media/{{ board_file.board_file_path }}">{{ board_file.board_file_name }}</a>
+                                                <!-- 파일 간 구분선 -->
+                                                <div class="dlab-divider tb10 bg-gray-dark"></div>
+                                            {% endfor %}
                                         </div>
 
                                         <!-- 게시글 속 사진 모음 -->
                                         <div class="widget widget_gallery gallery-grid-4 lightgallery">
                                             <ul>
+                                                {% for board_img in board_img_list %}
                                                 <li>
-													<span data-exthumbimage="/static/images/listing/grid/pic1.jpg"
-                                                          data-src="/static/images/listing/grid/pic1.jpg"
-                                                          class="check-km " title="Light Gallery Grid 1">
+													<span data-exthumbimage="/media/{{ board_img.board_file_path }}"
+                                                          data-src="/media/{{ board_img.board_file_path }}"
+                                                          class="check-km " title="">
 														<a href="javascript:void(0);">
 															<div class="dlab-post-thum act-detail-img-size"><img
                                                                     style="height: 190px"
-                                                                    src="/static/images/listing/grid/pic1.jpg"
+                                                                    src="/media/{{ board_img.board_file_path }}"
                                                                     alt=""></div>
 														</a>
 													</span>
                                                 </li>
+                                                {% endfor %}
                                                 <li>
 													<span data-exthumbimage="/static/images/blog/default/thum1.jpg"
                                                           data-src="/static/images/blog/default/thum1.jpg"
@@ -165,7 +145,7 @@
                                     </div>
                                     <!-- 게시글 삭제 및 수정 div -->
                                     <div class="extra-cell text-right">
-                                       <!-- 게시글 수정 버튼 -->
+                                        <!-- 게시글 수정 버튼 -->
                                         <!-- 관련자만 보이게 처리 -->
                                         <button class="site-button radius-xl m-l10"><i
                                                 class="fa fa-pencil m-r5"></i>게시글 수정

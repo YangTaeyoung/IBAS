@@ -10,15 +10,15 @@
                  style=" background-image: url('{% static 'images/board_name_img.jpg' %}'); height: 350px">
                 <!-- 상단 제목을 클릭하면, 상위 게시판으로 이동 -->
                 <!-- (ex.자유게시판의 '용식이의 학식일기'글의 상세 페이지에서 상위 제목을 클릭하면, 자유게시판으로 이동) -->
-                <a href="{% url 'activity' %}">
+                <a href="{% url 'board_view' board_type_no=board_type_no %}">
                     <div class="container clearfix">
                         <div class="dlab-bnr-inr-entry">
                             <!--제목-->
                             <!-- DB에서 제목 꺼내와야 함 -->
-                            <h1 class="text-white introduce-letter-spacing_5">OO게시판</h1>
+                            <h1 class="text-white introduce-letter-spacing_5">{{ board_name }}</h1>
                             <!--부제목-->
                             <!-- DB에서 제목 꺼내와야 함 -->
-                            <p class="introduce-margin-top_20">@@과 관련한 게시판입니다.</p>
+                            <p class="introduce-margin-top_20">{{ board_exp }}</p>
                         </div>
                     </div>
                 </a>
@@ -37,14 +37,15 @@
                                         <div style="margin-bottom: 20px">
                                             <h4 class="title">게시글 검색</h4>
                                             <div class="">
-                                                <form role="search" method="post">
+                                                <form role="search" action="{% url 'board_search' %}" method="get">
                                                     <div class="input-group">
-                                                        <input name="text" type="text" class="form-control"
+                                                        <input name="keyword" type="text" class="form-control"
                                                                placeholder="검색어를 입력하세요.">
                                                         <span class="input-group-btn">
-												<button type="submit" class="site-button"><i
-                                                        class="fa fa-search"></i></button>
-                                            </span>
+												           <button type="submit" class="site-button">
+                                                               <i class="fa fa-search"></i>
+                                                           </button>
+                                                        </span>
                                                     </div>
                                                 </form>
                                             </div>
@@ -56,10 +57,19 @@
                                         <h4 class="title">게시판</h4>
                                         <div class="widget_tag">
                                             <ul class="m-b0">
-                                                <li><a href="javascript:void(0);">전체 게시글</a> (28+)</li>
-                                                <li><a href="javascript:void(0);">공지사항</a> (39+)</li>
-                                                <li><a href="javascript:void(0);">자유게시판</a> (76+)</li>
-                                                <li><a href="javascript:void(0);">질문게시판</a> (47+)</li>
+                                                <li><a href="{% url 'board_view'  board_type_no=5 %}">전체 게시글</a>
+                                                    ({{ all_num }}+)
+                                                </li>
+                                                <li><a href="{% url 'board_view'  board_type_no=1 %}">공지사항</a>
+                                                    ({{ notice_num }}+)
+                                                </li>
+                                                <li><a href="{% url 'board_view'  board_type_no=2 %}">자유게시판</a>
+                                                    ({{ free_num }}+)
+                                                </li>
+                                                <li><a href="{% url 'board_view'  board_type_no=3 %}">질문게시판</a>
+                                                    ({{ quest_num }}+)
+                                                </li>
+                                                <li><a href="{% url 'activity' %}">활동게시판</a> ({{ quest_num }}+)</li>
                                             </ul>
                                         </div>
                                     </div>
@@ -80,131 +90,62 @@
                                     </thead>
                                     <!-- 끌고오는 게시글 파트 -->
                                     <tbody>
-                                    <!-- 게시글 1 -->
-                                    <tr>
-                                        <!-- 게시글 번호 -->
-                                        <th scope="row">1</th>
-                                        <!-- 게시글 제목 -->
-                                        <!-- 게시글 제목 클릭 시 해당 게시글의 상세 페이지로 이동하며, 제목을 a태크 처리함 -->
-                                        <td><a href="#">용식이의 학식일기</a></td>
-                                        <!-- 게시글 작성자 -->
-                                        <td>조용식</td>
-                                        <!-- 게시글 작성일자 -->
-                                        <td>2021-03-01</td>
-                                    </tr>
-                                    <!-- 게시글 2 -->
-                                    <!-- 하단도  내용과 동일하여 주석 생략함 -->
-                                    <tr>
-                                        <!-- 게시글 번호 -->
-                                        <th scope="row">2</th>
-                                        <!-- 게시글 제목 -->
-                                        <td>포브스가 선정한 미남</td>
-                                        <!-- 게시글 작성자 -->
-                                        <td>윤예진</td>
-                                        <!-- 게시글 작성자 -->
-                                        <td>2021-02-25</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">3</th>
-                                        <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
-                                        <td>신승연</td>
-                                        <td>2021-02-17</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">4</th>
-                                        <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
-                                        <td>신승연</td>
-                                        <td>2021-02-17</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">5</th>
-                                        <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
-                                        <td>신승연</td>
-                                        <td>2021-02-17</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">6</th>
-                                        <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
-                                        <td>신승연</td>
-                                        <td>2021-02-17</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">7</th>
-                                        <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
-                                        <td>신승연</td>
-                                        <td>2021-02-17</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">8</th>
-                                        <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
-                                        <td>신승연</td>
-                                        <td>2021-02-17</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">9</th>
-                                        <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
-                                        <td>신승연</td>
-                                        <td>2021-02-17</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">10</th>
-                                        <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
-                                        <td>신승연</td>
-                                        <td>2021-02-17</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">11</th>
-                                        <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
-                                        <td>신승연</td>
-                                        <td>2021-02-17</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">12</th>
-                                        <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
-                                        <td>신승연</td>
-                                        <td>2021-02-17</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">13</th>
-                                        <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
-                                        <td>신승연</td>
-                                        <td>2021-02-17</td>
-                                    </tr>
-
-                                    <tr>
-                                        <th scope="row">14</th>
-                                        <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
-                                        <td>신승연</td>
-                                        <td>2021-02-17</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">15</th>
-                                        <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
-                                        <td>신승연</td>
-                                        <td>2021-02-17</td>
-                                    </tr>
-
+                                    <!-- 게시글 출력부 -->
+                                    {% if board_len != 0 %}
+                                        {% for board in board_list %}
+                                            <tr>
+                                                <!-- 게시글 번호 -->
+                                                <th scope="row">{{ forloop.counter }}</th>
+                                                <!-- 게시글 제목 -->
+                                                <!-- 게시글 제목 클릭 시 해당 게시글의 상세 페이지로 이동하며, 제목을 a태크 처리함 -->
+                                                <td>
+                                                    <a href="{% url 'board_detail' board_no=board.board_no %}">{{ board.board_title }}</a>
+                                                </td>
+                                                <!-- 게시글 작성자 -->
+                                                <td>{{ board.board_writer.user_name }}</td>
+                                                <!-- 게시글 작성일자 -->
+                                                <td>{{ board.board_created }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    {% else %}
+                                        <tr>
+                                            <td colspan="4" style="text-align: center">{{ message }}</td>
+                                        </tr>
+                                    {% endif %}
 
                                     </tbody>
                                 </table>
-                                <div class="extra-cell text-right  m-t20">
-                                    <!-- 게시글 등록 버튼 -->
-                                    <!-- 관련자만 보이게 처리 -->
-                                    <button class="site-button radius-xl m-l10"><i class="fa fa-plus m-r5"></i>게시글 등록
-                                    </button>
-                                </div>
+                                {% if board_type_no != 5 %}
+                                    <form action="{% url 'board_register' %}" method="get">
+                                        <input type="hidden" name="board_type_no" value="{{ board_type_no }}">
+                                        <div class="extra-cell text-right  m-t20">
+                                            <!-- 게시글 등록 버튼 -->
+                                            <!-- 관련자만 보이게 처리 -->
+                                            <button type="submit" class="site-button radius-xl m-l10">
+                                                <i class="fa fa-plus m-r5"></i>게시글 등록
+                                            </button>
+                                        </div>
+                                    </form>
+                                {% endif %}
                                 <!--========== 페이지네이션 시작 ===========-->
                                 <!-- 1페이지에 15개 게시글 끌고오고, 게시글이 그보다 적으면, 페이지네이션 안보이게 처리 -->
                                 <div class="pagination-bx clearfix text-center">
                                     <ul class="pagination">
-                                        <li class="previous"><a href="javascript:void(0)"><i
-                                                class="fa fa-arrow-left"></i></a></li>
-                                        <li><a href="javascript:void(0)">1</a></li>
-                                        <li><a href="javascript:void(0)">2</a></li>
-                                        <li><a href="javascript:void(0)">...</a></li>
-                                        <li class="active"><a href="javascript:void(0)">7</a></li>
-                                        <li class="next"><a href="javascript:void(0)"><i class="fa fa-arrow-right"></i></a>
-                                        </li>
+                                        {% if board_list.has_previous %}
+                                            <li class="previous"><a href="?page=1"><i class="fa fa-arrow-left"></i></a>
+                                            </li>
+                                            <li>
+                                                <a href="?page={{ board_list.previous_page_number }}"> {{ board_list.previous_page_number }}</a>
+                                            </li>
+                                        {% endif %}
+                                        <li><a href="javascript:void(0)">{{ board_list.number }}</a></li>
+                                        {% if board_list.has_next %}
+                                            <li>
+                                                <a href="?page={{ board_list.next_page_number }}"> {{ board_list.next_page_number }}</a>
+                                            </li>
+                                            <li class="next"><a href="?page={{ board_list.paginator.num_pages }}"><i
+                                                    class="fa fa-arrow-right"></i></a></li>
+                                        {% endif %}
                                     </ul>
                                 </div>
                                 <!--========== 페이지네이션 끝 ===========-->

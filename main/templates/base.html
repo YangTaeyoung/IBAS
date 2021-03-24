@@ -88,12 +88,12 @@
                                 </ul>
                             </li>
                             <!--====================게시판을 상위메뉴로 가지고 있는 메뉴====================-->
-                            <li class="down active" style="padding-top: 6px"><a href="#">게시판 <i
+                            <li class="down active" style="padding-top: 6px"><a href="{% url 'board_view' board_type_no=5 %}">게시판<i
                                     class="fa fa-chevron-down"></i></a>
                                 <ul class="sub-menu">
-                                    <li><a href="#">공지사항</a></li>
-                                    <li><a href="#">자유게시판</a></li>
-                                    <li><a href="#">질문게시판</a></li>
+                                    <li><a href="{% url 'board_view' board_type_no=1 %}">공지사항</a></li>
+                                    <li><a href="{% url 'board_view' board_type_no=2 %}">자유게시판</a></li>
+                                    <li><a href="{% url 'board_view' board_type_no=3 %}">질문게시판</a></li>
                                     <li><a href="#">공모전게시판</a></li>
                                 </ul>
                             </li>
@@ -328,5 +328,3 @@ jQuery(document).ready(function(){
 
 </body>
 </html>
-
-정
