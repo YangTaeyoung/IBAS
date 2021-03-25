@@ -13,6 +13,7 @@
     background-color: inherit;
     width: 100px;
     text-align: center;
+
 }
 /* input 활성화 되었을 때 스타일을 설정해주기 위함 */
 /*사용된 곳: bank_yejin.js에서 bank_update()에서 사용*/
@@ -21,8 +22,9 @@
     background-color: white;
     text-align: center;
     width: 170px;
-    height: 35px;
+    height: 25px;
     border-radius: 4px;
+
 }
 .bank-input-add:focus { outline: none; }
 
@@ -73,6 +75,14 @@
     flex-direction: column;
     margin-bottom: 10px;
 }
-.bank-padding_10_0 {
-    padding: 10px 0;
+
+/*총액 div 스타일을 위함*/
+/*사용된 곳: 총액 */
+.bank-total {
+    background-color: #4611a7;
+    color: white;
+    padding: 10px;
+    width: 180px;
+    border-radius: 30px;
+    text-align: center
 }
