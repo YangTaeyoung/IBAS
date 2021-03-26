@@ -19,3 +19,7 @@ def member_delete_list(request):
 def member_delete_detail(request):
     context = {}
     return render(request, 'member_delete_detail.html', context)
+
+def member_delete_register(request):
+    context = {}
+    return render(request, 'member_delete_register.html', context)
