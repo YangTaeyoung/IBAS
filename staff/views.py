@@ -11,7 +11,11 @@ import os
 from IBAS.file_controller import get_filename, get_filename_with_ext
 
 # Create your views here.
-# 동아리 소개 작업할 것임
+
 def member_delete_list(request):
     context = {}
-    return render(request, 'member_delete_list.html', context)  # introduce 에 실어서 보내분다.
+    return render(request, 'member_delete_list.html', context)
+
+def member_delete_detail(request):
+    context = {}
+    return render(request, 'member_delete_detail.html', context)
