@@ -5,13 +5,10 @@ from DB.models import AuthUser, User, ChiefCarrier, UserRole, Board, BoardFile, 
 from django.db.models import Q
 from member import session
 from django.core.paginator import Paginator
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponse
 from django.conf import settings
-
-from IBAS.user_controller import is_chief_exist, is_sub_chief_exist, get_sub_chief, get_chief, get_banker, \
-    get_chief_crews
+from IBAS.user_controller import is_chief_exist, get_chief
 import os
-from IBAS.file_controller import get_filename, get_filename_with_ext
 
 
 # 메인페이지 이동 함수
