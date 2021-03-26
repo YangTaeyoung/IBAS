@@ -13,7 +13,7 @@
                  style=" background-image: url('{% static 'images/board_name_img.jpg' %}'); height: 350px">
                 <!-- 상단 제목을 클릭하면, 상위 게시판으로 이동 -->
                 <!-- (ex.자유게시판의 '용식이의 학식일기'글의 상세 페이지에서 상위 제목을 클릭하면, 자유게시판으로 이동) -->
-                <a href="{% url 'activity' %}">
+                <a href="{% url 'member_delete_list' %}">
                     <div class="container clearfix">
                         <div class="dlab-bnr-inr-entry">
                             <!--제목-->
@@ -69,7 +69,7 @@
                                 <!-- 게시글 번호 -->
                                 <th scope="row" style="text-align: center">1</th>
                                 <!-- 게시글 제목 -->
-                                <td><a href="#">홍길동 제명 건에 관하여</a></td>
+                                <td><a href="{% url 'member_delete_detail' %}">홍길동 제명 건에 관하여</a></td>
                                 <!-- 게시글 작성자 -->
                                 <td style="text-align: center">김채림</td>
                                 <!-- 게시글 작성일자 -->
