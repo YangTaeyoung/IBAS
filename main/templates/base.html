@@ -132,7 +132,7 @@
                                             </ul>
                                             <!--==승인되었을 때==-->
                                         {% else %}
-                                            <img src="{{ request.session.user_pic }}" width="35" height="35"
+                                            <img src="/media/{{ request.session.user_pic }}" width="35" height="35"
                                                  style=" border: 2px solid #3cff44; border-radius: 17.5px; margin-right: 3px"
                                                  alt="현재 브라우저에서 지원하지 않는 형식입니다.">
                                             {{ request.session.user_name }} 님
@@ -174,9 +174,10 @@
                                 <li class="active" style="padding-top: 5px;">
                                     <a href="{% url 'login' %}">Log In</a>
                                 </li>
-{#                                                                <li class="active" style="padding-top: 5px;">#}
-{#                                                                    <a href="#">Sign Up</a>#}
-{#                                                                </li>#}
+                                {#                                <li class="active" style="padding-top: 5px;">#}
+                                {#                                    <a href="#">Sign Up</a>#}
+                                {#                                </li>#}
+
                             {% endif %}
                         </ul>
                     </div>
@@ -197,7 +198,7 @@
 <footer>
     <!-- content 담는 부분이 footer-top -->
     <!-- footer-top에 대한 정의는 bottom_bar.css에 정의되어 있음. (height 관련) -->
-    <div class="ibas-footer-top" style="background-image: {% static 'images/botton_bar.jpg' %}">
+    <div class="ibas-footer-top" style="background-image: url({% static 'images/botton_bar.jpg' %})">
         <!-- content 시작 -->
         <!-- cont-grid에 대한 정의는 bottom_bar.css에 정의되어 있음. (grid 관련) -->
         <div class="cont-grid">
