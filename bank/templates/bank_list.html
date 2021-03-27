@@ -61,15 +61,15 @@
                         <!-- 테이블의 제목(1행) -->
                         <thead>
                         <!-- bank-tr-head는 bank_yejin.js에 사용됨. bank_select 부분과 관련 -->
-                        <tr id = "bank-tr-head" style="text-align: center">
-                            <th scope="col" style="width: 175px;">날짜</th>
+                        <tr id="bank-tr-head" style="text-align: center">
+                            <th scope="col" style="width: 150px;">사용일</th>
+                            <th scope="col" style="width: 150px;">게시일</th>
+                            <th scope="col" style="width: 150px;">수정일</th>
                             <th scope="col" style="width: 400px">내용</th>
                             <th scope="col" style="width: 123px;">수입액</th>
                             <th scope="col" style="width: 123px;">지출액</th>
-                            <th scope="col" style="width: 124px;">누적합계</th>
-                            <th scope="col" style="width: 86px;">증빙자료</th>
-                            <th scope="col" style="width: 54px;">수정</th>
-                            <th scope="col" style="width: 55px;">삭제</th>
+                            <th scope="col" style="width: 86px;">증빙</th>
+                            <th scope="col" style="width: 54px;" colspan="2">비고</th>
                         </tr>
                         </thead>
                         <!-- 끌고오는 게시글 파트 -->
@@ -78,28 +78,47 @@
                         <!-- ========================== 게시글 (여기서 부터 반복) ============================= -->
                         <!-- bank-tr-1는 bank_yejin.js에 사용됨. bank_select 부분과 관련 -->
                         <!-- bank-text-align_center는 bank_yejin.css에 정의됨. -->
-                        <tr id = "bank-tr-1" class="bank-text-align_center">
+                        <!-- 각 td에 스타일 padding: 10px 0;이 적용되어 있는데, 외부 css파일로 스타일 적용이 안되어 따로 지정해 준 것임.  -->
+                        <tr id="bank-tr-1" class="bank-text-align_center">
                             <form>
 
-                                <!-- 날짜 -->
-                                <td scope="row" style="width: 175px;">
+                                <!-- 사용일 -->
+                                <td scope="row" style="padding: 10px 0; width: 100px;">
                                     <!-- bank-date-1는 bank_yejin.js에 사용됨. bank_select, bank_update 부분과 관련 -->
                                     <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
-                                    <input id="bank-date-1" class="bank-input-con" type="date" value="2021-02-02"
-                                           style="width: 150px;" disabled="disabled">
+                                    <input id="bank-date-1" class="bank-input-con" type="text" value="2021-02-02"
+                                           style="width: 100px;" disabled="disabled">
                                 </td>
+
+                                <!-- 게시일 -->
+                                <td style="padding: 10px 0">
+                                    <!-- bank-date-1는 bank_yejin.js에 사용됨. bank_select, bank_update 부분과 관련 -->
+                                    <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
+                                    <input id="bank-date-1" class="bank-input-con" type="text" value="2021-12-25"
+                                           style="width: 100px;" disabled="disabled">
+                                </td>
+
+                                <!-- 수정일 -->
+                                <td style="padding: 10px 0">
+                                    <!-- bank-date-1는 bank_yejin.js에 사용됨. bank_select, bank_update 부분과 관련 -->
+                                    <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
+                                    <input id="bank-date-1" class="bank-input-con" type="text" value="2021-02-02"
+                                           style="width: 100px;" disabled="disabled">
+                                </td>
+
 
                                 <!-- 내용 -->
                                 <!-- bank-text-align_start는 bank_yejin.css에 정의됨. -->
-                                <td class="bank-text-align_start" style="width: 400px;">
+                                <td class="bank-text-align_start" style="width: 400px; padding: 10px 0">
                                     <!-- bank-txt-1는 bank_yejin.js에 사용됨. bank_update 부분과 관련 -->
                                     <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
-                                    <input id="bank-txt-1" class="bank-input-con" type="text" value="동아리 회비"
-                                           disabled="disabled">
+                                    <input id="bank-txt-1" class="bank-input-con" type="text"
+                                           value="동아리 회비동아리 회비동아리 회비동아리 회비동아리 회비"
+                                           disabled="disabled" style="width: 430px;">
                                 </td>
 
                                 <!-- 수입액 -->
-                                <td style="width: 123px;">
+                                <td style="width: 123px;padding: 10px 0;">
                                     <!-- bank-earn-1는 bank_yejin.js에 사용됨. bank_update 부분과 관련 -->
                                     <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
                                     <input id="bank-earn-1" class="bank-input-con" type="text" value="5,000,000"
@@ -107,23 +126,15 @@
                                 </td>
 
                                 <!-- 지출액 -->
-                                <td style="width: 123px;">
+                                <td style="width: 123px;padding: 10px 0;">
                                     <!-- bank-spend-1는 bank_yejin.js에 사용됨. bank_update 부분과 관련 -->
                                     <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
                                     <input id="bank-spend-1" class="bank-input-con" type="text" value="5,000,000"
                                            disabled="disabled">
                                 </td>
 
-                                <!-- 누적합계 -->
-                                <td style="width: 124px;">
-                                    <!-- bank-money-1는 bank_yejin.js에 사용됨. bank_update 부분과 관련 -->
-                                    <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
-                                    <input id="bank-money-1" class="bank-input-con" type="text" value="5,000,000"
-                                           disabled="disabled">
-                                </td>
-
                                 <!-- 증빙자료 버튼 -->
-                                <td style="width: 86px;">
+                                <td style="width: 86px;padding: 10px 0;">
                                     <!-- 누르면 증빙자료모달 보이게 함 -->
                                     <a data-toggle="modal" data-target="#bank-modal-bg" href="javascript:void(0);"
                                        class="site-button-link black bank-flex">
@@ -133,7 +144,7 @@
 
                                 <!-- 수정 -->
                                 <!-- bank_update는 bank_yejin.js에 정의됨. -->
-                                <td onclick="bank_update()" style="width: 55px; padding-left: 20px;">
+                                <td onclick="bank_update()" style="width: 55px; padding: 10px 0;">
                                     <!-- bank-update는 bank_yejin.js에 사용됨. bank_update 부분과 관련 -->
                                     <i id="bank-update" class="fa fa-pencil "></i>
                                 </td>
@@ -143,16 +154,360 @@
                             <form>
                                 <!-- 삭제 -->
                                 <!-- bank_del는 bank_yejin.js에 정의됨. -->
-                                <td onclick="bank_del()" style="padding-left: 20px;">
+                                <td onclick="bank_del()" style="padding: 10px 0;">
                                     <i class="fa fa-trash" style="font-size: 18px; justify-content: flex-start;"></i>
                                 </td>
                             </form>
                         </tr>
                         <!-- ========================== 게시글 끝 (여기까지) ============================= -->
 
+                        <!-- ========================== 게시글 (여기서 부터 반복) ============================= -->
+                        <!-- bank-tr-1는 bank_yejin.js에 사용됨. bank_select 부분과 관련 -->
+                        <!-- bank-text-align_center는 bank_yejin.css에 정의됨. -->
+                        <!-- 각 td에 스타일 padding: 10px 0;이 적용되어 있는데, 외부 css파일로 스타일 적용이 안되어 따로 지정해 준 것임.  -->
+                        <tr id="bank-tr-1" class="bank-text-align_center">
+                            <form>
+
+                                <!-- 사용일 -->
+                                <td scope="row" style="padding: 10px 0; width: 100px;">
+                                    <!-- bank-date-1는 bank_yejin.js에 사용됨. bank_select, bank_update 부분과 관련 -->
+                                    <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
+                                    <input id="bank-date-1" class="bank-input-con" type="text" value="2021-02-02"
+                                           style="width: 100px;" disabled="disabled">
+                                </td>
+
+                                <!-- 게시일 -->
+                                <td style="padding: 10px 0">
+                                    <!-- bank-date-1는 bank_yejin.js에 사용됨. bank_select, bank_update 부분과 관련 -->
+                                    <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
+                                    <input id="bank-date-1" class="bank-input-con" type="text" value="2021-12-25"
+                                           style="width: 100px;" disabled="disabled">
+                                </td>
+
+                                <!-- 수정일 -->
+                                <td style="padding: 10px 0">
+                                    <!-- bank-date-1는 bank_yejin.js에 사용됨. bank_select, bank_update 부분과 관련 -->
+                                    <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
+                                    <input id="bank-date-1" class="bank-input-con" type="text" value="2021-02-02"
+                                           style="width: 100px;" disabled="disabled">
+                                </td>
+
+
+                                <!-- 내용 -->
+                                <!-- bank-text-align_start는 bank_yejin.css에 정의됨. -->
+                                <td class="bank-text-align_start" style="width: 400px; padding: 10px 0">
+                                    <!-- bank-txt-1는 bank_yejin.js에 사용됨. bank_update 부분과 관련 -->
+                                    <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
+                                    <input id="bank-txt-1" class="bank-input-con" type="text"
+                                           value="동아리 회비동아리 회비동아리 회비동아리 회비동아리 회비"
+                                           disabled="disabled" style="width: 430px;">
+                                </td>
+
+                                <!-- 수입액 -->
+                                <td style="width: 123px;padding: 10px 0;">
+                                    <!-- bank-earn-1는 bank_yejin.js에 사용됨. bank_update 부분과 관련 -->
+                                    <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
+                                    <input id="bank-earn-1" class="bank-input-con" type="text" value="5,000,000"
+                                           disabled="disabled">
+                                </td>
+
+                                <!-- 지출액 -->
+                                <td style="width: 123px;padding: 10px 0;">
+                                    <!-- bank-spend-1는 bank_yejin.js에 사용됨. bank_update 부분과 관련 -->
+                                    <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
+                                    <input id="bank-spend-1" class="bank-input-con" type="text" value="5,000,000"
+                                           disabled="disabled">
+                                </td>
+
+                                <!-- 증빙자료 버튼 -->
+                                <td style="width: 86px;padding: 10px 0;">
+                                    <!-- 누르면 증빙자료모달 보이게 함 -->
+                                    <a data-toggle="modal" data-target="#bank-modal-bg" href="javascript:void(0);"
+                                       class="site-button-link black bank-flex">
+                                        <i class="fa fa-file-text-o"></i>
+                                    </a>
+                                </td>
+
+                                <!-- 수정 -->
+                                <!-- bank_update는 bank_yejin.js에 정의됨. -->
+                                <td onclick="bank_update()" style="width: 55px; padding: 10px 0;">
+                                    <!-- bank-update는 bank_yejin.js에 사용됨. bank_update 부분과 관련 -->
+                                    <i id="bank-update" class="fa fa-pencil "></i>
+                                </td>
+
+                            </form>
+
+                            <form>
+                                <!-- 삭제 -->
+                                <!-- bank_del는 bank_yejin.js에 정의됨. -->
+                                <td onclick="bank_del()" style="padding: 10px 0;">
+                                    <i class="fa fa-trash" style="font-size: 18px; justify-content: flex-start;"></i>
+                                </td>
+                            </form>
+                        </tr>
+                        <!-- ========================== 게시글 끝 (여기까지) ============================= -->
+
+                        <!-- ========================== 게시글 (여기서 부터 반복) ============================= -->
+                        <!-- bank-tr-1는 bank_yejin.js에 사용됨. bank_select 부분과 관련 -->
+                        <!-- bank-text-align_center는 bank_yejin.css에 정의됨. -->
+                        <!-- 각 td에 스타일 padding: 10px 0;이 적용되어 있는데, 외부 css파일로 스타일 적용이 안되어 따로 지정해 준 것임.  -->
+                        <tr id="bank-tr-1" class="bank-text-align_center">
+                            <form>
+
+                                <!-- 사용일 -->
+                                <td scope="row" style="padding: 10px 0; width: 100px;">
+                                    <!-- bank-date-1는 bank_yejin.js에 사용됨. bank_select, bank_update 부분과 관련 -->
+                                    <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
+                                    <input id="bank-date-1" class="bank-input-con" type="text" value="2021-02-02"
+                                           style="width: 100px;" disabled="disabled">
+                                </td>
+
+                                <!-- 게시일 -->
+                                <td style="padding: 10px 0">
+                                    <!-- bank-date-1는 bank_yejin.js에 사용됨. bank_select, bank_update 부분과 관련 -->
+                                    <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
+                                    <input id="bank-date-1" class="bank-input-con" type="text" value="2021-12-25"
+                                           style="width: 100px;" disabled="disabled">
+                                </td>
+
+                                <!-- 수정일 -->
+                                <td style="padding: 10px 0">
+                                    <!-- bank-date-1는 bank_yejin.js에 사용됨. bank_select, bank_update 부분과 관련 -->
+                                    <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
+                                    <input id="bank-date-1" class="bank-input-con" type="text" value="2021-02-02"
+                                           style="width: 100px;" disabled="disabled">
+                                </td>
+
+
+                                <!-- 내용 -->
+                                <!-- bank-text-align_start는 bank_yejin.css에 정의됨. -->
+                                <td class="bank-text-align_start" style="width: 400px; padding: 10px 0">
+                                    <!-- bank-txt-1는 bank_yejin.js에 사용됨. bank_update 부분과 관련 -->
+                                    <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
+                                    <input id="bank-txt-1" class="bank-input-con" type="text"
+                                           value="동아리 회비동아리 회비동아리 회비동아리 회비동아리 회비"
+                                           disabled="disabled" style="width: 430px;">
+                                </td>
+
+                                <!-- 수입액 -->
+                                <td style="width: 123px;padding: 10px 0;">
+                                    <!-- bank-earn-1는 bank_yejin.js에 사용됨. bank_update 부분과 관련 -->
+                                    <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
+                                    <input id="bank-earn-1" class="bank-input-con" type="text" value="5,000,000"
+                                           disabled="disabled">
+                                </td>
+
+                                <!-- 지출액 -->
+                                <td style="width: 123px;padding: 10px 0;">
+                                    <!-- bank-spend-1는 bank_yejin.js에 사용됨. bank_update 부분과 관련 -->
+                                    <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
+                                    <input id="bank-spend-1" class="bank-input-con" type="text" value="5,000,000"
+                                           disabled="disabled">
+                                </td>
+
+                                <!-- 증빙자료 버튼 -->
+                                <td style="width: 86px;padding: 10px 0;">
+                                    <!-- 누르면 증빙자료모달 보이게 함 -->
+                                    <a data-toggle="modal" data-target="#bank-modal-bg" href="javascript:void(0);"
+                                       class="site-button-link black bank-flex">
+                                        <i class="fa fa-file-text-o"></i>
+                                    </a>
+                                </td>
+
+                                <!-- 수정 -->
+                                <!-- bank_update는 bank_yejin.js에 정의됨. -->
+                                <td onclick="bank_update()" style="width: 55px; padding: 10px 0;">
+                                    <!-- bank-update는 bank_yejin.js에 사용됨. bank_update 부분과 관련 -->
+                                    <i id="bank-update" class="fa fa-pencil "></i>
+                                </td>
+
+                            </form>
+
+                            <form>
+                                <!-- 삭제 -->
+                                <!-- bank_del는 bank_yejin.js에 정의됨. -->
+                                <td onclick="bank_del()" style="padding: 10px 0;">
+                                    <i class="fa fa-trash" style="font-size: 18px; justify-content: flex-start;"></i>
+                                </td>
+                            </form>
+                        </tr>
+                        <!-- ========================== 게시글 끝 (여기까지) ============================= -->
+
+                        <!-- ========================== 게시글 (여기서 부터 반복) ============================= -->
+                        <!-- bank-tr-1는 bank_yejin.js에 사용됨. bank_select 부분과 관련 -->
+                        <!-- bank-text-align_center는 bank_yejin.css에 정의됨. -->
+                        <!-- 각 td에 스타일 padding: 10px 0;이 적용되어 있는데, 외부 css파일로 스타일 적용이 안되어 따로 지정해 준 것임.  -->
+                        <tr id="bank-tr-1" class="bank-text-align_center">
+                            <form>
+
+                                <!-- 사용일 -->
+                                <td scope="row" style="padding: 10px 0; width: 100px;">
+                                    <!-- bank-date-1는 bank_yejin.js에 사용됨. bank_select, bank_update 부분과 관련 -->
+                                    <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
+                                    <input id="bank-date-1" class="bank-input-con" type="text" value="2021-02-02"
+                                           style="width: 100px;" disabled="disabled">
+                                </td>
+
+                                <!-- 게시일 -->
+                                <td style="padding: 10px 0">
+                                    <!-- bank-date-1는 bank_yejin.js에 사용됨. bank_select, bank_update 부분과 관련 -->
+                                    <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
+                                    <input id="bank-date-1" class="bank-input-con" type="text" value="2021-12-25"
+                                           style="width: 100px;" disabled="disabled">
+                                </td>
+
+                                <!-- 수정일 -->
+                                <td style="padding: 10px 0">
+                                    <!-- bank-date-1는 bank_yejin.js에 사용됨. bank_select, bank_update 부분과 관련 -->
+                                    <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
+                                    <input id="bank-date-1" class="bank-input-con" type="text" value="2021-02-02"
+                                           style="width: 100px;" disabled="disabled">
+                                </td>
+
+
+                                <!-- 내용 -->
+                                <!-- bank-text-align_start는 bank_yejin.css에 정의됨. -->
+                                <td class="bank-text-align_start" style="width: 400px; padding: 10px 0">
+                                    <!-- bank-txt-1는 bank_yejin.js에 사용됨. bank_update 부분과 관련 -->
+                                    <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
+                                    <input id="bank-txt-1" class="bank-input-con" type="text"
+                                           value="동아리 회비동아리 회비동아리 회비동아리 회비동아리 회비"
+                                           disabled="disabled" style="width: 430px;">
+                                </td>
+
+                                <!-- 수입액 -->
+                                <td style="width: 123px;padding: 10px 0;">
+                                    <!-- bank-earn-1는 bank_yejin.js에 사용됨. bank_update 부분과 관련 -->
+                                    <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
+                                    <input id="bank-earn-1" class="bank-input-con" type="text" value="5,000,000"
+                                           disabled="disabled">
+                                </td>
+
+                                <!-- 지출액 -->
+                                <td style="width: 123px;padding: 10px 0;">
+                                    <!-- bank-spend-1는 bank_yejin.js에 사용됨. bank_update 부분과 관련 -->
+                                    <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
+                                    <input id="bank-spend-1" class="bank-input-con" type="text" value="5,000,000"
+                                           disabled="disabled">
+                                </td>
+
+                                <!-- 증빙자료 버튼 -->
+                                <td style="width: 86px;padding: 10px 0;">
+                                    <!-- 누르면 증빙자료모달 보이게 함 -->
+                                    <a data-toggle="modal" data-target="#bank-modal-bg" href="javascript:void(0);"
+                                       class="site-button-link black bank-flex">
+                                        <i class="fa fa-file-text-o"></i>
+                                    </a>
+                                </td>
+
+                                <!-- 수정 -->
+                                <!-- bank_update는 bank_yejin.js에 정의됨. -->
+                                <td onclick="bank_update()" style="width: 55px; padding: 10px 0;">
+                                    <!-- bank-update는 bank_yejin.js에 사용됨. bank_update 부분과 관련 -->
+                                    <i id="bank-update" class="fa fa-pencil "></i>
+                                </td>
+
+                            </form>
+
+                            <form>
+                                <!-- 삭제 -->
+                                <!-- bank_del는 bank_yejin.js에 정의됨. -->
+                                <td onclick="bank_del()" style="padding: 10px 0;">
+                                    <i class="fa fa-trash" style="font-size: 18px; justify-content: flex-start;"></i>
+                                </td>
+                            </form>
+                        </tr>
+                        <!-- ========================== 게시글 끝 (여기까지) ============================= -->
+
+                        <!-- ========================== 게시글 (여기서 부터 반복) ============================= -->
+                        <!-- bank-tr-1는 bank_yejin.js에 사용됨. bank_select 부분과 관련 -->
+                        <!-- bank-text-align_center는 bank_yejin.css에 정의됨. -->
+                        <!-- 각 td에 스타일 padding: 10px 0;이 적용되어 있는데, 외부 css파일로 스타일 적용이 안되어 따로 지정해 준 것임.  -->
+                        <tr id="bank-tr-1" class="bank-text-align_center">
+                            <form>
+
+                                <!-- 사용일 -->
+                                <td scope="row" style="padding: 10px 0; width: 100px;">
+                                    <!-- bank-date-1는 bank_yejin.js에 사용됨. bank_select, bank_update 부분과 관련 -->
+                                    <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
+                                    <input id="bank-date-1" class="bank-input-con" type="text" value="2021-02-02"
+                                           style="width: 100px;" disabled="disabled">
+                                </td>
+
+                                <!-- 게시일 -->
+                                <td style="padding: 10px 0">
+                                    <!-- bank-date-1는 bank_yejin.js에 사용됨. bank_select, bank_update 부분과 관련 -->
+                                    <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
+                                    <input id="bank-date-1" class="bank-input-con" type="text" value="2021-12-25"
+                                           style="width: 100px;" disabled="disabled">
+                                </td>
+
+                                <!-- 수정일 -->
+                                <td style="padding: 10px 0">
+                                    <!-- bank-date-1는 bank_yejin.js에 사용됨. bank_select, bank_update 부분과 관련 -->
+                                    <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
+                                    <input id="bank-date-1" class="bank-input-con" type="text" value="2021-02-02"
+                                           style="width: 100px;" disabled="disabled">
+                                </td>
+
+
+                                <!-- 내용 -->
+                                <!-- bank-text-align_start는 bank_yejin.css에 정의됨. -->
+                                <td class="bank-text-align_start" style="width: 400px; padding: 10px 0">
+                                    <!-- bank-txt-1는 bank_yejin.js에 사용됨. bank_update 부분과 관련 -->
+                                    <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
+                                    <input id="bank-txt-1" class="bank-input-con" type="text"
+                                           value="동아리 회비동아리 회비동아리 회비동아리 회비동아리 회비"
+                                           disabled="disabled" style="width: 430px;">
+                                </td>
+
+                                <!-- 수입액 -->
+                                <td style="width: 123px;padding: 10px 0;">
+                                    <!-- bank-earn-1는 bank_yejin.js에 사용됨. bank_update 부분과 관련 -->
+                                    <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
+                                    <input id="bank-earn-1" class="bank-input-con" type="text" value="5,000,000"
+                                           disabled="disabled">
+                                </td>
+
+                                <!-- 지출액 -->
+                                <td style="width: 123px;padding: 10px 0;">
+                                    <!-- bank-spend-1는 bank_yejin.js에 사용됨. bank_update 부분과 관련 -->
+                                    <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
+                                    <input id="bank-spend-1" class="bank-input-con" type="text" value="5,000,000"
+                                           disabled="disabled">
+                                </td>
+
+                                <!-- 증빙자료 버튼 -->
+                                <td style="width: 86px;padding: 10px 0;">
+                                    <!-- 누르면 증빙자료모달 보이게 함 -->
+                                    <a data-toggle="modal" data-target="#bank-modal-bg" href="javascript:void(0);"
+                                       class="site-button-link black bank-flex">
+                                        <i class="fa fa-file-text-o"></i>
+                                    </a>
+                                </td>
+
+                                <!-- 수정 -->
+                                <!-- bank_update는 bank_yejin.js에 정의됨. -->
+                                <td onclick="bank_update()" style="width: 55px; padding: 10px 0;">
+                                    <!-- bank-update는 bank_yejin.js에 사용됨. bank_update 부분과 관련 -->
+                                    <i id="bank-update" class="fa fa-pencil "></i>
+                                </td>
+
+                            </form>
+
+                            <form>
+                                <!-- 삭제 -->
+                                <!-- bank_del는 bank_yejin.js에 정의됨. -->
+                                <td onclick="bank_del()" style="padding: 10px 0;">
+                                    <i class="fa fa-trash" style="font-size: 18px; justify-content: flex-start;"></i>
+                                </td>
+                            </form>
+                        </tr>
+                        <!-- ========================== 게시글 끝 (여기까지) ============================= -->
 
                         </tbody>
                     </table>
+
 
                     <!-- 회계내역 추가 버튼  -->
                     <!-- bank-btn-add-divr는 bank_yejin.css에 정의됨. -->
@@ -164,6 +519,12 @@
                                 <i class="fa fa-plus" style="color: #787878; font-size: 20px"></i>
                             </a>
                         </div>
+                    </div>
+
+                    <!--=======================총액============================-->
+                    <div class="bank-flex">
+                        <!-- bank-total는 bank_yejin.css에 정의됨. -->
+                        <p class="bank-total">잔액: 5,000,000</p>
                     </div>
 
                     <!--=======================증빙자료 모달============================-->
