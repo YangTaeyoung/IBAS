@@ -67,11 +67,9 @@
                                     <!--============================== 게시글 본문 시작 ==============================-->
                                     <div class="dlab-post-text">
                                         <!-- 본문 입력 내용 -->
-
                                         {% autoescape off %}
                                             {{ board.board_cont }}
                                         {% endautoescape %}
-
                                         <!-- 첨부된 파일 불러오는 곳 -->
                                         <!-- download 쪽에 파일 경로 설정 -->
                                         <!-- 파일 리스트 길이가 0이 아닐 경우에만 파일 리스트를 출력하게 함. -->
@@ -96,7 +94,8 @@
                                                         <li>
                                                             <span data-exthumbimage="/media/{{ board_img.board_file_path }}"
                                                                   data-src="/media/{{ board_img.board_file_path }}"
-                                                                  class="check-km " title="{{ board_file.board_file_name}}">
+                                                                  class="check-km "
+                                                                  title="{{ board_file.board_file_name }}">
                                                                 <a href="javascript:void(0);">
                                                                     <div class="dlab-post-thum act-detail-img-size">
                                                                         <img style="height: 190px"
@@ -111,7 +110,7 @@
                                                             <span data-exthumbimage="/media/{{ board_img.board_file_path }}"
                                                                   data-src="/media/{{ board_img.board_file_path }}"
                                                                   class="check-km act-detail-img-siz"
-                                                                  title="{{ board_file.board_file_name}}">
+                                                                  title="{{ board_file.board_file_name }}">
                                                                 <a href="javascript:void(0);">
                                                                     <div class="dlab-post-thum "><img
                                                                             style="height: 190px"
@@ -133,7 +132,8 @@
                                                         <li style="display: none;">
                                                             <span data-exthumbimage="/media/{{ board_img.board_file_path }}"
                                                                   data-src="/media/{{ board_img.board_file_path }}"
-                                                                  class="check-km " title="{{ board_file.board_file_name}}">
+                                                                  class="check-km "
+                                                                  title="{{ board_file.board_file_name }}">
                                                                 <a href="javascript:void(0);">
                                                                     <div class="dlab-post-thum act-detail-img-size">
                                                                         <img style="height: 190px"
@@ -145,11 +145,8 @@
                                                         </li>
                                                     {% endif %}
                                                 {% endfor %}
-
-
                                             </ul>
                                         </div>
-
                                     </div>
                                     <!-- 게시글 삭제 및 수정 div -->
                                     <div class="extra-cell text-right">
@@ -165,12 +162,13 @@
                                                   style="display: none;">
                                                 {% csrf_token %}
                                                 <input type="hidden" name="board_no" value="{{ board.board_no }}">
-
                                             </form>
                                         {% endif %}
                                         <!-- 게시글 삭제 버튼 -->
                                         <!-- 관련자만 보이게 처리 -->
-                                        {% if request.session.user_stu == board.board_writer.user_stu and request.session.user_role >= 3 %}
+
+                                        {% if request.session.user_stu == board.board_writer.user_stu or request.session.user_role <= 3 %}
+
                                             <button class="site-button red radius-xl m-l10" onclick="go_delete()"><i
                                                     class="fa fa-trash m-r5"></i>게시글 삭제
                                             </button>

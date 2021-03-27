@@ -352,8 +352,7 @@ class User(models.Model):
     user_stu = models.IntegerField(db_column='USER_STU', primary_key=True)  # Field name made lowercase.
     user_name = models.CharField(db_column='USER_NAME', max_length=50)  # Field name made lowercase.
     user_major = models.ForeignKey(MajorInfo, models.DO_NOTHING, db_column='USER_MAJOR')  # Field name made lowercase.
-    user_pic = models.ImageField(db_column='USER_PIC', upload_to='member/', blank=True,
-                                 null=True)  # Field name made lowercase.
+    user_pic = models.ImageField(db_column='USER_PIC', upload_to='member/', blank=True, null=True)  # Field name made lowercase.
     user_auth = models.ForeignKey('UserAuth', models.DO_NOTHING, db_column='USER_AUTH')  # Field name made lowercase.
     user_role = models.ForeignKey('UserRole', models.DO_NOTHING, db_column='USER_ROLE')  # Field name made lowercase.
     user_joined = models.DateTimeField(db_column='USER_JOINED', auto_now_add=True)  # Field name made lowercase.
