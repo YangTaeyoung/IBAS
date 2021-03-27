@@ -13,7 +13,7 @@ from IBAS.file_controller import get_filename, get_filename_with_ext
 
 # Create your views here.
 # 동아리 소개 작업할 것임
-def bank_board(request):
+def bank_list(request):
     bank_list = Bank.objects.order_by('-bank_created').prefetch_related('bankfile_set')
     year_list = list()
     for bank in bank_list:
@@ -26,7 +26,7 @@ def bank_board(request):
         "bank_list": bank_list,
         "year_list": year_list,
     }
-    return render(request, 'bank_board.html', context)
+    return render(request, 'bank_list.html', context)
 
 
 def bank_delete(request):
