@@ -120,7 +120,7 @@ def quest_chk(request):
 
         user_pic = request.POST.get("user_pic")
         if user_pic is not None:
-            urlretrieve(user_pic, "/home/ibas/Django/IBAS/media/" + user_stu + ".jpg")
+            urlretrieve(user_pic, "/home/ibas/Django/IBAS/media/member/" + user_stu + ".jpg")
             user_pic = "member/" + user_stu + ".jpg"
         # 받은 정보로 user 모델 인스턴스 변수 생성
         user = User.objects.create(
@@ -152,7 +152,6 @@ def quest_chk(request):
                 )
 
                 answer.save()
-
         session.save_session(request, user) # 자동 로그인을 위해 세션 등록
         return redirect(reverse("welcome"))  # 정상 회원가입 완료시 회원 가입 완료 페이지로 이동.
     return render(request, "index.html", {'lgn_is_failed': 1}) #비정상 적인 접근 시 로그인 실패 메시지 출력과 함께 메인페이지 이동.

@@ -45,8 +45,6 @@ INSTALLED_APPS = [
     'member',
     # 메인 관련 앱
     'main',
-    # 회계 관련 앱
-    'bank',
     # 게시판 관련 앱
     'board',
     # 소셜 로그인 패키지: allauth 관련
@@ -103,7 +101,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'IBAS',
         'USER': 'root',
-        'PASSWORD': 'bigdata1156--',
+        'PASSWORD': 'webproj3971--',
         'HOST': 'localhost',
         'PORT': '3356',
     }

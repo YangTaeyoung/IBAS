@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    <div class="page-wraper">
+        <!-- 상단 제목부분 -->
+        <div class="page-content bg-white">
+            <!----------============= 상단 제목 시작 ================----------->
+            <!--제목을 감싸는 배경-->
+            <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"
+                 style=" background-image: url('{% static 'images/board_name_img.jpg' %}'); height: 350px">
+                <!-- 상단 제목을 클릭하면, 상위 게시판으로 이동 -->
+                <!-- (ex.자유게시판의 '용식이의 학식일기'글의 상세 페이지에서 상위 제목을 클릭하면, 자유게시판으로 이동) -->
+                <a href="{% url 'board_view' board_type_no=board_type_no %}">
+                    <div class="container clearfix">
+                        <div class="dlab-bnr-inr-entry">
+                            <!--제목-->
+                            <!-- DB에서 제목 꺼내와야 함 -->
+                            <h1 class="text-white introduce-letter-spacing_5">{{ board_name }}</h1>
+                            <!--부제목-->
+                            <!-- DB에서 제목 꺼내와야 함 -->
+                            <p class="introduce-margin-top_20">{{ board_exp }}</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <!----------============= 본문 시작 ================----------->
+            <div class="content-block">
+                <div class="section-full content-inner bg-white">
+                    <div class="container">
+                        <div class="row">
+                            <!--========== 왼쪽 검색창 및 네비게이션 시작 ==========-->
+                            <div class="col-lg-3 col-xl-3">
+                                <div class="sticky-top">
+                                    <!-- 게시글 검색창 -->
+                                    <!-- 검색 시, 전체 게시판의 게시글들 중 해당 키워드를 포함한 게시글을 모두 끌고옴 -->
+                                    <div class="listing-filter-sidebar" style="margin-bottom: 30px">
+                                        <div style="margin-bottom: 20px">
+                                            <h4 class="title">게시글 검색</h4>
+                                            <div class="">
+                                                <form role="search" action="{% url 'board_search' %}" method="get">
+                                                    <div class="input-group">
+                                                        <input name="keyword" type="text" class="form-control"
+                                                               placeholder="검색어를 입력하세요.">
+                                                        <span class="input-group-btn">
+												           <button type="submit" class="site-button">
+                                                               <i class="fa fa-search"></i>
+                                                           </button>
+                                                        </span>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- 게시판 종류 리스트 -->
+                                    <!-- 클릭한 게시판의 게시글을 끌고옴 -->
+                                    <div class="listing-filter-sidebar">
+                                        <h4 class="title">게시판</h4>
+                                        <div class="widget_tag">
+                                            <ul class="m-b0">
+                                                <li><a href="{% url 'board_view'  board_type_no=5 %}">전체 게시글</a>
+                                                    ({{ all_num }}+)
+                                                </li>
+                                                <li><a href="{% url 'board_view'  board_type_no=1 %}">공지사항</a>
+                                                    ({{ notice_num }}+)
+                                                </li>
+                                                <li><a href="{% url 'board_view'  board_type_no=2 %}">자유게시판</a>
+                                                    ({{ free_num }}+)
+                                                </li>
+                                                <li><a href="{% url 'board_view'  board_type_no=3 %}">질문게시판</a>
+                                                    ({{ quest_num }}+)
+                                                </li>
+                                                <li><a href="{% url 'activity' %}">활동게시판</a> ({{ quest_num }}+)</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--========== 오른쪽 게시글 리스트 부분 시작 ===========-->
+                            <div class="col-lg-10 col-xl-8 p-b30">
+                                <!-- 게시글을 담는 테이블 -->
+                                <table class="table table-hover">
+                                    <!-- 테이블의 제목(1행) -->
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">no.</th>
+                                        <th scope="col" style="width: 500px">제목</th>
+                                        <th scope="col">작성자</th>
+                                        <th scope="col">작성일</th>
+                                    </tr>
+                                    </thead>
+                                    <!-- 끌고오는 게시글 파트 -->
+                                    <tbody>
+                                    <!-- 게시글 출력부 -->
+                                    {% if board_len != 0 %}
+                                        {% for board in board_list %}
+                                            <tr>
+                                                <!-- 게시글 번호 -->
+                                                <th scope="row">{{ forloop.counter }}</th>
+                                                <!-- 게시글 제목 -->
+                                                <!-- 게시글 제목 클릭 시 해당 게시글의 상세 페이지로 이동하며, 제목을 a태크 처리함 -->
+                                                <td>
+                                                    <a href="{% url 'board_detail' board_no=board.board_no %}">{{ board.board_title }}</a>
+                                                </td>
+                                                <!-- 게시글 작성자 -->
+                                                <td>{{ board.board_writer.user_name }}</td>
+                                                <!-- 게시글 작성일자 -->
+                                                <td>{{ board.board_created|date:"Y-m-d" }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    {% else %}
+                                        <tr>
+                                            <td colspan="4" style="text-align: center">{{ message }}</td>
+                                        </tr>
+                                    {% endif %}
+
+                                    </tbody>
+                                </table>
+
+                                {% if board_type_no == 1 and request.session.user_role <= 4 or board_type_no != 1 and board_type_no != 5 and request.session.user_stu is not None %}
+                                    <form action="{% url 'board_register' %}" method="get">
+                                        <input type="hidden" name="board_type_no" value="{{ board_type_no }}">
+                                        <div class="extra-cell text-right  m-t20">
+                                            <!-- 게시글 등록 버튼 -->
+                                            <!-- 관련자만 보이게 처리 -->
+                                            <button type="submit" class="site-button radius-xl m-l10">
+                                                <i class="fa fa-plus m-r5"></i>게시글 등록
+                                            </button>
+                                        </div>
+                                    </form>
+                                {% endif %}
+                                <!--========== 페이지네이션 시작 ===========-->
+                                <!-- 1페이지에 15개 게시글 끌고오고, 게시글이 그보다 적으면, 페이지네이션 안보이게 처리 -->
+                                <div class="pagination-bx clearfix text-center">
+                                    <ul class="pagination">
+                                        {% if board_list.has_previous %}
+                                            <li class="previous"><a href="?page=1"><i class="fa fa-arrow-left"></i></a>
+                                            </li>
+                                            <li>
+                                                <a href="?page={{ board_list.previous_page_number }}"> {{ board_list.previous_page_number }}</a>
+                                            </li>
+                                        {% endif %}
+                                        <li><a href="javascript:void(0)">{{ board_list.number }}</a></li>
+                                        {% if board_list.has_next %}
+                                            <li>
+                                                <a href="?page={{ board_list.next_page_number }}"> {{ board_list.next_page_number }}</a>
+                                            </li>
+                                            <li class="next"><a href="?page={{ board_list.paginator.num_pages }}"><i
+                                                    class="fa fa-arrow-right"></i></a></li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                                <!--========== 페이지네이션 끝 ===========-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 상단으로 한번에 올라가는 버튼 -->
+        <button class="scroltop fa fa-chevron-up" style="display: none;"></button>
+    </div>
+{% endblock %}
