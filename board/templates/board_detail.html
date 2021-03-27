@@ -6,15 +6,13 @@
     <script src="{% static 'js/jquery.min.js' %}"></script><!-- JQUERY.MIN JS -->
     <script src="{% static 'js/sy.js' %}"></script>
     <script>
-        function go_delete()
-        {
-            if(confirm("정말 해당 게시글을 삭제하시겠습니까?"))
-            {
+        function go_delete() {
+            if (confirm("정말 해당 게시글을 삭제하시겠습니까?")) {
                 document.getElementById("form-board-delete").submit()
             }
         }
-        function go_update()
-        {
+
+        function go_update() {
             document.getElementById('form-board-update').submit()
         }
     </script>
@@ -81,8 +79,8 @@
                                             <div class="download-box">
                                                 {% for board_file in board_file_list %}
                                                     <!-- 첨부파일 1 -->
-                                                     <i class="fa fa-download m-r15 "></i><a class="line2" href="#"
-                                                                                             download="/media/{{ board_file.board_file_path }}">{{ board_file.board_file_name }}</a>
+                                                     <i class="fa fa-download m-r15 "></i><a class="line2" download
+                                                                                             href="/media/{{ board_file.board_file_path }}">{{ board_file.board_file_name }}</a>
                                                     <!-- 파일 간 구분선 마지막 파일은 구분선을 출력하지 않도록 설정.-->
                                                     {% if forloop.revcounter0 != 0 %}
                                                         <div class="dlab-divider tb10 bg-gray-dark"></div>
@@ -98,7 +96,7 @@
                                                         <li>
                                                             <span data-exthumbimage="/media/{{ board_img.board_file_path }}"
                                                                   data-src="/media/{{ board_img.board_file_path }}"
-                                                                  class="check-km " title="">
+                                                                  class="check-km " title="{{ board_file.board_file_name}}">
                                                                 <a href="javascript:void(0);">
                                                                     <div class="dlab-post-thum act-detail-img-size">
                                                                         <img style="height: 190px"
@@ -113,7 +111,7 @@
                                                             <span data-exthumbimage="/media/{{ board_img.board_file_path }}"
                                                                   data-src="/media/{{ board_img.board_file_path }}"
                                                                   class="check-km act-detail-img-siz"
-                                                                  title="">
+                                                                  title="{{ board_file.board_file_name}}">
                                                                 <a href="javascript:void(0);">
                                                                     <div class="dlab-post-thum "><img
                                                                             style="height: 190px"
@@ -135,7 +133,7 @@
                                                         <li style="display: none;">
                                                             <span data-exthumbimage="/media/{{ board_img.board_file_path }}"
                                                                   data-src="/media/{{ board_img.board_file_path }}"
-                                                                  class="check-km " title="">
+                                                                  class="check-km " title="{{ board_file.board_file_name}}">
                                                                 <a href="javascript:void(0);">
                                                                     <div class="dlab-post-thum act-detail-img-size">
                                                                         <img style="height: 190px"
@@ -155,27 +153,36 @@
                                     </div>
                                     <!-- 게시글 삭제 및 수정 div -->
                                     <div class="extra-cell text-right">
-                                        <!-- 게시글 수정 버튼 -->
-                                        <!-- 관련자만 보이게 처리 -->
-                                        <button class="site-button radius-xl m-l10" onclick="go_update()"><i
-                                                class="fa fa-pencil m-r5"></i>게시글 수정
-                                        </button>
+
+                                        {% if request.session.user_stu == board.board_writer.user_stu %}
+                                            <!-- 게시글 수정 버튼 -->
+                                            <!-- 관련자만 보이게 처리 -->
+                                            <button class="site-button radius-xl m-l10" onclick="go_update()"><i
+                                                    class="fa fa-pencil m-r5"></i>게시글 수정
+                                            </button>
+                                            <!-- 게시글 수정을 위한 폼 -->
+                                            <form id="form-board-update" action="{% url 'board_update' %}" method="GET"
+                                                  style="display: none;">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="board_no" value="{{ board.board_no }}">
+
+                                            </form>
+                                        {% endif %}
                                         <!-- 게시글 삭제 버튼 -->
                                         <!-- 관련자만 보이게 처리 -->
-                                        <button class="site-button red radius-xl m-l10" onclick="go_delete()"><i
-                                                class="fa fa-trash m-r5"></i>게시글 삭제
-                                        </button>
-                                        <!-- 게시글 수정을 위한 폼 -->
-                                        <form id="form-board-update" action="{% url 'board_update' %}" method="GET" style="display: none;">
-                                            {% csrf_token %}
-                                            <input type="hidden" name="board_no" value="{{ board.board_no }}">
+                                        {% if request.session.user_stu == board.board_writer.user_stu and request.session.user_role >= 3 %}
+                                            <button class="site-button red radius-xl m-l10" onclick="go_delete()"><i
+                                                    class="fa fa-trash m-r5"></i>게시글 삭제
+                                            </button>
 
-                                        </form>
-                                        <!-- 게시글 삭제를 위한 폼 -->
-                                        <form id="form-board-delete" action="{% url 'board_delete' %}" method="POST" style="display: none;">
-                                            {% csrf_token %}
-                                            <input type="hidden" name="board_no" value="{{ board.board_no }}">
-                                        </form>
+                                            <!-- 게시글 삭제를 위한 폼 -->
+                                            <form id="form-board-delete" action="{% url 'board_delete' %}" method="POST"
+                                                  style="display: none;">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="board_no" value="{{ board.board_no }}">
+                                            </form>
+                                        {% endif %}
+
                                     </div>
                                     <!-- 게시글과 댓글을 구분짓는 구분선 -->
                                     <div class="dlab-divider bg-gray-dark"></div>
@@ -189,157 +196,205 @@
                                             <!-- comment list END -->
                                             <ol class="comment-list">
                                                 <!-- 댓글 1 -->
-                                                <li class="comment">
-                                                    <div class="comment-body">
-                                                        <!-- 댓글 작성자 프로필자신 및 이름을 담는 div -->
-                                                        <div class="comment-author vcard"><cite class="fn"><img
-                                                                src="{{ request.session.user_pic }}" width="35"
-                                                                height="35" class="comment-profile-size"
-                                                                alt="현재 브라우저에서 지원하지 않는 형식입니다.">양태영</cite></div>
-                                                        <!-- 댓글 작성자 학과, 학번 및 작성시간 div -->
-                                                        <div class="dlab-post-meta m-l10">
-                                                            <ul class="d-flex">
-                                                                <!-- 학과 및 학번 -->
-                                                                <li class="post-author"><a
-                                                                        href="javascript:void(0);">경영학과 16학번</a></li>
-                                                                <!-- 작성시간 -->
-                                                                <li class="post-comment"><i
-                                                                        class="ti ti-alarm-clock"></i> <a
-                                                                        href="javascript:void(0);">19 hours ago</a></li>
-                                                            </ul>
-                                                        </div>
-                                                        <!-- 댓글내용란, 댓글 데이터 가져오는 곳 -->
-                                                        <input type="text" disabled="disabled" style="width: 706px"
-                                                               class="comments-area"
-                                                               id="correcting-{{ commnet.commnet_id }}"
-                                                               value="호호아줌마 아나 존나 힘드네 시바라아아ㅏㅇ앙">
-                                                        <!-- 하단의 comment_no_1은 꼭 {{ comment.comment_id }}로 바꿔줄 것 -->
-                                                        <div id="comment_no_1" class="reply-btn-div">
-                                                            <!-- 답글쓰기버튼 클릭 시, jqury로 버튼을 담는 div 밑에 대댓글 작성 란 생김 -->
-                                                            <button type="button" class="btnAdd comment-btn m-r20"><i
-                                                                    class="fa fa-commenting m-r5"></i>답글쓰기
-                                                            </button>
-                                                            <!-- 댓글삭제 버튼 -->
-                                                            <button type="submit"
-                                                                    onclick="comment_del({{ comment.comment_id }})"
-                                                                    id="comment-delete-{{ comment.comment_id }}"
-                                                                    class="comment-btn m-r10"><i
-                                                                    class="fa fa-trash m-r5"></i>
-                                                                댓글 삭제
-                                                            </button>
-                                                            <!-- 댓글수정 버튼 -->
-                                                            <button onclick="correcting_comment({{ commnet.commnet_id }})"
-                                                                    class="comment-btn m-r10"><i
-                                                                    class="fa fa-pencil m-r5"></i>댓글 수정
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <!--===================== 하단은 대댓글 예시임 참고용 ========================-->
-                                                <!-- 댓글 2 -->
-                                                <li class="comment">
-                                                    <div class="comment-body">
-                                                        <!-- 댓글 작성자 프로필자신 및 이름을 담는 div -->
-                                                        <div class="comment-author vcard"><cite class="fn"><img
-                                                                src="{{ request.session.user_pic }}" width="35"
-                                                                height="35" class="comment-profile-size"
-                                                                alt="현재 브라우저에서 지원하지 않는 형식입니다.">신승연</cite></div>
-                                                        <!-- 댓글 작성자 학과, 학번 및 작성시간 div -->
-                                                        <div class="dlab-post-meta m-l10">
-                                                            <ul class="d-flex">
-                                                                <!-- 댓글 작성자 학과 및 학번 -->
-                                                                <li class="post-author"><a
-                                                                        href="javascript:void(0);">경영학과 17학번</a></li>
-                                                                <!-- 댓글 작성시간 -->
-                                                                <li class="post-comment"><i
-                                                                        class="ti ti-alarm-clock"></i> <a
-                                                                        href="javascript:void(0);">19 hours ago</a></li>
-                                                            </ul>
-                                                        </div>
-                                                        <!-- 댓글 내용란 (DB에서 가져옴) -->
-                                                        <input type="text" disabled="disabled" style="width: 706px"
-                                                               class="comments-area" id="comment_no_2"
-                                                               value="댓글 구현하기 정말 잣같구만,,,, 시부렐">
-                                                        <div class="reply-btn-div">
-                                                            <!-- 답글쓰기버튼 클릭 시, jqury로 버튼을 담는 div 밑에 대댓글 작성 란 생김 -->
-                                                            <button type="button" class="btnAdd comment-btn m-r20"><i
-                                                                    class="fa fa-commenting m-r5"></i>답글쓰기
-                                                            </button>
-                                                            <!-- 댓글삭제 버튼 -->
-                                                            <button type="submit"
-                                                                    onclick="comment_del({{ comment.comment_id }})"
-                                                                    id="comment-delete-{{ comment.comment_id }}"
-                                                                    class="comment-btn m-r10"><i
-                                                                    class="fa fa-trash m-r5"></i>
-                                                                댓글 삭제
-                                                            </button>
-                                                            <!-- 댓글수정 버튼 -->
-                                                            <button onclick="correcting_comment({{ commnet.commnet_id }})"
-                                                                    class="comment-btn m-r10"><i
-                                                                    class="fa fa-pencil m-r5"></i>댓글 수정
-                                                            </button>
-                                                        </div>
-                                                        <!-- 대댓글란 디자인 예시 -->
-                                                        <div class="dlab-divider bg-gray-dark"></div>
-                                                        <div style="margin-left: 20px;">
+                                                {% for comment in comment_list %}
+                                                    <li class="comment">
+                                                        <div class="comment-body">
                                                             <!-- 댓글 작성자 프로필자신 및 이름을 담는 div -->
                                                             <div class="comment-author vcard"><cite class="fn"><img
-                                                                    src="{{ request.session.user_pic }}" width="35"
+                                                                    src="/media/{{ comment.comment_writer.user_pic }}"
+                                                                    width="35"
                                                                     height="35" class="comment-profile-size"
-                                                                    alt="현재 브라우저에서 지원하지 않는 형식입니다.">신승연</cite></div>
+                                                                    alt="현재 브라우저에서 지원하지 않는 형식입니다.">{{ comment.comment_writer.user_name }}
+                                                            </cite></div>
+                                                            <!-- 댓글 작성자 학과, 학번 및 작성시간 div -->
                                                             <div class="dlab-post-meta m-l10">
                                                                 <ul class="d-flex">
-                                                                    <!-- 댓글 작성자 학과 및 학번 -->
+                                                                    <!-- 학과 및 학번 -->
                                                                     <li class="post-author"><a
-                                                                            href="javascript:void(0);">경영학과 17학번</a>
+                                                                            href="javascript:void(0);">{{ comment.comment_writer.user_major.major_name }}
+                                                                        {{ comment.comment_writer.user_stu|stringformat:"s" |slice:"2:4" }}학번</a>
                                                                     </li>
-                                                                    <!-- 댓글 작성 시간 -->
+                                                                    <!-- 작성시간 -->
                                                                     <li class="post-comment"><i
-                                                                            class="ti ti-alarm-clock"></i> <a
-                                                                            href="javascript:void(0);">19 hours ago</a>
+                                                                            class="ti ti-alarm-clock"></i>
+                                                                        <a href="javascript:void(0);">
+                                                                            {{ comment.comment_created|date:"Y-m-d h:m:s" }}
+                                                                        </a>
                                                                     </li>
                                                                 </ul>
                                                             </div>
-                                                            <!-- DB에서 가져온 댓글정보 -->
-                                                            <input type="text" disabled="disabled" style="width: 706px"
-                                                                   class="comments-area" id="comment_no_2"
-                                                                   value="댓글 구현하기 정말 잣같구만,,,, 시부렐">
-                                                            <div class="reply-btn-div">
-                                                                <button id="" class="comment-btn m-r10"><i
-                                                                        class="fa fa-pencil m-r5"></i>댓글 수정
-                                                                </button>
-                                                                <button type="submit"
-                                                                        onclick="comment_del({{ comment.comment_id }})"
-                                                                        id="comment-delete-{{ comment.comment_id }}"
-                                                                        class="comment-btn m-r10"><i
-                                                                        class="fa fa-trash m-r5"></i>
-                                                                    댓글 삭제
-                                                                </button>
-                                                            </div>
-                                                        </div>
+                                                            <!-- 댓글내용란, 댓글 데이터 가져오는 곳 -->
+                                                            <!-- DB 적용할 때는 id 부분을 id="correcting-{{ comment.comment_id }}"로 변경바람 -->
+                                                            <!-- 테스트를 위해 id를 다음과 같이 함. js도 똑같이 주석 달아줬으니 참고해야 함.  -->
+                                                            <form id="form-comment-update-{{ comment.comment_id }}"
+                                                                  action="{% url 'activity_comment_update' %}"
+                                                                  method="post">
+                                                                {% csrf_token %}
+                                                                <input type="hidden" name="comment_id"
+                                                                       value="{{ comment.comment_id }}"/>
+                                                                <input type="text" disabled="disabled"
+                                                                       style="width: 706px"
+                                                                       name="comment_cont"
+                                                                       class="comments-area"
+                                                                       id="correcting-no-{{ comment.comment_id }}"
+                                                                       value="{{ comment.comment_cont }}"
+                                                                       autofocus>
+                                                            </form>
+                                                            <!-- 하단의 comment_no_1은 꼭 id= "commentbtnDiv-{{ comment.comment_id }}"로 바꿔줄 것 -->
+                                                            <!-- 댓글수정 버튼을 누르면, 기존 댓글수정 버튼이 사라지고, 수정완료 버튼이 생기도록 구현했는데, -->
+                                                            <!-- 수정완료 버튼이 commentbtnDiv에 자식요소로 붙게하기 때문에, id 값 필요 -->
+                                                            <div id="comment_no_{{ comment.comment_id }}"
+                                                                 class="reply-btn-div">
+                                                                <!-- 답글쓰기버튼 클릭 시, jqury로 버튼을 담는 div 밑에 대댓글 작성 란 생김 -->
+                                                                <form id="form-comment-delete-{{ comment.comment_id }}"
+                                                                      action="{% url 'activity_comment_delete' %}"
+                                                                      method="post">
 
-                                                    </div>
-                                                </li>
+                                                                    {% if request.session.user_stu is not None %}
+                                                                        <button type="button"
+                                                                                id="btnAdd-{{ comment.comment_id }}"
+                                                                                onclick="addReply({{ comment.comment_id }},'{% url "activity_comment_register" %}', {{ board.board_no }})"
+                                                                                class="btnAdd comment-btn m-r20"><i
+                                                                                class="fa fa-commenting m-r5"></i>답글쓰기
+                                                                        </button>
+                                                                    {% endif %}
+                                                                    <!-- 댓글삭제 버튼 -->
+                                                                    <!-- id="comment-delete-{{ comment.comment_id }}" -->
+                                                                    {% if request.session.user_stu == comment.comment_writer.user_stu or request.session.user_role <= 3 %}
+                                                                        {% csrf_token %}
+                                                                        <input type="hidden" name="comment_id"
+                                                                               value="{{ comment.comment_id }}"/>
+                                                                        <input type="hidden" name="board_no"
+                                                                               value="{{ board.board_no }}"/>
+                                                                        <button type="button"
+                                                                                onclick="comment_del({{ comment.comment_id }})"
+                                                                                class="comment-btn m-r10"><i
+                                                                                class="fa fa-trash m-r5"></i>
+                                                                            댓글 삭제
+                                                                        </button>
+                                                                    {% endif %}
+                                                                    <!-- 덧글 삭제 폼 -->
+
+                                                                    {% if request.session.user_stu == comment.comment_writer.user_stu %}
+
+                                                                        <!-- 댓글수정 버튼 -->
+                                                                        <button onclick="comment_update({{ comment.comment_id }})"
+                                                                                id="correctingBtn-{{ comment.comment_id }}"
+                                                                                type="button"
+                                                                                class="comment-btn m-r10"><i
+                                                                                class="fa fa-pencil m-r5"></i>댓글 수정
+                                                                        </button>
+                                                                    {% endif %}
+                                                                </form>
+                                                            </div>
+                                                            <!-- for 문 들어갈 자리 (대댓글)-->
+                                                            {% for comment_ref in comment.comment_set.all %}
+                                                                <div class="dlab-divider bg-gray-dark"></div>
+                                                                <div style="margin-left: 20px;">
+                                                                    <!-- 댓글 작성자 프로필자신 및 이름을 담는 div -->
+                                                                    <div class="comment-author vcard"><cite
+                                                                            class="fn"><img
+                                                                            src="/media/{{ comment_ref.comment_writer.user_pic }}"
+                                                                            width="35"
+                                                                            height="35" class="comment-profile-size"
+                                                                            alt="현재 브라우저에서 지원하지 않는 형식입니다.">{{ comment_ref.comment_writer.user_name }}
+                                                                    </cite>
+                                                                    </div>
+                                                                    <div class="dlab-post-meta m-l10">
+                                                                        <ul class="d-flex">
+                                                                            <!-- 댓글 작성자 학과 및 학번 -->
+                                                                            <li class="post-author"><a
+                                                                                    href="javascript:void(0);">{{ comment_ref.comment_writer.user_major.major_name }}
+                                                                                {{ comment_ref.comment_writer.user_stu|stringformat:"s"|slice:"2:4" }}학번</a>
+                                                                            </li>
+                                                                            <!-- 댓글 작성 시간 -->
+                                                                            <li class="post-comment"><i
+                                                                                    class="ti ti-alarm-clock"></i>
+                                                                                <a href="javascript:void(0);">{{ comment_ref.comment_created }}</a>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                    <!-- DB에서 가져온 댓글정보 -->
+                                                                    <form id="form-comment-update-{{ comment_ref.comment_id }}"
+                                                                          action="{% url 'activity_comment_update' %}"
+                                                                          method="post">
+                                                                        {% csrf_token %}
+                                                                        <input type="hidden" name="comment_id"
+                                                                               value="{{ comment_ref.comment_id }}">
+                                                                        <input type="hidden" name="board_no"
+                                                                               value="{{ board.board_no }}"/>
+                                                                        <input type="text" disabled="disabled"
+                                                                               style="width: 706px"
+                                                                               class="comments-area"
+                                                                               name="comment_cont"
+                                                                               id="correcting-no-{{ comment_ref.comment_id }}"
+                                                                               value="{{ comment_ref.comment_cont }}">
+                                                                    </form>
+                                                                    <div id="comment_no_{{ comment_ref.comment_id }}"
+                                                                         class="reply-btn-div">
+                                                                        <form id="form-comment-delete-{{ comment_ref.comment_id }}"
+                                                                              action="{% url 'activity_comment_delete' %}"
+                                                                              method="post">
+                                                                            {% csrf_token %}
+                                                                            <input type="hidden" name="comment_id"
+                                                                                   value="{{ comment_ref.comment_id }}"/>
+                                                                            <input type="hidden" name="board_no"
+                                                                                   value="{{ board.board_no }}"/>
+                                                                            {% if request.session.user_role <= 3 or request.session.user_stu == comment_ref.comment_writer.user_stu %}
+                                                                                <button type="button"
+                                                                                        onclick="comment_del({{ comment_ref.comment_id }})"
+                                                                                        id="btn-del-{{ comment_ref.comment_id }}"
+                                                                                        class="comment-btn m-r10"><i
+                                                                                        class="fa fa-trash m-r5"></i>
+                                                                                    댓글 삭제
+                                                                                </button>
+                                                                            {% endif %}
+                                                                            {% if request.session.user_stu == comment_ref.comment_writer.user_stu %}
+                                                                                <button type="button"
+                                                                                        id="correctingBtn-{{ comment_ref.comment_id }}"
+                                                                                        class="comment-btn m-r10"
+                                                                                        onclick="comment_update({{ comment_ref.comment_id }})">
+                                                                                    <i class="fa fa-pencil m-r5"></i>댓글
+                                                                                    수정
+                                                                                </button>
+                                                                            {% endif %}
+                                                                        </form>
+
+                                                                    </div>
+                                                                </div>
+                                                            {% endfor %}
+                                                        </div>
+                                                    </li>
+                                                {% endfor %}
                                             </ol>
                                             <!-- 작성된 댓글과 댓글입력 부분을 나누는 구분선 -->
-                                            <div class="dlab-divider bg-gray-dark"></div>
-                                            <!--========================= 댓글 입력 form 태그 =========================-->
-                                            <div class="" id="respond">
-                                                <form class="comment-form" id="commentform" method="post" action="#">
-                                                    <!-- 댓글입력창 -->
-                                                    <p class="comment-form-comment">
-                                                        <label for="comment">Comments</label>
-                                                        <textarea rows="8" name="comment"
-                                                                  placeholder="댓글을 남겨보세요!"
-                                                                  id="comment"></textarea>
-                                                    </p>
-                                                    <!-- 댓글작성 버튼 -->
-                                                    <p class="form-submit" style="text-align: right">
-                                                        <input type="submit" value="댓글등록"
-                                                               class="submit site-button" id="submit" name="submit">
-                                                    </p>
-                                                </form>
-                                            </div>
+                                            {% if request.session.user_stu is not None %}
+                                                <div class="dlab-divider bg-gray-dark"></div>
+                                                <!--========================= 댓글 입력 form 태그 =========================-->
+
+                                                <div class="" id="respond">
+                                                    <form class="comment-form" id="commentform" method="post"
+                                                          action="{% url 'activity_comment_register' %}">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="board_no"
+                                                               value="{{ board.board_no }}"/>
+                                                        <!-- 댓글입력창 -->
+
+                                                        <p class="comment-form-comment">
+                                                            <label for="comment">Comments</label>
+                                                            <textarea rows="8" name="comment_cont"
+                                                                      placeholder="댓글을 남겨보세요!"
+                                                                      id="comment"></textarea>
+                                                        </p>
+                                                        <!-- 댓글작성 버튼 -->
+                                                        <p class="form-submit" style="text-align: right">
+                                                            <input type="submit" value="댓글등록"
+                                                                   class="submit site-button" id="submit" name="submit">
+                                                        </p>
+
+                                                    </form>
+                                                </div>
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </div>

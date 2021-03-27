@@ -36,7 +36,7 @@ def introduce(request):
 # 동아리 활동 게시판
 def activity(request):
     # 최신순으로 정렬하고, 1:M 관계로 가져오기 위해 prefetch_related 함수 사용
-    board_list = Board.objects.order_by('-board_created').prefetch_related("boardfile_set")
+    board_list = Board.objects.filter(board_type_no__board_type_no=4).order_by('-board_created').prefetch_related("boardfile_set")
     # board 에서 board_type_no = 5 인 것만 들고옴. 최신 순으로 보여주는 코드는 order_by
     # board_type_no = 5 <- 동아리게시판에 관련한 글만 가져오기 위해서 만들어짐
     paginator = Paginator(board_list, 6)  # 페이지네이터로 10개씩 보이게끔. 나중에 수정하면 됌
@@ -69,7 +69,7 @@ def activity_register(request):
     if request.method == "POST":
         if request.session.get("user_stu") is not None:
             activity = Board(  # 객체로 저장을 할 것이오
-                board_type_no=BoardType.objects.get(pk=5),
+                board_type_no=BoardType.objects.get(pk=4),
                 board_title=request.POST.get('board_title'),
                 board_cont=request.POST.get('board_cont'),
                 board_writer=User.objects.get(pk=request.session.get('user_stu'))  # 유저 학번 들고오는 것임

@@ -187,3 +187,54 @@ def board_delete(request):
 
     else:  # 파라미터가 제대로 넘어오지 않은 경우, 즉 비정상적인 경로를 통해 들어간 경우 바로 나오게 해준다.
         return redirect('board_view', board_type_no=5)
+
+
+# 댓글 달기 코드
+def board_comment_register(request):
+    if request.method == "POST":
+
+        board_no = Board.objects.get(pk=request.POST.get('board_no'))  # 게시글 번호 들고오는 것임
+
+        # 객체로 받아서 저장할 예정
+        comment = Comment(  # 받은 정보로 덧글 생성
+            comment_board_no=board_no,  # 해당 게시글에
+            comment_writer=User.objects.get(pk=request.session.get('user_stu')),  # 해당 학번이
+            comment_cont=request.POST.get('comment_cont')  # 사용자가 쓴 내용을 가져옴
+        )
+        comment.save()
+    else:
+        board_no = Board.objects.get(pk=request.GET.get('board_no'))  # 게시글 번호 들고오는 것임
+        # 객체로 받아서 저장할 예정
+        comment = Comment(
+            comment_board_no=board_no,
+            comment_writer=User.objects.get(pk=request.session.get('user_stu')),
+            comment_cont=request.GET.get('comment_cont'),
+            comment_cont_ref=Comment.objects.get(pk=request.GET.get("comment_ref"))
+        )
+        comment.save()
+        # 데이터 베이스에 저장
+    return HttpResponse(  # 게시글 상세 페이지로 다시 돌아감, 리다이렉트를 이용한 것은 실행 안해봄. 아마 이게 제일 정확하지 않을까 싶음.
+        "<script>location.href='/activity/" + str(board_no.board_no) + "/detail/';</script>")  # 게시글 상세페이지로 이동
+
+
+# 댓글 삭제 코드
+def board_comment_delete(request):
+    if request.method == "POST":  # 댓글 삭제를 누를 경우
+        comment = Comment.objects.get(pk=request.POST.get('comment_id'))
+        board_type_no = comment.comment_board_no.board_type_no.board_type_no
+        # 그 댓글의 pk 를 찾아서 DB 에서 지운다.
+        comment.delete()
+        return HttpResponse(go_board(board_type_no))  # 게시글 상세페이지로 이동
+    else:
+        return HttpResponse(go_board(5))  # 잘못 들어온 접근은 전체 게시판으로 이동
+
+
+# 댓글 수정 코드
+def board_comment_update(request):
+    if request.method == "POST":  # 정상적으로 파라미터가 넘어왔을 경우
+        comment = Comment.objects.get(pk=request.POST.get('comment_id'))  # 가져온 comment_id를 토대로 수정 내역을 적용
+        comment.comment_cont = request.POST.get('comment_cont')  # 수정할 내용을 가져옴
+        comment.save()  # DB 저장
+        return HttpResponse(go_board_detail(comment.comment_board_no.board_no))  # 게시글 상세 페이지로 돌아감
+    else:
+        return HttpResponse(go_board(5))  # 잘못된 요청의 경우 전체 게시판으로 이동하게 함.

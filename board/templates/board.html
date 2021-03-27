@@ -10,7 +10,7 @@
                  style=" background-image: url('{% static 'images/board_name_img.jpg' %}'); height: 350px">
                 <!-- 상단 제목을 클릭하면, 상위 게시판으로 이동 -->
                 <!-- (ex.자유게시판의 '용식이의 학식일기'글의 상세 페이지에서 상위 제목을 클릭하면, 자유게시판으로 이동) -->
-                <a href="{% url 'board_view' board_type_no=board_type_no%}">
+                <a href="{% url 'board_view' board_type_no=board_type_no %}">
                     <div class="container clearfix">
                         <div class="dlab-bnr-inr-entry">
                             <!--제목-->
@@ -115,7 +115,8 @@
 
                                     </tbody>
                                 </table>
-                                {% if board_type_no != 5 %}
+                                {% if board_type_no == 1 and request.session.user_role >= 4 or board_type_no != 1 and board_type_no != 5 and request.session.user_stu is not None %}
+
                                     <form action="{% url 'board_register' %}" method="get">
                                         <input type="hidden" name="board_type_no" value="{{ board_type_no }}">
                                         <div class="extra-cell text-right  m-t20">
