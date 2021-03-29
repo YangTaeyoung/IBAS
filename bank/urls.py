@@ -11,6 +11,9 @@ urlpatterns = [
     path('support/board', views.bank_support_board, name='bank_support_board'),  # 회계 게시판 목록
     path('support/register', views.bank_support_register, name='bank_support_register'),  # 회계 게시판 목록
     path('support/detail', views.bank_support_detail, name='bank_support_detail'),  # 회계 게시판 목록
-
+    path('list/', views.bank, name='bank_list'),  # 회계 게시판 작업
+    path('delete/', views.bank_delete, name='bank_delete'),
+    path('update/', views.bank_update, name='bank_update'),
+    path('register/', views.bank_register, name='bank_register'),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

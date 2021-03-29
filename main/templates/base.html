@@ -82,18 +82,18 @@
 
                                     {# 밑에 있는 회계내역, 예산지원 신청은 회원들만 신청을 할 수 있음. #}
                                     {% if request.session.user_stu is not None %}
-                                        <li><a href="#">회계내역</a></li>
+                                        <li><a href="{% url 'bank_list' %}">회계내역</a></li>
                                         <li><a href="#">예산지원신청</a></li>
                                     {% endif %}
                                 </ul>
                             </li>
                             <!--====================게시판을 상위메뉴로 가지고 있는 메뉴====================-->
-                            <li class="down active" style="padding-top: 6px"><a href="#">게시판 <i
+                            <li class="down active" style="padding-top: 6px"><a href="{% url 'board_view' board_type_no=5 %}">게시판<i
                                     class="fa fa-chevron-down"></i></a>
                                 <ul class="sub-menu">
-                                    <li><a href="#">공지사항</a></li>
-                                    <li><a href="#">자유게시판</a></li>
-                                    <li><a href="#">질문게시판</a></li>
+                                    <li><a href="{% url 'board_view' board_type_no=1 %}">공지사항</a></li>
+                                    <li><a href="{% url 'board_view' board_type_no=2 %}">자유게시판</a></li>
+                                    <li><a href="{% url 'board_view' board_type_no=3 %}">질문게시판</a></li>
                                     <li><a href="#">공모전게시판</a></li>
                                 </ul>
                             </li>
@@ -132,7 +132,7 @@
                                             </ul>
                                             <!--==승인되었을 때==-->
                                         {% else %}
-                                            <img src="{{ request.session.user_pic }}" width="35" height="35"
+                                            <img src="/media/{{ request.session.user_pic }}" width="35" height="35"
                                                  style=" border: 2px solid #3cff44; border-radius: 17.5px; margin-right: 3px"
                                                  alt="현재 브라우저에서 지원하지 않는 형식입니다.">
                                             {{ request.session.user_name }} 님
@@ -174,9 +174,10 @@
                                 <li class="active" style="padding-top: 5px;">
                                     <a href="{% url 'login' %}">Log In</a>
                                 </li>
-{#                                                                <li class="active" style="padding-top: 5px;">#}
-{#                                                                    <a href="#">Sign Up</a>#}
-{#                                                                </li>#}
+                                {#                                <li class="active" style="padding-top: 5px;">#}
+                                {#                                    <a href="#">Sign Up</a>#}
+                                {#                                </li>#}
+
                             {% endif %}
                         </ul>
                     </div>
@@ -197,7 +198,7 @@
 <footer>
     <!-- content 담는 부분이 footer-top -->
     <!-- footer-top에 대한 정의는 bottom_bar.css에 정의되어 있음. (height 관련) -->
-    <div class="ibas-footer-top" style="background-image: {% static 'images/botton_bar.jpg' %}">
+    <div class="ibas-footer-top" style="background-image: url({% static 'images/botton_bar.jpg' %})">
         <!-- content 시작 -->
         <!-- cont-grid에 대한 정의는 bottom_bar.css에 정의되어 있음. (grid 관련) -->
         <div class="cont-grid">
@@ -328,5 +329,3 @@ jQuery(document).ready(function(){
 
 </body>
 </html>
-
-정

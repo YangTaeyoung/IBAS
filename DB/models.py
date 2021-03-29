@@ -24,11 +24,11 @@ class Answer(models.Model):
 
 class Bank(models.Model):
     bank_no = models.AutoField(db_column='BANK_NO', primary_key=True)  # Field name made lowercase.
-    bank_plus = models.IntegerField(db_column='BANK_PLUS', blank=True, null=True)  # Field name made lowercase.
-    bank_minus = models.IntegerField(db_column='BANK_MINUS', blank=True, null=True)  # Field name made lowercase.
+    bank_plus = models.IntegerField(db_column='BANK_PLUS', blank=True, default=0)  # Field name made lowercase.
+    bank_minus = models.IntegerField(db_column='BANK_MINUS', blank=True, default=0)  # Field name made lowercase.
     bank_title = models.CharField(db_column='BANK_TITLE', max_length=100, blank=True,
                                   null=True)  # Field name made lowercase.
-    bank_used = models.DateTimeField(db_column='BANK_USED', blank=True, null=True)  # Field name made lowercase.
+    bank_used = models.DateTimeField(db_column='BANK_USED', blank=True)  # Field name made lowercase.
     bank_created = models.DateTimeField(db_column='BANK_CREATED', auto_now_add=True)  # Field name made lowercase.
     bank_updated = models.DateTimeField(db_column='BANK_UPDATED', auto_now=True, blank=True,
                                         null=True)  # Field name made lowercase.
@@ -36,7 +36,8 @@ class Bank(models.Model):
                                  related_name="cfo")  # Field name made lowercase.
     bank_used_user = models.ForeignKey('User', models.DO_NOTHING, db_column='BANK_USED_USER',
                                        related_name="used_user")  # Field name made lowercase.
-    bank_apply = models.IntegerField(db_column='BANK_APPLY')  # Field name made lowercase.
+    bank_apply = models.ForeignKey('BankApplyInfo', models.DO_NOTHING,
+                                   db_column='BANK_APPLY')  # Field name made lowercase.
     bank_reason = models.CharField(db_column='BANK_REASON', max_length=300, blank=True,
                                    null=True)  # Field name made lowercase.
     bank_reject_reason = models.CharField(db_column='BANK_REJECT_REASON', max_length=200, blank=True,
@@ -49,14 +50,29 @@ class Bank(models.Model):
         db_table = 'BANK'
 
 
+def bank_file_upload_to(instance, filename):
+    return f'bank/{instance.bank_no.bank_no}/{filename}'
+
+
 class BankFile(models.Model):
     bank_no = models.ForeignKey(Bank, on_delete=models.CASCADE, db_column='BANK_NO')  # Field name made lowercase.
     bank_file_id = models.AutoField(db_column='BANK_FILE_ID', primary_key=True)  # Field name made lowercase.
-    bank_file_path = models.CharField(db_column='BANK_FILE_PATH', max_length=1000)  # Field name made lowercase.
+    bank_file_path = models.FileField(db_column='BANK_FILE_PATH', max_length=1000,
+                                      upload_to=bank_file_upload_to)  # Field name made lowercase.
+    bank_file_name = models.CharField(db_column='BANK_FILE_NAME', max_length=500)
 
     class Meta:
         managed = False
         db_table = 'BANK_FILE'
+
+
+class BankApplyInfo(models.Model):
+    bank_apply_no = models.AutoField(db_column="BANK_APPLY_NO", primary_key=True)
+    bank_apply_name = models.CharField(db_column="BANK_APPLY_NAME", max_length=20)
+
+    class Meta:
+        managed = False
+        db_table = "BANK_APPLY_INFO"
 
 
 class Board(models.Model):
@@ -91,6 +107,7 @@ class BoardFile(models.Model):
     # upload_to에 대한 인자를 위에 정의한 함수로 대체해야 경로를 커스터마이징 할 수 있음.
     board_file_path = models.ImageField(db_column='BOARD_FILE_PATH', upload_to=board_file_upload_to, blank=True,
                                         null=True)  # Field name made lowercase.
+    board_file_name = models.CharField(db_column='BOARD_FILE_NAME', max_length=300)
 
     class Meta:
         managed = False
@@ -100,6 +117,7 @@ class BoardFile(models.Model):
 class BoardType(models.Model):
     board_type_no = models.AutoField(db_column='BOARD_TYPE_NO', primary_key=True)  # Field name made lowercase.
     board_type_name = models.CharField(db_column='BOARD_TYPE_NAME', max_length=50)  # Field name made lowercase.
+    board_type_exp = models.CharField(db_column='BOARD_TYPE_EXP', max_length=100)
 
     class Meta:
         managed = False
@@ -110,7 +128,8 @@ class ChiefCarrier(models.Model):
     carrier_no = models.AutoField(db_column='CARRIER_NO', primary_key=True)  # Field name made lowercase.
     carrier_content = models.CharField(db_column='CARRIER_CONTENT', max_length=300, blank=True,
                                        null=True)  # Field name made lowercase.
-    chief_user = models.ForeignKey('User', models.DO_NOTHING, db_column='CHIEF_USER')  # Field name made lowercase.
+    chief_user = models.ForeignKey('User', on_delete=models.CASCADE,
+                                   db_column='CHIEF_USER')  # Field name made lowercase.
 
     class Meta:
         managed = False

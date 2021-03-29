@@ -1,29 +1,88 @@
+/*flex로 만들어 주기 위함임*/
+/*사용된 곳: 연도 선택하는 div쪽, */
 .bank-flex {
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.bank-grid {
-    display: grid;
-    grid-template-columns: repeat(6,1fr);
-    justify-content: center;
-    align-items: center;
-    row-gap: 10px;
-}
-.bank-prove-btn {
-    background-color: #4611a7;
-    border: 0;
-    border-radius: 30px;
-    padding: 5px 10px;
-    color: white; font-weight: 400;
-    font-size: 14px;
-    width: 65px;
-}
-.bank-input-date {
+
+/*표 안 input의 스타일을 설정해주기 위함*/
+/*사용된 곳: 테이블 안 input*/
+.bank-input-con {
     border: none;
     background-color: inherit;
+    width: 100px;
+    text-align: center;
+
+}
+/* input 활성화 되었을 때 스타일을 설정해주기 위함 */
+/*사용된 곳: bank_yejin.js에서 bank_update()에서 사용*/
+.bank-input-add {
+    border: 1px solid #e7e7ed;
+    background-color: white;
+    text-align: center;
+    width: 170px;
+    height: 25px;
+    border-radius: 4px;
+
+}
+.bank-input-add:focus { outline: none; }
+
+/*쓰인 곳: 모달 시작 div, 모달 배경 부분임. */
+.bank-modal-bg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top:0;
+    left: 0;
+    background-color: rgba(0,0,0,0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+
+}
+/*밑 마진을 0으로 해주기 위함*/
+/*사용된 곳: 연도 h태그 부분*/
+.bank-margin-bottom_0 {
+    margin-bottom: 0;
+}
+/*사용된 곳: 회계내역 추가 버튼*/
+.bank-btn-add-div {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    padding: 0;
+}
+
+/*글자 가운데 정렬을 위함*/
+/*사용된 곳: tr 부분*/
+.bank-text-align_center {
     text-align: center;
 }
-.bank-margin-right {
 
+/*글자정렬을 왼쪽으로 하기 위함*/
+/*사용된 곳: 테이블 안 내용 input*/
+.bank-text-align_start {
+    text-align: start;
+}
+/*영수증 이미지 정렬을 위함*/
+/*사용된 곳: 영수증 이미지 */
+.bank-image-flex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+/*총액 div 스타일을 위함*/
+/*사용된 곳: 총액 */
+.bank-total {
+    background-color: #4611a7;
+    color: white;
+    padding: 10px;
+    width: 180px;
+    border-radius: 30px;
+    text-align: center
 }

@@ -5,7 +5,17 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/seungyeon.css' %}">
     <script src="{% static 'js/jquery.min.js' %}"></script><!-- JQUERY.MIN JS -->
     <script src="{% static 'js/sy.js' %}"></script>
+    <script>
+        function go_delete() {
+            if (confirm("정말 해당 게시글을 삭제하시겠습니까?")) {
+                document.getElementById("form-board-delete").submit()
+            }
+        }
 
+        function go_update() {
+            document.getElementById('form-board-update').submit()
+        }
+    </script>
     <div class="page-wraper">
 
         <div class="page-content bg-white">
@@ -14,14 +24,17 @@
                 <!--제목을 감싸는 배경-->
                 <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"
                      style=" background-image: url('{% static 'images/board_name_img.jpg' %}'); height: 350px">
-                    <!-- 상단 제목을 클릭하면, 상위 게시판으로 돌아감 -->
-                    <a href="{% url 'activity' %}">
+                    <!-- 상단 제목을 클릭하면, 상위 게시판으로 이동 -->
+                    <!-- (ex.자유게시판의 '용식이의 학식일기'글의 상세 페이지에서 상위 제목을 클릭하면, 자유게시판으로 이동) -->
+                    <a href="{% url 'board_view' board_type_no=board.board_type_no.board_type_no %}">
                         <div class="container clearfix">
                             <div class="dlab-bnr-inr-entry">
                                 <!--제목-->
-                                <h1 class="text-white introduce-letter-spacing_5">동아리 활동</h1>
+                                <!-- DB에서 제목 꺼내와야 함 -->
+                                <h1 class="text-white introduce-letter-spacing_5">{{ board.board_type_no.board_type_name }}</h1>
                                 <!--부제목-->
-                                <p class="introduce-margin-top_20">동아리 수상 및 활동 내역에 대한 게시판입니다.</p>
+                                <!-- DB에서 제목 꺼내와야 함 -->
+                                <p class="introduce-margin-top_20">{{ board.board_type_no.board_type_exp }}</p>
                             </div>
                         </div>
                     </a>
@@ -41,7 +54,8 @@
                                             </li>
                                             <!-- 게시글 작성시간 -->
                                             <li class="post-comment"><i class="ti ti-alarm-clock"></i> <a
-                                                    href="javascript:void(0);">{{ board.board_created }}</a></li>
+                                                    href="javascript:void(0);">{{ board.board_created|date:'Y.m.d h:i' }}</a>
+                                            </li>
                                         </ul>
                                     </div>
                                     <!-- 게시글 제목 -->
@@ -54,22 +68,38 @@
                                     <div class="dlab-post-text">
                                         <!-- 본문 입력 내용 -->
                                         {% autoescape off %}
-                                            <!-- DB에서 꺼내온 것들 중 해당 블럭 안에 있는 것을 HTML 태그로 인식하게 함-->
                                             {{ board.board_cont }}
                                         {% endautoescape %}
+                                        <!-- 첨부된 파일 불러오는 곳 -->
+                                        <!-- download 쪽에 파일 경로 설정 -->
+                                        <!-- 파일 리스트 길이가 0이 아닐 경우에만 파일 리스트를 출력하게 함. -->
+                                        {% if file_len != 0 %}
+                                            <div class="download-box">
+                                                {% for board_file in board_file_list %}
+                                                    <!-- 첨부파일 1 -->
+                                                     <i class="fa fa-download m-r15 "></i><a class="line2" download
+                                                                                             href="/media/{{ board_file.board_file_path }}">{{ board_file.board_file_name }}</a>
+                                                    <!-- 파일 간 구분선 마지막 파일은 구분선을 출력하지 않도록 설정.-->
+                                                    {% if forloop.revcounter0 != 0 %}
+                                                        <div class="dlab-divider tb10 bg-gray-dark"></div>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
                                         <!-- 게시글 속 사진 모음 -->
                                         <div class="widget widget_gallery gallery-grid-4 lightgallery">
                                             <ul>
-                                                {% for board_file in board_file_list %}
+                                                {% for board_img in board_img_list %}
                                                     {% if forloop.counter < 4 %}
                                                         <li>
-                                                            <span data-exthumbimage="/media/{{ board_file.board_file_path }}"
-                                                                  data-src="/media/{{ board_file.board_file_path }}"
-                                                                  class="check-km " title="{{ board_file.board_file_name}}">
+                                                            <span data-exthumbimage="/media/{{ board_img.board_file_path }}"
+                                                                  data-src="/media/{{ board_img.board_file_path }}"
+                                                                  class="check-km "
+                                                                  title="{{ board_file.board_file_name }}">
                                                                 <a href="javascript:void(0);">
                                                                     <div class="dlab-post-thum act-detail-img-size">
                                                                         <img style="height: 190px"
-                                                                             src="/media/{{ board_file.board_file_path }}"
+                                                                             src="/media/{{ board_img.board_file_path }}"
                                                                              alt=""/>
                                                                     </div>
                                                                 </a>
@@ -77,16 +107,17 @@
                                                         </li>
                                                     {% elif forloop.counter == 4 %}
                                                         <li>
-                                                            <span data-exthumbimage="/media/{{ board_file.board_file_path }}"
-                                                                  data-src="/media/{{ board_file.board_file_path }}"
+                                                            <span data-exthumbimage="/media/{{ board_img.board_file_path }}"
+                                                                  data-src="/media/{{ board_img.board_file_path }}"
                                                                   class="check-km act-detail-img-siz"
-                                                                  title="{{ board_file.board_file_name}}">
+                                                                  title="{{ board_file.board_file_name }}">
                                                                 <a href="javascript:void(0);">
                                                                     <div class="dlab-post-thum "><img
                                                                             style="height: 190px"
-                                                                            src="/media/{{ board_file.board_file_path }}"
+                                                                            src="/media/{{ board_img.board_file_path }}"
                                                                             alt=""></div>
-                                                                    {% if forloop.revcounter0 > 0 %} <!-- 사용자가 업로드한 사진이 딱 4개인 경우 남은 이미지 개수를 출력하지 않음.-->
+                                                                    {% if forloop.revcounter0 > 0 %}
+                                                                        <!-- 사용자가 업로드한 사진이 딱 4개인 경우 남은 이미지 개수를 출력하지 않음.-->
                                                                         <div class="more-images">
                                                                             <div>
                                                                                 <strong>{{ forloop.revcounter0 }}</strong>
@@ -99,58 +130,57 @@
                                                         </li>
                                                     {% else %}
                                                         <li style="display: none;">
-                                                            <span data-exthumbimage="/media/{{ board_file.board_file_path }}"
-                                                                  data-src="/media/{{ board_file.board_file_path }}"
-                                                                  class="check-km " title="{{ board_file.board_file_name}}">
+                                                            <span data-exthumbimage="/media/{{ board_img.board_file_path }}"
+                                                                  data-src="/media/{{ board_img.board_file_path }}"
+                                                                  class="check-km "
+                                                                  title="{{ board_file.board_file_name }}">
                                                                 <a href="javascript:void(0);">
                                                                     <div class="dlab-post-thum act-detail-img-size">
                                                                         <img style="height: 190px"
-                                                                             src="/media/{{ board_file.board_file_path }}"
+                                                                             src="/media/{{ board_img.board_file_path }}"
                                                                              alt=""/>
                                                                     </div>
                                                                 </a>
                                                             </span>
                                                         </li>
                                                     {% endif %}
-
                                                 {% endfor %}
-
-
                                             </ul>
                                         </div>
-
                                     </div>
                                     <!-- 게시글 삭제 및 수정 div -->
                                     <div class="extra-cell text-right">
+
                                         {% if request.session.user_stu == board.board_writer.user_stu %}
                                             <!-- 게시글 수정 버튼 -->
-                                            <button type="button" class="site-button radius-xl m-l10"
-                                                    onclick="document.getElementById('form-activity-update').submit()">
-                                                <i
-                                                        class="fa fa-pencil m-r5"></i>게시글 수정
+                                            <!-- 관련자만 보이게 처리 -->
+                                            <button class="site-button radius-xl m-l10" onclick="go_update()"><i
+                                                    class="fa fa-pencil m-r5"></i>게시글 수정
                                             </button>
-                                            <!--게시글 수정 폼-->
+                                            <!-- 게시글 수정을 위한 폼 -->
+                                            <form id="form-board-update" action="{% url 'board_update' %}" method="GET"
+                                                  style="display: none;">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="board_no" value="{{ board.board_no }}">
+                                            </form>
+                                        {% endif %}
+                                        <!-- 게시글 삭제 버튼 -->
+                                        <!-- 관련자만 보이게 처리 -->
 
-                                        {% endif %}
-                                        {% if request.session.user_role <= 3 or request.session.user_stu == board.board_writer.user_stu %}
-                                            <!-- 게시글 삭제 버튼 -->
-                                            <button type="button" class="site-button red radius-xl m-l10"
-                                                    onclick="if(confirm('정말 삭제하시겠습니까?')){document.getElementById('form-activity-delete').submit();}">
-                                                <i
-                                                        class="fa fa-trash m-r5"></i>게시글 삭제
+                                        {% if request.session.user_stu == board.board_writer.user_stu or request.session.user_role <= 3 %}
+
+                                            <button class="site-button red radius-xl m-l10" onclick="go_delete()"><i
+                                                    class="fa fa-trash m-r5"></i>게시글 삭제
                                             </button>
-                                            <!--게식글 삭제 폼-->
+
+                                            <!-- 게시글 삭제를 위한 폼 -->
+                                            <form id="form-board-delete" action="{% url 'board_delete' %}" method="POST"
+                                                  style="display: none;">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="board_no" value="{{ board.board_no }}">
+                                            </form>
                                         {% endif %}
-                                        <form id="form-activity-update" action="{% url 'activity_update' %}"
-                                              method="get">
-                                            {% csrf_token %}
-                                            <input type="hidden" name="board_no" value="{{ board.board_no }}"/>
-                                        </form>
-                                        <form id="form-activity-delete" action="{% url 'activity_delete' %}"
-                                              method="post">
-                                            {% csrf_token %}
-                                            <input type="hidden" name="board_no" value="{{ board.board_no }}"/>
-                                        </form>
+
                                     </div>
                                     <!-- 게시글과 댓글을 구분짓는 구분선 -->
                                     <div class="dlab-divider bg-gray-dark"></div>
