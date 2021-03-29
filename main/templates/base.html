@@ -83,7 +83,7 @@
                                     {# 밑에 있는 회계내역, 예산지원 신청은 회원들만 신청을 할 수 있음. #}
                                     {% if request.session.user_stu is not None %}
                                         <li><a href="{% url 'bank_list' %}">회계내역</a></li>
-                                        <li><a href="#">예산지원신청</a></li>
+                                        <li><a href="{% url 'bank_support_board' %}">예산지원신청</a></li>
                                     {% endif %}
                                 </ul>
                             </li>
@@ -120,7 +120,7 @@
                                 <!--======회원정보 뜨는 곳======-->
                                 <li class="active">
                                     <!--아래 href에 마이페이지 링크 들어가야 함-->
-                                    <a href="#" style="padding-right: 7px;">
+                                    <a href="{% url 'my_info' %}" style="padding-right: 7px;">
                                         <!--==승인되지 않았을 때==-->
                                         {% if request.session.is_activated == 0 %}
                                             <img src="/media/{{ request.session.user_pic }}" width="35px" height="35px"
@@ -256,7 +256,7 @@
         <!-- design-with에 대한 정의는 bottom_bar.css에 정의되어 있음. (font, margin 관련) -->
         <p class="fbottom-like design-with">© 2021 Developed By <a class="like-btn"
                                                                   href="javascript:void(0)">
-        </a> 양태영, 신승연, 조용식, 김채림, 윤예진 </p>
+        </a> 양태영, 신승연, 김채림, 윤예진 </p>
     </div>
 </footer>
 <!-- Footer END-->

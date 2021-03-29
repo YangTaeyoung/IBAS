@@ -32,6 +32,9 @@ class Bank(models.Model):
     bank_created = models.DateTimeField(db_column='BANK_CREATED', auto_now_add=True)  # Field name made lowercase.
     bank_updated = models.DateTimeField(db_column='BANK_UPDATED', auto_now=True, blank=True,
                                         null=True)  # Field name made lowercase.
+    bank_checked = models.DateTimeField(db_column='BANK_CHECKED', null=True)
+    bank_allowed = models.DateTimeField(db_column='BANK_ALLOWED', null=True)
+
     bank_cfo = models.ForeignKey('User', models.DO_NOTHING, db_column='BANK_CFO',
                                  related_name="cfo")  # Field name made lowercase.
     bank_used_user = models.ForeignKey('User', models.DO_NOTHING, db_column='BANK_USED_USER',
