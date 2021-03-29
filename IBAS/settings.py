@@ -46,9 +46,10 @@ INSTALLED_APPS = [
     # 메인 관련 앱
     'main',
     # 회계 관련 앱
-    'bank'
+    'bank',
     # 게시판 관련 앱
     'board',
+    'my_info',
     # 소셜 로그인 패키지: allauth 관련
     'allauth',
     'allauth.account',
@@ -105,7 +106,7 @@ DATABASES = {
         'USER': 'root',
         'PASSWORD': 'bigdata1156--',
         'HOST': 'localhost',
-        'PORT': '3356',
+        'PORT': '3306',
     }
 }
 

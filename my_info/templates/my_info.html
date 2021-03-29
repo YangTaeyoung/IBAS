@@ -1,124 +1,131 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-    <link rel="stylesheet" href="{% static 'css/login.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/my_info_cr.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/login.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/my_info_cr.css' %}"/>
 
-<!-- Content -->
+    <!-- Content -->
     <div class="page-content bg-white text-gray-1">
         <!-- inner page banner -->
         <img src="{% static 'images/myinfo_bg.jpg' %}" style="height: 20%; width: 100%; overflow: hidden">
         <!-- inner page banner END -->
-		<div class="listing-details-head">
-			<div class="container">
-				<div class="listing-info-box">
+        <div class="listing-details-head">
+            <div class="container">
+                <div class="listing-info-box">
                     <!--프로필 사진, Back : 본인 프로필 사진 나오도록 수정-->
-					<div class="listing-theme-logo">
-						<img src="{% static 'images/default_profile.png' %}" alt="">
-					</div>
-					<div class="listing-info">
+                    <div class="listing-theme-logo">
+                        <img src="/media/{{ my_info.user_pic }}" alt="">
+                    </div>
+                    <div class="listing-info">
                         <!--이름, 학과, 학번 표시되는 곳, Back : 본인 이름, 학과, 한번 들어갈 수 있도록 수정-->
-						<div class="listing-info-left">
-							<h3 class="title">김채림</h3>
-							<p>경영학과 &#8226; 12192199</p>
-						</div>
+                        <div class="listing-info-left">
+                            <h3 class="title">{{ my_info.user_name }}</h3>
+                            <p>{{ my_info.user_major.major_name }} &#8226; {{ my_info.user_stu }}</p>
+                        </div>
                         <!--프로필 사진변경하고 싶을 때 누르는 버튼-->
                         <div class="listing-info-right">
-							<a href="javascript:void(0);" data-toggle="modal" data-target="#photo_edit" class="site-button"><i class="la la-photo m-r5"></i>사진변경</a>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+                            <a href="javascript:void(0);" data-toggle="modal" data-target="#photo_edit"
+                               class="site-button"><i class="la la-photo m-r5"></i>사진변경</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- 사진 수정 Modal -->
-                        <div class="modal fade modal-bx-info modal-lg" id="photo_edit" tabindex="-1" role="dialog" aria-labelledby="ReportReviewsModalLongTitle" aria-hidden="true">
-                            <div class="modal-dialog " role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <!--상단 제목부분-->
-                                        <h5 class="modal-title" id="ReportReviewsModalLongTitle">프로필 사진 수정</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true"><i class="la la-close"></i></span>
-                                        </button>
-                                    </div>
-                                    <!--내용부분, 이미지 첨부하는 곳 들어감, Back : 가능하면....원래 사진 뜰 수 있도록 수정, 어려우면 없어도 될듯-->
-                                    <div class="modal-body">
-                                        <form class="dlab-form">
-                                            <div class="content-body">
-                                                <div class="form-group">
-                                                    <input
-                                                    type="file"
-                                                    accept=".xlsx,.xls,image/*,.doc,audio/*,.docx,video/*,.ppt,.pptx,.txt,.pdf"
-                                                    multiple
-                                                    />
-                                                </div>
-                                            </div>
-                                            <!--수정버튼, Back : 누르면 프로필 사진에 반영되도록 수정-->
-                                            <a href="#" class="site-button" style="display: grid; justify-items: center;" onclick="return confirm('수정하시겠습니까?') && alert('프로필 사진 수정이 완료되었습니다.')">수정</a>
-                                        </form>
-                                    </div>
+        <div class="modal fade modal-bx-info modal-lg" id="photo_edit" tabindex="-1" role="dialog"
+             aria-labelledby="ReportReviewsModalLongTitle" aria-hidden="true">
+            <div class="modal-dialog " role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <!--상단 제목부분-->
+                        <h5 class="modal-title" id="ReportReviewsModalLongTitle">프로필 사진 수정</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true"><i class="la la-close"></i></span>
+                        </button>
+                    </div>
+                    <!--내용부분, 이미지 첨부하는 곳 들어감, Back : 가능하면....원래 사진 뜰 수 있도록 수정, 어려우면 없어도 될듯-->
+                    <div class="modal-body">
+                        <form class="dlab-form">
+                            <div class="content-body">
+                                <div class="form-group">
+                                    <input
+                                            type="file"
+                                            accept="image/*"
+                                    />
                                 </div>
                             </div>
-                        </div>
-                        <!-- Modal End -->
+                            <!--수정버튼, Back : 누르면 프로필 사진에 반영되도록 수정-->
+                            <a href="#" class="site-button" style="display: grid; justify-items: center;"
+                               onclick="return confirm('수정하시겠습니까?') && alert('프로필 사진 수정이 완료되었습니다.')">수정</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal End -->
         <!--마이인포의 상단 메뉴부분 해당 버튼 누르면 해당하는 곳으로 이동,Back : 각 메뉴에 따라 권한자만 보이게 수정-->
-		<div class="listing-details-nav">
-			<div class="container">
-				<ul class="listing-nav nav">
+        <div class="listing-details-nav">
+            <div class="container">
+                <ul class="listing-nav nav">
                     <!--강의실 메뉴버튼,Back : 모두에게 보이게 수정-->
-					<li><a data-toggle="tab" href="#listing_myclass" class="active"><i class="la la-home"></i><span>강의실</span></a></li>
+                    <li><a data-toggle="tab" href="#listing_myclass" class="active"><i
+                            class="la la-home"></i><span>강의실</span></a></li>
                     <!--개설강의 메뉴버튼,Back : 강의자만 보이게 수정-->
-					<li><a data-toggle="tab" href="#listing_class_setting"><i class="la la-book"></i><span>개설강의관리</span></a></li>
+                    <li><a data-toggle="tab" href="#listing_class_setting"><i class="la la-book"></i><span>개설강의관리</span></a>
+                    </li>
                     <!--작성들관리 메뉴버튼,Back : 모두에게 보이게 수정-->
-					<li><a data-toggle="tab" href="#listing_mycontent"><i class="la la-list-alt"></i><span>작성글관리</span></a></li>
+                    <li><a data-toggle="tab" href="#listing_mycontent"><i class="la la-list-alt"></i><span>작성글관리</span></a>
+                    </li>
                     <!--예산신청내역 메뉴버튼,Back : 모두에게 보이게 수정-->
-					<li><a data-toggle="tab" href="#listing_mybank"><i class="la la-money"></i><span>예산신청내역</span></a></li>
+                    <li><a data-toggle="tab" href="#listing_mybank"><i class="la la-money"></i><span>예산신청내역</span></a>
+                    </li>
                     <!--회원관리 메뉴버튼,Back : 회장단만 보이게 수정-->
-					<li><a data-toggle="tab" href="#listing_user_setting"><i class="la la-users"></i><span>회원관리</span></a></li>
+                    <li><a data-toggle="tab" href="#listing_user_setting"><i
+                            class="la la-users"></i><span>회원관리</span></a></li>
                     <!--내정보 메뉴버튼,Back : 모두에게 보이게 수정-->
-					<li><a data-toggle="tab" href="#listing_my_info"><i class="la la-user"></i><span>내정보</span></a></li>
-				</ul>
-			</div>
-		</div>
+                    <li><a data-toggle="tab" href="#listing_my_info"><i class="la la-user"></i><span>내정보</span></a></li>
+                </ul>
+            </div>
+        </div>
 
         <!-- 버튼누르면 보여지는 곳 목록-->
         <div class="section-full listing-details-content">
             <div class="container">
                 <!--강의실, 모두에게 보임-->
-				<div class="tab-content">
-					<div id="listing_myclass" class="tab-pane active">
-						<div class="row">
-							<div class="col-xl-12">
-								<div class="content-box">
-									<div class="content-header">
-										<h3 class="title">강의실 제목</h3>
-									</div>
-									<div class="content-body">
-										<p>강의실 내용~~~~~~~~~~~~~~~~~~~~~~</p>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
+                <div class="tab-content">
+                    <div id="listing_myclass" class="tab-pane active">
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="content-box">
+                                    <div class="content-header">
+                                        <h3 class="title">강의실 제목</h3>
+                                    </div>
+                                    <div class="content-body">
+                                        <p>강의실 내용~~~~~~~~~~~~~~~~~~~~~~</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <!--개설강의 관리-->
-					<div id="listing_class_setting" class="tab-pane">
-						<div class="row">
-							<div class="col-xl-12">
-								<div class="content-box">
-									<div class="content-header">
-										<h3 class="title">개설강의관리 제목</h3>
-									</div>
-									<div class="content-body">
-										<p>개설강의관리 내용~~~~~~~~~~~~~~~~~~~~~~</p>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
+                    <div id="listing_class_setting" class="tab-pane">
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="content-box">
+                                    <div class="content-header">
+                                        <h3 class="title">개설강의관리 제목</h3>
+                                    </div>
+                                    <div class="content-body">
+                                        <p>개설강의관리 내용~~~~~~~~~~~~~~~~~~~~~~</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <!--작성글관리-->
-					<div id="listing_mycontent" class="tab-pane">
-						<div class="row">
+                    <div id="listing_mycontent" class="tab-pane">
+                        <div class="row">
                             <!-- 내가 작성한 글을 담는 div -->
                             <div class="col-xl-12">
                                 <!-- 내가 작성한 게시글 부분  -->
@@ -133,6 +140,7 @@
                                         <table class="table">
                                             <thead>
                                             <!-- 테이블 1행: 제목 -->
+
                                             <tr class="border-0">
                                                 <th class="border-top-0" scope="col">게시판 유형</th>
                                                 <th style="width: 550px" class="border-top-0" scope="col">제목</th>
@@ -140,25 +148,20 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <tr>
-                                                <!-- 게시판 유형 -->
-                                                <td>자유게시판</td>
-                                                <!-- 게시글 제목 (클릭하면 해당 게시글로 이동하도록 a태그로 둠 -->
-                                                <td><a href="#">코로나 검사받은 썰</a></td>
-                                                <!-- 게시글 작성일 -->
-                                                <td>2021-03-20</td>
-                                            </tr>
-                                            <tr>
-                                                <td>자유게시판</td>
-                                                <td><a href="#">자유로운 영혼을 위함</a></td>
-                                                <td>2021-04-10</td>
-                                            </tr>
-                                            <tr>
-                                                <td>질문게시판</td>
-                                                <td><a href="#">특강일정 문의</a></td>
-                                                <td>2021-04-11</td>
-                                            </tr>
+                                            {% for my_board in my_board_list %}
+                                                <tr>
+                                                    <!-- 게시판 유형 -->
+                                                    <td>{{ my_board.board_type_no.board_type_name }}</td>
+                                                    <!-- 게시글 제목 (클릭하면 해당 게시글로 이동하도록 a태그로 둠 -->
+                                                    <td>
+                                                        <a href="{% url 'board_detail' board_no=my_board.board_no %}">{{ my_board.board_title }}</a>
+                                                    </td>
+                                                    <!-- 게시글 작성일 -->
+                                                    <td>{{ my_board.board_created|date:"Y-m-d" }}</td>
+                                                </tr>
+                                            {% endfor %}
                                             </tbody>
+
                                         </table>
                                     </div>
                                 </div>
@@ -183,36 +186,28 @@
                                             </thead>
                                             <!-- 댓글 내용 테이블 -->
                                             <tbody>
-                                            <tr>
-                                                <!-- 게시판 유형 -->
-                                                <td>자유게시판</td>
-                                                <!-- 댓글내용 -->
-                                                <td>ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ</td>
-                                                <!-- 원문으로 이동하는 a태그 -->
-                                                <td><a href="#">원문보기 ▶</a></td>
-                                                <td>2021-03-20</td>
-                                            </tr>
-                                            <tr>
-                                                <td>자유게시판</td>
-                                                <td>그것 참 안타깝게 생각하고 있어요</td>
-                                                <td><a href="#">원문보기 ▶</a></td>
-                                                <td>2021-04-10</td>
-                                            </tr>
-                                            <tr>
-                                                <td>질문게시판</td>
-                                                <td>그것 답변하기 곤란합니다.</td>
-                                                <td><a href="#">원문보기 ▶</a></td>
-                                                <td>2021-04-11</td>
-                                            </tr>
+                                            {% for my_comment in my_comment_list %}
+                                                <tr>
+                                                    <!-- 게시판 유형 -->
+                                                    <td>{{ my_comment.comment_board_no.board_type_no.board_type_name }}</td>
+                                                    <!-- 댓글내용 -->
+                                                    <td>{{ my_comment.comment_cont }}</td>
+                                                    <!-- 원문으로 이동하는 a태그 -->
+                                                    <td>
+                                                        <a href="{% url 'board_detail' board_no=my_comment.comment_board_no.board_no %}">원문보기
+                                                            ▶</a></td>
+                                                    <td>{{ my_comment.comment_created|date:"Y-m-d" }}</td>
+                                                </tr>
+                                            {% endfor %}
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
                             </div>
                         </div>
-					</div>
+                    </div>
                     <!--예산신청내역-->
-					<!--===== 내가 신청한 예산내역 코드 시작 =====-->
+                    <!--===== 내가 신청한 예산내역 코드 시작 =====-->
                     <div id="listing_mybank" class="tab-pane">
                         <div class="row">
                             <div class="col-xl-12">
@@ -245,7 +240,7 @@
                                                     <td>쓰레기통 및 쓰레기봉투</td>
                                                     <!-- 원글로 넘어가는 a태크 -->
                                                     <td><a href="#">원문보기 ▶</a>
-                                                    <!-- 게시글 작성일 -->
+                                                        <!-- 게시글 작성일 -->
                                                     <td>2021-03-20</td>
                                                     <!-- 게시글 검토일 (총무가 승인, 거절 버튼을 누른 일자) 만약 아직 검토 전이면, '-'로 표기되어야 함. -->
                                                     <td>2021-03-26</td>
@@ -286,174 +281,186 @@
                     </div>
                     <!--===== 내가 신청한 예산내역 코드 끝 =====-->
                     <!--회원관리-->
-					<div id="listing_user_setting" class="tab-pane">
-						<div class="row">
-							<div class="col-xl-12">
-								<div class="content-box">
-									<div class="content-header">
-										<h3 class="title">회원관리 제목</h3>
-									</div>
-									<div class="content-body">
-										<p>회원관리 내용~~~~~~~~~~~~~~~~~~~~~~</p>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
+                    <div id="listing_user_setting" class="tab-pane">
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="content-box">
+                                    <div class="content-header">
+                                        <h3 class="title">회원관리 제목</h3>
+                                    </div>
+                                    <div class="content-body">
+                                        <p>회원관리 내용~~~~~~~~~~~~~~~~~~~~~~</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <!--내정보-->
-					<div id="listing_my_info" class="tab-pane">
-						<div class="row">
-							<div class="col-xl-12">
-								<div class="content-box">
+                    <div id="listing_my_info" class="tab-pane">
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="content-box">
                                     <!--내 정보 상세보기란-->
                                     <!--제목부분-->
-									<div class="content-header">
+                                    <div class="content-header">
                                         <h3 class="title"><i class="la la-user"></i>내정보 상세보기</h3>
-									</div>
+                                    </div>
                                     <!--내용부분-->
-									<div class="content-body">
-										<table class="table" style="margin-top: 30px; width: 95%; margin-left: 2.5%">
+                                    <div class="content-body">
+                                        <table class="table" style="margin-top: 30px; width: 95%; margin-left: 2.5%">
                                             <tbody>
-                                                <!--이름-->
-                                                <tr>
-                                                  <th scope="row">이름</th>
-                                                  <!--Back : 자기 이름 뜨도록 수정-->
-                                                  <td>김채림</td>
-                                                  <!--수정하기 버튼, 누르면 모달 뜸-->
-                                                  <td>
-                                                      <a href="javascript:void(0);" data-toggle="modal" data-target="#name_edit"><i class="la la-pencil"></i></a>
-                                                  </td>
-                                                </tr>
-                                                <!--학번-->
-                                                <tr>
-                                                  <th scope="row">학번</th>
-                                                  <!--Back : 자기 학번 뜨도록 수정-->
-                                                  <td>12192199</td>
-                                                  <td></td>
-                                                </tr>
-                                                <!--학과-->
-                                                <tr>
-                                                  <th scope="row">학과</th>
-                                                  <!--Back : 자기 학과 뜨도록 수정-->
-                                                  <td>경영학과</td>
-                                                  <!--수정하기 버튼, 누르면 모달 뜸-->
-                                                  <td>
-                                                      <a href="javascript:void(0);" data-toggle="modal" data-target="#major_edit"><i class="la la-pencil"></i></a>
-                                                  </td>
-                                                </tr>
-                                                <!--학년-->
-                                                <tr>
-                                                  <th scope="row">학년</th>
-                                                  <!--Back : 자기 학년 뜨도록 수정-->
-                                                  <td>3학년</td>
-                                                  <td></td>
-                                                </tr>
-                                                <!--이메일-->
-                                                <tr>
-                                                  <th scope="row">이메일</th>
-                                                  <!--Back : 자기 이메일 번호 뜨도록 수정-->
-                                                  <td>cofla030360@gmail.com</td>
-                                                  <td></td>
-                                                </tr>
-                                                <!--전화번호-->
-                                                <tr>
-                                                  <th scope="row">전화번호</th>
-                                                  <!--Back : 자기 핸드폰 번호 뜨도록 수정-->
-                                                  <td>010-5398-9075</td>
-                                                  <!--수정하기 버튼, 누르면 모달 뜸-->
-                                                  <td>
-                                                      <a href="javascript:void(0);" data-toggle="modal" data-target="#phone_edit"><i class="la la-pencil"></i></a>
-                                                  </td>
-                                                </tr>
-                                                <!--승인상태-->
-                                                <tr>
-                                                  <th scope="row">승인상태</th>
-                                                  <!--Back : 승인 안되면 미승인, 승인되면 승인 뜨도록 수정-->
-                                                  <td>미승인</td>
-                                                  <td></td>
-                                                </tr>
-                                                <!--권한-->
-                                                <tr>
-                                                  <th scope="row">권한</th>
-                                                    <!--Back : 회장이면 회장, 부회장이면 부회장 ...... 일반회원이면 일반회원으로 뜨도록 수정-->
-                                                  <td>일반회원</td>
-                                                  <td></td>
-                                                </tr>
-                                                <!--아래 선 하나 더 보이게 추가한 곳-->
-                                                <tr>
-                                                    <th></th>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
+                                            <!--이름-->
+                                            <tr>
+                                                <th scope="row">이름</th>
+                                                <!--Back : 자기 이름 뜨도록 수정-->
+                                                <td>김채림</td>
+                                                <!--수정하기 버튼, 누르면 모달 뜸-->
+                                                <td>
+                                                    <a href="javascript:void(0);" data-toggle="modal"
+                                                       data-target="#name_edit"><i class="la la-pencil"></i></a>
+                                                </td>
+                                            </tr>
+                                            <!--학번-->
+                                            <tr>
+                                                <th scope="row">학번</th>
+                                                <!--Back : 자기 학번 뜨도록 수정-->
+                                                <td>12192199</td>
+                                                <td></td>
+                                            </tr>
+                                            <!--학과-->
+                                            <tr>
+                                                <th scope="row">학과</th>
+                                                <!--Back : 자기 학과 뜨도록 수정-->
+                                                <td>경영학과</td>
+                                                <!--수정하기 버튼, 누르면 모달 뜸-->
+                                                <td>
+                                                    <a href="javascript:void(0);" data-toggle="modal"
+                                                       data-target="#major_edit"><i class="la la-pencil"></i></a>
+                                                </td>
+                                            </tr>
+                                            <!--학년-->
+                                            <tr>
+                                                <th scope="row">학년</th>
+                                                <!--Back : 자기 학년 뜨도록 수정-->
+                                                <td>3학년</td>
+                                                <td></td>
+                                            </tr>
+                                            <!--이메일-->
+                                            <tr>
+                                                <th scope="row">이메일</th>
+                                                <!--Back : 자기 이메일 번호 뜨도록 수정-->
+                                                <td>cofla030360@gmail.com</td>
+                                                <td></td>
+                                            </tr>
+                                            <!--전화번호-->
+                                            <tr>
+                                                <th scope="row">전화번호</th>
+                                                <!--Back : 자기 핸드폰 번호 뜨도록 수정-->
+                                                <td>010-5398-9075</td>
+                                                <!--수정하기 버튼, 누르면 모달 뜸-->
+                                                <td>
+                                                    <a href="javascript:void(0);" data-toggle="modal"
+                                                       data-target="#phone_edit"><i class="la la-pencil"></i></a>
+                                                </td>
+                                            </tr>
+                                            <!--승인상태-->
+                                            <tr>
+                                                <th scope="row">승인상태</th>
+                                                <!--Back : 승인 안되면 미승인, 승인되면 승인 뜨도록 수정-->
+                                                <td>미승인</td>
+                                                <td></td>
+                                            </tr>
+                                            <!--권한-->
+                                            <tr>
+                                                <th scope="row">권한</th>
+                                                <!--Back : 회장이면 회장, 부회장이면 부회장 ...... 일반회원이면 일반회원으로 뜨도록 수정-->
+                                                <td>일반회원</td>
+                                                <td></td>
+                                            </tr>
+                                            <!--아래 선 하나 더 보이게 추가한 곳-->
+                                            <tr>
+                                                <th></th>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
                                             </tbody>
                                         </table>
-									</div>
-								</div>
+                                    </div>
+                                </div>
                                 <div class="content-box">
-									<div class="content-header">
+                                    <div class="content-header">
                                         <h3 class="title"><i class="la la-share"></i>계정연동</h3>
-									</div>
+                                    </div>
                                     <!--계정연동 버튼들, Back : 주석보고 각 조건에 맞게 해당하는 버튼만 뜨도록 수정-->
-									<div class="content-body">
+                                    <div class="content-body">
                                         <!--구글 계정으로 로그인하였을 때-->
                                         <!--네이버 계정 연동 안했을 때-->
                                         <form class="dlab-form m-t10">
-                                          <div class="text-center m-b10">
-                                            <div href="#" class="site-button gray_box" style="width: 45%">
-                                                <i class="fa fa-google m-r10"></i>
-                                                구글 계정으로 로그인하였습니다.
+                                            <div class="text-center m-b10">
+                                                <div href="#" class="site-button gray_box" style="width: 45%">
+                                                    <i class="fa fa-google m-r10"></i>
+                                                    구글 계정으로 로그인하였습니다.
+                                                </div>
+                                                <!--Back : 누르면 네이버 계정 연동하는 창으로 이동하도록 수정-->
+                                                <a href="#" class="site-button whatsapp btn-block"
+                                                   style="width: 45%; margin-left: 20px">
+                                                    <span class="naver-logo m-r10">N</span>
+                                                    네이버 계정 연동하기</a>
                                             </div>
-                                            <!--Back : 누르면 네이버 계정 연동하는 창으로 이동하도록 수정-->
-                                            <a href="#" class="site-button whatsapp btn-block" style="width: 45%; margin-left: 20px">
-                                                <span class="naver-logo m-r10">N</span>
-                                                네이버 계정 연동하기</a>
-                                          </div>
                                         </form>
                                         <!--네이버 계정 연동 했을 때-->
                                         <div class="m-t10">
-                                          <div class="text-center m-b10">
-                                            <div href="#" class="site-button gray_box" style="width: 45%">
-                                                <i class="fa fa-google m-r10"></i>
-                                                구글 계정으로 로그인하였습니다.
+                                            <div class="text-center m-b10">
+                                                <div href="#" class="site-button gray_box" style="width: 45%">
+                                                    <i class="fa fa-google m-r10"></i>
+                                                    구글 계정으로 로그인하였습니다.
+                                                </div>
+                                                <div href="#" class="site-button gray_box"
+                                                     style="width: 45%; margin-left: 20px">
+                                                    <span class="naver-logo m-r10">N</span>
+                                                    네이버 계정이 연동되어 있습니다.
+                                                </div>
                                             </div>
-                                            <div href="#" class="site-button gray_box" style="width: 45%; margin-left: 20px">
-                                                <span class="naver-logo m-r10">N</span>
-                                                네이버 계정이 연동되어 있습니다.</div>
-                                          </div>
                                         </div>
-                                         <!--네이버 계정으로 로그인하였을 때-->
+                                        <!--네이버 계정으로 로그인하였을 때-->
                                         <!--구글 계정 연동 안했을 때-->
                                         <form class="dlab-form m-t10">
-                                          <div class="text-center m-b10">
-                                            <!--Back : 누르면 구글계정 연동하는 창으로 이동하도록 수정-->
-                                            <a href="#" class="site-button google-plus btn-block" style="width: 45%">
-                                                <i class="fa fa-google m-r10"></i>
-                                                구글 계정 연동하기
-                                            </a>
-                                            <div href="#" class="site-button gray_box" style="width: 45%; margin-left: 20px">
-                                                <span class="naver-logo m-r10">N</span>
-                                                네이버 계정으로 로그인하였습니다.</div>
-                                          </div>
+                                            <div class="text-center m-b10">
+                                                <!--Back : 누르면 구글계정 연동하는 창으로 이동하도록 수정-->
+                                                <a href="#" class="site-button google-plus btn-block"
+                                                   style="width: 45%">
+                                                    <i class="fa fa-google m-r10"></i>
+                                                    구글 계정 연동하기
+                                                </a>
+                                                <div href="#" class="site-button gray_box"
+                                                     style="width: 45%; margin-left: 20px">
+                                                    <span class="naver-logo m-r10">N</span>
+                                                    네이버 계정으로 로그인하였습니다.
+                                                </div>
+                                            </div>
                                         </form>
                                         <!--구글 계정 연동 했을 때-->
                                         <div>
-                                          <div class="text-center m-b10 m-t10">
-                                            <div href="#" class="site-button gray_box" style="width: 45%">
-                                                <i class="fa fa-google m-r10"></i>
-                                                구글 계정이 연동되어 있습니다.
+                                            <div class="text-center m-b10 m-t10">
+                                                <div href="#" class="site-button gray_box" style="width: 45%">
+                                                    <i class="fa fa-google m-r10"></i>
+                                                    구글 계정이 연동되어 있습니다.
+                                                </div>
+                                                <div href="#" class="site-button gray_box"
+                                                     style="width: 45%; margin-left: 20px">
+                                                    <span class="naver-logo m-r10">N</span>
+                                                    네이버 계정으로 로그인하였습니다.
+                                                </div>
                                             </div>
-                                            <div href="#" class="site-button gray_box" style="width: 45%; margin-left: 20px">
-                                                <span class="naver-logo m-r10">N</span>
-                                                네이버 계정으로 로그인하였습니다.</div>
-                                          </div>
                                         </div>
-									</div>
-								</div>
-							</div>
-						</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                         <!-- 이름 수정 Modal -->
-                        <div class="modal fade modal-bx-info modal-lg" id="name_edit" tabindex="-1" role="dialog" aria-labelledby="ReportReviewsModalLongTitle" aria-hidden="true">
+                        <div class="modal fade modal-bx-info modal-lg" id="name_edit" tabindex="-1" role="dialog"
+                             aria-labelledby="ReportReviewsModalLongTitle" aria-hidden="true">
                             <div class="modal-dialog " role="document">
                                 <div class="modal-content">
                                     <!--제목부분-->
@@ -468,14 +475,18 @@
                                         <form class="dlab-form">
                                             <!--수정설명 부분-->
                                             <div class="clearfix">
-                                                <p class="my_info_modal_content"><i class="la la-check"></i>이름은 회장의 승인을 통하여 수정할 수 있습니다. </p>
+                                                <p class="my_info_modal_content"><i class="la la-check"></i>이름은 회장의 승인을
+                                                    통하여 수정할 수 있습니다. </p>
                                             </div>
                                             <!--수정할 이름 적는 부분-->
                                             <div class="form-group">
-                                                <input name="dzName" required="" class="form-control" placeholder="수정하고 싶은 이름을 적어주세요" type="text"/>
+                                                <input name="dzName" required="" class="form-control"
+                                                       placeholder="수정하고 싶은 이름을 적어주세요" type="text"/>
                                             </div>
                                             <!--수정신청하기 버튼, Back : 누르면 회장에게 승인을 요구하도록 수정-->
-                                            <a href="#" class="site-button" style="display: grid; justify-items: center;" onclick="return confirm('신청하시겠습니까?') && alert('신청이 완료되었습니다. 회장의 승인 후 수정이 완료됩니다.')">수정신청</a>
+                                            <a href="#" class="site-button"
+                                               style="display: grid; justify-items: center;"
+                                               onclick="return confirm('신청하시겠습니까?') && alert('신청이 완료되었습니다. 회장의 승인 후 수정이 완료됩니다.')">수정신청</a>
                                         </form>
                                     </div>
                                 </div>
@@ -484,7 +495,8 @@
                         <!-- Modal End -->
 
                         <!-- 학과 수정 Modal -->
-                        <div class="modal fade modal-bx-info modal-lg" id="major_edit" tabindex="-1" role="dialog" aria-labelledby="ReportReviewsModalLongTitle" aria-hidden="true">
+                        <div class="modal fade modal-bx-info modal-lg" id="major_edit" tabindex="-1" role="dialog"
+                             aria-labelledby="ReportReviewsModalLongTitle" aria-hidden="true">
                             <div class="modal-dialog " role="document">
                                 <div class="modal-content">
                                     <!--제목부분-->
@@ -499,10 +511,13 @@
                                         <form class="dlab-form">
                                             <!--일단 input창으로 해둠, Back : 학과선택할 수 있는 창 뜰 수 있도록 수정-->
                                             <div class="form-group">
-                                                <input name="dzName" required="" class="form-control" placeholder="수정하고 싶은 학과명을 적어주세요" type="text"/>
+                                                <input name="dzName" required="" class="form-control"
+                                                       placeholder="수정하고 싶은 학과명을 적어주세요" type="text"/>
                                             </div>
                                             <!--수정하기 버튼, Back : 누르면 내정보에 반영되도록 수정-->
-                                            <a href="#" class="site-button" style="display: grid; justify-items: center;" onclick="return confirm('수정하시겠습니까?') && alert('학과 수정이 완료되었습니다.')">수정</a>
+                                            <a href="#" class="site-button"
+                                               style="display: grid; justify-items: center;"
+                                               onclick="return confirm('수정하시겠습니까?') && alert('학과 수정이 완료되었습니다.')">수정</a>
                                         </form>
                                     </div>
                                 </div>
@@ -511,7 +526,8 @@
                         <!-- Modal End -->
 
                         <!-- 전화번호 수정 Modal -->
-                        <div class="modal fade modal-bx-info modal-lg" id="phone_edit" tabindex="-1" role="dialog" aria-labelledby="ReportReviewsModalLongTitle" aria-hidden="true">
+                        <div class="modal fade modal-bx-info modal-lg" id="phone_edit" tabindex="-1" role="dialog"
+                             aria-labelledby="ReportReviewsModalLongTitle" aria-hidden="true">
                             <div class="modal-dialog " role="document">
                                 <div class="modal-content">
                                     <!--제목부분-->
@@ -526,10 +542,13 @@
                                         <form class="dlab-form">
                                             <!--수정할 전화번호 입력창, Back : 입력하면 전화번호 중복체크 하도록 수정-->
                                             <div class="form-group">
-                                                <input name="dzName" required="" class="form-control" placeholder="수정하고 싶은 전화번호을 적어주세요" type="tel"/>
+                                                <input name="dzName" required="" class="form-control"
+                                                       placeholder="수정하고 싶은 전화번호을 적어주세요" type="tel"/>
                                             </div>
                                             <!--수정버튼, Back : 누르면 내정보에 반영되도록 수정-->
-                                            <a href="#" class="site-button" style="display: grid; justify-items: center;" onclick="return confirm('수정하시겠습니까?') && alert('전화번호 수정이 완료되어습니다.')">수정</a>
+                                            <a href="#" class="site-button"
+                                               style="display: grid; justify-items: center;"
+                                               onclick="return confirm('수정하시겠습니까?') && alert('전화번호 수정이 완료되어습니다.')">수정</a>
                                         </form>
                                     </div>
                                 </div>
@@ -537,11 +556,11 @@
                         </div>
                         <!-- Modal End -->
 
-					</div>
+                    </div>
                 </div>
             </div>
         </div>
-		<!-- contact area END -->
+        <!-- contact area END -->
     </div>
     <!-- Content END-->
 
