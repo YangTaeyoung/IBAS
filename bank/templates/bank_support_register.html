@@ -89,7 +89,7 @@
                                     </div>
                                     <div class="content-body">
                                         <div class="form-group">
-                                            <textarea class="form-control" placeholder="지출 목적 및 사용 내용을 입력해주세요" required="required">{{ bank.bank_reason }}</textarea>
+                                            <textarea class="form-control" placeholder="지출 목적 및 사용 내용을 입력해주세요" name="bank_reason" required="required">{{ bank.bank_reason }}</textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -113,7 +113,7 @@
                                     </div>
                                     <div class="content-body">
                                         <div class="form-group">
-                                            <input type="text" class="form-control" placeholder="요청자의 학번을 적어주세요" value="{{ request.session.user_stu }}" required="required"/>
+                                            <input type="text" class="form-control" placeholder="요청자의 학번을 적어주세요" name="bank_used_user" value="{{ request.session.user_stu }}" required="required"/>
                                         </div>
                                     </div>
                                 </div>
@@ -125,7 +125,7 @@
                                     </div>
                                     <div class="content-body">
                                         <div class="form-group">
-                                            <input type="text" class="form-control" placeholder="은행명, 계좌번호, 예금주를 입력해주세요" value="{{ bank.bank_account }}" required="required"/>
+                                            <input type="text" class="form-control" placeholder="은행명, 계좌번호, 예금주를 입력해주세요" name="bank_account" value="{{ bank.bank_account }}" required="required"/>
                                         </div>
                                     </div>
                                 </div>
@@ -140,6 +140,7 @@
                                         <div class="form-group">
                                             <input
                                             type="file"
+                                            name="bank_file"
                                             accept=".xlsx,.xls,image/*,.doc,.docx,.pdf"
                                             multiple
                                             required="required"

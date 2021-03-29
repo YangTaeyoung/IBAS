@@ -156,25 +156,36 @@ def bank_support_board(request):
 
 
 def bank_support_register(request):
-    bank = Bank.objects.create(
-        bank_used=request.POST.get('bank_used'),
-        bank_title=request.POST.get('bank_title'),
-        bank_reason=request.POST.get("bank_reason"),
-        bank_plus=0,
-        bank_minus=request.POST.get("bank_minus"),
-        # cfo는 승인하는 사람인데, 처음 등록할 땐 아직 승인한 사람이 없어서 신청한 사람으로 받았음
-        bank_cfo=User.objects.get(pk=request.POST.get('bank_cfo')),
-        # 사용한 사람은 user_stu 임
-        bank_used_user=request.POST.get("bank_used_user"),
-        bank_apply=BankApplyInfo.objects.get(pk=request.POST.get("bank_apply"))  # 총무가 추가하는 경우 바로 처리됨.
-    )
     context = {}
-    return render(request, 'bank_support_register.html', context)  # 등록
+    print(request.POST.get("bank_used_user"))
+    if request.method == "POST":
+        bank = Bank.objects.create(
+            bank_used=request.POST.get('bank_used'),
+            bank_title=request.POST.get('bank_title'),
+            bank_reason=request.POST.get("bank_reason"),
+            bank_plus=0,
+            bank_minus=request.POST.get("bank_minus"),
+            bank_account=request.POST.get("bank_account"),
+            # 사용한 사람은 user_stu 임
+            bank_used_user=User.objects.get(pk=request.POST.get("bank_used_user")),
+            bank_apply=BankApplyInfo.objects.get(pk=request.POST.get("bank_apply"))  # 총무가 추가하는 경우 바로 처리됨.
+        )
+        bank.save()
+        for updated_file in request.FILES.getlist('bank_file'):
+            new_bank_file = BankFile.objects.create(bank_no=Bank.objects.get(pk=bank.bank_no),
+                                                    bank_file_path=updated_file,
+                                                    bank_file_name=get_file_name(updated_file))
+            new_bank_file.save()
+        return redirect("bank_support_detail", bank_no=bank.bank_no)
+    else:
+        return render(request, 'bank_support_register.html', context)  # 등록
 
 
 def bank_support_detail(request, bank_no):
     bank = Bank.objects.get(pk=bank_no)
+    bank_file_list = BankFile.objects.filter(bank_no=bank)
     context = {
-        "bank": bank
+        "bank": bank,
+        "bank_file_list": bank_file_list
     }
     return render(request, 'bank_support_detail.html', context)  # 상세보기
