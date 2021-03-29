@@ -119,33 +119,172 @@
                     <!--작성글관리-->
 					<div id="listing_mycontent" class="tab-pane">
 						<div class="row">
-							<div class="col-xl-12">
-								<div class="content-box">
-									<div class="content-header">
-										<h3 class="title">내가쓴게시글 제목</h3>
-									</div>
-									<div class="content-body">
-										<p>내가쓴게시글 내용~~~~~~~~~~~~~~~~~~~~~~</p>
-									</div>
-								</div>
-							</div>
-						</div>
+                            <!-- 내가 작성한 글을 담는 div -->
+                            <div class="col-xl-10 col-lg-10 col-md-12">
+                                <!-- 내가 작성한 게시글 부분  -->
+                                <div class="content-box">
+                                    <!-- 내가 작성한 게시글 제목 -->
+                                    <div class="content-header">
+                                        <h3 class="title"><i class="la la-file-text m-r5"></i> 내가 작성한 게시글</h3>
+                                    </div>
+                                    <!-- 게시글 담는 div -->
+                                    <div class="myinfo-table-padding">
+                                        <!-- 내가 작성한 게시글 테이블 -->
+                                        <table class="table">
+                                            <thead>
+                                            <!-- 테이블 1행: 제목 -->
+                                            <tr class="border-0">
+                                                <th class="border-top-0" scope="col">게시판 유형</th>
+                                                <th style="width: 550px" class="border-top-0" scope="col">제목</th>
+                                                <th class="border-top-0" scope="col">작성일</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <!-- 게시판 유형 -->
+                                                <td>자유게시판</td>
+                                                <!-- 게시글 제목 (클릭하면 해당 게시글로 이동하도록 a태그로 둠 -->
+                                                <td><a href="#">코로나 검사받은 썰</a></td>
+                                                <!-- 게시글 작성일 -->
+                                                <td>2021-03-20</td>
+                                            </tr>
+                                            <tr>
+                                                <td>자유게시판</td>
+                                                <td><a href="#">자유로운 영혼을 위함</a></td>
+                                                <td>2021-04-10</td>
+                                            </tr>
+                                            <tr>
+                                                <td>질문게시판</td>
+                                                <td><a href="#">특강일정 문의</a></td>
+                                                <td>2021-04-11</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <!-- 내가 작성한 댓글 담는 div -->
+                                <div class="content-box">
+                                    <!-- 내가 작성한 댓글 제목부분 -->
+                                    <div class="content-header">
+                                        <h3 class="title"><i class="la la-file-text m-r5"></i> 내가 작성한 댓글</h3>
+                                    </div>
+                                    <!-- 내가 작성한 댓글 내용 담는 div -->
+                                    <div class="myinfo-table-padding">
+                                        <!-- 댓글 내용 테이블 -->
+                                        <table class="table">
+                                            <!-- 테이블 1행: 제목 -->
+                                            <thead>
+                                            <tr>
+                                                <th class="border-top-0" scope="col">게시판 유형</th>
+                                                <th class="border-top-0" scope="col">댓글내용</th>
+                                                <th class="border-top-0" scope="col"></th>
+                                                <th class="border-top-0" scope="col">작성일</th>
+                                            </tr>
+                                            </thead>
+                                            <!-- 댓글 내용 테이블 -->
+                                            <tbody>
+                                            <tr>
+                                                <!-- 게시판 유형 -->
+                                                <td>자유게시판</td>
+                                                <!-- 댓글내용 -->
+                                                <td>ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ</td>
+                                                <!-- 원문으로 이동하는 a태그 -->
+                                                <td><a href="#">원문보기 ▶</a></td>
+                                                <td>2021-03-20</td>
+                                            </tr>
+                                            <tr>
+                                                <td>자유게시판</td>
+                                                <td>그것 참 안타깝게 생각하고 있어요</td>
+                                                <td><a href="#">원문보기 ▶</a></td>
+                                                <td>2021-04-10</td>
+                                            </tr>
+                                            <tr>
+                                                <td>질문게시판</td>
+                                                <td>그것 답변하기 곤란합니다.</td>
+                                                <td><a href="#">원문보기 ▶</a></td>
+                                                <td>2021-04-11</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 					</div>
                     <!--예산신청내역-->
-					<div id="listing_mybank" class="tab-pane">
-						<div class="row">
-							<div class="col-xl-12">
-								<div class="content-box">
-									<div class="content-header">
-										<h3 class="title">예산신청내역 제목</h3>
-									</div>
-									<div class="content-body">
-										<p>예산신청내역 내용~~~~~~~~~~~~~~~~~~~~~~</p>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
+					<!--===== 내가 신청한 예산내역 코드 시작 =====-->
+                    <div id="listing_mybank" class="tab-pane">
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="content-box">
+                                    <!-- 제목 div -->
+                                    <div class="content-header">
+                                        <h3 class="title"><i class="la la-money m-r5"></i>예산신청 내역</h3>
+                                    </div>
+                                    <div class="content-body">
+                                        <div class="myinfo-table-padding">
+                                            <!-- 내가 신청한 예산신청 리스트 -->
+                                            <table class="table">
+                                                <thead>
+                                                <!-- 테이블 1행: 제목 -->
+                                                <tr>
+                                                    <th class="border-top-0" scope="col">진행상황</th>
+                                                    <th class="border-top-0" scope="col">신청명</th>
+                                                    <th class="border-top-0" scope="col"></th>
+                                                    <th class="border-top-0" scope="col">작성일</th>
+                                                    <th class="border-top-0" scope="col">검토일</th>
+                                                    <th class="border-top-0" scope="col">입금일</th>
+                                                </tr>
+                                                </thead>
+                                                <!-- 내가 신청한 예산내역 테이블 -->
+                                                <tbody>
+                                                <tr>
+                                                    <!-- 현재 상태 -->
+                                                    <td>입금완료</td>
+                                                    <!-- 신청 제목 -->
+                                                    <td>쓰레기통 및 쓰레기봉투</td>
+                                                    <!-- 원글로 넘어가는 a태크 -->
+                                                    <td><a href="#">원문보기 ▶</a>
+                                                    <!-- 게시글 작성일 -->
+                                                    <td>2021-03-20</td>
+                                                    <!-- 게시글 검토일 (총무가 승인, 거절 버튼을 누른 일자) 만약 아직 검토 전이면, '-'로 표기되어야 함. -->
+                                                    <td>2021-03-26</td>
+                                                    <!-- 총무가 돈을 입금한 날 (아직 입금 전이면, '-'로 표기되어야 함. -->
+                                                    <td>2021-04-01</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>승인거절</td>
+                                                    <td>요술봉 및 망토</td>
+                                                    <td><a href="#">원문보기 ▶</a></td>
+                                                    <td>2021-02-01</td>
+                                                    <td>2021-02-02</td>
+                                                    <td>-</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>승인완료</td>
+                                                    <td>몬스터 20캔</td>
+                                                    <td><a href="#">원문보기 ▶</a></td>
+                                                    <td>2021-01-01</td>
+                                                    <td>2021-02-02</td>
+                                                    <td>-</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>승인대기</td>
+                                                    <td>ZOOM 이용료</td>
+                                                    <td><a href="#">원문보기 ▶</a></td>
+                                                    <td>2020-05-13</td>
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--===== 내가 신청한 예산내역 코드 끝 =====-->
                     <!--회원관리-->
 					<div id="listing_user_setting" class="tab-pane">
 						<div class="row">
@@ -169,7 +308,7 @@
                                     <!--내 정보 상세보기란-->
                                     <!--제목부분-->
 									<div class="content-header">
-										<h3 class="title">내정보 상세보기</h3>
+                                        <h3 class="title"><i class="la la-user"></i>내정보 상세보기</h3>
 									</div>
                                     <!--내용부분-->
 									<div class="content-body">
@@ -252,7 +391,7 @@
 								</div>
                                 <div class="content-box">
 									<div class="content-header">
-										<h3 class="title">계정연동</h3>
+                                        <h3 class="title"><i class="la la-share"></i>계정연동</h3>
 									</div>
                                     <!--계정연동 버튼들, Back : 주석보고 각 조건에 맞게 해당하는 버튼만 뜨도록 수정-->
 									<div class="content-body">
