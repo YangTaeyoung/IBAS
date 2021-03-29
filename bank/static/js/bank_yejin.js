@@ -34,9 +34,11 @@ function bank_update() {
 }
 
 // 아이콘 눌렀을 때 삭제 comfirm 알림 나옴.
-function bank_del() {
-    confirm('정말로 삭제하시겠습니까?')
-
+function bank_del(bank_no) {
+    if (confirm('정말로 삭제하시겠습니까?'))
+    {
+        document.getElementById("form-bank-delete-"+bank_no).submit()
+    }
 }
 
 
