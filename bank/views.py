@@ -17,29 +17,37 @@ from IBAS.file_controller import get_filename, get_filename_with_ext
 # Create your views here.
 # 동아리 소개 작업할 것임
 def bank(request):
+    # 회계 내역
     bank_list = Bank.objects.order_by('bank_used').prefetch_related('bankfile_set').all()
+    # 연도를 담을 리스트
     year_list = list()
     for bank in bank_list:
         year_list.append(str(bank.bank_used).split('-')[0])
 
+    # 연도 리스트
     year_list = list(set(year_list))
     year_list.sort()
+
+    # 수입, 지출 합계
     bank_plus = Bank.objects.all().aggregate(Sum("bank_plus"))
     bank_minus = Bank.objects.all().aggregate(Sum("bank_minus"))
 
+    # 지출, 수입을 아직 등록하지 않은 경우의 예외처리
     if isinstance(bank_plus["bank_plus__sum"], NoneType):
         bank_plus["bank_plus__sum"] = 0
     if isinstance(bank_minus["bank_minus__sum"], NoneType):
         bank_minus["bank_minus__sum"] = 0
-
+    # 잔액 설정
     balance = bank_plus["bank_plus__sum"] - bank_minus["bank_minus__sum"]
 
-    paginator = Paginator(bank_list, 15)  # 페이지네이터로 10개씩 보이게끔. 나중에 수정하면 됌
-    page = request.GET.get('page')  # 페이지 이름 ㅇㅇ 여기서 변경하면 됌
+    # 페이지네이션 설정
+    paginator = Paginator(bank_list, 15)  # 페이지네이터로 15개씩 보이게 설정
+    page = request.GET.get('page')
     item = paginator.get_page(page)
     context = {
         "bank_list": item,
         "year_list": year_list,
+        "bank_len": len(bank_list),
         "balance": balance
     }
     return render(request, 'bank_list.html', context)
@@ -81,6 +89,12 @@ def bank_register(request):
     if request.method == "POST":
         bank_minus = 0
         bank_plus = 0
+        bank_reason = request.POST.get("bank_reason")
+        bank_used_user = request.POST.get("bank_used_user")
+        if bank_used_user == '':
+            bank_used_user = request.POST.get("bank_cfo")
+        if bank_reason == '':
+            bank_reason = request.POST.get("bank_title")
         if request.POST.get("bank_minus") != '':
             bank_minus = int(request.POST.get("bank_minus"))
         if request.POST.get("bank_plus") != '':
@@ -88,14 +102,14 @@ def bank_register(request):
         bank = Bank(
             bank_used=request.POST.get('bank_used'),
             bank_title=request.POST.get('bank_title'),
-            bank_reason=request.POST.get('bank_reason'),
+            bank_reason=bank_reason,
             bank_plus=bank_plus,
             bank_minus=bank_minus,
             # cfo는 승인하는 사람인데, 처음 등록할 땐 아직 승인한 사람이 없어서 신청한 사람으로 받았음
-            bank_cfo=User.objects.get(pk=request.session.get('user_stu')),
+            bank_cfo=User.objects.get(pk=request.POST.get('bank_cfo')),
             # 사용한 사람은 user_stu 임
-            bank_used_user=User.objects.get(pk=request.session.get('user_stu')),
-            bank_apply=BankApplyInfo.objects.get(pk=4)  # 총무가 추가하는 경우 바로 처리됨.
+            bank_used_user=User.objects.get(pk=bank_used_user),
+            bank_apply=BankApplyInfo.objects.get(pk=request.POST.get("bank_apply"))  # 총무가 추가하는 경우 바로 처리됨.
         )
         bank.save()
 
@@ -104,18 +118,27 @@ def bank_register(request):
                                                     bank_file_path=updated_file,
                                                     bank_file_name=get_file_name(updated_file))
             new_bank_file.save()
-        return redirect(reverse('bank_list'))
+            if request.POST.get("is_support") is None:
+                return redirect(reverse('bank_list'))
+            else:
+                return redirect("bank_support_detail", bank_no=bank.bank_no)
     else:
         return render(request, "index.html", {'lgn_is_failed': 1})
 
+
 def bank_support_board(request):
     context = {}
-    return render(request, 'bank_support_board.html', context)  #게시판 목록
+    return render(request, 'bank_support_board.html', context)  # 게시판 목록
+
 
 def bank_support_register(request):
     context = {}
-    return render(request, 'bank_support_register.html', context) #등록
+    return render(request, 'bank_support_register.html', context)  # 등록
 
-def bank_support_detail(request):
-    context = {}
-    return render(request, 'bank_support_detail.html', context)  #상세보기
+
+def bank_support_detail(request, bank_no):
+    bank = Bank.objects.get(pk=bank_no)
+    context = {
+        "bank": bank
+    }
+    return render(request, 'bank_support_detail.html', context)  # 상세보기

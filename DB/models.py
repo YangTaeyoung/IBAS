@@ -60,7 +60,6 @@ class BankFile(models.Model):
     bank_file_path = models.FileField(db_column='BANK_FILE_PATH', max_length=1000,
                                       upload_to=bank_file_upload_to)  # Field name made lowercase.
     bank_file_name = models.CharField(db_column='BANK_FILE_NAME', max_length=500)
-
     class Meta:
         managed = False
         db_table = 'BANK_FILE'

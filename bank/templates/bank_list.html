@@ -138,7 +138,7 @@
                                     <!-- 증빙자료 버튼 -->
                                     <td style="width: 86px;padding: 10px 0;">
                                         <!-- 누르면 증빙자료모달 보이게 함 -->
-                                        <a data-toggle="modal" data-target="#bank-modal-bg" href="javascript:void(0);"
+                                        <a data-toggle="modal" data-target="#bank-modal-bg-{{ bank.bank_no }}" href="javascript:void(0);"
                                            class="site-button-link black bank-flex">
                                             <i class="fa fa-file-text-o"></i>
                                         </a>
@@ -171,7 +171,7 @@
                             </tr>
                             <!--=======================증빙자료 모달============================-->
                             <!-- bank-modal-bg는 증빙자료 버튼과 연결 하기 위함임  -->
-                            <div class="modal fade modal-bx-info" id="bank-modal-bg" tabindex="-1" role="dialog"
+                            <div class="modal fade modal-bx-info" id="bank-modal-bg-{{ bank.bank_no }}" tabindex="-1" role="dialog"
                                  aria-labelledby="FavoriteModalLongTitle" aria-hidden="true">
                                 <div class="modal-dialog " role="document">
                                     <div class="modal-content" style="margin-top: 65px">
@@ -264,6 +264,8 @@
                                     <form class="dlab-form" action="{% url 'bank_register' %}" method="post"
                                           enctype="multipart/form-data">
                                         {% csrf_token %}
+                                        <input type="hidden" name="bank_cfo" value="{{ request.session.user_stu }}"/>
+                                        <input type="hidden" name="bank_apply" value="4"/>
                                         <!-- 날짜 -->
                                         <div class="form-group">
                                             <input required="" name="bank_used" class="form-control" type="date"/>
@@ -281,6 +283,13 @@
                                             <textarea class="form-control" name="bank_reason"
                                                       placeholder="내용을 입력하세요."></textarea>
                                             <div class="form-text font-10">해당란을 입력하지 않을 시 제목과 내용이 같도록 처리합니다.</div>
+                                        </div>
+                                        <!-- 사용한 유저의 학번 -->
+                                        <div class="form-group">
+                                            <input required="" class="form-control" name="bank_title"
+                                                   placeholder="회비를 사용한 부원의 학번을 입력하세요"
+                                                   type="number"/>
+                                            <div class="form-text font-10">해당란을 입력하지 않을 시, 로그인 한 유저로 입력됩니다. </div>
                                         </div>
 
                                         <!-- 수입액 -->
