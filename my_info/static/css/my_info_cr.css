@@ -1,0 +1,12 @@
+.gray_box{
+    background-color: grey;
+}
+
+.gray_box:hover{
+    background-color: grey;
+}
+
+.my_info_modal_content{
+    font-size: 13px;
+    font-style: italic;
+}
