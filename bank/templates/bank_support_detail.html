@@ -21,7 +21,28 @@
                 href="{% static 'plugins/drop/imageuploadify.min.css' %}"
         />
         <link rel="stylesheet" href="{% static 'plugins/tag-editor/jquery.tag-editor.css' %}"/>
+        <script>
+            function goApply() {
+                if (confirm("예산 지원 요청을 인하시겠습니까?")) {
+                    alert("예산지원 요청이 승인 되었습니다. 지급 후 지급 완료를 누를 시 회계에 반영됩니다.");
+                    document.getElementById("form-bank-support-apply").submit();
+                }
+            }
 
+            function goDeposit() {
+                if (confirm("예산 지급을 완료하시겠습니까?")) {
+                    alert("예산 지급이 완료되었습니다.");
+                    document.getElementById("form-bank-support-deposit").submit();
+                }
+            }
+
+            function goDelete() {
+                if (confirm("정말 삭제하시겠습니까?")) {
+                    alert("삭제되었습니다.");
+                    document.getElementById("form-bank-support-delete").submit();
+                }
+            }
+        </script>
     </head>
 
     <body>
@@ -62,7 +83,7 @@
                         {% elif bank.bank_apply.bank_apply_no == 3 %}
                             <!--승인 거절 시 뜨는 알람, 거절 사유 입력하면 같이 뜨게 만들기-->
                             <div class="alert alert-danger" role="alert" style="text-align: center">
-                                <i>승인거절 ( 거절사유 : 마음에 안들어서 )</i>
+                                <i>승인거절 ( 거절사유 : {{ bank.bank_reject_reason }} )</i>
                             </div>
                         {% elif bank.bank_apply.bank_apply_no == 4 %}
                             <!--지급완료 시 뜨는 알람-->
@@ -224,44 +245,71 @@
 
                         <!--====================================영수증 끝=============================================-->
                         <!-- 게시글 삭제 및 수정 div -->
-                        <form>
+                        {% if request.session.user_stu == bank.bank_used_user.user_stu %}
                             <div class="extra-cell text-right">
-                                <!-- 게시글 수정 버튼 -->
-
-                                <a href="{% url 'bank_support_register' %}"
-                                   class="site-button radius-xl m-l10"><i
-                                        class="fa fa-pencil m-r5"></i>
-                                    게시글 수정</a>
-                                <!-- 게시글 삭제 버튼 -->
-
-                                <a href="#"
-                                   class="site-button red radius-xl m-l10"><i
-                                        class="fa fa-trash m-r5"></i>
-                                    게시글 삭제</a>
+                            <!-- 게시글 수정 버튼 -->
+                            <a href="#"
+                               class="site-button radius-xl m-l10"><i
+                                    class="fa fa-pencil m-r5"></i>
+                                게시글 수정</a>
+                            <!-- 게시글 삭제 버튼 -->
+                            <form id="form-bank-support-update" action="{% url 'bank_support_update' %}" method="post"
+                                  style="display: none">
+                                {% csrf_token %}
+                                <input type="hidden" name="is_move" value="1"/>
+                                <input type="hidden" name="bank_no" value="{{ bank.bank_no }}"/>
+                            </form>
+                        {% endif %}
+                        {% if request.session.user_stu == bank.bank_used_user.user_stu or request.session.user_role == 4 %}
+                            <a href="#"
+                               class="site-button red radius-xl m-l10"><i
+                                    class="fa fa-trash m-r5"></i>
+                                게시글 삭제</a>
                             </div>
-                        </form>
+                            <form id="form-bank-support-delete" action="{% url 'bank_support_delete' %}" method="post"
+                                  style="display: none">
+                                {% csrf_token %}
+                                <input type="hidden" name="bank_no" value="{{ bank.bank_no }}"/>
+                            </form>
+                        {% endif %}
                         <!--=======승인/거절 버튼======-->
                         <form>
                             <div style="display: flex; justify-content: center; ">
-                                <!--승인-->
-                                <button type="button" class="btn btn-outline-success btn-lg"
-                                        style="width: 200px; font-weight: bold"
-                                        onclick="return confirm('승인하시겠습니까?') && alert('승인이 완료되었습니다. 입금 후 지급완료 버튼을 눌러주세요.')">
-                                    승인
-                                </button>
-                                <!--거절-->
-                                <button type="button" class="btn btn-outline-danger btn-lg"
-                                        style="width: 200px; margin-left: 10px; font-weight: bold"
-                                        onclick="return confirm('승인을 거절하시겠습니까?')"
-                                        href="javascript:void(0);" data-toggle="modal" data-target="#favorite"
-                                        class="site-button gray">
-                                    거절
-                                </button>
-                                <!--지급완료, 승인버튼 누르기 전에는 안나오고, 승인버튼 누르면 승인,거절 버튼은 없어지고 이 버튼만 보이게 함-->
-                                <button type="button" class="btn btn-outline-primary btn-lg"
-                                        style="width: 200px; font-weight: bold"
-                                        onclick="return confirm('지급을 완료하시겠습니까?')">지급완료
-                                </button>
+                                {% if request.session.user_role == 4 %}
+                                    <!--승인-->
+                                    {% if bank.bank_apply.bank_apply_no == 1 %}
+                                        <button type="button" class="btn btn-outline-success btn-lg"
+                                                style="width: 200px; font-weight: bold"
+                                                onclick="goApply()">
+                                            승인
+                                        </button>
+                                        <form id="form-bank-support-apply" action="{% url 'bank_support_aor' %}"
+                                              method="post" style="display: none">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="bank_no" value="{{ bank.bank_no }}"/>
+                                            <input type="hidden" name="bank_support_apply" value="2"/>
+                                        </form>
+                                        <!--거절-->
+                                        <button type="button" class="btn btn-outline-danger btn-lg"
+                                                style="width: 200px; margin-left: 10px; font-weight: bold"
+                                                onclick="return confirm('승인을 거절하시겠습니까?')"
+                                                href="javascript:void(0);" data-toggle="modal" data-target="#favorite"
+                                                class="site-button gray">
+                                            거절
+                                        </button>
+                                    {% elif bank.bank_apply.bank_apply_no == 2 %}
+                                        <!--지급완료, 승인버튼 누르기 전에는 안나오고, 승인버튼 누르면 승인,거절 버튼은 없어지고 이 버튼만 보이게 함-->
+                                        <button type="button" class="btn btn-outline-primary btn-lg"
+                                                style="width: 200px; font-weight: bold"
+                                                onclick="goDeposit()">지급완료
+                                        </button>
+                                        <form id="form-bank-support-deposit" action="{% url 'bank_support_aor' %}"
+                                              method="post">
+                                            <input type="hidden" name="bank_no" value="{{ bank.bank_no }}"/>
+                                            <input type="hidden" name="bank_apply_no" value="4"/>
+                                        </form>
+                                    {% endif %}
+                                {% endif %}
                             </div>
                         </form>
                         <!---->
@@ -280,16 +328,23 @@
                                         <div class="tab-content nav">
                                             <div id="login" class="tab-pane active"
                                                  style="margin-bottom: -25px; margin-top: 10px">
-                                                <form class="dlab-form">
+                                                <form id="form-bank-support-reject"
+                                                      action="{% url 'bank_support_aor' %}" class="dlab-form"
+                                                      method="post">
                                                     <!--승인 거절 사유 입력창-->
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="bank_no" value="{{ bank.bank_no }}">
+                                                    <input type="hidden" name="bank_apply_no" value="3">
                                                     <div class="form-group">
-                                                        <input name="dzName" class="form-control"
-                                                               placeholder="승인거절 사유를 입력해주세요" type="text"/>
+                                                        <input class="form-control"
+                                                               name="bank_reject_reason"
+                                                               placeholder="승인거절 사유를 입력해주세요"
+                                                               type="text"/>
                                                     </div>
                                                     <!--거절버튼-->
                                                     <div class="form-group">
-                                                        <button class="site-button btn-block button-md"
-                                                                onclick="return alert('승인이 거절되었습니다')">입력
+                                                        <button type="submit" class="site-button btn-block button-md"
+                                                                onclick="alert('승인이 거절되었습니다')">입력
                                                         </button>
                                                     </div>
                                                 </form>

@@ -72,8 +72,7 @@
                                         <!-- 게시글 번호 -->
                                         <th scope="row" style="text-align: center">{{ forloop.counter }}</th>
                                         <!-- 게시글 제목 -->
-                                        <td><a href="{% url 'bank_support_detail' bank_no=bank.bank_no %}">예산 지원
-                                            신청합니다.</a></td>
+                                        <td><a href="{% url 'bank_support_detail' bank_no=bank.bank_no %}">{{ bank.bank_title }}</a></td>
                                         <!-- 게시글 작성자 -->
                                         <td style="text-align: center">{{ bank.bank_used_user.user_stu }}</td>
                                         <!-- 게시글 작성일자 -->
