@@ -78,7 +78,7 @@
                                         <!-- 게시글 작성일자 -->
                                         <td style="text-align: center">{{ bank.bank_created|date:"Y-m-d" }}</td>
                                         <!-- 상태 : 승인완료 -->
-                                        <td class="{% if bank.bank_apply.bank_apply_no == 1 %}bank_yet{% elif bank.bank_apply.bank_apply_no == 2 %}bank_pass{% elif bank.bank_apply_no == 3 %}bank_nopass{% endif %}">{{ bank.bank_apply.bank_apply_name }}</td>
+                                        <td class="{% if bank.bank_apply.bank_apply_no == 1 %}bank_yet{% elif bank.bank_apply.bank_apply_no == 2 %}bank_pass{% elif bank.bank_apply.bank_apply_no == 3 %}bank_nopass{% endif %}">{{ bank.bank_apply.bank_apply_name }}</td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
