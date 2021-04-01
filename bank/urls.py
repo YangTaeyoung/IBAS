@@ -14,6 +14,6 @@ urlpatterns = [
     path('register/', views.bank_register, name='bank_register'),
     path('support/aor/', views.bank_support_aor, name='bank_support_aor'),
     path('support/delete/', views.bank_support_delete, name="bank_support_delete"),
-    path('support/delete/', views.bank_support_update, name="bank_support_update"),
+    path('support/update/', views.bank_support_update, name="bank_support_update"),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

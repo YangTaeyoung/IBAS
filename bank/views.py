@@ -10,7 +10,9 @@ from file_controller import get_file_name
 from django.http import HttpResponseRedirect
 from django.conf import settings
 from datetime import datetime
+from django.utils.dateformat import DateFormat
 from IBAS.user_controller import is_chief_exist, is_sub_chief_exist, get_sub_chief, get_chief
+from date_controller import today
 import os
 from IBAS.file_controller import get_filename, get_filename_with_ext
 
@@ -194,19 +196,31 @@ def bank_support_detail(request, bank_no):
 
 
 def bank_support_aor(request): # 총무가 승인, 승인거절, 지급완료를 눌렀을 때의 과정
+    print("test_point_0")
     if request.method == "POST":
         bank = Bank.objects.get(pk=request.POST.get("bank_no"))
-        bank_apply_no = request.POST.get("bank_apply_no")
+        print("test_point_1")
+        print(bank)
+        bank_apply_no = int(request.POST.get("bank_apply_no"))
+        print(bank_apply_no)
         bank.bank_apply = BankApplyInfo.objects.get(pk=bank_apply_no)
+        print(bank.bank_apply.bank_apply_no)
         bank.bank_cfo = User.objects.get(pk=request.session.get('user_stu'))
+        print(bank.bank_cfo.user_stu)
+        print("test_point_2")
         if bank_apply_no == 2:
-            bank.bank_checked = datetime.now()
+            print("왔니!")
+            bank.bank_checked = today()
         elif bank_apply_no == 3:
-            bank.bank_checked = datetime.now()
+            print("거절시")
+            bank.bank_checked = today()
             bank.bank_reject_reason = request.POST.get("bank_reject_reason")
         elif bank_apply_no == 4:
-            bank.bank_allowed = datetime.now()
+            print("지급 완료시")
+            bank.bank_allowed = today()
+
         bank.save()
+        print("test_point_3")
         return redirect("bank_support_detail", bank_no=bank.bank_no)
     else:
         return redirect(reverse("bank_support_board"))

@@ -244,11 +244,11 @@
                                                             <a href="{% url 'bank_support_detail' bank_no=my_bank.bank_no %}">원문보기
                                                                 ▶</a>
                                                             <!-- 게시글 작성일 -->
-                                                        <td>{{ my_bank.bank_created|date:"Y-m-d" }}</td>
+                                                        <td>{{ my_bank.bank_created|date:"Y-m-d"}}</td>
                                                         <!-- 게시글 검토일 (총무가 승인, 거절 버튼을 누른 일자) 만약 아직 검토 전이면, '-'로 표기되어야 함. -->
-                                                        <td>{% if my_bank.bank_checked is not None %}{{ my_bank.bank_checked }}{% else %}-{% endif %}</td>
+                                                        <td>{% if my_bank.bank_checked is not None %}{{ my_bank.bank_checked|date:"Y-m-d" }}{% else %}-{% endif %}</td>
                                                         <!-- 총무가 돈을 입금한 날 (아직 입금 전이면, '-'로 표기되어야 함. -->
-                                                        <td>{% if my_bank.bank_allowed is not None %}{{ my_bank.bank_allowed }}{% else %}-{% endif %}</td>
+                                                        <td>{% if my_bank.bank_allowed is not None %}{{ my_bank.bank_allowed|date:"Y-m-d" }}{% else %}-{% endif %}</td>
                                                     </tr>
                                                 {% endfor %}
                                                 </tbody>

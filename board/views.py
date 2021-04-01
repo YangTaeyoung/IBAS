@@ -51,6 +51,7 @@ def board_search(request):
             "board_len": len(item),
             "message": "\"" + keyword + "\"로 검색한 게시글이 존재하지 않습니다.",
             "board_list": item,
+            'board_type_no': 5,
             "board_name": "검색결과",
             "board_exp": keyword + "로 검색한 결과입니다.",
             "all_num": Board.objects.all().count(),
