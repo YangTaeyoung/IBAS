@@ -26,6 +26,7 @@ urlpatterns = [
     path('board/', include('board.urls')),
     path('admin/', admin.site.urls),
     path('', include('main.urls')),
+    path('member/', include('staff.urls')),
     path('bank/', include('bank.urls')),
     path('my_info/', include('my_info.urls')),
     path('test/add/listing/', views.add_listing, name="add_listing"),
