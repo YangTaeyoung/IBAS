@@ -368,12 +368,16 @@ class StateInfo(models.Model):
         db_table = 'STATE_INFO'
 
 
+def user_pic_upload_to(instance, filename): # 프로필 사진 경로 설정하는 함수
+    return f'member/{instance.user_stu}/{filename}' # 저장 경로는 member/학번/경로 임.
+
+
 class User(models.Model):
     user_email = models.CharField(db_column='USER_EMAIL', max_length=100)  # Field name made lowercase.
     user_stu = models.IntegerField(db_column='USER_STU', primary_key=True)  # Field name made lowercase.
     user_name = models.CharField(db_column='USER_NAME', max_length=50)  # Field name made lowercase.
     user_major = models.ForeignKey(MajorInfo, models.DO_NOTHING, db_column='USER_MAJOR')  # Field name made lowercase.
-    user_pic = models.ImageField(db_column='USER_PIC', upload_to='member/', blank=True,
+    user_pic = models.ImageField(db_column='USER_PIC', upload_to=user_pic_upload_to, blank=True,
                                  null=True)  # Field name made lowercase.
     user_auth = models.ForeignKey('UserAuth', models.DO_NOTHING, db_column='USER_AUTH')  # Field name made lowercase.
     user_role = models.ForeignKey('UserRole', models.DO_NOTHING, db_column='USER_ROLE')  # Field name made lowercase.
