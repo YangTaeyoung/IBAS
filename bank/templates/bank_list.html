@@ -31,7 +31,7 @@
                                 <div>
                                     <!-- bank-margin-bottom_0는 bank_yejin.css에 정의되어 있음.  -->
                                     <!-- bank-year는 bank_yejin.js에 사용됨. bank_select 부분과 관련 -->
-                                    <h3 id="bank-year" class="title bank-margin-bottom_0">2021</h3>
+                                    <h3 id="bank-year" class="title bank-margin-bottom_0" style="font-size: 22px">전체 회계 내역</h3>
                                 </div>
                             </div>
                             <div>
@@ -283,9 +283,9 @@
 
                                         <!-- 첨부된 파일 불러오기 -->
                                         <!-- 파일 리스트 길이가 0이 아닐 경우에만 파일 리스트를 출력하게 함. -->
-                                        {% if file_len != 0 %}
+{#                                        {% if file_len != 0 %}#}
                                             <div id="bank-update-file-parent" class="download-box" style="font-size: 13px">
-                                                {% for bank_file in bank_file_list %}
+{#                                                {% for bank_file in bank_file_list %}#}
                                                     <!-- 첨부파일 1 -->
                                                     <div id="bank-update-file-1">
                                                          <i class="fa fa-download m-r15"></i><a class="line2" href="#">{{ bank.bank_file_name}}</a>
@@ -300,9 +300,9 @@
                                                     {% if forloop.revcounter0 != 0 %}
                                                         <div class="dlab-divider tb10 bg-gray-dark"></div>
                                                     {% endif %}
-                                                {% endfor %}
+{#                                                {% endfor %}#}
                                             </div>
-                                        {% endif %}
+{#                                        {% endif %}#}
 
                                         <!-- 첨부버튼 -->
                                         <div class="form-group">
