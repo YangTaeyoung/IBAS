@@ -1,12 +1,32 @@
-.gray_box{
+.gray_box {
     background-color: grey;
 }
 
-.gray_box:hover{
+.gray_box:hover {
     background-color: grey;
 }
 
-.my_info_modal_content{
+.my_info_modal_content {
     font-size: 13px;
     font-style: italic;
+}
+
+.my_info_width_50 {
+    width: 50px;
+}
+
+.my_info_width_100 {
+    width: 100px;
+}
+
+.my_info_width_150 {
+    width: 150px;
+}
+
+.my_info_width_170 {
+    width: 170px;
+}
+
+.my_info_width_200 {
+    width: 200px;
 }
