@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/staff_yejin.css' %}">
+    <script src="{% static 'js/staff_yejin.js' %}"></script>
+
+    <div class="page-wraper">
+        <!-- 상단 제목부분 -->
+        <div class="page-content bg-white">
+            <!----------============= 상단 제목 시작 ================----------->
+            <!--제목을 감싸는 배경-->
+            <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"
+                 style=" background-image: url('{% static 'images/board_name_img.jpg' %}'); height: 350px">
+                <!-- 상단 제목을 클릭하면, 상위 게시판으로 이동 -->
+                <!-- (ex.자유게시판의 '용식이의 학식일기'글의 상세 페이지에서 상위 제목을 클릭하면, 자유게시판으로 이동) -->
+                <a href="{% url 'member_delete_list' %}">
+                    <div class="container clearfix">
+                        <div class="dlab-bnr-inr-entry">
+                            <!--제목-->
+                            <!-- DB에서 제목 꺼내와야 함 -->
+                            <h1 class="text-white introduce-letter-spacing_5">제명 안건 게시판</h1>
+                            <!--부제목-->
+                            <!-- DB에서 제목 꺼내와야 함 -->
+                            <p class="introduce-margin-top_20">제명 안건과 관련한 게시판입니다.</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <!----------============= 본문 시작 ================----------->
+            <div class="content-block">
+                <div class="section-full content-inner bg-white">
+                    <div class="container">
+
+                        <div class="listing-filter m-b40" style="border: none; padding: 0;">
+                            <div class="d-flex">
+                                <div>
+                                    <ul class="filter m-b0">
+                                        <li>
+                                            <select id="staff-select" onchange="staff_select()">
+                                                <option>선택</option>
+                                                <option>진행중</option>
+                                                <option>완료</option>
+                                            </select>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!--========== 게시글 리스트 부분 시작 ===========-->
+
+                        <!-- 게시글을 담는 테이블 -->
+                        <table class="table table-hover">
+                            <!-- 테이블의 제목(1행) -->
+                            <thead>
+                            <tr>
+                                <th scope="col" style="text-align: center">no.</th>
+                                <th scope="col" style="width: 500px; text-align: center">제목</th>
+                                <th scope="col" style="text-align: center">작성자</th>
+                                <th scope="col" style="text-align: center">작성일</th>
+                                <th scope="col" style="text-align: center">상태</th>
+                            </tr>
+                            </thead>
+                            <!-- 끌고오는 게시글 파트 -->
+                            <tbody>
+                            <!-- 게시글 1 -->
+                            <tr id="staff-tr-1">
+                                <!-- 게시글 번호 -->
+                                <th scope="row" style="text-align: center">1</th>
+                                <!-- 게시글 제목 -->
+                                <td><a href="{% url 'member_delete_detail' %}">홍길동 제명 건에 관하여</a></td>
+                                <!-- 게시글 작성자 -->
+                                <td style="text-align: center">김채림</td>
+                                <!-- 게시글 작성일자 -->
+                                <td style="text-align: center">2021-03-01</td>
+                                <!-- 상태 : 진행중 -->
+                                <td id="staff-td-1" class="staff-ing">진행중</td>
+                            </tr>
+                            <!-- 게시글 2 -->
+                            <tr id="staff-tr-2">
+                                <!-- 게시글 번호 -->
+                                <th scope="row" style="text-align: center">2</th>
+                                <!-- 게시글 제목 -->
+                                <td><a href="#">김아무개 제명 건에 관하여</a></td>
+                                <!-- 게시글 작성자 -->
+                                <td style="text-align: center">김채림</td>
+                                <!-- 게시글 작성일자 -->
+                                <td style="text-align: center">2021-03-01</td>
+                                <!-- 상태 : 진행중 -->
+                                <td id="staff-td-2" class="staff-ing">진행중</td>
+                            </tr>
+                            <!-- 게시글 3 -->
+                            <tr id="staff-tr-3">
+                                <!-- 게시글 번호 -->
+                                <th scope="row" style="text-align: center">3</th>
+                                <!-- 게시글 제목 -->
+                                <td><a href="#">김아무개 제명 건에 관하여</a></td>
+                                <!-- 게시글 작성자 -->
+                                <td style="text-align: center">김채림</td>
+                                <!-- 게시글 작성일자 -->
+                                <td style="text-align: center">2021-03-01</td>
+                                <!-- 상태 : 진행중 -->
+                                <td id="staff-td-3" class="staff-ing">진행중</td>
+                            </tr>
+                            <!-- 게시글 4 -->
+                            <tr id="staff-tr-4">
+                                <!-- 게시글 번호 -->
+                                <th scope="row" style="text-align: center">4</th>
+                                <!-- 게시글 제목 -->
+                                <td><a href="#">김아무개 제명 건에 관하여</a></td>
+                                <!-- 게시글 작성자 -->
+                                <td style="text-align: center">김채림</td>
+                                <!-- 게시글 작성일자 -->
+                                <td style="text-align: center">2021-03-01</td>
+                                <!-- 상태 : 승인완료 -->
+                                <td id="staff-td-4" class="staff-fin">완료</td>
+                            </tr>
+                            <!-- 게시글 5 -->
+                            <tr id="staff-tr-5">
+                                <!-- 게시글 번호 -->
+                                <th scope="row" style="text-align: center">5</th>
+                                <!-- 게시글 제목 -->
+                                <td><a href="#">김아무개 제명 건에 관하여</a></td>
+                                <!-- 게시글 작성자 -->
+                                <td style="text-align: center">김채림</td>
+                                <!-- 게시글 작성일자 -->
+                                <td style="text-align: center">2021-03-01</td>
+                                <!-- 상태 : 승인완료 -->
+                                <td id="staff-td-5" class="staff-fin">완료</td>
+                            </tr>
+                            <!-- 게시글 6 -->
+                            <tr id="staff-tr-6">
+                                <!-- 게시글 번호 -->
+                                <th scope="row" style="text-align: center">6</th>
+                                <!-- 게시글 제목 -->
+                                <td><a href="#">김아무개 제명 건에 관하여</a></td>
+                                <!-- 게시글 작성자 -->
+                                <td style="text-align: center">김채림</td>
+                                <!-- 게시글 작성일자 -->
+                                <td style="text-align: center">2021-03-01</td>
+                                <!-- 상태 : 승인완료 -->
+                                <td id="staff-td-6" class="staff-fin">완료</td>
+                            </tr>
+
+
+                            </tbody>
+                        </table>
+
+                        <!--신청하기 버튼, 누르면 작성페이지로 이동-->
+                        <div class="extra-cell text-right" style="margin: 20px;">
+                            <a href="{% url 'member_delete_register' %}" class="site-button radius-xl m-l10">
+                                <i class="fa fa-plus m-r5"></i>
+                                신청하기
+                            </a>
+                        </div>
+
+                        <!--========== 페이지네이션 시작 ===========-->
+                        <!-- 1페이지에 15개 게시글 끌고오고, 게시글이 그보다 적으면, 페이지네이션 안보이게 처리 -->
+                        <div class="pagination-bx clearfix text-center">
+                            <ul class="pagination">
+                                <li class="previous"><a href="javascript:void(0)"><i
+                                        class="fa fa-arrow-left"></i></a></li>
+                                <li><a href="javascript:void(0)">1</a></li>
+                                <li><a href="javascript:void(0)">2</a></li>
+                                <li><a href="javascript:void(0)">...</a></li>
+                                <li class="active"><a href="javascript:void(0)">7</a></li>
+                                <li class="next"><a href="javascript:void(0)"><i class="fa fa-arrow-right"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!--========== 페이지네이션 끝 ===========-->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 상단으로 한번에 올라가는 버튼 -->
+        <button class="scroltop fa fa-chevron-up" style="display: none;"></button>
+    </div>
+{% endblock %}

@@ -47,9 +47,10 @@
             </div>
             <!--===============================================입력란=========================================================-->
 
-            <form action="#"
+            <form action="{% url 'bank_support_register' %}"
                   class="add-listing-form" method="POST" enctype="multipart/form-data">
-
+                {% csrf_token %}
+                <input type="hidden" name="bank_apply" value="1"/>
                 <div class="content-block">
                     <div class="section-full content-inner bg-white">
                         <div class="container">
@@ -62,8 +63,8 @@
                                     </div>
                                     <div class="content-body">
                                         <div class="form-group">
-                                            <input type="text" name="board_title" value="{{ board.board_title }}"
-                                                   class="form-control" placeholder="제목을 입력하세요"
+                                            <input type="text" name="bank_title" value="{{ bank.bank_title }}"
+                                                   class="form-control" placeholder="제목을 입력하세요" required="required"
                                                    style="font-size: 25px; height: 70px;">
                                         </div>
                                     </div>
@@ -76,7 +77,7 @@
                                     </div>
                                     <div class="content-body">
                                         <div class="form-group">
-                                            <input type="date" class="form-control"/>
+                                            <input class="form-control" type="date" name="bank_used" value="{{ bank.bank_used|date:"Y-m-d" }}" required="required"/>
                                         </div>
                                     </div>
                                 </div>
@@ -88,7 +89,7 @@
                                     </div>
                                     <div class="content-body">
                                         <div class="form-group">
-                                            <input type="text" class="form-control" placeholder="지출 목적 및 사용 내용을 입력해주세요"/>
+                                            <textarea class="form-control" placeholder="지출 목적 및 사용 내용을 입력해주세요" name="bank_reason" required="required">{{ bank.bank_reason }}</textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -100,7 +101,7 @@
                                     </div>
                                     <div class="content-body">
                                         <div class="form-group">
-                                            <input type="text" class="form-control" placeholder="정확한 지출금액을 입력해주세요"/>
+                                            <input type="number" class="form-control" placeholder="정확한 지출금액을 입력해주세요" name="bank_minus" value="{{ bank.bank_minus }}" required="required"/>
                                         </div>
                                     </div>
                                 </div>
@@ -108,11 +109,11 @@
                             <!--====================================사용인 시작==============================================-->
                                 <div class="content-box">
                                     <div class="content-header">
-                                        <h3 class="title">사용인</h3>
+                                        <h3 class="title">요청자 학번</h3>
                                     </div>
                                     <div class="content-body">
                                         <div class="form-group">
-                                            <input type="text" class="form-control" placeholder="결제인의 이름을 적어주세요"/>
+                                            <input type="text" class="form-control" placeholder="요청자의 학번을 적어주세요" name="bank_used_user" value="{{ request.session.user_stu }}" required="required"/>
                                         </div>
                                     </div>
                                 </div>
@@ -124,7 +125,7 @@
                                     </div>
                                     <div class="content-body">
                                         <div class="form-group">
-                                            <input type="text" class="form-control" placeholder="은행명, 계좌번호, 예금주를 입력해주세요"/>
+                                            <input type="text" class="form-control" placeholder="은행명, 계좌번호, 예금주를 입력해주세요" name="bank_account" value="{{ bank.bank_account }}" required="required"/>
                                         </div>
                                     </div>
                                 </div>
@@ -139,8 +140,10 @@
                                         <div class="form-group">
                                             <input
                                             type="file"
-                                            accept=".xlsx,.xls,image/*,.doc,audio/*,.docx,video/*,.ppt,.pptx,.txt,.pdf"
+                                            name="bank_file"
+                                            accept="image/*"
                                             multiple
+                                            required="required"
                                             />
                                         </div>
                                     </div>

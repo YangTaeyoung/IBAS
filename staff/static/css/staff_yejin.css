@@ -1,0 +1,13 @@
+/*완료 상태 스타일*/
+.staff-fin{
+    color:#408558;
+    text-align: center;
+    font-style: italic;
+}
+
+/*진행중 상태 스타일*/
+.staff-ing{
+    color:#cb444a;
+    text-align: center;
+    font-style: italic;
+}

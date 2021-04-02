@@ -32,7 +32,10 @@ class Bank(models.Model):
     bank_created = models.DateTimeField(db_column='BANK_CREATED', auto_now_add=True)  # Field name made lowercase.
     bank_updated = models.DateTimeField(db_column='BANK_UPDATED', auto_now=True, blank=True,
                                         null=True)  # Field name made lowercase.
-    bank_cfo = models.ForeignKey('User', models.DO_NOTHING, db_column='BANK_CFO',
+    bank_checked = models.DateTimeField(db_column='BANK_CHECKED', null=True)
+    bank_allowed = models.DateTimeField(db_column='BANK_ALLOWED', null=True)
+
+    bank_cfo = models.ForeignKey('User', models.DO_NOTHING, db_column='BANK_CFO', null=True,
                                  related_name="cfo")  # Field name made lowercase.
     bank_used_user = models.ForeignKey('User', models.DO_NOTHING, db_column='BANK_USED_USER',
                                        related_name="used_user")  # Field name made lowercase.
@@ -60,6 +63,7 @@ class BankFile(models.Model):
     bank_file_path = models.FileField(db_column='BANK_FILE_PATH', max_length=1000,
                                       upload_to=bank_file_upload_to)  # Field name made lowercase.
     bank_file_name = models.CharField(db_column='BANK_FILE_NAME', max_length=500)
+
     class Meta:
         managed = False
         db_table = 'BANK_FILE'
