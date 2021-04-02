@@ -3013,6 +3013,8 @@ font-size: 17px;
 .listing-details-head .listing-theme-logo {
     width: 130px;
     height: 130px;
+	min-width: 130px;
+	min-height: 130px;
     border-radius: 50%;
     overflow: hidden;
     border: 3px solid #fff;
