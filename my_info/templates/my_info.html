@@ -264,79 +264,302 @@
                         </div>
                     </div>
                     <!--===== 내가 신청한 예산내역 코드 끝 =====-->
+
                     <!--회원관리-->
                     <div id="listing_user_setting" class="tab-pane">
                         <div class="row">
                             <div class="col-xl-12">
                                 <div class="content-box">
+                                    <!-- 제목 div -->
                                     <div class="content-header">
-                                        <h3 class="title"><i class="la la-tasks m-r5"></i>동아리원 현황</h3>
+                                        <h3 class="title"><i class="la la-users m-r5"></i>신입부원 관리</h3>
                                     </div>
+                                    <!-- 신입부원 관리 콘텐츠 시작 -->
                                     <div class="content-body">
-                                        {#                                        <div class="listing-filter m-b40" style="border: none; padding: 0;">#}
-                                        {#                                            <div class="d-flex">#}
-                                        {#                                                <div>#}
-                                        {#                                                    <ul class="filter m-b0">#}
-                                        {#                                                        <li>#}
-                                        {#                                                            <select id="staff-select" >#}
-                                        {#                                                                <option>일반</option>#}
-                                        {#                                                                <option>미납</option>#}
-                                        {#                                                                <option>강의자</option>#}
-                                        {#                                                            </select>#}
-                                        {#                                                        </li>#}
-                                        {#                                                    </ul>#}
-                                        {#                                                </div>#}
-                                        {#                                            </div>#}
-                                        {#                                        </div>#}
-
-                                        <!-- 내가 작성한 댓글 내용 담는 div -->
                                         <div class="myinfo-table-padding">
-                                            <!-- 댓글 내용 테이블 -->
+                                            <!-- 신입부원 관리 테이블 시작 -->
                                             <table class="table">
-                                                <!-- 테이블 1행: 제목 -->
                                                 <thead>
+                                                <!-- 테이블 1행: 제목 -->
                                                 <tr>
-                                                    <th class="border-top-0 my_info_width_50"></th>
+                                                    <!-- my_info_width는 my_info_cr.css에 정의되어 있음.  -->
                                                     <th class="border-top-0 my_info_width_50" scope="col"></th>
                                                     <th class="border-top-0 my_info_width_100" scope="col">이름</th>
                                                     <th class="border-top-0 my_info_width_150" scope="col">학번</th>
+                                                    <th class="border-top-0 my_info_width_150" scope="col">이메일</th>
                                                     <th class="border-top-0" scope="col">학과</th>
-                                                    <th class="border-top-0 my_info_width_170" scope="col">권한</th>
-                                                    <th class="border-top-0 my_info_width_170" scope="col">역할</th>
+                                                    <th class="border-top-0" scope="col">지원서 보기</th>
                                                 </tr>
                                                 </thead>
-                                                <!-- 댓글 내용 테이블 -->
+                                                <!-- 신입부원 관리 테이블 내용 시작 -->
                                                 <tbody>
+                                                <!-- ===========================여기부터 복붙============================== -->
                                                 {#                                                {% for %}#}
                                                 <tr>
-                                                    <td scope="row">
-                                                        <div>
-                                                            <input id="check" type="checkbox">
-                                                            <label for="check"></label>
-                                                        </div>
-                                                    </td>
                                                     <th>1</th>
                                                     <!-- 회원 이름 -->
                                                     <td>홍길동</td>
                                                     <!-- 회원 학번 -->
                                                     <td>12121212</td>
+                                                    <!-- 회원 이메일 -->
+                                                    <td>abcd@naver.com</td>
                                                     <!-- 회원 학과 -->
-                                                    <td>미디어커뮤니케이션학과</td>
-                                                    <!-- 권한 상태 -->
+                                                    <td>디자인테크놀러지학과</td>
+                                                    <!-- 지원서보기 -->
                                                     <td>
-                                                        일반 회원
-                                                    </td>
-                                                    <!-- 역할 상태 -->
-                                                    <td>
-                                                        강의자
+                                                        <a href="#">지원서보기 ▶</a>
                                                     </td>
                                                 </tr>
                                                 {#                                                {% endfor %}#}
+                                                <!-- ===========================여기까지 복붙============================== -->
+                                                <!-- 여기부터 예시 <<<삭제하기>>>> -->
+                                                <tr>
+                                                    <th>2</th>
+                                                    <!-- 회원 이름 -->
+                                                    <td>탄지로</td>
+                                                    <!-- 회원 학번 -->
+                                                    <td>21212121</td>
+                                                    <!-- 회원 이메일 -->
+                                                    <td>adfder@naver.com</td>
+                                                    <!-- 회원 학과 -->
+                                                    <td>스마트모빌리티공학과</td>
+                                                    <!-- 지원서보기 -->
+                                                    <td>
+                                                        <a href="#">지원서보기 ▶</a>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>3</th>
+                                                    <!-- 회원 이름 -->
+                                                    <td>젠이츠</td>
+                                                    <!-- 회원 학번 -->
+                                                    <td>12345678</td>
+                                                    <!-- 회원 이메일 -->
+                                                    <td>adfdefddfsdfefdd@naver.com</td>
+                                                    <!-- 회원 학과 -->
+                                                    <td>데이터사이언스학과</td>
+                                                    <!-- 지원서보기 -->
+                                                    <td>
+                                                        <a href="#">지원서보기 ▶</a>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>4</th>
+                                                    <!-- 회원 이름 -->
+                                                    <td>렌고쿠상</td>
+                                                    <!-- 회원 학번 -->
+                                                    <td>87654321</td>
+                                                    <!-- 회원 이메일 -->
+                                                    <td>ILovePineapplePizza@naver.com</td>
+                                                    <!-- 회원 학과 -->
+                                                    <td>인공지능공학과</td>
+                                                    <!-- 지원서보기 -->
+                                                    <td>
+                                                        <a href="#">지원서보기 ▶</a>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>5</th>
+                                                    <!-- 회원 이름 -->
+                                                    <td>네즈코</td>
+                                                    <!-- 회원 학번 -->
+                                                    <td>20211234</td>
+                                                    <!-- 회원 이메일 -->
+                                                    <td>amazingNezuko@naver.com</td>
+                                                    <!-- 회원 학과 -->
+                                                    <td>소프트웨어융합공학과</td>
+                                                    <!-- 지원서보기 -->
+                                                    <td>
+                                                        <a href="#">지원서보기 ▶</a>
+                                                    </td>
+                                                </tr>
+                                                <!-- 여기까지 예시 -->
                                                 </tbody>
                                             </table>
+                                            <!--페이지네이션-->
+                                            <div style="display: flex; justify-content: center; align-items: center">
+                                                <nav aria-label="Page navigation example">
+                                                    <!-- my_info_margin_bottom_0는 my_info_cr.css에 정의되어 있음.  -->
+                                                    <ul class="pagination my_info_margin_bottom_0">
+                                                        <li class="page-item">
+                                                            <a class="page-link" href="#" aria-label="Previous">
+                                                                <span aria-hidden="true">&laquo;</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                                        <li class="page-item">
+                                                            <a class="page-link" href="#" aria-label="Next">
+                                                                <span aria-hidden="true">&raquo;</span>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </nav>
+                                            </div>
+                                            <!--페이지네이션 끝-->
                                         </div>
-
                                     </div>
+                                </div>
+
+                                <!-- 회원 관리 콘텐츠 시작 -->
+                                <div class="content-box">
+                                    <div class="content-header">
+                                        <h3 class="title"><i class="la la-tasks m-r5"></i>동아리원 현황</h3>
+                                    </div>
+                                    <!-- 회원 관리 콘텐츠 시작 -->
+                                    <form>
+                                        <div class="content-body">
+                                            <!-- 내가 작성한 댓글 내용 담는 div -->
+                                            <div class="myinfo-table-padding">
+                                                {# 권한: 활동회원, 비활동, 미승인#}
+                                                {# 역할: 회장, 부회장, 총무, 기획팀, 운영팀(회장단), 교수, 일반회원#}
+
+                                                <!-- my_info_mem_select는 my_info_cr.css에 정의되어 있음.  -->
+                                                <div class="my_info_mem_select m-b20">
+                                                    <select>
+                                                        <option>권한 부여</option>
+                                                        <option>활동 회원</option>
+                                                        <option>비활동 회원</option>
+                                                        <option>미승인 회원</option>
+                                                    </select>
+                                                </div>
+                                                <!-- my_info_mem_select는 my_info_cr.css에 정의되어 있음.  -->
+                                                <div class="my_info_mem_select m-b20">
+                                                    <select>
+                                                        <option>역할 부여</option>
+                                                        <option>회장</option>
+                                                        <option>부회장</option>
+                                                        <option>총무</option>
+                                                        <option>기획팀</option>
+                                                        <option>운영진</option>
+                                                        <option>교수님</option>
+                                                        <option>일반회원</option>
+                                                    </select>
+                                                </div>
+                                                <!-- my_info_mem_btn는 my_info_cr.css에 정의되어 있음.  -->
+                                                <div class="my_info_mem_btn m-b20 listing-info-right">
+                                                    <!-- &nbsp;는 띄어쓰기 -->
+                                                    <button class="site-button" type="submit"><i
+                                                            class="la la-check m-r5"
+                                                            style="font-weight: bold"></i>&nbsp;적용
+                                                    </button>
+                                                </div>
+
+                                                <!-- 댓글 내용 테이블 -->
+                                                <table class="table">
+                                                    <!-- 테이블 1행: 제목 -->
+                                                    <thead>
+                                                    <tr>
+                                                        <!-- my_info_width는 my_info_cr.css에 정의되어 있음.  -->
+                                                        <th class="border-top-0 my_info_width_50"></th>
+                                                        <th class="border-top-0 my_info_width_50" scope="col"></th>
+                                                        <th class="border-top-0 my_info_width_100" scope="col">이름</th>
+                                                        <th class="border-top-0 my_info_width_150" scope="col">학번</th>
+                                                        <th class="border-top-0" scope="col">학과</th>
+                                                        <th class="border-top-0 my_info_width_170" scope="col">권한</th>
+                                                        <th class="border-top-0 my_info_width_170" scope="col">역할</th>
+                                                        <th class="border-top-0 my_info_width_70"></th>
+                                                    </tr>
+                                                    </thead>
+                                                    <!-- 댓글 내용 테이블 -->
+                                                    <tbody>
+                                                    <!-- ===========================여기부터 복붙============================== -->
+                                                    {#                                                {% for %}#}
+                                                    <tr>
+                                                        <td scope="row">
+                                                            <div class="input-block">
+                                                                <input id="check" type="checkbox">
+                                                                <!-- my_info_label_margin는 my_info_cr.css에 정의되어 있음.  -->
+                                                                <label for="check" class="my_info_label_margin"></label>
+                                                            </div>
+                                                        </td>
+                                                        <th>1</th>
+                                                        <!-- 회원 이름 -->
+                                                        <td>홍길동</td>
+                                                        <!-- 회원 학번 -->
+                                                        <td>12121212</td>
+                                                        <!-- 회원 학과 -->
+                                                        <td>디자인테크놀러지학과</td>
+                                                        <!-- 권한 상태 -->
+                                                        <td>
+                                                            미승인 회원
+                                                        </td>
+                                                        <!-- 역할 상태 -->
+                                                        <td>
+                                                            일반 회원
+                                                        </td>
+                                                        <!-- 제명건의 -->
+                                                        <td>
+                                                            <a href="#"
+                                                               style="font-size: 12px; font-weight: bold">제명건의</a>
+                                                            {#                                                        <a href="#" style="font-size: 12px; font-weight: bold">&nbsp;&nbsp;논의중</a>#}
+
+                                                        </td>
+                                                    </tr>
+                                                    {#                                                {% endfor %}#}
+                                                    <!-- ===========================여기까지 복붙============================== -->
+
+                                                    <!-- 여기부터 삭제 <<<삭제하기>>> -->
+                                                    <tr>
+                                                        <td scope="row">
+                                                            <div class="input-block">
+                                                                <input id="check2" type="checkbox">
+                                                                <label for="check2"
+                                                                       class="my_info_label_margin"></label>
+                                                            </div>
+                                                        </td>
+                                                        <th>2</th>
+                                                        <!-- 회원 이름 -->
+                                                        <td>탄지로</td>
+                                                        <!-- 회원 학번 -->
+                                                        <td>21212121</td>
+                                                        <!-- 회원 학과 -->
+                                                        <td>문화컨텐츠문화경영학과</td>
+                                                        <!-- 권한 상태 -->
+                                                        <td>
+                                                            활동 회원
+                                                        </td>
+                                                        <!-- 역할 상태 -->
+                                                        <td>
+                                                            기획팀
+                                                        </td>
+                                                        <!-- 제명건의 -->
+                                                        <td>
+                                                            {#                                                        <a href="#" style="font-size: 12px; font-weight: bold">제명건의</a>#}
+                                                            <a href="#" style="font-size: 12px; font-weight: bold">&nbsp;&nbsp;논의중</a>
+
+                                                        </td>
+                                                    </tr>
+                                                    <!-- 여기까지 예시-->
+                                                    </tbody>
+                                                </table>
+                                                <!--페이지네이션-->
+                                                <div style="display: flex; justify-content: center; align-items: center">
+                                                    <nav aria-label="Page navigation example">
+                                                        <ul class="pagination my_info_margin_bottom_0">
+                                                            <li class="page-item">
+                                                                <a class="page-link" href="#" aria-label="Previous">
+                                                                    <span aria-hidden="true">&laquo;</span>
+                                                                </a>
+                                                            </li>
+                                                            <li class="page-item"><a class="page-link" href="#">1</a>
+                                                            </li>
+                                                            <li class="page-item"><a class="page-link" href="#">2</a>
+                                                            </li>
+                                                            <li class="page-item"><a class="page-link" href="#">3</a>
+                                                            </li>
+                                                            <li class="page-item">
+                                                                <a class="page-link" href="#" aria-label="Next">
+                                                                    <span aria-hidden="true">&raquo;</span>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </nav>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
