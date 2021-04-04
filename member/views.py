@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from allauth.socialaccount.models import SocialAccount, \
     SocialToken  # 소셜 계정 DB, socialaccount_socialaccount 테이블을 사용하기 위함.
 from django.urls import reverse
-from DB.models import AuthUser, User, UserAuth, UserRole, QuestForm, Answer, \
-    MajorInfo  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
+from DB.models import AuthUser, User, UserAuth, UserRole, QuestForm, Answer, MajorInfo, \
+    UserEmail  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
 from django.http import HttpResponseRedirect
 # 내가 만든 세션 모듈 불러오기
 from . import session
@@ -155,6 +155,30 @@ def quest_chk(request):
         return redirect(reverse("welcome"))  # 정상 회원가입 완료시 회원 가입 완료 페이지로 이동.
     return render(request, "index.html", {'lgn_is_failed': 1})  # 비정상 적인 접근 시 로그인 실패 메시지 출력과 함께 메인페이지 이동.
 
+
+def add_email(request):
+    if request.method == "POST":  # POST로 온 요청의 경우, 즉 정상적인 요청인 경우
+        if request.POST.get("password") is not None:  # pass페이지에서 password가 파라미터로 넘어왔을 경우, 즉 정상적으로 구글 로그인을 마친 경우
+            user_token = request.POST.get("password")  # 토큰 정보를 받음
+            if len(AuthUser.objects.filter(password=user_token)) == 0:  # 토큰 정보로 AuthUser정보를 조회 만약 없다면 비정상 적인 접근.
+                return redirect(reverse("index"))  # 비정상적인 접근의 경우 강제로 홈으로 이동
+            auth_user = AuthUser.objects.filter(password=user_token)[0]  # auth테이블에서 해당 패스워드가 있는지 조회.
+
+            # 있다면 social account에서 앞서서 Auth의 primary key를 통해 가입한 친구의 pk를 넣어서 조회
+            tar_member = SocialAccount.objects.filter(user_id=auth_user.id)[0]  # quesyset의 첫번째 자료. 즉 로그인한 인원의 인스턴스 변수
+            tar_token = SocialToken.objects.filter(account_id=tar_member.id)[0]
+
+            # extra_data: 사용자의 동의를 통해 로그인 출처로 부터 얻은 사용자의 개인정보
+            email = tar_member.extra_data.get('email')  # 자동 완성을 위해 인스턴스 변수 설정
+            UserEmail.objects.create(user_stu=User.objects.get(pk=request.session.get("user_stu")), user_email=email)
+
+            # 소셜 로그인으로 부터 받은 정보는 저장하지 않기 위해 해당 정보 삭제
+            tar_token.delete()
+            tar_member.delete()
+            auth_user.delete()
+
+            return redirect(reverse("my_info"))
+    return redirect(reverse("index"))
 
 def pass_param(request):  # 구글 로그인으로 부터 파라미터를 받아 넘기는 페이지, 사용자에겐 보이지 않음.
     return render(request, "pass_login_param.html", {})
