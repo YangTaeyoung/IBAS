@@ -345,14 +345,14 @@
                                             </tr>
                                             <!--승인상태-->
                                             <tr>
-                                                <th scope="row">승인상태</th>
+                                                <th scope="row">권한</th>
                                                 <!--Back : 승인 안되면 미승인, 승인되면 승인 뜨도록 수정-->
-                                                <td>{% if my_info.is_activated == 1 %}승인{% else %}승인 대기{% endif %}</td>
+                                                <td>{{ my_info.user_auth.auth_name}}</td>
                                                 <td></td>
                                             </tr>
                                             <!--권한-->
                                             <tr>
-                                                <th scope="row">권한</th>
+                                                <th scope="row">역할</th>
                                                 <!--Back : 회장이면 회장, 부회장이면 부회장 ...... 일반회원이면 일반회원으로 뜨도록 수정-->
                                                 <td>{{ my_info.user_role.role_name }}</td>
                                                 <td></td>
