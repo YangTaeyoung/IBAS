@@ -151,15 +151,15 @@
 
                             <!--====================================영수증 입력 끝=============================================-->
 
-                                {% if board is not None %}
-                                    <input type="hidden" name="board_no" value="{{ board.board_no }}">
+                                {% if bank is not None %}
+                                    <input type="hidden" name="bank_no" value="{{ bank.bank_no }}">
                                 {% endif %}
                                 <!--=====================-->
                                 <!--등록하기 버튼, 누르면 게시글 상세보기로-->
                                 <!--최초 글작성 시 나오는 버튼-->
                                 <div style="display: grid; justify-items: center">
                                     <button class="site-button btn-block button-md" type="submit" style="width: 30%">
-                                        {% if board is None %}
+                                        {% if bank is None %}
                                             신청하기
                                         {% else %}
                                             수정하기
