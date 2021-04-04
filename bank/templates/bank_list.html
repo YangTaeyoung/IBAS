@@ -31,7 +31,7 @@
                                 <div>
                                     <!-- bank-margin-bottom_0는 bank_yejin.css에 정의되어 있음.  -->
                                     <!-- bank-year는 bank_yejin.js에 사용됨. bank_select 부분과 관련 -->
-                                    <h3 id="bank-year" class="title bank-margin-bottom_0">2021</h3>
+                                    <h3 id="bank-year" class="title bank-margin-bottom_0" style="font-size: 22px">전체 회계 내역</h3>
                                 </div>
                             </div>
                             <div>
@@ -292,6 +292,20 @@
                                                            type="number"/>
                                                 </div>
 
+                                        <!-- 첨부된 파일 불러오기 -->
+                                        <!-- 파일 리스트 길이가 0이 아닐 경우에만 파일 리스트를 출력하게 함. -->
+{#                                        {% if file_len != 0 %}#}
+                                            <div id="bank-update-file-parent" class="download-box" style="font-size: 13px">
+{#                                                {% for bank_file in bank_file_list %}#}
+                                                    <!-- 첨부파일 1 -->
+                                                    <div id="bank-update-file-1">
+                                                         <i class="fa fa-download m-r15"></i><a class="line2" href="#">{{ bank.bank_file_name}}</a>
+                                                        <input type="hidden" name="exist-bank-file-{{ bank_file.bank_file_id }}" value="{{ bank_file.bank_file_path }}"/>
+                                                        <!-- 첨부파일 지우기 버튼 -->
+                                                        <button onclick="bank_update_del({{ bank_file.bank_file_id }})" id="bank-update-x-1" type="button" class="close">
+                                                            <span aria-hidden="true"><i class="la la-close"></i></span>
+                                                        </button>
+                                                    </div>
                                                 <!-- 첨부된 파일 불러오기 -->
                                                 <!-- 파일 리스트 길이가 0이 아닐 경우에만 파일 리스트를 출력하게 함. -->
                                                 {% if bank.bankfile_set.all|length > 0 %}
@@ -411,7 +425,7 @@
                                         <div class="form-group">
                                             <input required="" class="form-control" name="bank_used_user"
                                                    placeholder="회비를 사용한 부원의 학번을 입력하세요"
-                                                   type="number"/>용
+                                                   type="number"/>
                                             <div class="form-text font-10">해당란을 입력하지 않을 시, 로그인 한 유저로 입력됩니다.</div>
                                         </div>
 

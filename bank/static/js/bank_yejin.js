@@ -39,14 +39,18 @@ function bank_select() {
 
         var dateYear = dateValue[i].value.split("-")[0]; // date input 가져온 것을 -기준으로 쪼개서 연도만 가져옴.
 
-        // 만약 date input의 연도랑 선택된 select의 글자가 같지 않으면 보이지 않고
-        if (dateYear !== selectString) {
-            tr_list[i].style.display = "none";
-        }
-        // 만약 date input의 연도랑 선택된 select의 글자가 같으면 보인다.
-        else {
-            tr_head.style.display = "table-row"; // 이거 해야 테이블 형태 안무너짐
-            tr_list[i].style.display = "table-row";
+        if ("전체" === selectString) {
+            tr_head.style.display = "table-row"; // 이거 해야 테이블 형태 안무너짐 // 테이블 헤드 부분
+            tr_list[i].style.display = "table-row"; // 테이블 내용 부분
+            bankYear.innerHTML = "전체 회계 내역"; // select 안의 내용과 다르게 나타내주기 위해 따로 다시 선언해줌
+            bankYear.style.fontSize = "22px"; // 폰트 사이즈 조정
+        } else if (dateYear === selectString) {
+            tr_head.style.display = "table-row"; // 이거 해야 테이블 형태 안무너짐 // 테이블 헤드 부분
+            tr_list[i].style.display = "table-row"; // 테이블 내용 부분
+            bankYear.style.fontSize = "28px"; // 폰트 사이즈 조정
+        } else {
+            tr_list[i].style.display = "none"; // 테이블 내용 부분
+            bankYear.style.fontSize = "28px"; // 폰트 사이즈 조정
         }
 
     }
