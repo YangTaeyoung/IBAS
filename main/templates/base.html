@@ -7,9 +7,9 @@
     <meta name="keywords" content=""/>
     <meta name="author" content=""/>
     <meta name="robots" content=""/>
-    <meta name="description" content="BizMap Directory & Listings HTML templates"/>
-    <meta property="og:title" content="BizMap Directory & Listings HTML templates"/>
-    <meta property="og:description" content="BizMap Directory & Listings HTML templates"/>
+    <meta name="description" content="IBAS 동아리 공식 홈페이지 입니다."/>
+    <meta property="og:title" content="IBAS"/>
+    <meta property="og:description" content="IBAS 동아리 공식 홈페이지입니다."/>
     <meta property="og:image" content=""/>
     <meta name="format-detection" content="telephone=no">
 
@@ -35,14 +35,13 @@
     <link class="skin" rel="stylesheet" type="text/css" href="{% static 'css/skin/skin-1.css' %}">
 
     <link rel="stylesheet" type="text/css" href="{% static 'css/star-rating-svg.css' %}">
-	<link rel="stylesheet" type="text/css" href="{% static 'plugins/editor/jquery-te-1.4.0.css' %}">
-	<link rel="stylesheet" type="text/css" href="{% static 'plugins/drop/imageuploadify.min.css' %}">
-	<link rel="stylesheet" href="{% static 'plugins/tag-editor/jquery.tag-editor.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'plugins/editor/jquery-te-1.4.0.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'plugins/drop/imageuploadify.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/tag-editor/jquery.tag-editor.css' %}">
 
     <!--직접 만든거-->
     <link rel="stylesheet" type="text/css" href="{% static 'css/chaerim.css' %}">
     <link class="skin" rel="stylesheet" type="text/css" href="{% static 'css/bottom_bar.css' %}">
-
 
 
 </head>
@@ -75,25 +74,26 @@
                             <li class="down active" style="padding-top: 6px"><a href="#">IBAS <i
                                     class="fa fa-chevron-down"></i></a>
                                 <ul class="sub-menu">
-                                <!-- 동아리 소개를 누를 경우 url로 넘어간다. -->
+                                    <!-- 동아리 소개를 누를 경우 url로 넘어간다. -->
                                     <li><a href="{% url 'introduce' %}">동아리 소개</a></li>
-                                <!-- 동아리 활동를 누를 경우 url로 넘어간다. -->
+                                    <!-- 동아리 활동를 누를 경우 url로 넘어간다. -->
                                     <li><a href="{% url 'activity' %}">동아리 활동</a></li>
 
                                     {# 밑에 있는 회계내역, 예산지원 신청은 회원들만 신청을 할 수 있음. #}
                                     {% if request.session.user_stu is not None %}
-                                        <li><a href="#">회계내역</a></li>
-                                        <li><a href="#">예산지원신청</a></li>
+                                        <li><a href="{% url 'bank_list' %}">회계내역</a></li>
+                                        <li><a href="{% url 'bank_support_board' %}">예산지원신청</a></li>
                                     {% endif %}
                                 </ul>
                             </li>
                             <!--====================게시판을 상위메뉴로 가지고 있는 메뉴====================-->
-                            <li class="down active" style="padding-top: 6px"><a href="#">게시판 <i
+                            <li class="down active" style="padding-top: 6px"><a
+                                    href="{% url 'board_view' board_type_no=5 %}">게시판<i
                                     class="fa fa-chevron-down"></i></a>
                                 <ul class="sub-menu">
-                                    <li><a href="#">공지사항</a></li>
-                                    <li><a href="#">자유게시판</a></li>
-                                    <li><a href="#">질문게시판</a></li>
+                                    <li><a href="{% url 'board_view' board_type_no=1 %}">공지사항</a></li>
+                                    <li><a href="{% url 'board_view' board_type_no=2 %}">자유게시판</a></li>
+                                    <li><a href="{% url 'board_view' board_type_no=3 %}">질문게시판</a></li>
                                     <li><a href="#">공모전게시판</a></li>
                                 </ul>
                             </li>
@@ -120,24 +120,32 @@
                                 <!--======회원정보 뜨는 곳======-->
                                 <li class="active">
                                     <!--아래 href에 마이페이지 링크 들어가야 함-->
-                                    <a href="#" style="padding-right: 7px;">
+                                    <a href="{% url 'my_info' %}" style="padding-right: 7px;">
                                         <!--==승인되지 않았을 때==-->
-                                        {% if request.session.is_activated == 0 %}
+                                        {% if request.session.user_auth == 3 %}
                                             <img src="/media/{{ request.session.user_pic }}" width="35px" height="35px"
                                                  style=" border: 2px solid #ff3d3d; border-radius: 17.5px; margin-right: 3px; max-height: 35px; max-width: 35px"
                                                  alt="현재 브라우저에서 지원하지 않는 형식입니다.">
                                             {{ request.session.user_name }} 님
-                                            <ul class="sub-menu" style="text-align: center">
-                                                <a>아직 승인되지 않았습니다</a>
+                                            <ul class="sub-menu" style="text-align: center; width: 240px">
+                                                <a>아직 가입이 승인되지 않았습니다.<br/> 모든 기능이 제한됩니다.</a>
                                             </ul>
                                             <!--==승인되었을 때==-->
+                                        {% elif request.session.user_auth == 2 %}
+                                            <img src="/media/{{ request.session.user_pic }}" width="35" height="35"
+                                                 style=" border: 2px solid #ff5a00; border-radius: 17.5px; margin-right: 3px"
+                                                 alt="현재 브라우저에서 지원하지 않는 형식입니다.">
+                                            {{ request.session.user_name }} 님
+                                            <ul class="sub-menu" style="text-align: center; width: 240px">
+                                                <a>회비를 납부하지 않은 상태입니다.<br/> 대부분의 기능이 제한됩니다. </a>
+                                            </ul>
                                         {% else %}
-                                            <img src="{{ request.session.user_pic }}" width="35" height="35"
+                                            <img src="/media/{{ request.session.user_pic }}" width="35" height="35"
                                                  style=" border: 2px solid #3cff44; border-radius: 17.5px; margin-right: 3px"
                                                  alt="현재 브라우저에서 지원하지 않는 형식입니다.">
                                             {{ request.session.user_name }} 님
-                                            <ul class="sub-menu" style="text-align: center">
-                                                <a>가입이 승인되었습니다.</a>
+                                            <ul class="sub-menu" style="text-align: center; width: 240px">
+                                                <a>계정이 활성화 되어 있습니다.</a>
                                             </ul>
                                         {% endif %}
                                     </a>
@@ -174,9 +182,10 @@
                                 <li class="active" style="padding-top: 5px;">
                                     <a href="{% url 'login' %}">Log In</a>
                                 </li>
-{#                                                                <li class="active" style="padding-top: 5px;">#}
-{#                                                                    <a href="#">Sign Up</a>#}
-{#                                                                </li>#}
+                                {#                                <li class="active" style="padding-top: 5px;">#}
+                                {#                                    <a href="#">Sign Up</a>#}
+                                {#                                </li>#}
+
                             {% endif %}
                         </ul>
                     </div>
@@ -197,7 +206,7 @@
 <footer>
     <!-- content 담는 부분이 footer-top -->
     <!-- footer-top에 대한 정의는 bottom_bar.css에 정의되어 있음. (height 관련) -->
-    <div class="ibas-footer-top" style="background-image: {% static 'images/botton_bar.jpg' %}">
+    <div class="ibas-footer-top" style="background-image: url({% static 'images/botton_bar.jpg' %})">
         <!-- content 시작 -->
         <!-- cont-grid에 대한 정의는 bottom_bar.css에 정의되어 있음. (grid 관련) -->
         <div class="cont-grid">
@@ -243,7 +252,8 @@
                 <!-- 여기 부분이 이미지임 -->
                 <a href="https://www.inha.ac.kr">
                     <!-- width_300에 대한 정의는 bottom_bar.css에 정의되어 있음. (width 관련) -->
-                    <img src="{% static 'images/inha_en_logo.png' %} " class="m-b15" alt="" style="width: 450px; margin-right: 50px">
+                    <img src="{% static 'images/inha_en_logo.png' %} " class="m-b15" alt=""
+                         style="width: 450px; margin-right: 50px">
                 </a>
             </div>
             <!-- 인하대 로고 div 끝 -->
@@ -254,8 +264,8 @@
     <div class="footer-bottom min-width_1400">
         <!-- design-with에 대한 정의는 bottom_bar.css에 정의되어 있음. (font, margin 관련) -->
         <p class="fbottom-like design-with">© 2021 Developed By <a class="like-btn"
-                                                                  href="javascript:void(0)">
-        </a> 양태영, 신승연, 조용식, 김채림, 윤예진 </p>
+                                                                   href="javascript:void(0)">
+        </a> 양태영, 신승연, 김채림, 윤예진 </p>
     </div>
 </footer>
 <!-- Footer END-->
@@ -281,7 +291,8 @@
 <script src="{% static 'js/dz.carousel.js' %}"></script><!-- SORTCODE FUCTIONS  -->
 <script src="{% static 'js/dz.ajax.js' %}"></script><!-- CONTACT JS  -->
 <script src="{% static 'js/jqueƒry.star-rating-svg.js' %}"></script><!-- STAR RATING SVG -->
-<script src="https://maps.google.com/maps/api/js?key=AIzaSyBjirg3UoMD5oUiFuZt3P9sErZD-2Rxc68&sensor=false"  ></script><!-- GOOGLE MAP -->
+<script src="https://maps.google.com/maps/api/js?key=AIzaSyBjirg3UoMD5oUiFuZt3P9sErZD-2Rxc68&sensor=false"></script>
+<!-- GOOGLE MAP -->
 <script src='https://www.google.com/recaptcha/api.js'></script> <!-- Google API For Recaptcha  -->
 <script src="{% static 'js/map.script.js' %}"></script><!-- CONTACT JS  -->
 <script src="{% static 'plugins/editor/jquery-te-1.4.0.min.js' %}"></script>
@@ -292,37 +303,36 @@
 
 
 <script>
-jQuery(document).ready(function(){
+    jQuery(document).ready(function () {
 
-	$('.jqte-test').jqte();
+        $('.jqte-test').jqte();
 
-	// settings of status
-	var jqteStatus = true;
-	$(".status").on('click',function()
-	{
-		jqteStatus = jqteStatus ? false : true;
-		$('.jqte-test').jqte({"status" : jqteStatus})
-	});
+        // settings of status
+        var jqteStatus = true;
+        $(".status").on('click', function () {
+            jqteStatus = jqteStatus ? false : true;
+            $('.jqte-test').jqte({"status": jqteStatus})
+        });
 
-	$('[data-toggle="tooltip"]').tooltip()
+        $('[data-toggle="tooltip"]').tooltip()
 
 
-	jQuery(document).on('click','.add-social-btn',function(){
-		var copy_data = '<div class="input-group"><select id="mySelect"><option>Instagram</option><option>LinkedIn</option><option>Facebook</option></select><input type="text" class="form-control" placeholder="http://"><div class="input-group-prepend"><button class="site-button btn-block add-social-btn" type="button"><i class="fa fa-plus"></i> Add</button><button class="site-button btn-block remove-social-btn red" type="button"><i class="fa fa-times"></i> Close</button></div></div>';
-		jQuery('.social-btn-container').append(copy_data);
-		jQuery('select').selectpicker();
-	});
+        jQuery(document).on('click', '.add-social-btn', function () {
+            var copy_data = '<div class="input-group"><select id="mySelect"><option>Instagram</option><option>LinkedIn</option><option>Facebook</option></select><input type="text" class="form-control" placeholder="http://"><div class="input-group-prepend"><button class="site-button btn-block add-social-btn" type="button"><i class="fa fa-plus"></i> Add</button><button class="site-button btn-block remove-social-btn red" type="button"><i class="fa fa-times"></i> Close</button></div></div>';
+            jQuery('.social-btn-container').append(copy_data);
+            jQuery('select').selectpicker();
+        });
 
-	jQuery(document).on('click','.remove-social-btn',function(){
-			jQuery(this).parents('.input-group').remove();
-	});
+        jQuery(document).on('click', '.remove-social-btn', function () {
+            jQuery(this).parents('.input-group').remove();
+        });
 
-	$('input[type="file"]').imageuploadify();
+        $('input[type="file"]').imageuploadify();
 
-	$('#input-tags').tagEditor({
-		placeholder: 'Enter tags ...',
-	});
-});
+        $('#input-tags').tagEditor({
+            placeholder: 'Enter tags ...',
+        });
+    });
 
 </script>
 

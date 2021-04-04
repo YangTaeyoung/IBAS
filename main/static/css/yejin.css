@@ -219,6 +219,8 @@
     justify-content: center;
     align-items: center;
     z-index: 9999;
+    overflow: auto;
+    
 ;
 }
 /* 쓰인 곳: 모달 배경div 밑, (실질적 모달부분)*/

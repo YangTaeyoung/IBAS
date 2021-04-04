@@ -19,4 +19,4 @@ git update-index --assume-unchanged IBAS/settings.py
 mysql.server start
 
 - 데이터베이스 복제
-mysqldump -uroot -pbigdata1156-- IBAS > IBAS.sql
+mysqldump -uroot -pwebproj3971-- IBAS > IBAS.sql

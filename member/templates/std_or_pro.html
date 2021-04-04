@@ -74,7 +74,7 @@
                         <!-- card-for-grid에 대한 내용은 std_or_pro.css에 정의되어 있음. -->
                         <div class="card-for-grid">
                             <!-- big-card에 대한 내용은 std_or_pro.css에 정의되어 있음. -->
-                            <div class="big-card" onclick="passAuth('2')">
+                            <div class="big-card" onclick="passRole('5')">
                                 <!-- card에 대한 내용은 std_or_pro.css에 정의되어 있음. -->
                                 <div class="card mb-4 ">
                                     <!-- card-body에 대한 내용은 std_or_pro.css에 정의되어 있음. -->
@@ -89,7 +89,7 @@
                                 </div>
                             </div>
                             <!-- big-card에 대한 내용은 std_or_pro.css에 정의되어 있음. -->
-                            <div class="big-card" onclick="passAuth('4')">
+                            <div class="big-card" onclick="passRole('6')">
                                 <!-- card에 대한 내용은 std_or_pro.css에 정의되어 있음. -->
                                 <div class="card mb-4 ">
                                     <!-- card-body에 대한 내용은 std_or_pro.css에 정의되어 있음. -->
@@ -114,7 +114,7 @@
 <!-- 구글에서 가져온 파라미터를 입부신청 페이지로 전송 -->
 <form id="hd_form" action="{% url 'join' %}" method="post">
     {% csrf_token %}
-    <input id="user_auth" type="hidden" name="user_auth"/>
+    <input id="user_role" type="hidden" name="user_role"/>
     <input type="hidden" name="email" value="{{ email }}"/>
     <input type="hidden" name="name" value="{{ name }}"/>
     <input type="hidden" name="pic" value="{{ pic }}"/>

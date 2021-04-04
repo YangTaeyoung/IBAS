@@ -60,12 +60,13 @@
                                         <!-- 게시글 속 사진 모음 -->
                                         <div class="widget widget_gallery gallery-grid-4 lightgallery">
                                             <ul>
+
                                                 {% for board_file in board_file_list %}
                                                     {% if forloop.counter < 4 %}
                                                         <li>
                                                             <span data-exthumbimage="/media/{{ board_file.board_file_path }}"
                                                                   data-src="/media/{{ board_file.board_file_path }}"
-                                                                  class="check-km " title="Light Gallery Grid 1">
+                                                                  class="check-km " title="{{ board_file.board_file_name}}">
                                                                 <a href="javascript:void(0);">
                                                                     <div class="dlab-post-thum act-detail-img-size">
                                                                         <img style="height: 190px"
@@ -80,7 +81,7 @@
                                                             <span data-exthumbimage="/media/{{ board_file.board_file_path }}"
                                                                   data-src="/media/{{ board_file.board_file_path }}"
                                                                   class="check-km act-detail-img-siz"
-                                                                  title="Light Gallery Grid 1">
+                                                                  title="{{ board_file.board_file_name}}">
                                                                 <a href="javascript:void(0);">
                                                                     <div class="dlab-post-thum "><img
                                                                             style="height: 190px"
@@ -101,7 +102,7 @@
                                                         <li style="display: none;">
                                                             <span data-exthumbimage="/media/{{ board_file.board_file_path }}"
                                                                   data-src="/media/{{ board_file.board_file_path }}"
-                                                                  class="check-km " title="Light Gallery Grid 1">
+                                                                  class="check-km " title="{{ board_file.board_file_name}}">
                                                                 <a href="javascript:void(0);">
                                                                     <div class="dlab-post-thum act-detail-img-size">
                                                                         <img style="height: 190px"

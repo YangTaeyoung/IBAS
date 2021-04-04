@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bank_chaerim.css' %}">
+    <script src="{% static 'js/bank_chaerim.js' %}"></script>
+    <div class="page-wraper">
+        <!-- 상단 제목부분 -->
+        <div class="page-content bg-white">
+            <!----------============= 상단 제목 시작 ================----------->
+            <!--제목을 감싸는 배경-->
+            <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"
+                 style=" background-image: url('{% static 'images/board_name_img.jpg' %}'); height: 350px">
+                <!-- 상단 제목을 클릭하면, 상위 게시판으로 이동 -->
+                <!-- (ex.자유게시판의 '용식이의 학식일기'글의 상세 페이지에서 상위 제목을 클릭하면, 자유게시판으로 이동) -->
+                <a href="{% url 'bank_support_board' %}">
+                    <div class="container clearfix">
+                        <div class="dlab-bnr-inr-entry">
+                            <!--제목-->
+                            <h1 class="text-white introduce-letter-spacing_5">예산지원신청</h1>
+                            <!--부제목-->
+                            <p class="introduce-margin-top_20">예산 지원을 신청하는 게시판입니다.</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <!----------============= 본문 시작 ================----------->
+            <div class="content-block">
+                <div class="section-full content-inner bg-white" style="padding-top: 50px">
+                    <div class="container">
+
+                        <!--필터 == 전체보기, 승인대기, 승인완료, 승인거절 중 선택-->
+                        <div class="listing-filter" style="border: none; padding-left: 0px">
+                            <div class="d-flex">
+                                <div class="mr-auto">
+                                    <ul class="filter m-b0">
+                                        <li>
+                                            <select>
+                                                <option>전체보기</option>
+                                                <option>승인대기</option>
+                                                <option>승인완료</option>
+                                                <option>승인거절</option>
+                                            </select>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <!--========== 오른쪽 게시글 리스트 부분 시작 ===========-->
+                            <!-- 게시글을 담는 테이블 -->
+                            <table class="table table-hover">
+                                <!-- 테이블의 제목(1행) -->
+                                <thead>
+                                <tr>
+                                    <th scope="col" style="text-align: center">no.</th>
+                                    <th scope="col" style="width: 500px; text-align: center">제목</th>
+                                    <th scope="col" style="text-align: center">작성자</th>
+                                    <th scope="col" style="text-align: center">작성일</th>
+                                    <th scope="col" style="text-align: center">상태</th>
+                                </tr>
+                                </thead>
+                                <!-- 끌고오는 게시글 파트 -->
+                                <tbody>
+                                <!-- 게시글 1 -->
+                                {% if bank_len == 0 %}
+                                    <td colspan="5" style="text-align: center"> 예산 지원 신청 게시글이 없습니다. </td>
+                                {% endif %}
+                                {% for bank in bank_list %}
+                                    <tr>
+                                        <!-- 게시글 번호 -->
+                                        <th scope="row" style="text-align: center">{{ forloop.counter }}</th>
+                                        <!-- 게시글 제목 -->
+                                        <td><a href="{% url 'bank_support_detail' bank_no=bank.bank_no %}">{{ bank.bank_title }}</a></td>
+                                        <!-- 게시글 작성자 -->
+                                        <td style="text-align: center">{{ bank.bank_used_user.user_name }}</td>
+                                        <!-- 게시글 작성일자 -->
+                                        <td style="text-align: center">{{ bank.bank_created|date:"Y-m-d" }}</td>
+                                        <!-- 상태 : 승인완료 -->
+                                        <td class="{% if bank.bank_apply.bank_apply_no == 1 %}bank_yet{% elif bank.bank_apply.bank_apply_no == 2 %}bank_pass{% elif bank.bank_apply.bank_apply_no == 3 %}bank_nopass{% endif %}">{{ bank.bank_apply.bank_apply_name }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <!--신청하기 버튼, 누르면 작성페이지로 이동-->
+                        <div class="extra-cell text-right" style="margin: 20px 20px 0px 0px">
+                            <a href="{% url 'bank_support_register' %}" class="site-button radius-xl m-l10">
+                                <i class="fa fa-plus m-r5"></i>
+                                신청하기
+                            </a>
+                        </div>
+
+                    <!--========== 페이지네이션 시작 ===========-->
+                    <!-- 1페이지에 15개 게시글 끌고오고, 게시글이 그보다 적으면, 페이지네이션 안보이게 처리 -->
+                    <div class="pagination-bx clearfix text-center">
+                        <ul class="pagination">
+                            {% if bank_list.has_previous %}
+                                <li class="previous"><a href="?page=1"><i class="fa fa-arrow-left"></i></a>
+                                </li>
+                                <li>
+                                    <a href="?page={{ bank_list.previous_page_number }}"> {{ bank_list.previous_page_number }}</a>
+                                </li>
+                            {% endif %}
+                            <li><a href="javascript:void(0)">{{ bank_list.number }}</a></li>
+                            {% if bank_list.has_next %}
+                                <li>
+                                    <a href="?page={{ bank_list.next_page_number }}"> {{ bank_list.next_page_number }}</a>
+                                </li>
+                                <li class="next"><a href="?page={{ bank_list.paginator.num_pages }}"><i
+                                        class="fa fa-arrow-right"></i></a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    <!--========== 페이지네이션 끝 ===========-->
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 상단으로 한번에 올라가는 버튼 -->
+        <button class="scroltop fa fa-chevron-up" style="display: none;"></button>
+    </div>
+{% endblock %}

@@ -39,13 +39,20 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     # DB 관련 앱
     'DB',
     # 유저 관련 앱
     'member',
     # 메인 관련 앱
     'main',
+    # 회계 관련 앱
+    'bank',
+    # 게시판 관련 앱
     'board',
+    # 내 정보 관련 앱
+    'my_info',
+    # 회원 관리 관련 앱
     'staff',
     # 소셜 로그인 패키지: allauth 관련
     'allauth',
@@ -75,7 +82,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             BASE_DIR / 'templates',
-            'C:/dev/Django/IBAS/templates/',
+            '/home/ibas/Django/IBAS/templates',
         ]
         ,
         'APP_DIRS': True,
@@ -99,9 +106,9 @@ WSGI_APPLICATION = 'IBAS.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'IBAS_LOCAL',
+        'NAME': 'IBAS',
         'USER': 'root',
-        'PASSWORD': '1234',
+        'PASSWORD': 'bigdata1156--',
         'HOST': 'localhost',
         'PORT': '3306',
     }
@@ -150,8 +157,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(ROOT_DIR, '.static_root')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
-    'C:/dev/Django/IBAS/static/'
-
+    '/home/ibas/Django/IBAS/static/',
 ]
 # social 로그인 패키지 설정
 AUTHENTICATION_BACKENDS = (
