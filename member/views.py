@@ -74,7 +74,7 @@ def join(request): # 회원 가입 페이지를 랜더링 하는 함수
         "email": request.POST.get("email"), #이메일
         "name": request.POST.get("name"), #이름
         "pic": request.POST.get("pic"), #프로필 사진
-        "user_auth": request.POST.get("user_auth"), # 회원 권한
+        "user_role": request.POST.get("user_role"), # 회원 역할 (학생 or 교수)
         "stu_list": stu_list, # 학번 리스트
         "quest_list": QuestForm.objects.all(), # 질문 양식
         "major_list": MajorInfo.objects.all() # 전공 리스트(전공 검색을 위해)
@@ -117,7 +117,6 @@ def quest_chk(request):
         user_grade = request.POST.get("user_grade")
         user_gen = request.POST.get("user_gen")
         user_phone = request.POST.get("user_phone")
-
         user_pic = request.POST.get("user_pic")
         if user_pic is not None:
             urlretrieve(user_pic, "/home/ibas/Django/IBAS/media/member/" + user_stu + ".jpg")
@@ -138,7 +137,7 @@ def quest_chk(request):
         # 사용자 정보를 DB에 저장
         user.save()
 
-        if user_auth == "4":  # 오직 일반 학생으로 가입했을 때만
+        if user_role == "5":  # 오직 일반 학생으로 가입했을 때만
             # 모든 질문 리스트를 뽑아옴: 질문이 몇번까지 있는지 알아야 답변을 몇번까지 했는지 알기 때문
             quest_list = QuestForm.objects.all()
 

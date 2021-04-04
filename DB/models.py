@@ -380,7 +380,6 @@ class User(models.Model):
     user_joined = models.DateTimeField(db_column='USER_JOINED', auto_now_add=True)  # Field name made lowercase.
     user_grade = models.IntegerField(db_column='USER_GRADE')  # Field name made lowercase.
     user_gen = models.IntegerField(db_column='USER_GEN')  # Field name made lowercase.
-    is_activated = models.IntegerField(db_column='IS_ACTIVATED', default=0)  # Field name made lowercase.
     user_phone = models.CharField(db_column='USER_PHONE', unique=True, max_length=15)  # Field name made lowercase.
 
     class Meta:
@@ -402,7 +401,6 @@ class UserDeleteFile(models.Model):
     user_stu = models.ForeignKey(User, on_delete=models.CASCADE, db_column='USER_STU')  # Field name made lowercase.
     user_delete_file_path = models.CharField(db_column='USER_DELETE_FILE_PATH',
                                              max_length=1000)  # Field name made lowercase.
-
     class Meta:
         managed = False
         db_table = 'USER_DELETE_FILE'
