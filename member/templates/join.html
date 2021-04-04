@@ -113,14 +113,26 @@
             if (stuIsNotOK !== 0 || phoneIsNotOK !== 0) // 학번과 핸드폰 중 하나라도 중복이 있는 경우
             {
                 alert("회원 입력 양식을 다시 한번 확인하세요")
-            }
-            else // 모두 정상인 경우
+            } else // 모두 정상인 경우
             {
                 document.getElementById("btn-next").click(); // 보이지 않는 submit 버튼을 클릭하도록 설정.
             }
 
         }
+
+        function maxLengthCheck(object) {
+            if (object.value.length > object.maxLength) {
+                object.value = object.value.slice(0, object.maxLength);
+            }
+        }
     </script>
+    <style>
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    </style>
 </head>
 <body id="bg">
 <div id="loading-area"></div>
@@ -148,7 +160,7 @@
 
                         <!-- 회원 가입 입력 폼 시작 -->
                         <form id="join-form" action="
-                                {% if user_role == "5" %}{% url 'join_chk' %}{% else %}{% url 'quest_chk' %}{% endif %}"
+                                {% if user_role == "6" %}{% url 'join_chk' %}{% else %}{% url 'quest_chk' %}{% endif %}"
                               method="post">
                             <!-- 회원 가입 확인 함수:join_chk()로 전송 -->
                             <!--POST전송을 위한 CSRF 토큰-->
@@ -156,7 +168,7 @@
                             <!-- 바로 사용하지 못하는 것들은 사전 설정함. -->
                             <!--사전 설정-->
                             <input type="hidden" id="user_token" name="user_token" value="{{ token }}"/>
-                            {% if user_role == 6 %} <!-- 교수일 경우 -->
+                            {% if user_role == "5" %} <!-- 교수일 경우 -->
                                 <input type="hidden" id="user_auth" name="user_auth" value="1"/> <!-- 계정을 바로 활성화 시킴 -->
                             {% else %} <!-- 학생일 경우 -->
                                 <input type="hidden" id="user_auth" name="user_auth" value="3"/> <!-- 계정을 비활성화 시킴 -->
@@ -214,7 +226,7 @@
                                     <!-- 학년, 학번 컨테이너 -->
                                     <div class="form-container-flex form-group mb-0">
                                         <!--학년 컨테이너-->
-                                        {% if user_role == "5" %}
+                                        {% if user_role == "6" %}
                                             <div class="form-item-flex-std-grade">
                                                 <select name="user_grade" required="required">
                                                     <option value="1">
@@ -238,24 +250,25 @@
                                         <div class="form-group form-item-flex-std-no">
                                             <input
                                                     id="user_stu"
-                                                    type="text"
+                                                    type="number"
                                                     name="user_stu"
                                                     class="form-control"
                                                     required="required"
-                                                    {% if user_role == "5" %}
+                                                    {% if user_role == "6" %}
                                                     placeholder="학번"
                                                     maxlength="8"
                                                     {% else %}
                                                     placeholder="교수번호"
                                                     maxlength="6"
                                                     {% endif %}
+                                                    oninput="maxLengthCheck(this)"
                                                     onfocusout="stu_check()"
                                                     onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"
                                             />
                                         </div>
 
                                     </div>
-                                    <p id="error_text_stu" class="error-text">입력하신 {% if user_role == "5" %}
+                                    <p id="error_text_stu" class="error-text">입력하신 {% if user_role == "6" %}
                                         학번이{% else %}교수번호가{% endif %} 이미 가입되어 있습니다.</p>
                                     <!-- 전공 input -->
                                     <div class="form-container-flex form-group mb-0">
