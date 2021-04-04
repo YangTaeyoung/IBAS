@@ -38,14 +38,18 @@ def introduce(request):
 # 동아리 활동 게시판
 def activity(request):
     # 최신순으로 정렬하고, 1:M 관계로 가져오기 위해 prefetch_related 함수 사용
-    board_list = Board.objects.filter(board_type_no__board_type_no=4).order_by('-board_created').prefetch_related("boardfile_set")
+    board_list = Board.objects.filter(board_type_no__board_type_no=4).order_by('-board_created').prefetch_related(
+        "boardfile_set")
     # board 에서 board_type_no = 5 인 것만 들고옴. 최신 순으로 보여주는 코드는 order_by
     # board_type_no = 5 <- 동아리게시판에 관련한 글만 가져오기 위해서 만들어짐
     paginator = Paginator(board_list, 6)  # 페이지네이터로 10개씩 보이게끔. 나중에 수정하면 됌
     page = request.GET.get('page')  # 페이지 이름 ㅇㅇ 여기서 변경하면 됌
     item = paginator.get_page(page)
-
-    return render(request, 'activity_list.html', {'board_list': item})
+    context = {
+        'board_list': item,
+        "board_len": len(board_list)
+    }
+    return render(request, 'activity_list.html', context)
 
 
 # 동아리 활동 게시판 상세보기
