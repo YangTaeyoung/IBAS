@@ -424,9 +424,9 @@
                                                         <tr>
                                                             <td scope="row">
                                                                 <div class="input-block">
-                                                                    <input id="check" type="checkbox" name="user_stu_list[]" value="{{ exist_user.user_stu }}">
+                                                                    <input id="check_{{ exist_user.user_stu }}" type="checkbox" name="user_stu_list[]" value="{{ exist_user.user_stu }}">
                                                                     <!-- my_info_label_margin는 my_info_cr.css에 정의되어 있음.  -->
-                                                                    <label for="check"
+                                                                    <label for="check_{{ exist_user.user_stu }}"
                                                                            class="my_info_label_margin"></label>
                                                                 </div>
                                                             </td>
