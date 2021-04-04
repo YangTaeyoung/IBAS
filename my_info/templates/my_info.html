@@ -425,9 +425,10 @@
                                                     </select>
                                                 </div>
                                                 <!-- my_info_mem_select는 my_info_cr.css에 정의되어 있음.  -->
-                                                <div class="my_info_mem_select m-b20">
-                                                    <select>
-                                                        <option>역할 부여</option>
+                                                <!-- CheckSelect()는 my_info.js에 정의되어 있음.  -->
+                                                <div class="my_info_mem_select m-b20" onclick="CheckSelect()">
+                                                    <select id="my_info_select">
+                                                        <option id="default_user_role">역할 부여</option>
                                                         <option>회장</option>
                                                         <option>부회장</option>
                                                         <option>총무</option>
