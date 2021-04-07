@@ -12,6 +12,7 @@ urlpatterns = [
    # path('delete/detail/', views.member_delete_detail, name='member_delete_detail'),
    # path('delete/register/', views.member_delete_register, name='member_delete_register'),
     path('member/applications/', views.member_applications, name='member_applications'),
+    path('member/aor', views.member_aor, name="member_aor")
 
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

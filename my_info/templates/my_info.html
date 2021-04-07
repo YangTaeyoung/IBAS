@@ -312,7 +312,11 @@
                                                             <td>{{ new_user.user_major.major_name }}</td>
                                                             <!-- 지원서보기 -->
                                                             <td>
-                                                                <a href="#">지원서보기 ▶</a>
+                                                                <a href="#" onclick="document.getElementById('new_user_application_{{ new_user.user_stu }}').submit()">지원서보기 ▶</a>
+                                                                <form id="new_user_application_{{ new_user.user_stu }}" action="{% url 'member_applications' %}" method="post" style="display: none">
+                                                                    {% csrf_token %}
+                                                                    <input type="hidden" name="user_stu" value="{{ new_user.user_stu }}">
+                                                                </form>
                                                             </td>
                                                         </tr>
                                                     {% endfor %}

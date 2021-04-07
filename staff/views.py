@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, reverse, redirect
 from allauth.socialaccount.models import SocialAccount  # 소셜 계정 DB, socialaccount_socialaccount 테이블을 사용하기 위함.
 from DB.models import AuthUser, User, ChiefCarrier, UserRole, Board, BoardFile, \
-    BoardType, Comment, History, UserAuth  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
+    BoardType, Comment, History, UserAuth, QuestForm, Answer  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
 from django.db.models import QuerySet
 from member import session
 from django.core.paginator import Paginator
@@ -10,6 +10,8 @@ from django.conf import settings
 from IBAS.user_controller import is_chief_exist, is_sub_chief_exist, get_sub_chief, get_chief
 import os
 from IBAS.file_controller import get_filename, get_filename_with_ext
+from django.core.mail import send_mail
+from django.conf import settings
 
 
 # Create your views here.
@@ -34,7 +36,8 @@ def staff_member_update(request):
         if (user_role == 1 and len(user_stu_list) > 1) or (
                 user_role == 2 and len(user_stu_list) > 1):  # 회장이나 부회장으로 바꾸려고 하면서 다수의 인원을 선택했을 경우.
             return redirect(reverse("my_info"))  # 내 정보 페이지로 이동.
-        elif user_role == 1 and len(user_stu_list) == 1 or (user_role == 2 and len(user_stu_list) == 1): # 회장 위임의 조건을 충족한 경우. (한명만 골랐을 때)
+        elif user_role == 1 and len(user_stu_list) == 1 or (
+                user_role == 2 and len(user_stu_list) == 1):  # 회장 위임의 조건을 충족한 경우. (한명만 골랐을 때)
             user = User.objects.get(pk=user_stu_list[0])
             user.user_role = UserRole.objects.get(pk=user_role)
             user.user_auth = UserAuth.objects.get(pk=1)
@@ -66,8 +69,30 @@ def member_delete_list(request):
 
 
 def member_applications(request):
-    context = {}
+    user = User.objects.get(pk=request.POST.get('user_stu'))
+
+    context = {
+        "user": user,
+        "user_answer_list": Answer.objects.filter(answer_user=user).select_related('answer_quest')
+    }
     return render(request, 'member_applications.html', context)
+
+
+def member_aor(request):
+    if request.method == "POST":
+        user = User.objects.get(pk=request.POST.get("user_stu"))
+        if request.POST.get("apply") == "1":
+            user.user_auth = UserAuth.objects.get(pk=2)
+            send_mail(subject="IBAS 지원 최종 합격 통보", message="축하합니다.", from_email=settings.EMAIL_HOST_USER,
+                      recipient_list=["apxkf9632@naver.com"])
+            user.save()
+            return redirect(reverse("my_info"))
+        else:
+            # 이메일 보내는 로직이 추가로 필요함.
+            send_mail(subject="IBAS 지원 최종 불합격 통보", message="유감스럽습니다.", from_email=settings.EMAIL_HOST_USER,
+                      recipient_list=["apxkf9632@naver.com"])
+            user.delete()
+            return redirect(reverse("my_info"))
 
 
 def member_delete_register(request):
