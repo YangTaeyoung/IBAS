@@ -170,13 +170,13 @@ class ContestBoard(models.Model):
         managed = False
         db_table = 'CONTEST_BOARD'
 
-
+def contest_file_upload_to(instance, filename):
+    return f'board/contest/{instance.contest_no.contest_no}/{filename}'
 class ContestFile(models.Model):
     contest_file_id = models.AutoField(db_column='CONTEST_FILE_ID', primary_key=True)  # Field name made lowercase.
-    contest_no = models.ForeignKey(ContestBoard, on_delete=models.CASCADE,
-                                   db_column='CONTEST_NO')  # Field name made lowercase.
-    contest_file_path = models.CharField(db_column='CONTEST_FILE_PATH', max_length=1000)  # Field name made lowercase.
-
+    contest_no = models.ForeignKey(ContestBoard, on_delete=models.CASCADE, db_column='CONTEST_NO')  # Field name made lowercase.
+    contest_file_path = models.ImageField(db_column='CONTEST_FILE_PATH', upload_to=contest_file_upload_to)  # Field name made lowercase.
+    contest_file_name = models.CharField(db_column='CONTEST_FILE_NAME', max_length=500)
     class Meta:
         managed = False
         db_table = 'CONTEST_FILE'
