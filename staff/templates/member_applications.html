@@ -22,27 +22,15 @@
         />
         <link rel="stylesheet" href="{% static 'plugins/tag-editor/jquery.tag-editor.css' %}"/>
         <script>
-            function goApply() {
-                if (confirm("예산 지원 요청을 승인하시겠습니까?")) {
-                    alert("예산지원 요청이 승인 되었습니다. \n지급 후 지급 완료를 누를 시 회계에 반영됩니다.");
-                    document.getElementById("form-bank-support-apply").submit();
+            function member_pass() {
+                if (confirm("지원자를 합격시키겠습니까?")) {
+                    {#alert("");#}
+                    document.getElementById("form-apply").submit();
 
                 }
             }
 
-            function goDeposit() {
-                if (confirm("예산 지급을 완료하시겠습니까?")) {
-                    alert("예산 지급이 완료되었습니다.");
-                    document.getElementById("form-bank-support-deposit").submit();
-                }
-            }
 
-            function goDelete() {
-                if (confirm("정말 삭제하시겠습니까?")) {
-                    alert("삭제되었습니다.");
-                    document.getElementById("form-bank-support-delete").submit();
-                }
-            }
         </script>
     </head>
 
@@ -54,13 +42,13 @@
             <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"
                  style=" background-image: url('{% static 'images/board_name_img.jpg' %}'); height: 350px">
                 <!--상단 제목부분을 누르면 해당 게시판 목록으로 이동-->
-                <a href="{% url 'bank_support_board' %}">
+                <a href="#">
                     <div class="container clearfix">
                         <div class="dlab-bnr-inr-entry">
                             <!--제목-->
-                            <h1 class="text-white introduce-letter-spacing_5">예산지원신청</h1>
+                            <h1 class="text-white introduce-letter-spacing_5">지원서</h1>
                             <!--부제목-->
-                            <p class="introduce-margin-top_20">예산 지원을 신청하는 게시판입니다.</p>
+{#                            <p class="introduce-margin-top_20">신입부원 지원서를 볼 수 있는 게시판입니다. </p>#}
                         </div>
                     </div>
                 </a>
@@ -72,19 +60,19 @@
                     <div class="container">
                         <!--=====================-->
                         <!--승인을 대기 중일 때 뜨는 알람-->
-                        {#                        {% if bank.bank_apply.bank_apply_no == 1 %}#}
+                        {#                        {% if %}#}
                         <div class="alert alert-secondary" role="alert" style="text-align: center">
                             <i>승인대기중</i>
                         </div>
-                        {#                        {% elif bank.bank_apply.bank_apply_no == 2 %}#}
-                        <!--승인 완료 시 뜨는 알람-->
+                        {#                        {% elif  %}#}
+                        <!--합격 시 뜨는 알람-->
                         <div class="alert alert-success" role="alert" style="text-align: center">
-                            <i>승인완료</i>
+                            <i>합격</i>
                         </div>
-                        {#                        {% elif bank.bank_apply.bank_apply_no == 3 %}#}
-                        <!--승인 거절 시 뜨는 알람, 거절 사유 입력하면 같이 뜨게 만들기-->
+                        {#                        {% elif  %}#}
+                        <!--불합격 시 뜨는 알람, 거절 사유 입력하면 같이 뜨게 만들기-->
                         <div class="alert alert-danger" role="alert" style="text-align: center">
-                            <i>승인거절 ( 거절사유 : {{ bank.bank_reject_reason }} )</i>
+                            <i>불합격 ( 불합격 사유 : )</i>
                         </div>
 
                         <!--====================================지원자 이름 시작==============================================-->
@@ -107,7 +95,6 @@
                             <div class="content-body">
                                 <div class="form-group">
                                     <a>2021-03-03</a>
-                                    {#                                    <a>{{ bank.bank_created|date:"Y-m-d h:i" }}</a>#}
                                 </div>
                             </div>
                         </div>
@@ -127,7 +114,7 @@
                         <!--====================================학년 시작==============================================-->
                         <div class="content-box">
                             <div class="content-header">
-                                <h3 class="title">3학년</h3>
+                                <h3 class="title">학년</h3>
                             </div>
                             <div class="content-body">
                                 <div class="form-group">
@@ -245,50 +232,23 @@
                         </div>
                         <!--====================================질문에 대한 답변 4 끝=============================================-->
 
-                        <!-- 게시글 삭제 및 수정 div -->
-                        {#                        {% if request.session.user_stu == bank.bank_used_user.user_stu %}#}
-                        <div class="extra-cell text-right">
-                            <!-- 게시글 수정 버튼 -->
-                            <a href="#"
-                               onclick="document.getElementById('form-bank-support-update').submit()"
-                               class="site-button radius-xl m-l10"><i
-                                    class="fa fa-pencil m-r5"></i>
-                                게시글 수정</a>
-                            <!-- 게시글 삭제 버튼 -->
-                            <form id="form-bank-support-update" action="{% url 'bank_support_update' %}" method="post"
-                                  style="display: none">
-                                {% csrf_token %}
-                                <input type="hidden" name="is_move" value="1"/>
-                                <input type="hidden" name="bank_no" value="{{ bank.bank_no }}"/>
-                            </form>
-                            {#                        {% endif %}#}
-                            {#                        {% if request.session.user_stu == bank.bank_used_user.user_stu or request.session.user_role == 4 %}#}
-                            <a href="#" onclick="goDelete()"
-                               class="site-button red radius-xl m-l10"><i
-                                    class="fa fa-trash m-r5"></i>
-                                게시글 삭제</a>
-                        </div>
-                        <form id="form-bank-support-delete" action="{% url 'bank_support_delete' %}" method="post"
-                              style="display: none">
-                            {#                                {% csrf_token %}#}
-                            <input type="hidden" name="bank_no" value="{{ bank.bank_no }}"/>
-                        </form>
                         {#                        {% endif %}#}
                         <!--=======승인/거절 버튼======-->
                         <div style="display: flex; justify-content: center; ">
                             {#                            {% if request.session.user_role == 4 %}#}
                             <!--승인-->
-                            {#                                {% if bank.bank_apply.bank_apply_no == 1 %}#}
+                            {#                                {% if %}#}
                             <button type="button" class="btn btn-outline-success btn-lg"
                                     style="width: 200px; font-weight: bold"
-                                    onclick="goApply()">
+                                    onclick="member_pass()">
                                 승인
                             </button>
-                            <form id="form-bank-support-apply" action="{% url 'bank_support_aor' %}"
+                            <form id="form-apply" action="#"
                                   method="post" style="display: none">
                                 {#                                        {% csrf_token %}#}
-                                <input type="hidden" name="bank_no" value="{{ bank.bank_no }}"/>
-                                <input type="hidden" name="bank_apply_no" value="2"/>
+{#                                승인 눌렀을 때 파라미터 옮기기#}
+                                <input type="hidden" name="#" value="#"/>
+                                <input type="hidden" name="#" value="#"/>
                             </form>
                             <!--거절-->
                             <button type="button" class="btn btn-outline-danger btn-lg"
@@ -298,19 +258,6 @@
                                     class="site-button gray">
                                 거절
                             </button>
-                            {#                                {% elif bank.bank_apply.bank_apply_no == 2 %}#}
-                            <!--지급완료, 승인버튼 누르기 전에는 안나오고, 승인버튼 누르면 승인,거절 버튼은 없어지고 이 버튼만 보이게 함-->
-                            <button type="button" class="btn btn-outline-primary btn-lg"
-                                    style="width: 200px; font-weight: bold"
-                                    onclick="goDeposit()">지급완료
-                            </button>
-                            <form id="form-bank-support-deposit" action="{% url 'bank_support_aor' %}"
-                                  method="post">
-                                {#                                        {% csrf_token %}#}
-                                <input type="hidden" name="bank_no" value="{{ bank.bank_no }}"/>
-                                <input type="hidden" name="bank_apply_no" value="4"/>
-                            </form>
-                            {#                                {% endif %}#}
                             {#                            {% endif %}#}
                         </div>
                         <!-- 거절 버튼 누르면 나오는 창 -->
@@ -319,7 +266,7 @@
                             <div class="modal-dialog " role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="FavoriteModalLongTitle">승인거절 사유</h5>
+                                        <h5 class="modal-title" id="FavoriteModalLongTitle">불합격 사유</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true"><i class="la la-close"></i></span>
                                         </button>
@@ -328,17 +275,17 @@
                                         <div class="tab-content nav">
                                             <div id="login" class="tab-pane active"
                                                  style="margin-bottom: -25px; margin-top: 10px">
-                                                <form id="form-bank-support-reject"
-                                                      action="{% url 'bank_support_aor' %}" class="dlab-form"
+                                                <form id="form-member-reject"
+                                                      action="#" class="dlab-form"
                                                       method="post">
                                                     <!--승인 거절 사유 입력창-->
-                                                    {% csrf_token %}
-                                                    <input type="hidden" name="bank_no" value="{{ bank.bank_no }}">
-                                                    <input type="hidden" name="bank_apply_no" value="3">
+{#                                                    {% csrf_token %}#}
+                                                    <input type="hidden" name="" value="">
+                                                    <input type="hidden" name="" value="">
                                                     <div class="form-group">
                                                         <input class="form-control"
-                                                               name="bank_reject_reason"
-                                                               placeholder="승인거절 사유를 입력해주세요"
+                                                               name=""
+                                                               placeholder="불합격 사유를 입력해주세요"
                                                                type="text"/>
                                                     </div>
                                                     <!--거절버튼-->
