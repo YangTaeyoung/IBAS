@@ -105,8 +105,11 @@ def member_aor(request):
 
             send_mail(subject=mail_title, message=mail_messsage, from_email=settings.EMAIL_HOST_USER,
                       recipient_list=[user.user_email])
-            os.remove(settings.MEDIA_ROOT+"/"+user.user_pic)
-            os.rmdir(settings.MEDIA_ROOT+"/"+user.user_stu)
+            try:
+                os.remove(settings.MEDIA_ROOT+"/"+str(user.user_pic))
+                os.rmdir(settings.MEDIA_ROOT+"/"+str(user.user_stu))
+            except FileNotFoundError:
+                pass
             user.delete()
             return redirect(reverse("my_info"))
     return redirect(reverse("index"))
