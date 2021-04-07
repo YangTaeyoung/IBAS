@@ -28,6 +28,11 @@
                 }
             }
 
+            function member_nopass() {
+                if (confirm("지원자를 탈락시키겠습니까?\n모든 DB에서 해당 지원자에 대한 기록이 사라집니다.")) {
+                    document.getElementById("form-deny").submit();
+                }
+            }
 
         </script>
     </head>
@@ -155,8 +160,7 @@
                                     onclick="member_pass()">
                                 승인
                             </button>
-                            <form id="form-apply" action="#"
-                                  method="post" style="display: none">
+                            <form id="form-apply" action="{% url 'member_aor' %}" method="post" style="display: none">
                                 {% csrf_token %}
                                 <input type="hidden" name="user_stu" value="{{ user.user_stu }}"/>
                                 <input type="hidden" name="apply" value="1"/>
@@ -164,53 +168,16 @@
                             <!--거절-->
                             <button type="button" class="btn btn-outline-danger btn-lg "
                                     style="width: 200px; margin-left: 10px; font-weight: bold"
-                                    onclick="return confirm('지원자를 탈락시키겠습니까?')"
+                                    onclick="member_nopass()"
                                     href="javascript:void(0);" data-toggle="modal" data-target="#favorite">
                                 거절
                             </button>
+                            <form id="form-deny" action="{% url 'member_aor' %}" method="post" style="display: none">
+                                {% csrf_token %}
+                                <input type="hidden" name="user_stu" value="{{ user.user_stu }}">
+                                <input type="hidden" name="apply" value="2"/>
+                            </form>
                         </div>
-                        <!-- 거절 버튼 누르면 나오는 창 -->
-                        <div class="modal fade modal-bx-info" id="favorite" tabindex="-1" role="dialog"
-                             aria-labelledby="FavoriteModalLongTitle" aria-hidden="true">
-                            <div class="modal-dialog " role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="FavoriteModalLongTitle">불합격 사유</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true"><i class="la la-close"></i></span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="tab-content nav">
-                                            <div id="login" class="tab-pane active"
-                                                 style="margin-bottom: -25px; margin-top: 10px">
-                                                <form id="form-member-reject"
-                                                      action="{% url 'member_aor' %}" class="dlab-form"
-                                                      method="post">
-                                                    <!--승인 거절 사유 입력창-->
-                                                    {% csrf_token %}
-                                                    <input type="hidden" name="user_stu" value="{{ user.user_stu }}">
-                                                    <input type="hidden" name="apply" value="2">
-                                                    <div class="form-group">
-                                                        <input class="form-control"
-                                                               name="reject_reason"
-                                                               placeholder="불합격 사유를 입력해주세요"
-                                                               type="text"/>
-                                                    </div>
-                                                    <!--거절버튼-->
-                                                    <div class="form-group">
-                                                        <button type="submit" class="site-button btn-block button-md"
-                                                                onclick="alert('승인이 거절되었습니다')">입력
-                                                        </button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- 거절 버튼 누르면 나오는 창 끝 -->
 
                     </div>
                 </div>

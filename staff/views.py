@@ -81,18 +81,33 @@ def member_applications(request):
 def member_aor(request):
     if request.method == "POST":
         user = User.objects.get(pk=request.POST.get("user_stu"))
-        if request.POST.get("apply") == "1":
-            user.user_auth = UserAuth.objects.get(pk=2)
-            send_mail(subject="IBAS 지원 최종 합격 통보", message="축하합니다.", from_email=settings.EMAIL_HOST_USER,
-                      recipient_list=["apxkf9632@naver.com"])
+        apply = int(request.POST.get("apply"))
+        if apply == 1:
+            # 합격 통보 이메일
+            mail_title = "[IBAS] 축하합니다. " + user.user_name + "님 동아리에 입부되셨습니다."
+            mail_messsage = "안녕하세요. IBAS(Inha Bigdata Analysts Society)입니다.\n 저희동아리에 지원해주셔서 정말 감사드립니다.\nIBAS를 통해 많은 " \
+                            "지식을 함양하고, 많은 사람과 교류하시길 바랍니다. \nIBAS는 언제나 " + user.user_name + "님의 발전을 응원하겠습니다. " \
+                            "\n\n동아리에 지원해주셔서 다시 한 번 감사드립니다. IBAS에 대해 더 많은 정보를 얻고 싶다면 아래 홈페이지를 방문해주세요" \
+                            " \n\nIBAS 홈페이지 링크: http://www.inhabas.com"
+            User.user_auth = UserAuth.objects.get(pk=2)
+            send_mail(subject=mail_title, message=mail_messsage, from_email=settings.EMAIL_HOST_USER,
+                      recipient_list=[user.user_email])
             user.save()
             return redirect(reverse("my_info"))
         else:
-            # 이메일 보내는 로직이 추가로 필요함.
-            send_mail(subject="IBAS 지원 최종 불합격 통보", message="유감스럽습니다.", from_email=settings.EMAIL_HOST_USER,
-                      recipient_list=["apxkf9632@naver.com"])
+            # 불합격 이메일 통보
+            mail_title = "[IBAS]" + user.user_name + "님의 입부 신청 결과를 알립니다."
+            mail_messsage = "안녕하세요. IBAS(Inha Bigdata Analysts Society)입니다." \
+                            "\n 저희동아리에 지원해주셔서 정말 감사드립니다. " \
+                            "\n안타깝게도, 내부회의 결과," + user.user_name + "님은 저희 동아리와 함께 갈 수 없게 되었습니다." \
+                            "\n\n저희 동아리에 관심을 가져주셔서 정말 감사합니다. 앞으로 " + user.user_name + \
+                            "님의 지속적인 발전을 응원하겠습니다. \n감사합니다. -IBAS-"
+
+            send_mail(subject=mail_title, message=mail_messsage, from_email=settings.EMAIL_HOST_USER,
+                      recipient_list=[user.user_email])
             user.delete()
             return redirect(reverse("my_info"))
+    return redirect(reverse("index"))
 
 
 def member_delete_register(request):
