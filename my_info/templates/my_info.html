@@ -299,6 +299,9 @@
                                                     <!-- 신입부원 관리 테이블 내용 시작 -->
                                                     <tbody>
                                                     <!-- =========================== 여기부터 복붙 ============================== -->
+                                                    {% if new_user_len == 0 %}
+                                                        <td colspan="6" style="text-align: center"> 입부 신청 대기중인 회원이 없습니다.</td>
+                                                    {% endif %}
                                                     {% for new_user in new_user_list %}
                                                         <tr>
                                                             <th>{{ forloop.counter }}</th>
@@ -418,27 +421,21 @@
                                                             <tr>
                                                                 <!-- my_info_width는 my_info_cr.css에 정의되어 있음.  -->
                                                                 <th class="border-top-0 my_info_width_50"></th>
-                                                                <th class="border-top-0 my_info_width_50"
-                                                                    scope="col"></th>
-                                                                <th class="border-top-0 my_info_width_100" scope="col">
-                                                                    이름
-                                                                </th>
-                                                                <th class="border-top-0 my_info_width_150" scope="col">
-                                                                    학번
-                                                                </th>
+                                                                <th class="border-top-0 my_info_width_50" scope="col"></th>
+                                                                <th class="border-top-0 my_info_width_100" scope="col">이름</th>
+                                                                <th class="border-top-0 my_info_width_150" scope="col">학번</th>
                                                                 <th class="border-top-0" scope="col">학과</th>
-                                                                <th class="border-top-0 my_info_width_170" scope="col">
-                                                                    권한
-                                                                </th>
-                                                                <th class="border-top-0 my_info_width_170" scope="col">
-                                                                    역할
-                                                                </th>
+                                                                <th class="border-top-0 my_info_width_170" scope="col">권한</th>
+                                                                <th class="border-top-0 my_info_width_170" scope="col">역할</th>
                                                                 <th class="border-top-0 my_info_width_70"></th>
                                                             </tr>
                                                             </thead>
                                                             <!-- 댓글 내용 테이블 -->
                                                             <tbody>
                                                             <!-- ===========================여기부터 복붙============================== -->
+                                                            {% if exist_user_len == 0 %}
+                                                                <td colspan="8" style="text-align: center">회원 리스트에 회원이 존재하지 않습니다.</td>
+                                                            {% endif %}
                                                             {% for exist_user in exist_user_list %}
                                                                 <tr>
                                                                     <td scope="row">

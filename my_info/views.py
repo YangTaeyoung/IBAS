@@ -25,7 +25,9 @@ def my_info(request):
             "my_bank_list": my_bank_list,
             "my_info": my_info,
             "exist_user_list": exist_user_items,
+            "exist_user_len": len(exist_user_list),
             "new_user_list": new_user_items,
+            "new_user_len":len(new_user_list),
             "auth_list": auth_list,
             "role_list": role_list
         }
