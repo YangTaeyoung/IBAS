@@ -83,9 +83,11 @@
                     <!--예산신청내역 메뉴버튼,Back : 모두에게 보이게 수정-->
                     <li><a data-toggle="tab" href="#listing_mybank"><i class="la la-money"></i><span>예산신청내역</span></a>
                     </li>
-                    <!--회원관리 메뉴버튼,Back : 회장단만 보이게 수정-->
-                    <li><a data-toggle="tab" href="#listing_user_setting"><i
-                            class="la la-users"></i><span>회원관리</span></a></li>
+                    {% if request.session.user_role <= 3 %}
+                        <!--회원관리 메뉴버튼,Back : 회장단만 보이게 수정-->
+                        <li><a data-toggle="tab" href="#listing_user_setting"><i
+                                class="la la-users"></i><span>회원관리</span></a></li>
+                    {% endif %}
                     <!--내정보 메뉴버튼,Back : 모두에게 보이게 수정-->
                     <li><a data-toggle="tab" href="#listing_my_info"><i class="la la-user"></i><span>내정보</span></a></li>
                 </ul>
@@ -267,190 +269,50 @@
                         </div>
                     </div>
                     <!--===== 내가 신청한 예산내역 코드 끝 =====-->
-
-                    <!--회원관리-->
-                    <div id="listing_user_setting" class="tab-pane">
-                        <div class="row">
-                            <div class="col-xl-12">
-                                <div class="content-box">
-                                    <!-- 제목 div -->
-                                    <div class="content-header">
-                                        <h3 class="title"><i class="la la-users m-r5"></i>신입부원 관리</h3>
-                                    </div>
-                                    <!-- 신입부원 관리 콘텐츠 시작 -->
-                                    <div class="content-body">
-                                        <div class="myinfo-table-padding">
-                                            <!-- 신입부원 관리 테이블 시작 -->
-                                            <table class="table">
-                                                <thead>
-                                                <!-- 테이블 1행: 제목 -->
-                                                <tr>
-                                                    <!-- my_info_width는 my_info_cr.css에 정의되어 있음.  -->
-                                                    <th class="border-top-0 my_info_width_50" scope="col"></th>
-                                                    <th class="border-top-0 my_info_width_100" scope="col">이름</th>
-                                                    <th class="border-top-0 my_info_width_150" scope="col">학번</th>
-                                                    <th class="border-top-0 my_info_width_150" scope="col">이메일</th>
-                                                    <th class="border-top-0" scope="col">학과</th>
-                                                    <th class="border-top-0" scope="col">지원서 보기</th>
-                                                </tr>
-                                                </thead>
-                                                <!-- 신입부원 관리 테이블 내용 시작 -->
-                                                <tbody>
-                                                <!-- =========================== 여기부터 복붙 ============================== -->
-                                                {% for new_user in new_user_list %}
-                                                    <tr>
-                                                        <th>{{ forloop.counter }}</th>
-                                                        <!-- 회원 이름 -->
-                                                        <td>{{ new_user.user_name }}</td>
-                                                        <!-- 회원 학번 -->
-                                                        <td>{{ new_user.user_stu }}</td>
-                                                        <!-- 회원 이메일 -->
-                                                        <td>{{ new_user.user_email }}</td>
-                                                        <!-- 회원 학과 -->
-                                                        <td>{{ new_user.user_major.major_name }}</td>
-                                                        <!-- 지원서보기 -->
-                                                        <td>
-                                                            <a href="#">지원서보기 ▶</a>
-                                                        </td>
-                                                    </tr>
-                                                {% endfor %}
-                                                </tbody>
-                                            </table>
-                                            <!--페이지네이션-->
-                                            <div style="display: flex; justify-content: center; align-items: center">
-                                                <nav aria-label="Page navigation example">
-                                                    <!-- my_info_margin_bottom_0는 my_info_cr.css에 정의되어 있음.  -->
-                                                    <ul class="pagination my_info_margin_bottom_0">
-                                                        {% if new_user_list.has_previous %}
-                                                            <li class="page-item">
-                                                                <a class="page-link" href="?new_user_page=1"
-                                                                   aria-label="Previous">
-                                                                    <span aria-hidden="true">&laquo;</span>
-                                                                </a>
-                                                            </li>
-                                                            <li class="page-item">
-                                                                <a class="page-link"
-                                                                   href="?new_user_page={{ new_user_list.previous_page_number }}">
-                                                                    {{ new_user_list.previous_page_number }}
-                                                                </a>
-                                                            </li>
-                                                        {% endif %}
-                                                        <li class="page-item"><a class="page-link"
-                                                                                 href="#">{{ new_user_list.number }}</a>
-                                                        </li>
-                                                        {% if new_user_list.has_next %}
-                                                            <li class="page-item"><a class="page-link"
-                                                                                     href="?new_user_page={{ new_user_list.next_page_number }}">
-                                                                {{ new_user_list.next_page_number }}
-                                                            </a>
-                                                            </li>
-                                                            <li class="page-item">
-                                                                <a class="page-link"
-                                                                   href="?new_user_page={{ new_user_list.paginator.num_pages }}"
-                                                                   aria-label="Next">
-                                                                    <span aria-hidden="true">&raquo;</span>
-                                                                </a>
-                                                            </li>
-                                                        {% endif %}
-                                                    </ul>
-                                                </nav>
-                                            </div>
-                                            <!--페이지네이션 끝-->
+                    {% if request.session.user_role <= 3 %}
+                        <!--회원관리-->
+                        <div id="listing_user_setting" class="tab-pane">
+                            <div class="row">
+                                <div class="col-xl-12">
+                                    <div class="content-box">
+                                        <!-- 제목 div -->
+                                        <div class="content-header">
+                                            <h3 class="title"><i class="la la-users m-r5"></i>신입부원 관리</h3>
                                         </div>
-                                    </div>
-                                </div>
-
-                                <!-- 회원 관리 콘텐츠 시작 -->
-                                <div class="content-box">
-                                    <div class="content-header">
-                                        <h3 class="title"><i class="la la-tasks m-r5"></i>동아리원 현황</h3>
-                                    </div>
-                                    <!-- 회원 관리 콘텐츠 시작 -->
-                                    <form action="{% url 'staff_member_update' %}" method="post">
-                                        {% csrf_token %}
+                                        <!-- 신입부원 관리 콘텐츠 시작 -->
                                         <div class="content-body">
-                                            <!-- 내가 작성한 댓글 내용 담는 div -->
                                             <div class="myinfo-table-padding">
-                                                {# 권한: 활동회원, 비활동, 미승인#}
-                                                {# 역할: 회장, 부회장, 총무, 기획팀, 운영팀(회장단), 교수, 일반회원#}
-
-                                                <!-- my_info_mem_select는 my_info_cr.css에 정의되어 있음.  -->
-                                                <div class="my_info_mem_select m-b20">
-                                                    <select name="user_auth">
-                                                        <option selected="selected" disabled="disabled">권한 부여</option>
-                                                        {% for auth in auth_list %}
-                                                            <option value="{{ auth.auth_no }}">{{ auth.auth_name }}</option>
-                                                        {% endfor %}
-                                                    </select>
-                                                </div>
-                                                <!-- my_info_mem_select는 my_info_cr.css에 정의되어 있음.  -->
-                                                <div class="my_info_mem_select m-b20">
-                                                    <select name="user_role">
-                                                        <option selected="selected" disabled="disabled">역할 부여</option>
-                                                        {% for role in role_list %}
-                                                            <option value="{{ role.role_no }}">{{ role.role_name }}</option>
-                                                        {% endfor %}
-                                                    </select>
-                                                </div>
-                                                <!-- my_info_mem_btn는 my_info_cr.css에 정의되어 있음.  -->
-                                                <div class="my_info_mem_btn m-b20 listing-info-right">
-                                                    <!-- &nbsp;는 띄어쓰기 -->
-                                                    <button class="site-button" type="submit"><i
-                                                            class="la la-check m-r5"
-                                                            style="font-weight: bold"></i>&nbsp;적용
-                                                    </button>
-                                                </div>
-
-                                                <!-- 댓글 내용 테이블 -->
+                                                <!-- 신입부원 관리 테이블 시작 -->
                                                 <table class="table">
-                                                    <!-- 테이블 1행: 제목 -->
                                                     <thead>
+                                                    <!-- 테이블 1행: 제목 -->
                                                     <tr>
                                                         <!-- my_info_width는 my_info_cr.css에 정의되어 있음.  -->
-                                                        <th class="border-top-0 my_info_width_50"></th>
                                                         <th class="border-top-0 my_info_width_50" scope="col"></th>
                                                         <th class="border-top-0 my_info_width_100" scope="col">이름</th>
                                                         <th class="border-top-0 my_info_width_150" scope="col">학번</th>
+                                                        <th class="border-top-0 my_info_width_150" scope="col">이메일</th>
                                                         <th class="border-top-0" scope="col">학과</th>
-                                                        <th class="border-top-0 my_info_width_170" scope="col">권한</th>
-                                                        <th class="border-top-0 my_info_width_170" scope="col">역할</th>
-                                                        <th class="border-top-0 my_info_width_70"></th>
+                                                        <th class="border-top-0" scope="col">지원서 보기</th>
                                                     </tr>
                                                     </thead>
-                                                    <!-- 댓글 내용 테이블 -->
+                                                    <!-- 신입부원 관리 테이블 내용 시작 -->
                                                     <tbody>
-                                                    <!-- ===========================여기부터 복붙============================== -->
-                                                    {% for exist_user in exist_user_list %}
+                                                    <!-- =========================== 여기부터 복붙 ============================== -->
+                                                    {% for new_user in new_user_list %}
                                                         <tr>
-                                                            <td scope="row">
-                                                                <div class="input-block">
-                                                                    <input id="check_{{ exist_user.user_stu }}" type="checkbox" name="user_stu_list[]" value="{{ exist_user.user_stu }}">
-                                                                    <!-- my_info_label_margin는 my_info_cr.css에 정의되어 있음.  -->
-                                                                    <label for="check_{{ exist_user.user_stu }}"
-                                                                           class="my_info_label_margin"></label>
-                                                                </div>
-                                                            </td>
                                                             <th>{{ forloop.counter }}</th>
                                                             <!-- 회원 이름 -->
-                                                            <td>{{ exist_user.user_name }}</td>
+                                                            <td>{{ new_user.user_name }}</td>
                                                             <!-- 회원 학번 -->
-                                                            <td>{{ exist_user.user_stu }}</td>
+                                                            <td>{{ new_user.user_stu }}</td>
+                                                            <!-- 회원 이메일 -->
+                                                            <td>{{ new_user.user_email }}</td>
                                                             <!-- 회원 학과 -->
-                                                            <td>{{ exist_user.user_major.major_name }}</td>
-                                                            <!-- 권한 상태 -->
+                                                            <td>{{ new_user.user_major.major_name }}</td>
+                                                            <!-- 지원서보기 -->
                                                             <td>
-                                                                {{ exist_user.user_auth.auth_name }}
-                                                            </td>
-                                                            <!-- 역할 상태 -->
-                                                            <td>
-                                                                {{ exist_user.user_role.role_name }}
-                                                            </td>
-                                                            <!-- 제명건의 -->
-                                                            <td>
-                                                                <a href="#"
-                                                                   style="font-size: 12px; font-weight: bold">제명건의</a>
-                                                                {#                                                        <a href="#" style="font-size: 12px; font-weight: bold">&nbsp;&nbsp;논의중</a>#}
-
+                                                                <a href="#">지원서보기 ▶</a>
                                                             </td>
                                                         </tr>
                                                     {% endfor %}
@@ -461,32 +323,32 @@
                                                     <nav aria-label="Page navigation example">
                                                         <!-- my_info_margin_bottom_0는 my_info_cr.css에 정의되어 있음.  -->
                                                         <ul class="pagination my_info_margin_bottom_0">
-                                                            {% if exist_user_list.has_previous %}
+                                                            {% if new_user_list.has_previous %}
                                                                 <li class="page-item">
-                                                                    <a class="page-link" href="?exist_user_page=1"
+                                                                    <a class="page-link" href="?new_user_page=1"
                                                                        aria-label="Previous">
                                                                         <span aria-hidden="true">&laquo;</span>
                                                                     </a>
                                                                 </li>
                                                                 <li class="page-item">
                                                                     <a class="page-link"
-                                                                       href="?exist_user_page={{ exist_user_list.previous_page_number }}">
-                                                                        {{ exist_user_list.previous_page_number }}
+                                                                       href="?new_user_page={{ new_user_list.previous_page_number }}">
+                                                                        {{ new_user_list.previous_page_number }}
                                                                     </a>
                                                                 </li>
                                                             {% endif %}
                                                             <li class="page-item"><a class="page-link"
-                                                                                     href="#">{{ exist_user_list.number }}</a>
+                                                                                     href="#">{{ new_user_list.number }}</a>
                                                             </li>
-                                                            {% if exist_user_list.has_next %}
+                                                            {% if new_user_list.has_next %}
                                                                 <li class="page-item"><a class="page-link"
-                                                                                         href="?exist_user_page={{ exist_user_list.next_page_number }}">
-                                                                    {{ exist_user_list.next_page_number }}
+                                                                                         href="?new_user_page={{ new_user_list.next_page_number }}">
+                                                                    {{ new_user_list.next_page_number }}
                                                                 </a>
                                                                 </li>
                                                                 <li class="page-item">
                                                                     <a class="page-link"
-                                                                       href="?exist_user_page={{ exist_user_list.paginator.num_pages }}"
+                                                                       href="?new_user_page={{ new_user_list.paginator.num_pages }}"
                                                                        aria-label="Next">
                                                                         <span aria-hidden="true">&raquo;</span>
                                                                     </a>
@@ -498,11 +360,170 @@
                                                 <!--페이지네이션 끝-->
                                             </div>
                                         </div>
-                                    </form>
+                                    </div>
+                                    {% if request.session.user_role == 1 %}
+                                        <!-- 회원 관리 콘텐츠 시작 -->
+                                        <div class="content-box">
+                                            <div class="content-header">
+                                                <h3 class="title"><i class="la la-tasks m-r5"></i>동아리원 현황</h3>
+                                            </div>
+                                            <!-- 회원 관리 콘텐츠 시작 -->
+                                            <form action="{% url 'staff_member_update' %}" method="post">
+                                                {% csrf_token %}
+                                                <div class="content-body">
+                                                    <!-- 내가 작성한 댓글 내용 담는 div -->
+                                                    <div class="myinfo-table-padding">
+                                                        {# 권한: 활동회원, 비활동, 미승인#}
+                                                        {# 역할: 회장, 부회장, 총무, 기획팀, 운영팀(회장단), 교수, 일반회원#}
+
+                                                        <!-- my_info_mem_select는 my_info_cr.css에 정의되어 있음.  -->
+                                                        <div class="my_info_mem_select m-b20">
+                                                            <select name="user_auth">
+                                                                <option selected="selected" disabled="disabled">권한 부여
+                                                                </option>
+                                                                {% for auth in auth_list %}
+                                                                    <option name="user_auth"
+                                                                            value="{{ auth.auth_no }}">{{ auth.auth_name }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                        <!-- my_info_mem_select는 my_info_cr.css에 정의되어 있음.  -->
+                                                        <div class="my_info_mem_select m-b20">
+                                                            <select name="user_role">
+                                                                <option selected="selected" disabled="disabled">역할 부여
+                                                                </option>
+                                                                {% for role in role_list %}
+                                                                    <option name="user_role"
+                                                                            value="{{ role.role_no }}">{{ role.role_name }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                        <!-- my_info_mem_btn는 my_info_cr.css에 정의되어 있음.  -->
+                                                        <div class="my_info_mem_btn m-b20 listing-info-right">
+                                                            <!-- &nbsp;는 띄어쓰기 -->
+                                                            <button class="site-button" type="submit"><i
+                                                                    class="la la-check m-r5"
+                                                                    style="font-weight: bold"></i>&nbsp;적용
+                                                            </button>
+                                                        </div>
+
+                                                        <!-- 댓글 내용 테이블 -->
+                                                        <table class="table">
+                                                            <!-- 테이블 1행: 제목 -->
+                                                            <thead>
+                                                            <tr>
+                                                                <!-- my_info_width는 my_info_cr.css에 정의되어 있음.  -->
+                                                                <th class="border-top-0 my_info_width_50"></th>
+                                                                <th class="border-top-0 my_info_width_50"
+                                                                    scope="col"></th>
+                                                                <th class="border-top-0 my_info_width_100" scope="col">
+                                                                    이름
+                                                                </th>
+                                                                <th class="border-top-0 my_info_width_150" scope="col">
+                                                                    학번
+                                                                </th>
+                                                                <th class="border-top-0" scope="col">학과</th>
+                                                                <th class="border-top-0 my_info_width_170" scope="col">
+                                                                    권한
+                                                                </th>
+                                                                <th class="border-top-0 my_info_width_170" scope="col">
+                                                                    역할
+                                                                </th>
+                                                                <th class="border-top-0 my_info_width_70"></th>
+                                                            </tr>
+                                                            </thead>
+                                                            <!-- 댓글 내용 테이블 -->
+                                                            <tbody>
+                                                            <!-- ===========================여기부터 복붙============================== -->
+                                                            {% for exist_user in exist_user_list %}
+                                                                <tr>
+                                                                    <td scope="row">
+                                                                        <div class="input-block">
+                                                                            <input id="check_{{ exist_user.user_stu }}"
+                                                                                   type="checkbox"
+                                                                                   name="user_stu_list[]"
+                                                                                   value="{{ exist_user.user_stu }}">
+                                                                            <!-- my_info_label_margin는 my_info_cr.css에 정의되어 있음.  -->
+                                                                            <label for="check_{{ exist_user.user_stu }}"
+                                                                                   class="my_info_label_margin"></label>
+                                                                        </div>
+                                                                    </td>
+                                                                    <th>{{ forloop.counter }}</th>
+                                                                    <!-- 회원 이름 -->
+                                                                    <td>{{ exist_user.user_name }}</td>
+                                                                    <!-- 회원 학번 -->
+                                                                    <td>{{ exist_user.user_stu }}</td>
+                                                                    <!-- 회원 학과 -->
+                                                                    <td>{{ exist_user.user_major.major_name }}</td>
+                                                                    <!-- 권한 상태 -->
+                                                                    <td>
+                                                                        {{ exist_user.user_auth.auth_name }}
+                                                                    </td>
+                                                                    <!-- 역할 상태 -->
+                                                                    <td>
+                                                                        {{ exist_user.user_role.role_name }}
+                                                                    </td>
+                                                                    <!-- 제명건의 -->
+                                                                    <td>
+                                                                        <a href="#"
+                                                                           style="font-size: 12px; font-weight: bold">제명건의</a>
+                                                                        {#                                                        <a href="#" style="font-size: 12px; font-weight: bold">&nbsp;&nbsp;논의중</a>#}
+
+                                                                    </td>
+                                                                </tr>
+                                                            {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                        <!--페이지네이션-->
+                                                        <div style="display: flex; justify-content: center; align-items: center">
+                                                            <nav aria-label="Page navigation example">
+                                                                <!-- my_info_margin_bottom_0는 my_info_cr.css에 정의되어 있음.  -->
+                                                                <ul class="pagination my_info_margin_bottom_0">
+                                                                    {% if exist_user_list.has_previous %}
+                                                                        <li class="page-item">
+                                                                            <a class="page-link"
+                                                                               href="?exist_user_page=1"
+                                                                               aria-label="Previous">
+                                                                                <span aria-hidden="true">&laquo;</span>
+                                                                            </a>
+                                                                        </li>
+                                                                        <li class="page-item">
+                                                                            <a class="page-link"
+                                                                               href="?exist_user_page={{ exist_user_list.previous_page_number }}">
+                                                                                {{ exist_user_list.previous_page_number }}
+                                                                            </a>
+                                                                        </li>
+                                                                    {% endif %}
+                                                                    <li class="page-item"><a class="page-link"
+                                                                                             href="#">{{ exist_user_list.number }}</a>
+                                                                    </li>
+                                                                    {% if exist_user_list.has_next %}
+                                                                        <li class="page-item"><a class="page-link"
+                                                                                                 href="?exist_user_page={{ exist_user_list.next_page_number }}">
+                                                                            {{ exist_user_list.next_page_number }}
+                                                                        </a>
+                                                                        </li>
+                                                                        <li class="page-item">
+                                                                            <a class="page-link"
+                                                                               href="?exist_user_page={{ exist_user_list.paginator.num_pages }}"
+                                                                               aria-label="Next">
+                                                                                <span aria-hidden="true">&raquo;</span>
+                                                                            </a>
+                                                                        </li>
+                                                                    {% endif %}
+                                                                </ul>
+                                                            </nav>
+                                                        </div>
+                                                        <!--페이지네이션 끝-->
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    {% endif %}
                     <!--내정보-->
                     <div id="listing_my_info" class="tab-pane">
                         <div class="row">
