@@ -89,7 +89,7 @@ def member_aor(request):
                             "지식을 함양하고, 많은 사람과 교류하시길 바랍니다. \nIBAS는 언제나 " + user.user_name + "님의 발전을 응원하겠습니다. " \
                             "\n\n동아리에 지원해주셔서 다시 한 번 감사드립니다. IBAS에 대해 더 많은 정보를 얻고 싶다면 아래 홈페이지를 방문해주세요" \
                             " \n\nIBAS 홈페이지 링크: http://www.inhabas.com"
-            User.user_auth = UserAuth.objects.get(pk=2)
+            user.user_auth = UserAuth.objects.get(pk=2)
             send_mail(subject=mail_title, message=mail_messsage, from_email=settings.EMAIL_HOST_USER,
                       recipient_list=[user.user_email])
             user.save()
