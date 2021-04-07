@@ -197,9 +197,7 @@ def activity_comment_update(request):
         comment = get_object_or_404(Comment, pk=request.POST.get('comment_id'))  # 가져온 comment_id를 토대로 수정 내역을 적용
         comment.comment_cont = request.POST.get('comment_cont')  # 수정할 내용을 가져옴
         comment.save()  # DB 저장
-        return HttpResponse(  # 게시글 상세 페이지로 돌아감
-            "<script>location.href='/activity/" + str(comment.comment_board_no.board_no) + "/detail/';</script>")
-
+        return redirect("activity_detail", board_no=comment.comment_board_no.board_no)
 
 def history_register(request):  # 연혁 등록
     if request.method == "POST":  # 정상적으로 값이 넘어왔을 경우
