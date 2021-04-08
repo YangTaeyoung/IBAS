@@ -239,3 +239,18 @@ def board_comment_update(request):
         return HttpResponse(go_board_detail(comment.comment_board_no.board_no))  # 게시글 상세 페이지로 돌아감
     else:
         return HttpResponse(go_board(5))  # 잘못된 요청의 경우 전체 게시판으로 이동하게 함.
+
+def board(request):  # 게시판 페이지로 이동
+    return render(request, 'board.html', {})
+
+def detail(request):
+    return render(request, 'detail.html', {})
+
+def contest_list(request):  # 게시판 페이지로 이동
+    return render(request, 'contest_board.html', {})
+
+def contest_register(request):  # 게시판 등록 페이지로 이동
+    return render(request, 'contest_register.html', {})
+
+def contest_detail(request):  # 게시판 상세 페이지로 이동
+    return render(request, 'contest_detail.html', {})

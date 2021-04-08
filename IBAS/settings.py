@@ -54,6 +54,8 @@ INSTALLED_APPS = [
     'my_info',
     # 회원 관리 관련 앱
     'staff',
+    # 강의 관련 앱
+    'lecture',
     # 소셜 로그인 패키지: allauth 관련
     'allauth',
     'allauth.account',
@@ -108,9 +110,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'IBAS',
         'USER': 'root',
-        'PASSWORD': 'bigdata1156--',
+        'PASSWORD': 'webproj3971--',
         'HOST': 'localhost',
-        'PORT': '3306',
+        'PORT': '3356',
     }
 }
 
