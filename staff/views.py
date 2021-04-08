@@ -45,3 +45,15 @@ def staff_member_update(request):
 def member_applications(request):
     context = {}
     return render(request, 'member_applications.html', context)
+
+def member_delete_list(request):
+    context = {}
+    return render(request, 'member_delete_list.html', context)
+
+def member_delete_register(request):
+    context = {}
+    return render(request, 'member_delete_register.html', context)
+
+def member_delete_detail(request):
+    context = {}
+    return render(request, 'member_delete_detail.html', context)
