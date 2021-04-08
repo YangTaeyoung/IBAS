@@ -1,30 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-    <script src="{% static 'js/register.js' %}"></script>
-    <link rel="stylesheet" href="{% static 'css/register.css' %}"/>
-    <!DOCTYPE html>
-    <html lang="en">
-
-    <head>
-        <meta charset="UTF-8">
-        <title>Title</title>
-
-        <link rel="stylesheet" type="text/css" href="{% static 'css/star-rating-svg.css' %}"/>
-        <link
-                rel="stylesheet"
-                type="text/css"
-                href="{% static 'plugins/editor/jquery-te-1.4.0.css' %}"
-        />
-
-        <link
-                rel="stylesheet"
-                type="text/css"
-                href="{% static 'plugins/drop/imageuploadify.min.css' %}"
-        />
-        <link rel="stylesheet" href="{% static 'plugins/tag-editor/jquery.tag-editor.css' %}"/>
-
-    </head>
 
     <body>
     <div class="page-wraper">
@@ -47,10 +23,7 @@
             </div>
             <!--===============================================입력란=========================================================-->
 
-            <form action="
-
-
-                    {% if contest is None %}{% url 'activity_register' %}{% else %}{% url 'activity_update' %}{% endif %}"
+            <form action="{% if contest is None %}{% url 'contest_register' %}{% else %}{% url 'contest_update' %}{% endif %}"
                   class="add-listing-form" method="POST" enctype="multipart/form-data">
 
                 {% csrf_token %}
@@ -127,7 +100,7 @@
                                         <div class="content-body">
                                           <div class="form-group">
                                             <!--공모전 간단소개 입력란 / 여기에 입력한 것은 게시글 리스트에 보여지는 소개에 들어감-->
-                                            <input type="text" name="contest_title"
+                                            <input type="text" name="contest_desc"
                                                    class="form-control" placeholder="공모전에 대한 간단한 소개를 적어주세요">
                                           </div>
                                         </div>
@@ -206,7 +179,6 @@
                                     </button>
                                 </div>
                             </form>
-                            <!-- Pagination END -->
                         </div>
                     </div>
                 </div>

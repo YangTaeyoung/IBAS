@@ -158,14 +158,14 @@ class Comment(models.Model):
 
 class ContestBoard(models.Model):
     contest_no = models.AutoField(db_column='CONTEST_NO', primary_key=True)  # Field name made lowercase.
-    contest_name = models.CharField(db_column='CONTEST_NAME', max_length=500)  # Field name made lowercase.
     contest_title = models.CharField(db_column='CONTEST_TITLE', max_length=100)  # Field name made lowercase.
+    contest_desc = models.CharField(db_column='CONTEST_DESC', max_length=100)
     contest_cont = models.TextField(db_column='CONTEST_CONT')  # Field name made lowercase.
     contest_asso = models.CharField(db_column='CONTEST_ASSO', max_length=100)  # Field name made lowercase.
     contest_deadline = models.DateTimeField(db_column='CONTEST_DEADLINE')  # Field name made lowercase.
     contest_start = models.DateTimeField(db_column='CONTEST_START') # THE FIRST DATE FOR APPLICATION
     contest_created = models.DateTimeField(db_column='CONTEST_CREATED', auto_now_add=True)  # Field name made lowercase.
-    contest_writer = models.IntegerField(db_column='CONTEST_WRITER')  # Field name made lowercase.
+    contest_writer = models.ForeignKey('User', models.DO_NOTHING, db_column='CONTEST_WRITER')  # Field name made lowercase.
 
     class Meta:
         managed = False

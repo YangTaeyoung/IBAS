@@ -117,7 +117,7 @@
                                                         <span class="recruiting">모 집</span></li>
                                                     <!-- 공모전에 대한 간단소개 -->
                                                     <li class="text-cut">
-                                                        {{ board.contest_cont }}
+                                                        {{ board.contest_desc }}
                                                     </li>
                                                 </ul>
                                             </div>
@@ -142,7 +142,8 @@
                                 <div class="extra-cell text-right  m-t20">
                                     <!-- 게시글 등록 버튼 -->
                                     <!-- 관련자만 보이게 처리 -->
-                                    <button class="site-button radius-xl m-l10"><i class="fa fa-plus m-r5"></i>게시글 등록
+                                    <button class="site-button radius-xl m-l10" onclick="location.href='{% url 'contest_register'%}'">
+                                        <i class="fa fa-plus m-r5"></i>게시글 등록
                                     </button>
                                 </div>
                                 {% endif %}

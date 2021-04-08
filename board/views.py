@@ -1,6 +1,8 @@
+from datetime import date
+
 from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponse
-from DB.models import Board, BoardFile, BoardType, User, UserRole, UserAuth, Comment, ContestBoard
+from DB.models import Board, BoardFile, BoardType, User, UserRole, UserAuth, Comment, ContestBoard, ContestFile
 from django.db.models import Q, Count
 from addr_handling import go_board, go_board_detail
 from file_controller import is_image
@@ -111,12 +113,11 @@ def board_register(request):
         # ============================= 이미지 저장시키는 코드 =========================
         for updated_file in request.FILES.getlist("board_file"):
             # DB 저장
-            new_board_file = BoardFile.objects.create(board_no=Board.objects.get(pk=board.board_no),
-                                                      board_file_path=updated_file,
-                                                      board_file_name=str(updated_file)[
-                                                                      str(updated_file).rfind("/") + 1:])
+            new_board_file = BoardFile(board_no=Board.objects.get(pk=board.board_no),
+                                       board_file_path=updated_file,
+                                       board_file_name=str(updated_file)[str(updated_file).rfind("/") + 1:])
             new_board_file.save()
-        print(board.board_no)
+
         return redirect("board_detail", board_no=board.board_no)
 
     else:  # 게시글 등록 버튼을 눌렀을 때
@@ -265,8 +266,32 @@ def contest_list(request):  # 게시판 페이지로 이동
     return render(request, 'contest_board.html', context)
 
 
-def contest_register(request):  # 게시판 등록 페이지로 이동
-    return render(request, 'contest_register.html', {})
+def contest_register(request):
+
+    if request.method == 'POST':
+        contest = ContestBoard(
+            contest_title=request.POST.get('contest_title'),
+            contest_asso=request.POST.get('contest_asso'),
+            contest_start=date.fromisoformat(request.POST.get('contest_start')),
+            contest_deadline=date.fromisoformat(request.POST.get('contest_deadline')),
+            contest_desc=request.POST.get('contest_desc'),
+            contest_cont=request.POST.get('contest_cont'),
+            contest_writer=User.objects.get(pk=request.session['user_stu']),
+        )
+        contest.save()
+
+        # 파일 저장 잘 되는 지 봐야함.
+        for file in request.FILES["board_file"]:
+            ContestFile.objects.create(
+                contest_no=ContestBoard.objects.get(pk=contest.contest_no),
+                contest_file_path=settings.MEDIA_ROOT + 'contest/' + str(contest.contest_no) + '/' + file.name,
+                contest_file_name=file.name
+            )
+
+    elif request.method == 'GET':
+        redirect(reverse('contest_list'))
+
+    return render(request, 'contest_register.html')
 
 
 def contest_detail(request):  # 게시판 상세 페이지로 이동
