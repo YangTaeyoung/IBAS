@@ -1,3 +1,4 @@
+import datetime
 from datetime import date
 
 from django.shortcuts import render, redirect, reverse
@@ -251,15 +252,17 @@ def board_comment_update(request):
 
 
 def contest_list(request):  # 게시판 페이지로 이동
-    contest_board_list = ContestBoard.objects.all().order_by('-contest_deadline').prefetch_related('ContestFile')
+    contest_board_list = ContestBoard.objects.all().order_by('-contest_deadline').prefetch_related("contestfile_set")
 
     item = get_page_object(request, contest_board_list, num_of_boards_in_one_page=6)
+
     context = {
         "board_len": len(item),
         "message": "아직 등록한 공모전이 없습니다.",
         "contest_list": item,
-        "board_name": BoardType.objects.get(pk=6).board_type_name,
-        "board_exp": BoardType.objects.get(pk=6).board_type_exp,
+        "board_name": "공모전 게시판",  # BoardType.objects.get(pk=6).board_type_name,
+        "board_exp": "공모전 정보를 알려주는 게시판",  # BoardType.objects.get(pk=6).board_type_exp,
+        "now": date.today()
     }
     context.update(get_sidebar_information())
 
@@ -269,29 +272,30 @@ def contest_list(request):  # 게시판 페이지로 이동
 def contest_register(request):
 
     if request.method == 'POST':
+
         contest = ContestBoard(
             contest_title=request.POST.get('contest_title'),
             contest_asso=request.POST.get('contest_asso'),
-            contest_start=date.fromisoformat(request.POST.get('contest_start')),
-            contest_deadline=date.fromisoformat(request.POST.get('contest_deadline')),
-            contest_desc=request.POST.get('contest_desc'),
+            contest_start=date.fromisoformat(request.POST.get('contest_start')), # %Y-%m-%d 15:00:00,
+            contest_deadline=date.fromisoformat(request.POST.get('contest_deadline')), # %Y-%m-%d 15:00:00,
+            contest_topic=request.POST.get('contest_topic'),
             contest_cont=request.POST.get('contest_cont'),
             contest_writer=User.objects.get(pk=request.session['user_stu']),
         )
         contest.save()
 
-        # 파일 저장 잘 되는 지 봐야함.
-        for file in request.FILES["board_file"]:
-            ContestFile.objects.create(
-                contest_no=ContestBoard.objects.get(pk=contest.contest_no),
-                contest_file_path=settings.MEDIA_ROOT + 'contest/' + str(contest.contest_no) + '/' + file.name,
-                contest_file_name=file.name
-            )
+        if "contest_file" in request.FILES:
+            for file in request.FILES.getlist("contest_file"):
+                ContestFile.objects.create(
+                    contest_no=ContestBoard.objects.get(pk=contest.contest_no),
+                    contest_file_path=file, # imageField 객체 <- uploadedFile 객체 할당
+                    contest_file_name=file.name
+                )
 
     elif request.method == 'GET':
-        redirect(reverse('contest_list'))
+        return render(request,'contest_register.html')
 
-    return render(request, 'contest_register.html')
+    return redirect(reverse('contest_list'))
 
 
 def contest_detail(request):  # 게시판 상세 페이지로 이동
