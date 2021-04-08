@@ -5,7 +5,6 @@ from DB.models import AuthUser, User, ChiefCarrier, UserRole, Board, BoardFile, 
 from django.db.models import Q
 from member import session
 from django.core.paginator import Paginator
-from django.http import HttpResponse
 from django.conf import settings
 from IBAS.user_controller import is_chief_exist, get_chief
 import os
@@ -14,7 +13,7 @@ import os
 # 메인페이지 이동 함수
 def index(request):
     # 임시 로그인
-    # session.save_session(request, User.objects.get(pk=12162359))
+    session.save_session(request, User.objects.get(pk=12162359))
     if is_chief_exist():
         chief = get_chief()  # 하단바에서 회장꺼만 들고오면 됌
         session.save_chief(request, chief)  # 회장꺼 세션에 저장시켜줬음. save_chief 함수는 session 에 있음.
@@ -126,7 +125,7 @@ def activity_update(request):
                 new_board_file = BoardFile.objects.create(board_no=board, board_file_path=updated_file)
                 new_board_file.save()
                 # 목록 페이지 이동 (수정 필요)
-            return redirect(reverse("activity"))
+            return redirect("activity_detail", board_no=board.board_no)
     # 잘못 왔을 경우
     return render(request, 'activity_list.html', {})
 
@@ -157,29 +156,27 @@ def activity_comment_register(request):
     user_stu = User.objects.get(pk=request.session.get('user_stu'))  # 유저 학번 들고오는 것임
     if request.method == "POST":
 
-        board_no = Board.objects.get(pk=request.POST.get('board_no'))  # 게시글 번호 들고오는 것임
+        board = Board.objects.get(pk=request.POST.get('board_no'))  # 게시글 번호 들고오는 것임
 
         # 객체로 받아서 저장할 예정
         comment = Comment(  # 받은 정보로 덧글 생성
-            comment_board_no=board_no,  # 해당 게시글에
+            comment_board_no=board,  # 해당 게시글에
             comment_writer=user_stu,  # 해당 학번이
             comment_cont=request.POST.get('comment_cont')  # 사용자가 쓴 내용을 가져옴
         )
         comment.save()
     else:
-        board_no = Board.objects.get(pk=request.GET.get('board_no'))  # 게시글 번호 들고오는 것임
+        board = Board.objects.get(pk=request.GET.get('board_no'))  # 게시글 번호 들고오는 것임
         # 객체로 받아서 저장할 예정
         comment = Comment(
-            comment_board_no=board_no,
+            comment_board_no=board,
             comment_writer=user_stu,
             comment_cont=request.GET.get('comment_cont'),
             comment_cont_ref=Comment.objects.get(pk=request.GET.get("comment_ref"))
         )
         comment.save()
         # 데이터 베이스에 저장
-    return HttpResponse(  # 게시글 상세 페이지로 다시 돌아감, 리다이렉트를 이용한 것은 실행 안해봄. 아마 이게 제일 정확하지 않을까 싶음.
-        "<script>location.href='/activity/" + str(board_no.board_no) + "/detail/';</script>")  # 게시글 상세페이지로 이동
-
+    return redirect("activity_detail", board_no=board.board_no)
 
 # 댓글 삭제 코드
 def activity_comment_delete(request):
@@ -188,7 +185,7 @@ def activity_comment_delete(request):
         comment = Comment.objects.get(pk=request.POST.get('comment_id'))
         # 그 댓글의 pk 를 찾아서 DB 에서 지운다.
         comment.delete()
-    return HttpResponse("<script>location.href='/activity/" + str(board_no) + "/detail/';</script>")  # 게시글 상세페이지로 이동
+    return redirect("activity_detail", board_no=board_no) # 게시글 상세페이지로 이동
 
 
 # 댓글 수정 코드
@@ -198,6 +195,7 @@ def activity_comment_update(request):
         comment.comment_cont = request.POST.get('comment_cont')  # 수정할 내용을 가져옴
         comment.save()  # DB 저장
         return redirect("activity_detail", board_no=comment.comment_board_no.board_no)
+
 
 def history_register(request):  # 연혁 등록
     if request.method == "POST":  # 정상적으로 값이 넘어왔을 경우
