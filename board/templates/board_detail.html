@@ -227,7 +227,7 @@
                                                             <!-- DB 적용할 때는 id 부분을 id="correcting-{{ comment.comment_id }}"로 변경바람 -->
                                                             <!-- 테스트를 위해 id를 다음과 같이 함. js도 똑같이 주석 달아줬으니 참고해야 함.  -->
                                                             <form id="form-comment-update-{{ comment.comment_id }}"
-                                                                  action="{% url 'activity_comment_update' %}"
+                                                                  action="{% url 'board_comment_update' %}"
                                                                   method="post">
                                                                 {% csrf_token %}
                                                                 <input type="hidden" name="comment_id"
@@ -247,7 +247,7 @@
                                                                  class="reply-btn-div">
                                                                 <!-- 답글쓰기버튼 클릭 시, jqury로 버튼을 담는 div 밑에 대댓글 작성 란 생김 -->
                                                                 <form id="form-comment-delete-{{ comment.comment_id }}"
-                                                                      action="{% url 'activity_comment_delete' %}"
+                                                                      action="{% url 'board_comment_delete' %}"
                                                                       method="post">
 
                                                                     {% if request.session.user_auth != 3 %}
@@ -374,7 +374,7 @@
 
                                                 <div class="" id="respond">
                                                     <form class="comment-form" id="commentform" method="post"
-                                                          action="{% url 'activity_comment_register' %}">
+                                                          action="{% url 'board_comment_register' %}">
                                                         {% csrf_token %}
                                                         <input type="hidden" name="board_no"
                                                                value="{{ board.board_no }}"/>

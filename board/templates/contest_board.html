@@ -14,8 +14,7 @@
             <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"
                  style=" background-image: url('{% static 'images/board_name_img.jpg' %}'); height: 350px">
                 <!-- 상단 제목을 클릭하면, 상위 게시판으로 이동 -->
-                <!-- (ex.자유게시판의 '용식이의 학식일기'글의 상세 페이지에서 상위 제목을 클릭하면, 자유게시판으로 이동) -->
-                <a href="{% url 'activity' %}">
+                <a href="{% url 'contest_list' %}">
                     <div class="container clearfix">
                         <div class="dlab-bnr-inr-entry">
                             <!--제목-->
@@ -96,7 +95,7 @@
                                             <!-- 게시글 대표 이미지 div -->
                                             <div class="listing-media">
                                                 <!-- 이미지를 클릭하면, 해당 게시글로 이동함 -->
-                                                <a href="#">
+                                                <a href="{% url 'contest_detail' board.contest_no %}">
 
                                                     <img src="/media/{{ board.contestfile_set.first.contest_file_path }}"
                                                          alt="/media/{{ board.contestfile_set.first.contest_file_path  }}">
@@ -106,7 +105,7 @@
                                             <!-- 공모전 내용 간단소개 div -->
                                             <div class="listing-info" style="height: 110px">
                                                 <!-- 공모전 제목 -->
-                                                <h3 class="title"><a href="listing-details.html">{{ board.contest_title }}</a></h3>
+                                                <h3 class="title"><a href="{% url 'contest_detail' board.contest_no %}">{{ board.contest_title }}</a></h3>
                                                 <!-- 공모전 간단소개 -->
                                                 <ul class="event-meta">
                                                     <!-- 마감일 및 모집 상태 -->

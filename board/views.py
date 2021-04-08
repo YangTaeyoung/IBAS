@@ -3,7 +3,7 @@ from datetime import date
 
 from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponse
-from DB.models import Board, BoardFile, BoardType, User, UserRole, UserAuth, Comment, ContestBoard, ContestFile
+from DB.models import *
 from django.db.models import Q, Count
 from addr_handling import go_board, go_board_detail
 from file_controller import is_image
@@ -224,8 +224,7 @@ def board_comment_register(request):
         )
         comment.save()
         # 데이터 베이스에 저장
-    return HttpResponse(  # 게시글 상세 페이지로 다시 돌아감, 리다이렉트를 이용한 것은 실행 안해봄. 아마 이게 제일 정확하지 않을까 싶음.
-        "<script>location.href='/activity/" + str(board_no.board_no) + "/detail/';</script>")  # 게시글 상세페이지로 이동
+    return redirect("board_detail", board_no=board_no.board_no)
 
 
 # 댓글 삭제 코드
@@ -235,9 +234,9 @@ def board_comment_delete(request):
         board_type_no = comment.comment_board_no.board_type_no.board_type_no
         # 그 댓글의 pk 를 찾아서 DB 에서 지운다.
         comment.delete()
-        return HttpResponse(go_board(board_type_no))  # 게시글 상세페이지로 이동
+        return redirect("board_detail", board_no=comment.comment_board_no.board_no)  # 게시글 상세페이지로 이동
     else:
-        return HttpResponse(go_board(5))  # 잘못 들어온 접근은 전체 게시판으로 이동
+        return redirect("board_view", board_type_no=5)  # 잘못 들어온 접근은 전체 게시판으로 이동
 
 
 # 댓글 수정 코드
@@ -246,9 +245,9 @@ def board_comment_update(request):
         comment = Comment.objects.get(pk=request.POST.get('comment_id'))  # 가져온 comment_id를 토대로 수정 내역을 적용
         comment.comment_cont = request.POST.get('comment_cont')  # 수정할 내용을 가져옴
         comment.save()  # DB 저장
-        return HttpResponse(go_board_detail(comment.comment_board_no.board_no))  # 게시글 상세 페이지로 돌아감
+        return redirect("board_detail", board_no=comment.comment_board_no.board_no)  # 게시글 상세 페이지로 돌아감
     else:
-        return HttpResponse(go_board(5))  # 잘못된 요청의 경우 전체 게시판으로 이동하게 함.
+        return redirect("board_view", board_type_no=5)  # 잘못된 요청의 경우 전체 게시판으로 이동하게 함.
 
 
 def contest_list(request):  # 게시판 페이지로 이동
@@ -292,10 +291,37 @@ def contest_register(request):
                 )
 
     elif request.method == 'GET':
-        return render(request,'contest_register.html')
+        return render(request, 'contest_register.html')
 
     return redirect(reverse('contest_list'))
 
 
-def contest_detail(request):  # 게시판 상세 페이지로 이동
-    return render(request, 'contest_detail.html', {})
+def contest_detail(request, contest_no):  # 게시판 상세 페이지로 이동
+
+    if request.method == 'GET':
+        contest = ContestBoard.objects.get(pk=contest_no)
+
+        image_list = []
+        file_list = []
+        files = ContestFile.objects.filter(contest_no=contest_no)
+        for file in files:
+            if is_image(file.contest_file_path):
+                image_list.append(file)
+            else:
+                file_list.append(file)
+
+        comment_list = ContestComment.objects.filter(comment_board_no=contest).order_by("-comment_created").prefetch_related(
+            "comment_set")
+
+        context = {
+            'contest': contest,
+            'file_list': file_list,
+            'image_list': image_list,
+            "board_name": "공모전 게시판",  # BoardType.objects.get(pk=6).board_type_name,
+            "board_exp": "공모전 정보를 알려주는 게시판",  # BoardType.objects.get(pk=6).board_type_exp,
+            "comment_list": comment_list,
+        }
+        return render(request, 'contest_detail.html', context)
+
+    else:
+        redirect(reverse('contest_list'))

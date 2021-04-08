@@ -143,13 +143,10 @@ class ChiefCarrier(models.Model):
 
 
 class Comment(models.Model):
-    comment_id = models.AutoField(db_column='COMMENT_ID', primary_key=True)  # Field name made lowercase.
-    comment_board_no = models.ForeignKey(Board,
-                                         db_column='COMMENT_BOARD_NO',
-                                         on_delete=models.CASCADE)  # Field name made lowercase.
-    comment_writer = models.ForeignKey('User', models.DO_NOTHING,
-                                       db_column='COMMENT_WRITER')  # Field name made lowercase.
-    comment_cont = models.CharField(db_column='COMMENT_CONT', max_length=5000)  # Field name made lowercase.
+    comment_id = models.AutoField(db_column='COMMENT_ID', primary_key=True)
+    comment_board_no = models.ForeignKey(Board, db_column='COMMENT_BOARD_NO', on_delete=models.CASCADE)
+    comment_writer = models.ForeignKey('User', models.DO_NOTHING, db_column='COMMENT_WRITER')
+    comment_cont = models.CharField(db_column='COMMENT_CONT', max_length=5000)
     comment_cont_ref = models.ForeignKey('self', on_delete=models.CASCADE, db_column='COMMENT_CONT_REF', blank=True,
                                          null=True)  # Field name made lowercase.
     comment_created = models.DateTimeField(db_column='COMMENT_CREATED', auto_now_add=True)  # Field name made lowercase.
@@ -181,6 +178,20 @@ class ContestBoard(models.Model):
             return True
         else:
             return False
+
+
+class ContestComment(models.Model):
+    comment_id = models.AutoField(db_column='COMMENT_ID', primary_key=True)
+    comment_board_no = models.ForeignKey('ContestBoard', db_column='COMMENT_BOARD_NO', on_delete=models.CASCADE)
+    comment_writer = models.ForeignKey('User', models.DO_NOTHING, db_column='COMMENT_WRITER')
+    comment_cont = models.CharField(db_column='COMMENT_CONT', max_length=500)
+    comment_cont_ref = models.ForeignKey('self', on_delete=models.CASCADE, db_column='COMMENT_CONT_REF', blank=True,
+                                         null=True)  # Field name made lowercase.
+    comment_created = models.DateTimeField(db_column='COMMENT_CREATED', auto_now_add=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'CONTEST_COMMENT'
 
 
 def contest_file_upload_to(instance, filename):

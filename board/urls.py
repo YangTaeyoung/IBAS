@@ -8,9 +8,13 @@ urlpatterns = [
     path('register/', views.board_register, name="board_register"),
     path('update', views.board_update, name="board_update"),
     path('delete', views.board_delete, name="board_delete"),
+    path('comment/update/', views.board_comment_update, name="board_comment_update"),
+    path('comment/delete/', views.board_comment_delete, name="board_comment_delete"),
+    path('comment/register/', views.board_comment_register, name="board_comment_register"),
 
     # 공모전 게시판
     path('contest/list', views.contest_list, name="contest_list"),  # 공모전 게시판페이지로 이동
     path('contest/register', views.contest_register, name="contest_register"),  # 공모전 게시판 등록페이지로 이동
-    path('contest/detail', views.contest_detail, name="contest_detail"),  # 공모전 게시판 상세보기페이지로 이동
+    path('contest/detail/<int:contest_no>', views.contest_detail, name="contest_detail"),  # 공모전 게시판 상세보기페이지로 이동
+
 ]
