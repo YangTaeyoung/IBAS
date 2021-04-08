@@ -5,7 +5,16 @@
     <link rel="stylesheet" href="{% static 'css/my_info_cr.css' %}"/>
 
     <script src="{% static 'js/my_info.js' %}"></script>
-
+    <script>
+        function goUpdate() {
+            if (confirm('수정하시겠습니까?')) {
+                document.getElementById("form-user-update-request").submit();
+            }
+        }
+        function goUpdatePic(){
+            document.getElementById('form-user-pic-update').submit();
+        }
+    </script>
     <!-- Content -->
     <div class="page-content bg-white text-gray-1">
         <!-- inner page banner -->
@@ -49,18 +58,16 @@
 
                     <!--내용부분, 이미지 첨부하는 곳 들어감, Back : 가능하면....원래 사진 뜰 수 있도록 수정, 어려우면 없어도 될듯-->
                     <div class="modal-body">
-                        <form class="dlab-form">
+                        <form id="form-user-pic-update" action="{% url 'user_pic_update' %}" method="post" class="dlab-form" enctype="multipart/form-data">
+                            {% csrf_token %}
                             <div class="content-body">
                                 <div class="form-group">
-                                    <input
-                                            type="file"
-                                            accept="image/*"
-                                    />
+                                    <input name="user_pic" type="file" accept="image/*"/>
                                 </div>
                             </div>
                             <!--수정버튼, Back : 누르면 프로필 사진에 반영되도록 수정-->
                             <a href="#" class="site-button" style="display: grid; justify-items: center;"
-                               onclick="return confirm('수정하시겠습니까?') && alert('프로필 사진 수정이 완료되었습니다.')">수정</a>
+                               onclick="goUpdatePic()">수정</a>
                         </form>
                     </div>
                 </div>
@@ -153,6 +160,11 @@
                                             </tr>
                                             </thead>
                                             <tbody>
+                                            {% if my_board_list|length == 0 %}
+                                                <td class="text-center" colspan="3">
+                                                    내가 작성한 게시글이 없습니다.
+                                                </td>
+                                            {% endif %}
                                             {% for my_board in my_board_list %}
                                                 <tr>
                                                     <!-- 게시판 유형 -->
@@ -191,6 +203,13 @@
                                             </thead>
                                             <!-- 댓글 내용 테이블 -->
                                             <tbody>
+                                            {% if my_comment_list|length == 0 %}
+                                                <tr>
+                                                    <td class="text-center" colspan="4">
+                                                        내가 작성한 덧글이 없습니다.
+                                                    </td>
+                                                </tr>
+                                            {% endif %}
                                             {% for my_comment in my_comment_list %}
                                                 <tr>
                                                     <!-- 게시판 유형 -->
@@ -238,6 +257,11 @@
                                                 </thead>
                                                 <!-- 내가 신청한 예산내역 테이블 -->
                                                 <tbody>
+                                                {% if my_bank_list|length == 0 %}
+                                                    <tr>
+                                                        <td colspan="6" class="text-center">내가 작성한 예산신청 내역이 없습니다.</td>
+                                                    </tr>
+                                                {% endif %}
                                                 {% for my_bank in my_bank_list %}
                                                     <tr>
                                                         <!-- 현재 상태 -->
@@ -300,7 +324,9 @@
                                                     <tbody>
                                                     <!-- =========================== 여기부터 복붙 ============================== -->
                                                     {% if new_user_len == 0 %}
-                                                        <td colspan="6" style="text-align: center"> 입부 신청 대기중인 회원이 없습니다.</td>
+                                                        <td colspan="6" style="text-align: center"> 입부 신청 대기중인 회원이
+                                                            없습니다.
+                                                        </td>
                                                     {% endif %}
                                                     {% for new_user in new_user_list %}
                                                         <tr>
@@ -315,10 +341,15 @@
                                                             <td>{{ new_user.user_major.major_name }}</td>
                                                             <!-- 지원서보기 -->
                                                             <td>
-                                                                <a href="#" onclick="document.getElementById('new_user_application_{{ new_user.user_stu }}').submit()">지원서보기 ▶</a>
-                                                                <form id="new_user_application_{{ new_user.user_stu }}" action="{% url 'member_applications' %}" method="post" style="display: none">
+                                                                <a href="#"
+                                                                   onclick="document.getElementById('new_user_application_{{ new_user.user_stu }}').submit()">지원서보기
+                                                                    ▶</a>
+                                                                <form id="new_user_application_{{ new_user.user_stu }}"
+                                                                      action="{% url 'member_applications' %}"
+                                                                      method="post" style="display: none">
                                                                     {% csrf_token %}
-                                                                    <input type="hidden" name="user_stu" value="{{ new_user.user_stu }}">
+                                                                    <input type="hidden" name="user_stu"
+                                                                           value="{{ new_user.user_stu }}">
                                                                 </form>
                                                             </td>
                                                         </tr>
@@ -421,12 +452,21 @@
                                                             <tr>
                                                                 <!-- my_info_width는 my_info_cr.css에 정의되어 있음.  -->
                                                                 <th class="border-top-0 my_info_width_50"></th>
-                                                                <th class="border-top-0 my_info_width_50" scope="col"></th>
-                                                                <th class="border-top-0 my_info_width_100" scope="col">이름</th>
-                                                                <th class="border-top-0 my_info_width_150" scope="col">학번</th>
+                                                                <th class="border-top-0 my_info_width_50"
+                                                                    scope="col"></th>
+                                                                <th class="border-top-0 my_info_width_100" scope="col">
+                                                                    이름
+                                                                </th>
+                                                                <th class="border-top-0 my_info_width_150" scope="col">
+                                                                    학번
+                                                                </th>
                                                                 <th class="border-top-0" scope="col">학과</th>
-                                                                <th class="border-top-0 my_info_width_170" scope="col">권한</th>
-                                                                <th class="border-top-0 my_info_width_170" scope="col">역할</th>
+                                                                <th class="border-top-0 my_info_width_170" scope="col">
+                                                                    권한
+                                                                </th>
+                                                                <th class="border-top-0 my_info_width_170" scope="col">
+                                                                    역할
+                                                                </th>
                                                                 <th class="border-top-0 my_info_width_70"></th>
                                                             </tr>
                                                             </thead>
@@ -434,7 +474,9 @@
                                                             <tbody>
                                                             <!-- ===========================여기부터 복붙============================== -->
                                                             {% if exist_user_len == 0 %}
-                                                                <td colspan="8" style="text-align: center">회원 리스트에 회원이 존재하지 않습니다.</td>
+                                                                <td colspan="8" style="text-align: center">회원 리스트에 회원이
+                                                                    존재하지 않습니다.
+                                                                </td>
                                                             {% endif %}
                                                             {% for exist_user in exist_user_list %}
                                                                 <tr>
@@ -542,12 +584,17 @@
                                             <!--이름-->
                                             <tr>
                                                 <th scope="row">이름</th>
-                                                <!--Back : 자기 이름 뜨도록 수정-->
+                                                <!-- Back : 자기 이름 뜨도록 수정 -->
                                                 <td>{{ my_info.user_name }}</td>
-                                                <!--수정하기 버튼, 누르면 모달 뜸-->
+                                                <!-- 수정하기 버튼, 누르면 모달 뜸 -->
                                                 <td>
-                                                    <a href="javascript:void(0);" data-toggle="modal"
-                                                       data-target="#name_edit"><i class="la la-pencil"></i></a>
+                                                    {% if my_wait_request|length == 0 %} {# 이름 변경 신청한 것이 없는 경우 #}
+                                                        <a href="javascript:void(0);" data-toggle="modal"
+                                                           data-target="#name_edit"><i class="la la-pencil"></i></a>
+                                                    {% else %} {# 이미 이름 변경 신청을 한 경우 #}
+                                                        <!-- 이 부분 클릭하면 변경 신청했던 내역 모달 떠서 보게 해주세요. -->
+                                                        <a href="#">이름 신청 이력 보기</a>
+                                                    {% endif %}
                                                 </td>
                                             </tr>
                                             <!--학번-->
@@ -702,7 +749,10 @@
                                     </div>
                                     <!--내용부분-->
                                     <div class="modal-body">
-                                        <form class="dlab-form">
+                                        <form id="form-user-update-request"
+                                              action="{% url 'user_update_request_register' %}" class="dlab-form"
+                                              method="post">
+                                            {% csrf_token %}
                                             <!--수정설명 부분-->
                                             <div class="clearfix">
                                                 <p class="my_info_modal_content"><i class="la la-check"></i>이름은 회장의 승인을
@@ -710,13 +760,13 @@
                                             </div>
                                             <!--수정할 이름 적는 부분-->
                                             <div class="form-group">
-                                                <input name="dzName" required="" class="form-control"
+                                                <input name="updated_user_name" required="required" class="form-control"
                                                        placeholder="수정하고 싶은 이름을 적어주세요" type="text"/>
                                             </div>
                                             <!--수정신청하기 버튼, Back : 누르면 회장에게 승인을 요구하도록 수정-->
                                             <a href="#" class="site-button"
                                                style="display: grid; justify-items: center;"
-                                               onclick="return confirm('신청하시겠습니까?') && alert('신청이 완료되었습니다. 회장의 승인 후 수정이 완료됩니다.')">수정신청</a>
+                                               onclick="goUpdate()">수정신청</a>
                                         </form>
                                     </div>
                                 </div>
