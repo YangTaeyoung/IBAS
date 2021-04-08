@@ -307,53 +307,102 @@
                                         <div class="content-body">
                                             <div class="myinfo-table-padding">
                                                 <!-- 신입부원 관리 테이블 시작 -->
+                                                <!-- my_info_mem_select는 my_info_cr.css에 정의되어 있음.  -->
+                                                <div class="my_info_mem_select m-b20">
+                                                    <!-- onchange 는 필터. my_info.js 에 정의되어 있으.ㅁ -->
+                                                    <select id="my_info_select_grade" name=""
+                                                            onchange="my_info_grade()">
+                                                        <option selected="selected" disabled="disabled">학년
+                                                        </option>
+                                                        {#                                                        {% for  %}#}
+                                                        <option class="my_info_">1학년</option>
+                                                        <option>2학년</option>
+                                                        <option>3학년</option>
+                                                        <option>4학년</option>
+                                                        {#                                                        {% endfor %}#}
+                                                    </select>
+                                                </div>
+                                                <!-- my_info_mem_select는 my_info_cr.css에 정의되어 있음.  -->
+                                                <div class="my_info_mem_select m-b20">
+                                                    <select name="">
+                                                        <option selected="selected" disabled="disabled">승인 여부
+                                                        </option>
+                                                        {#                                                        {% for %}#}
+                                                        <option>합격</option>
+                                                        <option>불합격</option>
+                                                        {#                                                        {% endfor %}#}
+                                                    </select>
+                                                </div>
+                                                <!-- my_info_mem_btn는 my_info_cr.css에 정의되어 있음.  -->
+                                                <div class="my_info_mem_btn m-b20 listing-info-right">
+                                                    <!-- &nbsp;는 띄어쓰기 -->
+                                                    <button class="site-button" type="submit"><i
+                                                            class="la la-check m-r5"
+                                                            style="font-weight: bold"></i>&nbsp;적용
+                                                    </button>
+                                                </div>
+
                                                 <table class="table">
                                                     <thead>
                                                     <!-- 테이블 1행: 제목 -->
-                                                    <tr>
+                                                    <tr id="my_info_new_head">
                                                         <!-- my_info_width는 my_info_cr.css에 정의되어 있음.  -->
                                                         <th class="border-top-0 my_info_width_50" scope="col"></th>
+                                                        <th class="border-top-0 my_info_width_50" scope="col"></th>
                                                         <th class="border-top-0 my_info_width_100" scope="col">이름</th>
+                                                        <th class="border-top-0 my_info_width_100" scope="col">학년</th>
                                                         <th class="border-top-0 my_info_width_150" scope="col">학번</th>
-                                                        <th class="border-top-0 my_info_width_150" scope="col">이메일</th>
-                                                        <th class="border-top-0" scope="col">학과</th>
+                                                        <th class="border-top-0 my_info_width_230" scope="col">이메일</th>
+                                                        <th class="border-top-0 my_info_width_230" scope="col">학과</th>
                                                         <th class="border-top-0" scope="col">지원서 보기</th>
                                                     </tr>
                                                     </thead>
                                                     <!-- 신입부원 관리 테이블 내용 시작 -->
                                                     <tbody>
                                                     <!-- =========================== 여기부터 복붙 ============================== -->
-                                                    {% if new_user_len == 0 %}
-                                                        <td colspan="6" style="text-align: center"> 입부 신청 대기중인 회원이
-                                                            없습니다.
+                                                    {# {% if%}#}
+                                                    {# <td colspan="6" style="text-align: center"> 입부 신청 대기중인 회원이 없습니다.</td>#}
+                                                    {# {% endif %}#}
+                                                    {# {% for  %}#}
+                                                    <tr class="my_info_new_tr">
+                                                        <td scope="row">
+                                                            <div class="input-block">
+                                                                <input id="check_"
+                                                                       type="checkbox"
+                                                                       name="user_stu_list[]"
+                                                                       value="{{ exist_user.user_stu }}">
+                                                                <!-- my_info_label_margin는 my_info_cr.css에 정의되어 있음.  -->
+                                                                <label for="check_"
+                                                                       class="my_info_label_margin"></label>
+                                                            </div>
                                                         </td>
-                                                    {% endif %}
-                                                    {% for new_user in new_user_list %}
-                                                        <tr>
-                                                            <th>{{ forloop.counter }}</th>
-                                                            <!-- 회원 이름 -->
-                                                            <td>{{ new_user.user_name }}</td>
-                                                            <!-- 회원 학번 -->
-                                                            <td>{{ new_user.user_stu }}</td>
-                                                            <!-- 회원 이메일 -->
-                                                            <td>{{ new_user.user_email }}</td>
-                                                            <!-- 회원 학과 -->
-                                                            <td>{{ new_user.user_major.major_name }}</td>
-                                                            <!-- 지원서보기 -->
-                                                            <td>
-                                                                <a href="#"
-                                                                   onclick="document.getElementById('new_user_application_{{ new_user.user_stu }}').submit()">지원서보기
-                                                                    ▶</a>
-                                                                <form id="new_user_application_{{ new_user.user_stu }}"
-                                                                      action="{% url 'member_applications' %}"
-                                                                      method="post" style="display: none">
-                                                                    {% csrf_token %}
-                                                                    <input type="hidden" name="user_stu"
-                                                                           value="{{ new_user.user_stu }}">
-                                                                </form>
-                                                            </td>
-                                                        </tr>
-                                                    {% endfor %}
+                                                        <th>{{ forloop.counter }}</th>
+                                                        <!-- 회원 이름 -->
+                                                        <td>{{ new_user.user_name }}</td>
+{#                                                        학년 변수 작업 해야해요~!~~!~!~!~~!!!~~~~~#}
+                                                        <!-- 회원 학년 -->
+                                                        <td class="mem_grade">3학년</td>
+                                                        <!-- 회원 학번 -->
+                                                        <td>{{ new_user.user_stu }}</td>
+                                                        <!-- 회원 이메일 -->
+                                                        <td>{{ new_user.user_email }}</td>
+                                                        <!-- 회원 학과 -->
+                                                        <td>{{ new_user.user_major.major_name }}</td>
+                                                        <!-- 지원서보기 -->
+                                                        <td>
+                                                            <a href="#"
+                                                               onclick="document.getElementById('new_user_application_{{ new_user.user_stu }}').submit()">지원서보기
+                                                                ▶</a>
+                                                            <form id="new_user_application_{{ new_user.user_stu }}"
+                                                                  action="{% url 'member_applications' %}" method="post"
+                                                                  style="display: none">
+                                                                {% csrf_token %}
+                                                                <input type="hidden" name="user_stu"
+                                                                       value="{{ new_user.user_stu }}">
+                                                            </form>
+                                                        </td>
+                                                    </tr>
+                                                    {#                                                    {% endfor %}#}
                                                     </tbody>
                                                 </table>
                                                 <!--페이지네이션-->

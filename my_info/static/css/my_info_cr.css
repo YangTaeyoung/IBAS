@@ -41,6 +41,11 @@
     width: 200px;
 }
 
+/*td 너비를 조정하기 위함*/
+.my_info_width_230 {
+    width: 230px;
+}
+
 /*여기서부터 회원관리 부분 체크박스부분 스타일임. */
 input[type="checkbox"]:checked + label:before {
     border-color: #4611a7;
