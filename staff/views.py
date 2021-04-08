@@ -78,41 +78,82 @@ def member_applications(request):
     return render(request, 'member_applications.html', context)
 
 
+def get_message(is_passed, user_name):  # 합/불 메시지 딕셔너리 반환
+    mail_dict = dict()
+    if is_passed:  # 합격할 경우
+        mail_dict["mail_title"] = "[IBAS] 축하합니다. " + user_name + "님 동아리에 입부되셨습니다."
+        mail_dict["mail_message"] = "안녕하세요. IBAS(Inha Bigdata Analysts Society)입니다." \
+                                    "\n 저희동아리에 지원해주셔서 정말 감사드립니다." \
+                                    "\nIBAS를 통해 많은 지식을 함양하고, 많은 사람과 교류하시길 바랍니다. " \
+                                    "\nIBAS는 언제나 " + user_name + "님의 발전을 응원하겠습니다. " \
+                                    "\n\n동아리에 지원해주셔서 다시 한 번 감사드립니다. IBAS에 대해 더 많은 정보를 얻고 싶다면 아래 홈페이지를 방문해주세요" \
+                                    "\n\nIBAS 홈페이지 링크: http://www.inhabas.com"
+    else:  # 불합격할 경우
+        mail_dict["mail_title"] = "[IBAS]" + user_name + "님의 입부 신청 결과를 알립니다."
+        mail_dict["mail_message"] = "안녕하세요. IBAS(Inha Bigdata Analysts Society)입니다." \
+                                    "\n 저희동아리에 지원해주셔서 정말 감사드립니다. " \
+                                    "\n안타깝게도, 내부회의 결과," + user_name + "님은 저희 동아리와 함께 할 수 없게 되었습니다." \
+                                    "\n\nIBAS에 관심을 가져주셔서 정말 감사드립니다." \
+                                    "\n 앞으로 " + user_name + "님의 지속적인 발전을 응원하겠습니다. \n감사합니다. -IBAS-"
+    return mail_dict
+
+
 def member_aor(request):
     if request.method == "POST":
         user = User.objects.get(pk=request.POST.get("user_stu"))
         apply = int(request.POST.get("apply"))
         if apply == 1:
-            # 합격 통보 이메일
-            mail_title = "[IBAS] 축하합니다. " + user.user_name + "님 동아리에 입부되셨습니다."
-            mail_messsage = "안녕하세요. IBAS(Inha Bigdata Analysts Society)입니다.\n 저희동아리에 지원해주셔서 정말 감사드립니다.\nIBAS를 통해 많은 " \
-                            "지식을 함양하고, 많은 사람과 교류하시길 바랍니다. \nIBAS는 언제나 " + user.user_name + "님의 발전을 응원하겠습니다. " \
-                            "\n\n동아리에 지원해주셔서 다시 한 번 감사드립니다. IBAS에 대해 더 많은 정보를 얻고 싶다면 아래 홈페이지를 방문해주세요" \
-                            " \n\nIBAS 홈페이지 링크: http://www.inhabas.com"
+            # 합격 통보 이메일 메시지 딕셔너리 생성
+            mail_dict = get_message(True, user.user_name)
             user.user_auth = UserAuth.objects.get(pk=2)
-            send_mail(subject=mail_title, message=mail_messsage, from_email=settings.EMAIL_HOST_USER,
-                      recipient_list=[user.user_email])
+            # 메일 전송
+            send_mail(subject=mail_dict["mail_title"], message=mail_dict["mail_message"],
+                      from_email=settings.EMAIL_HOST_USER, recipient_list=[user.user_email])
             user.save()
-            return redirect(reverse("my_info"))
         else:
-            # 불합격 이메일 통보
-            mail_title = "[IBAS]" + user.user_name + "님의 입부 신청 결과를 알립니다."
-            mail_messsage = "안녕하세요. IBAS(Inha Bigdata Analysts Society)입니다." \
-                            "\n 저희동아리에 지원해주셔서 정말 감사드립니다. " \
-                            "\n안타깝게도, 내부회의 결과," + user.user_name + "님은 저희 동아리와 함께 갈 수 없게 되었습니다." \
-                            "\n\n저희 동아리에 관심을 가져주셔서 정말 감사합니다. 앞으로 " + user.user_name + \
-                            "님의 지속적인 발전을 응원하겠습니다. \n감사합니다. -IBAS-"
-
-            send_mail(subject=mail_title, message=mail_messsage, from_email=settings.EMAIL_HOST_USER,
-                      recipient_list=[user.user_email])
+            # 불합격 이메일 통보 메시지 딕셔너리 생성
+            mail_dict = get_message(False, user.user_name)
             try:
                 os.remove(settings.MEDIA_ROOT + "/" + str(user.user_pic))
                 os.rmdir(settings.MEDIA_ROOT + "/member/" + str(user.user_stu))
             except FileNotFoundError:
                 pass
+            send_mail(subject=mail_dict["mail_title"], message=mail_dict["mail_message"],  # 메일 전송
+                      from_email=settings.EMAIL_HOST_USER,
+                      recipient_list=[user.user_email])
             user.delete()
-            return redirect(reverse("my_info"))
+        return redirect(reverse("my_info"))
     return redirect(reverse("index"))
+
+
+def members_aor(request):
+    if request.method == "POST":
+        user_list = User.objects.filter(user_auth__auth_no=3)
+        aor = int(request.POST.get("aor"))
+        if aor == 0: # 사용자가 합격, 불합격, 아무것도 입력하지 않고 적용 버튼을 누른 경우.
+            return redirect(reverse("my_info"))
+        for user in user_list:
+            for user_stu in request.POST.getlist("user_stu_list[]"):
+                if user.user_stu == user_stu:
+                    if aor == 2:  # 합격
+                        mail_dict = get_message(True, user.user_name)
+                        user.user_auth = UserAuth.objects.get(pk=2)  # 비활동 회원으로 변경
+                        send_mail(subject=mail_dict["mail_title"], message=mail_dict["mail_message"],  # 합격 메일 전송
+                                  from_email=settings.EMAIL_HOST_USER, recipient_list=[user.user_email])
+                        user.save()
+                    else:  # 불합격
+                        # 불합격 이메일 통보 메시지 딕셔너리 생성
+                        mail_dict = get_message(False, user.user_name)
+                        try: # 프로필 사진 및 담았던 폴더 삭제
+                            os.remove(settings.MEDIA_ROOT + "/" + str(user.user_pic))
+                            os.rmdir(settings.MEDIA_ROOT + "/member/" + str(user.user_stu))
+                        except FileNotFoundError: # 파일이 존재하지 않은 경우
+                            pass # 넘어감.
+                        send_mail(subject=mail_dict["mail_title"], message=mail_dict["mail_message"],  # 불합격 메일 전송
+                                  from_email=settings.EMAIL_HOST_USER, recipient_list=[user.user_email])
+                        user.delete()
+        return redirect(reverse("my_info"))  # 처리 완료 후.
+    return redirect(reverse("index"))  # 비정상 적인 요청의 경우.
 
 
 def member_delete_register(request):
