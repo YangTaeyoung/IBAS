@@ -262,7 +262,6 @@ def contest_list(request):  # 게시판 페이지로 이동
         "contest_list": item,
         "board_name": "공모전 게시판",  # BoardType.objects.get(pk=6).board_type_name,
         "board_exp": "공모전 정보를 알려주는 게시판",  # BoardType.objects.get(pk=6).board_type_exp,
-        "now": date.today()
     }
     context.update(get_sidebar_information())
 

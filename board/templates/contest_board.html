@@ -118,10 +118,10 @@
                                                         <strong>{{ board.contest_deadline | date:"d" }}</strong>
                                                         <!-- 모집 및 마감 상태 -->
                                                         <!-- 공모전 기간 중에 있으면 모집이라고 뜨고, 공모전 기간이 자나면, 자동으로 마감으로 뜨게 처리 -->
-                                                        {% if board.contest_start <= now and now <= board.contest_deadline %}
+                                                        {% if board.is_past_due %}
                                                         <span class="recruiting">모 집</span></li>
                                                         {% else %}
-                                                        <span class="recruiting">마 감</span></li>
+                                                        <span class="recruiting-end">마 감</span></li>
                                                         {% endif %}
                                                     <!-- 공모전에 대한 간단소개 -->
                                                     <li class="text-cut">
