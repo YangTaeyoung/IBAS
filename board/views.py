@@ -1,12 +1,31 @@
 from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponse
-from DB.models import Board, BoardFile, BoardType, User, UserRole, UserAuth, Comment
+from DB.models import Board, BoardFile, BoardType, User, UserRole, UserAuth, Comment, ContestBoard
 from django.db.models import Q, Count
 from addr_handling import go_board, go_board_detail
 from file_controller import is_image
 from django.core.paginator import Paginator
 from django.conf import settings
 import os
+
+
+def get_sidebar_information():
+    return {
+        "all_num": Board.objects.all().count(),
+        "notice_num": Board.objects.filter(board_type_no__board_type_no=1).count(),
+        "free_num": Board.objects.filter(board_type_no__board_type_no=2).count(),
+        "quest_num": Board.objects.filter(board_type_no__board_type_no=3).count(),
+        "activity_num": Board.objects.filter(board_type_no__board_type_no=4).count(),
+        "contest_num": ContestBoard.objects.all().count(),
+    }
+
+
+def get_page_object(request, board_list, num_of_boards_in_one_page=10):
+    paginator = Paginator(board_list, num_of_boards_in_one_page)  # 페이지네이터로 10개씩 보이게끔. 나중에 수정하면 됌
+    page = request.GET.get('page')  # 페이지 이름 ㅇㅇ 여기서 변경하면 됌
+    item = paginator.get_page(page)
+
+    return item
 
 
 def board_view(request, board_type_no):  # 게시판 페이지로 이동
@@ -17,9 +36,7 @@ def board_view(request, board_type_no):  # 게시판 페이지로 이동
         board_list = Board.objects.filter(board_type_no=BoardType.objects.get(pk=board_type_no)).select_related(
             "board_writer").order_by("-board_created")
 
-    paginator = Paginator(board_list, 10)  # 페이지네이터로 10개씩 보이게끔. 나중에 수정하면 됌
-    page = request.GET.get('page')  # 페이지 이름 ㅇㅇ 여기서 변경하면 됌
-    item = paginator.get_page(page)
+    item = get_page_object(request, board_list)
     context = {
         "board_len": len(item),
         "message": "게시글이 존재하지 않습니다.",
@@ -27,12 +44,9 @@ def board_view(request, board_type_no):  # 게시판 페이지로 이동
         "board_name": BoardType.objects.get(pk=board_type_no).board_type_name,
         "board_exp": BoardType.objects.get(pk=board_type_no).board_type_exp,
         "board_type_no": board_type_no,
-        "all_num": Board.objects.all().count(),
-        "notice_num": Board.objects.filter(board_type_no__board_type_no=1).count(),
-        "free_num": Board.objects.filter(board_type_no__board_type_no=2).count(),
-        "quest_num": Board.objects.filter(board_type_no__board_type_no=3).count(),
-        "activity_num": Board.objects.filter(board_type_no__board_type_no=4).count()
     }
+    context.update(get_sidebar_information())
+
     return render(request, 'board.html', context)
 
 
@@ -43,10 +57,7 @@ def board_search(request):
             Q(board_cont__icontains=keyword) | Q(board_title__icontains=keyword) | Q(
                 board_writer__user_name=keyword)).select_related("board_writer").order_by("-board_created").all()
 
-        paginator = Paginator(board_list, 10)  # 페이지네이터로 10개씩 보이게끔. 나중에 수정하면 됌
-        page = request.GET.get('page')  # 페이지 이름 ㅇㅇ 여기서 변경하면 됌
-        item = paginator.get_page(page)
-
+        item = get_page_object(request, board_list)
         context = {
             "board_len": len(item),
             "message": "\"" + keyword + "\"로 검색한 게시글이 존재하지 않습니다.",
@@ -54,12 +65,9 @@ def board_search(request):
             'board_type_no': 5,
             "board_name": "검색결과",
             "board_exp": keyword + "로 검색한 결과입니다.",
-            "all_num": Board.objects.all().count(),
-            "notice_num": Board.objects.filter(board_type_no__board_type_no=1).count(),
-            "free_num": Board.objects.filter(board_type_no__board_type_no=2).count(),
-            "quest_num": Board.objects.filter(board_type_no__board_type_no=3).count(),
-            "activity_num": Board.objects.filter(board_type_no__board_type_no=4).count()
         }
+        context.update(get_sidebar_information())
+
         return render(request, "board.html", context)
     else:
         return HttpResponse(go_board(5))
@@ -134,7 +142,7 @@ def board_update(request):
             "board_name": board.board_type_no.board_type_name,
             "board_exp": board.board_type_no.board_type_exp,
         }
-        print("board.board_writer.user_stu", board.board_writer.user_stu)
+
         if board.board_writer.user_stu == request.session.get("user_stu"):
             return render(request, 'board_register.html', context)  # 이거로 보내줘서 작업 가능
         else:
@@ -240,17 +248,26 @@ def board_comment_update(request):
     else:
         return HttpResponse(go_board(5))  # 잘못된 요청의 경우 전체 게시판으로 이동하게 함.
 
-def board(request):  # 게시판 페이지로 이동
-    return render(request, 'board.html', {})
-
-def detail(request):
-    return render(request, 'detail.html', {})
 
 def contest_list(request):  # 게시판 페이지로 이동
-    return render(request, 'contest_board.html', {})
+    contest_board_list = ContestBoard.objects.all().order_by('-contest_deadline').prefetch_related('ContestFile')
+
+    item = get_page_object(request, contest_board_list, num_of_boards_in_one_page=6)
+    context = {
+        "board_len": len(item),
+        "message": "아직 등록한 공모전이 없습니다.",
+        "contest_list": item,
+        "board_name": BoardType.objects.get(pk=6).board_type_name,
+        "board_exp": BoardType.objects.get(pk=6).board_type_exp,
+    }
+    context.update(get_sidebar_information())
+
+    return render(request, 'contest_board.html', context)
+
 
 def contest_register(request):  # 게시판 등록 페이지로 이동
     return render(request, 'contest_register.html', {})
+
 
 def contest_detail(request):  # 게시판 상세 페이지로 이동
     return render(request, 'contest_detail.html', {})

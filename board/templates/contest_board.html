@@ -20,10 +20,10 @@
                         <div class="dlab-bnr-inr-entry">
                             <!--제목-->
                             <!-- DB에서 제목 꺼내와야 함 공모전, 강의, 취미-->
-                            <h1 class="text-white introduce-letter-spacing_5">공모전 게시판</h1>
+                            <h1 class="text-white introduce-letter-spacing_5">{{ board_name }}</h1>
                             <!--부제목-->
                             <!-- DB에서 부제목 꺼내와야 함 공모전, 강의, 취미 -->
-                            <p class="introduce-margin-top_20">@@과 관련한 게시판입니다.</p>
+                            <p class="introduce-margin-top_20">{{ board_exp }}</p>
                         </div>
                     </div>
                 </a>
@@ -42,14 +42,14 @@
                                         <div style="margin-bottom: 20px">
                                             <h4 class="title">게시글 검색</h4>
                                             <div class="">
-                                                <form role="search" method="post">
+                                                <form role="search" action={% url 'board_search' %}  method="post">
                                                     <div class="input-group">
                                                         <input name="text" type="text" class="form-control"
                                                                placeholder="검색어를 입력하세요.">
                                                         <span class="input-group-btn">
-												<button type="submit" class="site-button"><i
-                                                        class="fa fa-search"></i></button>
-                                            </span>
+                                                        <button type="submit" class="site-button"><i
+                                                                class="fa fa-search"></i></button>
+                                                        </span>
                                                     </div>
                                                 </form>
                                             </div>
@@ -61,11 +61,23 @@
                                         <h4 class="title">게시판</h4>
                                         <div class="widget_tag">
                                             <ul class="m-b0">
-                                                <li><a href="javascript:void(0);">전체 게시글</a> (28+)</li>
-                                                <li><a href="javascript:void(0);">공지사항</a> (39+)</li>
-                                                <li><a href="javascript:void(0);">자유게시판</a> (76+)</li>
-                                                <li><a href="javascript:void(0);">질문게시판</a> (47+)</li>
-                                                <li><a href="javascript:void(0);">공모전 게시판</a> (47+)</li>
+                                                <li><a href="{% url 'board_view'  board_type_no=5 %}">전체 게시글</a>
+                                                    ({{ all_num }}+)
+                                                </li>
+                                                <li><a href="{% url 'board_view'  board_type_no=1 %}">공지사항</a>
+                                                    ({{ notice_num }}+)
+                                                </li>
+                                                <li><a href="{% url 'board_view'  board_type_no=2 %}">자유게시판</a>
+                                                    ({{ free_num }}+)
+                                                </li>
+                                                <li><a href="{% url 'board_view'  board_type_no=3 %}">질문게시판</a>
+                                                    ({{ quest_num }}+)
+                                                </li>
+                                                <li><a href="{% url 'contest_list' %}">공모전게시판</a>
+                                                    ({{ contest_num }}+)
+                                                </li>
+                                                <li><a href="{% url 'activity' %}">활동게시판</a>
+                                                    ({{ activity_num }}+)</li>
                                             </ul>
                                         </div>
                                     </div>
@@ -74,146 +86,85 @@
                             <!--========== 오른쪽 공모전 게시글 리스트 부분 시작 ===========-->
                             <div class="col-lg-10 col-xl-8 p-b30">
                                 <div class="row">
+                                {% if board_len != 0 %}
                                     <!--================= 여기부터 게시글 반복시작 =================-->
                                     <!-- 게시글 1 -->
+                                    {% for board in contest_list %}
                                     <div class="col-lg-6">
                                         <div class="listing-bx event-listing m-b10">
                                             <!-- 게시글 대표 이미지 div -->
                                             <div class="listing-media">
                                                 <!-- 이미지를 클릭하면, 해당 게시글로 이동함 -->
                                                 <a href="#">
-                                                    <img src="{% static 'images/test_img1.png' %}" alt="">
+<!-- 파일 없로드 처리해야함 -->                       <img src="{% static 'images/test_img1.png' %}" alt="">
                                                 </a>
                                             </div>
                                             <!-- 공모전 내용 간단소개 div -->
                                             <div class="listing-info" style="height: 110px">
                                                 <!-- 공모전 제목 -->
-                                                <h3 class="title"><a href="listing-details.html">빅데이터 공모전</a></h3>
+                                                <h3 class="title"><a href="listing-details.html">{{ board.contest_title }}</a></h3>
                                                 <!-- 공모전 간단소개 -->
                                                 <ul class="event-meta">
                                                     <!-- 마감일 및 모집 상태 -->
                                                     <li class="event-date">
                                                         <!-- 공모전 마감일 -->
                                                         <!-- 마감 월 (영어로 표기됨) -->
-                                                        <span class="text-primary">JUN</span>
+                                                        <span class="text-primary">{{ board.contest_deadline | date:"N" }}</span>
                                                         <!-- 마감일 -->
-                                                        <strong>13</strong>
+                                                        <strong>{{ board.contest_deadline | date:"d" }}</strong>
                                                         <!-- 모집 및 마감 상태 -->
                                                         <!-- 공모전 기간 중에 있으면 모집이라고 뜨고, 공모전 기간이 자나면, 자동으로 마감으로 뜨게 처리 -->
                                                         <span class="recruiting">모 집</span></li>
                                                     <!-- 공모전에 대한 간단소개 -->
-                                                    <li class="text-cut">전기자동차, 플라스틱 재활용 등 지속가능한 환경을 위한 아이디어 캠페인에 대한
-                                                        공모전
+                                                    <li class="text-cut">
+                                                        {{ board.contest_cont }}
                                                     </li>
                                                 </ul>
                                             </div>
                                             <div class="event-bottom">
                                                 <ul>
                                                     <!-- 공모전 기간 -->
-                                                    <li class="event-hosted"><span
-                                                            class="text-primary mr-3">기간</span><span> 2021.03.01 ~ 2021.06.13</span>
+                                                    <li class="event-hosted">
+                                                        <span class="text-primary mr-3">기간</span>
+                                                        <span> {{ board.contest_start |date:"Y.m.d"}} ~ {{ board.contest_deadline | date:"Y.m.d" }}</span>
                                                     </li>
                                                 </ul>
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- 게시글 2 -->
-                                    <div class="col-lg-6 mb-3">
-                                        <div class="listing-bx event-listing m-b10">
-                                            <!-- 게시글 대표 이미지 div -->
-                                            <div class="listing-media">
-                                                <!-- 이미지를 클릭하면, 해당 게시글로 이동함 -->
-                                                <a href="#">
-                                                    <img src="{% static 'images/test_img1.png' %}" alt="">
-                                                </a>
-                                            </div>
-                                            <!-- 공모전 내용 간단소개 div -->
-                                            <div class="listing-info" style="height: 110px">
-                                                <!-- 공모전 제목 -->
-                                                <h3 class="title"><a href="listing-details.html">해커톤 해킹대회</a></h3>
-                                                <!-- 공모전 간단소개 -->
-                                                <ul class="event-meta">
-                                                    <!-- 마감일 및 모집 상태 -->
-                                                    <li class="event-date">
-                                                        <!-- 공모전 마감일 -->
-                                                        <!-- 마감 월 (영어로 표기됨) -->
-                                                        <span class="text-primary">FEB</span>
-                                                        <!-- 마감일 -->
-                                                        <strong>15</strong>
-                                                        <!-- 모집 및 마감 상태 -->
-                                                        <!-- 공모전 기간 중에 있으면 모집이라고 뜨고, 공모전 기간이 자나면, 자동으로 마감으로 뜨게 처리 -->
-                                                        <span class="recruiting-end">마 감</span></li>
-                                                    <!-- 공모전에 대한 간단소개 -->
-                                                    <li class="text-cut">‘해킹(Hacking)’과 ‘마라톤(Marathon)’의 합성어. 마라톤처럼 일정한
-                                                        시간과 장소에서 프로그램을 해킹하거나 개발하는 행사를 일컫는다. 일반인에게 해킹은 불법적으로 컴퓨터를 공격하는
-                                                        행위라는 의미로 많이 사용되나, 컴퓨터 프로그래머 사이에서는 흔히 ‘난이도 높은 프로그래밍’이란 뜻으로 쓰인다.
-                                                        반면, 불법적인 해킹은 크래킹(Cracking)이라 불린다. 정보기술(IT) 기업에서 흔하게 활용되며, 세계 최대
-                                                        누리소통망서비스업체인 페이스북에는 지속적 발전의 원동력으로 작용했다. 페이스북은 개발자와 디자이너는 물론이고 인사,
-                                                        마케팅, 재무 등 모든 구성원에게 밤새 음식과 간식을 제공하면서 아이디어와 생각을 직접 만들어 보게 하는 해커톤을
-                                                        개최하는 것으로 유명하다.
-                                                        [네이버 지식백과] 해커톤 [Hackathon] (ICT 시사상식 2015, 2014.12.31)
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div class="event-bottom">
-                                                <ul>
-                                                    <!-- 공모전 기간 -->
-                                                    <li class="event-hosted"><span
-                                                            class="text-primary mr-3">기간</span><span> 2021.02.01 ~ 2021.02.15</span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- 게시글 3 (위와 주석이 동일하므로 위의 주석들 참고) -->
-                                    <div class="col-lg-6 mb-3">
-                                        <div class="listing-bx event-listing m-b10">
-                                            <div class="listing-media">
-                                                <a href="#">
-                                                    <img src="{% static 'images/test_img1.png' %}" alt="">
-                                                </a>
-                                            </div>
-                                            <div class="listing-info" style="height: 110px">
-                                                <h3 class="title"><a href="listing-details.html">지속가능 환경 아이디어 캠페인</a>
-                                                </h3>
-                                                <ul class="event-meta">
-                                                    <li class="event-date"><span class="text-primary">SEP</span>
-                                                        <strong>04</strong><span class="recruiting-end">마 감</span></li>
-                                                    <li class="text-cut">전기자동차, 플라스틱 재활용 등 지속가능한 환경을 위한 아이디어 캠페인에 대한
-                                                        공모전
-                                                    </li>
-                                                    <li>⠀</li>
-                                                </ul>
-                                            </div>
-                                            <div class="event-bottom">
-                                                <ul>
-                                                    <li class="event-hosted"><span
-                                                            class="text-primary mr-3">기간</span><span> 2021.02.01 ~ 2021.02.15</span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    {% endfor %}
                                     <!--================= 여기부터 게시글 반복 끝 =================-->
+                                {% else %}
+                                    {{ message }}
+                                {% endif %}
                                 </div>
+                                {% if request.session.user_auth == 1 %}
                                 <div class="extra-cell text-right  m-t20">
                                     <!-- 게시글 등록 버튼 -->
                                     <!-- 관련자만 보이게 처리 -->
                                     <button class="site-button radius-xl m-l10"><i class="fa fa-plus m-r5"></i>게시글 등록
                                     </button>
                                 </div>
+                                {% endif %}
                                 <!--========== 페이지네이션 시작 ===========-->
                                 <!-- 1페이지에 6~8개 게시글 끌고오고, 게시글이 그보다 적으면, 페이지네이션 안보이게 처리 -->
                                 <div class="pagination-bx clearfix text-center">
                                     <ul class="pagination">
-                                        <li class="previous"><a href="javascript:void(0)"><i
-                                                class="fa fa-arrow-left"></i></a></li>
-                                        <li><a href="javascript:void(0)">1</a></li>
-                                        <li><a href="javascript:void(0)">2</a></li>
-                                        <li><a href="javascript:void(0)">...</a></li>
-                                        <li class="active"><a href="javascript:void(0)">7</a></li>
-                                        <li class="next"><a href="javascript:void(0)"><i class="fa fa-arrow-right"></i></a>
-                                        </li>
+                                        {% if contest_list.has_previous %}
+                                            <li class="previous"><a href="?page=1"><i class="fa fa-arrow-left"></i></a>
+                                            </li>
+                                            <li>
+                                                <a href="?page={{ contest_list.previous_page_number }}"> {{ contest_list.previous_page_number }}</a>
+                                            </li>
+                                        {% endif %}
+                                        <li><a href="javascript:void(0)">{{ contest_list.number }}</a></li>
+                                        {% if contest_list.has_next %}
+                                            <li>
+                                                <a href="?page={{ contest_list.next_page_number }}"> {{ contest_list.next_page_number }}</a>
+                                            </li>
+                                            <li class="next"><a href="?page={{ contest_list.paginator.num_pages }}"><i
+                                                    class="fa fa-arrow-right"></i></a></li>
+                                        {% endif %}
                                     </ul>
                                 </div>
                                 <!--========== 페이지네이션 끝 ===========-->

@@ -163,6 +163,7 @@ class ContestBoard(models.Model):
     contest_cont = models.TextField(db_column='CONTEST_CONT')  # Field name made lowercase.
     contest_asso = models.CharField(db_column='CONTEST_ASSO', max_length=100)  # Field name made lowercase.
     contest_deadline = models.DateTimeField(db_column='CONTEST_DEADLINE')  # Field name made lowercase.
+    contest_start = models.DateTimeField(db_column='CONTEST_START') # THE FIRST DATE FOR APPLICATION
     contest_created = models.DateTimeField(db_column='CONTEST_CREATED', auto_now_add=True)  # Field name made lowercase.
     contest_writer = models.IntegerField(db_column='CONTEST_WRITER')  # Field name made lowercase.
 
@@ -176,6 +177,7 @@ class ContestFile(models.Model):
     contest_no = models.ForeignKey(ContestBoard, on_delete=models.CASCADE,
                                    db_column='CONTEST_NO')  # Field name made lowercase.
     contest_file_path = models.CharField(db_column='CONTEST_FILE_PATH', max_length=1000)  # Field name made lowercase.
+    contest_file_name = models.CharField(db_column='CONTEST_FILE_NAME', max_length=500)
 
     class Meta:
         managed = False
