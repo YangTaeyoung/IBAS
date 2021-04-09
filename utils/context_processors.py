@@ -15,7 +15,7 @@ def alarms(request):
             "alarm_list": my_alarm
         }
     else:
-        return None;
+        return {}
 
 def chief(request):
     return {"chief": User.objects.filter(user_role__role_no=1).first()}
