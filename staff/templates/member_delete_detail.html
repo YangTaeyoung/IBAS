@@ -3,6 +3,7 @@
 {% block content %}
     <!--커스텀 css-->
     <link rel="stylesheet" type="text/css" href="{% static 'css/seungyeon.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/staff_yejin.css' %}">
     <script src="{% static 'js/jquery.min.js' %}"></script><!-- JQUERY.MIN JS -->
     <script src="{% static 'js/sy.js' %}"></script>
 
@@ -208,62 +209,71 @@
                                     <div class="comments-area" id="comments">
                                         <h3 class="font-26">현황
                                         </h3>
-                                        <div class="clearfix">
-                                            <!-- comment list END -->
-                                            <ol class="comment-list">
-                                                <!-- 찬성 -->
-{#                                                {% for  %}#}
-                                                    <li class="comment">
-                                                        <div class="comment-body">
-                                                            <!-- 댓글 작성자 프로필자신 및 이름을 담는 div -->
-                                                            <h4>찬성: 2명</h4>
-                                                            <div class="comment-author vcard"><cite class="fn"><img
-                                                                    src="{% static 'images/board_name_img.jpg' %}"
-                                                                    width="35"
-                                                                    height="35" class="comment-profile-size"
-                                                                    alt="현재 브라우저에서 지원하지 않는 형식입니다.">윤예진
-                                                            </cite></div>
-                                                            <!-- 찬성자 학과, 학번 및 작성시간 div -->
-                                                            <div class="dlab-post-meta m-l10">
-                                                                <ul class="d-flex">
-                                                                    <!-- 학과 및 학번 -->
-                                                                    <li class="post-author"><a
-                                                                            href="javascript:void(0);">글로벌금융학과 19학번</a>
-                                                                    </li>
-                                                                    <!-- 작성시간 -->
-                                                                    <li class="post-comment"><i
-                                                                            class="ti ti-alarm-clock"></i>
-                                                                        <a href="javascript:void(0);">
-                                                                            2021-02-02
-                                                                        </a>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-{#                                                {% endfor %}#}
-                                            </ol>
 
-                                            <!--=======찬성/반대 버튼======-->
-                                            <form>
-                                                <div style="display: flex; justify-content: center; ">
-                                                    <!--찬성-->
-                                                    <button type="button" class="btn btn-outline-primary btn-lg"
-                                                            style="width: 200px; font-weight: bold; margin-right: 20px"
-                                                            onclick="return confirm('제명에 찬성하시겠습니까?')">
-                                                        찬성
-                                                    </button>
-
-                                                    <!--반대-->
-                                                    <button type="button" class="btn btn-outline-danger btn-lg"
-                                                            style="width: 200px; font-weight: bold"
-                                                            onclick="return confirm('제명에 반대하시겠습니까?')">
-                                                        반대
-                                                    </button>
-                                                </div>
-                                            </form>
-
+                                        <h6>찬성</h6>
+                                        <div class="progress staff-graph">
+                                            <div class="progress-bar bg-info" role="progressbar"
+                                                 style="width: 50%"
+                                                 aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><p
+                                                    class="staff-margin-bottom_0 staff-font-size_15">50%</p></div>
                                         </div>
+
+                                        <div style="padding: 30px; border: 2px solid #ecebf5; border-radius: 10px">
+                                            <div class="comment-body">
+                                                        <!-- 댓글 작성자 프로필자신 및 이름을 담는 div -->
+                                                        <div class="comment-author vcard"><cite class="fn"><img
+                                                                src="{% static 'images/default_profile.png' %}"
+                                                                width="35"
+                                                                height="35" class="comment-profile-size"
+                                                                alt="현재 브라우저에서 지원하지 않는 형식입니다.">윤예진
+                                                        </cite></div>
+                                                    </div>
+                                        </div>
+
+                                        <div class="dropdown">
+                                            <button class="dropbtn"><h6>반대</h6></button>
+                                            <div class="dropdown-content" style="border: #4611a7 solid thin;">
+                                                <li class="comment">
+                                                    <div class="comment-body">
+                                                        <!-- 댓글 작성자 프로필자신 및 이름을 담는 div -->
+                                                        <div class="comment-author vcard"><cite class="fn"><img
+                                                                src="{% static 'images/bank-test.jpg' %}"
+                                                                width="35"
+                                                                height="35" class="comment-profile-size"
+                                                                alt="현재 브라우저에서 지원하지 않는 형식입니다.">윤예진
+                                                        </cite></div>
+                                                    </div>
+                                                </li>
+                                            </div>
+                                        </div>
+                                        <div class="progress staff-graph">
+                                            <div class="progress-bar bg-danger" role="progressbar" style="width: 50%"
+                                                 aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"><p
+                                                    class="staff-margin-bottom_0 staff-font-size_15">50%</p></div>
+                                        </div>
+
+
+                                        <!--=======찬성/반대 버튼======-->
+                                        <form>
+                                            <div style="display: flex; justify-content: center; ">
+                                                <!--찬성-->
+                                                <button type="button" class="btn btn-outline-primary btn-lg"
+                                                        style="width: 200px; font-weight: bold; margin-right: 20px"
+                                                        onclick="return confirm('제명에 찬성하시겠습니까?')">
+                                                    찬성
+                                                </button>
+
+
+                                                <!--반대-->
+                                                <button type="button" class="btn btn-outline-danger btn-lg"
+                                                        style="width: 200px; font-weight: bold"
+                                                        onclick="return confirm('제명에 반대하시겠습니까?')">
+                                                    반대
+                                                </button>
+                                            </div>
+                                        </form>
+
+
                                     </div>
                                 </div>
 
