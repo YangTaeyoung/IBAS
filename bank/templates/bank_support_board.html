@@ -65,14 +65,16 @@
                                 <tbody>
                                 <!-- 게시글 1 -->
                                 {% if bank_len == 0 %}
-                                    <td colspan="5" style="text-align: center"> 예산 지원 신청 게시글이 없습니다. </td>
+                                    <td colspan="5" style="text-align: center"> 예산 지원 신청 게시글이 없습니다.</td>
                                 {% endif %}
                                 {% for bank in bank_list %}
                                     <tr>
                                         <!-- 게시글 번호 -->
                                         <th scope="row" style="text-align: center">{{ forloop.counter }}</th>
                                         <!-- 게시글 제목 -->
-                                        <td><a href="{% url 'bank_support_detail' bank_no=bank.bank_no %}">{{ bank.bank_title }}</a></td>
+                                        <td>
+                                            <a href="{% url 'bank_support_detail' bank_no=bank.bank_no %}">{{ bank.bank_title }}</a>
+                                        </td>
                                         <!-- 게시글 작성자 -->
                                         <td style="text-align: center">{{ bank.bank_used_user.user_name }}</td>
                                         <!-- 게시글 작성일자 -->
@@ -84,36 +86,38 @@
                                 </tbody>
                             </table>
                         </div>
-                        <!--신청하기 버튼, 누르면 작성페이지로 이동-->
-                        <div class="extra-cell text-right" style="margin: 20px 20px 0px 0px">
-                            <a href="{% url 'bank_support_register' %}" class="site-button radius-xl m-l10">
-                                <i class="fa fa-plus m-r5"></i>
-                                신청하기
-                            </a>
-                        </div>
+                        {% if request.session.user_stu is not None and request.session.user_auth != 3 %}
+                            <!--신청하기 버튼, 누르면 작성페이지로 이동-->
+                            <div class="extra-cell text-right" style="margin: 20px 20px 0px 0px">
+                                <a href="{% url 'bank_support_register' %}" class="site-button radius-xl m-l10">
+                                    <i class="fa fa-plus m-r5"></i>
+                                    신청하기
+                                </a>
+                            </div>
+                        {% endif %}
 
-                    <!--========== 페이지네이션 시작 ===========-->
-                    <!-- 1페이지에 15개 게시글 끌고오고, 게시글이 그보다 적으면, 페이지네이션 안보이게 처리 -->
-                    <div class="pagination-bx clearfix text-center">
-                        <ul class="pagination">
-                            {% if bank_list.has_previous %}
-                                <li class="previous"><a href="?page=1"><i class="fa fa-arrow-left"></i></a>
-                                </li>
-                                <li>
-                                    <a href="?page={{ bank_list.previous_page_number }}"> {{ bank_list.previous_page_number }}</a>
-                                </li>
-                            {% endif %}
-                            <li><a href="javascript:void(0)">{{ bank_list.number }}</a></li>
-                            {% if bank_list.has_next %}
-                                <li>
-                                    <a href="?page={{ bank_list.next_page_number }}"> {{ bank_list.next_page_number }}</a>
-                                </li>
-                                <li class="next"><a href="?page={{ bank_list.paginator.num_pages }}"><i
-                                        class="fa fa-arrow-right"></i></a></li>
-                            {% endif %}
-                        </ul>
-                    </div>
-                    <!--========== 페이지네이션 끝 ===========-->
+                        <!--========== 페이지네이션 시작 ===========-->
+                        <!-- 1페이지에 15개 게시글 끌고오고, 게시글이 그보다 적으면, 페이지네이션 안보이게 처리 -->
+                        <div class="pagination-bx clearfix text-center">
+                            <ul class="pagination">
+                                {% if bank_list.has_previous %}
+                                    <li class="previous"><a href="?page=1"><i class="fa fa-arrow-left"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href="?page={{ bank_list.previous_page_number }}"> {{ bank_list.previous_page_number }}</a>
+                                    </li>
+                                {% endif %}
+                                <li><a href="javascript:void(0)">{{ bank_list.number }}</a></li>
+                                {% if bank_list.has_next %}
+                                    <li>
+                                        <a href="?page={{ bank_list.next_page_number }}"> {{ bank_list.next_page_number }}</a>
+                                    </li>
+                                    <li class="next"><a href="?page={{ bank_list.paginator.num_pages }}"><i
+                                            class="fa fa-arrow-right"></i></a></li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                        <!--========== 페이지네이션 끝 ===========-->
 
 
                     </div>
