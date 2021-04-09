@@ -1,3 +1,4 @@
+// delete_list에 적용되어 있음
 // select 값 설정했을때 필터
 function staff_select() {
     var tr_head = document.getElementById("staff-del-list-head"); // table head부분 가져옴
@@ -29,8 +30,8 @@ function staff_select() {
     }
 }
 
-
-// select 값 설정했을때 연도도 바뀌고, 연도에 맞는 내용으로 정렬
+// member_list에 적용되어 있음.
+// select 값 설정했을때 필터
 function staff_grade() {
 
     var tr_head = document.getElementById("staff_new_head"); // table head부분 가져옴

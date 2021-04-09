@@ -12,68 +12,28 @@
     font-style: italic;
 }
 
+/* member_delete_detail.html 에서 그래프 높이 조정. */
 .staff-graph {
     height: 30px;
     margin-bottom: 20px;
 }
 
-.staff-margin-bottom_0 {
-    margin-bottom: 0;
+/* member_delete_detail.html 에서 투표자 이름의 스타일. */
+.staff-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: black;
+    font-style: normal
 }
 
-.staff-font-size_15 {
-    font-size: 15px;
+/* member_delete_detail.html 에서 투표자 전공과 학번의 스타일. */
+.staff-major {
+    color: #7886a0;
+    font-size: 14px;
+    font-style: normal;
+    list-style: none;
+    margin-left: 46px
 }
-
-.staff-margin-bottom_20 {
-    margin-bottom: 20px;
-}
-
-.staff-list {
-    display: none;
-    background-color: white;
-    list-style-type: none;
-}
-
-.staff-hover:hover + .staff-show {
-    display: block;
-}
-
-.dropbtn {
-  background-color: white;
-  /*color: white;*/
-  padding: 16px;
-  font-size: 16px;
-  border: none;
-}
-
-.dropdown {
-  /*position: relative;*/
-  /*display: inline-block;*/
-}
-
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: white;
-  min-width: 300px;
-  /*box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);*/
-  z-index: 1;
-    border-radius: 5px;
-}
-
-.dropdown-content li {
-  color: black;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-}
-
-/*.dropdown-content li:hover {background-color: white;}*/
-
-.dropdown:hover .dropdown-content {display: block;}
-
-/*.dropdown:hover .dropbtn {background-color: #3e8e41;}*/
 
 /*============================================================================*/
 
@@ -133,21 +93,23 @@ input[type=checkbox] + label:before {
     -moz-transition: all 0.1s linear 0s;
     -webkit-transition: all 0.1s linear 0s;
     -o-transition: all 0.1s linear 0s;
-	transform: translateY(-50%);
-	-webkit-transform: translateY(-50%);
-	-moz-transform: translateY(-50%);
-	-o-transform: translateY(-50%);
+    transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
     width: 16px;
 }
+
 input[type=checkbox]:checked + label:after {
     font-size: 10px;
     left: 2px;
-	top:50%;
+    top: 50%;
     transform: translateY(-50%);
-	-webkit-transform: translateY(-50%);
-	-moz-transform: translateY(-50%);
-	-o-transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
 }
+
 input[type=checkbox] + label:after {
     color: #4611a7;
     content: "\f00c";
@@ -164,20 +126,22 @@ input[type=checkbox] + label:after {
     width: 14px;
     text-align: center;
 }
-/*여기서까지 회원관리 부분 체크박스부분 스타일임. */
+
+/*여기까지 회원관리 부분 체크박스부분 스타일임. */
 
 /*회원관리 select 부분 스타일 적용을 위함 */
-.staff_mem_select{
+.staff_mem_select {
     display: inline-block;
     width: 110px;
 }
 
 /*회원관리 적용 버튼 스타일 적용을 위함 */
-.staff_mem_btn{
+.staff_mem_btn {
     display: inline-block;
     margin-left: 15px;
 
 }
+
 /*회원관리 체크박스 가운데 정렬을 위함*/
 .staff_label_margin {
     margin-top: 13px;

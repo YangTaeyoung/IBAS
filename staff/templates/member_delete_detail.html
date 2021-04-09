@@ -16,7 +16,7 @@
                 <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"
                      style=" background-image: url('{% static 'images/board_name_img.jpg' %}'); height: 350px">
                     <!-- 상단 제목을 클릭하면, 상위 게시판으로 돌아감 -->
-                    <a href="{% url 'activity' %}">
+                    <a>
                         <div class="container clearfix">
                             <div class="dlab-bnr-inr-entry">
                                 <!--제목-->
@@ -173,16 +173,19 @@
                                         {#                                        {% if %}#}
                                         <!-- 게시글 수정 버튼 -->
                                         <!-- 관련자만 보이게 처리 -->
+
                                         <button class="site-button radius-xl m-l10" onclick="go_update()"><i
                                                 class="fa fa-pencil m-r5"></i>게시글 수정
                                         </button>
                                         <!-- 게시글 수정을 위한 폼 -->
-                                        <form id="form-board-update" action="{% url 'board_update' %}" method="GET"
+                                        <form id="form-board-update" action="#" method="GET"
                                               style="display: none;">
                                             {% csrf_token %}
                                             <input type="hidden" name="board_no" value="{{ board.board_no }}">
                                         </form>
                                         {#                                        {% endif %}#}
+
+
                                         <!-- 게시글 삭제 버튼 -->
                                         <!-- 관련자만 보이게 처리 -->
 
@@ -193,7 +196,7 @@
                                         </button>
 
                                         <!-- 게시글 삭제를 위한 폼 -->
-                                        <form id="form-board-delete" action="{% url 'board_delete' %}" method="POST"
+                                        <form id="form-board-delete" action="#" method="POST"
                                               style="display: none;">
                                             {% csrf_token %}
                                             <input type="hidden" name="board_no" value="{{ board.board_no }}">
@@ -210,48 +213,62 @@
                                         <h3 class="font-26">현황
                                         </h3>
 
-                                        <h6>찬성</h6>
+                                        <!-- 누군가 투표를 했을 때-->
+                                        <!-- 태그 안 style에 width의 %를 조정하면 그래프 바뀐다-->
+                                        <!-- staff-graph는 staff_yejin.css에서 정의되어 있음-->
                                         <div class="progress staff-graph">
-                                            <div class="progress-bar bg-info" role="progressbar"
-                                                 style="width: 50%"
-                                                 aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><p
-                                                    class="staff-margin-bottom_0 staff-font-size_15">50%</p></div>
-                                        </div>
-
-                                        <div style="padding: 30px; border: 2px solid #ecebf5; border-radius: 10px">
-                                            <div class="comment-body">
-                                                        <!-- 댓글 작성자 프로필자신 및 이름을 담는 div -->
-                                                        <div class="comment-author vcard"><cite class="fn"><img
-                                                                src="{% static 'images/default_profile.png' %}"
-                                                                width="35"
-                                                                height="35" class="comment-profile-size"
-                                                                alt="현재 브라우저에서 지원하지 않는 형식입니다.">윤예진
-                                                        </cite></div>
-                                                    </div>
-                                        </div>
-
-                                        <div class="dropdown">
-                                            <button class="dropbtn"><h6>반대</h6></button>
-                                            <div class="dropdown-content" style="border: #4611a7 solid thin;">
-                                                <li class="comment">
-                                                    <div class="comment-body">
-                                                        <!-- 댓글 작성자 프로필자신 및 이름을 담는 div -->
-                                                        <div class="comment-author vcard"><cite class="fn"><img
-                                                                src="{% static 'images/bank-test.jpg' %}"
-                                                                width="35"
-                                                                height="35" class="comment-profile-size"
-                                                                alt="현재 브라우저에서 지원하지 않는 형식입니다.">윤예진
-                                                        </cite></div>
-                                                    </div>
-                                                </li>
+                                            <div class="progress-bar bg-info" role="progressbar" style="width: 70%"
+                                                 aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">70%
                                             </div>
-                                        </div>
-                                        <div class="progress staff-graph">
-                                            <div class="progress-bar bg-danger" role="progressbar" style="width: 50%"
-                                                 aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"><p
-                                                    class="staff-margin-bottom_0 staff-font-size_15">50%</p></div>
+                                            <div class="progress-bar bg-danger" role="progressbar" style="width: 30%"
+                                                 aria-valuenow="30" aria-valuemin="0" aria-valuemax="100">30%
+                                            </div>
+
                                         </div>
 
+                                        <!-- 아무도 투표하지 않았을 때-->
+                                        <div class="progress staff-graph">
+                                            <div class="progress-bar bg-secondary" role="progressbar" style="width: 100%"
+                                                 aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">투표자 없음</div>
+                                        </div>
+
+
+                                        <!-- 투표자 리스트 시작 -->
+                                        <table class="table">
+                                            <tbody>
+                                            <!--하나의 tr에는 3개의 td만 있어야 함!!!!-->
+                                            <tr>
+                                                <!--하나의 tr에는 3개의 td만 있어야 하므로 주의!!!!-->
+                                                <!------------------------------여기부터 복붙----------------------------->
+                                                <td style="border: none">
+                                                    <!--투표자의 프로필 사진과 이름-->
+                                                    <div class="comment-author vcard"><cite class="fn staff-name"><img
+                                                            src="{% static 'images/bank-test.jpg' %}"
+                                                            width="35"
+                                                            height="35" class="comment-profile-size"
+                                                            alt="현재 브라우저에서 지원하지 않는 형식입니다.">윤예진
+                                                    </cite>
+
+                                                    <!-- 찬성 누른 사람에만 쓰기-->
+                                                    <span class="badge bg-info text-white">찬성</span>
+                                                    <!-- 반대 누른 사람에만 쓰기-->
+                                                    <span class="badge bg-danger text-white">반대</span>
+                                                    </div>
+
+                                                    <!--투표자의 학과와 학번-->
+                                                    <ul>
+                                                        <li class="post-author staff-major"
+                                                            style="">
+                                                            글로벌금융학과
+                                                            19학번
+                                                        </li>
+                                                    </ul>
+                                                </td>
+                                                <!------------------------------여기까지 복붙----------------------------->
+                                            </tr>
+
+                                            </tbody>
+                                        </table>
 
                                         <!--=======찬성/반대 버튼======-->
                                         <form>
@@ -320,7 +337,7 @@
                                                             <!-- DB 적용할 때는 id 부분을 id="correcting-{{ comment.comment_id }}"로 변경바람 -->
                                                             <!-- 테스트를 위해 id를 다음과 같이 함. js도 똑같이 주석 달아줬으니 참고해야 함.  -->
                                                             <form id="form-comment-update-{{ comment.comment_id }}"
-                                                                  action="{% url 'activity_comment_update' %}"
+                                                                  action="#"
                                                                   method="post">
                                                                 {% csrf_token %}
                                                                 <input type="hidden" name="comment_id"
@@ -340,7 +357,7 @@
                                                                  class="reply-btn-div">
                                                                 <!-- 답글쓰기버튼 클릭 시, jqury로 버튼을 담는 div 밑에 대댓글 작성 란 생김 -->
                                                                 <form id="form-comment-delete-{{ comment.comment_id }}"
-                                                                      action="{% url 'activity_comment_delete' %}"
+                                                                      action="#"
                                                                       method="post">
 
                                                                     {% if request.session.user_auth != 3 %}
@@ -409,7 +426,7 @@
                                                                     </div>
                                                                     <!-- DB에서 가져온 댓글정보 -->
                                                                     <form id="form-comment-update-{{ comment_ref.comment_id }}"
-                                                                          action="{% url 'activity_comment_update' %}"
+                                                                          action="#"
                                                                           method="post">
                                                                         {% csrf_token %}
                                                                         <input type="hidden" name="comment_id"
@@ -426,7 +443,7 @@
                                                                     <div id="comment_no_{{ comment_ref.comment_id }}"
                                                                          class="reply-btn-div">
                                                                         <form id="form-comment-delete-{{ comment_ref.comment_id }}"
-                                                                              action="{% url 'activity_comment_delete' %}"
+                                                                              action="#"
                                                                               method="post">
                                                                             {% csrf_token %}
                                                                             <input type="hidden" name="comment_id"
@@ -467,7 +484,7 @@
 
                                                 <div class="" id="respond">
                                                     <form class="comment-form" id="commentform" method="post"
-                                                          action="{% url 'activity_comment_register' %}">
+                                                          action="#">
                                                         {% csrf_token %}
                                                         <input type="hidden" name="board_no"
                                                                value="{{ board.board_no }}"/>
