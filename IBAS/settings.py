@@ -54,10 +54,13 @@ INSTALLED_APPS = [
     'my_info',
     # 회원 관리 관련 앱
     'staff',
+    # 강의 관련 앱
+    'lecture',
     # 소셜 로그인 패키지: allauth 관련
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+
 
     # provider: 우선 구글
     'allauth.socialaccount.providers.google',

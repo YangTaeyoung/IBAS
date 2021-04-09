@@ -23,6 +23,7 @@ from django.conf import settings
 urlpatterns = [
     path('user/', include('member.urls')),
     path('board/', include('board.urls')),
+    path('lect/', include('lecture.urls')),
     path('admin/', admin.site.urls), # 관리자 페이지 링크
     path('', include('main.urls')),
     path('staff/', include('staff.urls')),

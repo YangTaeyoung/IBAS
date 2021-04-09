@@ -1,0 +1,23 @@
+/* 모집중 */
+.recruiting {
+    border: solid 1px green;
+    border-radius: 5px;
+    padding: 2px;
+    color: green;
+}
+
+/* 모집 마감 */
+.recruiting-end {
+    border: solid 1px red;
+    border-radius: 5px;
+    padding: 2px;
+    color: red;
+}
+
+/* 간단소개란이 3줄을 넘어갈 경우, 텍스트 안보이게 처리 */
+.text-cut {
+    display: inline-block;
+    overflow: hidden;
+    line-height: 1.2;
+    height: 3.6em;
+}
