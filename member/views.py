@@ -120,9 +120,16 @@ def quest_chk(request):
         user_phone = request.POST.get("user_phone")
         user_pic = request.POST.get("user_pic")
         if user_pic is not None:
-            os.mkdir(settings.MEDIA_ROOT + "/member/" + user_stu)
-            urlretrieve(user_pic, "/home/ibas/Django/IBAS/media/member/" + user_stu + "/" + user_stu + ".jpg")
-            user_pic = "member/" + user_stu + "/" + user_stu + ".jpg"
+            try: # 자신의 폴더가 남아 있을 경우의 예외처리
+                os.mkdir(settings.MEDIA_ROOT + "/member/" + user_stu)
+            except FileExistsError:
+                pass
+            try: #
+                urlretrieve(user_pic, "/home/ibas/Django/IBAS/media/member/" + user_stu + "/" + user_stu + ".jpg")
+                user_pic = "member/" + user_stu + "/" + user_stu + ".jpg"
+            except FileNotFoundError:
+                user_pic = "member/default/default.png"
+                pass
         # 받은 정보로 user 모델 인스턴스 변수 생성
         user = User.objects.create(
             user_name=user_name,  # 이름
