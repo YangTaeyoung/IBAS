@@ -1,11 +1,10 @@
-from MySQLdb.converters import NoneType
 
 from DB.models import User
 
 
 # 로그인 했는지 여부를 반환하는 함수
 def is_logined(request):
-    return not isinstance(request.session.get("user_stu"), NoneType)
+    return User.objects.get(pk=request.session.get("user_stu")) is not None
 
 
 # 유저 관련 객체를 반환하는 컨트롤러
