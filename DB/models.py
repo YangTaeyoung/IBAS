@@ -22,6 +22,19 @@ class Answer(models.Model):
         db_table = 'ANSWER'
 
 
+class Alarm(models.Model):
+    alarm_no = models.AutoField(db_column='ALARM_NO', primary_key=True)
+    alarm_user = models.ForeignKey('User', on_delete=models.CASCADE, db_column='ALARM_USER')
+    alarm_cont = models.CharField(db_column='ALARM_CONT', max_length=150)
+    alarm_link = models.CharField(db_column='ALARM_LINK', max_length=150, null=True)
+    alarm_ischecked = models.IntegerField(db_column='ALARM_ISCHECKED', max_length=1, default=0)
+    alarm_date = models.DateTimeField(db_column='ALARM_DATE', auto_now_add=True)
+
+    class Meta:
+        managed = False
+        db_table = "ALARM"
+
+
 class Bank(models.Model):
     bank_no = models.AutoField(db_column='BANK_NO', primary_key=True)  # Field name made lowercase.
     bank_plus = models.IntegerField(db_column='BANK_PLUS', blank=True, default=0)  # Field name made lowercase.
@@ -447,6 +460,7 @@ class UserUpdateRequest(models.Model):
     class Meta:
         managed = False
         db_table = 'USER_UPDATE_REQUEST'
+
 
 class History(models.Model):
     history_no = models.AutoField(db_column="HISTORY_NO", primary_key=True)

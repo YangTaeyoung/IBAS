@@ -162,18 +162,10 @@
                                     <!--===DB에서 가져와야함... 용식 유감...===-->
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton"
                                          style="right: 14px; width: 204px; border-radius: 0px;">
-                                        <a class="dropdown-item site-button-link" href="javascript:void(0);">
-                                            <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
-                                        <a class="dropdown-item site-button-link" href="javascript:void(0);">
-                                            <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
-                                        <a class="dropdown-item site-button-link" href="javascript:void(0);">
-                                            <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
-                                        <a class="dropdown-item site-button-link" href="javascript:void(0);">
-                                            <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
-                                        <a class="dropdown-item site-button-link" href="javascript:void(0);">
-                                            <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
-                                        <a class="dropdown-item site-button-link" href="javascript:void(0);">
-                                            <i class="fa"></i><span>아직 알림이 없습니다.</span></a>
+                                        {% for alarm in alarm_list %}
+                                        <a class="dropdown-item site-button-link" href="{{ alarm.alarm_link }}">
+                                            <i class="fa"></i><span>{{ alarm.alarm_cont }}</span></a>
+                                        {% endfor %}
                                     </div>
                                 </li>
                                 <!--====================로그인 하지 않았을 때====================-->
