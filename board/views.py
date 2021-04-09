@@ -250,66 +250,80 @@ def board_comment_update(request):
         return redirect("board_view", board_type_no=5)  # 잘못된 요청의 경우 전체 게시판으로 이동하게 함.
 
 
-def contest_list(request):  # 게시판 페이지로 이동
+def contest_list(request):
+    # 공모전 게시물 전부를 해당 파일과 함께 Queryset 으로 가져오기
     contest_board_list = ContestBoard.objects.all().order_by('-contest_deadline').prefetch_related("contestfile_set")
 
+    # pagination 을 위한 page 객체 (page 객체 안에는 한 페이지에 보여줄만큼의 게시물이 들어있다.)
     item = get_page_object(request, contest_board_list, num_of_boards_in_one_page=6)
 
     context = {
         "board_len": len(item),
         "message": "아직 등록한 공모전이 없습니다.",
         "contest_list": item,
-        "board_name": "공모전 게시판",  # BoardType.objects.get(pk=6).board_type_name,
-        "board_exp": "공모전 정보를 알려주는 게시판",  # BoardType.objects.get(pk=6).board_type_exp,
+        "board_name": "공모전 게시판",
+        "board_exp": "공모전 정보를 알려주는 게시판",
     }
+    # update() 는 dict 자료형을 이어주는 함수. list.append() 와 같은 함수
     context.update(get_sidebar_information())
 
     return render(request, 'contest_board.html', context)
 
 
-def contest_register(request):
+def contest_register(request):  # 공모전 등록
 
+    # 글은 'POST'로 DB에 등록하게 되어있음.
     if request.method == 'POST':
 
         contest = ContestBoard(
             contest_title=request.POST.get('contest_title'),
             contest_asso=request.POST.get('contest_asso'),
-            contest_start=date.fromisoformat(request.POST.get('contest_start')), # %Y-%m-%d 15:00:00,
-            contest_deadline=date.fromisoformat(request.POST.get('contest_deadline')), # %Y-%m-%d 15:00:00,
+            # %Y-%m-%d 형태로 저장, DatetimeField 에서 %Y-%m-%d 15:00: 00로 변환됨/ 추후 UTC 고려해서 수정해야할듯
+            contest_start=date.fromisoformat(request.POST.get('contest_start')),
+            # %Y-%m-%d 형태로 저장, DatetimeField 에서 %Y-%m-%d 15:00: 00로 변환됨/ 추후 UTC 고려해서 수정해야할듯
+            contest_deadline=date.fromisoformat(request.POST.get('contest_deadline')),
             contest_topic=request.POST.get('contest_topic'),
             contest_cont=request.POST.get('contest_cont'),
             contest_writer=User.objects.get(pk=request.session['user_stu']),
         )
         contest.save()
 
-        if "contest_file" in request.FILES:
-            for file in request.FILES.getlist("contest_file"):
+        # 파일 저장
+        # request.FILES 는 dict 형태 (key : value)
+        # - key 는 html에서의 form 태그 name
+        # - value 는 해당 form에서 전송받은 file들 / uploadedFile 객체 형태
+        if "contest_file" in request.FILES:  # 넘겨받은 폼 태그 이름중에 "contest_file"이 있으면
+            for file in request.FILES.getlist("contest_file"): # 각각의 파일을 uploadedFile로 받아옴
                 ContestFile.objects.create(
                     contest_no=ContestBoard.objects.get(pk=contest.contest_no),
-                    contest_file_path=file, # imageField 객체 <- uploadedFile 객체 할당
+                    contest_file_path=file,  # imageField 객체 <- uploadedFile 객체 할당
                     contest_file_name=file.name
                 )
 
+        return redirect(reverse('contest_list'))
+
+    # 목록에서 신규 등록 버튼 눌렀을때
     elif request.method == 'GET':
         return render(request, 'contest_register.html')
-
-    return redirect(reverse('contest_list'))
 
 
 def contest_detail(request, contest_no):  # 게시판 상세 페이지로 이동
 
     if request.method == 'GET':
-        contest = ContestBoard.objects.get(pk=contest_no)
+        contest = ContestBoard.objects.get(pk=contest_no)  # 해당 공모전 정보 db에서 불러오기
 
         image_list = []
         file_list = []
-        files = ContestFile.objects.filter(contest_no=contest_no)
+        files = ContestFile.objects.filter(contest_no=contest_no)  # 해당 공모전에 등록된 파일 불러오기
+
+        # 파일을 이미지 파일과 일반 문서 따로 분리
         for file in files:
             if is_image(file.contest_file_path):
                 image_list.append(file)
             else:
                 file_list.append(file)
 
+        # 댓글 불러오기
         comment_list = ContestComment.objects.filter(comment_board_no=contest).order_by("-comment_created").prefetch_related(
             "comment_set")
 
@@ -317,11 +331,33 @@ def contest_detail(request, contest_no):  # 게시판 상세 페이지로 이동
             'contest': contest,
             'file_list': file_list,
             'image_list': image_list,
-            "board_name": "공모전 게시판",  # BoardType.objects.get(pk=6).board_type_name,
-            "board_exp": "공모전 정보를 알려주는 게시판",  # BoardType.objects.get(pk=6).board_type_exp,
+            "board_name": "공모전 게시판",
+            "board_exp": "공모전 정보를 알려주는 게시판",
             "comment_list": comment_list,
         }
         return render(request, 'contest_detail.html', context)
 
+    # 비정상적인 경로 들어왔을 시
     else:
         redirect(reverse('contest_list'))
+
+
+def contest_delete(request):
+    pass
+
+
+def contest_update(request):
+    pass
+
+
+def contest_comment_update(request):
+    pass
+
+
+def contest_comment_delete(request):
+    pass
+
+
+def contest_comment_register(request):
+    pass
+

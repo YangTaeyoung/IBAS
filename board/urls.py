@@ -16,5 +16,9 @@ urlpatterns = [
     path('contest/list', views.contest_list, name="contest_list"),  # 공모전 게시판페이지로 이동
     path('contest/register', views.contest_register, name="contest_register"),  # 공모전 게시판 등록페이지로 이동
     path('contest/detail/<int:contest_no>', views.contest_detail, name="contest_detail"),  # 공모전 게시판 상세보기페이지로 이동
-
+    path('contest/delete', views.contest_delete, name="contest_delete"),
+    path('contest/update', views.contest_update, name="contest_update"),
+    path('contest/comment/update', views.contest_comment_update, name="contest_comment_update"),
+    path('contest/comment/delete', views.contest_comment_delete, name="contest_comment_delete"),
+    path('contest/comment/register', views.contest_comment_register, name="contest_comment_register"),
 ]

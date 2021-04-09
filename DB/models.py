@@ -171,6 +171,7 @@ class ContestBoard(models.Model):
         managed = False
         db_table = 'CONTEST_BOARD'
 
+    # 템플릿 안에서 컨텍스트 객체를 통해 실행할 수 있음
     @property
     def is_past_due(self):
         today = date.today()
