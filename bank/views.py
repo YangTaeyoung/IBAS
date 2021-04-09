@@ -11,10 +11,8 @@ from django.http import HttpResponseRedirect
 from django.conf import settings
 from datetime import datetime
 from django.utils.dateformat import DateFormat
-from IBAS.user_controller import is_chief_exist, is_sub_chief_exist, get_sub_chief, get_chief
 from date_controller import today
 import os
-from IBAS.file_controller import get_filename, get_filename_with_ext
 
 
 # Create your views here.
