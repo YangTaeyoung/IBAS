@@ -159,3 +159,7 @@ def members_aor(request):
 def member_delete_register(request):
     context = {}
     return render(request, 'member_delete_register.html', context)
+
+def member_delete_detail(request):
+    context = {}
+    return render(request, 'member_delete_detail.html', context)
