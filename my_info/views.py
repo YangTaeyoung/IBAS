@@ -84,7 +84,10 @@ def user_pic_update(request):
         user_pic = request.FILES.get("user_pic")
         user = get_logined_user(request)
         if user_pic is not None:
-            os.remove(settings.MEDIA_ROOT + "/" + str(user.user_pic))
+            try:
+                os.remove(settings.MEDIA_ROOT + "/" + str(user.user_pic))
+            except FileNotFoundError:
+                pass
             user.user_pic = user_pic
             user.save()
             request.session["user_pic"] = str(user.user_pic)
