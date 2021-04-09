@@ -27,7 +27,7 @@ class Alarm(models.Model):
     alarm_user = models.ForeignKey('User', on_delete=models.CASCADE, db_column='ALARM_USER')
     alarm_cont = models.CharField(db_column='ALARM_CONT', max_length=150)
     alarm_link = models.CharField(db_column='ALARM_LINK', max_length=150, null=True)
-    alarm_ischecked = models.IntegerField(db_column='ALARM_ISCHECKED', max_length=1, default=0)
+    alarm_ischecked = models.IntegerField(db_column='ALARM_ISCHECKED', default=0)
     alarm_date = models.DateTimeField(db_column='ALARM_DATE', auto_now_add=True)
 
     class Meta:
