@@ -3,8 +3,9 @@ from django.db.models import Q
 from user_controller import get_logined_user, is_logined
 from date_controller import today, today_before_day, today_after_day
 
-
-def alarms(request):
+# 사용하기 위해서는 settings.py-TEMPLATE-OPTIONS 에 등록 해주어야 한다.
+# 사용시 그냥 일반 컨텍스트 처럼 바로 부르면 됨 예 {{ chief.user_name }}
+def alarms(request): # 알람 딕셔너리를 반환하는 함수
     if is_logined(request):
         my_alarm = Alarm.objects.filter(
             Q(alarm_user=get_logined_user(request)) & Q(
@@ -17,5 +18,6 @@ def alarms(request):
     else:
         return {}
 
-def chief(request):
+
+def chief(request): # 회장 정보 딕셔너리를 반환하는 함수.
     return {"chief": User.objects.filter(user_role__role_no=1).first()}
