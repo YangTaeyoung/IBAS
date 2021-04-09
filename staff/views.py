@@ -57,3 +57,7 @@ def member_delete_register(request):
 def member_delete_detail(request):
     context = {}
     return render(request, 'member_delete_detail.html', context)
+
+def staff_member_list(request):
+    context={}
+    return  render(request, 'staff_member_list.html', context)
