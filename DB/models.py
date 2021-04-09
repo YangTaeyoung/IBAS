@@ -171,11 +171,17 @@ class ContestBoard(models.Model):
         db_table = 'CONTEST_BOARD'
 
 
+def contest_file_upload_to(instance, filename):
+    return f'board/contest/{instance.contest_no.contest_no}/{filename}'
+
+
 class ContestFile(models.Model):
     contest_file_id = models.AutoField(db_column='CONTEST_FILE_ID', primary_key=True)  # Field name made lowercase.
     contest_no = models.ForeignKey(ContestBoard, on_delete=models.CASCADE,
                                    db_column='CONTEST_NO')  # Field name made lowercase.
-    contest_file_path = models.CharField(db_column='CONTEST_FILE_PATH', max_length=1000)  # Field name made lowercase.
+    contest_file_path = models.ImageField(db_column='CONTEST_FILE_PATH',
+                                          upload_to=contest_file_upload_to)  # Field name made lowercase.
+    contest_file_name = models.CharField(db_column='CONTEST_FILE_NAME', max_length=500)
 
     class Meta:
         managed = False
@@ -368,12 +374,16 @@ class StateInfo(models.Model):
         db_table = 'STATE_INFO'
 
 
+def user_pic_upload_to(instance, filename):
+    return f'member/{instance.user_stu}/{filename}'
+
+
 class User(models.Model):
     user_email = models.CharField(db_column='USER_EMAIL', max_length=100)  # Field name made lowercase.
     user_stu = models.IntegerField(db_column='USER_STU', primary_key=True)  # Field name made lowercase.
     user_name = models.CharField(db_column='USER_NAME', max_length=50)  # Field name made lowercase.
     user_major = models.ForeignKey(MajorInfo, models.DO_NOTHING, db_column='USER_MAJOR')  # Field name made lowercase.
-    user_pic = models.ImageField(db_column='USER_PIC', upload_to='member/', blank=True,
+    user_pic = models.ImageField(db_column='USER_PIC', upload_to=user_pic_upload_to, blank=True,
                                  null=True)  # Field name made lowercase.
     user_auth = models.ForeignKey('UserAuth', models.DO_NOTHING, db_column='USER_AUTH')  # Field name made lowercase.
     user_role = models.ForeignKey('UserRole', models.DO_NOTHING, db_column='USER_ROLE')  # Field name made lowercase.
@@ -401,6 +411,7 @@ class UserDeleteFile(models.Model):
     user_stu = models.ForeignKey(User, on_delete=models.CASCADE, db_column='USER_STU')  # Field name made lowercase.
     user_delete_file_path = models.CharField(db_column='USER_DELETE_FILE_PATH',
                                              max_length=1000)  # Field name made lowercase.
+
     class Meta:
         managed = False
         db_table = 'USER_DELETE_FILE'
@@ -424,6 +435,18 @@ class UserRole(models.Model):
         managed = False
         db_table = 'USER_ROLE'
 
+
+class UserUpdateRequest(models.Model):
+    updated_no = models.AutoField(db_column='UPDATED_NO', primary_key=True)
+    updated_user_name = models.CharField(db_column='UPDATED_USER_NAME', max_length=50)
+    updated_reject_reason = models.CharField(db_column='UPDATED_REJECT_REASON', null=True, max_length=200)
+    updated_user = models.ForeignKey(User, on_delete=models.CASCADE, db_column="UPDATED_USER")
+    updated_date = models.DateTimeField(db_column='UPDATED_DATE', auto_now_add=True)
+    updated_state = models.ForeignKey(StateInfo, models.DO_NOTHING, db_column='UPDATED_STATE', default=1)
+
+    class Meta:
+        managed = False
+        db_table = 'USER_UPDATE_REQUEST'
 
 class History(models.Model):
     history_no = models.AutoField(db_column="HISTORY_NO", primary_key=True)

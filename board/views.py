@@ -2,10 +2,10 @@ from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponse
 from DB.models import Board, BoardFile, BoardType, User, UserRole, UserAuth, Comment
 from django.db.models import Q, Count
-from addr_handling import go_board, go_board_detail
-from file_controller import is_image
+from file_controller import is_image, get_file_name
 from django.core.paginator import Paginator
 from django.conf import settings
+
 import os
 
 
@@ -41,7 +41,8 @@ def board_search(request):
         keyword = request.GET.get("keyword")
         board_list = Board.objects.filter(
             Q(board_cont__icontains=keyword) | Q(board_title__icontains=keyword) | Q(
-                board_writer__user_name=keyword)).select_related("board_writer").order_by("-board_created").all()
+                board_writer__user_name__icontains=keyword)).select_related("board_writer").order_by(
+            "-board_created").all()
 
         paginator = Paginator(board_list, 10)  # 페이지네이터로 10개씩 보이게끔. 나중에 수정하면 됌
         page = request.GET.get('page')  # 페이지 이름 ㅇㅇ 여기서 변경하면 됌
@@ -62,7 +63,7 @@ def board_search(request):
         }
         return render(request, "board.html", context)
     else:
-        return HttpResponse(go_board(5))
+        return redirect("board_view", board_type_no=5)
 
 
 def board_detail(request, board_no):  # 게시글 상세 보기
@@ -160,8 +161,7 @@ def board_update(request):
             for updated_file in request.FILES.getlist("board_file"):
                 # DB 저장
                 new_board_file = BoardFile.objects.create(board_no=board, board_file_path=updated_file,
-                                                          board_file_name=str(updated_file)[
-                                                                          str(updated_file).rfind("/") + 1:])
+                                                          board_file_name=get_file_name(updated_file))
                 new_board_file.save()
                 # 목록 페이지 이동 (수정 필요)
             return redirect("board_detail", board_no=board.board_no)
@@ -178,8 +178,8 @@ def board_delete(request):
             # file_list 라는 변수 선언 (여러개의 파일을 올릴 수 있으므로 list 로 변환)
             for i in range(len(file_list)):
                 # file_list 의 크기 만큼 for 문으로 돌려서 파일 삭제 후 폴더 삭제
-                os.remove('media/' + str(file_list[i].board_file_path))
-            os.rmdir('media/board/' + str(board.board_no))
+                os.remove(settings.MEDIA_ROOT + "/" + str(file_list[i].board_file_path))
+            os.rmdir(settings.MEDIA_ROOT + '/board/' + str(board.board_no))
             # 파일이 안에 있는 삭제에서 폴더를 삭제할 경우 오류 만남.
         except FileNotFoundError:
             pass  # 파일이 없는 경우 그냥 통과시킨다.
@@ -194,40 +194,39 @@ def board_delete(request):
 def board_comment_register(request):
     if request.method == "POST":
 
-        board_no = Board.objects.get(pk=request.POST.get('board_no'))  # 게시글 번호 들고오는 것임
+        board = Board.objects.get(pk=request.POST.get('board_no'))  # 게시글 번호 들고오는 것임
 
         # 객체로 받아서 저장할 예정
         comment = Comment(  # 받은 정보로 덧글 생성
-            comment_board_no=board_no,  # 해당 게시글에
+            comment_board_no=board,  # 해당 게시글에
             comment_writer=User.objects.get(pk=request.session.get('user_stu')),  # 해당 학번이
             comment_cont=request.POST.get('comment_cont')  # 사용자가 쓴 내용을 가져옴
         )
         comment.save()
     else:
-        board_no = Board.objects.get(pk=request.GET.get('board_no'))  # 게시글 번호 들고오는 것임
+        board = Board.objects.get(pk=request.GET.get('board_no'))  # 게시글 번호 들고오는 것임
         # 객체로 받아서 저장할 예정
         comment = Comment(
-            comment_board_no=board_no,
+            comment_board_no=board,
             comment_writer=User.objects.get(pk=request.session.get('user_stu')),
             comment_cont=request.GET.get('comment_cont'),
             comment_cont_ref=Comment.objects.get(pk=request.GET.get("comment_ref"))
         )
         comment.save()
         # 데이터 베이스에 저장
-    return HttpResponse(  # 게시글 상세 페이지로 다시 돌아감, 리다이렉트를 이용한 것은 실행 안해봄. 아마 이게 제일 정확하지 않을까 싶음.
-        "<script>location.href='/activity/" + str(board_no.board_no) + "/detail/';</script>")  # 게시글 상세페이지로 이동
+    return redirect("activity_detail", board_no=board.board_no)  # 게시글 상세페이지로 이동
 
 
 # 댓글 삭제 코드
 def board_comment_delete(request):
     if request.method == "POST":  # 댓글 삭제를 누를 경우
         comment = Comment.objects.get(pk=request.POST.get('comment_id'))
-        board_type_no = comment.comment_board_no.board_type_no.board_type_no
+        board_type_no = comment.comment_board_no.board_type_no.board_type_no  # 게시판 종류 번호를 담을 임시 변수 생성.
         # 그 댓글의 pk 를 찾아서 DB 에서 지운다.
         comment.delete()
-        return HttpResponse(go_board(board_type_no))  # 게시글 상세페이지로 이동
+        return redirect("board_detail", board_no=board_type_no)  # 게시글 상세페이지로 이동
     else:
-        return HttpResponse(go_board(5))  # 잘못 들어온 접근은 전체 게시판으로 이동
+        return redirect("board_view", board_type_no=5)  # 잘못 들어온 접근은 전체 게시판으로 이동
 
 
 # 댓글 수정 코드
@@ -236,6 +235,6 @@ def board_comment_update(request):
         comment = Comment.objects.get(pk=request.POST.get('comment_id'))  # 가져온 comment_id를 토대로 수정 내역을 적용
         comment.comment_cont = request.POST.get('comment_cont')  # 수정할 내용을 가져옴
         comment.save()  # DB 저장
-        return HttpResponse(go_board_detail(comment.comment_board_no.board_no))  # 게시글 상세 페이지로 돌아감
+        return redirect("board_detail", board_no=comment.comment_board_no.board_no)  # 게시글 상세 페이지로 돌아감
     else:
-        return HttpResponse(go_board(5))  # 잘못된 요청의 경우 전체 게시판으로 이동하게 함.
+        return redirect("board_view", board_type_no=5)  # 잘못된 요청의 경우 전체 게시판으로 이동하게 함.

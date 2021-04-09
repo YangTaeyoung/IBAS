@@ -24,12 +24,15 @@
         <script>
             function member_pass() {
                 if (confirm("지원자를 합격시키겠습니까?")) {
-                    {#alert("");#}
                     document.getElementById("form-apply").submit();
-
                 }
             }
 
+            function member_nopass() {
+                if (confirm("지원자를 탈락시키겠습니까?\n모든 DB에서 해당 지원자에 대한 기록이 사라집니다.")) {
+                    document.getElementById("form-deny").submit();
+                }
+            }
 
         </script>
     </head>
@@ -48,7 +51,7 @@
                             <!--제목-->
                             <h1 class="text-white introduce-letter-spacing_5">지원서</h1>
                             <!--부제목-->
-{#                            <p class="introduce-margin-top_20">신입부원 지원서를 볼 수 있는 게시판입니다. </p>#}
+                            {#                            <p class="introduce-margin-top_20">신입부원 지원서를 볼 수 있는 게시판입니다. </p>#}
                         </div>
                     </div>
                 </a>
@@ -60,20 +63,20 @@
                     <div class="container">
                         <!--=====================-->
                         <!--승인을 대기 중일 때 뜨는 알람-->
-                        {#                        {% if %}#}
-                        <div class="alert alert-secondary" role="alert" style="text-align: center">
-                            <i>승인대기중</i>
-                        </div>
-                        {#                        {% elif  %}#}
-                        <!--합격 시 뜨는 알람-->
-                        <div class="alert alert-success" role="alert" style="text-align: center">
-                            <i>합격</i>
-                        </div>
-                        {#                        {% elif  %}#}
-                        <!--불합격 시 뜨는 알람, 거절 사유 입력하면 같이 뜨게 만들기-->
-                        <div class="alert alert-danger" role="alert" style="text-align: center">
-                            <i>불합격 ( 불합격 사유 : )</i>
-                        </div>
+                        {% if user.user_auth.auth_no == 1 %}
+                            <div class="alert alert-secondary" role="alert" style="text-align: center">
+                                <i>승인대기중</i>
+                            </div>
+                        {% elif user.user_auth.auth_no == 2 %}
+                            <!--합격 시 뜨는 알람-->
+                            <div class="alert alert-success" role="alert" style="text-align: center">
+                                <i>합격</i>
+                            </div>
+                        {% endif %}
+                        {#                        <!--불합격 시 뜨는 알람, 거절 사유 입력하면 같이 뜨게 만들기--> 각하. 불합격한 사람은 DB에 남기지 않음. 추후 Email 을 활용하여 통보할 예정. #}
+                        {#                        <div class="alert alert-danger" role="alert" style="text-align: center">#}
+                        {#                            <i>불합격 ( 불합격 사유 : )</i>#}
+                        {#                        </div>#}
 
                         <!--====================================지원자 이름 시작==============================================-->
                         <div class="content-box">
@@ -82,7 +85,7 @@
                             </div>
                             <div class="content-body">
                                 <div class="form-group">
-                                    <a>윤예진</a>
+                                    <a>{{ user.user_name }}</a>
                                 </div>
                             </div>
                         </div>
@@ -94,7 +97,7 @@
                             </div>
                             <div class="content-body">
                                 <div class="form-group">
-                                    <a>2021-03-03</a>
+                                    <a>{{ user.user_joined }}</a>
                                 </div>
                             </div>
                         </div>
@@ -106,7 +109,7 @@
                             </div>
                             <div class="content-body">
                                 <div class="form-group">
-                                    <a>12192355</a>
+                                    <a>{{ user.user_stu }}</a>
                                 </div>
                             </div>
                         </div>
@@ -118,7 +121,7 @@
                             </div>
                             <div class="content-body">
                                 <div class="form-group">
-                                    <a>3학년</a>
+                                    <a>{{ user.user_grade }}학년</a>
                                 </div>
                             </div>
                         </div>
@@ -130,178 +133,51 @@
                             </div>
                             <div class="content-body">
                                 <div class="form-group">
-                                    <a>글로벌금융학과</a>
+                                    <a>{{ user.user_major.major_name }}</a>
                                 </div>
                             </div>
                         </div>
                         <!--====================================학과 끝=============================================-->
                         <!--====================================질문에 대한 답변 1 시작==============================================-->
-                        <div class="content-box">
-                            <div class="content-header">
-                                <h3 class="title">1. 지원동기 및 목표를 기술해주세요</h3>
-                            </div>
-                            <div class="content-body">
-                                <div class="form-group">
-                                    <a>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                        incididunt ut labore et dolore magna aliqua. Egestas fringilla phasellus
-                                        faucibus scelerisque eleifend donec pretium. Mi tempus imperdiet nulla malesuada
-                                        pellentesque. Etiam dignissim diam quis enim lobortis scelerisque. Sed
-                                        ullamcorper morbi tincidunt ornare massa. Aliquam sem et tortor consequat id.
-                                        Interdum velit laoreet id donec ultrices. Senectus et netus et malesuada fames.
-                                        Mauris rhoncus aenean vel elit scelerisque. Justo nec ultrices dui sapien eget
-                                        mi proin sed libero. Aliquam malesuada bibendum arcu vitae elementum curabitur
-                                        vitae. Euismod nisi porta lorem mollis aliquam ut. Nam aliquam sem et tortor
-                                        consequat id. Nunc vel risus commodo viverra maecenas accumsan lacus. Eu
-                                        volutpat odio facilisis mauris sit amet massa. Amet volutpat consequat mauris
-                                        nunc congue nisi vitae.
-                                    </a>
+                        {% for user_answer in user_answer_list %}
+                            <div class="content-box">
+                                <div class="content-header"> <!-- 질문 -->
+                                    <h3 class="title">{{ forloop.counter }}. {{ user_answer.answer_quest.quest_name }}</h3>
+                                </div>
+                                <div class="content-body"> <!-- 답변 -->
+                                    <div class="form-group">
+                                        <a>{{ user_answer.answer_cont }}</a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        {% endfor %}
                         <!--====================================질문에 대한 답변 1 끝=============================================-->
-                        <!--====================================질문에 대한 답변 2 시작==============================================-->
-                        <div class="content-box">
-                            <div class="content-header">
-                                <h3 class="title">2. 프로그래밍 관련 언어를 다루어 본 적이 있다면 적어주세요.</h3>
-                            </div>
-                            <div class="content-body">
-                                <div class="form-group">
-                                    <a>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                        incididunt ut labore et dolore magna aliqua. Egestas fringilla phasellus
-                                        faucibus scelerisque eleifend donec pretium. Mi tempus imperdiet nulla malesuada
-                                        pellentesque. Etiam dignissim diam quis enim lobortis scelerisque. Sed
-                                        ullamcorper morbi tincidunt ornare massa. Aliquam sem et tortor consequat id.
-                                        Interdum velit laoreet id donec ultrices. Senectus et netus et malesuada fames.
-                                        Mauris rhoncus aenean vel elit scelerisque. Justo nec ultrices dui sapien eget
-                                        mi proin sed libero. Aliquam malesuada bibendum arcu vitae elementum curabitur
-                                        vitae. Euismod nisi porta lorem mollis aliquam ut. Nam aliquam sem et tortor
-                                        consequat id. Nunc vel risus commodo viverra maecenas accumsan lacus. Eu
-                                        volutpat odio facilisis mauris sit amet massa. Amet volutpat consequat mauris
-                                        nunc congue nisi vitae.
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <!--====================================질문에 대한 답변 2 끝=============================================-->
-                        <!--====================================질문에 대한 답변 3 시작==============================================-->
-                        <div class="content-box">
-                            <div class="content-header">
-                                <h3 class="title">3. 빅데이터 관련 활동 혹은 공모전 관련 경험이 있다면 적어주세요.</h3>
-                            </div>
-                            <div class="content-body">
-                                <div class="form-group">
-                                    <a>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                        incididunt ut labore et dolore magna aliqua. Egestas fringilla phasellus
-                                        faucibus scelerisque eleifend donec pretium. Mi tempus imperdiet nulla malesuada
-                                        pellentesque. Etiam dignissim diam quis enim lobortis scelerisque. Sed
-                                        ullamcorper morbi tincidunt ornare massa. Aliquam sem et tortor consequat id.
-                                        Interdum velit laoreet id donec ultrices. Senectus et netus et malesuada fames.
-                                        Mauris rhoncus aenean vel elit scelerisque. Justo nec ultrices dui sapien eget
-                                        mi proin sed libero. Aliquam malesuada bibendum arcu vitae elementum curabitur
-                                        vitae. Euismod nisi porta lorem mollis aliquam ut. Nam aliquam sem et tortor
-                                        consequat id. Nunc vel risus commodo viverra maecenas accumsan lacus. Eu
-                                        volutpat odio facilisis mauris sit amet massa. Amet volutpat consequat mauris
-                                        nunc congue nisi vitae.
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <!--====================================질문에 대한 답변 3 끝=============================================-->
-                        <!--====================================질문에 대한 답변 4 시작==============================================-->
-                        <div class="content-box">
-                            <div class="content-header">
-                                <h3 class="title">4. 추후 희망하는 진로가 무엇이며, 동아리 활동이 진로에 어떠한 영향을 줄 것이라고 생각하나요?</h3>
-                            </div>
-                            <div class="content-body">
-                                <div class="form-group">
-                                    <a>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                        incididunt ut labore et dolore magna aliqua. Egestas fringilla phasellus
-                                        faucibus scelerisque eleifend donec pretium. Mi tempus imperdiet nulla malesuada
-                                        pellentesque. Etiam dignissim diam quis enim lobortis scelerisque. Sed
-                                        ullamcorper morbi tincidunt ornare massa. Aliquam sem et tortor consequat id.
-                                        Interdum velit laoreet id donec ultrices. Senectus et netus et malesuada fames.
-                                        Mauris rhoncus aenean vel elit scelerisque. Justo nec ultrices dui sapien eget
-                                        mi proin sed libero. Aliquam malesuada bibendum arcu vitae elementum curabitur
-                                        vitae. Euismod nisi porta lorem mollis aliquam ut. Nam aliquam sem et tortor
-                                        consequat id. Nunc vel risus commodo viverra maecenas accumsan lacus. Eu
-                                        volutpat odio facilisis mauris sit amet massa. Amet volutpat consequat mauris
-                                        nunc congue nisi vitae.
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <!--====================================질문에 대한 답변 4 끝=============================================-->
 
-                        {#                        {% endif %}#}
-                        <!--=======승인/거절 버튼======-->
+
                         <div style="display: flex; justify-content: center; ">
-                            {#                            {% if request.session.user_role == 4 %}#}
-                            <!--승인-->
-                            {#                                {% if %}#}
                             <button type="button" class="btn btn-outline-success btn-lg"
                                     style="width: 200px; font-weight: bold"
                                     onclick="member_pass()">
                                 승인
                             </button>
-                            <form id="form-apply" action="#"
-                                  method="post" style="display: none">
-                                {#                                        {% csrf_token %}#}
-{#                                승인 눌렀을 때 파라미터 옮기기#}
-                                <input type="hidden" name="#" value="#"/>
-                                <input type="hidden" name="#" value="#"/>
+                            <form id="form-apply" action="{% url 'member_aor' %}" method="post" style="display: none">
+                                {% csrf_token %}
+                                <input type="hidden" name="user_stu" value="{{ user.user_stu }}"/>
+                                <input type="hidden" name="apply" value="1"/>
                             </form>
                             <!--거절-->
-                            <button type="button" class="btn btn-outline-danger btn-lg"
+                            <button type="button" class="btn btn-outline-danger btn-lg "
                                     style="width: 200px; margin-left: 10px; font-weight: bold"
-                                    onclick="return confirm('승인을 거절하시겠습니까?')"
-                                    href="javascript:void(0);" data-toggle="modal" data-target="#favorite"
-                                    class="site-button gray">
+                                    onclick="member_nopass()"
+                                    href="javascript:void(0);" data-toggle="modal" data-target="#favorite">
                                 거절
                             </button>
-                            {#                            {% endif %}#}
+                            <form id="form-deny" action="{% url 'member_aor' %}" method="post" style="display: none">
+                                {% csrf_token %}
+                                <input type="hidden" name="user_stu" value="{{ user.user_stu }}">
+                                <input type="hidden" name="apply" value="2"/>
+                            </form>
                         </div>
-                        <!-- 거절 버튼 누르면 나오는 창 -->
-                        <div class="modal fade modal-bx-info" id="favorite" tabindex="-1" role="dialog"
-                             aria-labelledby="FavoriteModalLongTitle" aria-hidden="true">
-                            <div class="modal-dialog " role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="FavoriteModalLongTitle">불합격 사유</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true"><i class="la la-close"></i></span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="tab-content nav">
-                                            <div id="login" class="tab-pane active"
-                                                 style="margin-bottom: -25px; margin-top: 10px">
-                                                <form id="form-member-reject"
-                                                      action="#" class="dlab-form"
-                                                      method="post">
-                                                    <!--승인 거절 사유 입력창-->
-{#                                                    {% csrf_token %}#}
-                                                    <input type="hidden" name="" value="">
-                                                    <input type="hidden" name="" value="">
-                                                    <div class="form-group">
-                                                        <input class="form-control"
-                                                               name=""
-                                                               placeholder="불합격 사유를 입력해주세요"
-                                                               type="text"/>
-                                                    </div>
-                                                    <!--거절버튼-->
-                                                    <div class="form-group">
-                                                        <button type="submit" class="site-button btn-block button-md"
-                                                                onclick="alert('승인이 거절되었습니다')">입력
-                                                        </button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- 거절 버튼 누르면 나오는 창 끝 -->
 
                     </div>
                 </div>
