@@ -7,9 +7,8 @@ from member import session
 from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect
 from django.conf import settings
-from IBAS.user_controller import is_chief_exist, is_sub_chief_exist, get_sub_chief, get_chief
 import os
-from IBAS.file_controller import get_filename, get_filename_with_ext
+
 from django.core.mail import send_mail
 from django.conf import settings
 
