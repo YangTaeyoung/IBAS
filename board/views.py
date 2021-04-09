@@ -5,7 +5,7 @@ from django.db.models import Q, Count
 from file_controller import is_image, get_file_name
 from django.core.paginator import Paginator
 from django.conf import settings
-
+from alarm.alarm_controller import create_comment_alarm, create_comment_ref_alarm
 import os
 
 
@@ -193,16 +193,16 @@ def board_delete(request):
 # 댓글 달기 코드
 def board_comment_register(request):
     if request.method == "POST":
-
         board = Board.objects.get(pk=request.POST.get('board_no'))  # 게시글 번호 들고오는 것임
-
         # 객체로 받아서 저장할 예정
         comment = Comment(  # 받은 정보로 덧글 생성
             comment_board_no=board,  # 해당 게시글에
             comment_writer=User.objects.get(pk=request.session.get('user_stu')),  # 해당 학번이
             comment_cont=request.POST.get('comment_cont')  # 사용자가 쓴 내용을 가져옴
         )
+        create_comment_alarm(comment)
         comment.save()
+
     else:
         board = Board.objects.get(pk=request.GET.get('board_no'))  # 게시글 번호 들고오는 것임
         # 객체로 받아서 저장할 예정
@@ -212,7 +212,9 @@ def board_comment_register(request):
             comment_cont=request.GET.get('comment_cont'),
             comment_cont_ref=Comment.objects.get(pk=request.GET.get("comment_ref"))
         )
+        create_comment_ref_alarm(comment)
         comment.save()
+
         # 데이터 베이스에 저장
     return redirect("activity_detail", board_no=board.board_no)  # 게시글 상세페이지로 이동
 
