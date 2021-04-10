@@ -168,7 +168,7 @@
                                        class="site-button dropdown-toggle" id="dropdownMenuButton"
                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <!--이거는 노란색 동그라미인데, 알림이 없으면 뜨지 않고, 알림이 있으면 뜨게해야 함-->
-                                        {% if alarm_list|length != 0 %}
+                                        {% if alarm_len != 0 %}
                                             <div style="height: 6px; width: 6px; background-color: #e8af00; border-radius: 3px; margin: -18px 0px 0px 12px; position: relative; z-index: 2"></div>
                                         {% endif %}
                                     </a>
