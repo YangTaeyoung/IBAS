@@ -110,6 +110,18 @@
                             <!--====================로그인 여부에 따라 다르게 보이는 곳====================-->
                             <!--====================로그인했을 때====================-->
                             {% if request.session.user_stu is not None %}
+                                {% if request.session.user_role <= 3 %}
+                                    <li class="active" style="padding-top: 7px; padding-right: 5px; padding-left: 5px"
+                                        onclick="document.getElementById('hd-form-member-list').submit()">
+
+                                        <a href="#" style="padding: 19px 0px 0px 3px">회원관리</a>
+                                        <i class="fa fa-user-plus"></i>
+                                    </li>
+                                    <form id="hd-form-member-list" action="{% url 'staff_member_list' %}" method="post"
+                                          style="display: none">
+                                        {% csrf_token %}
+                                    </form>
+                                {% endif %}
                                 <!--======로그아웃 버튼======-->
                                 <li class="active" onclick="printConfirm('정말 로그아웃 하시겠습니까?', '{% url "logout" %}')"
                                     style="padding-top: 7px; padding-right: 10px">
@@ -169,8 +181,10 @@
                                                 <i class="fa"></i><span>표시할 알람이 없습니다.</span></a>
                                         {% endif %}
                                         {% for alarm in alarm_list %}
-                                            <a class="dropdown-item site-button-link" href="{% url 'alarm_check' alarm_no=alarm.alarm_no %}">
-                                                <i class="fa"></i><span {% if alarm.alarm_ischecked == 1 %} style="color: #848484;" {% endif %}>{{ alarm.alarm_cont }}</span></a>
+                                            <a class="dropdown-item site-button-link"
+                                               href="{% url 'alarm_check' alarm_no=alarm.alarm_no %}">
+                                                <i class="fa"></i><span {% if alarm.alarm_ischecked == 1 %}
+                                                style="color: #848484;" {% endif %}>{{ alarm.alarm_cont }}</span></a>
                                         {% endfor %}
                                     </div>
                                 </li>
