@@ -93,11 +93,11 @@
                         <!--====================================지원 시간 시작==============================================-->
                         <div class="content-box">
                             <div class="content-header">
-                                <h3 class="title">지원 시간</h3>
+                                <h3 class="title">지원 일시</h3>
                             </div>
                             <div class="content-body">
                                 <div class="form-group">
-                                    <a>{{ user.user_joined }}</a>
+                                    <a>{{ user.user_joined|date:"Y-m-d / H:i" }}</a>
                                 </div>
                             </div>
                         </div>
