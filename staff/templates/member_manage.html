@@ -3,20 +3,11 @@
 {% block content %}
     <!--커스텀 css-->
     <link rel="stylesheet" type="text/css" href="{% static 'css/staff_yejin.css' %}">
+    <script src="{% static 'js/staff_yejin.js' %}"></script>
     <script src="{% static 'js/jquery.min.js' %}"></script><!-- JQUERY.MIN JS -->
     <script src="{% static 'js/sy.js' %}"></script>
 
     <script>
-        function goUpdate() {
-            if (confirm('수정하시겠습니까?')) {
-                document.getElementById("form-user-update-request").submit();
-            }
-        }
-
-        function goUpdatePic() {
-            document.getElementById('form-user-pic-update').submit();
-        }
-
         function selectAoR() {
             itemidSelect = document.getElementById('select-aor');
             document.getElementById("input-aor").value = itemidSelect.options[itemidSelect.selectedIndex].value;
@@ -78,12 +69,12 @@
                                                             onchange="staff_grade()">
                                                         <option selected="selected">학년
                                                         </option>
-                                                        <option class="staff_">1학년</option>
-                                                        <option>2학년</option>
-                                                        <option>3학년</option>
-                                                        <option>4학년</option>
+                                                        {% for grade in grade_list %}
+                                                            <option>{{ grade }}학년</option>
+                                                        {% endfor %}
                                                     </select>
                                                 </div>
+
                                                 <!-- staff_mem_select는 staff_cr.css에 정의되어 있음.  -->
                                                 <div class="staff_mem_select m-b20">
                                                     <select id="select-aor" onchange="selectAoR()">
@@ -95,14 +86,16 @@
                                                 <!-- staff_mem_btn는 staff_cr.css에 정의되어 있음.  -->
                                                 <div class="staff_mem_btn m-b20 listing-info-right">
                                                     <!-- &nbsp;는 띄어쓰기 -->
-                                                    <button class="site-button" type="submit"><i
-                                                            class="la la-check m-r5"
-                                                            style="font-weight: bold"
-                                                            onclick="document.getElementById('hd-form-members-aor').submit()"></i>&nbsp;적용
+                                                    <button class="site-button" type="button"
+                                                            onclick="document.getElementById('hd-form-members-aor').submit()">
+                                                        <i
+                                                                class="la la-check m-r5"
+                                                                style="font-weight: bold"
+                                                        ></i>&nbsp;적용
                                                     </button>
                                                 </div>
                                                 <form id="hd-form-members-aor" action="{% url 'members_aor' %}"
-                                                      method="post" dis>
+                                                      method="post" style="display: none">
                                                     {% csrf_token %}
                                                     {% for new_user in new_user_list %}
                                                         <input id="new-user-check-{{ new_user.user_stu }}"
@@ -130,9 +123,11 @@
                                                     <tbody>
                                                     <!-- =========================== 여기부터 복붙 ============================== -->
                                                     {% if new_user_len == 0 %}
-                                                        <td colspan="8" style="text-align: center"> 입부 신청 대기중인 회원이
-                                                            없습니다.
-                                                        </td>
+                                                        <tr>
+                                                            <td colspan="8" style="text-align: center"> 입부 신청 대기중인 회원이
+                                                                없습니다.
+                                                            </td>
+                                                        </tr>
                                                     {% endif %}
 
                                                     {% for new_user in new_user_list %}
@@ -263,10 +258,9 @@
                                                         <!-- staff_mem_btn는 staff_cr.css에 정의되어 있음.  -->
                                                         <div class="staff_mem_btn m-b20 listing-info-right">
                                                             <!-- &nbsp;는 띄어쓰기 -->
-                                                            <button class="site-button" type="button"><i
+                                                            <button class="site-button" type="submit"><i
                                                                     class="la la-check m-r5"
-                                                                    style="font-weight: bold"
-                                                                    onclick="document.getElementById('hd-form-members-aor').submit()"></i>&nbsp;적용
+                                                                    style="font-weight: bold"></i>&nbsp;적용
                                                             </button>
                                                         </div>
 
@@ -440,63 +434,55 @@
                                                                 <th class="border-top-0 staff_width_230" scope="col">
                                                                     학과
                                                                 </th>
-                                                                <th class="border-top-0" scope="col">요청내용</th>
-                                                                <th class="border-top-0" scope="col">
-                                                                    요청사항
-                                                                </th>
-
-                                                                <th class="border-top-0 staff_width_70"></th>
+                                                                <th class="border-top-0" scope="col">변경 전 이름</th>
+                                                                <th class="border-top-0" scope="col">변경 후 이름</th>
                                                             </tr>
                                                             </thead>
                                                             <!-- 내용 테이블 -->
                                                             <tbody>
                                                             <!-- ===========================여기부터 복붙============================== -->
-                                                            {% if exist_user_len == 0 %}
-                                                                <td colspan="8" style="text-align: center">회원 리스트에 회원이
-                                                                    존재하지 않습니다.
-                                                                </td>
+                                                            {% if user_update_request_list|length == 0 %}
+                                                                <tr>
+                                                                    <td colspan="8" style="text-align: center">
+                                                                        승인 대기중인 이름 변경 요청이 없습니다.
+                                                                    </td>
+                                                                </tr>
                                                             {% endif %}
-                                                            {#                                                            {% for exist_user in exist_user_list %}#}
-                                                            <tr>
-                                                                <td scope="row">
-                                                                    <div class="input-block">
-                                                                        <input id="check_{{ exist_user.user_stu }}"
-                                                                               type="checkbox"
-                                                                               name="user_stu_list[]"
-                                                                               value="{{ exist_user.user_stu }}">
-                                                                        <!-- staff_label_margin는 staff_cr.css에 정의되어 있음.  -->
-                                                                        <label for="check_{{ exist_user.user_stu }}"
-                                                                               class="staff_label_margin"></label>
-                                                                    </div>
-                                                                </td>
-                                                                {#                                                                    <th>{{ forloop.counter }}</th>#}
-                                                                <th>1</th>
-                                                                <!-- 회원 이름 -->
-                                                                {#                                                                    <td>{{ exist_user.user_name }}</td>#}
-                                                                <td>윤예진</td>
-                                                                <!-- 회원 학번 -->
-                                                                {#                                                                    <td>{{ exist_user.user_stu }}</td>#}
-                                                                <td>12192355</td>
-                                                                <!-- 회원 학과 -->
-                                                                {#                                                                    <td>{{ exist_user.user_major.major_name }}</td>#}
-                                                                <td>문화콘텐츠문화경영학과</td>
-                                                                <!-- 요청 분류 -->
-                                                                <td>
-                                                                    이름 수정
-                                                                </td>
-                                                                <!-- 요청 분류 -->
-                                                                <td>
-                                                                    가나다로 수정 원함.
-                                                                </td>
-                                                                <!-- 수락,  -->
-                                                                <td>
-                                                                    <a href="#"
-                                                                       style="font-size: 12px; font-weight: bold"></a>
-                                                                    {#                                                        <a href="#" style="font-size: 12px; font-weight: bold">&nbsp;&nbsp;논의중</a>#}
+                                                            {% for user_update_request in user_update_request_list%}
+                                                                <tr>
+                                                                    <td scope="row">
+                                                                        <div class="input-block">
+                                                                            <input id="check_{{ user_update_request.updated_user.user_stu }}"
+                                                                                   type="checkbox"
+                                                                                   name="user_stu_list[]"
+                                                                                   value="{{ user_update_request.updated_user.user_stu }}">
+                                                                            <!-- staff_label_margin는 staff_cr.css에 정의되어 있음.  -->
+                                                                            <label for="check_{{ user_update_request.updated_user.user_stu }}"
+                                                                                   class="staff_label_margin"></label>
+                                                                        </div>
+                                                                    </td>
+                                                                    {#                                                                    <th>{{ forloop.counter }}</th>#}
+                                                                    <th>{{ forloop.counter }}</th>
+                                                                    <!-- 회원 이름 -->
+                                                                    {#                                                                    <td>{{ exist_user.user_name }}</td>#}
+                                                                    <td>{{ user_update_request.updated_user.user_name }}</td>
+                                                                    <!-- 회원 학번 -->
+                                                                    {#                                                                    <td>{{ exist_user.user_stu }}</td>#}
+                                                                    <td>{{ user_update_request.updated_user.user_stu }}</td>
+                                                                    <!-- 회원 학과 -->
+                                                                    {#                                                                    <td>{{ exist_user.user_major.major_name }}</td>#}
+                                                                    <td>{{ user_update_request.updated_user.user_major.major_name }}</td>
+                                                                    <!-- 변경 전 이름 -->
+                                                                    <td>
+                                                                        {{ user_update_request.updated_user.user_name }}
+                                                                    </td>
+                                                                    <!-- 변경 신청한 이름 -->
+                                                                    <td>
+                                                                       {{ user_update_request.updated_user_name }}
+                                                                    </td>
 
-                                                                </td>
-                                                            </tr>
-                                                            {#                                                            {% endfor %}#}
+                                                                </tr>
+                                                            {% endfor %}
                                                             </tbody>
                                                         </table>
                                                         <!--페이지네이션-->
@@ -507,30 +493,30 @@
                                                                     {% if exist_user_list.has_previous %}
                                                                         <li class="page-item">
                                                                             <a class="page-link"
-                                                                               href="?exist_user_page=1"
+                                                                               href="?request_page=1"
                                                                                aria-label="Previous">
                                                                                 <span aria-hidden="true">&laquo;</span>
                                                                             </a>
                                                                         </li>
                                                                         <li class="page-item">
                                                                             <a class="page-link"
-                                                                               href="?exist_user_page={{ exist_user_list.previous_page_number }}">
+                                                                               href="?request_page={{ user_update_request_list.previous_page_number }}">
                                                                                 {{ exist_user_list.previous_page_number }}
                                                                             </a>
                                                                         </li>
                                                                     {% endif %}
                                                                     <li class="page-item"><a class="page-link"
-                                                                                             href="#">{{ exist_user_list.number }}</a>
+                                                                                             href="#">{{ user_update_request_list.number }}</a>
                                                                     </li>
                                                                     {% if exist_user_list.has_next %}
                                                                         <li class="page-item"><a class="page-link"
-                                                                                                 href="?exist_user_page={{ exist_user_list.next_page_number }}">
-                                                                            {{ exist_user_list.next_page_number }}
+                                                                                                 href="?request_page={{ user_update_request_list.next_page_number }}">
+                                                                            {{ user_update_request_list.next_page_number }}
                                                                         </a>
                                                                         </li>
                                                                         <li class="page-item">
                                                                             <a class="page-link"
-                                                                               href="?exist_user_page={{ exist_user_list.paginator.num_pages }}"
+                                                                               href="?request_page={{ user_update_request_list.paginator.num_pages }}"
                                                                                aria-label="Next">
                                                                                 <span aria-hidden="true">&raquo;</span>
                                                                             </a>
