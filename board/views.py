@@ -34,6 +34,31 @@ def get_page_object(request, board_list, num_of_boards_in_one_page=10):
     return item
 
 
+# INPUT : board 또는 contest 객체로 받음
+def delete_file(object):
+    try:
+        location = ''
+
+        # Board 객체인 경우
+        if isinstance(object, Board):
+            # os.path.join : 파일 경로 설정 방식에 대한 서버 os 의존성 제거
+            location = os.path.join(MEDIA_ROOT, 'board', str(object.board_no))
+
+        # ContestBoard 객체인 경우
+        elif isinstance(object, ContestBoard):
+            # os.path.join : 파일 경로 설정 방식에 대한 서버 os 의존성 제거
+            location = os.path.join(MEDIA_ROOT, 'board', 'contest', str(object.contest_no))
+
+        else:  # object 가 적절히 넘어오지 않은 경우
+            raise Exception
+
+        if os.path.exists(location):  # 해당 경로가 존재하지 않는 경우에는 db 에서만 지워주면 된다.
+            shutil.rmtree(location, ignore_errors=False)  # 해당 디렉토리를 포함하여 하위 폴더/파일 삭제
+
+    except Exception as error:
+        print(error)  # LOGGING :: 로그 파일 생성하는 코드 나중에 수정해야 함.
+
+
 def board_view(request, board_type_no):  # 게시판 페이지로 이동
     if board_type_no == 5:
         board_list = Board.objects.all().select_related("board_writer").order_by(
@@ -119,12 +144,12 @@ def board_register(request):
         # - key 는 html에서의 form 태그 name
         # - value 는 해당 form에서 전송받은 file들 / uploadedFile 객체 형태
         if "board_file" in request.FILES:  # 넘겨받은 폼 태그 이름중에 "board_file"이 있으면
-            for file in request.FILES.getlist("contest_file"): # 각각의 파일을 uploadedFile로 받아옴
-                ContestFile.objects.create(
-                    contest_no=ContestBoard.objects.get(pk=board.board_no),
-                    contest_file_path=file,  # uploadedFile 객체를 imageField 객체 할당
-                    contest_file_name=file.name.replace(' ', '_')  # imageField 객체에 의해 파일 이름 공백이 '_'로 치환되어 서버 저장
-                                                                   # 따라서 db 에도 이름 공백을 '_'로 치환하여 저장
+            for file in request.FILES.getlist("board_file"):  # 각각의 파일을 uploadedFile로 받아옴
+                BoardFile.objects.create(
+                    board_no=Board.objects.get(pk=board.board_no),
+                    board_file_path=file,  # uploadedFile 객체를 imageField 객체 할당
+                    board_file_name=file.name.replace(' ', '_')  # imageField 객체에 의해 파일 이름 공백이 '_'로 치환되어 서버 저장
+                                                                 # 따라서 db 에도 이름 공백을 '_'로 치환하여 저장
                 )
 
         return redirect("board_detail", board_no=board.board_no)
@@ -192,16 +217,7 @@ def board_delete(request):
     if request.method == "POST":  # 포스트로 넘어오는 경우
         board = Board.objects.get(pk=request.POST.get('board_no'))
 
-        try:
-            files = BoardFile.objects.filter(board_no=board)
-
-            # os.path.join : 파일 경로 설정 방식에 대한 서버 os 의존성 제거
-            location = os.path.join(MEDIA_ROOT, 'board', str(board.board_no))
-            if os.path.exists(location):  # 해당 경로가 존재하지 않는 경우에는 db 에서만 지워주면 된다.
-                shutil.rmtree(location)   # 해당 디렉토리를 포함하여 하위 폴더/파일 삭제
-
-        except Exception as error:
-            print(error)  # LOGGING :: 로그 파일 생성하는 코드 나중에 수정해야 함.
+        delete_file(board)  # 해당 게시글에 등록된 파일 모두 제거
 
         board.delete()  # 파일과 폴더 삭제 후, 게시글 DB 에서 삭제
 
@@ -356,14 +372,8 @@ def contest_detail(request, contest_no):  # 게시판 상세 페이지로 이동
 def contest_delete(request):
     if request.method == "POST":
         contest = ContestBoard.objects.get(pk=request.POST.get('contest_no'))
-        try:
-            # os.path.join : 파일 경로 설정 방식에 대한 서버 os 의존성 제거
-            location = os.path.join(MEDIA_ROOT, 'board', 'contest', str(contest.contest_no))
-            if os.path.exists(location):  # 해당 경로가 존재하지 않는 경우에는 db 에서만 지워주면 된다.
-                shutil.rmtree(location)   # 해당 디렉토리를 포함하여 하위 폴더/파일 삭제
 
-        except Exception as error:
-            print(error)  # LOGGING :: 로그 파일 생성하는 코드 나중에 수정해야 함.
+        delete_file(contest)  # 해당 게시글에 등록된 파일 모두 제거
 
         contest.delete()  # 파일과 폴더 삭제 후, 게시글 DB 에서 삭제
 
@@ -373,7 +383,6 @@ def contest_delete(request):
     else:
         print(request)  # LOGGING :: 로그 파일 생성하는 코드 나중에 수정해야 함.
         return redirect(reverse('contest_list'))
-
 
 
 def contest_update(request):
