@@ -163,7 +163,7 @@ def members_aor(request):  # 여러명 일괄 처리시.
         for user in user_list:
             for user_stu in request.POST.getlist("user_stu_list[]"):
                 if user.user_stu == int(user_stu):
-                    if aor == 2:  # 합격
+                    if aor == 1:  # 합격
                         mail_dict = get_message(True, user.user_name)
                         user.user_auth = UserAuth.objects.get(pk=2)  # 비활동 회원으로 변경
                         send_mail(subject=mail_dict["mail_title"], message=mail_dict["mail_message"],  # 합격 메일 전송
