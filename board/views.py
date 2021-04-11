@@ -1,4 +1,5 @@
 import datetime
+import shutil
 from datetime import date
 
 from django.shortcuts import render, redirect, reverse
@@ -196,17 +197,10 @@ def board_delete(request):
 
             # os.path.join : 파일 경로 설정 방식에 대한 서버 os 의존성 제거
             location = os.path.join(MEDIA_ROOT, 'board', str(board.board_no))
-            for file in files:
-                os.remove(os.path.join(location, str(file.contest_file_name)))
-            os.rmdir(location)
+            if os.path.exists(location):  # 해당 경로가 존재하지 않는 경우에는 db 에서만 지워주면 된다.
+                shutil.rmtree(location)   # 해당 디렉토리를 포함하여 하위 폴더/파일 삭제
 
-        # os 모듈 안에 있는 모든 함수는 OSError 를 발생시킨다. (또는 OSError 하위 클래스 에러)
-        # 1. os.remove 해당 파일이 존재하지 않을 경우
-        # 2. os.remove 파일이 아닌 디렉토리를 삭제하려는 경우
-        # 3. os.rmdir 해당 디렉토리가 비어있지 않은 경우
-        # 4. os.rmdir 디렉토리가 아닌 파일을 삭제하려는 경우
-        # 위의 경우가 발생했을 때는 db와 로컬 파일의 불일치 일어날 수 있음.
-        except OSError as error:
+        except Exception as error:
             print(error)  # LOGGING :: 로그 파일 생성하는 코드 나중에 수정해야 함.
 
         board.delete()  # 파일과 폴더 삭제 후, 게시글 DB 에서 삭제
@@ -363,21 +357,12 @@ def contest_delete(request):
     if request.method == "POST":
         contest = ContestBoard.objects.get(pk=request.POST.get('contest_no'))
         try:
-            files = ContestFile.objects.filter(contest_no=contest)
-
             # os.path.join : 파일 경로 설정 방식에 대한 서버 os 의존성 제거
             location = os.path.join(MEDIA_ROOT, 'board', 'contest', str(contest.contest_no))
-            for file in files:
-                os.remove(os.path.join(location, str(file.contest_file_name)))
-            os.rmdir(location)
+            if os.path.exists(location):  # 해당 경로가 존재하지 않는 경우에는 db 에서만 지워주면 된다.
+                shutil.rmtree(location)   # 해당 디렉토리를 포함하여 하위 폴더/파일 삭제
 
-        # os 모듈 안에 있는 모든 함수는 OSError 를 발생시킨다. (또는 OSError 하위 클래스 에러)
-        # 1. os.remove 해당 파일이 존재하지 않을 경우
-        # 2. os.remove 파일이 아닌 디렉토리를 삭제하려는 경우
-        # 3. os.rmdir 해당 디렉토리가 비어있지 않은 경우
-        # 4. os.rmdir 디렉토리가 아닌 파일을 삭제하려는 경우
-        # 위의 경우가 발생했을 때는 db와 로컬 파일의 불일치 일어날 수 있음.
-        except OSError as error:
+        except Exception as error:
             print(error)  # LOGGING :: 로그 파일 생성하는 코드 나중에 수정해야 함.
 
         contest.delete()  # 파일과 폴더 삭제 후, 게시글 DB 에서 삭제
