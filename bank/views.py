@@ -11,10 +11,8 @@ from django.http import HttpResponseRedirect
 from django.conf import settings
 from datetime import datetime
 from django.utils.dateformat import DateFormat
-from IBAS.user_controller import is_chief_exist, is_sub_chief_exist, get_sub_chief, get_chief
 from date_controller import today
 import os
-from IBAS.file_controller import get_filename, get_filename_with_ext
 
 
 # Create your views here.
@@ -195,32 +193,20 @@ def bank_support_detail(request, bank_no):
     return render(request, 'bank_support_detail.html', context)  # 상세보기
 
 
-def bank_support_aor(request): # 총무가 승인, 승인거절, 지급완료를 눌렀을 때의 과정
-    print("test_point_0")
+def bank_support_aor(request):  # 총무가 승인, 승인거절, 지급완료를 눌렀을 때의 과정
     if request.method == "POST":
         bank = Bank.objects.get(pk=request.POST.get("bank_no"))
-        print("test_point_1")
-        print(bank)
         bank_apply_no = int(request.POST.get("bank_apply_no"))
-        print(bank_apply_no)
         bank.bank_apply = BankApplyInfo.objects.get(pk=bank_apply_no)
-        print(bank.bank_apply.bank_apply_no)
         bank.bank_cfo = User.objects.get(pk=request.session.get('user_stu'))
-        print(bank.bank_cfo.user_stu)
-        print("test_point_2")
-        if bank_apply_no == 2:
-            print("왔니!")
-            bank.bank_checked = today()
-        elif bank_apply_no == 3:
-            print("거절시")
-            bank.bank_checked = today()
+        if bank_apply_no == 2:  # 승인 시
+            bank.bank_checked = today()  # 검토일, 오늘
+        elif bank_apply_no == 3:  # 거절 시
+            bank.bank_checked = today()  # 검토일, 오늘
             bank.bank_reject_reason = request.POST.get("bank_reject_reason")
-        elif bank_apply_no == 4:
-            print("지급 완료시")
-            bank.bank_allowed = today()
-
+        elif bank_apply_no == 4:  # 지급 완료 시
+            bank.bank_allowed = today()  # 지급 완료일, 오늘
         bank.save()
-        print("test_point_3")
         return redirect("bank_support_detail", bank_no=bank.bank_no)
     else:
         return redirect(reverse("bank_support_board"))
@@ -250,26 +236,28 @@ def bank_support_update(request):
 
             bank_file_list = BankFile.objects.filter(bank_no=bank)
             try:
-                for bank_file in bank_file_list: # 기존에 파일들을 사용자가 수정할 때 삭제하는 경우
-                    if request.POST.get("exist_bank_file_" + str(bank_file.bank_file_id)) is None: # POST로 넘어오는 파라미터가 없는 경우 삭제를 했다고 간주함
+                for bank_file in bank_file_list:  # 기존에 파일들을 사용자가 수정할 때 삭제하는 경우
+                    if request.POST.get("exist_file_path_" + str(
+                            bank_file.bank_file_id)) is None:  # POST로 넘어오는 파라미터가 없는 경우 삭제를 했다고 간주함
                         # 기존에 있던 저장소에 파일 삭제
                         os.remove(settings.MEDIA_ROOT + "/" + str(bank_file.bank_file_path))
                         # db 기록 삭제
                         bank_file.delete()
-                os.rmdir(settings.MEDIA_ROOT + "/" + str(bank.bank_no)) # 디렉토리 삭제
-            except FileNotFoundError: # 파일을 못찾았을 때 예외처리
-                pass # 존재하지 않는 것이므로 그냥 둠
-            for updated_file in request.FILES.getlist('bank_file'): # 사용자가 새롭게 추가한 파일
-                new_bank_file = BankFile.objects.create(bank_no=Bank.objects.get(pk=bank.bank_no), # 객체 생성
+                if len(BankFile.objects.filter(bank_no=bank)) == 0:  # 수정 하면서 모든 파일을 지워버린 경우.
+                    os.rmdir(settings.MEDIA_ROOT + "/bank/" + str(bank.bank_no))  # 디렉토리 삭제
+            except FileNotFoundError:  # 파일을 못찾았을 때 예외처리
+                pass  # 존재하지 않는 것이므로 그냥 둠
+            for updated_file in request.FILES.getlist('bank_file'):  # 사용자가 새롭게 추가한 파일
+                new_bank_file = BankFile.objects.create(bank_no=Bank.objects.get(pk=bank.bank_no),  # 객체 생성
                                                         bank_file_path=updated_file,
                                                         bank_file_name=get_file_name(updated_file))
-                new_bank_file.save() # 새롭게 저장
+                new_bank_file.save()  # 새롭게 저장
         return redirect("bank_support_detail", bank_no=bank.bank_no)
     else:
         return redirect(reverse("bank_support_board"))
 
 
-def bank_support_delete(request): # 예산지원 삭제
+def bank_support_delete(request):  # 예산지원 삭제
     if request.method == "POST":  # 포스트로 넘어오는 경우
         bank = Bank.objects.get(pk=request.POST.get('bank_no'))
         try:
@@ -283,6 +271,6 @@ def bank_support_delete(request): # 예산지원 삭제
         except FileNotFoundError:
             pass  # 파일이 없는 경우 그냥 통과시킨다.
         bank.delete()  # 파일과 폴더 삭제 후, 회계 DB 에서 삭제
-        return redirect(reverse('bank_support_board')) # 예산 지원 신청 게시판으로 이동 
-    else: # get으로 넘어온 경우(해킹시도)
-        return redirect(reverse('bank_support_board')) # 삭제를 건너뛰고 예산 지원 신청 게시판으로 이동
+        return redirect(reverse('bank_support_board'))  # 예산 지원 신청 게시판으로 이동
+    else:  # get으로 넘어온 경우(해킹시도)
+        return redirect(reverse('bank_support_board'))  # 삭제를 건너뛰고 예산 지원 신청 게시판으로 이동

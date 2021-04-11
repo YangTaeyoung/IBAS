@@ -1,5 +1,5 @@
-function passAuth(user_auth)
+function passRole(user_role)
 {
-    document.getElementById("user_auth").value = user_auth;
+    document.getElementById("user_role").value = user_role;
     document.getElementById("hd_form").submit();
 }

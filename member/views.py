@@ -7,16 +7,17 @@ from DB.models import AuthUser, User, UserAuth, UserRole, QuestForm, Answer, \
 from django.http import HttpResponseRedirect
 # 내가 만든 세션 모듈 불러오기
 from . import session
-from urllib.request import urlretrieve # 인터넷에 있는 파일 다운로드
-
+from urllib.request import urlretrieve  # 인터넷에 있는 파일 다운로드
+import os
+from django.conf import settings
 
 
 # Create your views here.
 
 def choose_std_or_pro(request):  # 학생인지, 교수인지 고르게 하는 것.
-    if request.method == "POST": # POST로 온 요청의 경우, 즉 정상적인 요청인 경우
+    if request.method == "POST":  # POST로 온 요청의 경우, 즉 정상적인 요청인 경우
         if request.POST.get("password") is not None:  # pass페이지에서 password가 파라미터로 넘어왔을 경우, 즉 정상적으로 구글 로그인을 마친 경우
-            user_token = request.POST.get("password") # 토큰 정보를 받음
+            user_token = request.POST.get("password")  # 토큰 정보를 받음
             if len(AuthUser.objects.filter(password=user_token)) == 0:  # 토큰 정보로 AuthUser정보를 조회 만약 없다면 비정상 적인 접근.
                 return redirect(reverse("index"))  # 비정상적인 접근의 경우 강제로 홈으로 이동
             auth_user = AuthUser.objects.filter(password=user_token)[0]  # auth테이블에서 해당 패스워드가 있는지 조회.
@@ -65,19 +66,19 @@ def choose_std_or_pro(request):  # 학생인지, 교수인지 고르게 하는 �
         return render(request, "index.html", {'lgn_is_failed': 1})  # 자바 스크립트 경고를 띄우기 위한 변수 지정 후 index로 보냄.
 
 
-def join(request): # 회원 가입 페이지를 랜더링 하는 함수
-    stu_list = list() # 학생 리스트를 받아옴
+def join(request):  # 회원 가입 페이지를 랜더링 하는 함수
+    stu_list = list()  # 학생 리스트를 받아옴
     for user in User.objects.all():
-        stu_list.append(user.user_stu) # 학생 리스트에서 학번만 뽑아서 학번 리스트 생성
+        stu_list.append(user.user_stu)  # 학생 리스트에서 학번만 뽑아서 학번 리스트 생성
 
-    context = { # hidden을 통해서 받은 회원들의 정보를 받아서 붙여넣음.
-        "email": request.POST.get("email"), #이메일
-        "name": request.POST.get("name"), #이름
-        "pic": request.POST.get("pic"), #프로필 사진
-        "user_auth": request.POST.get("user_auth"), # 회원 권한
-        "stu_list": stu_list, # 학번 리스트
-        "quest_list": QuestForm.objects.all(), # 질문 양식
-        "major_list": MajorInfo.objects.all() # 전공 리스트(전공 검색을 위해)
+    context = {  # hidden을 통해서 받은 회원들의 정보를 받아서 붙여넣음.
+        "email": request.POST.get("email"),  # 이메일
+        "name": request.POST.get("name"),  # 이름
+        "pic": request.POST.get("pic"),  # 프로필 사진
+        "user_role": request.POST.get("user_role"),  # 회원 역할 (학생 or 교수)
+        "stu_list": stu_list,  # 학번 리스트
+        "quest_list": QuestForm.objects.all(),  # 질문 양식
+        "major_list": MajorInfo.objects.all()  # 전공 리스트(전공 검색을 위해)
     }
     return render(request, "join.html", context)
 
@@ -86,7 +87,7 @@ def join_chk(request):  # 회원 가입 페이지로 부터 정보를 받
     if request.method == "POST":  # POST로 데이터가 들어왔을 경우, 안들어 왔다면 -> 비정상 적인 접근임. 일반적으로 GET을 통해서는 접근이 불가능 해야함.
         # 사용자 정보를 받아옴
 
-        context = { # 회원 가입 정보를 받아서 질문 폼으로 전송
+        context = {  # 회원 가입 정보를 받아서 질문 폼으로 전송
             "user_auth": request.POST.get("user_auth"),
             "user_role": request.POST.get("user_role"),
             "user_email": request.POST.get("user_email"),
@@ -117,11 +118,18 @@ def quest_chk(request):
         user_grade = request.POST.get("user_grade")
         user_gen = request.POST.get("user_gen")
         user_phone = request.POST.get("user_phone")
-
         user_pic = request.POST.get("user_pic")
         if user_pic is not None:
-            urlretrieve(user_pic, "/home/ibas/Django/IBAS/media/member/" + user_stu + ".jpg")
-            user_pic = "member/" + user_stu + ".jpg"
+            try: # 자신의 폴더가 남아 있을 경우의 예외처리
+                os.mkdir(settings.MEDIA_ROOT + "/member/" + user_stu)
+            except FileExistsError:
+                pass
+            try: #
+                urlretrieve(user_pic, "/home/ibas/Django/IBAS/media/member/" + user_stu + "/" + user_stu + ".jpg")
+                user_pic = "member/" + user_stu + "/" + user_stu + ".jpg"
+            except FileNotFoundError:
+                user_pic = "member/default/default.png"
+                pass
         # 받은 정보로 user 모델 인스턴스 변수 생성
         user = User.objects.create(
             user_name=user_name,  # 이름
@@ -138,7 +146,7 @@ def quest_chk(request):
         # 사용자 정보를 DB에 저장
         user.save()
 
-        if user_auth == "4":  # 오직 일반 학생으로 가입했을 때만
+        if user_role == "6":  # 오직 일반 학생으로 가입했을 때만
             # 모든 질문 리스트를 뽑아옴: 질문이 몇번까지 있는지 알아야 답변을 몇번까지 했는지 알기 때문
             quest_list = QuestForm.objects.all()
 
@@ -152,9 +160,9 @@ def quest_chk(request):
                 )
 
                 answer.save()
-        session.save_session(request, user) # 자동 로그인을 위해 세션 등록
+        session.save_session(request, user)  # 자동 로그인을 위해 세션 등록
         return redirect(reverse("welcome"))  # 정상 회원가입 완료시 회원 가입 완료 페이지로 이동.
-    return render(request, "index.html", {'lgn_is_failed': 1}) #비정상 적인 접근 시 로그인 실패 메시지 출력과 함께 메인페이지 이동.
+    return render(request, "index.html", {'lgn_is_failed': 1})  # 비정상 적인 접근 시 로그인 실패 메시지 출력과 함께 메인페이지 이동.
 
 
 def pass_param(request):  # 구글 로그인으로 부터 파라미터를 받아 넘기는 페이지, 사용자에겐 보이지 않음.

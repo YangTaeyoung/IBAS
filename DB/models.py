@@ -22,6 +22,19 @@ class Answer(models.Model):
         db_table = 'ANSWER'
 
 
+class Alarm(models.Model):
+    alarm_no = models.AutoField(db_column='ALARM_NO', primary_key=True)
+    alarm_user = models.ForeignKey('User', on_delete=models.CASCADE, db_column='ALARM_USER')
+    alarm_cont = models.CharField(db_column='ALARM_CONT', max_length=150)
+    alarm_link = models.CharField(db_column='ALARM_LINK', max_length=150, null=True)
+    alarm_ischecked = models.IntegerField(db_column='ALARM_ISCHECKED', default=0)
+    alarm_date = models.DateTimeField(db_column='ALARM_DATE', auto_now_add=True)
+
+    class Meta:
+        managed = False
+        db_table = "ALARM"
+
+
 class Bank(models.Model):
     bank_no = models.AutoField(db_column='BANK_NO', primary_key=True)  # Field name made lowercase.
     bank_plus = models.IntegerField(db_column='BANK_PLUS', blank=True, default=0)  # Field name made lowercase.
@@ -171,11 +184,17 @@ class ContestBoard(models.Model):
         db_table = 'CONTEST_BOARD'
 
 
+def contest_file_upload_to(instance, filename):
+    return f'board/contest/{instance.contest_no.contest_no}/{filename}'
+
+
 class ContestFile(models.Model):
     contest_file_id = models.AutoField(db_column='CONTEST_FILE_ID', primary_key=True)  # Field name made lowercase.
     contest_no = models.ForeignKey(ContestBoard, on_delete=models.CASCADE,
                                    db_column='CONTEST_NO')  # Field name made lowercase.
-    contest_file_path = models.CharField(db_column='CONTEST_FILE_PATH', max_length=1000)  # Field name made lowercase.
+    contest_file_path = models.ImageField(db_column='CONTEST_FILE_PATH',
+                                          upload_to=contest_file_upload_to)  # Field name made lowercase.
+    contest_file_name = models.CharField(db_column='CONTEST_FILE_NAME', max_length=500)
 
     class Meta:
         managed = False
@@ -368,19 +387,22 @@ class StateInfo(models.Model):
         db_table = 'STATE_INFO'
 
 
+def user_pic_upload_to(instance, filename):
+    return f'member/{instance.user_stu}/{filename}'
+
+
 class User(models.Model):
     user_email = models.CharField(db_column='USER_EMAIL', max_length=100)  # Field name made lowercase.
     user_stu = models.IntegerField(db_column='USER_STU', primary_key=True)  # Field name made lowercase.
     user_name = models.CharField(db_column='USER_NAME', max_length=50)  # Field name made lowercase.
     user_major = models.ForeignKey(MajorInfo, models.DO_NOTHING, db_column='USER_MAJOR')  # Field name made lowercase.
-    user_pic = models.ImageField(db_column='USER_PIC', upload_to='member/', blank=True,
+    user_pic = models.ImageField(db_column='USER_PIC', upload_to=user_pic_upload_to, blank=True,
                                  null=True)  # Field name made lowercase.
     user_auth = models.ForeignKey('UserAuth', models.DO_NOTHING, db_column='USER_AUTH')  # Field name made lowercase.
     user_role = models.ForeignKey('UserRole', models.DO_NOTHING, db_column='USER_ROLE')  # Field name made lowercase.
     user_joined = models.DateTimeField(db_column='USER_JOINED', auto_now_add=True)  # Field name made lowercase.
     user_grade = models.IntegerField(db_column='USER_GRADE')  # Field name made lowercase.
     user_gen = models.IntegerField(db_column='USER_GEN')  # Field name made lowercase.
-    is_activated = models.IntegerField(db_column='IS_ACTIVATED', default=0)  # Field name made lowercase.
     user_phone = models.CharField(db_column='USER_PHONE', unique=True, max_length=15)  # Field name made lowercase.
 
     class Meta:
@@ -425,6 +447,19 @@ class UserRole(models.Model):
     class Meta:
         managed = False
         db_table = 'USER_ROLE'
+
+
+class UserUpdateRequest(models.Model):
+    updated_no = models.AutoField(db_column='UPDATED_NO', primary_key=True)
+    updated_user_name = models.CharField(db_column='UPDATED_USER_NAME', max_length=50)
+    updated_reject_reason = models.CharField(db_column='UPDATED_REJECT_REASON', null=True, max_length=200)
+    updated_user = models.ForeignKey(User, on_delete=models.CASCADE, db_column="UPDATED_USER")
+    updated_date = models.DateTimeField(db_column='UPDATED_DATE', auto_now_add=True)
+    updated_state = models.ForeignKey(StateInfo, models.DO_NOTHING, db_column='UPDATED_STATE', default=1)
+
+    class Meta:
+        managed = False
+        db_table = 'USER_UPDATE_REQUEST'
 
 
 class History(models.Model):

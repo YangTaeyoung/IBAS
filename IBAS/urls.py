@@ -24,13 +24,15 @@ urlpatterns = [
     # path('', include('first.urls')),
     path('user/', include('member.urls')),
     path('board/', include('board.urls')),
+    path('admin/', admin.site.urls), # 관리자 페이지 링크
     path('lecture/', include('lecture.urls')),
     path('admin/', admin.site.urls),
     path('', include('main.urls')),
     path('member/', include('staff.urls')),
     path('bank/', include('bank.urls')),
+    path('staff/', include('staff.urls')),
     path('my_info/', include('my_info.urls')),
-    path('lecture/', include('lecture.urls')),
+    # 템플릿 테스팅 링크
     path('test/add/listing/', views.add_listing, name="add_listing"),
     path('test/blog/detail/', views.blog_detail, name="blog_detail"),
     path('test/blog/standard/', views.blog_standard, name="blog_standard"),

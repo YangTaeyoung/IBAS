@@ -4,6 +4,18 @@
     <link rel="stylesheet" href="{% static 'css/login.css' %}"/>
     <link rel="stylesheet" href="{% static 'css/my_info_cr.css' %}"/>
 
+    <script src="{% static 'js/my_info.js' %}"></script>
+    <script>
+        function goUpdate() {
+            if (confirm('수정하시겠습니까?')) {
+                document.getElementById("form-user-update-request").submit();
+            }
+        }
+
+        function goUpdatePic() {
+            document.getElementById('form-user-pic-update').submit();
+        }
+    </script>
     <!-- Content -->
     <div class="page-content bg-white text-gray-1">
         <!-- inner page banner -->
@@ -14,7 +26,7 @@
                 <div class="listing-info-box">
                     <!--프로필 사진, Back : 본인 프로필 사진 나오도록 수정-->
                     <div class="listing-theme-logo">
-                        <img src="/media/{{ my_info.user_pic }}" alt="">
+                        <img src="/media/{{ my_info.user_pic }}" alt="" style="min-width: 130px; max-height: 130px; min-width: 130px; min-height: 130px">
                     </div>
                     <div class="listing-info">
                         <!--이름, 학과, 학번 표시되는 곳, Back : 본인 이름, 학과, 한번 들어갈 수 있도록 수정-->
@@ -44,20 +56,20 @@
                             <span aria-hidden="true"><i class="la la-close"></i></span>
                         </button>
                     </div>
+
                     <!--내용부분, 이미지 첨부하는 곳 들어감, Back : 가능하면....원래 사진 뜰 수 있도록 수정, 어려우면 없어도 될듯-->
                     <div class="modal-body">
-                        <form class="dlab-form">
+                        <form id="form-user-pic-update" action="{% url 'user_pic_update' %}" method="post"
+                              class="dlab-form" enctype="multipart/form-data">
+                            {% csrf_token %}
                             <div class="content-body">
                                 <div class="form-group">
-                                    <input
-                                            type="file"
-                                            accept="image/*"
-                                    />
+                                    <input name="user_pic" type="file" accept="image/*"/>
                                 </div>
                             </div>
                             <!--수정버튼, Back : 누르면 프로필 사진에 반영되도록 수정-->
                             <a href="#" class="site-button" style="display: grid; justify-items: center;"
-                               onclick="return confirm('수정하시겠습니까?') && alert('프로필 사진 수정이 완료되었습니다.')">수정</a>
+                               onclick="goUpdatePic()">수정</a>
                         </form>
                     </div>
                 </div>
@@ -80,9 +92,6 @@
                     <!--예산신청내역 메뉴버튼,Back : 모두에게 보이게 수정-->
                     <li><a data-toggle="tab" href="#listing_mybank"><i class="la la-money"></i><span>예산신청내역</span></a>
                     </li>
-                    <!--회원관리 메뉴버튼,Back : 회장단만 보이게 수정-->
-                    <li><a data-toggle="tab" href="#listing_user_setting"><i
-                            class="la la-users"></i><span>회원관리</span></a></li>
                     <!--내정보 메뉴버튼,Back : 모두에게 보이게 수정-->
                     <li><a data-toggle="tab" href="#listing_my_info"><i class="la la-user"></i><span>내정보</span></a></li>
                 </ul>
@@ -148,6 +157,11 @@
                                             </tr>
                                             </thead>
                                             <tbody>
+                                            {% if my_board_list|length == 0 %}
+                                                <td class="text-center" colspan="3">
+                                                    내가 작성한 게시글이 없습니다.
+                                                </td>
+                                            {% endif %}
                                             {% for my_board in my_board_list %}
                                                 <tr>
                                                     <!-- 게시판 유형 -->
@@ -186,6 +200,13 @@
                                             </thead>
                                             <!-- 댓글 내용 테이블 -->
                                             <tbody>
+                                            {% if my_comment_list|length == 0 %}
+                                                <tr>
+                                                    <td class="text-center" colspan="4">
+                                                        내가 작성한 덧글이 없습니다.
+                                                    </td>
+                                                </tr>
+                                            {% endif %}
                                             {% for my_comment in my_comment_list %}
                                                 <tr>
                                                     <!-- 게시판 유형 -->
@@ -233,6 +254,11 @@
                                                 </thead>
                                                 <!-- 내가 신청한 예산내역 테이블 -->
                                                 <tbody>
+                                                {% if my_bank_list|length == 0 %}
+                                                    <tr>
+                                                        <td colspan="6" class="text-center">내가 작성한 예산신청 내역이 없습니다.</td>
+                                                    </tr>
+                                                {% endif %}
                                                 {% for my_bank in my_bank_list %}
                                                     <tr>
                                                         <!-- 현재 상태 -->
@@ -244,11 +270,15 @@
                                                             <a href="{% url 'bank_support_detail' bank_no=my_bank.bank_no %}">원문보기
                                                                 ▶</a>
                                                             <!-- 게시글 작성일 -->
-                                                        <td>{{ my_bank.bank_created|date:"Y-m-d"}}</td>
+                                                        <td>{{ my_bank.bank_created|date:"Y-m-d" }}</td>
                                                         <!-- 게시글 검토일 (총무가 승인, 거절 버튼을 누른 일자) 만약 아직 검토 전이면, '-'로 표기되어야 함. -->
-                                                        <td>{% if my_bank.bank_checked is not None %}{{ my_bank.bank_checked|date:"Y-m-d" }}{% else %}-{% endif %}</td>
+                                                        <td>{% if my_bank.bank_checked is not None %}
+                                                            {{ my_bank.bank_checked|date:"Y-m-d" }}{% else %}
+                                                            -{% endif %}</td>
                                                         <!-- 총무가 돈을 입금한 날 (아직 입금 전이면, '-'로 표기되어야 함. -->
-                                                        <td>{% if my_bank.bank_allowed is not None %}{{ my_bank.bank_allowed|date:"Y-m-d" }}{% else %}-{% endif %}</td>
+                                                        <td>{% if my_bank.bank_allowed is not None %}
+                                                            {{ my_bank.bank_allowed|date:"Y-m-d" }}{% else %}
+                                                            -{% endif %}</td>
                                                     </tr>
                                                 {% endfor %}
                                                 </tbody>
@@ -260,21 +290,6 @@
                         </div>
                     </div>
                     <!--===== 내가 신청한 예산내역 코드 끝 =====-->
-                    <!--회원관리-->
-                    <div id="listing_user_setting" class="tab-pane">
-                        <div class="row">
-                            <div class="col-xl-12">
-                                <div class="content-box">
-                                    <div class="content-header">
-                                        <h3 class="title">회원관리 제목</h3>
-                                    </div>
-                                    <div class="content-body">
-                                        <p>회원관리 내용~~~~~~~~~~~~~~~~~~~~~~</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     <!--내정보-->
                     <div id="listing_my_info" class="tab-pane">
                         <div class="row">
@@ -292,12 +307,17 @@
                                             <!--이름-->
                                             <tr>
                                                 <th scope="row">이름</th>
-                                                <!--Back : 자기 이름 뜨도록 수정-->
+                                                <!-- Back : 자기 이름 뜨도록 수정 -->
                                                 <td>{{ my_info.user_name }}</td>
-                                                <!--수정하기 버튼, 누르면 모달 뜸-->
+                                                <!-- 수정하기 버튼, 누르면 모달 뜸 -->
                                                 <td>
-                                                    <a href="javascript:void(0);" data-toggle="modal"
-                                                       data-target="#name_edit"><i class="la la-pencil"></i></a>
+                                                    {% if my_wait_request|length == 0 %} {# 이름 변경 신청한 것이 없는 경우 #}
+                                                        <a href="javascript:void(0);" data-toggle="modal"
+                                                           data-target="#name_edit"><i class="la la-pencil"></i></a>
+                                                    {% else %} {# 이미 이름 변경 신청을 한 경우 #}
+                                                        <!-- 이 부분 클릭하면 변경 신청했던 내역 모달 떠서 보게 해주세요. -->
+                                                        <a href="#">이름 신청 이력 보기</a>
+                                                    {% endif %}
                                                 </td>
                                             </tr>
                                             <!--학번-->
@@ -322,7 +342,7 @@
                                             <tr>
                                                 <th scope="row">학년</th>
                                                 <!--Back : 자기 학년 뜨도록 수정-->
-                                                <td>{{  my_info.user_grade }}학년</td>
+                                                <td>{{ my_info.user_grade }}학년</td>
                                                 <td></td>
                                             </tr>
                                             <!--이메일-->
@@ -345,14 +365,14 @@
                                             </tr>
                                             <!--승인상태-->
                                             <tr>
-                                                <th scope="row">승인상태</th>
+                                                <th scope="row">권한</th>
                                                 <!--Back : 승인 안되면 미승인, 승인되면 승인 뜨도록 수정-->
-                                                <td>{% if my_info.is_activated == 1 %}승인{% else %}승인 대기{% endif %}</td>
+                                                <td>{{ my_info.user_auth.auth_name }}</td>
                                                 <td></td>
                                             </tr>
                                             <!--권한-->
                                             <tr>
-                                                <th scope="row">권한</th>
+                                                <th scope="row">역할</th>
                                                 <!--Back : 회장이면 회장, 부회장이면 부회장 ...... 일반회원이면 일반회원으로 뜨도록 수정-->
                                                 <td>{{ my_info.user_role.role_name }}</td>
                                                 <td></td>
@@ -452,7 +472,10 @@
                                     </div>
                                     <!--내용부분-->
                                     <div class="modal-body">
-                                        <form class="dlab-form">
+                                        <form id="form-user-update-request"
+                                              action="{% url 'user_update_request_register' %}" class="dlab-form"
+                                              method="post">
+                                            {% csrf_token %}
                                             <!--수정설명 부분-->
                                             <div class="clearfix">
                                                 <p class="my_info_modal_content"><i class="la la-check"></i>이름은 회장의 승인을
@@ -460,13 +483,13 @@
                                             </div>
                                             <!--수정할 이름 적는 부분-->
                                             <div class="form-group">
-                                                <input name="dzName" required="" class="form-control"
+                                                <input name="updated_user_name" required="required" class="form-control"
                                                        placeholder="수정하고 싶은 이름을 적어주세요" type="text"/>
                                             </div>
                                             <!--수정신청하기 버튼, Back : 누르면 회장에게 승인을 요구하도록 수정-->
                                             <a href="#" class="site-button"
                                                style="display: grid; justify-items: center;"
-                                               onclick="return confirm('신청하시겠습니까?') && alert('신청이 완료되었습니다. 회장의 승인 후 수정이 완료됩니다.')">수정신청</a>
+                                               onclick="goUpdate()">수정신청</a>
                                         </form>
                                     </div>
                                 </div>
