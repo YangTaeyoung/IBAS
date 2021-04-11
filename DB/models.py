@@ -175,7 +175,7 @@ class ContestBoard(models.Model):
     @property
     def is_past_due(self):
         today = date.today()
-        if self.contest_start.date() <= today <= self.contest_deadline.date():
+        if today <= self.contest_deadline.date():
             return True
         else:
             return False

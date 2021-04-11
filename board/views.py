@@ -5,6 +5,8 @@ from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponse
 from DB.models import *
 from django.db.models import Q, Count
+
+from IBAS.settings import MEDIA_ROOT
 from addr_handling import go_board, go_board_detail
 from file_controller import is_image
 from django.core.paginator import Paginator
@@ -112,12 +114,17 @@ def board_register(request):
         board.save()  # DB 에 차곡차곡 저장을 함
 
         # ============================= 이미지 저장시키는 코드 =========================
-        for updated_file in request.FILES.getlist("board_file"):
-            # DB 저장
-            new_board_file = BoardFile(board_no=Board.objects.get(pk=board.board_no),
-                                       board_file_path=updated_file,
-                                       board_file_name=str(updated_file)[str(updated_file).rfind("/") + 1:])
-            new_board_file.save()
+        # request.FILES 는 dict 형태 (key : value)
+        # - key 는 html에서의 form 태그 name
+        # - value 는 해당 form에서 전송받은 file들 / uploadedFile 객체 형태
+        if "board_file" in request.FILES:  # 넘겨받은 폼 태그 이름중에 "board_file"이 있으면
+            for file in request.FILES.getlist("contest_file"): # 각각의 파일을 uploadedFile로 받아옴
+                ContestFile.objects.create(
+                    contest_no=ContestBoard.objects.get(pk=board.board_no),
+                    contest_file_path=file,  # uploadedFile 객체를 imageField 객체 할당
+                    contest_file_name=file.name.replace(' ', '_')  # imageField 객체에 의해 파일 이름 공백이 '_'로 치환되어 서버 저장
+                                                                   # 따라서 db 에도 이름 공백을 '_'로 치환하여 저장
+                )
 
         return redirect("board_detail", board_no=board.board_no)
 
@@ -183,17 +190,27 @@ def board_update(request):
 def board_delete(request):
     if request.method == "POST":  # 포스트로 넘어오는 경우
         board = Board.objects.get(pk=request.POST.get('board_no'))
+
         try:
-            file_list = list(BoardFile.objects.filter(board_no=board))
-            # file_list 라는 변수 선언 (여러개의 파일을 올릴 수 있으므로 list 로 변환)
-            for i in range(len(file_list)):
-                # file_list 의 크기 만큼 for 문으로 돌려서 파일 삭제 후 폴더 삭제
-                os.remove('media/' + str(file_list[i].board_file_path))
-            os.rmdir('media/board/' + str(board.board_no))
-            # 파일이 안에 있는 삭제에서 폴더를 삭제할 경우 오류 만남.
-        except FileNotFoundError:
-            pass  # 파일이 없는 경우 그냥 통과시킨다.
+            files = BoardFile.objects.filter(board_no=board)
+
+            # os.path.join : 파일 경로 설정 방식에 대한 서버 os 의존성 제거
+            location = os.path.join(MEDIA_ROOT, 'board', str(board.board_no))
+            for file in files:
+                os.remove(os.path.join(location, str(file.contest_file_name)))
+            os.rmdir(location)
+
+        # os 모듈 안에 있는 모든 함수는 OSError 를 발생시킨다. (또는 OSError 하위 클래스 에러)
+        # 1. os.remove 해당 파일이 존재하지 않을 경우
+        # 2. os.remove 파일이 아닌 디렉토리를 삭제하려는 경우
+        # 3. os.rmdir 해당 디렉토리가 비어있지 않은 경우
+        # 4. os.rmdir 디렉토리가 아닌 파일을 삭제하려는 경우
+        # 위의 경우가 발생했을 때는 db와 로컬 파일의 불일치 일어날 수 있음.
+        except OSError as error:
+            print(error)  # LOGGING :: 로그 파일 생성하는 코드 나중에 수정해야 함.
+
         board.delete()  # 파일과 폴더 삭제 후, 게시글 DB 에서 삭제
+
         return redirect('board_view', board_type_no=5)
 
     else:  # 파라미터가 제대로 넘어오지 않은 경우, 즉 비정상적인 경로를 통해 들어간 경우 바로 나오게 해준다.
@@ -270,11 +287,10 @@ def contest_list(request):
     return render(request, 'contest_board.html', context)
 
 
+# 버그 처리 :: 등록 버튼 누르고 가끔 로딩되면서 화면전환이 늦어질 때가 있는데,
+#            그 때 등록버튼 연타하면 클릭한수만큼 동일한 게시글 작성됨.
 def contest_register(request):  # 공모전 등록
-
-    # 글은 'POST'로 DB에 등록하게 되어있음.
     if request.method == 'POST':
-
         contest = ContestBoard(
             contest_title=request.POST.get('contest_title'),
             contest_asso=request.POST.get('contest_asso'),
@@ -296,8 +312,9 @@ def contest_register(request):  # 공모전 등록
             for file in request.FILES.getlist("contest_file"): # 각각의 파일을 uploadedFile로 받아옴
                 ContestFile.objects.create(
                     contest_no=ContestBoard.objects.get(pk=contest.contest_no),
-                    contest_file_path=file,  # imageField 객체 <- uploadedFile 객체 할당
-                    contest_file_name=file.name
+                    contest_file_path=file,  # uploadedFile 객체를 imageField 객체 할당
+                    contest_file_name=file.name.replace(' ', '_')  # imageField 객체에 의해 파일 이름 공백이 '_'로 치환되어 서버 저장
+                                                                   # 따라서 db 에도 이름 공백을 '_'로 치환하여 저장
                 )
 
         return redirect(reverse('contest_list'))
@@ -308,7 +325,6 @@ def contest_register(request):  # 공모전 등록
 
 
 def contest_detail(request, contest_no):  # 게시판 상세 페이지로 이동
-
     if request.method == 'GET':
         contest = ContestBoard.objects.get(pk=contest_no)  # 해당 공모전 정보 db에서 불러오기
 
@@ -339,11 +355,40 @@ def contest_detail(request, contest_no):  # 게시판 상세 페이지로 이동
 
     # 비정상적인 경로 들어왔을 시
     else:
+        print(request)  # LOGGING :: 로그 파일 생성하는 코드 나중에 수정해야 함.
         redirect(reverse('contest_list'))
 
 
 def contest_delete(request):
-    pass
+    if request.method == "POST":
+        contest = ContestBoard.objects.get(pk=request.POST.get('contest_no'))
+        try:
+            files = ContestFile.objects.filter(contest_no=contest)
+
+            # os.path.join : 파일 경로 설정 방식에 대한 서버 os 의존성 제거
+            location = os.path.join(MEDIA_ROOT, 'board', 'contest', str(contest.contest_no))
+            for file in files:
+                os.remove(os.path.join(location, str(file.contest_file_name)))
+            os.rmdir(location)
+
+        # os 모듈 안에 있는 모든 함수는 OSError 를 발생시킨다. (또는 OSError 하위 클래스 에러)
+        # 1. os.remove 해당 파일이 존재하지 않을 경우
+        # 2. os.remove 파일이 아닌 디렉토리를 삭제하려는 경우
+        # 3. os.rmdir 해당 디렉토리가 비어있지 않은 경우
+        # 4. os.rmdir 디렉토리가 아닌 파일을 삭제하려는 경우
+        # 위의 경우가 발생했을 때는 db와 로컬 파일의 불일치 일어날 수 있음.
+        except OSError as error:
+            print(error)  # LOGGING :: 로그 파일 생성하는 코드 나중에 수정해야 함.
+
+        contest.delete()  # 파일과 폴더 삭제 후, 게시글 DB 에서 삭제
+
+        return redirect(reverse('contest_list'))
+
+    # 비정상적인 접근 시도
+    else:
+        print(request)  # LOGGING :: 로그 파일 생성하는 코드 나중에 수정해야 함.
+        return redirect(reverse('contest_list'))
+
 
 
 def contest_update(request):
