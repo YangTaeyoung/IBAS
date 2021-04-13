@@ -5,6 +5,7 @@
 #   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
+from datetime import date
 from django.db import models
 
 
@@ -114,16 +115,19 @@ def board_file_upload_to(instance, filename):
     return f'board/{instance.board_no.board_no}/{filename}'
 
 
-class BoardFile(models.Model):
-    board_no = models.ForeignKey(Board, on_delete=models.CASCADE, db_column='BOARD_NO',
-                                 null=True)  # Field name made lowercase.
-    board_file_id = models.AutoField(db_column='BOARD_FILE_ID', primary_key=True)  # Field name made lowercase.
+# 추상클래스 File
+class File(models.Model):
+    file_id = models.AutoField(db_column='FILE_ID', primary_key=True)  # Field name made lowercase.
+    file_name = models.CharField(db_column='FILE_NAME', max_length=300)
 
-    # 조용식이 만진 부분
+    class Meta:
+        abstract = True
+
+
+class BoardFile(File):
+    board_no = models.ForeignKey(Board, on_delete=models.CASCADE, db_column='BOARD_NO', null=True)
     # upload_to에 대한 인자를 위에 정의한 함수로 대체해야 경로를 커스터마이징 할 수 있음.
-    board_file_path = models.ImageField(db_column='BOARD_FILE_PATH', upload_to=board_file_upload_to, blank=True,
-                                        null=True)  # Field name made lowercase.
-    board_file_name = models.CharField(db_column='BOARD_FILE_NAME', max_length=300)
+    file_path = models.ImageField(db_column='FILE_PATH', upload_to=board_file_upload_to, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -153,13 +157,10 @@ class ChiefCarrier(models.Model):
 
 
 class Comment(models.Model):
-    comment_id = models.AutoField(db_column='COMMENT_ID', primary_key=True)  # Field name made lowercase.
-    comment_board_no = models.ForeignKey(Board,
-                                         db_column='COMMENT_BOARD_NO',
-                                         on_delete=models.CASCADE)  # Field name made lowercase.
-    comment_writer = models.ForeignKey('User', models.DO_NOTHING,
-                                       db_column='COMMENT_WRITER')  # Field name made lowercase.
-    comment_cont = models.CharField(db_column='COMMENT_CONT', max_length=5000)  # Field name made lowercase.
+    comment_id = models.AutoField(db_column='COMMENT_ID', primary_key=True)
+    comment_board_no = models.ForeignKey(Board, db_column='COMMENT_BOARD_NO', on_delete=models.CASCADE)
+    comment_writer = models.ForeignKey('User', models.DO_NOTHING, db_column='COMMENT_WRITER')
+    comment_cont = models.CharField(db_column='COMMENT_CONT', max_length=5000)
     comment_cont_ref = models.ForeignKey('self', on_delete=models.CASCADE, db_column='COMMENT_CONT_REF', blank=True,
                                          null=True)  # Field name made lowercase.
     comment_created = models.DateTimeField(db_column='COMMENT_CREATED', auto_now_add=True)  # Field name made lowercase.
@@ -170,31 +171,51 @@ class Comment(models.Model):
 
 
 class ContestBoard(models.Model):
-    contest_no = models.AutoField(db_column='CONTEST_NO', primary_key=True)  # Field name made lowercase.
-    contest_name = models.CharField(db_column='CONTEST_NAME', max_length=500)  # Field name made lowercase.
-    contest_title = models.CharField(db_column='CONTEST_TITLE', max_length=100)  # Field name made lowercase.
-    contest_cont = models.TextField(db_column='CONTEST_CONT')  # Field name made lowercase.
-    contest_asso = models.CharField(db_column='CONTEST_ASSO', max_length=100)  # Field name made lowercase.
-    contest_deadline = models.DateTimeField(db_column='CONTEST_DEADLINE')  # Field name made lowercase.
-    contest_created = models.DateTimeField(db_column='CONTEST_CREATED', auto_now_add=True)  # Field name made lowercase.
-    contest_writer = models.IntegerField(db_column='CONTEST_WRITER')  # Field name made lowercase.
+    contest_no = models.AutoField(db_column='CONTEST_NO', primary_key=True)
+    contest_title = models.CharField(db_column='CONTEST_TITLE', max_length=100)
+    contest_cont = models.CharField(db_column='CONTEST_CONT', max_length=5000)
+    contest_writer = models.ForeignKey('User', models.DO_NOTHING, db_column='CONTEST_WRITER')
+    contest_created = models.DateTimeField(db_column='CONTEST_CREATED', auto_now_add=True)
+    contest_topic = models.CharField(db_column='CONTEST_TOPIC', max_length=500)
+    contest_asso = models.CharField(db_column='CONTEST_ASSO', max_length=100)
+    contest_deadline = models.DateTimeField(db_column='CONTEST_DEADLINE')
+    contest_start = models.DateTimeField(db_column='CONTEST_START')
 
     class Meta:
         managed = False
         db_table = 'CONTEST_BOARD'
+
+    # 템플릿 안에서 컨텍스트 객체를 통해 실행할 수 있음
+    @property
+    def is_past_due(self):
+        today = date.today()
+        if today <= self.contest_deadline.date():
+            return True
+        else:
+            return False
+
+
+class ContestComment(models.Model):
+    comment_id = models.AutoField(db_column='COMMENT_ID', primary_key=True)
+    comment_board_no = models.ForeignKey('ContestBoard', db_column='COMMENT_BOARD_NO', on_delete=models.CASCADE)
+    comment_writer = models.ForeignKey('User', models.DO_NOTHING, db_column='COMMENT_WRITER')
+    comment_cont = models.CharField(db_column='COMMENT_CONT', max_length=500)
+    comment_cont_ref = models.ForeignKey('self', on_delete=models.CASCADE, db_column='COMMENT_CONT_REF', blank=True,
+                                         null=True)  # Field name made lowercase.
+    comment_created = models.DateTimeField(db_column='COMMENT_CREATED', auto_now_add=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'CONTEST_COMMENT'
 
 
 def contest_file_upload_to(instance, filename):
     return f'board/contest/{instance.contest_no.contest_no}/{filename}'
 
 
-class ContestFile(models.Model):
-    contest_file_id = models.AutoField(db_column='CONTEST_FILE_ID', primary_key=True)  # Field name made lowercase.
-    contest_no = models.ForeignKey(ContestBoard, on_delete=models.CASCADE,
-                                   db_column='CONTEST_NO')  # Field name made lowercase.
-    contest_file_path = models.ImageField(db_column='CONTEST_FILE_PATH',
-                                          upload_to=contest_file_upload_to)  # Field name made lowercase.
-    contest_file_name = models.CharField(db_column='CONTEST_FILE_NAME', max_length=500)
+class ContestFile(File):
+    contest_no = models.ForeignKey(ContestBoard, on_delete=models.CASCADE, db_column='CONTEST_NO')
+    file_path = models.ImageField(db_column='FILE_PATH', upload_to=contest_file_upload_to)
 
     class Meta:
         managed = False

@@ -50,11 +50,12 @@ INSTALLED_APPS = [
     'bank',
     # 게시판 관련 앱
     'board',
-    'lecture',
     # 내 정보 관련 앱
     'my_info',
     # 회원 관리 관련 앱
     'staff',
+    # 강의 관련 앱
+    'lecture',
     # 소셜 로그인 패키지: allauth 관련
     'allauth',
     'allauth.account',

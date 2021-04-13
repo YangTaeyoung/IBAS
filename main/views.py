@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, reverse, redirect
 from DB.models import AuthUser, User, ChiefCarrier, UserRole, Board, BoardFile, \
     BoardType, Comment, History, Alarm  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
 from django.db.models import Q
+from member import session
 from django.core.paginator import Paginator
 from django.conf import settings
 from alarm.alarm_controller import create_comment_alarm, create_comment_ref_alarm

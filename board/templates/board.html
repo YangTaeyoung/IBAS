@@ -69,7 +69,11 @@
                                                 <li><a href="{% url 'board_view'  board_type_no=3 %}">질문게시판</a>
                                                     ({{ quest_num }}+)
                                                 </li>
-                                                <li><a href="{% url 'activity' %}">활동게시판</a> ({{ quest_num }}+)</li>
+                                                <li><a href="{% url 'contest_list' %}">공모전게시판</a>
+                                                    ({{ contest_num }}+)
+                                                </li>
+                                                <li><a href="{% url 'activity' %}">활동게시판</a>
+                                                    ({{ activity_num }}+)</li>
                                             </ul>
                                         </div>
                                     </div>

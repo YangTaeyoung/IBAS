@@ -2,30 +2,6 @@
 {% load static %}
 {% block content %}
     <script src="{% static 'js/register.js' %}"></script>
-    <link rel="stylesheet" href="{% static 'css/register.css' %}"/>
-    <!DOCTYPE html>
-    <html lang="en">
-
-    <head>
-        <meta charset="UTF-8">
-        <title>Title</title>
-
-        <link rel="stylesheet" type="text/css" href="{% static 'css/star-rating-svg.css' %}"/>
-        <link
-                rel="stylesheet"
-                type="text/css"
-                href="{% static 'plugins/editor/jquery-te-1.4.0.css' %}"
-        />
-
-        <link
-                rel="stylesheet"
-                type="text/css"
-                href="{% static 'plugins/drop/imageuploadify.min.css' %}"
-        />
-        <link rel="stylesheet" href="{% static 'plugins/tag-editor/jquery.tag-editor.css' %}"/>
-
-    </head>
-
     <body>
     <div class="page-wraper">
         <div class="page-content bg-white">
@@ -47,10 +23,7 @@
             </div>
             <!--===============================================입력란=========================================================-->
 
-            <form action="
-
-
-                    {% if contest is None %}{% url 'activity_register' %}{% else %}{% url 'activity_update' %}{% endif %}"
+            <form action="{% if contest is None %}{% url 'contest_register' %}{% else %}{% url 'contest_update' %}{% endif %}"
                   class="add-listing-form" method="POST" enctype="multipart/form-data">
 
                 {% csrf_token %}
@@ -69,7 +42,7 @@
                                         <div class="content-body">
                                           <div class="form-group">
                                             <!--제목 입력란-->
-                                            <input type="text" name="contest_title"
+                                            <input type="text" name="contest_title" value="{{ contest.contest_title }}"
                                                    class="form-control" placeholder="공모전 이름을 입력하세요"
                                                    style="font-size: 25px; height: 70px;">
                                           </div>
@@ -85,11 +58,12 @@
                                         <div class="content-body">
                                           <div class="form-group">
                                               <!--주체기관 입력란-->
-                                            <input type="text" name="contest_asso" class="form-control" placeholder="주체기관을 입력하세요">
+                                            <input type="text" name="contest_asso" value="{{ contest.contest_asso }}"
+                                                   class="form-control" placeholder="주체기관을 입력하세요">
                                           </div>
                                         </div>
                                     </div>
-                                     <!--공모전 주제-->
+                                    <!--공모전 주제-->
                                     <div class="content-box">
                                         <div class="content-header">
                                           <h3 class="title">
@@ -98,8 +72,9 @@
                                         </div>
                                         <div class="content-body">
                                           <div class="form-group">
-                                              <!--공모전 입력란-->
-                                            <input type="text" name="contest_topic" class="form-control" placeholder="공모전 주제를 입력해주세요">
+                                            <!--공모전 주제란 / 여기에 입력한 것은 게시글 리스트에 보여지는 소개에 들어감-->
+                                            <textarea name="contest_topic" class="form-control"
+                                                      placeholder="공모전 주제를 적어주세요">{{ contest.contest_topic }}</textarea>
                                           </div>
                                         </div>
                                     </div>
@@ -113,7 +88,9 @@
                                         <div class="content-body">
                                           <div class="form-group">
                                             <!--공모전 시작일 입력란-->
-                                            <input type="date" name="contest_start" class="form-control">
+                                            <input type="date" name="contest_start"
+                                                   value="{{ contest.contest_start|date:"Y-m-d" }}"
+                                                   class="form-control">
                                           </div>
                                         </div>
                                     </div>
@@ -127,22 +104,9 @@
                                         <div class="content-body">
                                           <div class="form-group">
                                              <!--공모전 마감일 입력란-->
-                                            <input type="date" name="contest_deadline" class="form-control">
-                                          </div>
-                                        </div>
-                                    </div>
-                                    <!--공모전 간단소개-->
-                                    <div class="content-box">
-                                        <div class="content-header">
-                                          <h3 class="title">
-                                            공모전 간단소개
-                                          </h3>
-                                        </div>
-                                        <div class="content-body">
-                                          <div class="form-group">
-                                            <!--공모전 간단소개 입력란 / 여기에 입력한 것은 게시글 리스트에 보여지는 소개에 들어감-->
-                                            <input type="text" name="contest_title"
-                                                   class="form-control" placeholder="공모전에 대한 간단한 소개를 적어주세요">
+                                            <input type="date" name="contest_deadline"
+                                                   value="{{ contest.contest_deadline|date:"Y-m-d" }}"
+                                                   class="form-control">
                                           </div>
                                         </div>
                                     </div>
@@ -156,7 +120,7 @@
                                         <div class="content-body">
                                           <div class="form-group">
                                             <!--공모전 포스터 입력란-->
-                                            <input type="file" name="contest_file"
+                                            <input type="file" name="upload_file"
                                                        accept=".xlsx,.xls,image/*,.doc,.docx,video/*,.ppt,.pptx,.txt,.pdf,.py,.java"
                                                        multiple>
                                           </div>
@@ -165,23 +129,23 @@
                                             <div class="form-group">
                                                 <div id="image-cont" class="image-cont">
                                                     {% for contest_file in contest_file_list %}
-                                                        <div id="image-card-{{ contest_file.contest_file_id }}"
+                                                        <div id="image-card-{{ contest_file.file_id }}"
                                                              class="image-card">
                                                             <!-- 취소 버튼, 취소를 누를 시 image-card 컨테이너가 통채로 사라짐. -->
                                                             <button type="button"
                                                                     class="btn btn-danger fa fa-times btn-cancel"
-                                                                    onclick="delImg(document.getElementById('image-card-{{ contest_file.contest_file_id }}'))"></button>
+                                                                    onclick="delImg(document.getElementById('image-card-{{ contest_file.file_id }}'))"></button>
                                                             <!-- 이미지 컨테이너 이미지 파일일 경우 img태그가, 이미지 파일이 아닐 경우 파일 모양의 아이콘이 붙음. -->
-                                                            <div id="image-{{ contest_file.contest_file_id }}"
+                                                            <div id="image-{{ contest_file.file_id }}"
                                                                  class="image-container"></div>
                                                             <!--기존 파일링크를 이동시키기 위한 히든 링크 -->
                                                             <input type="hidden"
-                                                                   name="exist_file_path_{{ contest_file.contest_file_id }}"
-                                                                   value="{{ contest_file.contest_file_path }}"/>
+                                                                   name="exist_file_path_{{ contest_file.file_id }}"
+                                                                   value="{{ contest_file.file_path }}"/>
                                                         </div>
                                                         <script>
                                                             // 페이지가 로딩 될 때 해당 함수도 자동으로 실행되도록 설정함. (아이콘 or img 결정)
-                                                            onload = decisionIcon(document.getElementById("image-{{ contest_file.contest_file_id }}"), '{{ contest_file.contest_file_path }}');
+                                                            onload = decisionIcon(document.getElementById("image-{{ contest_file.file_id }}"), '{{ contest_file.file_path }}');
                                                         </script>
                                                     {% endfor %}
                                                 </div>
@@ -220,7 +184,6 @@
                                     </button>
                                 </div>
                             </form>
-                            <!-- Pagination END -->
                         </div>
                     </div>
                 </div>
