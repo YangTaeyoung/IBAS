@@ -69,13 +69,18 @@ def user_update_request_aor(request):
 
     return redirect(reverse("my_info"))
 
+def is_default_pic(img_path):
+    return str(img_path) == "member/default/default.png"
+
+def get_default_pic_path():
+    return "member/default/default.png"
 
 def user_pic_update(request):
     if request.method == "POST":
         user_pic = request.FILES.get("user_pic")
         user = get_logined_user(request)
         if user_pic is not None:
-            if str(user.user_pic) != "member/default/default.png":  # 만약 사용자의 이미지가 디폴트 이미지가 아니라면
+            if not is_default_pic(user.user_pic):  # 만약 사용자의 이미지가 디폴트 이미지가 아니라면
                 try:
                     os.remove(settings.MEDIA_ROOT + "/" + str(user.user_pic))  # 프로필 이미지 삭제
                 except FileNotFoundError:
@@ -89,10 +94,11 @@ def user_pic_update(request):
 
 def user_pic_delete(request):
     user = get_logined_user(request)
-    if str(user.user_pic) != "member/default/default.png":  # 기존에 있던 사진이 디폴트 사진이 아닌 경우.
+    if not is_default_pic(user.user_pic):  # 기존에 있던 사진이 디폴트 사진이 아닌 경우.
         try:
             os.remove(settings.MEDIA_ROOT + "/" + str(user.user_pic))  # 이전 파일 삭제
         except FileNotFoundError:
             pass
     user.user_pic = "member/default/default.png"
+    request.session["user_pic"] = str(user.user_pic)
     return redirect(reverse("my_info"))
