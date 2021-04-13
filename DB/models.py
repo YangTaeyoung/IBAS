@@ -98,22 +98,25 @@ class Board(models.Model):
         return self.board_no
 
 
-# 제발... 제발.... 되라...
 # 게시판 번호에 맞게 경로를 정하고 지정된 경로에 파일을 업로드 하는 함수.
 def board_file_upload_to(instance, filename):
     return f'board/{instance.board_no.board_no}/{filename}'
 
 
-class BoardFile(models.Model):
-    board_no = models.ForeignKey(Board, on_delete=models.CASCADE, db_column='BOARD_NO',
-                                 null=True)  # Field name made lowercase.
-    board_file_id = models.AutoField(db_column='BOARD_FILE_ID', primary_key=True)  # Field name made lowercase.
+# 추상클래스 File
+class File(models.Model):
+    file_id = models.AutoField(db_column='FILE_ID', primary_key=True)  # Field name made lowercase.
+    file_name = models.CharField(db_column='FILE_NAME', max_length=300)
 
-    # 조용식이 만진 부분
+    class Meta:
+        abstract = True
+
+
+class BoardFile(File):
+    board_no = models.ForeignKey(Board, on_delete=models.CASCADE, db_column='BOARD_NO', null=True)
     # upload_to에 대한 인자를 위에 정의한 함수로 대체해야 경로를 커스터마이징 할 수 있음.
-    board_file_path = models.ImageField(db_column='BOARD_FILE_PATH', upload_to=board_file_upload_to, blank=True,
-                                        null=True)  # Field name made lowercase.
-    board_file_name = models.CharField(db_column='BOARD_FILE_NAME', max_length=300)
+    board_file_path = models.ImageField(db_column='BOARD_FILE_PATH', upload_to=board_file_upload_to,
+                                        blank=True, null=True)
 
     class Meta:
         managed = False
@@ -156,7 +159,6 @@ class Comment(models.Model):
         db_table = 'COMMENT'
 
 
-# Board 상속
 class ContestBoard(models.Model):
     contest_no = models.AutoField(db_column='CONTEST_NO', primary_key=True)
     contest_title = models.CharField(db_column='CONTEST_TITLE', max_length=100)
@@ -200,11 +202,9 @@ def contest_file_upload_to(instance, filename):
     return f'board/contest/{instance.contest_no.contest_no}/{filename}'
 
 
-class ContestFile(models.Model):
-    contest_file_id = models.AutoField(db_column='CONTEST_FILE_ID', primary_key=True)
+class ContestFile(File):
     contest_no = models.ForeignKey(ContestBoard, on_delete=models.CASCADE, db_column='CONTEST_NO')
-    contest_file_path = models.ImageField(db_column='CONTEST_FILE_PATH', upload_to=contest_file_upload_to)
-    contest_file_name = models.CharField(db_column='CONTEST_FILE_NAME', max_length=500)
+    file_path = models.ImageField(db_column='FILE_PATH', upload_to=contest_file_upload_to)
 
     class Meta:
         managed = False

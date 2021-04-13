@@ -85,7 +85,7 @@
 
                                         <!-- 포스터 나오는 곳 img파일은 이곳에 나오도록 -->
                                         {% for image in image_list %}
-                                        <img class="img-cover" src="/media/{{ image.contest_file_path }}" alt="" />
+                                        <img class="img-cover" src="/media/{{ image.file_path }}" alt="" />
                                         {% endfor %}
                                         <!--공모전 상세내용 나오는 곳-->
                                         <p class="font-weight-400"></p>
@@ -97,7 +97,8 @@
                                         {% for file in file_list %}
                                         <div class="download-box">
                                             <!-- 첨부파일 1 -->
-                                             <i class="fa fa-download m-r15 "></i><a class="line2" href="#" download="{{ file.contest_file_path }}">{{ file.contest_file_name }}</a>
+                                             <i class="fa fa-download m-r15 "></i>
+                                            <a class="line2" href="#" download="{{ file.file_path }}">{{ file.file_name }}</a>
                                                 <!-- 파일 간 구분선 -->
                                                 {% if forloop.revcounter0 > 0 %}
                                                     <div class="dlab-divider tb10 bg-gray-dark"></div>

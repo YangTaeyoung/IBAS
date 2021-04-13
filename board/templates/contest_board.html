@@ -89,15 +89,15 @@
                                     <!--================= 여기부터 게시글 반복시작 =================-->
                                     <!-- 게시글 1 -->
 
-                                    {% for board in contest_list %}
+                                    {% for contest in contest_list %}
                                     <div class="col-lg-6">
                                         <div class="listing-bx event-listing m-b10">
                                             <!-- 게시글 대표 이미지 div -->
                                             <div class="listing-media">
                                                 <!-- 이미지를 클릭하면, 해당 게시글로 이동함 -->
-                                                <a href="{% url 'contest_detail' board.contest_no %}">
+                                                <a href="{% url 'contest_detail' contest.contest_no %}">
 
-                                                    <img src="/media/{{ board.contestfile_set.first.contest_file_path }}"
+                                                    <img src="/media/{{ contest.contestfile_set.first.file_path }}"
                                                          alt="이미지를 표시할 수 없습니다.">
 <!-- 파일 없로드 처리해야함 -->
                                                 </a>
@@ -105,26 +105,26 @@
                                             <!-- 공모전 내용 간단소개 div -->
                                             <div class="listing-info" style="height: 110px">
                                                 <!-- 공모전 제목 -->
-                                                <h3 class="title"><a href="{% url 'contest_detail' board.contest_no %}">{{ board.contest_title }}</a></h3>
+                                                <h3 class="title"><a href="{% url 'contest_detail' contest.contest_no %}">{{ contest.contest_title }}</a></h3>
                                                 <!-- 공모전 간단소개 -->
                                                 <ul class="event-meta">
                                                     <!-- 마감일 및 모집 상태 -->
                                                     <li class="event-date">
                                                         <!-- 공모전 마감일 -->
                                                         <!-- 마감 월 (영어로 표기됨) -->
-                                                        <span class="text-primary">{{ board.contest_deadline | date:"N" }}</span>
+                                                        <span class="text-primary">{{ contest.contest_deadline | date:"N" }}</span>
                                                         <!-- 마감일 -->
-                                                        <strong>{{ board.contest_deadline | date:"d" }}</strong>
+                                                        <strong>{{ contest.contest_deadline | date:"d" }}</strong>
                                                         <!-- 모집 및 마감 상태 -->
                                                         <!-- 공모전 기간 중에 있으면 모집이라고 뜨고, 공모전 기간이 자나면, 자동으로 마감으로 뜨게 처리 -->
-                                                        {% if board.is_past_due %}
+                                                        {% if contest.is_past_due %}
                                                         <span class="recruiting">모 집</span></li>
                                                         {% else %}
                                                         <span class="recruiting-end">마 감</span></li>
                                                         {% endif %}
                                                     <!-- 공모전에 대한 간단소개 -->
                                                     <li class="text-cut">
-                                                        {{ board.contest_cont }}
+                                                        {{ contest.contest_cont }}
                                                     </li>
                                                 </ul>
                                             </div>
@@ -133,7 +133,7 @@
                                                     <!-- 공모전 기간 -->
                                                     <li class="event-hosted">
                                                         <span class="text-primary mr-3">기간</span>
-                                                        <span> {{ board.contest_start |date:"Y.m.d"}} ~ {{ board.contest_deadline | date:"Y.m.d" }}</span>
+                                                        <span> {{ contest.contest_start |date:"Y.m.d"}} ~ {{ contest.contest_deadline | date:"Y.m.d" }}</span>
                                                     </li>
                                                 </ul>
                                             </div>

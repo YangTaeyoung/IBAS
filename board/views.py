@@ -34,7 +34,6 @@ def get_page_object(request, board_list, num_of_boards_in_one_page=10):
     return item
 
 
-# 나중에 board 모델 상속 받아서 최적화하면 코드 반으로 줄일 수 있음.
 def get_images_and_files_of_(object):
     image_list = []
     file_list = []
@@ -44,24 +43,16 @@ def get_images_and_files_of_(object):
     # Board 객체
     if isinstance(object, Board):
         files = BoardFile.objects.filter(board_no=object.board_no)
-
-        # 파일을 이미지 파일과 일반 문서 따로 분리
-        for file in files:
-            if is_image(file.board_file_path):
-                image_list.append(file)
-            else:
-                file_list.append(file)
-
     # ContestBoard 객체
     elif isinstance(object, ContestBoard):
         files = ContestFile.objects.filter(contest_no=object.contest_no)
 
-        # 파일을 이미지 파일과 일반 문서 따로 분리
-        for file in files:
-            if is_image(file.contest_file_path):
-                image_list.append(file)
-            else:
-                file_list.append(file)
+    # 파일을 이미지 파일과 일반 문서 따로 분리
+    for file in files:
+        if is_image(file.file_path):
+            image_list.append(file)
+        else:
+            file_list.append(file)
 
     return files, image_list, file_list
 
@@ -74,8 +65,7 @@ def get_context_of_contest_(contest_no):
 
     # 댓글 불러오기
     comment_list = ContestComment.objects.filter(comment_board_no=contest).order_by(
-        "-comment_created").prefetch_related(
-        "comment_set")
+        "-comment_created").prefetch_related("comment_set")
 
     context = {
         'contest': contest,
@@ -122,8 +112,8 @@ def upload_new_files_of_contest(request, contest):
         for file in request.FILES.getlist("contest_file"):  # 각각의 파일을 uploadedFile로 받아옴
             ContestFile.objects.create(
                 contest_no=ContestBoard.objects.get(pk=contest.contest_no),
-                contest_file_path=file,  # uploadedFile 객체를 imageField 객체 할당
-                contest_file_name=file.name.replace(' ', '_')  # imageField 객체에 의해 파일 이름 공백이 '_'로 치환되어 서버 저장
+                file_path=file,  # uploadedFile 객체를 imageField 객체 할당
+                file_name=file.name.replace(' ', '_')  # imageField 객체에 의해 파일 이름 공백이 '_'로 치환되어 서버 저장
                 # 따라서 db 에도 이름 공백을 '_'로 치환하여 저장
             )
 
@@ -436,8 +426,8 @@ def contest_update(request):
         files = ContestFile.objects.filter(contest_no=contest)
         for file in files:
             # exist_file_path_{파일id}가 없는 경우: 사용자가 기존에 있던 파일을 삭제하기로 결정하였음 (input tag가 없어지면서 값이 전송되지 않음)
-            if request.POST.get("exist_file_path_" + str(file.contest_file_id)) is None:
-                location = os.path.join(MEDIA_ROOT, str(file.contest_file_path))
+            if request.POST.get("exist_file_path_" + str(file.file_id)) is None:
+                location = os.path.join(MEDIA_ROOT, str(file.file_path))
                 # 해당 파일이 존재하면 삭제 (존재하지 않는 경우 에러 발생)
                 if os.path.exists(location):
                     os.remove(location)  # 기존에 있던 저장소에 파일 삭제
