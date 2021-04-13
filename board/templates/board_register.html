@@ -2,30 +2,6 @@
 {% load static %}
 {% block content %}
     <script src="{% static 'js/register.js' %}"></script>
-    <link rel="stylesheet" href="{% static 'css/register.css' %}"/>
-    <!DOCTYPE html>
-    <html lang="en">
-
-    <head>
-        <meta charset="UTF-8">
-        <title>Title</title>
-
-        <link rel="stylesheet" type="text/css" href="{% static 'css/star-rating-svg.css' %}"/>
-        <link
-                rel="stylesheet"
-                type="text/css"
-                href="{% static 'plugins/editor/jquery-te-1.4.0.css' %}"
-        />
-
-        <link
-                rel="stylesheet"
-                type="text/css"
-                href="{% static 'plugins/drop/imageuploadify.min.css' %}"
-        />
-        <link rel="stylesheet" href="{% static 'plugins/tag-editor/jquery.tag-editor.css' %}"/>
-
-    </head>
-
     <body>
     <div class="page-wraper">
         <div class="page-content bg-white">
@@ -72,7 +48,7 @@
                                         <br/>
                                         <!--이미지, 파일 업로드란-->
                                         <div class="form-group">
-                                            <input type="file" name="board_file"
+                                            <input type="file" name="upload_file"
                                                    accept=".xlsx,.xls,image/*,.doc,.docx,video/*,.ppt,.pptx,.txt,.pdf,.py,.java,.txt,.ipynb,.c,.cpp,.r,.sql,.csv,.kt,.html,.js,.css,.zip,.apk,.shp,.shx,.dbf,.ini,.cpg,.alz,.7z,.rar,.msi,.psd,.hwp,.egg,.jar"
                                                    multiple><!-- accept는 첨부파일 확장자를 올리는 것. 추가할 것이 있으면 저기에 추가할 것.-->
                                         </div>
@@ -81,24 +57,24 @@
                                     {% if board is not None %}
                                         <div class="form-group">
                                             <div id="image-cont" class="image-cont">
-                                                {% for board_file in board_file_list %}
-                                                    <div id="image-card-{{ board_file.board_file_id }}"
+                                                {% for board_file in file_list %}
+                                                    <div id="image-card-{{ board_file.file_id }}"
                                                          class="image-card">
                                                         <!-- 취소 버튼, 취소를 누를 시 image-card 컨테이너가 통채로 사라짐. -->
                                                         <button type="button"
                                                                 class="btn btn-danger fa fa-times btn-cancel"
-                                                                onclick="delImg(document.getElementById('image-card-{{ board_file.board_file_id }}'))"></button>
+                                                                onclick="delImg(document.getElementById('image-card-{{ board_file.file_id }}'))"></button>
                                                         <!-- 이미지 컨테이너 이미지 파일일 경우 img태그가, 이미지 파일이 아닐 경우 파일 모양의 아이콘이 붙음. -->
-                                                        <div id="image-{{ board_file.board_file_id }}"
+                                                        <div id="image-{{ board_file.file_id }}"
                                                              class="image-container"></div>
                                                         <!--기존 파일링크를 이동시키기 위한 히든 링크 -->
                                                         <input type="hidden"
-                                                               name="exist_file_path_{{ board_file.board_file_id }}"
-                                                               value="{{ board_file.board_file_path }}"/>
+                                                               name="exist_file_path_{{ board_file.file_id }}"
+                                                               value="{{ board_file.file_path }}"/>
                                                     </div>
                                                     <script>
                                                         // 페이지가 로딩 될 때 해당 함수도 자동으로 실행되도록 설정함. (아이콘 or img 결정)
-                                                        onload = decisionIcon(document.getElementById("image-{{ board_file.board_file_id }}"), '{{ board_file.board_file_path }}');
+                                                        onload = decisionIcon(document.getElementById("image-{{ board_file.file_id }}"), '{{ board_file.file_path }}');
                                                     </script>
                                                 {% endfor %}
                                             </div>
