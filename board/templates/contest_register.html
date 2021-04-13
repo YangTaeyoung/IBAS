@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-
+    <script src="{% static 'js/register.js' %}"></script>
     <body>
     <div class="page-wraper">
         <div class="page-content bg-white">
@@ -42,7 +42,7 @@
                                         <div class="content-body">
                                           <div class="form-group">
                                             <!--제목 입력란-->
-                                            <input type="text" name="contest_title"
+                                            <input type="text" name="contest_title" value="{{ contest.contest_title }}"
                                                    class="form-control" placeholder="공모전 이름을 입력하세요"
                                                    style="font-size: 25px; height: 70px;">
                                           </div>
@@ -58,7 +58,8 @@
                                         <div class="content-body">
                                           <div class="form-group">
                                               <!--주체기관 입력란-->
-                                            <input type="text" name="contest_asso" class="form-control" placeholder="주체기관을 입력하세요">
+                                            <input type="text" name="contest_asso" value="{{ contest.contest_asso }}"
+                                                   class="form-control" placeholder="주체기관을 입력하세요">
                                           </div>
                                         </div>
                                     </div>
@@ -72,8 +73,9 @@
                                         <div class="content-body">
                                           <div class="form-group">
                                             <!--공모전 간단소개 입력란 / 여기에 입력한 것은 게시글 리스트에 보여지는 소개에 들어감-->
-                                            <textarea name="contest_topic"
-                                                   class="form-control" placeholder="공모전 주제를 적어주세요"></textarea>
+                                            <textarea name="contest_topic" class="form-control"
+                                                      placeholder="공모전 주제를 적어주세요">{{ contest.contest_topic }}
+                                            </textarea>
                                           </div>
                                         </div>
                                     </div>
@@ -87,7 +89,9 @@
                                         <div class="content-body">
                                           <div class="form-group">
                                             <!--공모전 시작일 입력란-->
-                                            <input type="date" name="contest_start" class="form-control">
+                                            <input type="date" name="contest_start"
+                                                   value="{{ contest.contest_start|date:"Y-m-d" }}"
+                                                   class="form-control">
                                           </div>
                                         </div>
                                     </div>
@@ -101,7 +105,9 @@
                                         <div class="content-body">
                                           <div class="form-group">
                                              <!--공모전 마감일 입력란-->
-                                            <input type="date" name="contest_deadline" class="form-control">
+                                            <input type="date" name="contest_deadline"
+                                                   value="{{ contest.contest_deadline|date:"Y-m-d" }}"
+                                                   class="form-control">
                                           </div>
                                         </div>
                                     </div>
@@ -158,7 +164,7 @@
                                         <div class="content-body">
                                           <div class="form-group">
                                             <!--공모전 상세 입력란-->
-                                            <textarea name="contest_cont" type="text"
+                                            <textarea name="contest_cont" type="text" value="{{ contest.contest_cont }}"
                                                       class="jqte-test">{{ contest.contest_cont }}</textarea>
                                           </div>
                                         </div>

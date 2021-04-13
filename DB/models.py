@@ -156,16 +156,17 @@ class Comment(models.Model):
         db_table = 'COMMENT'
 
 
+# Board 상속
 class ContestBoard(models.Model):
     contest_no = models.AutoField(db_column='CONTEST_NO', primary_key=True)
     contest_title = models.CharField(db_column='CONTEST_TITLE', max_length=100)
+    contest_cont = models.CharField(db_column='CONTEST_CONT', max_length=5000)
+    contest_writer = models.ForeignKey('User', models.DO_NOTHING, db_column='CONTEST_WRITER')
+    contest_created = models.DateTimeField(db_column='CONTEST_CREATED', auto_now_add=True)
     contest_topic = models.CharField(db_column='CONTEST_TOPIC', max_length=500)
-    contest_cont = models.TextField(db_column='CONTEST_CONT')
     contest_asso = models.CharField(db_column='CONTEST_ASSO', max_length=100)
     contest_deadline = models.DateTimeField(db_column='CONTEST_DEADLINE')
     contest_start = models.DateTimeField(db_column='CONTEST_START')
-    contest_created = models.DateTimeField(db_column='CONTEST_CREATED', auto_now_add=True)
-    contest_writer = models.ForeignKey('User', models.DO_NOTHING, db_column='CONTEST_WRITER')
 
     class Meta:
         managed = False

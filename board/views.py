@@ -5,7 +5,7 @@ from datetime import date
 from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponse
 from DB.models import *
-from django.db.models import Q, Count
+from django.db.models import Q
 
 from IBAS.settings import MEDIA_ROOT
 from addr_handling import go_board, go_board_detail
@@ -34,19 +34,73 @@ def get_page_object(request, board_list, num_of_boards_in_one_page=10):
     return item
 
 
+# 나중에 board 모델 상속 받아서 최적화하면 코드 반으로 줄일 수 있음.
+def get_images_and_files_of_(object):
+    image_list = []
+    file_list = []
+
+    files = set()  # 쿼리셋을 담기 위한 empty Set 생성
+
+    # Board 객체
+    if isinstance(object, Board):
+        files = BoardFile.objects.filter(board_no=object.board_no)
+
+        # 파일을 이미지 파일과 일반 문서 따로 분리
+        for file in files:
+            if is_image(file.board_file_path):
+                image_list.append(file)
+            else:
+                file_list.append(file)
+
+    # ContestBoard 객체
+    elif isinstance(object, ContestBoard):
+        files = ContestFile.objects.filter(contest_no=object.contest_no)
+
+        # 파일을 이미지 파일과 일반 문서 따로 분리
+        for file in files:
+            if is_image(file.contest_file_path):
+                image_list.append(file)
+            else:
+                file_list.append(file)
+
+    return files, image_list, file_list
+
+
+def get_context_of_contest_(contest_no):
+    contest = ContestBoard.objects.get(pk=contest_no)  # 해당 공모전 정보 db에서 불러오기
+
+    # 게시글 파일 받아오기. (순서대로 전체파일, 이미지파일, 문서파일)
+    contest_file_list, image_list, file_list = get_images_and_files_of_(contest)  # 공모전 이미지와 문서 받아오기
+
+    # 댓글 불러오기
+    comment_list = ContestComment.objects.filter(comment_board_no=contest).order_by(
+        "-comment_created").prefetch_related(
+        "comment_set")
+
+    context = {
+        'contest': contest,
+        'file_list': file_list,
+        'image_list': image_list,
+        'contest_file_list': contest_file_list,
+        "board_name": "공모전 게시판",
+        "board_exp": "공모전 정보를 알려주는 게시판",
+        "comment_list": comment_list,
+    }
+
+    return context
+
+
 # INPUT : board 또는 contest 객체로 받음
-def delete_file(object):
+def delete_all_files_of_(object):
     try:
         location = ''
 
         # Board 객체인 경우
         if isinstance(object, Board):
-            # os.path.join : 파일 경로 설정 방식에 대한 서버 os 의존성 제거
             location = os.path.join(MEDIA_ROOT, 'board', str(object.board_no))
 
         # ContestBoard 객체인 경우
         elif isinstance(object, ContestBoard):
-            # os.path.join : 파일 경로 설정 방식에 대한 서버 os 의존성 제거
             location = os.path.join(MEDIA_ROOT, 'board', 'contest', str(object.contest_no))
 
         else:  # object 가 적절히 넘어오지 않은 경우
@@ -57,6 +111,21 @@ def delete_file(object):
 
     except Exception as error:
         print(error)  # LOGGING :: 로그 파일 생성하는 코드 나중에 수정해야 함.
+
+
+def upload_new_files_of_contest(request, contest):
+    # 새로 사용자가 파일을 첨부한 경우
+    # request.FILES 는 dict 형태 (key : value)
+    # - key 는 html에서의 form 태그 name
+    # - value 는 해당 form에서 전송받은 file들 / uploadedFile 객체 형태
+    if "contest_file" in request.FILES:  # 넘겨받은 폼 태그 이름중에 "contest_file"이 있으면
+        for file in request.FILES.getlist("contest_file"):  # 각각의 파일을 uploadedFile로 받아옴
+            ContestFile.objects.create(
+                contest_no=ContestBoard.objects.get(pk=contest.contest_no),
+                contest_file_path=file,  # uploadedFile 객체를 imageField 객체 할당
+                contest_file_name=file.name.replace(' ', '_')  # imageField 객체에 의해 파일 이름 공백이 '_'로 치환되어 서버 저장
+                # 따라서 db 에도 이름 공백을 '_'로 치환하여 저장
+            )
 
 
 def board_view(request, board_type_no):  # 게시판 페이지로 이동
@@ -106,13 +175,7 @@ def board_search(request):
 
 def board_detail(request, board_no):  # 게시글 상세 보기
     board = Board.objects.get(pk=board_no)  # 게시글을 불러옴
-    board_img_list = list()  # 이미지를 담을 리스트
-    board_file_list = list()  # 이미지가 아닌 파일을 담는 리스트
-    for board_file in BoardFile.objects.filter(board_no=board):  # DB 파일 리스트 순회
-        if is_image(board_file.board_file_path):  # 파일이 이미지이면
-            board_img_list.append(board_file)  # 이미지 리스트에 저장
-        else:  # 이미지가 아니면
-            board_file_list.append(board_file)  # 파일 리스트에 저장
+    board_img_list, board_file_list = get_images_and_files_of_(board)
 
     comment_list = Comment.objects.filter(comment_board_no=board).order_by("-comment_created").prefetch_related(
         "comment_set")
@@ -206,7 +269,7 @@ def board_update(request):
                                                           board_file_name=str(updated_file)[
                                                                           str(updated_file).rfind("/") + 1:])
                 new_board_file.save()
-                # 목록 페이지 이동 (수정 필요)
+                # 목록 페이지 이동
             return redirect("board_detail", board_no=board.board_no)
         else:  # 다른 사람이 임의로 게시글을 수정하려 시도하는 경우(해킹 시도)
             return redirect("board_view", board_type_no=board.board_type_no.board_type_no)
@@ -217,7 +280,7 @@ def board_delete(request):
     if request.method == "POST":  # 포스트로 넘어오는 경우
         board = Board.objects.get(pk=request.POST.get('board_no'))
 
-        delete_file(board)  # 해당 게시글에 등록된 파일 모두 제거
+        delete_all_files_of_(board)  # 해당 게시글에 등록된 파일 모두 제거
 
         board.delete()  # 파일과 폴더 삭제 후, 게시글 DB 에서 삭제
 
@@ -277,6 +340,7 @@ def board_comment_update(request):
         return redirect("board_view", board_type_no=5)  # 잘못된 요청의 경우 전체 게시판으로 이동하게 함.
 
 
+# 수정사항 :: 이미지파일만 불러오기
 def contest_list(request):
     # 공모전 게시물 전부를 해당 파일과 함께 Queryset 으로 가져오기
     contest_board_list = ContestBoard.objects.all().order_by('-contest_deadline').prefetch_related("contestfile_set")
@@ -314,18 +378,7 @@ def contest_register(request):  # 공모전 등록
         )
         contest.save()
 
-        # 파일 저장
-        # request.FILES 는 dict 형태 (key : value)
-        # - key 는 html에서의 form 태그 name
-        # - value 는 해당 form에서 전송받은 file들 / uploadedFile 객체 형태
-        if "contest_file" in request.FILES:  # 넘겨받은 폼 태그 이름중에 "contest_file"이 있으면
-            for file in request.FILES.getlist("contest_file"): # 각각의 파일을 uploadedFile로 받아옴
-                ContestFile.objects.create(
-                    contest_no=ContestBoard.objects.get(pk=contest.contest_no),
-                    contest_file_path=file,  # uploadedFile 객체를 imageField 객체 할당
-                    contest_file_name=file.name.replace(' ', '_')  # imageField 객체에 의해 파일 이름 공백이 '_'로 치환되어 서버 저장
-                                                                   # 따라서 db 에도 이름 공백을 '_'로 치환하여 저장
-                )
+        upload_new_files_of_contest(request, contest)  # 파일 업로드
 
         return redirect(reverse('contest_list'))
 
@@ -336,34 +389,10 @@ def contest_register(request):  # 공모전 등록
 
 def contest_detail(request, contest_no):  # 게시판 상세 페이지로 이동
     if request.method == 'GET':
-        contest = ContestBoard.objects.get(pk=contest_no)  # 해당 공모전 정보 db에서 불러오기
-
-        image_list = []
-        file_list = []
-        files = ContestFile.objects.filter(contest_no=contest_no)  # 해당 공모전에 등록된 파일 불러오기
-
-        # 파일을 이미지 파일과 일반 문서 따로 분리
-        for file in files:
-            if is_image(file.contest_file_path):
-                image_list.append(file)
-            else:
-                file_list.append(file)
-
-        # 댓글 불러오기
-        comment_list = ContestComment.objects.filter(comment_board_no=contest).order_by("-comment_created").prefetch_related(
-            "comment_set")
-
-        context = {
-            'contest': contest,
-            'file_list': file_list,
-            'image_list': image_list,
-            "board_name": "공모전 게시판",
-            "board_exp": "공모전 정보를 알려주는 게시판",
-            "comment_list": comment_list,
-        }
+        context = get_context_of_contest_(contest_no)
         return render(request, 'contest_detail.html', context)
 
-    # 비정상적인 경로 들어왔을 시
+    # 비정상적인 접근 시도
     else:
         print(request)  # LOGGING :: 로그 파일 생성하는 코드 나중에 수정해야 함.
         redirect(reverse('contest_list'))
@@ -373,7 +402,7 @@ def contest_delete(request):
     if request.method == "POST":
         contest = ContestBoard.objects.get(pk=request.POST.get('contest_no'))
 
-        delete_file(contest)  # 해당 게시글에 등록된 파일 모두 제거
+        delete_all_files_of_(contest)  # 해당 게시글에 등록된 파일 모두 제거
 
         contest.delete()  # 파일과 폴더 삭제 후, 게시글 DB 에서 삭제
 
@@ -386,7 +415,39 @@ def contest_delete(request):
 
 
 def contest_update(request):
-    pass
+    # 게시물 상세보기에서 수정하기 버튼 눌렀을 때
+    if request.method == "GET":
+        context = get_context_of_contest_(request.GET.get('contest_no'))
+
+        return render(request, 'contest_register.html', context)
+
+    # 게시물 수정을 완료했을 때
+    elif request.method == "POST":
+        contest = ContestBoard.objects.get(pk=request.POST.get('contest_no'))  # 맞는 것을 가져온다.
+        contest.contest_title = request.POST.get('contest_title')
+        contest.contest_cont = request.POST.get('contest_cont')
+        contest.contest_start = request.POST.get('contest_start')
+        contest.contest_deadline = request.POST.get('contest_deadline')
+        contest.contest_topic = request.POST.get('contest_topic')
+        contest.contest_asso = request.POST.get('contest_asso')
+        contest.save()
+
+        # 이미 저장소에 있는 파일 순회
+        files = ContestFile.objects.filter(contest_no=contest)
+        for file in files:
+            # exist_file_path_{파일id}가 없는 경우: 사용자가 기존에 있던 파일을 삭제하기로 결정하였음 (input tag가 없어지면서 값이 전송되지 않음)
+            if request.POST.get("exist_file_path_" + str(file.contest_file_id)) is None:
+                location = os.path.join(MEDIA_ROOT, str(file.contest_file_path))
+                # 해당 파일이 존재하면 삭제 (존재하지 않는 경우 에러 발생)
+                if os.path.exists(location):
+                    os.remove(location)  # 기존에 있던 저장소에 파일 삭제
+                file.delete()  # db 기록 삭제
+
+        upload_new_files_of_contest(request, contest)  # 파일 업로드
+
+        # 수정된 게시글 페이지로 이동
+        return redirect("contest_detail", contest_no=contest.contest_no)
+
 
 
 def contest_comment_update(request):
