@@ -34,10 +34,15 @@
                             <h3 class="title">{{ my_info.user_name }}</h3>
                             <p>{{ my_info.user_major.major_name }} &#8226; {{ my_info.user_stu }}</p>
                         </div>
-                        <!--프로필 사진변경하고 싶을 때 누르는 버튼-->
+                        <!--상단 오른쪽에 뜨는버튼 버튼-->
                         <div class="listing-info-right">
+                            <!--회원관리, 회장단만 보이게, 상단바에 배치랑 고민헤볼것-->
+                            <a href="javascript:void(0);" class="site-button"><i class="la la-users m-r5"></i>회원관리</a>
+                            <!--사진변경-->
                             <a href="javascript:void(0);" data-toggle="modal" data-target="#photo_edit"
-                               class="site-button"><i class="la la-photo m-r5"></i>사진변경</a>
+                               class="site-button purple"><i class="la la-photo m-r5"></i>사진변경</a>
+                            <!--사진삭제-->
+                            <a href="javascript:void(0);" class="site-button gray" onclick="return confirm('사진을 삭제하시겠습니까?')"><i class="la la-trash m-r5"></i>사진삭제</a>
                         </div>
                     </div>
                 </div>
@@ -64,7 +69,13 @@
                             {% csrf_token %}
                             <div class="content-body">
                                 <div class="form-group">
-                                    <input name="user_pic" type="file" accept="image/*"/>
+                                    <input
+                                            type="file"
+                                            name="bank_file"
+                                            accept="image/*"
+                                            multiple
+                                            required="required"
+                                            />
                                 </div>
                             </div>
                             <!--수정버튼, Back : 누르면 프로필 사진에 반영되도록 수정-->
