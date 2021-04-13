@@ -1,0 +1,312 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    <!--커스텀 css-->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/seungyeon.css' %}">
+    <script src="{% static 'js/jquery.min.js' %}"></script><!-- JQUERY.MIN JS -->
+    <script src="{% static 'js/sy.js' %}"></script>
+
+    <div class="page-wraper">
+
+        <div class="page-content bg-white">
+            <div class="page-content bg-white">
+                <!----------============= 상단 제목 시작 ================----------->
+                <!--제목을 감싸는 배경-->
+                <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"
+                     style=" background-image: url('{% static 'images/board_name_img.jpg' %}'); height: 350px">
+                    <!-- 상단 제목을 클릭하면, 상위 게시판으로 돌아감 -->
+                    <a href="{% url 'contest_list' %}">
+                        <div class="container clearfix">
+                            <div class="dlab-bnr-inr-entry">
+                                <!--제목-->
+                                <h1 class="text-white introduce-letter-spacing_5">공모전 게시판</h1>
+                                <!--부제목-->
+                                <p class="introduce-margin-top_20">공모전 정보를 공유하는 게시판입니다.</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <!----------============= 본문 시작 ================----------->
+                <div class="section-full content-inner">
+                    <div class="container">
+                        <div class="row" style="justify-content: center">
+                            <div class="col-lg-8 col-xl-8 p-b30">
+                                <div class="blog-post blog-single">
+                                    <!-- 게시글 작성자 및 작성시간을 담는 div -->
+                                    <div class="dlab-post-meta m-b20">
+                                        <ul class="d-flex align-items-center">
+                                            <!-- 게시글 작성자 -->
+                                            <li class="post-author"><i class="ti ti-user"></i>By <a
+                                                    href="javascript:void(0);">신승연</a></li>
+                                            <!-- 게시글 작성시간 -->
+                                            <li class="post-comment"><i class="ti ti-alarm-clock"></i> <a
+                                                    href="javascript:void(0);">2021.03.15 15:00</a></li>
+                                        </ul>
+                                    </div>
+                                    <!-- 게시글 제목 -->
+                                    <div class="dlab-post-title ">
+                                        <h2 class="post-title m-t0">
+                                            <a href="javascript:void(0);">With our vastly improved notifications system,
+                                                users
+                                                have more control on your mind.</a>
+                                        </h2>
+                                    </div>
+                                    <!-- 공모전 주체기관 및 공모전 기간을 담는 div -->
+                                    <div class="dlab-post-meta m-b20">
+                                        <ul class="d-flex align-items-center">
+                                            <!-- 공모전 주체기관 -->
+                                            <li class="post-author"><i class="ti ti-home"></i><a
+                                                    href="javascript:void(0);">인하대학교 경영대학</a></li>
+                                            <!-- 공모전 기간 -->
+                                            <li class="post-comment"><i class="ti ti-calendar"></i> <a
+                                                    href="javascript:void(0);">2021.03.15 ~ 2021.05.15</a></li>
+                                        </ul>
+                                    </div>
+                                    <!--============================== 게시글 본문 시작 ==============================-->
+                                    <div class="dlab-post-text">
+
+                                        <!--공모전 주제-->
+                                        <div class="dlab-divider bg-gray-dark" style="margin-bottom: 15px"></div>
+                                        <h5 style="text-align: center">공모전 주제</h5>
+                                        <div class="dlab-divider bg-gray-dark" style="margin-top: 0px"></div>
+                                        <p class="font-weight-300" style="text-align: center">~~~를 활용한 ~~~분석</p>
+                                        <div class="dlab-divider bg-gray-dark"></div>
+
+
+                                        <!-- 포스터 나오는 곳 img파일은 이곳에 나오도록 -->
+                                        <img class="img-cover" src="{% static 'images/ibas_poster.jpg' %}" alt="" />
+                                        <img class="img-cover" src="{% static 'images/ibas_poster.jpg' %}" alt="" />
+
+                                        <!--공모전 상세내용 나오는 곳-->
+                                        <p class="font-weight-400">Lorem ipsum dolor sit amet, consectetur adipisicing
+                                            elit, sed
+                                            do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+                                            minim
+                                            veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+                                            commodo amet
+                                            set for your cool happiness for lyour loyal city.</p>
+
+                                        <p class="font-weight-300">Lorem ipsum dolor sit amet, consectetur adipisicing
+                                            elit, sed
+                                            do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+                                            minim
+                                            veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+                                            commodo
+                                            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                                            cillum
+                                            dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                                            proident,
+                                            sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut
+                                            perspiciatis
+                                            unde omnis iste natus error sit voluptatem accusantium doloremque
+                                            laudantium, totam
+                                            rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto
+                                            beatae
+                                            vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit
+                                            aspernatur
+                                            aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione
+                                            voluptatem
+                                            sequi nesciunt. Neque porro quisquam est.</p>
+                                        <!-- 첨부된 파일 불러오는 곳 -->
+                                        <!-- download 쪽에 파일 경로 설정 -->
+                                        <div class="download-box">
+                                            <!-- 첨부파일 1 -->
+                                             <i class="fa fa-download m-r15 "></i><a class="line2" href="#" download="www.naver.com">빅데이터빅데이터빅데이터빅데이터빅데이터빅데이터빅데이터빅데이터빅데이터빅데이터 관련 논문자료.pdf</a>
+                                            <!-- 파일 간 구분선 -->
+                                            <div class="dlab-divider tb10 bg-gray-dark"></div>
+                                            <!-- 첨부파일 2 -->
+                                             <i class="fa fa-download m-r15"></i><a class="line2" href="#" download="www.naver.com">통계학 수업자료.ppt</a>
+                                        </div>
+
+                                    </div>
+                                    <!-- 게시글 삭제 및 수정 div -->
+                                    <div class="extra-cell text-right">
+                                       <!-- 게시글 수정 버튼 -->
+                                        <!-- 관련자만 보이게 처리 -->
+                                        <button class="site-button radius-xl m-l10"><i
+                                                class="fa fa-pencil m-r5"></i>게시글 수정
+                                        </button>
+                                        <!-- 게시글 삭제 버튼 -->
+                                        <!-- 관련자만 보이게 처리 -->
+                                        <button class="site-button red radius-xl m-l10"><i
+                                                class="fa fa-trash m-r5"></i>게시글 삭제
+                                        </button>
+                                    </div>
+                                    <!-- 게시글과 댓글을 구분짓는 구분선 -->
+                                    <div class="dlab-divider bg-gray-dark"></div>
+                                </div>
+                                <!--==================== 댓글부분 시작 ====================-->
+                                <div class="clear" id="comment-list">
+                                    <div class="comments-area" id="comments">
+                                        <h3 class="font-26">팀원 모집
+                                        </h3>
+                                        <div class="clearfix">
+                                            <!-- comment list END -->
+                                            <ol class="comment-list">
+                                                <!-- 댓글 1 -->
+                                                <li class="comment">
+                                                    <div class="comment-body">
+                                                        <!-- 댓글 작성자 프로필자신 및 이름을 담는 div -->
+                                                        <div class="comment-author vcard"><cite class="fn"><img
+                                                                src="{{ request.session.user_pic }}" width="35"
+                                                                height="35" class="comment-profile-size"
+                                                                alt="현재 브라우저에서 지원하지 않는 형식입니다.">양태영</cite></div>
+                                                        <!-- 댓글 작성자 학과, 학번 및 작성시간 div -->
+                                                        <div class="dlab-post-meta m-l10">
+                                                            <ul class="d-flex">
+                                                                <!-- 학과 및 학번 -->
+                                                                <li class="post-author"><a
+                                                                        href="javascript:void(0);">경영학과 16학번</a></li>
+                                                                <!-- 작성시간 -->
+                                                                <li class="post-comment"><i
+                                                                        class="ti ti-alarm-clock"></i> <a
+                                                                        href="javascript:void(0);">19 hours ago</a></li>
+                                                            </ul>
+                                                        </div>
+                                                        <!-- 댓글내용란, 댓글 데이터 가져오는 곳 -->
+                                                        <input type="text" disabled="disabled" style="width: 706px"
+                                                               class="comments-area"
+                                                               id="correcting-{{ commnet.commnet_id }}"
+                                                               value="호호아줌마 아나 존나 힘드네 시바라아아ㅏㅇ앙">
+                                                        <!-- 하단의 comment_no_1은 꼭 {{ comment.comment_id }}로 바꿔줄 것 -->
+                                                        <div id="comment_no_1" class="reply-btn-div">
+                                                            <!-- 답글쓰기버튼 클릭 시, jqury로 버튼을 담는 div 밑에 대댓글 작성 란 생김 -->
+                                                            <button type="button" class="btnAdd comment-btn m-r20"><i
+                                                                    class="fa fa-commenting m-r5"></i>답글쓰기
+                                                            </button>
+                                                            <!-- 댓글삭제 버튼 -->
+                                                            <button type="submit"
+                                                                    onclick="comment_del({{ comment.comment_id }})"
+                                                                    id="comment-delete-{{ comment.comment_id }}"
+                                                                    class="comment-btn m-r10"><i
+                                                                    class="fa fa-trash m-r5"></i>
+                                                                댓글 삭제
+                                                            </button>
+                                                            <!-- 댓글수정 버튼 -->
+                                                            <button onclick="correcting_comment({{ commnet.commnet_id }})"
+                                                                    class="comment-btn m-r10"><i
+                                                                    class="fa fa-pencil m-r5"></i>댓글 수정
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <!--===================== 하단은 대댓글 예시임 참고용 ========================-->
+                                                <!-- 댓글 2 -->
+                                                <li class="comment">
+                                                    <div class="comment-body">
+                                                        <!-- 댓글 작성자 프로필자신 및 이름을 담는 div -->
+                                                        <div class="comment-author vcard"><cite class="fn"><img
+                                                                src="{{ request.session.user_pic }}" width="35"
+                                                                height="35" class="comment-profile-size"
+                                                                alt="현재 브라우저에서 지원하지 않는 형식입니다.">신승연</cite></div>
+                                                        <!-- 댓글 작성자 학과, 학번 및 작성시간 div -->
+                                                        <div class="dlab-post-meta m-l10">
+                                                            <ul class="d-flex">
+                                                                <!-- 댓글 작성자 학과 및 학번 -->
+                                                                <li class="post-author"><a
+                                                                        href="javascript:void(0);">경영학과 17학번</a></li>
+                                                                <!-- 댓글 작성시간 -->
+                                                                <li class="post-comment"><i
+                                                                        class="ti ti-alarm-clock"></i> <a
+                                                                        href="javascript:void(0);">19 hours ago</a></li>
+                                                            </ul>
+                                                        </div>
+                                                        <!-- 댓글 내용란 (DB에서 가져옴) -->
+                                                        <input type="text" disabled="disabled" style="width: 706px"
+                                                               class="comments-area" id="comment_no_2"
+                                                               value="댓글 구현하기 정말 잣같구만,,,, 시부렐">
+                                                        <div class="reply-btn-div">
+                                                            <!-- 답글쓰기버튼 클릭 시, jqury로 버튼을 담는 div 밑에 대댓글 작성 란 생김 -->
+                                                            <button type="button" class="btnAdd comment-btn m-r20"><i
+                                                                    class="fa fa-commenting m-r5"></i>답글쓰기
+                                                            </button>
+                                                            <!-- 댓글삭제 버튼 -->
+                                                            <button type="submit"
+                                                                    onclick="comment_del({{ comment.comment_id }})"
+                                                                    id="comment-delete-{{ comment.comment_id }}"
+                                                                    class="comment-btn m-r10"><i
+                                                                    class="fa fa-trash m-r5"></i>
+                                                                댓글 삭제
+                                                            </button>
+                                                            <!-- 댓글수정 버튼 -->
+                                                            <button onclick="correcting_comment({{ commnet.commnet_id }})"
+                                                                    class="comment-btn m-r10"><i
+                                                                    class="fa fa-pencil m-r5"></i>댓글 수정
+                                                            </button>
+                                                        </div>
+                                                        <!-- 대댓글란 디자인 예시 -->
+                                                        <div class="dlab-divider bg-gray-dark"></div>
+                                                        <div style="margin-left: 20px;">
+                                                            <!-- 댓글 작성자 프로필자신 및 이름을 담는 div -->
+                                                            <div class="comment-author vcard"><cite class="fn"><img
+                                                                    src="{{ request.session.user_pic }}" width="35"
+                                                                    height="35" class="comment-profile-size"
+                                                                    alt="현재 브라우저에서 지원하지 않는 형식입니다.">신승연</cite></div>
+                                                            <div class="dlab-post-meta m-l10">
+                                                                <ul class="d-flex">
+                                                                    <!-- 댓글 작성자 학과 및 학번 -->
+                                                                    <li class="post-author"><a
+                                                                            href="javascript:void(0);">경영학과 17학번</a>
+                                                                    </li>
+                                                                    <!-- 댓글 작성 시간 -->
+                                                                    <li class="post-comment"><i
+                                                                            class="ti ti-alarm-clock"></i> <a
+                                                                            href="javascript:void(0);">19 hours ago</a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                            <!-- DB에서 가져온 댓글정보 -->
+                                                            <input type="text" disabled="disabled" style="width: 706px"
+                                                                   class="comments-area" id="comment_no_2"
+                                                                   value="댓글 구현하기 정말 잣같구만,,,, 시부렐">
+                                                            <div class="reply-btn-div">
+                                                                <button id="" class="comment-btn m-r10"><i
+                                                                        class="fa fa-pencil m-r5"></i>댓글 수정
+                                                                </button>
+                                                                <button type="submit"
+                                                                        onclick="comment_del({{ comment.comment_id }})"
+                                                                        id="comment-delete-{{ comment.comment_id }}"
+                                                                        class="comment-btn m-r10"><i
+                                                                        class="fa fa-trash m-r5"></i>
+                                                                    댓글 삭제
+                                                                </button>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </li>
+                                            </ol>
+                                            <!-- 작성된 댓글과 댓글입력 부분을 나누는 구분선 -->
+                                            <div class="dlab-divider bg-gray-dark"></div>
+                                            <!--========================= 댓글 입력 form 태그 =========================-->
+                                            <div class="" id="respond">
+                                                <form class="comment-form" id="commentform" method="post" action="#">
+                                                    <!-- 댓글입력창 -->
+                                                    <p class="comment-form-comment">
+                                                        <label for="comment">Comments</label>
+                                                        <textarea rows="8" name="comment"
+                                                                  placeholder="댓긋을 통하여 팀원을 모집할 수 있습니다!"
+                                                                  id="comment"></textarea>
+                                                    </p>
+                                                    <!-- 댓글작성 버튼 -->
+                                                    <p class="form-submit" style="text-align: right">
+                                                        <input type="submit" value="댓글등록"
+                                                               class="submit site-button" id="submit" name="submit">
+                                                    </p>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 상단으로 올라가는 버튼 -->
+        <button class="scroltop fa fa-chevron-up"></button>
+    </div>
+
+{% endblock %}

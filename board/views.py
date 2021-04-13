@@ -240,3 +240,12 @@ def board_comment_update(request):
         return redirect("board_detail", board_no=comment.comment_board_no.board_no)  # 게시글 상세 페이지로 돌아감
     else:
         return redirect("board_view", board_type_no=5)  # 잘못된 요청의 경우 전체 게시판으로 이동하게 함.
+
+def contest_board(request):  # 공모전 목록
+    return render(request, 'contest_board.html', {})
+
+def contest_detail(request):  # 공모전 상세보기
+    return render(request, 'contest_detail.html', {})
+
+def contest_register(request):  # 공모전 등록
+    return render(request, 'contest_register.html', {})

@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'bank',
     # 게시판 관련 앱
     'board',
+    'lecture',
     # 내 정보 관련 앱
     'my_info',
     # 회원 관리 관련 앱
