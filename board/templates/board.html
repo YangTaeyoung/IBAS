@@ -95,7 +95,7 @@
                                     <!-- 끌고오는 게시글 파트 -->
                                     <tbody>
                                     <!-- 게시글 출력부 -->
-                                    {% if board_len != 0 %}
+                                    {% if board_list %}
                                         {% for board in board_list %}
                                             <tr>
                                                 <!-- 게시글 번호 -->
@@ -113,7 +113,7 @@
                                         {% endfor %}
                                     {% else %}
                                         <tr>
-                                            <td colspan="4" style="text-align: center">{{ message }}</td>
+                                            <td colspan="4" style="text-align: center">게시글이 존재하지 않습니다.</td>
                                         </tr>
                                     {% endif %}
 
