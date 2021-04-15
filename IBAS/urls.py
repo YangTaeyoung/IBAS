@@ -27,7 +27,7 @@ urlpatterns = [
     path('admin/', admin.site.urls), # 관리자 페이지 링크
     path('lecture/', include('lecture.urls')),
     path('', include('main.urls')),
-    path('staff/', include('staff.urls')),
+    path('member/', include('staff.urls')),
     path('bank/', include('bank.urls')),
     path('staff/', include('staff.urls')),
     path('my_info/', include('my_info.urls')),
