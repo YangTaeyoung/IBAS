@@ -36,7 +36,7 @@ def get_context_of_board_(board_no):
     board_file_list, image_list, doc_list = get_images_and_files_of_(board)  # 공모전 이미지와 문서 받아오기
 
     # 댓글 불러오기
-    comment_list = Comment.objects.filter(comment_board_no=board).order_by(
+    comment_list = Comment.objects.filter(comment_board_no=board).filter(comment_cont_ref__isnull=True).order_by(
         "-comment_created").prefetch_related("comment_set")
 
     context = {
@@ -65,8 +65,8 @@ def get_context_of_contest_(contest_no):
     contest_file_list, image_list, doc_list = get_images_and_files_of_(contest)  # 공모전 이미지와 문서 받아오기
 
     # 댓글 불러오기
-    comment_list = ContestComment.objects.filter(comment_board_no=contest).order_by(
-        "-comment_created").prefetch_related("comment_set")
+    comment_list = ContestComment.objects.filter(comment_board_no=contest).filter(
+        comment_cont_ref__isnull=True).order_by("-comment_created").prefetch_related("comment_set")
 
     context = {
         'contest': contest,
@@ -233,26 +233,24 @@ def board_delete(request):
 def board_comment_register(request):
     if request.method == "POST":
         board = Board.objects.get(pk=request.POST.get('board_no'))  # 게시글 번호 들고오는 것임
-        # 객체로 받아서 저장할 예정
-        comment = Comment(  # 받은 정보로 덧글 생성
+
+        comment = Comment.objects.create(
             comment_board_no=board,  # 해당 게시글에
             comment_writer=User.objects.get(pk=request.session.get('user_stu')),  # 해당 학번이
             comment_cont=request.POST.get('comment_cont')  # 사용자가 쓴 내용을 가져옴
         )
         create_comment_alarm(comment)
-        comment.save()
 
     else:
         board = Board.objects.get(pk=request.GET.get('board_no'))  # 게시글 번호 들고오는 것임
         # 객체로 받아서 저장할 예정
-        comment = Comment(
+        comment = Comment.objects.create(
             comment_board_no=board,
             comment_writer=User.objects.get(pk=request.session.get('user_stu')),
             comment_cont=request.GET.get('comment_cont'),
             comment_cont_ref=Comment.objects.get(pk=request.GET.get("comment_ref"))
         )
         create_comment_ref_alarm(comment)
-        comment.save()
 
         # 데이터 베이스에 저장
     return redirect("board_detail", board_no=board.board_no)
@@ -262,8 +260,6 @@ def board_comment_register(request):
 def board_comment_delete(request):
     if request.method == "POST":  # 댓글 삭제를 누를 경우
         comment = Comment.objects.get(pk=request.POST.get('comment_id'))
-        board_type_no = comment.comment_board_no.board_type_no.board_type_no  # 게시판 종류 번호를 담을 임시 변수 생성.
-        # 그 댓글의 pk 를 찾아서 DB 에서 지운다.
         comment.delete()
         return redirect("board_detail", board_no=comment.comment_board_no.board_no)  # 게시글 상세페이지로 이동
     else:
