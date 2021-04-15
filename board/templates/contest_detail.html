@@ -153,26 +153,46 @@
                                                     <div class="comment-body">
                                                         <!-- 댓글 작성자 프로필자신 및 이름을 담는 div -->
                                                         <div class="comment-author vcard"><cite class="fn"><img
-                                                                src="{{ request.session.user_pic }}" width="35"
+                                                                src="/media/{{ comment.comment_writer.user_pic }}"
+                                                                width="35"
                                                                 height="35" class="comment-profile-size"
-                                                                alt="현재 브라우저에서 지원하지 않는 형식입니다.">신승연</cite></div>
+                                                                alt="현재 브라우저에서 지원하지 않는 형식입니다.">{{ comment.comment_writer.user_name }}
+                                                        </cite></div>
                                                         <!-- 댓글 작성자 학과, 학번 및 작성시간 div -->
                                                         <div class="dlab-post-meta m-l10">
                                                             <ul class="d-flex">
-                                                                <!-- 댓글 작성자 학과 및 학번 -->
+                                                                <!-- 학과 및 학번 -->
                                                                 <li class="post-author"><a
-                                                                        href="javascript:void(0);">경영학과 17학번</a></li>
-                                                                <!-- 댓글 작성시간 -->
+                                                                        href="javascript:void(0);">{{ comment.comment_writer.user_major.major_name }}
+                                                                    {{ comment.comment_writer.user_stu|stringformat:"s" |slice:"2:4" }}학번</a>
+                                                                </li>
+                                                                <!-- 작성시간 -->
                                                                 <li class="post-comment"><i
-                                                                        class="ti ti-alarm-clock"></i> <a
-                                                                        href="javascript:void(0);">19 hours ago</a></li>
+                                                                        class="ti ti-alarm-clock"></i>
+                                                                    <a href="javascript:void(0);">
+                                                                        {{ comment.comment_created|date:"Y-m-d h:m:s" }}
+                                                                    </a>
+                                                                </li>
                                                             </ul>
                                                         </div>
                                                         <!-- 댓글 내용란 (DB에서 가져옴) -->
-                                                        <input type="text" disabled="disabled" style="width: 706px"
-                                                               class="comments-area" id="comment_no_2"
-                                                               value="댓글 구현하기 정말 잣같구만,,,, 시부렐">
-                                                        <div class="reply-btn-div">
+                                                        <form id="form-comment-update-{{ comment.comment_id }}"
+                                                              action="{% url 'contest_comment_update' %}"
+                                                              method="post">
+                                                            {% csrf_token %}
+                                                            <input type="hidden" name="comment_id"
+                                                                   value="{{ comment.comment_id }}"/>
+                                                            <input type="text" disabled="disabled"
+                                                                   style="width: 706px"
+                                                                   name="comment_cont"
+                                                                   class="comments-area"
+                                                                   id="correcting-no-{{ comment.comment_id }}"
+                                                                   value="{{ comment.comment_cont }}"
+                                                                   autofocus>
+                                                        </form>
+
+                                                        <div id="comment_no_{{ comment.comment_id }}"
+                                                                 class="reply-btn-div">
                                                             <!-- 답글쓰기버튼 클릭 시, jqury로 버튼을 담는 div 밑에 대댓글 작성 란 생김 -->
                                                                 <form id="form-comment-delete-{{ comment.comment_id }}"
                                                                       action="{% url 'contest_comment_delete' %}"
@@ -214,9 +234,9 @@
                                                                         </button>
                                                                     {% endif %}
                                                                 </form>
-                                                        </div>
-                                                        <!-- 대댓글란 디자인 예시 -->
-                                                        {% for comment_ref in comment.comment_set.all %}
+                                                            </div>
+                                                            <!-- 대댓글란 디자인 예시 -->
+                                                            {% for comment_ref in comment.comment_set.all %}
                                                                 <div class="dlab-divider bg-gray-dark"></div>
                                                                 <div style="margin-left: 20px;">
                                                                     <!-- 댓글 작성자 프로필자신 및 이름을 담는 div -->
@@ -291,6 +311,7 @@
                                                                     </div>
                                                                 </div>
                                                             {% endfor %}
+                                                        </div>
                                                 </li>
                                             {% endfor %}
                                             </ol>
