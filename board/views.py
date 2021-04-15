@@ -319,7 +319,7 @@ def contest_register(request):  # 공모전 등록
             contest_deadline=date.fromisoformat(request.POST.get('contest_deadline')),
             contest_topic=request.POST.get('contest_topic'),
             contest_cont=request.POST.get('contest_cont'),
-            contest_writer=User.objects.get(pk=request.session['user_stu']),
+            contest_writer=User.objects.get(pk=request.session.get('user_stu')),
         )
 
         upload_new_files(request, contest)  # 파일 업로드

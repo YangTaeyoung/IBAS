@@ -219,7 +219,7 @@
                                                                       action="{% url 'activity_comment_delete' %}"
                                                                       method="post">
 
-                                                                    {% if request.session.user_stu is not None %}
+                                                                    {% if request.session.user_stu is not None and request.session.user_auth < 3 %}
                                                                         <button type="button"
                                                                                 id="btnAdd-{{ comment.comment_id }}"
                                                                                 onclick="addReply({{ comment.comment_id }},'{% url "activity_comment_register" %}', {{ board.board_no }})"
