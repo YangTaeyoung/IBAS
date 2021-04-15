@@ -146,7 +146,7 @@
                                     </tr>
                                 {% endif %}
                                 </div>
-                                {% if request.session.user_auth == 1 %}
+                                {% if request.session.user_role < 3 %}
                                 <div class="extra-cell text-right  m-t20">
                                     <!-- 게시글 등록 버튼 -->
                                     <!-- 관련자만 보이게 처리 -->
