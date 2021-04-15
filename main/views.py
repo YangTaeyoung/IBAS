@@ -62,7 +62,7 @@ def activity_detail(request, board_no):
         board = Board.objects.get(pk=board_no)
 
         comment_list = Comment.objects.filter(comment_board_no=board).filter(comment_cont_ref__isnull=True).order_by(
-            "-comment_created").prefetch_related("comment_set")
+            "comment_created").prefetch_related("comment_set")
 
         context = {
             "board": board,

@@ -37,7 +37,7 @@ def get_context_of_board_(board_no):
 
     # 댓글 불러오기
     comment_list = Comment.objects.filter(comment_board_no=board).filter(comment_cont_ref__isnull=True).order_by(
-        "-comment_created").prefetch_related("comment_set")
+        "comment_created").prefetch_related("comment_set")
 
     context = {
         "board": board,
@@ -66,7 +66,7 @@ def get_context_of_contest_(contest_no):
 
     # 댓글 불러오기
     comment_list = ContestComment.objects.filter(comment_board_no=contest).filter(
-        comment_cont_ref__isnull=True).order_by("-comment_created").prefetch_related("contestcomment_set")
+        comment_cont_ref__isnull=True).order_by("comment_created").prefetch_related("contestcomment_set")
 
     context = {
         'contest': contest,
