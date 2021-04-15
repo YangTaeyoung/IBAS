@@ -66,7 +66,7 @@ def get_context_of_contest_(contest_no):
 
     # 댓글 불러오기
     comment_list = ContestComment.objects.filter(comment_board_no=contest).filter(
-        comment_cont_ref__isnull=True).order_by("-comment_created").prefetch_related("comment_set")
+        comment_cont_ref__isnull=True).order_by("-comment_created").prefetch_related("contestcomment_set")
 
     context = {
         'contest': contest,
@@ -259,9 +259,10 @@ def board_comment_register(request):
 # 댓글 삭제 코드
 def board_comment_delete(request):
     if request.method == "POST":  # 댓글 삭제를 누를 경우
+        board_no = request.POST.get('board_no')
         comment = Comment.objects.get(pk=request.POST.get('comment_id'))
         comment.delete()
-        return redirect("board_detail", board_no=comment.comment_board_no.board_no)  # 게시글 상세페이지로 이동
+        return redirect("board_detail", board_no=board_no)  # 게시글 상세페이지로 이동
     else:
         return redirect("board_view", board_type_no=5)  # 잘못 들어온 접근은 전체 게시판으로 이동
 
@@ -269,10 +270,11 @@ def board_comment_delete(request):
 # 댓글 수정 코드
 def board_comment_update(request):
     if request.method == "POST":  # 정상적으로 파라미터가 넘어왔을 경우
+        board_no = request.POST.get('board_no')
         comment = Comment.objects.get(pk=request.POST.get('comment_id'))  # 가져온 comment_id를 토대로 수정 내역을 적용
         comment.comment_cont = request.POST.get('comment_cont')  # 수정할 내용을 가져옴
         comment.save()  # DB 저장
-        return redirect("board_detail", board_no=comment.comment_board_no.board_no)  # 게시글 상세 페이지로 돌아감
+        return redirect("board_detail", board_no=board_no)  # 게시글 상세 페이지로 돌아감
     else:
         return redirect("board_view", board_type_no=5)  # 잘못된 요청의 경우 전체 게시판으로 이동하게 함.
 
@@ -310,6 +312,7 @@ def contest_list(request):
 #                      그 때 등록버튼 연타하면 클릭한수만큼 동일한 게시글 작성됨.
 def contest_register(request):  # 공모전 등록
     if request.method == 'POST':
+        print(request.session.get('user_stu'))
         contest = ContestBoard.objects.create(
             contest_title=request.POST.get('contest_title'),
             contest_asso=request.POST.get('contest_asso'),
@@ -338,13 +341,13 @@ def contest_register(request):  # 공모전 등록
 # 수정내용 :
 def contest_detail(request, contest_no):  # 게시판 상세 페이지로 이동
     if request.method == 'GET':
+        print('왜 안돼'+str(contest_no))
         context = get_context_of_contest_(contest_no)
         return render(request, 'contest_detail.html', context)
 
-    # 비정상적인 접근 시도
-    else:
+    else:  # 비정상적인 접근
         print(request)  # LOGGING :: 로그 파일 생성하는 코드 나중에 수정해야 함.
-        redirect(reverse('contest_list'))
+        return redirect(reverse('contest_list'))
 
 
 # ---- contest_delete ---- #
@@ -402,13 +405,62 @@ def contest_update(request):
         return redirect("contest_detail", contest_no=contest.contest_no)
 
 
+# ---- contest_comment_update ---- #
+# : 공모전 댓글 수정
+# 작성자 : 유동현
+# 마지막 수정 일시 : 2021.04.15
+# 수정내용 :
 def contest_comment_update(request):
-    pass
+    if request.method == "POST":
+        contest_no = request.POST.get("contest_no")
+        comment = ContestComment.objects.get(pk=request.POST.get("comment_id"))
+        comment.comment_cont = request.POST.get("comment_cont")
+        comment.save()
+
+        return redirect("contest_detail", contest_no=contest_no)
 
 
+# ---- contest_comment_delete ---- #
+# : 공모전 댓글 삭제
+# 작성자 : 유동현
+# 마지막 수정 일시 : 2021.04.15
+# 수정내용 :
 def contest_comment_delete(request):
-    pass
+    if request.method == "POST":
+        contest_no = request.POST.get('contest_no')
+        comment = ContestComment.objects.get(pk=request.POST.get('comment_id'))
+        comment.delete()
+        return redirect("contest_detail", contest_no=contest_no)
+    else:
+        return render(request, "contest_board.html")
 
 
+# ---- contest_comment_register ---- #
+# : 공모전 댓글 등록
+# 작성자 : 유동현
+# 마지막 수정 일시 : 2021.04.15
+# 수정내용 :
 def contest_comment_register(request):
-    pass
+    contest = None
+
+    # 댓글 등록할 때
+    if request.method == "POST":
+        contest = ContestBoard.objects.get(pk=request.POST.get("contest_no"))
+        ContestComment.objects.create(
+            comment_writer=User.objects.get(user_stu=request.session.get("user_stu")),
+            comment_cont=request.POST.get("comment_cont"),
+            comment_board_no=contest
+        )
+
+    # 대댓글 등록할 때
+    elif request.method == "GET":
+        contest = ContestBoard.objects.get(pk=request.GET.get("board_no"))  # sy.js AddReply 함수. <input name='board_no'>
+        ContestComment.objects.create(
+            comment_writer=User.objects.get(user_stu=request.session.get("user_stu")),
+            comment_cont=request.GET.get("comment_cont"),
+            comment_board_no=contest,
+            comment_cont_ref=ContestComment.objects.get(pk=request.GET.get("comment_ref"))
+        )
+
+    return redirect("contest_detail", contest_no=contest.contest_no)
+

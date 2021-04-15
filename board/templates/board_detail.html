@@ -232,6 +232,8 @@
                                                                 {% csrf_token %}
                                                                 <input type="hidden" name="comment_id"
                                                                        value="{{ comment.comment_id }}"/>
+                                                                <input type="hidden" name="board_no"
+                                                                       value="{{ board.board_no }}"/>
                                                                 <input type="text" disabled="disabled"
                                                                        style="width: 706px"
                                                                        name="comment_cont"
