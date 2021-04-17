@@ -161,7 +161,6 @@ def members_aor(request):  # 여러명 일괄 처리시.
     if request.method == "POST":
         user_list = User.objects.filter(user_auth__auth_no=3)
         aor = int(request.POST.get("aor"))
-        print("aor: ", aor)
         if aor == 0:  # 사용자가 합격, 불합격, 아무것도 입력하지 않고 적용 버튼을 누른 경우.
             return redirect(reverse("staff_member_list"))
         for user in user_list:
