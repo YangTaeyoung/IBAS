@@ -67,9 +67,11 @@ def choose_std_or_pro(request):  # 학생인지, 교수인지 고르게 하는 �
 
 
 def join(request):  # 회원 가입 페이지를 랜더링 하는 함수
-    stu_list = list()  # 학생 리스트를 받아옴
+    stu_list = list()  # 학생번호 리스트를 담을 변수.
+    phone_list = list() # 핸드폰 번호를 담을 변수.
     for user in User.objects.all():
         stu_list.append(user.user_stu)  # 학생 리스트에서 학번만 뽑아서 학번 리스트 생성
+        phone_list.append(user.user_phone)
 
     context = {  # hidden을 통해서 받은 회원들의 정보를 받아서 붙여넣음.
         "email": request.POST.get("email"),  # 이메일
@@ -77,6 +79,7 @@ def join(request):  # 회원 가입 페이지를 랜더링 하는 함수
         "pic": request.POST.get("pic"),  # 프로필 사진
         "user_role": request.POST.get("user_role"),  # 회원 역할 (학생 or 교수)
         "stu_list": stu_list,  # 학번 리스트
+        "phone_list": phone_list,
         "quest_list": QuestForm.objects.all(),  # 질문 양식
         "major_list": MajorInfo.objects.all()  # 전공 리스트(전공 검색을 위해)
     }
