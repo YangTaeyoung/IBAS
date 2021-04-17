@@ -69,11 +69,13 @@ def user_update_request_aor(request):
 
     return redirect(reverse("my_info"))
 
-def is_default_pic(img_path):
-    return str(img_path) == "member/default/default.png"
-
 def get_default_pic_path():
     return "member/default/default.png"
+
+def is_default_pic(img_path):
+    return str(img_path) == get_default_pic_path()
+
+
 
 def user_pic_update(request):
     if request.method == "POST":
@@ -99,7 +101,7 @@ def user_pic_delete(request):
             os.remove(settings.MEDIA_ROOT + "/" + str(user.user_pic))  # 이전 파일 삭제
         except FileNotFoundError:
             pass
-    user.user_pic = "member/default/default.png"
+    user.user_pic = get_default_pic_path()
     user.save()
     request.session["user_pic"] = str(user.user_pic)
     return redirect(reverse("my_info"))
