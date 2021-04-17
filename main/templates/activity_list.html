@@ -32,7 +32,7 @@
                         <div class="container">
                             <div class="row">
                                 <!-- 게시글 리스트 출력부분 -->
-
+                                {% if board_list %}
                                 {% for board in board_list %}
                                     <!--============ 게시글 박스 시작 ============-->
                                     <div class="col-lg-4 col-md-6 col-sm-6 m-b30">
@@ -46,7 +46,7 @@
                                                 <!-- 게시글 박스에 보이는 대표사진 -->
                                                 <div class="listing-media act-img-size">
                                                     <!-- 첫번째 사진만 가져오기 -->
-                                                    <img src="/media/{{ board.boardfile_set.first.board_file_path }}"
+                                                    <img src="/media/{{ board.boardfile_set.first.file_path }}"
                                                          alt="">
                                                 </div>
                                                 <!--게시글 제목, 작성자 및 작성시간을 담 div 시작-->
@@ -83,6 +83,11 @@
                                     </div>
 
                                 {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="4" style="text-align: center">게시글이 존재하지 않습니다.</td>
+                                    </tr>
+                                {% endif %}
                             </div>
                             <!-- ===============세션처리 했음, 회장, 부회장, 운영팀이 user_role 1, 2, 3 임. 나중에 user_role == 5 만 지우면 됌-->
                             <!-- 게시글 등록버튼(권한자만 보임) -->

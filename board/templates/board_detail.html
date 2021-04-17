@@ -232,6 +232,8 @@
                                                                 {% csrf_token %}
                                                                 <input type="hidden" name="comment_id"
                                                                        value="{{ comment.comment_id }}"/>
+                                                                <input type="hidden" name="board_no"
+                                                                       value="{{ board.board_no }}"/>
                                                                 <input type="text" disabled="disabled"
                                                                        style="width: 706px"
                                                                        name="comment_cont"
@@ -250,10 +252,10 @@
                                                                       action="{% url 'board_comment_delete' %}"
                                                                       method="post">
 
-                                                                    {% if request.session.user_auth != 3 %}
+                                                                    {% if request.session.user_stu is not None and request.session.user_auth < 3  %}
                                                                         <button type="button"
                                                                                 id="btnAdd-{{ comment.comment_id }}"
-                                                                                onclick="addReply({{ comment.comment_id }},'{% url "activity_comment_register" %}', {{ board.board_no }})"
+                                                                                onclick="addReply({{ comment.comment_id }},'{% url "board_comment_register" %}', {{ board.board_no }})"
                                                                                 class="btnAdd comment-btn m-r20"><i
                                                                                 class="fa fa-commenting m-r5"></i>답글쓰기
                                                                         </button>
@@ -316,7 +318,7 @@
                                                                     </div>
                                                                     <!-- DB에서 가져온 댓글정보 -->
                                                                     <form id="form-comment-update-{{ comment_ref.comment_id }}"
-                                                                          action="{% url 'activity_comment_update' %}"
+                                                                          action="{% url 'board_comment_update' %}"
                                                                           method="post">
                                                                         {% csrf_token %}
                                                                         <input type="hidden" name="comment_id"
@@ -333,7 +335,7 @@
                                                                     <div id="comment_no_{{ comment_ref.comment_id }}"
                                                                          class="reply-btn-div">
                                                                         <form id="form-comment-delete-{{ comment_ref.comment_id }}"
-                                                                              action="{% url 'activity_comment_delete' %}"
+                                                                              action="{% url 'board_comment_delete' %}"
                                                                               method="post">
                                                                             {% csrf_token %}
                                                                             <input type="hidden" name="comment_id"

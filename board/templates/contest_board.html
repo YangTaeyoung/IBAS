@@ -85,7 +85,7 @@
                             <!--========== 오른쪽 공모전 게시글 리스트 부분 시작 ===========-->
                             <div class="col-lg-10 col-xl-8 p-b30">
                                 <div class="row">
-                                {% if board_len != 0 %}
+                                {% if contest_list %}
                                     <!--================= 여기부터 게시글 반복시작 =================-->
                                     <!-- 게시글 1 -->
 
@@ -99,7 +99,6 @@
 
                                                     <img src="/media/{{ contest.contestfile_set.first.file_path }}"
                                                          alt="이미지를 표시할 수 없습니다.">
-<!-- 파일 없로드 처리해야함 -->
                                                 </a>
                                             </div>
                                             <!-- 공모전 내용 간단소개 div -->
@@ -124,7 +123,7 @@
                                                         {% endif %}
                                                     <!-- 공모전에 대한 간단소개 -->
                                                     <li class="text-cut">
-                                                        {{ contest.contest_cont }}
+                                                        {{ contest.contest_topic }}
                                                     </li>
                                                 </ul>
                                             </div>
@@ -142,10 +141,12 @@
                                     {% endfor %}
                                     <!--================= 여기부터 게시글 반복 끝 =================-->
                                 {% else %}
-                                    {{ message }}
+                                    <tr>
+                                        <td colspan="4" style="text-align: center">게시글이 존재하지 않습니다.</td>
+                                    </tr>
                                 {% endif %}
                                 </div>
-                                {% if request.session.user_auth == 1 %}
+                                {% if request.session.user_role < 3 %}
                                 <div class="extra-cell text-right  m-t20">
                                     <!-- 게시글 등록 버튼 -->
                                     <!-- 관련자만 보이게 처리 -->

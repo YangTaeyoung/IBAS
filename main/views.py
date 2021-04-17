@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, reverse, redirect
-from DB.models import AuthUser, User, ChiefCarrier, UserRole, Board, BoardFile, \
-    BoardType, Comment, History, Alarm  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
+from DB.models import *
+from pagination_handler import *
+from file_controller import *
 from django.db.models import Q
 from member import session
 from django.core.paginator import Paginator
@@ -34,116 +35,119 @@ def introduce(request):
 
 
 # 동아리 활동 게시판
+# ---- activity ---- #
+# : 게시글 목록 페이지
+# 작성자 : 양태영
+# 마지막 수정 일시 : 2021.04.15 (유동현)
+# 수정 내역:
+#   - 코드 최적화 paginator 부분
 def activity(request):
     # 최신순으로 정렬하고, 1:M 관계로 가져오기 위해 prefetch_related 함수 사용
     board_list = Board.objects.filter(board_type_no__board_type_no=4).order_by('-board_created').prefetch_related(
         "boardfile_set")
-    # board 에서 board_type_no = 5 인 것만 들고옴. 최신 순으로 보여주는 코드는 order_by
-    # board_type_no = 5 <- 동아리게시판에 관련한 글만 가져오기 위해서 만들어짐
-    paginator = Paginator(board_list, 6)  # 페이지네이터로 10개씩 보이게끔. 나중에 수정하면 됌
-    page = request.GET.get('page')  # 페이지 이름 ㅇㅇ 여기서 변경하면 됌
-    item = paginator.get_page(page)
-    context = {
-        'board_list': item,
-        "board_len": len(board_list)
-    }
-    return render(request, 'activity_list.html', context)
+    item = get_page_object(request, board_list, 6)
+
+    return render(request, 'activity_list.html', {'board_list': item})
 
 
 # 동아리 활동 게시판 상세보기
+# ---- activity_detail ---- #
+# : 게시글 상세 페이지
+# 작성자 : 양태영
+# 마지막 수정 일시 : 2021.04.15 (유동현)
+# 수정 내역:
+#   - 단순 코드 정리..
 def activity_detail(request, board_no):
     if board_no is not None:
-        context = {}
-        board = Board.objects.get(pk=board_no)  # 게시글 번호로 게시글 내용을 들고옴
-        context["board"] = board
-        board_file_list = BoardFile.objects.filter(board_no=board)
-        context["board_file_list"] = board_file_list
-        comment_list = Comment.objects.filter(comment_board_no=board).filter(
-            comment_cont_ref__isnull=True).order_by(
-            'comment_created').prefetch_related('comment_set').all()  # 게시글 번호로 댓글 내용
-        context["comment_list"] = comment_list
+        board = Board.objects.get(pk=board_no)
+
+        comment_list = Comment.objects.filter(comment_board_no=board).filter(comment_cont_ref__isnull=True).order_by(
+            "comment_created").prefetch_related("comment_set")
+
+        context = {
+            "board": board,
+            "board_file_list": BoardFile.objects.filter(board_no=board),
+            "comment_list": comment_list,
+        }
+
         return render(request, 'activity_detail.html', context)
     else:
         return redirect(reverse('activity'))
 
 
-# 동아리 활동 등록하기
+# 동아리 활동 게시판 등록하기
+# ---- activity_register ---- #
+# 작성자 : 양태영
+# 마지막 수정 일시 : 2021.04.15 (유동현)
+# 수정내용 : 코드 최적화
+#   - 파일 업로드
+#   - create() 로 저장
 def activity_register(request):
     # 글쓰기 들어와서 등록 버튼을 누르면 실행이 되는 부분
     if request.method == "POST":
-        if request.session.get("user_stu") is not None:
-            activity = Board(  # 객체로 저장을 할 것이오
-                board_type_no=BoardType.objects.get(pk=4),
-                board_title=request.POST.get('board_title'),
-                board_cont=request.POST.get('board_cont'),
-                board_writer=User.objects.get(pk=request.session.get('user_stu'))  # 유저 학번 들고오는 것임
-            )
-            activity.save()  # DB 에 차곡차곡 저장을 함
+        activity = Board.objects.create(  # 객체로 저장을 할 것이오
+            board_type_no=BoardType.objects.get(pk=4),
+            board_title=request.POST.get('board_title'),
+            board_cont=request.POST.get('board_cont'),
+            board_writer=User.objects.get(pk=request.session.get('user_stu'))  # 유저 학번 들고오는 것임
+        )
 
-            # ============================= 이미지 저장시키는 코드 =========================
-            for updated_file in request.FILES.getlist("board_file"):
-                # DB 저장
-                new_board_file = BoardFile.objects.create(board_no=activity, board_file_path=updated_file)
-                new_board_file.save()
-            return redirect(reverse("activity"))
-    return render(request, "activity_register.html", {})
+        upload_new_files(request, activity)  # 파일 업로드
+
+        return redirect(reverse("activity"))
+
+    else:  # 게시글 등록 버튼을 눌렀을 때
+
+        return render(request, "activity_register.html", {})
 
 
-# 동아리 글 수정 코드
+# : 동아리 글 수정 코드
+# ---- activity_update ---- #
+# 작성자 : 양태영
+# 마지막 수정 일시 : 2021.04.15 (유동현)
+# 수정내용
+#   - 코드 최적화
 def activity_update(request):
     # 수정을 누르면 GET 방식으로 DB 에 있는 것을 꺼내 온다.
     if request.method == "GET":
         board = Board.objects.get(pk=request.GET.get('board_no'))  # 맞는 것을 가져온다.
         board_file_list = BoardFile.objects.filter(board_no=board)
         context = {'board': board, 'board_file_list': board_file_list}
-        print("board.board_writer.user_stu", board.board_writer.user_stu)
-        if board.board_writer.user_stu == request.session.get("user_stu"):
-            return render(request, 'activity_register.html', context)  # 이거로 보내줘서 작업 가능
-        else:
-            return redirect(reverse("activity"))
+
+        return render(request, 'activity_register.html', context)  # 이거로 보내줘서 작업 가능
 
     # 수정을 하고 난 후 수정 버튼을 누를 경우 이걸로 진행 됌
-    if request.method == 'POST':
+    elif request.method == 'POST':
         board = Board.objects.get(pk=request.POST.get('board_no'))  # 맞는 것을 가져온다.
-        board_file_list = BoardFile.objects.filter(board_no=board)
-        if board.board_writer.user_stu == request.session.get("user_stu"):
-            board.board_title = request.POST.get('board_title')
-            board.board_cont = request.POST.get('board_cont')
-            board.save()
-            # 이미 저장소에 있는 파일 순회
-            for board_file in board_file_list:
-                # exist_file_path_{파일id}가 없는 경우: 사용자가 기존에 있던 파일을 삭제하기로 결정하였음 (input tag가 없어지면서 값이 전송되지 않음)
-                if request.POST.get("exist_file_path_" + str(board_file.board_file_id)) is None:
-                    # 기존에 있던 저장소에 파일 삭제
-                    os.remove(settings.MEDIA_ROOT + "/" + str(board_file.board_file_path))
-                    # db 기록 삭제
-                    board_file.delete()
-            # 새로 사용자가 파일을 첨부한 경우
-            for updated_file in request.FILES.getlist("board_file"):
-                # DB 저장
-                new_board_file = BoardFile.objects.create(board_no=board, board_file_path=updated_file)
-                new_board_file.save()
-                # 목록 페이지 이동 (수정 필요)
-            return redirect("activity_detail", board_no=board.board_no)
+        board.board_title = request.POST.get('board_title')
+        board.board_cont = request.POST.get('board_cont')
+        board.save()
+
+        board_files = BoardFile.objects.filter(board_no=board)  # 파일들을 갖고 옴
+        remove_files_by_user(request, board_files)  # 사용자가 제거한 파일 삭제
+
+        upload_new_files(request, board)  # 파일 업로드
+
+        # 목록 페이지 이동
+        return redirect("activity_detail", board_no=board.board_no)
+
     # 잘못 왔을 경우
-    return render(request, 'activity_list.html', {})
+    return redirect("activity")
 
 
-# 동아리 활동 상세페이지에서 삭제하는 코드
+# : 활동게시판 상세페이지에서 삭제하는 코드
+# ---- activity_delete ---- #
+# 작성자 : 양태영
+# 마지막 수정 일시 : 2021.04.15 (유동현)
+# 수정내용 : 코드 최적화(파일 처리 코드 모듈화 file_controller.py)
 def activity_delete(request):
     if request.method == "POST":  # 포스트로 넘어오는 경우
         board = Board.objects.get(pk=request.POST.get('board_no'))
-        try:
-            file_list = list(BoardFile.objects.filter(board_no=board))
-            # file_list 라는 변수 선언 (여러개의 파일을 올릴 수 있으므로 list 로 변환)
-            for i in range(len(file_list)):
-                # file_list 의 크기 만큼 for 문으로 돌려서 파일 삭제 후 폴더 삭제
-                os.remove('media/' + str(file_list[i].board_file_path))
-            os.rmdir('media/board/' + str(board.board_no))
-            # 파일이 안에 있는 삭제에서 폴더를 삭제할 경우 오류 만남.
-        except FileNotFoundError:
-            pass  # 파일이 없는 경우 그냥 통과시킨다.
+
+        delete_all_files_of_(board)  # 해당 게시글에 등록된 파일 모두 제거
+
         board.delete()  # 파일과 폴더 삭제 후, 게시글 DB 에서 삭제
+
         return redirect(reverse('activity'))
 
     else:  # 파라미터가 제대로 넘어오지 않은 경우, 즉 비정상적인 경로를 통해 들어간 경우 바로 나오게 해준다.
@@ -200,20 +204,30 @@ def activity_comment_update(request):
         return redirect("activity_detail", board_no=comment.comment_board_no.board_no)
 
 
+# ---- history_register ---- #
+# : 연혁 등록하는 코드
+# 작성자 : 양태영
+# 마지막 수정 일시 : 2021.04.15 (유동현)
+# 수정내용
+#   - 단순 코드 정리 history.save 없애도 되서 없앴음.
 def history_register(request):  # 연혁 등록
     if request.method == "POST":  # 정상적으로 값이 넘어왔을 경우
-        history = History.objects.create(  # history 객체 생성 후 받은 값을 집어넣음.
+        History.objects.create(  # history 객체 생성 후 받은 값을 집어넣음.
             history_cont=request.POST.get("history_cont"),
             history_date=request.POST.get("history_date"),
             history_writer=User.objects.get(pk=request.session.get("user_stu"))
         )
-        history.save()
         return redirect(reverse("introduce"))  # 소개 페이지로 리다이렉트
+
     else:  # 비 정상적인 경로로 접근하였을 경우 (해킹 시도)
         print("비정상적인 접근: ", request.session.get("user_stu"))
         return render(request, "index.html", {'lgn_is_failed': 1})
 
 
+# ---- history_update ---- #
+# : 연혁 수정하는 코드
+# 작성자 : 양태영
+# 마지막 수정 일시 :
 def history_update(request):  # 연혁 수정
     if request.method == "POST":  # 정상적으로 파라미터가 넘어왔을 경우
         history = History.objects.get(pk=request.POST.get("history_no"))  # 가져온 history_no를 토대로 수정 내역을 적용
@@ -226,6 +240,10 @@ def history_update(request):  # 연혁 수정
         return render(request, "index.html", {'lgn_is_failed': 1})  # 메인페이지로 보내버림
 
 
+# ---- history_delete ---- #
+# : 연혁 삭제하는 코드
+# 작성자 : 양태영
+# 마지막 수정 일시 :
 def history_delete(request):  # 연혁 삭제
     if request.method == "POST":  # 정상적으로 파라미터가 넘어왔을 경우
         history = History.objects.get(pk=request.POST.get("history_no"))  # 가져온 history_no를 토대로 삭제할 대상을 가져옴
