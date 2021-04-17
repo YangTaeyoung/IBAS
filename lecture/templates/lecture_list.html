@@ -14,15 +14,15 @@
             <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"
                  style=" background-image: url('{% static 'images/board_name_img.jpg' %}'); height: 350px">
                 <!-- 상단 제목을 클릭하면, 상위 게시판으로 이동 -->
-                <a href="{% url 'activity' %}">
+                <a href="{% url 'lect_view' type_no=type.type_no %}">
                     <div class="container clearfix">
                         <div class="dlab-bnr-inr-entry">
                             <!--제목-->
                             <!-- 추후 DB에서 강의, 스터디, 취미 중 하나만 꺼내오게 처리해야 함. -->
-                            <h1 class="text-white introduce-letter-spacing_5">강의/스터디/취미모임 게시판</h1>
+                            <h1 class="text-white introduce-letter-spacing_5">{{ type.type_name }}</h1>
                             <!--부제목-->
                             <!-- DB에서 부제목 꺼내와야 함 강의, 스터디, 취미 -->
-                            <p class="introduce-margin-top_20">@@와 관련된 게시판입니다.</p>
+                            <p class="introduce-margin-top_20">{{ type.type_exp }}</p>
                         </div>
                     </div>
                 </a>
@@ -60,11 +60,16 @@
                                         <h4 class="title">게시판</h4>
                                         <div class="widget_tag">
                                             <ul class="m-b0">
-                                                <li><a href="javascript:void(0);">전체 게시글</a> (28+)</li>
-                                                <li><a href="javascript:void(0);">공지사항</a> (39+)</li>
-                                                <li><a href="javascript:void(0);">자유게시판</a> (76+)</li>
-                                                <li><a href="javascript:void(0);">질문게시판</a> (47+)</li>
-                                                <li><a href="javascript:void(0);">공모전 게시판</a> (47+)</li>
+                                                <li><a href="javascript:void(0);">{{ lecture.type_name }}</a>
+                                                    ({{ lecture_len }})
+                                                </li>
+                                                <li><a href="javascript:void(0);">{{ study.type_name }}</a>
+                                                    ({{ study_len }})
+                                                </li>
+
+                                                <li><a href="javascript:void(0);">{{ habit.type_name }}</a>
+                                                    ({{ habit_len }})
+                                                </li>
                                             </ul>
                                         </div>
                                     </div>
@@ -80,64 +85,66 @@
                                 </div>
                                 <div class="row">
                                     <!--================= 여기부터 게시글 반복시작 =================-->
-                                    <!-- 게시글 1 -->
-                                    <div class="col-lg-6">
-                                        <div class="listing-bx event-listing m-b10">
-                                            <!-- 게시글 대표 이미지 div -->
-                                            <div class="listing-media">
-                                                <!-- 이미지를 클릭하면, 해당 게시글로 이동함 -->
-                                                <a href="#">
-                                                    <img src="{% static 'images/test_img1.png' %}" alt="">
-                                                </a>
-                                            </div>
-                                            <!-- 강의, 스터디, 취미 내용 간단소개 div -->
-                                            <div class="listing-info" style="height: 110px">
-                                                <!-- 강의, 스터디, 취미 제목 -->
-                                                <!-- 제목 클릭 시, 해당 게시글로 이동 -->
-                                                <h3 class="title"><a href="listing-details.html">파이썬 입문자들을 위한 기초강의</a></h3>
-                                                <!-- 강의, 스터디, 취미 간단소개 -->
-                                                <ul class="event-meta">
-                                                    <!-- 마감일 및 모집 상태 -->
-                                                    <li class="event-date">
-                                                        <!-- 강의, 스터디, 취미 마감일 -->
-                                                        <!-- 마감 월 (영어로 표기됨 - 월 끌고 오면 처리 예정) -->
-                                                        <span class="text-primary">JUN</span>
-                                                        <!-- 마감일 -->
-                                                        <strong>13</strong>
-                                                        <!-- 모집 및 마감 상태 -->
-                                                        <!-- 강의, 스터디, 취미 기간 중에 있으면 모집이라고 뜨고, 모집 기간이 자나면, 자동으로 마감으로 뜨게 처리 -->
-                                                        <span class="recruiting">모 집</span>
-{#                                                        <span class="recruiting-end">마 감</span>#}
-                                                    </li>
-                                                    <!-- 강의, 스터디, 취미에 대한 간단소개 -->
-                                                    <li class="text-cut">이 강의를 듣는다면, 여러분들도 거북이를 소환하여 그림을 그릴 수 있습니다! 모두들
-                                                        파이썬을 배워보세요
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div class="event-bottom">
-                                                <ul>
-                                                    <!-- 강 요일, 장소, 인원 li-->
-                                                    <li class="event-hosted">
-                                                        <!-- 강의를 정기적으로 진행하는 요일 -->
-                                                        <span class="text-primary mr-3">요일</span>
-                                                        <!-- 강의에 해당하는 요일을 DB에서 가져와야 함 -->
-                                                        <span>월</span>
-                                                        <!-- 강의 진행방식 Zoom 혹은 강의실 호수 -->
-                                                        <span class="text-primary mr-3 m-l30"><i
-                                                                class="ti-location-pin"></i></span>
-                                                        <!-- 강의 진행방식을 DB에서 가져와야 함 -->
-                                                        <span>6-345</span>
-                                                        <!-- 수강 신청한 인원 및 제한 인원 -->
-                                                        <span class="text-primary m-l40 mr-3"><i
-                                                                class="fa fa-user"></i></span>
-                                                        <!-- 강의 신청자 및 총 정원을 DB에서 가져와야 함. -->
-                                                        <span>3 / 50 명</span>
-                                                    </li>
-                                                </ul>
+                                    {% for lect in lect_list %}
+                                        <!-- 게시글 1 -->
+                                        <div class="col-lg-6">
+                                            <div class="listing-bx event-listing m-b10">
+                                                <!-- 게시글 대표 이미지 div -->
+                                                <div class="listing-media">
+                                                    <!-- 이미지를 클릭하면, 해당 게시글로 이동함 -->
+                                                    <a href="#">
+                                                        <img src="/media/{{ lect.lect_pic }}/" alt="">
+                                                    </a>
+                                                </div>
+                                                <!-- 강의, 스터디, 취미 내용 간단소개 div -->
+                                                <div class="listing-info" style="height: 110px">
+                                                    <!-- 강의, 스터디, 취미 제목 -->
+                                                    <!-- 제목 클릭 시, 해당 게시글로 이동 -->
+                                                    <h3 class="title"><a
+                                                            href="{% url 'lecture_detail' lect_no=lect.lect_no %}">{{ lect.lect_title }}</a>
+                                                    </h3>
+                                                    <!-- 강의, 스터디, 취미 간단소개 -->
+                                                    <ul class="event-meta">
+                                                        <!-- 마감일 및 모집 상태 -->
+                                                        <li class="event-date">
+                                                            <!-- 강의, 스터디, 취미 마감일 -->
+                                                            <!-- 마감 월 (영어로 표기됨 - 월 끌고 오면 처리 예정) -->
+                                                            <span class="text-primary">{{ lect.lect_deadline|date:"M" }}</span>
+                                                            <!-- 마감일 -->
+                                                            <strong>{{ lect.lect_deadline|date:"d" }}</strong>
+                                                            <!-- 모집 및 마감 상태 -->
+                                                            <!-- 강의, 스터디, 취미 기간 중에 있으면 모집이라고 뜨고, 모집 기간이 자나면, 자동으로 마감으로 뜨게 처리 -->
+                                                            <span class="{% if lect.lect_state.state_no == 4 %}recruiting{% elif lect.lect_state.state_no == 5 %}recruiting-end{% endif %}">{{ lect.lect_state.state_name }}</span>
+                                                        </li>
+                                                        <!-- 강의, 스터디, 취미에 대한 간단소개 -->
+                                                        <li class="text-cut">{{ lect.lect_intro|truncatechars:100 }}
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="event-bottom">
+                                                    <ul>
+                                                        <!-- 강 요일, 장소, 인원 li-->
+                                                        <li class="event-hosted">
+                                                            <!-- 강의를 정기적으로 진행하는 요일 -->
+                                                            <span class="text-primary mr-3">요일</span>
+                                                            <!-- 강의에 해당하는 요일을 DB에서 가져와야 함 -->
+                                                            <span>{{ lect }}</span>
+                                                            <!-- 강의 진행방식 Zoom 혹은 강의실 호수 -->
+                                                            <span class="text-primary mr-3 m-l30"><i
+                                                                    class="ti-location-pin"></i></span>
+                                                            <!-- 강의 진행방식을 DB에서 가져와야 함 -->
+                                                            <span>6-345</span>
+                                                            <!-- 수강 신청한 인원 및 제한 인원 -->
+                                                            <span class="text-primary m-l40 mr-3"><i
+                                                                    class="fa fa-user"></i></span>
+                                                            <!-- 강의 신청자 및 총 정원을 DB에서 가져와야 함. -->
+                                                            <span>3 / 50 명</span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    {% endfor %}
                                     <!-- 게시글 2 -->
                                     <div class="col-lg-6 mb-3">
                                         <div class="listing-bx event-listing m-b10">
@@ -152,7 +159,8 @@
                                             <div class="listing-info" style="height: 110px">
                                                 <!-- 강의, 스터디, 취미 제목 -->
                                                 <!-- 제목을 클릭하면, 해당 게시글로 이동 -->
-                                                <h3 class="title"><a href="listing-details.html">파이썬 쌉고수들을 위한 점프투 강의</a></h3>
+                                                <h3 class="title"><a href="listing-details.html">파이썬 쌉고수들을 위한 점프투 강의</a>
+                                                </h3>
                                                 <!-- 강의, 스터디, 취미 간단소개 -->
                                                 <ul class="event-meta">
                                                     <!-- 마감일 및 모집 상태 -->
@@ -259,9 +267,11 @@
                                 <div class="extra-cell text-right  m-t20">
                                     <!-- 강의, 스터디, 취미 게시판들의 게시글 등록 버튼 (관련자 및 관련 게시판만 보이게 처리) -->
                                     <!-- 강의 게시판에만 보이는 버튼임 -->
-                                    <button class="site-button radius-xl m-l10"><i class="fa fa-plus m-r5"></i>강의개설 신청</button>
+                                    <button class="site-button radius-xl m-l10"><i class="fa fa-plus m-r5"></i>강의개설 신청
+                                    </button>
                                     <!-- 스터디, 취미 게시판에만 보이는 버튼임 -->
-                                    <button class="site-button radius-xl m-l10"><i class="fa fa-plus m-r5"></i>등록</button>
+                                    <button class="site-button radius-xl m-l10"><i class="fa fa-plus m-r5"></i>등록
+                                    </button>
                                 </div>
                                 <!--========== 페이지네이션 시작 ===========-->
                                 <!-- 1페이지에 6~8개 게시글 끌고오고, 게시글이 그보다 적으면, 페이지네이션 안보이게 처리 -->
