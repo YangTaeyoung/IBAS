@@ -49,6 +49,7 @@
             <!--===============================================입력란=========================================================-->
 
             <form action="
+
                     {% if bank is None %}{% url 'bank_support_register' %}{% else %}{% url 'bank_support_update' %}{% endif %}"
                   class="add-listing-form" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
@@ -113,18 +114,8 @@
                                 </div>
                                 <!--====================================지출금액 끝=============================================-->
                                 <!--====================================사용인 시작==============================================-->
-                                <div class="content-box">
-                                    <div class="content-header">
-                                        <h3 class="title">요청자 학번</h3>
-                                    </div>
-                                    <div class="content-body">
-                                        <div class="form-group">
-                                            <input type="text" class="form-control" placeholder="요청자의 학번을 적어주세요"
-                                                   name="bank_used_user" value="{{ request.session.user_stu }}"
-                                                   required="required"/>
-                                        </div>
-                                    </div>
-                                </div>
+                                <input type="hidden" class="form-control" name="bank_used_user"
+                                       value="{{ request.session.user_stu }}" required="required"/>
                                 <!--====================================사용인 끝=============================================-->
                                 <!--====================================입금계좌 시작==============================================-->
                                 <div class="content-box">
