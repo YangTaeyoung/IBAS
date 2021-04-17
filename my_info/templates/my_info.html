@@ -43,7 +43,7 @@
                         <!--상단 오른쪽에 뜨는버튼 버튼-->
                         <div class="listing-info-right">
                             <!--회원관리, 회장단만 보이게, 상단바에 배치랑 고민헤볼것-->
-                            {% if request.session.user_role <= 3 %}
+                            {% if request.session.user_role <= 4 %}
                                 <a href="{% url 'staff_member_list' %}" class="site-button"><i class="la la-users m-r5"></i>회원관리</a>
                             {% endif %}
                             <!--사진변경-->

@@ -112,7 +112,7 @@
                             <!--====================로그인 여부에 따라 다르게 보이는 곳====================-->
                             <!--====================로그인했을 때====================-->
                             {% if request.session.user_stu is not None %}
-                                {% if request.session.user_role <= 3 %}
+                                {% if request.session.user_role <= 4 %}
                                     <li class="active" style="padding-top: 7px; padding-right: 5px; padding-left: 5px"
                                         onclick="document.getElementById('hd-form-member-list').submit()">
 
