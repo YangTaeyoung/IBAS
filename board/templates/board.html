@@ -73,7 +73,8 @@
                                                     ({{ contest_num }}+)
                                                 </li>
                                                 <li><a href="{% url 'activity' %}">활동게시판</a>
-                                                    ({{ activity_num }}+)</li>
+                                                    ({{ activity_num }}+)
+                                                </li>
                                             </ul>
                                         </div>
                                     </div>
@@ -103,7 +104,11 @@
                                                 <!-- 게시글 제목 -->
                                                 <!-- 게시글 제목 클릭 시 해당 게시글의 상세 페이지로 이동하며, 제목을 a태크 처리함 -->
                                                 <td>
-                                                    <a href="{% url 'board_detail' board_no=board.board_no %}">{{ board.board_title }}</a>
+                                                    {% if board.board_type_no.board_type_no == 4 %}
+                                                        <a href="{% url 'activity_detail' board_no=board.board_no %}">{{ board.board_title }}</a>
+                                                    {% else %}
+                                                        <a href="{% url 'board_detail' board_no=board.board_no %}">{{ board.board_title }}</a>
+                                                    {% endif %}
                                                 </td>
                                                 <!-- 게시글 작성자 -->
                                                 <td>{{ board.board_writer.user_name }}</td>
