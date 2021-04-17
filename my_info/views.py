@@ -17,10 +17,9 @@ def my_info(request):  # 내 정보 출력
         my_comment_list = Comment.objects.filter(comment_writer=my_info).order_by(
             "comment_board_no__board_type_no").order_by("-comment_created")
         my_bank_list = Bank.objects.filter(bank_used_user=my_info).order_by("-bank_used")
-        my_wait_request = UserUpdateRequest.objects.filter( # 이름 변경 신청한 것.
+        my_wait_request = UserUpdateRequest.objects.filter(  # 이름 변경 신청한 것.
             Q(updated_user=get_logined_user(request)) & Q(updated_state__state_no=1))
         my_update_request_list = UserUpdateRequest.objects.filter(updated_user=get_logined_user(request))
-
 
         context = {
             "my_board_list": my_board_list,
@@ -29,7 +28,6 @@ def my_info(request):  # 내 정보 출력
             "my_update_request_list ": my_update_request_list,
             "my_bank_list": my_bank_list,
             "my_info": my_info,
-
 
         }
         return render(request, 'my_info.html', context)
@@ -69,12 +67,13 @@ def user_update_request_aor(request):
 
     return redirect(reverse("my_info"))
 
+
 def get_default_pic_path():
     return "member/default/default.png"
 
+
 def is_default_pic(img_path):
     return str(img_path) == get_default_pic_path()
-
 
 
 def user_pic_update(request):
