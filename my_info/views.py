@@ -100,5 +100,6 @@ def user_pic_delete(request):
         except FileNotFoundError:
             pass
     user.user_pic = "member/default/default.png"
+    user.save()
     request.session["user_pic"] = str(user.user_pic)
     return redirect(reverse("my_info"))
