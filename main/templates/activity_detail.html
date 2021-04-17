@@ -187,7 +187,7 @@
                                                                     <li class="post-comment"><i
                                                                             class="ti ti-alarm-clock"></i>
                                                                         <a href="javascript:void(0);">
-                                                                            {{ comment.comment_created|date:"Y-m-d h:m:s" }}
+                                                                            {{ comment.comment_created|date:"Y-m-d h:i" }}
                                                                         </a>
                                                                     </li>
                                                                 </ul>
@@ -279,7 +279,7 @@
                                                                             <!-- 댓글 작성 시간 -->
                                                                             <li class="post-comment"><i
                                                                                     class="ti ti-alarm-clock"></i>
-                                                                                <a href="javascript:void(0);">{{ comment_ref.comment_created }}</a>
+                                                                                <a href="javascript:void(0);">{{ comment_ref.comment_created|date:"Y-m-d h:i" }}</a>
                                                                             </li>
                                                                         </ul>
                                                                     </div>
