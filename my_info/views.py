@@ -83,7 +83,7 @@ def user_pic_update(request):
         if user_pic is not None:
             if not is_default_pic(user.user_pic):  # 만약 사용자의 이미지가 디폴트 이미지가 아니라면
                 try:
-                    os.remove(settings.MEDIA_ROOT + "/" + str(user.user_pic))  # 프로필 이미지 삭제
+                    os.remove(settings.MEDIA_ROOT + "/" + str(user.user_pic))  # 프  로필 이미지 삭제
                 except FileNotFoundError:
                     pass
             # 새로운 이미지로 교체.
