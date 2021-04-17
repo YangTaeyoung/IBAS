@@ -8,14 +8,18 @@ from django.core.mail import send_mail
 from django.conf import settings
 from pagination_handler import get_paginator_list
 from alarm.alarm_controller import create_user_auth_update_alarm, create_user_role_update_alarm
-
+from user_controller import get_logined_user
 
 # Create your views here.
 
 def staff_member_list(request):
-    if request.session.get("user_role") <= 3:  # 회원에 대한 관리는 회장단만
+    user = get_logined_user(request)
+    if user.user_role.role_no <= 4:  # 회원에 대한 관리는 회장단만
         new_user_list = User.objects.filter(user_auth__auth_no=3)  # 신입 부원 리스트
-        exist_user_list = User.objects.filter(~Q(user_auth__auth_no=3) & ~Q(user_role__role_no=1))  # 기존 회원 리스트
+        if user.user_role.role_no == 4: # 총무일 경우
+            exist_user_list = User.objects.filter(~Q(user_auth__auth_no=3) & Q(user_role__role_no=6))
+        else:
+            exist_user_list = User.objects.filter(~Q(user_auth__auth_no=3) & ~Q(user_role__role_no=1))  # 기존 회원 리스트
         user_update_request_list = UserUpdateRequest.objects.filter(updated_state__state_no=1)  # 이름 변경 신청을 받는 리스트
         new_user_items = get_paginator_list(request, "new_user", new_user_list, 10)
         exist_user_items = get_paginator_list(request, "exist_user", exist_user_list, 10)
@@ -26,7 +30,7 @@ def staff_member_list(request):
         grade_list = list(set(grade_list))
         grade_list.sort()
         auth_list = UserAuth.objects.filter(auth_no__lte=2)  # 기존 회원은 미승인 회원으로 넘길 수 없으므로, role_no 가 2 이하인 튜플만 가져옴.
-        role_list = UserRole.objects.all()
+        role_list = UserRole.objects.filter(~Q(role_no=5))
         context = {  # 컨텍스트에 등록
             "exist_user_list": exist_user_items,
             "exist_user_len": len(exist_user_list),

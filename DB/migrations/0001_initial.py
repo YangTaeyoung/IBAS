@@ -473,7 +473,8 @@ class Migration(migrations.Migration):
             name='LectType',
             fields=[
                 ('type_no', models.AutoField(db_column='TYPE_NO', primary_key=True, serialize=False)),
-                ('type_name', models.IntegerField(db_column='TYPE_NAME')),
+                ('type_name', models.IntegerField(db_column='TYPE_NAME', unique=True)),
+                ('type_exp', models.CharField(db_column='TYPE_EXP', max_length=100)),
             ],
             options={
                 'db_table': 'LECT_TYPE',

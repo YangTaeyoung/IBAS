@@ -53,172 +53,178 @@
                         <div id="listing_user_setting" class="tab-pane">
                             <div class="row">
                                 <div class="col-xl-12">
-                                    <div class="content-box">
-                                        <!-- 제목 div -->
-                                        <div class="content-header">
-                                            <h3 class="title"><i class="la la-users m-r5"></i>신입부원 관리</h3>
-                                        </div>
-                                        <!-- 신입부원 관리 콘텐츠 시작 -->
-                                        <div class="content-body">
-                                            <div class="myinfo-table-padding">
-                                                <!-- 신입부원 관리 테이블 시작 -->
-                                                <!-- staff_mem_select는 staff_cr.css에 정의되어 있음.  -->
-                                                <div class="staff_mem_select m-b20">
-                                                    <!-- onchange 는 필터. staff.js 에 정의되어 있음. -->
-                                                    <select id="staff_select_grade" name=""
-                                                            onchange="staff_grade()">
-                                                        <option selected="selected">학년
-                                                        </option>
-                                                        {% for grade in grade_list %}
-                                                            <option>{{ grade }}학년</option>
+                                    {% if request.session.user_role != 4 %}
+                                        <div class="content-box">
+                                            <!-- 제목 div -->
+                                            <div class="content-header">
+                                                <h3 class="title"><i class="la la-users m-r5"></i>신입부원 관리</h3>
+                                            </div>
+                                            <!-- 신입부원 관리 콘텐츠 시작 -->
+                                            <div class="content-body">
+                                                <div class="myinfo-table-padding">
+                                                    <!-- 신입부원 관리 테이블 시작 -->
+                                                    <!-- staff_mem_select는 staff_cr.css에 정의되어 있음.  -->
+                                                    <div class="staff_mem_select m-b20">
+                                                        <!-- onchange 는 필터. staff.js 에 정의되어 있음. -->
+                                                        <select id="staff_select_grade" name=""
+                                                                onchange="staff_grade()">
+                                                            <option selected="selected">학년
+                                                            </option>
+                                                            {% for grade in grade_list %}
+                                                                <option>{{ grade }}학년</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+
+                                                    <!-- staff_mem_select는 staff_cr.css에 정의되어 있음.  -->
+                                                    <div class="staff_mem_select m-b20">
+                                                        <select id="select-aor" onchange="selectAoR()">
+                                                            <option selected="selected" disabled="disabled">승인 여부
+                                                            </option>
+                                                            <option value="1">합격</option>
+                                                            <option value="2">불합격</option>
+                                                        </select>
+                                                    </div>
+                                                    <!-- staff_mem_btn는 staff_cr.css에 정의되어 있음.  -->
+                                                    <div class="staff_mem_btn m-b20 listing-info-right">
+                                                        <!-- &nbsp;는 띄어쓰기 -->
+                                                        <button class="site-button" type="button"
+                                                                onclick="document.getElementById('hd-form-members-aor').submit()">
+                                                            <i
+                                                                    class="la la-check m-r5"
+                                                                    style="font-weight: bold"
+                                                            ></i>&nbsp;적용
+                                                        </button>
+                                                    </div>
+                                                    <form id="hd-form-members-aor" action="{% url 'members_aor' %}"
+                                                          method="post" style="display: none">
+                                                        {% csrf_token %}
+                                                        {% for new_user in new_user_list %}
+                                                            <input id="new-user-check-{{ new_user.user_stu }}"
+                                                                   type="checkbox" name="user_stu_list[]"
+                                                                   value="{{ new_user.user_stu }}"
+                                                                   style="display: none"/>
                                                         {% endfor %}
-                                                    </select>
-                                                </div>
-
-                                                <!-- staff_mem_select는 staff_cr.css에 정의되어 있음.  -->
-                                                <div class="staff_mem_select m-b20">
-                                                    <select id="select-aor" onchange="selectAoR()">
-                                                        <option selected="selected" disabled="disabled">승인 여부</option>
-                                                        <option value="1">합격</option>
-                                                        <option value="2">불합격</option>
-                                                    </select>
-                                                </div>
-                                                <!-- staff_mem_btn는 staff_cr.css에 정의되어 있음.  -->
-                                                <div class="staff_mem_btn m-b20 listing-info-right">
-                                                    <!-- &nbsp;는 띄어쓰기 -->
-                                                    <button class="site-button" type="button"
-                                                            onclick="document.getElementById('hd-form-members-aor').submit()">
-                                                        <i
-                                                                class="la la-check m-r5"
-                                                                style="font-weight: bold"
-                                                        ></i>&nbsp;적용
-                                                    </button>
-                                                </div>
-                                                <form id="hd-form-members-aor" action="{% url 'members_aor' %}"
-                                                      method="post" style="display: none">
-                                                    {% csrf_token %}
-                                                    {% for new_user in new_user_list %}
-                                                        <input id="new-user-check-{{ new_user.user_stu }}"
-                                                               type="checkbox" name="user_stu_list[]"
-                                                               value="{{ new_user.user_stu }}" style="display: none"/>
-                                                    {% endfor %}
-                                                    <input id="input-aor" type="hidden" name="aor" value="0"/>
-                                                </form>
-                                                <table class="table">
-                                                    <thead>
-                                                    <!-- 테이블 1행: 제목 -->
-                                                    <tr id="staff_new_head">
-                                                        <!-- staff_width는 staff_cr.css에 정의되어 있음.  -->
-                                                        <th class="border-top-0 staff_width_50" scope="col"></th>
-                                                        <th class="border-top-0 staff_width_50" scope="col"></th>
-                                                        <th class="border-top-0 staff_width_100" scope="col">이름</th>
-                                                        <th class="border-top-0 staff_width_100" scope="col">학년</th>
-                                                        <th class="border-top-0 staff_width_150" scope="col">학번</th>
-                                                        <th class="border-top-0 staff_width_230" scope="col">이메일</th>
-                                                        <th class="border-top-0 staff_width_230" scope="col">학과</th>
-                                                        <th class="border-top-0" scope="col">지원서 보기</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <!-- 신입부원 관리 테이블 내용 시작 -->
-                                                    <tbody>
-                                                    <!-- =========================== 여기부터 복붙 ============================== -->
-                                                    {% if new_user_len == 0 %}
-                                                        <tr>
-                                                            <td colspan="8" style="text-align: center"> 입부 신청 대기중인 회원이
-                                                                없습니다.
-                                                            </td>
+                                                        <input id="input-aor" type="hidden" name="aor" value="0"/>
+                                                    </form>
+                                                    <table class="table">
+                                                        <thead>
+                                                        <!-- 테이블 1행: 제목 -->
+                                                        <tr id="staff_new_head">
+                                                            <!-- staff_width는 staff_cr.css에 정의되어 있음.  -->
+                                                            <th class="border-top-0 staff_width_50" scope="col"></th>
+                                                            <th class="border-top-0 staff_width_50" scope="col"></th>
+                                                            <th class="border-top-0 staff_width_100" scope="col">이름</th>
+                                                            <th class="border-top-0 staff_width_100" scope="col">학년</th>
+                                                            <th class="border-top-0 staff_width_150" scope="col">학번</th>
+                                                            <th class="border-top-0 staff_width_230" scope="col">이메일
+                                                            </th>
+                                                            <th class="border-top-0 staff_width_230" scope="col">학과</th>
+                                                            <th class="border-top-0" scope="col">지원서 보기</th>
                                                         </tr>
-                                                    {% endif %}
+                                                        </thead>
+                                                        <!-- 신입부원 관리 테이블 내용 시작 -->
+                                                        <tbody>
+                                                        <!-- =========================== 여기부터 복붙 ============================== -->
+                                                        {% if new_user_len == 0 %}
+                                                            <tr>
+                                                                <td colspan="8" style="text-align: center"> 입부 신청 대기중인
+                                                                    회원이
+                                                                    없습니다.
+                                                                </td>
+                                                            </tr>
+                                                        {% endif %}
 
-                                                    {% for new_user in new_user_list %}
-                                                        <tr class="staff_new_tr">
-                                                            <td scope="row">
+                                                        {% for new_user in new_user_list %}
+                                                            <tr class="staff_new_tr">
+                                                                <td scope="row">
 
-                                                                {% csrf_token %}
-                                                                <div class="input-block">
-                                                                    <input id="check_{{ new_user.user_stu }}"
-                                                                           type="checkbox"
-                                                                           onclick="decideChk(this,'{{ new_user.user_stu }}')">
-                                                                    <!-- staff_label_margin는 staff_cr.css에 정의되어 있음.  -->
-                                                                    <label for="check_{{ new_user.user_stu }}"
-                                                                           class="staff_label_margin"></label>
-                                                                </div>
-
-                                                            </td>
-                                                            <th>{{ forloop.counter }}</th>
-                                                            <!-- 회원 이름 -->
-                                                            <td>{{ new_user.user_name }}</td>
-                                                            <!-- 회원 학년 -->
-                                                            <td class="mem_grade">{{ new_user.user_grade }}학년</td>
-                                                            <!-- 회원 학번 -->
-                                                            <td>{{ new_user.user_stu }}</td>
-                                                            <!-- 회원 이메일 -->
-                                                            <td>{{ new_user.user_email }}</td>
-                                                            <!-- 회원 학과 -->
-                                                            <td>{{ new_user.user_major.major_name }}</td>
-                                                            <!-- 지원서보기 -->
-                                                            <td>
-                                                                <a href="#"
-                                                                   onclick="document.getElementById('new_user_application_{{ new_user.user_stu }}').submit()">
-                                                                    지원서보기 ▶
-                                                                </a>
-                                                                <form id="new_user_application_{{ new_user.user_stu }}"
-                                                                      action="{% url 'member_applications' %}"
-                                                                      method="post"
-                                                                      style="display: none">
                                                                     {% csrf_token %}
-                                                                    <input type="hidden" name="user_stu"
-                                                                           value="{{ new_user.user_stu }}">
-                                                                </form>
-                                                            </td>
-                                                        </tr>
-                                                    {% endfor %}
-                                                    </tbody>
-                                                </table>
-                                                <!--페이지네이션-->
-                                                <div style="display: flex; justify-content: center; align-items: center">
-                                                    <nav aria-label="Page navigation example">
-                                                        <!-- staff_margin_bottom_0는 staff_cr.css에 정의되어 있음.  -->
-                                                        <ul class="pagination staff_margin_bottom_0">
-                                                            {% if new_user_list.has_previous %}
-                                                                <li class="page-item">
-                                                                    <a class="page-link" href="?new_user_page=1"
-                                                                       aria-label="Previous">
-                                                                        <span aria-hidden="true">&laquo;</span>
+                                                                    <div class="input-block">
+                                                                        <input id="check_{{ new_user.user_stu }}"
+                                                                               type="checkbox"
+                                                                               onclick="decideChk(this,'{{ new_user.user_stu }}')">
+                                                                        <!-- staff_label_margin는 staff_cr.css에 정의되어 있음.  -->
+                                                                        <label for="check_{{ new_user.user_stu }}"
+                                                                               class="staff_label_margin"></label>
+                                                                    </div>
+
+                                                                </td>
+                                                                <th>{{ forloop.counter }}</th>
+                                                                <!-- 회원 이름 -->
+                                                                <td>{{ new_user.user_name }}</td>
+                                                                <!-- 회원 학년 -->
+                                                                <td class="mem_grade">{{ new_user.user_grade }}학년</td>
+                                                                <!-- 회원 학번 -->
+                                                                <td>{{ new_user.user_stu }}</td>
+                                                                <!-- 회원 이메일 -->
+                                                                <td>{{ new_user.user_email }}</td>
+                                                                <!-- 회원 학과 -->
+                                                                <td>{{ new_user.user_major.major_name }}</td>
+                                                                <!-- 지원서보기 -->
+                                                                <td>
+                                                                    <a href="#"
+                                                                       onclick="document.getElementById('new_user_application_{{ new_user.user_stu }}').submit()">
+                                                                        지원서보기 ▶
                                                                     </a>
-                                                                </li>
-                                                                <li class="page-item">
-                                                                    <a class="page-link"
-                                                                       href="?new_user_page={{ new_user_list.previous_page_number }}">
-                                                                        {{ new_user_list.previous_page_number }}
-                                                                    </a>
-                                                                </li>
-                                                            {% endif %}
-                                                            <li class="page-item"><a class="page-link"
-                                                                                     href="#">{{ new_user_list.number }}</a>
-                                                            </li>
-                                                            {% if new_user_list.has_next %}
+                                                                    <form id="new_user_application_{{ new_user.user_stu }}"
+                                                                          action="{% url 'member_applications' %}"
+                                                                          method="post"
+                                                                          style="display: none">
+                                                                        {% csrf_token %}
+                                                                        <input type="hidden" name="user_stu"
+                                                                               value="{{ new_user.user_stu }}">
+                                                                    </form>
+                                                                </td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                    <!--페이지네이션-->
+                                                    <div style="display: flex; justify-content: center; align-items: center">
+                                                        <nav aria-label="Page navigation example">
+                                                            <!-- staff_margin_bottom_0는 staff_cr.css에 정의되어 있음.  -->
+                                                            <ul class="pagination staff_margin_bottom_0">
+                                                                {% if new_user_list.has_previous %}
+                                                                    <li class="page-item">
+                                                                        <a class="page-link" href="?new_user_page=1"
+                                                                           aria-label="Previous">
+                                                                            <span aria-hidden="true">&laquo;</span>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="page-item">
+                                                                        <a class="page-link"
+                                                                           href="?new_user_page={{ new_user_list.previous_page_number }}">
+                                                                            {{ new_user_list.previous_page_number }}
+                                                                        </a>
+                                                                    </li>
+                                                                {% endif %}
                                                                 <li class="page-item"><a class="page-link"
-                                                                                         href="?new_user_page={{ new_user_list.next_page_number }}">
-                                                                    {{ new_user_list.next_page_number }}
-                                                                </a>
+                                                                                         href="#">{{ new_user_list.number }}</a>
                                                                 </li>
-                                                                <li class="page-item">
-                                                                    <a class="page-link"
-                                                                       href="?new_user_page={{ new_user_list.paginator.num_pages }}"
-                                                                       aria-label="Next">
-                                                                        <span aria-hidden="true">&raquo;</span>
+                                                                {% if new_user_list.has_next %}
+                                                                    <li class="page-item"><a class="page-link"
+                                                                                             href="?new_user_page={{ new_user_list.next_page_number }}">
+                                                                        {{ new_user_list.next_page_number }}
                                                                     </a>
-                                                                </li>
-                                                            {% endif %}
-                                                        </ul>
-                                                    </nav>
+                                                                    </li>
+                                                                    <li class="page-item">
+                                                                        <a class="page-link"
+                                                                           href="?new_user_page={{ new_user_list.paginator.num_pages }}"
+                                                                           aria-label="Next">
+                                                                            <span aria-hidden="true">&raquo;</span>
+                                                                        </a>
+                                                                    </li>
+                                                                {% endif %}
+                                                            </ul>
+                                                        </nav>
+                                                    </div>
+                                                    <!--페이지네이션 끝-->
                                                 </div>
-                                                <!--페이지네이션 끝-->
                                             </div>
                                         </div>
-                                    </div>
-                                    {% if request.session.user_role == 1 %}
+                                    {% endif %}
+                                    {% if request.session.user_role == 1 or request.session.user_role == 4 %}
                                         <!-- 회원 관리 콘텐츠 시작 -->
                                         <div class="content-box">
                                             <div class="content-header">
@@ -234,27 +240,34 @@
                                                         {# 역할: 회장, 부회장, 총무, 기획팀, 운영팀(회장단), 교수, 일반회원#}
 
                                                         <!-- staff_mem_select는 staff_cr.css에 정의되어 있음.  -->
-                                                        <div class="staff_mem_select m-b20">
-                                                            <select name="user_auth">
-                                                                <option selected="selected" disabled="disabled">권한 부여
-                                                                </option>
-                                                                {% for auth in auth_list %}
-                                                                    <option name="user_auth"
-                                                                            value="{{ auth.auth_no }}">{{ auth.auth_name }}</option>
-                                                                {% endfor %}
-                                                            </select>
-                                                        </div>
+                                                        {% if request.session.user_role == 4 %}
+                                                            <div class="staff_mem_select m-b20">
+                                                                <select name="user_auth">
+                                                                    <option selected="selected" disabled="disabled">권한
+                                                                        부여
+                                                                    </option>
+                                                                    {% for auth in auth_list %}
+                                                                        <option name="user_auth"
+                                                                                value="{{ auth.auth_no }}">{{ auth.auth_name }}</option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                            </div>
+                                                        {% endif %}
                                                         <!-- staff_mem_select는 staff_cr.css에 정의되어 있음.  -->
-                                                        <div class="staff_mem_select m-b20">
-                                                            <select name="user_role">
-                                                                <option selected="selected" disabled="disabled">역할 부여
-                                                                </option>
-                                                                {% for role in role_list %}
-                                                                    <option name="user_role"
-                                                                            value="{{ role.role_no }}">{{ role.role_name }}</option>
-                                                                {% endfor %}
-                                                            </select>
-                                                        </div>
+                                                        {% if request.session.user_role == 1 %}
+                                                            <div class="staff_mem_select m-b20">
+                                                                <select name="user_role">
+                                                                    <option selected="selected" disabled="disabled">역할
+                                                                        부여
+                                                                    </option>
+                                                                    {% for role in role_list %}
+                                                                        <option name="user_role"
+                                                                                value="{{ role.role_no }}">{{ role.role_name }}</option>
+                                                                    {% endfor %}
+                                                                </select>
+
+                                                            </div>
+                                                        {% endif %}
                                                         <!-- staff_mem_btn는 staff_cr.css에 정의되어 있음.  -->
                                                         <div class="staff_mem_btn m-b20 listing-info-right">
                                                             <!-- &nbsp;는 띄어쓰기 -->
@@ -448,7 +461,7 @@
                                                                     </td>
                                                                 </tr>
                                                             {% endif %}
-                                                            {% for user_update_request in user_update_request_list%}
+                                                            {% for user_update_request in user_update_request_list %}
                                                                 <tr>
                                                                     <td scope="row">
                                                                         <div class="input-block">
@@ -478,7 +491,7 @@
                                                                     </td>
                                                                     <!-- 변경 신청한 이름 -->
                                                                     <td>
-                                                                       {{ user_update_request.updated_user_name }}
+                                                                        {{ user_update_request.updated_user_name }}
                                                                     </td>
 
                                                                 </tr>

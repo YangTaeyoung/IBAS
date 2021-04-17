@@ -354,8 +354,8 @@ class LectCheck(models.Model):
 
 class LectType(models.Model):
     type_no = models.AutoField(db_column='TYPE_NO', primary_key=True)  # Field name made lowercase.
-    type_name = models.IntegerField(db_column='TYPE_NAME')  # Field name made lowercase.
-
+    type_name = models.IntegerField(db_column='TYPE_NAME', unique=True)  # Field name made lowercase.
+    type_exp = models.CharField(db_column='TYPE_EXP', max_length=100)
     class Meta:
         managed = False
         db_table = 'LECT_TYPE'
