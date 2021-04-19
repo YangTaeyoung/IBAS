@@ -22,8 +22,9 @@
         }
         function submitForm(id)
         {
-            document.getElementById("loading-area").style.display = "block";
-            document.getElementById("loading-area").style.zIndex = "99999999";
+            const loadingObj = document.createElement("div");
+            loadingObj.id = "loading-area"
+            document.body.appendChild(loadingObj)
             document.getElementById(id).submit();
         }
     </script>
