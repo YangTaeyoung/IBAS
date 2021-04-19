@@ -20,6 +20,12 @@
                 document.getElementById('new-user-check-' + user_stu).checked = false;
             }
         }
+        function submitForm(id)
+        {
+            document.getElementById("loading-area").style.display = "block";
+            document.getElementById("loading-area").style.zIndex = 99999999;
+            document.getElementById(id).submit();
+        }
     </script>
 
 
@@ -89,7 +95,7 @@
                                                     <div class="staff_mem_btn m-b20 listing-info-right">
                                                         <!-- &nbsp;는 띄어쓰기 -->
                                                         <button class="site-button" type="button"
-                                                                onclick="document.getElementById('hd-form-members-aor').submit()">
+                                                                onclick="submitForm('hd-form-members-aor')">
                                                             <i
                                                                     class="la la-check m-r5"
                                                                     style="font-weight: bold"
@@ -164,7 +170,7 @@
                                                                 <!-- 지원서보기 -->
                                                                 <td>
                                                                     <a href="#"
-                                                                       onclick="document.getElementById('new_user_application_{{ new_user.user_stu }}').submit()">
+                                                                       onclick="submitForm('new_user_application_{{ new_user.user_stu }}')">
                                                                         지원서보기 ▶
                                                                     </a>
                                                                     <form id="new_user_application_{{ new_user.user_stu }}"
@@ -425,7 +431,7 @@
                                                             <button class="site-button" type="submit"><i
                                                                     class="la la-check m-r5"
                                                                     style="font-weight: bold"
-                                                                    onclick="document.getElementById('hd-form-members-aor').submit()"></i>&nbsp;적용
+                                                                    onclick="submitForm('hd-form-members-aor')"></i>&nbsp;적용
                                                             </button>
                                                         </div>
 
