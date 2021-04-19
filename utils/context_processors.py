@@ -22,3 +22,12 @@ def alarms(request):  # 알람 딕셔너리를 반환하는 함수
 
 def chief(request):  # 회장 정보 딕셔너리를 반환하는 함수.
     return {"chief": User.objects.filter(user_role__role_no=1).first()}
+
+
+def login(request):  # 로그인을 시키는 함수.
+    if request.session.get('user_stu') is None:
+        return {}
+    else:
+        return {
+            "logined_user": User.objects.get(request.session.get('user_stu'))
+        }
