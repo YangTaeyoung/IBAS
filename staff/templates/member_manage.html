@@ -231,7 +231,7 @@
                                             </div>
                                         </div>
                                     {% endif %}
-                                    {% if request.session.user_role == 1 or request.session.user_role == 4 %}
+                                    {% if logined_user.user_role.role_no == 1 or logined_user.user_role.role_no == 4 %}
                                         <!-- 회원 관리 콘텐츠 시작 -->
                                         <div class="content-box">
                                             <div class="content-header">

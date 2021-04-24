@@ -25,9 +25,9 @@ def chief(request):  # 회장 정보 딕셔너리를 반환하는 함수.
 
 
 def login(request):  # 로그인을 시키는 함수.
-    if request.session.get('user_stu') is None:
-        return {}
-    else:
+    if is_logined(request):
         return {
-            "logined_user": User.objects.get(request.session.get('user_stu'))
+            "logined_user": get_logined_user(request)
         }
+    else:
+        return {}

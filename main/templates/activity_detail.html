@@ -123,7 +123,7 @@
                                     </div>
                                     <!-- 게시글 삭제 및 수정 div -->
                                     <div class="extra-cell text-right">
-                                        {% if request.session.user_stu == board.board_writer.user_stu %}
+                                        {% if logined_user.user_stu == board.board_writer.user_stu %}
                                             <!-- 게시글 수정 버튼 -->
                                             <button type="button" class="site-button radius-xl m-l10"
                                                     onclick="document.getElementById('form-activity-update').submit()">
@@ -133,7 +133,7 @@
                                             <!--게시글 수정 폼-->
 
                                         {% endif %}
-                                        {% if request.session.user_role <= 3 or request.session.user_stu == board.board_writer.user_stu %}
+                                        {% if logined_user.user_role.role_no <= 3 or logined_user.user_stu == board.board_writer.user_stu %}
                                             <!-- 게시글 삭제 버튼 -->
                                             <button type="button" class="site-button red radius-xl m-l10"
                                                     onclick="if(confirm('정말 삭제하시겠습니까?')){document.getElementById('form-activity-delete').submit();}">
@@ -219,7 +219,7 @@
                                                                       action="{% url 'activity_comment_delete' %}"
                                                                       method="post">
 
-                                                                    {% if request.session.user_stu is not None and request.session.user_auth < 3 %}
+                                                                    {% if request.session.user_stu is not None and logined_user.user_auth.auth_no < 3 %}
                                                                         <button type="button"
                                                                                 id="btnAdd-{{ comment.comment_id }}"
                                                                                 onclick="addReply({{ comment.comment_id }},'{% url "activity_comment_register" %}', {{ board.board_no }})"
@@ -229,7 +229,7 @@
                                                                     {% endif %}
                                                                     <!-- 댓글삭제 버튼 -->
                                                                     <!-- id="comment-delete-{{ comment.comment_id }}" -->
-                                                                    {% if request.session.user_stu == comment.comment_writer.user_stu or request.session.user_role <= 3 %}
+                                                                    {% if logined_user.user_stu == comment.comment_writer.user_stu or logined_user.user_role.role_no <= 3 %}
                                                                         {% csrf_token %}
                                                                         <input type="hidden" name="comment_id"
                                                                                value="{{ comment.comment_id }}"/>
@@ -244,7 +244,7 @@
                                                                     {% endif %}
                                                                     <!-- 덧글 삭제 폼 -->
 
-                                                                    {% if request.session.user_stu == comment.comment_writer.user_stu %}
+                                                                    {% if logined_user.user_stu == comment.comment_writer.user_stu %}
 
                                                                         <!-- 댓글수정 버튼 -->
                                                                         <button onclick="comment_update({{ comment.comment_id }})"
@@ -309,7 +309,7 @@
                                                                                    value="{{ comment_ref.comment_id }}"/>
                                                                             <input type="hidden" name="board_no"
                                                                                    value="{{ board.board_no }}"/>
-                                                                            {% if request.session.user_role <= 3 or request.session.user_stu == comment_ref.comment_writer.user_stu %}
+                                                                            {% if logined_user.user_role.role_no <= 3 or logined_user.user_stu == comment_ref.comment_writer.user_stu %}
                                                                                 <button type="button"
                                                                                         onclick="comment_del({{ comment_ref.comment_id }})"
                                                                                         id="btn-del-{{ comment_ref.comment_id }}"
@@ -318,7 +318,7 @@
                                                                                     댓글 삭제
                                                                                 </button>
                                                                             {% endif %}
-                                                                            {% if request.session.user_stu == comment_ref.comment_writer.user_stu %}
+                                                                            {% if logined_user.user_stu == comment_ref.comment_writer.user_stu %}
                                                                                 <button type="button"
                                                                                         id="correctingBtn-{{ comment_ref.comment_id }}"
                                                                                         class="comment-btn m-r10"

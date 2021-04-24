@@ -126,7 +126,7 @@
                                 </table>
 
                                 {% if request.session.user_stu is not None %}
-                                    {% if board_type_no == 1 and request.session.user_role <= 5 or board_type_no != 1 and board_type_no != 5 and request.session.user_auth != 3 %}
+                                    {% if board_type_no == 1 and logined_user.user_role.role_no <= 5 or board_type_no != 1 and board_type_no != 5 and logined_user.user_auth.auth_no != 3 %}
                                         <form action="{% url 'board_register' %}" method="get">
                                             <input type="hidden" name="board_type_no" value="{{ board_type_no }}">
                                             <div class="extra-cell text-right  m-t20">

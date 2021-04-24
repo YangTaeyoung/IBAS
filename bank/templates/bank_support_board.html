@@ -86,7 +86,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        {% if request.session.user_stu is not None and request.session.user_auth != 3 %}
+                        {% if request.session.user_stu is not None and logined_user.user_auth.auth_no != 3 %}
                             <!--신청하기 버튼, 누르면 작성페이지로 이동-->
                             <div class="extra-cell text-right" style="margin: 20px 20px 0px 0px">
                                 <a href="{% url 'bank_support_register' %}" class="site-button radius-xl m-l10">
