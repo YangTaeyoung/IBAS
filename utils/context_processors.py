@@ -6,7 +6,9 @@ from date_controller import today, today_before_day, today_after_day
 
 # 사용하기 위해서는 settings.py-TEMPLATE-OPTIONS 에 각 함수를 등록 해주어야 한다.
 # 사용시 그냥 일반 컨텍스트 처럼 바로 부르면 됨 예 {{ chief.user_name }}
-def alarms(request):  # 알람 딕셔너리를 반환하는 함수
+
+# 알람 딕셔너리를 반환하는 함수
+def alarms(request):
     if is_logined(request):
         my_alarm = Alarm.objects.filter(
             Q(alarm_user=get_logined_user(request)) & Q(
@@ -20,14 +22,19 @@ def alarms(request):  # 알람 딕셔너리를 반환하는 함수
         return {}
 
 
-def chief(request):  # 회장 정보 딕셔너리를 반환하는 함수.
+# 회장 정보 딕셔너리를 반환하는 함수.
+def chief(request):
     return {"chief": User.objects.filter(user_role__role_no=1).first()}
 
 
-def login(request):  # 로그인을 시키는 함수.
+# 로그인을 시키는 함수.
+def login(request):
     if is_logined(request):
-        return {
-            "logined_user": get_logined_user(request)
-        }
+        return {"logined_user": get_logined_user(request)}
     else:
         return {}
+
+
+# 로그인 확인 정보를 컨텍스트에 등록하는 함수.
+def login_check(request):
+    return {"is_logined": is_logined(request)}

@@ -219,7 +219,7 @@
                                                                       action="{% url 'activity_comment_delete' %}"
                                                                       method="post">
 
-                                                                    {% if request.session.user_stu is not None and logined_user.user_auth.auth_no < 3 %}
+                                                                    {% if is_logined and logined_user.user_auth.auth_no < 3 %}
                                                                         <button type="button"
                                                                                 id="btnAdd-{{ comment.comment_id }}"
                                                                                 onclick="addReply({{ comment.comment_id }},'{% url "activity_comment_register" %}', {{ board.board_no }})"
@@ -337,7 +337,7 @@
                                                 {% endfor %}
                                             </ol>
                                             <!-- 작성된 댓글과 댓글입력 부분을 나누는 구분선 -->
-                                            {% if request.session.user_stu is not None %}
+                                            {% if is_logined %}
                                                 <div class="dlab-divider bg-gray-dark"></div>
                                                 <!--========================= 댓글 입력 form 태그 =========================-->
 

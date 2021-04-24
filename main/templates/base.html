@@ -80,7 +80,7 @@
                                     <li><a href="{% url 'activity' %}">동아리 활동</a></li>
 
                                     {# 밑에 있는 회계내역, 예산지원 신청은 회원들만 신청을 할 수 있음. #}
-                                    {% if request.session.user_stu is not None %}
+                                    {% if is_logined %}
                                         <li><a href="{% url 'bank_list' %}">회계내역</a></li>
                                         <li><a href="{% url 'bank_support_board' %}">예산지원신청</a></li>
                                     {% endif %}
@@ -98,12 +98,12 @@
                                 </ul>
                             </li>
                             <!--====================강의실을 상위메뉴로 가지고 있는 메뉴====================-->
-                            <li class="down active" style="padding-top: 7px"><a href="#">강의실 <i
+                            <li class="down active" style="padding-top: 7px"><a href="{% url 'lect_view' type_no=1 %}">강의실 <i
                                     class="fa fa-chevron-down"></i></a>
                                 <ul class="sub-menu">
-                                    <li><a href="#">강의</a></li>
-                                    <li><a href="#">스터디</a></li>
-                                    <li><a href="#">강의개설신청</a></li>
+                                    <li><a href="{% url 'lect_view' type_no=1 %}">강의</a></li>
+                                    <li><a href="{% url 'lect_view' type_no=2 %}">스터디</a></li>
+                                    <li><a href="{% url 'lect_register' %}">강의개설신청</a></li>
                                 </ul>
                             </li>
                             <!--====================취미모임 메뉴====================-->
@@ -111,7 +111,7 @@
 
                             <!--====================로그인 여부에 따라 다르게 보이는 곳====================-->
                             <!--====================로그인했을 때====================-->
-                            {% if request.session.user_stu is not None %}
+                            {% if is_logined %}
                                 {% if logined_user.user_role.role_no <= 4 %}
                                     <li class="active" style="padding-top: 7px; padding-right: 5px; padding-left: 5px"
                                         onclick="document.getElementById('hd-form-member-list').submit()">

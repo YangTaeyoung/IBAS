@@ -60,7 +60,7 @@
                         <div id="listing_user_setting" class="tab-pane">
                             <div class="row">
                                 <div class="col-xl-12">
-                                    {% if request.session.user_role != 4 %}
+                                    {% if logined_user.user_role.role_no != 4 %}
                                         <div class="content-box">
                                             <!-- 제목 div -->
                                             <div class="content-header">
@@ -247,7 +247,7 @@
                                                         {# 역할: 회장, 부회장, 총무, 기획팀, 운영팀(회장단), 교수, 일반회원#}
 
                                                         <!-- staff_mem_select는 staff_cr.css에 정의되어 있음.  -->
-                                                        {% if request.session.user_role == 4 %}
+                                                        {% if logined_user.user_role.role_no == 4 %}
                                                             <div class="staff_mem_select m-b20">
                                                                 <select name="user_auth">
                                                                     <option selected="selected" disabled="disabled">권한
@@ -261,7 +261,7 @@
                                                             </div>
                                                         {% endif %}
                                                         <!-- staff_mem_select는 staff_cr.css에 정의되어 있음.  -->
-                                                        {% if request.session.user_role == 1 %}
+                                                        {% if logined_user.user_role.role_no == 1 %}
                                                             <div class="staff_mem_select m-b20">
                                                                 <select name="user_role">
                                                                     <option selected="selected" disabled="disabled">역할
@@ -404,7 +404,7 @@
                                     {% endif %}
 
                                     <!------------------------------여기서부터 백엔드 작업 시작---------------------------------->
-                                    {% if request.session.user_role == 1 %}
+                                    {% if logined_user.user_role.role_no == 1 %}
                                         <!-- 요청사항 콘텐츠 시작 -->
                                         <div class="content-box">
                                             <div class="content-header">
