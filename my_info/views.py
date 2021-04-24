@@ -4,15 +4,13 @@ from django.shortcuts import render, redirect, reverse
 from DB.models import Board, User, Comment, Lect, LectBoard, BoardType, UserRole, Bank, UserAuth, UserUpdateRequest, \
     StateInfo
 from django.db.models import Q
-
-from user_controller import get_logined_user, get_user
+from user_controller import get_logined_user, get_user, is_logined
 from django.conf import settings
 
 
 # Create your views here.
 def my_info(request):  # 내 정보 출력
-    if request.session.get("user_stu") is not None:
-        my_info = get_logined_user(request)
+    if is_logined(request):
         my_board_list = Board.objects.filter(board_writer=my_info).order_by("board_type_no").order_by("-board_created")
         my_comment_list = Comment.objects.filter(comment_writer=my_info).order_by(
             "comment_board_no__board_type_no").order_by("-comment_created")
@@ -26,9 +24,7 @@ def my_info(request):  # 내 정보 출력
             "my_comment_list": my_comment_list,
             "my_wait_request": my_wait_request,
             "my_update_request_list ": my_update_request_list,
-            "my_bank_list": my_bank_list,
-            "my_info": my_info,
-
+            "my_bank_list": my_bank_list
         }
         return render(request, 'my_info.html', context)
     else:
@@ -89,7 +85,6 @@ def user_pic_update(request):
             # 새로운 이미지로 교체.
             user.user_pic = user_pic
             user.save()
-            request.session["user_pic"] = str(user.user_pic)
     return redirect(reverse("my_info"))
 
 
@@ -102,5 +97,4 @@ def user_pic_delete(request):
             pass
     user.user_pic = get_default_pic_path()
     user.save()
-    request.session["user_pic"] = str(user.user_pic)
     return redirect(reverse("my_info"))
