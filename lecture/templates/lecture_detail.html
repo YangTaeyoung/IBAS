@@ -36,10 +36,10 @@
                         <div class="dlab-bnr-inr-entry">
                             <!--제목-->
                             <!--강의게시판, 스터디게시판, 취미모임게시판 종류에 따라 바뀌도록 변경-->
-                            <h1 class="text-white introduce-letter-spacing_5">@@ 게시판</h1>
+                            <h1 class="text-white introduce-letter-spacing_5">{{ lect.lect_type.type_name }}</h1>
                             <!--부제목-->
                             <!--강의게시판, 스터디게시판, 취미모임게시판 종류에 따라 바뀌도록 변경-->
-                            <p class="introduce-margin-top_20">@@에 관한 정보를 담을 게시판입니다.</p>
+                            <p class="introduce-margin-top_20">{{ lect.lect_type.type_exp }}</p>
                         </div>
                     </div>
                 </a>
@@ -58,21 +58,21 @@
                                     <ul class="d-flex align-items-center">
                                         <!-- 게시글 작성자, 작성자 이름 나오도록 수정 -->
                                         <li class="post-author"><i
-                                                class="ti ti-user"></i>By 김채림</li>
+                                                class="ti ti-user"></i>{{ lect.lect_chief.user_name }}</li>
                                         <!-- 게시글 작성시간, 작성시간 나오도록 수정 -->
                                         <li class="post-comment"><i
-                                                class="ti ti-alarm-clock"></i> 2020-02-02 13:40
+                                                class="ti ti-alarm-clock"></i> {{ lect.lect_created|date:"Y-m-d h:i" }}
                                         </li>
                                     </ul>
                                 </div>
                             </div>
                             <!--여기까지가 게시글 정보-->
-                             <!--====================================제목 시작==============================================-->
+                            <!--====================================제목 시작==============================================-->
                             <div class="content-body">
                                 <div class="form-group">
                                     <!--강의명 이곳에 뜨도록 수정-->
                                     <h4 class="post-title "
-                                        style="margin-top: 10px; margin-bottom: 8px">데이터베이스 기초 특강</h4>
+                                        style="margin-top: 10px; margin-bottom: 8px">{{ lect.lect_title }}</h4>
                                 </div>
                             </div>
                         </div>
@@ -85,7 +85,7 @@
                             <div class="content-body">
                                 <div class="form-group">
                                     <!--소개란에 입력한 내용 이곳에 뜨도록 수정-->
-                                    <a>소개내용~~</a>
+                                    <a>{{ lect.lect_intro }}</a>
                                 </div>
                             </div>
                         </div>
@@ -93,12 +93,12 @@
                         <!--====================================일정계획 시작==============================================-->
                         <div class="content-box">
                             <div class="content-header">
-                                <h3 class="title">일정계획</h3>
+                                <h3 class="title">{{ lect.lect_type.type_name }} 계획</h3>
                             </div>
                             <div class="content-body">
                                 <div class="form-group">
                                     <!--일정계획에 입력한 내용 이곳에 뜨도록 수정-->
-                                    <a>일정계획 내용~~~</a>
+                                    <a>{{ lect.lect_curri }}</a>
                                 </div>
                             </div>
                         </div>
@@ -107,12 +107,12 @@
                         <!--=======강의, 스터디 게시판에서만 사용하기 때문에 취미모임 게시판일 경우에는 뜨지 않도록 수정======-->
                         <div class="content-box">
                             <div class="content-header">
-                                <h3 class="title">신청인원/제한인원</h3>
+                                <h3 class="title">신청 현황</h3>
                             </div>
                             <div class="content-body">
                                 <div class="form-group">
                                     <!--지금까지 신청한 인원과/대표자가 입력한 제한인원이 이곳에 뜨도록 수정-->
-                                    <a>3/20</a>
+                                    <a>{{ lect_user_num }}/{{ lect.lect_limit_num }}</a>
                                 </div>
                             </div>
                         </div>
@@ -125,7 +125,7 @@
                             <div class="content-body">
                                 <div class="form-group">
                                     <!--방식에 입력한 내용 이곳에 뜨도록 수정-->
-                                    <a>온라인</a>
+                                    <a>{{ lect.lect_method.method_name }}</a>
                                 </div>
                             </div>
                         </div>
@@ -133,12 +133,18 @@
                         <!--====================================장소 시작==============================================-->
                         <div class="content-box">
                             <div class="content-header">
-                                <h3 class="title">장소</h3>
+                                <h3 class="title">
+                                    {% if lect.lect_method.method_no == 1 %}
+                                        장소
+                                    {% else %}
+                                        링크
+                                    {% endif %}
+                                </h3>
                             </div>
                             <div class="content-body">
                                 <div class="form-group">
                                     <!--장소에 입력한 내용 이곳에 뜨도록 수정-->
-                                    <a>Zoom</a>
+                                    <a>{{ lect.lect_place_or_link }}</a>
                                 </div>
                             </div>
                         </div>
@@ -151,7 +157,7 @@
                             <div class="content-body">
                                 <div class="form-group">
                                     <!--여기 뜨는 것은 작성자가 입력한 내용이 아닌, 작성자 개인정보에서 가져와서 뜨도록 수정-->
-                                    <a>010-5398-9075</a>
+                                    <a>{{ lect.lect_chief.user_phone }}</a>
                                 </div>
                             </div>
                         </div>
@@ -164,7 +170,7 @@
                             <div class="content-body">
                                 <div class="form-group">
                                     <!--여기 뜨는 것은 작성자가 입력한 내용이 아닌, 작성자 개인정보에서 가져와서 뜨도록 수정-->
-                                    <a>cofla030360@gmail.com</a>
+                                    <a>{{ lect.lect_chief.user_email }}</a>
                                 </div>
                             </div>
                         </div>
@@ -178,7 +184,7 @@
                             <div class="content-body">
                                 <div class="form-group">
                                     <!--신청마감일에 입력한 내용 뜨도록 수정-->
-                                    <a>2021-06-30</a>
+                                    <a>{{ lect.lect_deadline|date: "Y-m-d" }}</a>
                                 </div>
                             </div>
                         </div>
@@ -192,107 +198,83 @@
                             <!--일단 기존에 있던 쿼리 가져왔는데, 작성자가 첨부한 이미지 이곳에 뜨도록 수정-->
                             <div class="widget widget_gallery gallery-grid-4 lightgallery">
                                 <ul style="padding: 10px; margin-bottom: 0px">
-                                    {% for lect_file in lect_file_list %}
-                                        {% if forloop.counter < 4 %}
-                                            <li>
-                                                            <span data-exthumbimage="/media/{{ lect_file.lect_file_path }}"
-                                                                  data-src="/media/{{ lect_file.lect_file_path }}"
-                                                                  class="check-km "
-                                                                  title="{{ lect_file.lect_file_name }}">
-                                                                <a href="javascript:void(0);">
-                                                                    <div class="dlab-post-thum act-detail-img-size">
-                                                                        <img style="height: 190px"
-                                                                             src="/media/{{ lect_file.lect_file_path }}"
-                                                                             alt=""/>
-                                                                    </div>
-                                                                </a>
-                                                            </span>
-                                            </li>
-                                        {% elif forloop.counter == 4 %}
-                                            <li>
-                                                            <span data-exthumbimage="/media/{{ lect_file.lect_file_path }}"
-                                                                  data-src="/media/{{ lect_file.lect_file_path }}"
-                                                                  class="check-km act-detail-img-siz"
-                                                                  title="{{ lect_file.lect_file_name }}">
-                                                                <a href="javascript:void(0);">
-                                                                    <div class="dlab-post-thum "><img
-                                                                            style="height: 190px"
-                                                                            src="/media/{{ lect_file.lect_file_path }}"
-                                                                            alt=""></div>
-                                                                    {% if forloop.revcounter0 > 0 %}
-                                                                        <!-- 사용자가 업로드한 사진이 딱 4개인 경우 남은 이미지 개수를 출력하지 않음.-->
-                                                                        <div class="more-images">
-                                                                            <div>
-                                                                                <strong>{{ forloop.revcounter0 }}</strong>
-                                                                                <span>More Images</span>
-                                                                            </div>
-                                                                        </div>
-                                                                    {% endif %}
-                                                                </a>
-                                                            </span>
-                                            </li>
-                                        {% else %}
-                                            <li style="display: none;">
-                                                <span data-exthumbimage="/media/{{ lect_img.board_file_path }}"
-                                                      data-src="/media/{{ lect_img.lect_file_path }}"
-                                                      class="check-km "
-                                                      title="{{ lect_file.lect_file_name }}">
-                                                    <a href="javascript:void(0);">
-                                                        <div class="dlab-post-thum act-detail-img-size">
-                                                            <img style="height: 190px"
-                                                                 src="/media/{{ lect_img.lect_file_path }}" alt=""/>
-                                                        </div>
-                                                    </a>
-                                                </span>
-                                            </li>
-                                        {% endif %}
-                                    {% endfor %}
+
+                                    <li>
+                                        <span data-exthumbimage="/media/{{ lect.lect_pic }}"
+                                              data-src="/media/{{ lect.lect_pic }}"
+                                              class="check-km "
+                                              title="">
+                                            <a href="javascript:void(0);">
+                                                <div class="dlab-post-thum act-detail-img-size">
+                                                    <img style="height: 190px"
+                                                         src="/media/{{ lect.lect_pic }}"
+                                                         alt=""/>
+                                                </div>
+                                            </a>
+                                        </span>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
 
                         <!--====================================영수증 끝=============================================-->
                         <!-- 게시글 삭제 및 수정 div -->
+                        {% if logined_user.user_stu == lect.lect_chief.user_stu %}
                             <div class="extra-cell text-right">
                             <!-- 게시글 수정 버튼 -->
                             <a href="#"
                                class="site-button radius-xl m-l10"><i
                                     class="fa fa-pencil m-r5"></i>
                                 게시글 수정</a>
+                        {% endif %}
+                        {% if logined_user.user_stu == lect.lect_chief.user_stu or logined_user.user_role.role_no <= 3 %}
                             <!-- 게시글 삭제 버튼 -->
                             <a href="#"
                                class="site-button red radius-xl m-l10"><i
                                     class="fa fa-trash m-r5"></i>
                                 게시글 삭제</a>
                             </div>
-
-                        <!--=======신청하기 버튼, 한번 신청하기 버튼을 누르면 없어지도록 수정======-->
-                        <div style="display: flex; justify-content: center; ">
-                            <button type="button" class="btn btn-outline-success btn-lg" style="width: 200px; font-weight: bold" onclick="alert('신청이 완료되었습니다.')">
-                                신청하기
-                            </button>
-                        </div>
-                        <!--=======강의실로 이동하기 버튼, 신청을 하지 않으면 뜨지 않고, 신청 후 버튼이 뜨도록 수정, 누르면 강의실로 이동함======-->
-                        <!--=======강의, 스터디 게시판에서만 사용하기 때문에 취미모임 게시판일 경우에는 뜨지 않도록 수정======-->
-                        <div style="display: flex; justify-content: center; ">
-                           <button type="button" class="btn btn-outline-primary btn-lg" style="font-weight: bold">
-                                강의실로 이동하기
-                           </button>
-                        </div>
-                         <!--=======강의개설신청 게시판에 들어가면 보이는 버튼들, 강의/스터디/취미모임 게시판에서는 안보이도록 수정, 강의 개설 신청 승인/거절 버튼======-->
-                        <div style="display: flex; justify-content: center; ">
-                            <!--승인-->
-                            <button type="button" class="btn btn-outline-success btn-lg" style="width: 200px; font-weight: bold" onclick="goApply()">
-                                개설승인
-                            </button>
-                            <!--거절-->
-                            <button type="button" class="btn btn-outline-danger btn-lg" style="width: 200px; margin-left: 10px; font-weight: bold"
-                                    onclick="return confirm('승인을 거절하시겠습니까?')"
-                                    href="javascript:void(0);" data-toggle="modal" data-target="#lect_refuse"
-                                    class="site-button gray">
-                                개설거절
-                            </button>
-                        </div>
+                        {% endif %}
+                        {% if lect.lect_state.state_no == 3 %}
+                            {% if is_logined and logined_user.user_stu != lect.lect_chief.user_stu and not is_in %}
+                                <!--=======신청하기 버튼, 한번 신청하기 버튼을 누르면 없어지도록 수정======-->
+                                <div style="display: flex; justify-content: center; ">
+                                    <button type="button" class="btn btn-outline-success btn-lg"
+                                            style="width: 200px; font-weight: bold" onclick="alert('신청이 완료되었습니다.')">
+                                        신청하기
+                                    </button>
+                                </div>
+                            {% endif %}
+                            <!--=======강의실로 이동하기 버튼, 신청을 하지 않으면 뜨지 않고, 신청 후 버튼이 뜨도록 수정, 누르면 강의실로 이동함======-->
+                            <!--=======강의, 스터디 게시판에서만 사용하기 때문에 취미모임 게시판일 경우에는 뜨지 않도록 수정======-->
+                            {% if is_in %}
+                                <div style="display: flex; justify-content: center; ">
+                                    <button type="button" class="btn btn-outline-primary btn-lg"
+                                            style="font-weight: bold">
+                                        강의실로 이동하기
+                                    </button>
+                                </div>
+                            {% endif %}
+                            <!--=======강의개설신청 게시판에 들어가면 보이는 버튼들, 강의/스터디/취미모임 게시판에서는 안보이도록 수정, 강의 개설 신청 승인/거절 버튼======-->
+                        {% elif lect.lect_state.state_no == 1 %}
+                            <div style="display: flex; justify-content: center; ">
+                                <!--승인-->
+                                <button type="button" class="btn btn-outline-success btn-lg"
+                                        style="width: 200px; font-weight: bold" onclick="goApply()">
+                                    개설승인
+                                </button>
+                                <!--거절-->
+                                <button type="button" class="btn btn-outline-danger btn-lg"
+                                        style="width: 200px; margin-left: 10px; font-weight: bold"
+                                        onclick="return confirm('승인을 거절하시겠습니까?')"
+                                        href="javascript:void(0);" data-toggle="modal" data-target="#lect_refuse"
+                                        class="site-button gray">
+                                    개설거절
+                                </button>
+                            </div>
+                        {% else %}
+                            개설 거절됨: {{ lect.lect_reject_reason }}
+                        {% endif %}
                         <!---->
                         <!-- 거절 버튼 누르면 나오는 창 -->
                         <div class="modal fade modal-bx-info" id="lect_refuse" tabindex="-1" role="dialog"
@@ -309,19 +291,19 @@
                                         <div class="tab-content nav">
                                             <div id="login" class="tab-pane active"
                                                  style="margin-bottom: -25px; margin-top: 10px">
-                                                    <!--승인 거절 사유 입력창-->
-                                                    <div class="form-group">
-                                                        <input class="form-control"
-                                                               name="bank_reject_reason"
-                                                               placeholder="승인거절 사유를 입력해주세요"
-                                                               type="text"/>
-                                                    </div>
-                                                    <!--거절버튼-->
-                                                    <div class="form-group">
-                                                        <button type="submit" class="site-button btn-block button-md"
-                                                                onclick="alert('승인이 거절되었습니다')">입력
-                                                        </button>
-                                                    </div>
+                                                <!--승인 거절 사유 입력창-->
+                                                <div class="form-group">
+                                                    <input class="form-control"
+                                                           name="lect_reject_reason"
+                                                           placeholder="승인거절 사유를 입력해주세요"
+                                                           type="text"/>
+                                                </div>
+                                                <!--거절버튼-->
+                                                <div class="form-group">
+                                                    <button type="submit" class="site-button btn-block button-md"
+                                                            onclick="alert('승인이 거절되었습니다')">입력
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
