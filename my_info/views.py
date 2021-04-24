@@ -11,10 +11,10 @@ from django.conf import settings
 # Create your views here.
 def my_info(request):  # 내 정보 출력
     if is_logined(request):
-        my_board_list = Board.objects.filter(board_writer=my_info).order_by("board_type_no").order_by("-board_created")
-        my_comment_list = Comment.objects.filter(comment_writer=my_info).order_by(
+        my_board_list = Board.objects.filter(board_writer=get_logined_user(request)).order_by("board_type_no").order_by("-board_created")
+        my_comment_list = Comment.objects.filter(comment_writer=get_logined_user(request)).order_by(
             "comment_board_no__board_type_no").order_by("-comment_created")
-        my_bank_list = Bank.objects.filter(bank_used_user=my_info).order_by("-bank_used")
+        my_bank_list = Bank.objects.filter(bank_used_user=get_logined_user(request)).order_by("-bank_used")
         my_wait_request = UserUpdateRequest.objects.filter(  # 이름 변경 신청한 것.
             Q(updated_user=get_logined_user(request)) & Q(updated_state__state_no=1))
         my_update_request_list = UserUpdateRequest.objects.filter(updated_user=get_logined_user(request))
