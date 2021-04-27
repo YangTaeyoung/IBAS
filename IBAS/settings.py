@@ -65,6 +65,9 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.naver',
     'allauth.socialaccount.providers.kakao',
+
+    # form 템플릿 css 처리 도와주는 장고템플릿 언어
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [

@@ -1,6 +1,9 @@
+from django.contrib import messages
+from django.forms import formset_factory
 from django.shortcuts import render, redirect, reverse
 from DB.models import *
 from django.db.models import Q
+from board.forms import *
 from pagination_handler import *
 from file_controller import *
 from alarm.alarm_controller import create_comment_alarm, create_comment_ref_alarm
@@ -306,32 +309,35 @@ def contest_list(request):
 # ---- contest_register ---- #
 # : 공모전 글 등록하기
 # 작성자 : 유동현
-# 마지막 수정 일시 : 2021.04.13
-# 수정내용 :
+# 마지막 수정 일시 : 2021.04.27
+# 수정내용 : 폼으로 처리하는 걸로 코드 수정
 # 버그 처리해야할 사항 :: 등록 버튼 누르고 가끔 로딩되면서 화면전환이 늦어질 때가 있는데,
 #                      그 때 등록버튼 연타하면 클릭한수만큼 동일한 게시글 작성됨.
 def contest_register(request):  # 공모전 등록
     if request.method == 'POST':
-        print(request.session.get('user_stu'))
-        contest = ContestBoard.objects.create(
-            contest_title=request.POST.get('contest_title'),
-            contest_asso=request.POST.get('contest_asso'),
-            # %Y-%m-%d 형태로 저장, DatetimeField 에서 %Y-%m-%d 15:00: 00로 변환됨/ 추후 UTC 고려해서 수정해야할듯
-            contest_start=date.fromisoformat(request.POST.get('contest_start')),
-            # %Y-%m-%d 형태로 저장, DatetimeField 에서 %Y-%m-%d 15:00: 00로 변환됨/ 추후 UTC 고려해서 수정해야할듯
-            contest_deadline=date.fromisoformat(request.POST.get('contest_deadline')),
-            contest_topic=request.POST.get('contest_topic'),
-            contest_cont=request.POST.get('contest_cont'),
-            contest_writer=User.objects.get(pk=request.session.get('user_stu')),
-        )
+        contest_form = ContestForm(request.POST)
+        file_form = FileForm(request.POST, request.FILES)
 
-        upload_new_files(request, contest)  # 파일 업로드
+        if contest_form.is_valid() and file_form.is_valid():
+            # 학번 오류 처리 필요
+            # 파일 저장시 오류 발생하거나, 로딩 중 저장 여러번 누르는 등 부적절한 저장 피하기 => 트랜젝션
+            contest = contest_form.save(
+                contest_writer=User.objects.get(pk=request.session.get('user_stu'))
+            )
+            file_form.save(instance=contest)
+        else:
+            pass
 
+        # form의 유효성과 관계없이 게시글 목록으로 이동
         return redirect(reverse('contest_list'))
 
     # 목록에서 신규 등록 버튼 눌렀을때
     elif request.method == 'GET':
-        return render(request, 'contest_register.html')
+        form_context = {
+            'contestform': ContestForm(),
+            'fileform': FileForm(),
+        }
+        return render(request, 'contest_register.html', form_context)
 
 
 # ---- contest_detail ---- #
@@ -341,7 +347,6 @@ def contest_register(request):  # 공모전 등록
 # 수정내용 :
 def contest_detail(request, contest_no):  # 게시판 상세 페이지로 이동
     if request.method == 'GET':
-        print('왜 안돼'+str(contest_no))
         context = get_context_of_contest_(contest_no)
         return render(request, 'contest_detail.html', context)
 
@@ -381,20 +386,22 @@ def contest_delete(request):
 def contest_update(request):
     # 게시물 상세보기에서 수정하기 버튼 눌렀을 때
     if request.method == "GET":
-        context = get_context_of_contest_(request.GET.get('contest_no'))
-
+        contest_no = request.GET.get('contest_no')
+        contest = ContestBoard.objects.get(pk=contest_no)
+        context = {
+            'contestform': ContestForm(instance=ContestBoard.objects.get(pk=contest_no)),
+            'fileform': FileForm(),
+            'contest_file_list': ContestFile.objects.filter(contest_no=contest)
+        }
         return render(request, 'contest_register.html', context)
 
     # 게시물 수정을 완료했을 때
     elif request.method == "POST":
-        contest = ContestBoard.objects.get(pk=request.POST.get('contest_no'))  # 맞는 것을 가져온다.
-        contest.contest_title = request.POST.get('contest_title')
-        contest.contest_cont = request.POST.get('contest_cont')
-        contest.contest_start = request.POST.get('contest_start')
-        contest.contest_deadline = request.POST.get('contest_deadline')
-        contest.contest_topic = request.POST.get('contest_topic')
-        contest.contest_asso = request.POST.get('contest_asso')
-        contest.save()
+        contest_form = ContestForm(request.POST)
+        if contest_form.is_valid() and contest_form.has_changed():
+            contest = contest_form.update()
+
+        file_form = FileForm(request.POST, request.FILES)
 
         contest_files = ContestFile.objects.filter(contest_no=contest)  # 게시글 파일을 불러옴
         remove_files_by_user(request, contest_files)  # 사용자가 삭제한 파일을 제거

@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
+{% load widget_tweaks %}
     <script src="{% static 'js/register.js' %}"></script>
     <body>
     <div class="page-wraper">
@@ -23,7 +24,7 @@
             </div>
             <!--===============================================입력란=========================================================-->
 
-            <form action="{% if contest is None %}{% url 'contest_register' %}{% else %}{% url 'contest_update' %}{% endif %}"
+            <form action="{% if contestform.contest_no.value is None %}{% url 'contest_register' %}{% else %}{% url 'contest_update' %}{% endif %}"
                   class="add-listing-form" method="POST" enctype="multipart/form-data">
 
                 {% csrf_token %}
@@ -32,19 +33,20 @@
                         <div class="container">
                             <form class="add-listing-form">
                                 <!--=====================-->
+                                    <!-- 번호 -->
+                                    <!-- hidden input -->
+                                    {{ contestform.contest_no }}
                                     <!--제목-->
                                     <div class="content-box">
                                         <div class="content-header">
                                           <h3 class="title">
-                                            공모전 이름
+                                              {{ contestform.contest_title.label }}
                                           </h3>
                                         </div>
                                         <div class="content-body">
                                           <div class="form-group">
                                             <!--제목 입력란-->
-                                            <input type="text" name="contest_title" value="{{ contest.contest_title }}"
-                                                   class="form-control" placeholder="공모전 이름을 입력하세요"
-                                                   style="font-size: 25px; height: 70px;">
+                                            {% render_field contestform.contest_title class="form-control" style="font-size: 25px; height: 70px;" %}
                                           </div>
                                         </div>
                                     </div>
@@ -52,14 +54,13 @@
                                     <div class="content-box">
                                         <div class="content-header">
                                           <h3 class="title">
-                                            공모전 주체기관
+                                              {{ contestform.contest_asso.label }}
                                           </h3>
                                         </div>
                                         <div class="content-body">
                                           <div class="form-group">
                                               <!--주체기관 입력란-->
-                                            <input type="text" name="contest_asso" value="{{ contest.contest_asso }}"
-                                                   class="form-control" placeholder="주체기관을 입력하세요">
+                                              {% render_field contestform.contest_asso class="form-control" %}
                                           </div>
                                         </div>
                                     </div>
@@ -67,14 +68,13 @@
                                     <div class="content-box">
                                         <div class="content-header">
                                           <h3 class="title">
-                                            공모전 주제
+                                            {{ contestform.contest_topic.label }}
                                           </h3>
                                         </div>
                                         <div class="content-body">
                                           <div class="form-group">
                                             <!--공모전 주제란 / 여기에 입력한 것은 게시글 리스트에 보여지는 소개에 들어감-->
-                                            <textarea name="contest_topic" class="form-control"
-                                                      placeholder="공모전 주제를 적어주세요">{{ contest.contest_topic }}</textarea>
+                                              {% render_field contestform.contest_topic class="form-control" %}
                                           </div>
                                         </div>
                                     </div>
@@ -82,15 +82,13 @@
                                     <div class="content-box">
                                         <div class="content-header">
                                           <h3 class="title">
-                                            공모전 시작일
+                                            {{ contestform.contest_start.label }}
                                           </h3>
                                         </div>
                                         <div class="content-body">
                                           <div class="form-group">
                                             <!--공모전 시작일 입력란-->
-                                            <input type="date" name="contest_start"
-                                                   value="{{ contest.contest_start|date:"Y-m-d" }}"
-                                                   class="form-control">
+                                            {% render_field contestform.contest_start class="form-control" %}
                                           </div>
                                         </div>
                                     </div>
@@ -98,15 +96,13 @@
                                     <div class="content-box">
                                         <div class="content-header">
                                           <h3 class="title">
-                                            공모전 마감일
+                                            {{ contestform.contest_deadline.label }}
                                           </h3>
                                         </div>
                                         <div class="content-body">
                                           <div class="form-group">
                                              <!--공모전 마감일 입력란-->
-                                            <input type="date" name="contest_deadline"
-                                                   value="{{ contest.contest_deadline|date:"Y-m-d" }}"
-                                                   class="form-control">
+                                            {% render_field contestform.contest_deadline class="form-control" %}
                                           </div>
                                         </div>
                                     </div>
@@ -120,14 +116,14 @@
                                         <div class="content-body">
                                           <div class="form-group">
                                             <!--공모전 포스터 입력란-->
-                                            <input type="file" name="upload_file"
-                                                       accept=".xlsx,.xls,image/*,.doc,.docx,video/*,.ppt,.pptx,.txt,.pdf,.py,.java"
-                                                       multiple>
+                                              {% render_field fileform.upload_file %}
                                           </div>
+
                                           <!-- 이미 존재하고 있던 파일: 삭제 가능 (수정모드)-->
-                                        {% if contest is not None %}
+                                        {% if contestform.contest_no.value is not None %}
                                             <div class="form-group">
                                                 <div id="image-cont" class="image-cont">
+                                                    <!-- -------------------------------------------------------------- -->
                                                     {% for contest_file in contest_file_list %}
                                                         <div id="image-card-{{ contest_file.file_id }}"
                                                              class="image-card">
@@ -148,6 +144,7 @@
                                                             onload = decisionIcon(document.getElementById("image-{{ contest_file.file_id }}"), '{{ contest_file.file_path }}');
                                                         </script>
                                                     {% endfor %}
+                                                    <!-- -------------------------------------------------------------- -->
                                                 </div>
                                             </div>
                                         {% endif %}
@@ -156,27 +153,24 @@
                                     <!--공모전 상세-->
                                     <div class="content-box editor">
                                         <div class="content-header">
-                                          <h3 class="title">
-                                            공모전 상세설명
-                                          </h3>
+                                            <h3 class="title">
+                                                {{ contestform.contest_cont.label }}
+                                            </h3>
                                         </div>
                                         <div class="content-body">
-                                          <div class="form-group">
-                                            <!--공모전 상세 입력란-->
-                                            <textarea name="contest_cont" type="text"
-                                                      class="jqte-test">{{ contest.contest_cont }}</textarea>
-                                          </div>
+                                            <div class="form-group">
+                                                <!--공모전 상세 입력란-->
+                                                {% render_field contestform.contest_cont class="jqte-test" %}
+                                            </div>
                                         </div>
                                     </div>
-                                {% if contest is not None %}
-                                    <input type="hidden" name="contest_no" value="{{ contest.contest_no }}">
-                                {% endif %}
+
                                 <!--=====================-->
                                 <!--등록하기 버튼, 누르면 게시글 상세보기로-->
                                 <!--최초 글작성 시 나오는 버튼-->
                                 <div style="display: grid; justify-items: center">
                                     <button class="site-button btn-block button-md" type="submit" style="width: 30%">
-                                        {% if contest is None %}
+                                        {% if contestform.contest_no.value is None %}
                                             등록하기
                                         {% else %}
                                             수정하기

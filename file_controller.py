@@ -120,24 +120,23 @@ def delete_all_files_of_(obj):
 # : 새로 입력받은 파일들을 업로드
 # 마지막 수정 일시 : 2021.04.13
 # 작성자 : 유동현
-def upload_new_files(request, obj):
+def upload_new_files(files_to_upload, instance):
     # 새로 사용자가 파일을 첨부한 경우
     # request.FILES 는 dict 형태 (key : value)
     # - key 는 html에서의 form 태그 name
     # - value 는 해당 form에서 전송받은 file들 / uploadedFile 객체 형태
-    if "upload_file" in request.FILES:  # 넘겨받은 폼 태그 이름중에 "contest_file"이 있으면
-        for file in request.FILES.getlist("upload_file"):  # 각각의 파일을 uploadedFile로 받아옴
-            if isinstance(obj, ContestBoard):
-                ContestFile.objects.create(
-                    contest_no=ContestBoard.objects.get(pk=obj.contest_no),
-                    file_path=file,  # uploadedFile 객체를 imageField 객체 할당
-                    file_name=file.name.replace(' ', '_')  # imageField 객체에 의해 파일 이름 공백이 '_'로 치환되어 서버 저장
-                                                           # 따라서 db 에도 이름 공백을 '_'로 치환하여 저장
-                )
-            elif isinstance(obj, Board):
-                BoardFile.objects.create(
-                    board_no=Board.objects.get(pk=obj.board_no),
-                    file_path=file,  # uploadedFile 객체를 imageField 객체 할당
-                    file_name=file.name.replace(' ', '_')  # imageField 객체에 의해 파일 이름 공백이 '_'로 치환되어 서버 저장
-                                                           # 따라서 db 에도 이름 공백을 '_'로 치환하여 저장
-                )
+    for file in files_to_upload:  # 각각의 파일을 uploadedFile로 받아옴
+        if isinstance(instance, ContestBoard):
+            ContestFile.objects.create(
+                contest_no=ContestBoard.objects.get(pk=instance.contest_no),
+                file_path=file,  # uploadedFile 객체를 imageField 객체 할당
+                file_name=file.name.replace(' ', '_')  # imageField 객체에 의해 파일 이름 공백이 '_'로 치환되어 서버 저장
+                                                       # 따라서 db 에도 이름 공백을 '_'로 치환하여 저장
+            )
+        elif isinstance(instance, Board):
+            BoardFile.objects.create(
+                board_no=Board.objects.get(pk=instance.board_no),
+                file_path=file,  # uploadedFile 객체를 imageField 객체 할당
+                file_name=file.name.replace(' ', '_')  # imageField 객체에 의해 파일 이름 공백이 '_'로 치환되어 서버 저장
+                                                       # 따라서 db 에도 이름 공백을 '_'로 치환하여 저장
+            )
