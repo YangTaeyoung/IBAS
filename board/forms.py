@@ -1,8 +1,8 @@
 import os
 import sys
 from django import forms
-from DB.models import ContestBoard, ContestFile
-from file_controller import upload_new_files
+from DB.models import ContestBoard
+from file_controller import *
 
 
 class ContestForm(forms.Form):
@@ -19,7 +19,7 @@ class ContestForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         instance = kwargs.get('instance')
-        if instance is not None:
+        if instance is not None and isinstance(instance, ContestBoard):
             super().__init__(auto_id=False, initial={
                 'contest_no': instance.contest_no,
                 'contest_title': instance.contest_title,
@@ -30,7 +30,7 @@ class ContestForm(forms.Form):
                 'contest_cont': instance.contest_cont,
             })
         else:
-            super().__init__(*args, **kwargs)
+            super().__init__(auto_id=False, *args, **kwargs)
 
     def save(self, contest_writer):
         return ContestBoard.objects.create(
@@ -87,8 +87,9 @@ class FileForm(forms.Form):
         # 유효성 검사를 통해서 1개 이상의 이미지를 받을 것.
         # 이 폼은 여러개의 파일을 갖고 있을 것이다.
         # upload_new_files 이용해서 저장하기
+        # contest 파일 저장할 때 이미지와 문서 분리하기..?
         upload_new_files(
-            files_to_upload=self.files.getlist('upload_file'),
+            files_to_upload=self.files,
             instance=instance
         )
 
@@ -99,26 +100,32 @@ class FileForm(forms.Form):
         # 함수 호출 스택 : clean(0계층) << _clean_form(1계층) << full_clean(2계층) << errors(3계층) << is_valid(4계층)
         # 즉 is_valid 를 호출한 함수 이름을 묻는 것.
         calling_function = sys._getframe(5).f_code.co_name
-        if calling_function == 'contest_register':
+        if calling_function in ['contest_register', 'contest_update']:
             if not self._check_contest_thumbnail():
                 raise forms.ValidationError('공모전 이미지를 적어도 한 개 이상 등록해주세요!')
-        elif calling_function == 'contest_update':
-            # 기존에 있던 파일 목록 가져오기.
-            pass
 
     # protected
     # contest 경우에는 이미지 파일이 항상 첫번째로 오게 해야함.
     # contest_list 에서 표지 보여줄 때 항상 첫번째로 저장되어 있는 파일을 가져오기 때문
     # 이미지 파일이 없는 경우, 보여줄 표지가 없기 때문에 오류!
     def _check_contest_thumbnail(self):
-        img_ext = ['.jpg', '.jpeg', '.png', '.bmp']
+        img_ext = ['.jpg', '.jpeg', '.png', '.bmp', '.gif']
 
-        files = self.files.getlist('upload_file')
-        for idx, file in enumerate(files):
-            path, ext = os.path.splitext(str(file))
-            if ext in img_ext:
-                files[0], files[idx] = files[idx], files[0]
-                self.files = files
+        # 로컬 저장소에 이미지 파일이 있으면 상관없음.
+        # 이미지 파일은 항상 첫번째에 있기 때문에, 가장 파일만 보고 판단 가능
+        for key, value in self.data:
+            if 'exist_file_path' in key:
+                if is_image(value):
+                    return True
+                else:
+                    break
+
+        files = self.files.getlist('upload_file')  # InMemoryUploadedFile 객체 리스트 (파일명으로 임시 저장되어 있음)
+        for file in files:
+            if is_image(file):
                 return True
 
         return False
+
+
+

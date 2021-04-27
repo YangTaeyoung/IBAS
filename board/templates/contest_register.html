@@ -109,15 +109,19 @@
                                     <!--공모전 포스터-->
                                     <div class="content-box">
                                         <div class="content-header">
-                                          <h3 class="title">
-                                            공모전 포스터 및 첨부파일
-                                          </h3>
+                                            <h3 class="title">
+                                                공모전 포스터 및 첨부파일
+                                            {% if fileform.errors %}
+                                                <span style="color:red">{{ fileform.errors }}</span>
+                                            {% endif %}
+                                            </h3>
                                         </div>
                                         <div class="content-body">
-                                          <div class="form-group">
+                                            <div class="form-group">
                                             <!--공모전 포스터 입력란-->
-                                              {% render_field fileform.upload_file %}
-                                          </div>
+                                                {% render_field fileform.upload_file %}
+                                            </div>
+
 
                                           <!-- 이미 존재하고 있던 파일: 삭제 가능 (수정모드)-->
                                         {% if contestform.contest_no.value is not None %}

@@ -4,13 +4,6 @@ import os
 from IBAS.settings import MEDIA_ROOT
 
 
-def get_ext(file_path):
-    dot_idx = str(file_path).rfind(".")
-    if dot_idx != -1:
-        return str(file_path)[dot_idx:].lower()
-    else:
-        return str(file_path).lower()
-
 # 파일 이름을 반환 파라미터(파일 경로)
 def get_file_name(file_path):
     slash_idx = str(file_path).rfind("/")
@@ -19,13 +12,16 @@ def get_file_name(file_path):
     else:
         return str(file_path)
 
+
 # 이미지인지 확인하는 함수. 파라미터(파일 경로)
 def is_image(file_path):
-    ext = get_ext(file_path)
-    if ext == ".jpg" or ext == ".gif" or ext == ".bmp" or ext == ".png":
+    path, ext = os.path.splitext(str(file_path))
+
+    if ext in ['.jpg', '.jpeg', '.png', '.bmp', '.gif']:
         return True
     else:
         return False
+
 
 # 파일인지 확인 하는 함수 파라미터(파일 경로).
 def is_file(file_path):
@@ -125,15 +121,16 @@ def upload_new_files(files_to_upload, instance):
     # request.FILES 는 dict 형태 (key : value)
     # - key 는 html에서의 form 태그 name
     # - value 는 해당 form에서 전송받은 file들 / uploadedFile 객체 형태
-    for file in files_to_upload:  # 각각의 파일을 uploadedFile로 받아옴
-        if isinstance(instance, ContestBoard):
+    if isinstance(instance, ContestBoard):
+        for file in files_to_upload:  # 각각의 파일을 uploadedFile로 받아옴
             ContestFile.objects.create(
                 contest_no=ContestBoard.objects.get(pk=instance.contest_no),
                 file_path=file,  # uploadedFile 객체를 imageField 객체 할당
                 file_name=file.name.replace(' ', '_')  # imageField 객체에 의해 파일 이름 공백이 '_'로 치환되어 서버 저장
                                                        # 따라서 db 에도 이름 공백을 '_'로 치환하여 저장
             )
-        elif isinstance(instance, Board):
+    elif isinstance(instance, Board):
+        for file in files_to_upload:
             BoardFile.objects.create(
                 board_no=Board.objects.get(pk=instance.board_no),
                 file_path=file,  # uploadedFile 객체를 imageField 객체 할당

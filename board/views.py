@@ -398,15 +398,13 @@ def contest_update(request):
     # 게시물 수정을 완료했을 때
     elif request.method == "POST":
         contest_form = ContestForm(request.POST)
-        if contest_form.is_valid() and contest_form.has_changed():
-            contest = contest_form.update()
-
         file_form = FileForm(request.POST, request.FILES)
 
-        contest_files = ContestFile.objects.filter(contest_no=contest)  # 게시글 파일을 불러옴
-        remove_files_by_user(request, contest_files)  # 사용자가 삭제한 파일을 제거
-
-        upload_new_files(request, contest)  # 파일 업로드
+        if contest_form.is_valid() and file_form.is_valid():
+            contest = contest_form.update()
+            contest_files = ContestFile.objects.filter(contest_no=contest)  # 게시글 파일을 불러옴
+            remove_files_by_user(request, contest_files)  # 사용자가 삭제한 파일을 제거
+            file_form.save(contest)  # 유효성 검사 문제. 썸네일이 보장되는가..?
 
         # 수정된 게시글 페이지로 이동
         return redirect("contest_detail", contest_no=contest.contest_no)
