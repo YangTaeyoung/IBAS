@@ -379,8 +379,8 @@ def contest_delete(request):
 # ---- contest_update ---- #
 # : 공모전 글 수정
 # 작성자 : 유동현
-# 마지막 수정 일시 : 2021.04.13
-# 수정내용 :
+# 마지막 수정 일시 : 2021.04.29
+# 수정내용 : 폼으로 처리하도록 변경
 # 버그 처리해야할 사항 :: 수정 버튼 누르고 가끔 로딩되면서 화면전환이 늦어질 때가 있는데,
 #                      그 때 수정버튼 연타하면 클릭한수만큼 동일한 게시글 작성됨.
 def contest_update(request):
@@ -406,8 +406,10 @@ def contest_update(request):
             remove_files_by_user(request, contest_files)  # 사용자가 삭제한 파일을 제거
             file_form.save(contest)  # 유효성 검사 문제. 썸네일이 보장되는가..?
 
-        # 수정된 게시글 페이지로 이동
-        return redirect("contest_detail", contest_no=contest.contest_no)
+            # 수정된 게시글 페이지로 이동
+            return redirect("contest_detail", contest_no=contest.contest_no)
+        else:
+            return redirect(reverse('contest_list'))
 
 
 # ---- contest_comment_update ---- #
