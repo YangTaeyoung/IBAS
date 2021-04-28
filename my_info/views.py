@@ -4,33 +4,27 @@ from django.shortcuts import render, redirect, reverse
 from DB.models import Board, User, Comment, Lect, LectBoard, BoardType, UserRole, Bank, UserAuth, UserUpdateRequest, \
     StateInfo
 from django.db.models import Q
-
-from user_controller import get_logined_user, get_user
+from user_controller import get_logined_user, get_user, is_logined
 from django.conf import settings
 
 
 # Create your views here.
 def my_info(request):  # 내 정보 출력
-    if request.session.get("user_stu") is not None:
-        my_info = get_logined_user(request)
-        my_board_list = Board.objects.filter(board_writer=my_info).order_by("board_type_no").order_by("-board_created")
-        my_comment_list = Comment.objects.filter(comment_writer=my_info).order_by(
+    if is_logined(request):
+        my_board_list = Board.objects.filter(board_writer=get_logined_user(request)).order_by("board_type_no").order_by("-board_created")
+        my_comment_list = Comment.objects.filter(comment_writer=get_logined_user(request)).order_by(
             "comment_board_no__board_type_no").order_by("-comment_created")
-        my_bank_list = Bank.objects.filter(bank_used_user=my_info).order_by("-bank_used")
-        my_wait_request = UserUpdateRequest.objects.filter( # 이름 변경 신청한 것.
+        my_bank_list = Bank.objects.filter(bank_used_user=get_logined_user(request)).order_by("-bank_used")
+        my_wait_request = UserUpdateRequest.objects.filter(  # 이름 변경 신청한 것.
             Q(updated_user=get_logined_user(request)) & Q(updated_state__state_no=1))
         my_update_request_list = UserUpdateRequest.objects.filter(updated_user=get_logined_user(request))
-
 
         context = {
             "my_board_list": my_board_list,
             "my_comment_list": my_comment_list,
             "my_wait_request": my_wait_request,
             "my_update_request_list ": my_update_request_list,
-            "my_bank_list": my_bank_list,
-            "my_info": my_info,
-
-
+            "my_bank_list": my_bank_list
         }
         return render(request, 'my_info.html', context)
     else:
@@ -69,11 +63,14 @@ def user_update_request_aor(request):
 
     return redirect(reverse("my_info"))
 
-def is_default_pic(img_path):
-    return str(img_path) == "member/default/default.png"
 
 def get_default_pic_path():
     return "member/default/default.png"
+
+
+def is_default_pic(img_path):
+    return str(img_path) == get_default_pic_path()
+
 
 def user_pic_update(request):
     if request.method == "POST":
@@ -82,13 +79,12 @@ def user_pic_update(request):
         if user_pic is not None:
             if not is_default_pic(user.user_pic):  # 만약 사용자의 이미지가 디폴트 이미지가 아니라면
                 try:
-                    os.remove(settings.MEDIA_ROOT + "/" + str(user.user_pic))  # 프로필 이미지 삭제
+                    os.remove(settings.MEDIA_ROOT + "/" + str(user.user_pic))  # 프  로필 이미지 삭제
                 except FileNotFoundError:
                     pass
             # 새로운 이미지로 교체.
             user.user_pic = user_pic
             user.save()
-            request.session["user_pic"] = str(user.user_pic)
     return redirect(reverse("my_info"))
 
 
@@ -99,6 +95,6 @@ def user_pic_delete(request):
             os.remove(settings.MEDIA_ROOT + "/" + str(user.user_pic))  # 이전 파일 삭제
         except FileNotFoundError:
             pass
-    user.user_pic = "member/default/default.png"
-    request.session["user_pic"] = str(user.user_pic)
+    user.user_pic = get_default_pic_path()
+    user.save()
     return redirect(reverse("my_info"))

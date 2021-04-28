@@ -71,7 +71,7 @@
                     <div class="header-nav navbar-collapse collapse justify-content-end" id="navbarNavDropdown">
                         <ul class="nav navbar-nav">
                             <!--====================IBAS 상위메뉴로 가지고 있는 메뉴====================-->
-                            <li class="down active" style="padding-top: 6px"><a href="#">IBAS <i
+                            <li class="down active" style="padding-top: 6px"><a href="{% url 'introduce' %}">IBAS <i
                                     class="fa fa-chevron-down"></i></a>
                                 <ul class="sub-menu">
                                     <!-- 동아리 소개를 누를 경우 url로 넘어간다. -->
@@ -80,7 +80,7 @@
                                     <li><a href="{% url 'activity' %}">동아리 활동</a></li>
 
                                     {# 밑에 있는 회계내역, 예산지원 신청은 회원들만 신청을 할 수 있음. #}
-                                    {% if request.session.user_stu is not None %}
+                                    {% if is_logined %}
                                         <li><a href="{% url 'bank_list' %}">회계내역</a></li>
                                         <li><a href="{% url 'bank_support_board' %}">예산지원신청</a></li>
                                     {% endif %}
@@ -98,12 +98,12 @@
                                 </ul>
                             </li>
                             <!--====================강의실을 상위메뉴로 가지고 있는 메뉴====================-->
-                            <li class="down active" style="padding-top: 7px"><a href="#">강의실 <i
+                            <li class="down active" style="padding-top: 7px"><a href="{% url 'lect_view' type_no=1 %}">강의실 <i
                                     class="fa fa-chevron-down"></i></a>
                                 <ul class="sub-menu">
-                                    <li><a href="#">강의</a></li>
-                                    <li><a href="#">스터디</a></li>
-                                    <li><a href="#">강의개설신청</a></li>
+                                    <li><a href="{% url 'lect_view' type_no=1 %}">강의</a></li>
+                                    <li><a href="{% url 'lect_view' type_no=2 %}">스터디</a></li>
+                                    <li><a href="{% url 'lect_register' %}">강의개설신청</a></li>
                                 </ul>
                             </li>
                             <!--====================취미모임 메뉴====================-->
@@ -111,8 +111,8 @@
 
                             <!--====================로그인 여부에 따라 다르게 보이는 곳====================-->
                             <!--====================로그인했을 때====================-->
-                            {% if request.session.user_stu is not None %}
-                                {% if request.session.user_role <= 3 %}
+                            {% if is_logined %}
+                                {% if logined_user.user_role.role_no <= 4 %}
                                     <li class="active" style="padding-top: 7px; padding-right: 5px; padding-left: 5px"
                                         onclick="document.getElementById('hd-form-member-list').submit()">
 
@@ -136,28 +136,28 @@
                                     <!--아래 href에 마이페이지 링크 들어가야 함-->
                                     <a href="{% url 'my_info' %}" style="padding-right: 7px;">
                                         <!--==승인되지 않았을 때==-->
-                                        {% if request.session.user_auth == 3 %}
-                                            <img src="/media/{{ request.session.user_pic }}" width="35px" height="35px"
+                                        {% if logined_user.user_auth.auth_no == 3 %}
+                                            <img src="/media/{{ logined_user.user_pic }}" width="35px" height="35px"
                                                  style=" border: 2px solid #ff3d3d; border-radius: 17.5px; margin-right: 3px; max-height: 35px; max-width: 35px; min-height: 35px; min-width: 35px"
                                                  alt="현재 브라우저에서 지원하지 않는 형식입니다.">
-                                            {{ request.session.user_name }} 님
+                                            {{ logined_user.user_name }}님
                                             <ul class="sub-menu" style="text-align: center; width: 240px">
                                                 <a>아직 가입이 승인되지 않았습니다.<br/> 모든 기능이 제한됩니다.</a>
                                             </ul>
                                             <!--==승인되었을 때==-->
-                                        {% elif request.session.user_auth == 2 %}
-                                            <img src="/media/{{ request.session.user_pic }}" width="35" height="35"
-                                                 style=" border: 2px solid #ff5a00; border-radius: 17.5px; margin-right: 3px; max-height: 35px; max-width: 35px; min-height: 35px; min-width: 35px"
+                                        {% elif logined_user.user_auth.auth_no == 2 %}
+                                            <img src="/media/{{ logined_user.user_pic }}" width="35" height="35"
+                                                 style=" border: 2px solid #ffbf00; border-radius: 17.5px; margin-right: 3px; max-height: 35px; max-width: 35px; min-height: 35px; min-width: 35px"
                                                  alt="현재 브라우저에서 지원하지 않는 형식입니다.">
-                                            {{ request.session.user_name }} 님
+                                            {{ logined_user.user_name }}님
                                             <ul class="sub-menu" style="text-align: center; width: 240px">
                                                 <a>회비를 납부하지 않은 상태입니다.<br/> 대부분의 기능이 제한됩니다. </a>
                                             </ul>
                                         {% else %}
-                                            <img src="/media/{{ request.session.user_pic }}" width="35" height="35"
+                                            <img src="/media/{{ logined_user.user_pic }}" width="35" height="35"
                                                  style=" border: 2px solid #3cff44; border-radius: 17.5px; margin-right: 3px; max-height: 35px; max-width: 35px; min-height: 35px; min-width: 35px"
                                                  alt="현재 브라우저에서 지원하지 않는 형식입니다.">
-                                            {{ request.session.user_name }} 님
+                                            {{ logined_user.user_name }}님
                                             <ul class="sub-menu" style="text-align: center; width: 240px">
                                                 <a>계정이 활성화 되어 있습니다.</a>
                                             </ul>
