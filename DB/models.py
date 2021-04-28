@@ -210,7 +210,11 @@ class ContestComment(models.Model):
 
 
 def contest_file_upload_to(instance, filename):
-    return f'board/contest/{instance.contest_no.contest_no}/{filename}'
+    from file_controller import is_image
+    if is_image(filename):
+        return f'board/contest/{instance.contest_no.contest_no}/image/{filename}'
+    else:
+        return f'board/contest/{instance.contest_no.contest_no}/doc/{filename}'
 
 
 class ContestFile(File):
