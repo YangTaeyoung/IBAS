@@ -224,6 +224,7 @@ class ContestFile(File):
     class Meta:
         managed = False
         db_table = 'CONTEST_FILE'
+        ordering = ['-file_path']  # 항상 게시글의 이미지를 먼저 가져오기 위함.(썸네일 관련)
 
 
 class Lect(models.Model):

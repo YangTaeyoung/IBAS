@@ -89,23 +89,25 @@
                                         {% endfor %}
                                         <!--공모전 상세내용 나오는 곳-->
                                         <p class="font-weight-400"></p>
-
-                                        <p class="font-weight-300">{{ contest.contest_cont }}</p>
+                                            {% autoescape off %}
+                                                {{ contest.contest_cont }}
+                                            {% endautoescape %}
+                                        <p class="font-weight-300"></p>
 
                                         <!-- 첨부된 파일 불러오는 곳 -->
                                         <!-- download 쪽에 파일 경로 설정 -->
                                         {% if file_list %}
-                                        <div class="download-box">
-                                        {% for file in file_list %}
-                                            <!-- 첨부파일 1 -->
-                                             <i class="fa fa-download m-r15 "></i>
-                                            <a class="line2" href="#" download="{{ file.file_path }}">{{ file.file_name }}</a>
-                                                <!-- 파일 간 구분선 -->
-                                                {% if forloop.revcounter0 > 0 %}
-                                                    <div class="dlab-divider tb10 bg-gray-dark"></div>
-                                                {% endif %}
-                                        {% endfor %}
-                                        </div>
+                                            <div class="download-box">
+                                                {% for file in file_list %}
+                                                    <!-- 첨부파일 1 -->
+                                                     <i class="fa fa-download m-r15 "></i>
+                                                    <a class="line2" href="#" download="{{ file.file_path }}">{{ file.file_name }}</a>
+                                                        <!-- 파일 간 구분선 -->
+                                                        {% if forloop.revcounter0 > 0 %}
+                                                            <div class="dlab-divider tb10 bg-gray-dark"></div>
+                                                        {% endif %}
+                                                {% endfor %}
+                                            </div>
                                         {% endif %}
 
 

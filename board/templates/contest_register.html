@@ -55,7 +55,7 @@
 
                             - 아래와 같이 작성하면 히든 타입 태그를 한번에 관리 가능!
                                 {% for field in contestform.hidden_fields %}
-                                    {% field %}
+                                    {{  field  }}
                                 {% endfor %}
                             -->
                             <!-- hidden fields -->
@@ -88,9 +88,9 @@
                                     <input name="contest_title" max_length="100" required placeholder="공모전 이름을 입력하세요" value="국민은행 핀테크 공모">
                                     views.py 에서 수정 시에는, ContestForm 객체에 초기값을 할당해서 넘겨주기 때문.
 
-                            - css 효과 주기 (위의 경우에서, 단순히 css class 만 추가한 경우를 예시로 들었음.)
+                            - css 효과 주기
                                 1) {% load widget_tweaks %} 패키지 사용 선언
-                                2) render_field 태그 사용!!
+                                2) render_field 태그 사용!! (위의 경우에서, 단순히 css class 만 추가한 경우를 예시로 들었음.)
                                     {% render_field contestform.contest_title class="form-control" %}
                                     #  <input class="form-control" name="contest_title" max_length="100" required placeholder="공모전 이름을 입력하세요">
                             -->
@@ -210,7 +210,7 @@
                                 <!--입력란-->
                                     <div class="content-body">
                                         <div class="form-group">
-                                            {% render_field contestform.contest_cont class="jqte-test" %}
+                                                {% render_field contestform.contest_cont class="jqte-test" %}
                                         </div>
                                     </div>
                                 <!--입력란 끝-->

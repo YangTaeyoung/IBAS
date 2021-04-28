@@ -5,16 +5,16 @@ from file_controller import *
 
 class ContestForm(forms.Form):
     # -------------------------------------------- 프론트엔드가 알아야 할 부분 -------------------------------------------- #
-    contest_no = forms.CharField(widget=forms.HiddenInput(), required=False)                                           #
-    contest_title = forms.CharField(label="공모전 제목", max_length=100,                                                 #
-                                    widget=forms.TextInput(attrs={'placeholder': '공모전 이름을 입력하세요.'}))            #
-    contest_asso = forms.CharField(label="공모전 주체 기관", max_length=100,                                              #
-                                   widget=forms.TextInput(attrs={'placeholder': '주체기관을 입력하세요.'}))                #
-    contest_topic = forms.CharField(label="공모전 주제", max_length=500,                                                 #
-                                    widget=forms.TextInput(attrs={'placeholder': '공모전 주제를 적어주세요.'}))            #
-    contest_start = forms.DateTimeField(label="공모전 시작일", widget=forms.DateInput(attrs={'type': 'date'}))           #
-    contest_deadline = forms.DateTimeField(label="공모전 마감일", widget=forms.DateInput(attrs={'type': 'date'}))        #
-    contest_cont = forms.CharField(label="공모전 상세 설명")                                                              #
+    contest_no = forms.CharField(widget=forms.HiddenInput(), required=False)  #
+    contest_title = forms.CharField(label="공모전 제목", max_length=100,  #
+                                    widget=forms.TextInput(attrs={'placeholder': '공모전 이름을 입력하세요.'}))  #
+    contest_asso = forms.CharField(label="공모전 주체 기관", max_length=100,  #
+                                   widget=forms.TextInput(attrs={'placeholder': '주체기관을 입력하세요.'}))  #
+    contest_topic = forms.CharField(label="공모전 주제", max_length=500,  #
+                                    widget=forms.TextInput(attrs={'placeholder': '공모전 주제를 적어주세요.'}))  #
+    contest_start = forms.DateTimeField(label="공모전 시작일", widget=forms.DateInput(attrs={'type': 'date'}))  #
+    contest_deadline = forms.DateTimeField(label="공모전 마감일", widget=forms.DateInput(attrs={'type': 'date'}))  #
+    contest_cont = forms.CharField(label="공모전 상세 설명", widget=forms.Textarea())  #
     # -------------------------------------------- 프론트엔드가 알아야 할 부분 -------------------------------------------- #
     """
     [폼 객체 생성주기]
@@ -36,12 +36,12 @@ class ContestForm(forms.Form):
     ContestForm.contest_topic     =>    <input name="contest_topic" max_length="500" placeholder="공모전 주제를 적어주세요." required>
     ContestForm.contest_start     =>    <input type="date" name="contest_start" required>
     ContestForm.contest_deadline  =>    <input type="date" name="contest_deadline" required>
-    ContestForm.contest_cont      =>    <input name="contest_cont" required>  
+    ContestForm.contest_cont      =>    <textarea name="contest_cont" required>  
     ########################################################################################
     
     클래스 내부 함수는 백엔드 처리 부분.
     """
-    # overriding
+
     # 생성자 함수
     # 밑의 사용 예시
     # form_instance = ContestForm()  # 빈 객체 생성!
@@ -83,9 +83,9 @@ class ContestForm(forms.Form):
         contest.contest_asso = self.cleaned_data.get('contest_asso')
 
         if self.has_changed():
-            return contest.save()
-        else:
-            return contest
+            contest.save()
+
+        return contest
 
     # overriding
     # views.py 에서 is_valid() 호출시 내부에서 자동적으로 clean 호출
@@ -110,12 +110,78 @@ class ContestForm(forms.Form):
         return cleaned_data
 
 
+# 위에서는 간단히 forms.Form 을 상속받아서 폼이 어떻게 기능하는지에 대해 알아보았습니다!
+# forms.ModelForm 을 상속받아서 좀 더 깔끔하게 코딩해보자!!
+# Meta 클래스
+#  : 필드를 정의하는 부분 =>> 프론트엔드만 신경쓰면 됨.
+#   - model : 어떤 모델을 폼으로 변환할 것인지!
+#   - fields : 어떤 필드를 사용할 것인지. ex. fields = ('contest_no', 'contest_title',)
+#   - exclude : 어떤 필드를 사용하지 않을 것인지. ex. exclude = ('contest_writer',)
+#       (fields 와  exclude 둘 중에 하나는 무조건 명시해야함.)
+#   나머지는 뭐 보시면 이제 아시겠죠? 모르겠으면 위에랑 비교해서 보세용, 그래도 모르겠으면 레퍼런스 참고하세요
+
+class ContestModelForm(forms.ModelForm):
+    # -------------------------------------------- 프론트엔드가 알아야 할 부분 -------------------------------------------- #
+    class Meta:
+        model = ContestBoard
+        # fields = '__all__'
+        exclude = ('contest_writer',)  # fields 또는 exclude 필수
+        widgets = {
+            'contest_no': forms.HiddenInput(),
+            'contest_title': forms.TextInput(attrs={'placeholder': '공모전 이름을 입력하세요.'}),
+            'contest_asso': forms.TextInput(attrs={'placeholder': '주최기관을 입력하세요.'}),
+            'contest_topic': forms.TextInput(attrs={'placeholder': '공모전 주제를 적어주세요.'}),
+            'contest_start': forms.DateInput(attrs={'type': 'date'}),
+            'contest_deadline': forms.DateInput(attrs={'type': 'date'}),
+            'contest_cont': forms.Textarea(),
+        }
+        labels = {
+            'contest_title': '공모전 제목',
+            'contest_asso': '공모전 주최기관',
+            'contest_topic': '공모전 주제',
+            'contest_start': '공모전 시작일',
+            'contest_deadline': '공모전 마감일',
+            'contest_cont': '공모전 상세 설명',
+        }
+    # -------------------------------------------- 프론트엔드가 알아야 할 부분 -------------------------------------------- #
+
+    # 밑에서부터는 클래스 내장 함수. 백엔드만 신경쓰면 됨.
+    # ContestForm 과 다른 점은 save() 메소드 뿐! 나머지는 ContestForm 에서 복붙하면 됨.
+
+    # overriding
+    # forms.ModelForm 에는 save 메소드를 지원.
+    # super().save()
+    #       1) form.cleaned_data 안에 있는 값들로  모델 객체 생성
+    #       2) 해당 모델 객체의 save() 메소드를 호출해서 db 에 저장
+    #       3) 해당 모델 객체를 리턴.
+    #       super().save(commit=False) >> 2)을 생략.
+    def save(self, contest_writer):
+        contest = super().save(commit=False)  # db에 아직 저장하지는 않고, 객체만 생성
+        contest.contest_writer = contest_writer  # 유저정보 받고
+        contest.save()  # db에 저장
+
+        return contest
+
+    # ContestForm 과 코드 동일함.
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    # ContestForm 과 코드 동일함.
+    def update(self):
+        pass
+
+    # ContestForm 과 코드 동일함.
+    def clean(self):
+        pass
+
+
 class FileForm(forms.Form):
     # -------------------------------------------- 프론트엔드가 알아야 할 부분 -------------------------------------------- #
     upload_file = forms.FileField(
         required=False,
-        widget=forms.FileInput(attrs={'multiple': True,
-                                      'accept': ".xlsx,.xls,image/*,.doc,.docx,video/*,.ppt,.pptx,.txt,.pdf,.py,.java"})
+        widget=forms.FileInput(
+            attrs={'multiple': True,
+                   'accept': ".xlsx,.xls,image/*,.doc,.docx,video/*,.ppt,.pptx,.txt,.pdf,.py,.java"})
     )
     # -------------------------------------------- 프론트엔드가 알아야 할 부분 -------------------------------------------- #
     """
@@ -145,10 +211,11 @@ class FileForm(forms.Form):
         # upload_new_files 이용해서 저장하기
         # contest 파일 저장할 때 이미지와 문서 분리하기..?
         upload_new_files(
-            files_to_upload=self.files,
+            files_to_upload=self.files.getlist('upload_file'),
             instance=instance
         )
 
+    # overriding
     # is_valid 호출 시 내부에서 자동적으로 clean 호출
     def clean(self):
         cleaned_data = super().clean()
@@ -168,7 +235,7 @@ class FileForm(forms.Form):
     def _check_contest_thumbnail(self):
         # 로컬 저장소에 이미지 파일이 있으면 상관없음.
         # 이미지 파일은 항상 첫번째에 있기 때문에, 가장 파일만 보고 판단 가능
-        for key, value in self.data:
+        for key, value in self.data.items():
             if 'exist_file_path' in key:
                 if is_image(value):
                     return True
@@ -181,6 +248,3 @@ class FileForm(forms.Form):
                 return True
 
         return False
-
-
-
