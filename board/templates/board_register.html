@@ -24,11 +24,18 @@
                     </div>
                 </a>
             </div>
+
+        {% load widget_tweaks %}
             <!--===============================================입력란=========================================================-->
-            <form action="{% if board is None %}{% url 'board_register' %}{% else %}{% url 'board_update' %}{% endif %}"
+            <form action="{% if board_no is None %}{% url 'board_register' %}{% else %}{% url 'board_update' board_no %}{% endif %}"
                   class="add-listing-form" method="post" enctype="multipart/form-data">
-                <input type="hidden" name="board_type_no" value="{{ board_type_no }}">
+
                 {% csrf_token %}
+            <!--히든태그-->
+                {% for field in board_form.hidden_fields %}
+                        {{ field }}
+                {% endfor %}
+
                 <div class="content-block">
                     <div class="section-full content-inner bg-white">
                         <div class="container">
@@ -40,21 +47,19 @@
                                 </div>
 
                                 <div class="content-body">
-                                    <!--제목 입력란-->
                                     <div class="form-group">
-                                        <input type="text" name="board_title" value="{{ board.board_title }}"
-                                               class="form-control" placeholder="제목을 입력하세요"
-                                               style="font-size: 25px; height: 70px;">
+                                        <!--제목 입력란-->
+                                        {% render_field board_form.board_title class="form-control" style="font-size: 25px; height: 70px;"%}
+
                                         <br/>
+
                                         <!--이미지, 파일 업로드란-->
                                         <div class="form-group">
-                                            <input type="file" name="upload_file"
-                                                   accept=".xlsx,.xls,image/*,.doc,.docx,video/*,.ppt,.pptx,.txt,.pdf,.py,.java,.txt,.ipynb,.c,.cpp,.r,.sql,.csv,.kt,.html,.js,.css,.zip,.apk,.shp,.shx,.dbf,.ini,.cpg,.alz,.7z,.rar,.msi,.psd,.hwp,.egg,.jar"
-                                                   multiple><!-- accept는 첨부파일 확장자를 올리는 것. 추가할 것이 있으면 저기에 추가할 것.-->
+                                           {{ file_form.upload_file }}
                                         </div>
                                     </div>
                                     <!-- 이미 존재하고 있던 이미지: 삭제 가능 (수정모드)-->
-                                    {% if board is not None %}
+                                    {% if board_no is not None %}
                                         <div class="form-group">
                                             <div id="image-cont" class="image-cont">
                                                 {% for board_file in file_list %}
@@ -82,21 +87,18 @@
                                     {% endif %}
                                     <!--내용입력란-->
                                     <div class="form-group">
-                                            <textarea name="board_cont" type="text"
-                                                      class="jqte-test">{{ board.board_cont }}</textarea>
+                                        {% render_field board_form.board_cont class="jqte-test" %}
                                         <!--input-->
                                     </div>
                                 </div>
                             </div>
-                            {% if board is not None %}
-                                <input type="hidden" name="board_no" value="{{ board.board_no }}">
-                            {% endif %}
+
                             <!--=====================-->
                             <!--등록하기 버튼, 누르면 게시글 상세보기로-->
                             <!--최초 글작성 시 나오는 버튼-->
                             <div style="display: grid; justify-items: center">
                                 <button class="site-button btn-block button-md" type="submit" style="width: 30%">
-                                    {% if board is None %}
+                                    {% if board_no is None %}
                                         등록하기
                                     {% else %}
                                         수정하기

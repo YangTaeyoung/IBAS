@@ -26,7 +26,7 @@
             {% load widget_tweaks %}
 
             <!-- contestform.contest_no.value 에 관한 설명은 바로 아래의 [공모전 번호] 주석 참고! -->
-            <form action="{% if contestform.contest_no.value is None %}{% url 'contest_register' %}{% else %}{% url 'contest_update' %}{% endif %}"
+            <form action="{% if contest_no is None %}{% url 'contest_register' %}{% else %}{% url 'contest_update' contest_no %}{% endif %}"
                   class="add-listing-form" method="POST" enctype="multipart/form-data">
 
                 {% csrf_token %}
@@ -36,31 +36,6 @@
                             <form class="add-listing-form">
                                 <!--=====================-->
 
-                            <!--
-                            [공모전 번호]
-                            - hidden fields
-                            - forms.py 선언부 : contest_no = forms.CharField(widget=forms.HiddenInput(), required=False)
-                            - 객체 전달 흐름 :
-                                1) (views.py) ContestForm 객체 생성 (여기서 쓰이는 객체 이름 : contestform)
-                                2) (views.py) context 변수를 통해 해당 템플릿으로 전달.
-                                3) (template) context 변수 이름을 통해 사용. ex) contestform.contest_no
-                                4) (template) 폼 객체는 이 페이지에서 벗어나면 소멸!
-
-                            - 아래와 같이 변환됨
-                                {{ contestform.contest_no }}
-                                1) 글을 등록할 때 : <input type="hidden" name="contest_no">
-                                                  views.py 에서, 비어있는 폼 객체를 전달하면(폼 객체 초기값 설정 안하고!) value 값이 없음()
-                                2) 글을 수정할 때 : <input type="hidden" name="contest_no" value="60">
-                                                  views.py 에서 수정 시에는, ContestForm 객체에 초기값을 할당해서 넘겨주기 때문.
-
-                            - 아래와 같이 작성하면 히든 타입 태그를 한번에 관리 가능!
-                                {% for field in contestform.hidden_fields %}
-                                    {{  field  }}
-                                {% endfor %}
-                            -->
-                            <!-- hidden fields -->
-                                {{ contestform.contest_no }}
-                            <!-- hidden fields 끝 -->
 
                             <!--
                             [공모전 제목 / 주체기관 / 주제 / 시작일 / 마감일]
@@ -80,7 +55,7 @@
                                 3) (views.py) 적절하게 처리!
 
                             - 아래와 같이 변환됨
-                                {{ contestform.contest_title }}
+                                {{ contest_form.contest_title }}
                                 1) 글을 등록할 때 :
                                     <input name="contest_title" max_length="100" required placeholder="공모전 이름을 입력하세요">
                                     views.py 에서, 비어있는 폼 객체를 전달하면(폼 객체 초기값 설정 안하고!) value 값이 없음()
@@ -91,12 +66,12 @@
                             - css 효과 주기
                                 1) {% load widget_tweaks %} 패키지 사용 선언
                                 2) render_field 태그 사용!! (위의 경우에서, 단순히 css class 만 추가한 경우를 예시로 들었음.)
-                                    {% render_field contestform.contest_title class="form-control" %}
+                                    {% render_field contest_form.contest_title class="form-control" %}
                                     #  <input class="form-control" name="contest_title" max_length="100" required placeholder="공모전 이름을 입력하세요">
                             -->
                             <!-- visible_fields (contest_cont 는 하단에!)-->
-                                {% for field in contestform.visible_fields %}
-                                    {% if not field == contestform.contest_cont %}
+                                {% for field in contest_form.visible_fields %}
+                                    {% if not field == contest_form.contest_cont %}
                                         <div class="content-box">
 
                                             <!--레이블-->
@@ -109,7 +84,11 @@
                                             <!--입력란-->
                                             <div class="content-body">
                                                 <div class="form-group">
-                                                    {% render_field field class="form-control" %}
+                                                    {% if field == contest_form.contest_title %}
+                                                        {% render_field field class="form-control" style="font-size: 25px; height: 70px;"%}
+                                                    {% else %}
+                                                        {% render_field field class="form-control" %}
+                                                    {% endif %}
                                                 </div>
                                             </div>
 
@@ -156,33 +135,33 @@
                                 <!-- 파일 입력란 -->
                                     <div class="content-body">
                                         <div class="form-group">
-                                            {{  fileform.upload_file }}
+                                            {{  file_form.upload_file }}
                                         </div>
 
                                         <!-- 이 부분은 기존과 동일 -->
                                             <!-- 이미 존재하고 있던 파일: 삭제 가능 (수정모드)-->
-                                            {% if contestform.contest_no.value is not None %}
+                                            {% if contest_no is not None %}
                                                 <div class="form-group">
                                                     <div id="image-cont" class="image-cont">
                                                         <!-- -------------------------------------------------------------- -->
-                                                        {% for contest_file in contest_file_list %}
-                                                            <div id="image-card-{{ contest_file.file_id }}"
+                                                        {% for file in file_list %}
+                                                            <div id="image-card-{{ file.file_id }}"
                                                                  class="image-card">
                                                                 <!-- 취소 버튼, 취소를 누를 시 image-card 컨테이너가 통채로 사라짐. -->
                                                                 <button type="button"
                                                                         class="btn btn-danger fa fa-times btn-cancel"
-                                                                        onclick="delImg(document.getElementById('image-card-{{ contest_file.file_id }}'))"></button>
+                                                                        onclick="delImg(document.getElementById('image-card-{{ file.file_id }}'))"></button>
                                                                 <!-- 이미지 컨테이너 이미지 파일일 경우 img태그가, 이미지 파일이 아닐 경우 파일 모양의 아이콘이 붙음. -->
-                                                                <div id="image-{{ contest_file.file_id }}"
+                                                                <div id="image-{{ file.file_id }}"
                                                                      class="image-container"></div>
                                                                 <!--기존 파일링크를 이동시키기 위한 히든 링크 -->
                                                                 <input type="hidden"
-                                                                       name="exist_file_path_{{ contest_file.file_id }}"
-                                                                       value="{{ contest_file.file_path }}"/>
+                                                                       name="exist_file_path_{{ file.file_id }}"
+                                                                       value="{{ file.file_path }}"/>
                                                             </div>
                                                             <script>
                                                                 // 페이지가 로딩 될 때 해당 함수도 자동으로 실행되도록 설정함. (아이콘 or img 결정)
-                                                                onload = decisionIcon(document.getElementById("image-{{ contest_file.file_id }}"), '{{ contest_file.file_path }}');
+                                                                onload = decisionIcon(document.getElementById("image-{{ file.file_id }}"), '{{ file.file_path }}');
                                                             </script>
                                                         {% endfor %}
                                                         <!-- -------------------------------------------------------------- -->
@@ -202,7 +181,7 @@
                                 <!--레이블-->
                                     <div class="content-header">
                                         <h3 class="title">
-                                            {{ contestform.contest_cont.label }}
+                                            {{ contest_form.contest_cont.label }}
                                         </h3>
                                     </div>
                                 <!--레이블 끝-->
@@ -210,7 +189,7 @@
                                 <!--입력란-->
                                     <div class="content-body">
                                         <div class="form-group">
-                                                {% render_field contestform.contest_cont class="jqte-test" %}
+                                                {% render_field contest_form.contest_cont class="jqte-test" %}
                                         </div>
                                     </div>
                                 <!--입력란 끝-->
@@ -222,7 +201,7 @@
                             <!--최초 글작성 시 나오는 버튼-->
                                 <div style="display: grid; justify-items: center">
                                     <button class="site-button btn-block button-md" type="submit" style="width: 30%">
-                                        {% if contestform.contest_no.value is None %}
+                                        {% if contest_no is None %}
                                             등록하기
                                         {% else %}
                                             수정하기

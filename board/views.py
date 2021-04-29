@@ -1,6 +1,5 @@
 from django.contrib import messages
-from django.forms import formset_factory
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect, reverse, get_object_or_404
 from DB.models import *
 from django.db.models import Q
 from board.forms import *
@@ -157,23 +156,25 @@ def board_detail(request, board_no):  # 게시글 상세 보기
 def board_register(request):
     # 글쓰기 들어와서 등록 버튼을 누르면 실행이 되는 부분
     if request.method == "POST":
-        board = Board.objects.create(  # 객체로 저장을 할 것이오
-            board_type_no=BoardType.objects.get(pk=request.POST.get("board_type_no")),
-            board_title=request.POST.get('board_title'),
-            board_cont=request.POST.get('board_cont'),
-            board_writer=User.objects.get(pk=request.session.get('user_stu'))  # 유저 학번 들고오는 것임
-        )
+        board_form = BoardForm(request.POST)
+        file_form = FileForm(request.POST, request.FILES)
 
-        upload_new_files(request, board)  # 파일 업로드
-
-        return redirect("board_detail", board_no=board.board_no)
+        if board_form.is_valid() and file_form.is_valid():
+            board = board_form.save(
+                board_writer=User.objects.get(pk=request.session.get('user_stu')))
+            file_form.save(instance=board)
+            return redirect("board_detail", board_no=board.board_no)
+        else:
+            return redirect("board_view", board_type_no=5)
 
     else:  # 게시글 등록 버튼을 눌렀을 때
-        board_type_no = request.GET.get("board_type_no")
+        board_type_no = BoardType.objects.get(pk=request.GET.get('board_type_no'))
         context = {
-            "board_type_no": board_type_no,
-            "board_name": BoardType.objects.get(pk=board_type_no).board_type_name,
-            "board_exp": BoardType.objects.get(pk=board_type_no).board_type_exp,
+            "board_type_no": board_type_no.board_type_no,
+            "board_name": board_type_no.board_type_name,
+            "board_exp": board_type_no.board_type_exp,
+            "board_form": BoardForm(board_type_no=board_type_no.board_type_no),
+            "file_form": FileForm(),
         }
         return render(request, "board_register.html", context)
 
@@ -186,50 +187,48 @@ def board_register(request):
 #   - 파일 처리 최적화를 위한 BoardFile 모델 수정
 #   - 파일 처리 코드 모듈화 file_controller.py
 #   - context 변수 가져오는 함수 생성
-def board_update(request):
+def board_update(request, board_no):
+    board = get_object_or_404(Board, pk=board_no)
+
     # 수정을 누르면 GET 방식으로 DB 에 있는 것을 꺼내 온다.
     if request.method == "GET":
-        board = Board.objects.get(pk=request.GET.get('board_no'))
-        context = get_context_of_board_(board.board_no)  # 게시글 정보를 가져온다
-
-        return render(request, 'board_register.html', context)  # 이거로 보내줘서 작업 가능
+        context = {
+            'board_no': board_no,
+            'board_type_no': board.board_type_no.board_type_no,
+            'board_form': BoardForm(instance=board),
+            'file_form': FileForm(),
+            'file_list': BoardFile.objects.filter(board_no=board)
+        }
+        return render(request, "board_register.html", context)
 
     # 수정을 하고 난 후 수정 버튼을 누를 경우 이걸로 진행 됌
     elif request.method == 'POST':
-        board = Board.objects.get(pk=request.POST.get('board_no'))  # 맞는 것을 가져온다.
-        board.board_title = request.POST.get('board_title')
-        board.board_cont = request.POST.get('board_cont')
-        board.save()
+        board_form = BoardForm(request.POST)
+        file_form = FileForm(request.POST, request.FILES)
 
-        board_files = BoardFile.objects.filter(board_no=board)  # 파일들을 갖고 옴
-        remove_files_by_user(request, board_files)  # 사용자가 제거한 파일 삭제
-
-        upload_new_files(request, board)  # 파일 업로드
+        if board_form.is_valid() and file_form.is_valid():
+            board_form.update(pk=board_no)
+            board_files = BoardFile.objects.filter(board_no=board)  # 파일들을 갖고 옴
+            remove_files_by_user(request, board_files)  # 사용자가 제거한 파일 삭제
+            file_form.save(instance=board)
 
         # 목록 페이지 이동
-        return redirect("board_detail", board_no=board.board_no)
-
-    # 잘못 왔을 경우
-    return redirect("board_view", board_type_no=5)
+        return redirect("board_detail", board_no=board_no)
 
 
 # ---- board_delete ---- #
 # : 게시글 상세페이지에서 삭제하는 코드
 # 작성자 : 양태영
-# 마지막 수정 일시 : 2021.04.13 (유동현)
-# 수정내용 : 코드 최적화(파일 처리 코드 모듈화 file_controller.py)
-def board_delete(request):
-    if request.method == "POST":  # 포스트로 넘어오는 경우
-        board = Board.objects.get(pk=request.POST.get('board_no'))
+# 마지막 수정 일시 : 2021.04.30 (유동현)
+# 수정내용 : 모델폼 사용 => urls.py 변경에 따른 코드 수정
+def board_delete(request, board_no):
+    board = Board.objects.get(pk=board_no)
 
-        delete_all_files_of_(board)  # 해당 게시글에 등록된 파일 모두 제거
+    delete_all_files_of_(board)  # 해당 게시글에 등록된 파일 모두 제거
 
-        board.delete()  # 파일과 폴더 삭제 후, 게시글 DB 에서 삭제
+    board.delete()  # 파일과 폴더 삭제 후, 게시글 DB 에서 삭제
 
-        return redirect('board_view', board_type_no=5)
-
-    else:  # 파라미터가 제대로 넘어오지 않은 경우, 즉 비정상적인 경로를 통해 들어간 경우 바로 나오게 해준다.
-        return redirect('board_view', board_type_no=5)
+    return redirect('board_view', board_type_no=5)
 
 
 # 댓글 달기 코드
@@ -322,8 +321,7 @@ def contest_register(request):  # 공모전 등록
             # 학번 오류 처리 필요
             # 파일 저장시 오류 발생하거나, 로딩 중 저장 여러번 누르는 등 부적절한 저장 피하기 => 트랜젝션
             contest = contest_form.save(
-                contest_writer=User.objects.get(pk=request.session.get('user_stu'))
-            )
+                contest_writer=User.objects.get(pk=request.session.get('user_stu')))
             file_form.save(instance=contest)
         else:
             pass
@@ -334,8 +332,8 @@ def contest_register(request):  # 공모전 등록
     # 목록에서 신규 등록 버튼 눌렀을때
     elif request.method == 'GET':
         form_context = {
-            'contestform': ContestForm(),
-            'fileform': FileForm(),
+            'contest_form': ContestForm(),
+            'file_form': FileForm(),
         }
         return render(request, 'contest_register.html', form_context)
 
@@ -358,40 +356,35 @@ def contest_detail(request, contest_no):  # 게시판 상세 페이지로 이동
 # ---- contest_delete ---- #
 # : 공모전 글 삭제
 # 작성자 : 유동현
-# 마지막 수정 일시 : 2021.04.13
-# 수정내용 :
-def contest_delete(request):
-    if request.method == "POST":
-        contest = ContestBoard.objects.get(pk=request.POST.get('contest_no'))
+# 마지막 수정 일시 : 2021.04.30
+# 수정내용 : 모델 폼 사용 => urls.py 변경에 따른 코드 수정
+def contest_delete(request, contest_no):
+    contest = ContestBoard.objects.get(pk=contest_no)
 
-        delete_all_files_of_(contest)  # 해당 게시글에 등록된 파일 모두 제거
+    delete_all_files_of_(contest)  # 해당 게시글에 등록된 파일 모두 제거
 
-        contest.delete()  # 파일과 폴더 삭제 후, 게시글 DB 에서 삭제
+    contest.delete()  # 파일과 폴더 삭제 후, 게시글 DB 에서 삭제
 
-        return redirect(reverse('contest_list'))
-
-    # 비정상적인 접근 시도
-    else:
-        print(request)  # LOGGING :: 로그 파일 생성하는 코드 나중에 수정해야 함.
-        return redirect(reverse('contest_list'))
+    return redirect(reverse('contest_list'))
 
 
 # ---- contest_update ---- #
 # : 공모전 글 수정
 # 작성자 : 유동현
-# 마지막 수정 일시 : 2021.04.29
-# 수정내용 : 폼으로 처리하도록 변경
+# 마지막 수정 일시 : 2021.04.30
+# 수정내용 : 모델 폼 사용 => urls.py 변경에 따른 코드 수정
 # 버그 처리해야할 사항 :: 수정 버튼 누르고 가끔 로딩되면서 화면전환이 늦어질 때가 있는데,
 #                      그 때 수정버튼 연타하면 클릭한수만큼 동일한 게시글 작성됨.
-def contest_update(request):
+def contest_update(request, contest_no):
+    contest = get_object_or_404(ContestBoard, pk=contest_no)
+
     # 게시물 상세보기에서 수정하기 버튼 눌렀을 때
     if request.method == "GET":
-        contest_no = request.GET.get('contest_no')
-        contest = ContestBoard.objects.get(pk=contest_no)
         context = {
-            'contestform': ContestForm(instance=ContestBoard.objects.get(pk=contest_no)),
-            'fileform': FileForm(),
-            'contest_file_list': ContestFile.objects.filter(contest_no=contest)
+            'contest_no': contest_no,
+            'contest_form': ContestForm(instance=contest),
+            'file_form': FileForm(),
+            'file_list': ContestFile.objects.filter(contest_no=contest)
         }
         return render(request, 'contest_register.html', context)
 
@@ -401,7 +394,7 @@ def contest_update(request):
         file_form = FileForm(request.POST, request.FILES)
 
         if contest_form.is_valid() and file_form.is_valid():
-            contest = contest_form.update()
+            contest_form.update(pk=contest_no)
             contest_files = ContestFile.objects.filter(contest_no=contest)  # 게시글 파일을 불러옴
             remove_files_by_user(request, contest_files)  # 사용자가 삭제한 파일을 제거
             file_form.save(contest)  # 유효성 검사 문제. 썸네일이 보장되는가..?
