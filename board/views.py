@@ -4,6 +4,7 @@ from django.db.models import Q
 from board.forms import *
 from pagination_handler import get_page_object
 from alarm.alarm_controller import create_comment_alarm, create_comment_ref_alarm
+from user_controller import login_required, writer_only
 
 
 # ---- get_sidebar_information ---- #
@@ -12,9 +13,6 @@ from alarm.alarm_controller import create_comment_alarm, create_comment_ref_alar
 # RETURN : dict Type / 각 게시판의 게시글 수
 # 작성자 : 유동현
 # 마지막 수정 일시 : 2021.04.13
-from user_controller import login_required, writer_only
-
-
 def get_sidebar_information():
     return {
         "all_num": Board.objects.all().count(),
@@ -153,7 +151,6 @@ def board_detail(request, board_no):  # 게시글 상세 보기
 # 마지막 수정 일시 : 2021.04.30 (유동현)
 # 수정내용 : 모델 폼 적용에 따른 코드 수정
 @login_required
-@writer_only(superuser=True)
 def board_register(request):
     # 글쓰기 들어와서 등록 버튼을 누르면 실행이 되는 부분
     if request.method == "POST":
@@ -222,6 +219,7 @@ def board_update(request, board_no):
 # 마지막 수정 일시 : 2021.04.30 (유동현)
 # 수정내용 : 모델폼 사용 => urls.py 변경에 따른 코드 수정
 @login_required
+@writer_only
 def board_delete(request, board_no):
     board = Board.objects.get(pk=board_no)
 
@@ -363,7 +361,7 @@ def contest_detail(request, contest_no):  # 게시판 상세 페이지로 이동
 # 마지막 수정 일시 : 2021.04.30
 # 수정내용 : 모델 폼 사용 => urls.py 변경에 따른 코드 수정
 @login_required
-@writer_only(superuser=True)
+@writer_only
 def contest_delete(request, contest_no):
     contest = ContestBoard.objects.get(pk=contest_no)
 
@@ -382,7 +380,7 @@ def contest_delete(request, contest_no):
 # 버그 처리해야할 사항 :: 수정 버튼 누르고 가끔 로딩되면서 화면전환이 늦어질 때가 있는데,
 #                      그 때 수정버튼 연타하면 클릭한수만큼 동일한 게시글 작성됨.
 @login_required
-@writer_only()
+@writer_only
 def contest_update(request, contest_no):
     contest = get_object_or_404(ContestBoard, pk=contest_no)
 
