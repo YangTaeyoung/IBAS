@@ -13,6 +13,7 @@ from datetime import datetime
 from django.utils.dateformat import DateFormat
 from date_controller import today
 import os
+from user_controller import is_logined
 
 
 # Create your views here.
@@ -52,7 +53,10 @@ def bank(request):
         "bank_len": len(bank_list),
         "balance": balance
     }
-    return render(request, 'bank_list.html', context)
+    if is_logined(request):
+        return render(request, 'bank_list.html', context)
+    else:
+        return redirect(reverse("index"))
 
 
 def bank_delete(request):
@@ -71,7 +75,10 @@ def bank_delete(request):
         bank.delete()  # 파일과 폴더 삭제 후, 회계 DB 에서 삭제
         return redirect(reverse('bank_list'))
     else:
-        return redirect(reverse('bank_list'))
+        if is_logined(request):
+            return redirect(reverse('bank_list'))
+        else:
+            return redirect(reverse("index"))
 
 
 def bank_update(request):
@@ -102,7 +109,7 @@ def bank_update(request):
             new_bank_file.save()
         return redirect(reverse('bank_list'))
     else:  # 비정상적인 접근의 경우 (해킹시도)
-        return render(request, "index.html", {'lgn_is_failed': 1})  # 메인페이지로 보내버림
+        return redirect(reverse("index"))  # 메인페이지로 보내버림
 
 
 def bank_register(request):
@@ -139,9 +146,8 @@ def bank_register(request):
                                                     bank_file_name=get_file_name(updated_file))
             new_bank_file.save()
         return redirect(reverse('bank_list'))
-
     else:
-        return render(request, "index.html", {'lgn_is_failed': 1})
+        return redirect(reverse("index"))
 
 
 def bank_support_board(request):
@@ -154,7 +160,10 @@ def bank_support_board(request):
         "bank_list": item,
         "bank_len": len(bank_list)
     }
-    return render(request, 'bank_support_board.html', context)  # 게시판 목록
+    if is_logined(request):
+        return render(request, 'bank_support_board.html', context)  # 게시판 목록
+    else:
+        return redirect(reverse("index"))
 
 
 def bank_support_register(request):
@@ -180,7 +189,10 @@ def bank_support_register(request):
             new_bank_file.save()
         return redirect("bank_support_detail", bank_no=bank.bank_no)
     else:
-        return render(request, 'bank_support_register.html', context)  # 등록
+        if is_logined(request):
+            return render(request, 'bank_support_register.html', context)  # 등록
+        else:
+            return redirect(reverse("index"))
 
 
 def bank_support_detail(request, bank_no):
@@ -190,7 +202,10 @@ def bank_support_detail(request, bank_no):
         "bank": bank,
         "bank_file_list": bank_file_list
     }
-    return render(request, 'bank_support_detail.html', context)  # 상세보기
+    if is_logined(request):
+        return render(request, 'bank_support_detail.html', context)  # 상세보기
+    else:
+        return redirect(redirect("index"))
 
 
 def bank_support_aor(request):  # 총무가 승인, 승인거절, 지급완료를 눌렀을 때의 과정
@@ -209,7 +224,10 @@ def bank_support_aor(request):  # 총무가 승인, 승인거절, 지급완료�
         bank.save()
         return redirect("bank_support_detail", bank_no=bank.bank_no)
     else:
-        return redirect(reverse("bank_support_board"))
+        if is_logined(request):
+            return redirect(reverse("bank_support_board"))
+        else:
+            return redirect(reverse("index"))
 
 
 def bank_support_update(request):
@@ -254,7 +272,10 @@ def bank_support_update(request):
                 new_bank_file.save()  # 새롭게 저장
         return redirect("bank_support_detail", bank_no=bank.bank_no)
     else:
-        return redirect(reverse("bank_support_board"))
+        if is_logined(reverse("index")):
+            return redirect(reverse("bank_support_board"))
+        else:
+            return redirect(reverse("index"))
 
 
 def bank_support_delete(request):  # 예산지원 삭제
@@ -273,4 +294,7 @@ def bank_support_delete(request):  # 예산지원 삭제
         bank.delete()  # 파일과 폴더 삭제 후, 회계 DB 에서 삭제
         return redirect(reverse('bank_support_board'))  # 예산 지원 신청 게시판으로 이동
     else:  # get으로 넘어온 경우(해킹시도)
-        return redirect(reverse('bank_support_board'))  # 삭제를 건너뛰고 예산 지원 신청 게시판으로 이동
+        if is_logined(request):
+            return redirect(reverse('bank_support_board'))  # 삭제를 건너뛰고 예산 지원 신청 게시판으로 이동
+        else:
+            return redirect(reverse("index"))

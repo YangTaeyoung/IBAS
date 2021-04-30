@@ -16,8 +16,7 @@
             document.getElementById('form-user-pic-update').submit();
         }
         function goDeletePic() { // 프로필 사진 삭제 폼 전송
-            if(confirm("등록하신 프로필 사진을 삭제하시겠습니까?"))
-            {
+            if(confirm("등록하신 프로필 사진을 삭제하시겠습니까?")){
                 document.getElementById("form-user-pic-delete").submit();
             }
         }
@@ -32,18 +31,18 @@
                 <div class="listing-info-box">
                     <!--프로필 사진, Back : 본인 프로필 사진 나오도록 수정-->
                     <div class="listing-theme-logo">
-                        <img src="/media/{{ request.session.user_pic }}" alt="" style="min-width: 130px; max-height: 130px; min-width: 130px; min-height: 130px">
+                        <img src="/media/{{ logined_user.user_pic }}" alt="" style="min-width: 130px; max-height: 130px; min-width: 130px; min-height: 130px">
                     </div>
                     <div class="listing-info">
                         <!--이름, 학과, 학번 표시되는 곳, Back : 본인 이름, 학과, 한번 들어갈 수 있도록 수정-->
                         <div class="listing-info-left">
-                            <h3 class="title">{{ my_info.user_name }}</h3>
-                            <p>{{ my_info.user_major.major_name }} &#8226; {{ my_info.user_stu }}</p>
+                            <h3 class="title">{{ logined_user.user_name }}</h3>
+                            <p>{{ logined_user.user_major.major_name }} &#8226; {{ logined_user.user_stu }}</p>
                         </div>
                         <!--상단 오른쪽에 뜨는버튼 버튼-->
                         <div class="listing-info-right">
                             <!--회원관리, 회장단만 보이게, 상단바에 배치랑 고민헤볼것-->
-                            {% if request.session.user_role <= 3 %}
+                            {% if logined_user.user_role.role_no <= 4 %}
                                 <a href="{% url 'staff_member_list' %}" class="site-button"><i class="la la-users m-r5"></i>회원관리</a>
                             {% endif %}
                             <!--사진변경-->
@@ -53,7 +52,7 @@
                             <a href="javascript:void(0);" class="site-button gray" onclick="goDeletePic()"><i class="la la-trash m-r5"></i>사진삭제</a>
                             <form id="form-user-pic-delete" action="{% url 'user_pic_delete' %}" method="post">
                                 {% csrf_token %}
-                                <input type="hidden" name="user_stu" value="{{ my_info.user_stu }}">
+                                <input type="hidden" name="user_stu" value="{{ logined_user.user_stu }}">
                             </form>
                         </div>
                     </div>
@@ -80,15 +79,16 @@
                               class="dlab-form" enctype="multipart/form-data">
                             {% csrf_token %}
                             <div class="content-body">
-                                <div class="form-group">
+                                <div class="form-group" style="margin-bottom: 4px">
                                     <input
                                             type="file"
-                                            name="bank_file"
+                                            name="user_pic"
                                             accept="image/*"
-                                            multiple
                                             required="required"
-                                            />
+                                            multiple
+                                    />
                                 </div>
+                                <p style="color: red; font-size: 8pt; text-align: center;">여러 개의 파일 첨부 시 마지막 파일만 반영됩니다.</p>
                             </div>
                             <!--수정버튼, Back : 누르면 프로필 사진에 반영되도록 수정-->
                             <a href="#" class="site-button" style="display: grid; justify-items: center;"
@@ -331,7 +331,7 @@
                                             <tr>
                                                 <th scope="row">이름</th>
                                                 <!-- Back : 자기 이름 뜨도록 수정 -->
-                                                <td>{{ my_info.user_name }}</td>
+                                                <td>{{ logined_user.user_name }}</td>
                                                 <!-- 수정하기 버튼, 누르면 모달 뜸 -->
                                                 <td>
                                                     {% if my_wait_request|length == 0 %} {# 이름 변경 신청한 것이 없는 경우 #}
@@ -347,14 +347,14 @@
                                             <tr>
                                                 <th scope="row">학번</th>
                                                 <!--Back : 자기 학번 뜨도록 수정-->
-                                                <td>{{ my_info.user_stu }}</td>
+                                                <td>{{ logined_user.user_stu }}</td>
                                                 <td></td>
                                             </tr>
                                             <!--학과-->
                                             <tr>
                                                 <th scope="row">학과</th>
                                                 <!--Back : 자기 학과 뜨도록 수정-->
-                                                <td>{{ my_info.user_major.major_name }}</td>
+                                                <td>{{ logined_user.user_major.major_name }}</td>
                                                 <!--수정하기 버튼, 누르면 모달 뜸-->
                                                 <td>
                                                     <a href="javascript:void(0);" data-toggle="modal"
@@ -365,21 +365,21 @@
                                             <tr>
                                                 <th scope="row">학년</th>
                                                 <!--Back : 자기 학년 뜨도록 수정-->
-                                                <td>{{ my_info.user_grade }}학년</td>
+                                                <td>{{ logined_user.user_grade }}학년</td>
                                                 <td></td>
                                             </tr>
                                             <!--이메일-->
                                             <tr>
                                                 <th scope="row">이메일</th>
                                                 <!--Back : 자기 이메일 번호 뜨도록 수정-->
-                                                <td>{{ my_info.user_email }}</td>
+                                                <td>{{ logined_user.user_email }}</td>
                                                 <td></td>
                                             </tr>
                                             <!--전화번호-->
                                             <tr>
                                                 <th scope="row">전화번호</th>
                                                 <!--Back : 자기 핸드폰 번호 뜨도록 수정-->
-                                                <td>{{ my_info.user_phone }}</td>
+                                                <td>{{ logined_user.user_phone }}</td>
                                                 <!--수정하기 버튼, 누르면 모달 뜸-->
                                                 <td>
                                                     <a href="javascript:void(0);" data-toggle="modal"
@@ -390,14 +390,14 @@
                                             <tr>
                                                 <th scope="row">권한</th>
                                                 <!--Back : 승인 안되면 미승인, 승인되면 승인 뜨도록 수정-->
-                                                <td>{{ my_info.user_auth.auth_name }}</td>
+                                                <td>{{ logined_user.user_auth.auth_name }}</td>
                                                 <td></td>
                                             </tr>
                                             <!--권한-->
                                             <tr>
                                                 <th scope="row">역할</th>
                                                 <!--Back : 회장이면 회장, 부회장이면 부회장 ...... 일반회원이면 일반회원으로 뜨도록 수정-->
-                                                <td>{{ my_info.user_role.role_name }}</td>
+                                                <td>{{ logined_user.user_role.role_name }}</td>
                                                 <td></td>
                                             </tr>
                                             <!--아래 선 하나 더 보이게 추가한 곳-->

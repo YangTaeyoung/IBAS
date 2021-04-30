@@ -1,0 +1,300 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    <link
+            rel="stylesheet"
+            type="text/css"
+            href="{% static 'css/lecture-shin.css' %}"
+    />
+    <div class="page-wraper">
+        <!-- 상단 제목부분 -->
+        <div class="page-content bg-white">
+            <!----------============= 상단 제목 시작 ================----------->
+            <!--제목을 감싸는 배경-->
+            <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"
+                 style=" background-image: url('{% static 'images/board_name_img.jpg' %}'); height: 350px">
+                <!-- 상단 제목을 클릭하면, 상위 게시판으로 이동 -->
+                <a href="{% url 'lect_view' type_no=type.type_no %}">
+                    <div class="container clearfix">
+                        <div class="dlab-bnr-inr-entry">
+                            <!--제목-->
+                            <!-- 추후 DB에서 강의, 스터디, 취미 중 하나만 꺼내오게 처리해야 함. -->
+                            <h1 class="text-white introduce-letter-spacing_5">{{ type.type_name }}</h1>
+                            <!--부제목-->
+                            <!-- DB에서 부제목 꺼내와야 함 강의, 스터디, 취미 -->
+                            <p class="introduce-margin-top_20">{{ type.type_exp }}</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <!----------============= 본문 시작 ================----------->
+            <div class="content-block">
+                <div class="section-full content-inner bg-white">
+                    <div class="container">
+                        <div class="row">
+                            <!--========== 왼쪽 검색창 및 네비게이션 시작 ==========-->
+                            <div class="col-lg-3 col-xl-3">
+                                <div class="sticky-top">
+                                    <!-- 게시글 검색창 -->
+                                    <!-- 검색 시, 전체 게시판의 게시글들 중 해당 키워드를 포함한 게시글을 모두 끌고옴 -->
+                                    <div class="listing-filter-sidebar" style="margin-bottom: 30px">
+                                        <div style="margin-bottom: 20px">
+                                            <h4 class="title">게시글 검색</h4>
+                                            <div class="">
+                                                <form role="search" method="post">
+                                                    <div class="input-group">
+                                                        <input name="text" type="text" class="form-control"
+                                                               placeholder="검색어를 입력하세요.">
+                                                        <span class="input-group-btn">
+												<button type="submit" class="site-button"><i
+                                                        class="fa fa-search"></i></button>
+                                            </span>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- 게시판 종류 리스트 -->
+                                    <!-- 클릭한 게시판의 게시글을 끌고옴 -->
+                                    <div class="listing-filter-sidebar">
+                                        <h4 class="title">게시판</h4>
+                                        <div class="widget_tag">
+                                            <ul class="m-b0">
+                                                <li><a href="javascript:void(0);">{{ lecture.type_name }}</a>
+                                                    ({{ lecture_len }})
+                                                </li>
+                                                <li><a href="javascript:void(0);">{{ study.type_name }}</a>
+                                                    ({{ study_len }})
+                                                </li>
+
+                                                <li><a href="javascript:void(0);">{{ habit.type_name }}</a>
+                                                    ({{ habit_len }})
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--========== 오른쪽 강의, 스터디, 취미 게시글 리스트 부분 시작 ===========-->
+                            <div class="col-lg-10 col-xl-8 p-b30">
+                                <!-- 상단 필터 버튼 해당 버튼을 클릭하면, 해당 게시글만 보이게 처리할 예정(DB에서 받고 처리 예정) -->
+                                <div class="listing-filter m-b40">
+                                    <button class="site-button radius-xl m-l10">전체보기</button>
+                                    <button class="site-button radius-xl m-l10">모집중</button>
+                                    <button class="site-button radius-xl m-l10 red"></i>마감</button>
+                                </div>
+                                <div class="row">
+                                    <!--================= 여기부터 게시글 반복시작 =================-->
+                                    {% for lect in lect_list %}
+                                        <!-- 게시글 1 -->
+                                        <div class="col-lg-6">
+                                            <div class="listing-bx event-listing m-b10">
+                                                <!-- 게시글 대표 이미지 div -->
+                                                <div class="listing-media">
+                                                    <!-- 이미지를 클릭하면, 해당 게시글로 이동함 -->
+                                                    <a href="#">
+                                                        <img src="/media/{{ lect.lect_pic }}/" alt="">
+                                                    </a>
+                                                </div>
+                                                <!-- 강의, 스터디, 취미 내용 간단소개 div -->
+                                                <div class="listing-info" style="height: 110px">
+                                                    <!-- 강의, 스터디, 취미 제목 -->
+                                                    <!-- 제목 클릭 시, 해당 게시글로 이동 -->
+                                                    <h3 class="title"><a
+                                                            href="{% url 'lecture_detail' lect_no=lect.lect_no %}">{{ lect.lect_title }}</a>
+                                                    </h3>
+                                                    <!-- 강의, 스터디, 취미 간단소개 -->
+                                                    <ul class="event-meta">
+                                                        <!-- 마감일 및 모집 상태 -->
+                                                        <li class="event-date">
+                                                            <!-- 강의, 스터디, 취미 마감일 -->
+                                                            <!-- 마감 월 (영어로 표기됨 - 월 끌고 오면 처리 예정) -->
+                                                            <span class="text-primary">{{ lect.lect_deadline|date:"M" }}</span>
+                                                            <!-- 마감일 -->
+                                                            <strong>{{ lect.lect_deadline|date:"d" }}</strong>
+                                                            <!-- 모집 및 마감 상태 -->
+                                                            <!-- 강의, 스터디, 취미 기간 중에 있으면 모집이라고 뜨고, 모집 기간이 자나면, 자동으로 마감으로 뜨게 처리 -->
+                                                            <span class="{% if lect.lect_state.state_no == 4 %}recruiting{% elif lect.lect_state.state_no == 5 %}recruiting-end{% endif %}">{{ lect.lect_state.state_name }}</span>
+                                                        </li>
+                                                        <!-- 강의, 스터디, 취미에 대한 간단소개 -->
+                                                        <li class="text-cut">{{ lect.lect_intro|truncatechars:100 }}
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="event-bottom">
+                                                    <ul>
+                                                        <!-- 강 요일, 장소, 인원 li-->
+                                                        <li class="event-hosted">
+                                                            <!-- 강의를 정기적으로 진행하는 요일 -->
+                                                            <span class="text-primary mr-3">요일</span>
+                                                            <!-- 강의에 해당하는 요일을 DB에서 가져와야 함 -->
+                                                            <span>{{ lect }}</span>
+                                                            <!-- 강의 진행방식 Zoom 혹은 강의실 호수 -->
+                                                            <span class="text-primary mr-3 m-l30"><i
+                                                                    class="ti-location-pin"></i></span>
+                                                            <!-- 강의 진행방식을 DB에서 가져와야 함 -->
+                                                            <span>6-345</span>
+                                                            <!-- 수강 신청한 인원 및 제한 인원 -->
+                                                            <span class="text-primary m-l40 mr-3"><i
+                                                                    class="fa fa-user"></i></span>
+                                                            <!-- 강의 신청자 및 총 정원을 DB에서 가져와야 함. -->
+                                                            <span>3 / 50 명</span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                    <!-- 게시글 2 -->
+                                    <div class="col-lg-6 mb-3">
+                                        <div class="listing-bx event-listing m-b10">
+                                            <!-- 게시글 대표 이미지 div -->
+                                            <div class="listing-media">
+                                                <!-- 이미지를 클릭하면, 해당 게시글로 이동함 -->
+                                                <a href="#">
+                                                    <img src="{% static 'images/test_img1.png' %}" alt="">
+                                                </a>
+                                            </div>
+                                            <!-- 강의, 스터디, 취미 내용 간단소개 div -->
+                                            <div class="listing-info" style="height: 110px">
+                                                <!-- 강의, 스터디, 취미 제목 -->
+                                                <!-- 제목을 클릭하면, 해당 게시글로 이동 -->
+                                                <h3 class="title"><a href="listing-details.html">파이썬 쌉고수들을 위한 점프투 강의</a>
+                                                </h3>
+                                                <!-- 강의, 스터디, 취미 간단소개 -->
+                                                <ul class="event-meta">
+                                                    <!-- 마감일 및 모집 상태 -->
+                                                    <li class="event-date">
+                                                        <!-- 강의, 스터디, 취미 마감일 -->
+                                                        <!-- 마감 월 (영어로 표기됨) -->
+                                                        <span class="text-primary">FEB</span>
+                                                        <!-- 마감일 -->
+                                                        <strong>15</strong>
+                                                        <!-- 모집 및 마감 상태 -->
+                                                        <!-- 정원이 다 차거나, 모집 기간이 끝나면, 자동으로 마감으로 바뀌게 설정 -->
+                                                        <span class="recruiting-end">마 감</span></li>
+                                                    <!-- 강의, 스터디, 취미 대한 간단소개 -->
+                                                    <li class="text-cut">Lorem Ipsum is simply dummy text of the
+                                                        printing and typesetting industry. Lorem Ipsum has been the
+                                                        industry's standard dummy text ever since the 1500s, when an
+                                                        unknown printer took a galley of type and scrambled it to make a
+                                                        type specimen book. It has survived not only five centuries, but
+                                                        also the leap into electronic typesetting, remaining essentially
+                                                        unchanged. It was popularised in the 1960s with the release of
+                                                        Letraset sheets containing Lorem Ipsum passages, and more
+                                                        recently with desktop publishing software like Aldus PageMaker
+                                                        including versions of Lorem Ipsum.
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="event-bottom">
+                                                <ul>
+                                                    <!-- 강의, 스터디, 취미 요일, 장소, 인원 li-->
+                                                    <li class="event-hosted">
+                                                        <!-- 강의, 스터디, 취미를 정기적으로 진행하는 요일 -->
+                                                        <span class="text-primary mr-3">요일</span>
+                                                        <!-- 강의, 스터디, 취미에 해당하는 요일을 DB에서 가져와야 함 -->
+                                                        <span>월, 수, 금</span>
+                                                        <!-- 강의, 스터디, 취미 진행방식 Zoom 혹은 강의실 호수 -->
+                                                        <span class="text-primary mr-3 m-l30"><i
+                                                                class="ti-location-pin"></i></span>
+                                                        <!-- 강의, 스터디, 취미 진행방식을 DB에서 가져와야 함 -->
+                                                        <span>ZOOM</span>
+                                                        <!-- 수강 신청한 인원 및 제한 인원 -->
+                                                        <span class="text-primary m-l30 mr-3"><i
+                                                                class="fa fa-user"></i></span>
+                                                        <!-- 강의, 스터디, 취미 신청자 및 총 정원을 DB에서 가져와야 함. -->
+                                                        <!-- 취미는 정원 부분을 없애도 될 듯 -->
+                                                        <span>50 / 50 명</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- 게시글 3 (위와 주석이 동일하므로 위의 주석들 참고) -->
+                                    <div class="col-lg-6 mb-3">
+                                        <div class="listing-bx event-listing m-b10">
+                                            <div class="listing-media">
+                                                <a href="#">
+                                                    <img src="{% static 'images/test_img1.png' %}" alt="">
+                                                </a>
+                                            </div>
+                                            <div class="listing-info" style="height: 110px">
+                                                <h3 class="title"><a href="listing-details.html">홈페이지로 배우는 미학적인 가치</a>
+                                                </h3>
+                                                <ul class="event-meta">
+                                                    <li class="event-date"><span class="text-primary">SEP</span>
+                                                        <strong>04</strong><span class="recruiting-end">마 감</span></li>
+                                                    <li class="text-cut">Lorem Ipsum is simply dummy text of the
+                                                        printing and typesetting industry. Lorem Ipsum has been the
+                                                        industry's standard dummy text ever since the 1500s, when an
+                                                        unknown printer took a galley of type and scrambled it to make a
+                                                        type specimen book. It has survived not only five centuries, but
+                                                        also the leap into electronic typesetting, remaining essentially
+                                                        unchanged. It was popularised in the 1960s with the release of
+                                                        Letraset sheets containing Lorem Ipsum passages, and more
+                                                        recently with desktop publishing software like Aldus PageMaker
+                                                        including versions of Lorem Ipsum.
+                                                    </li>
+                                                    <li>⠀</li>
+                                                </ul>
+                                            </div>
+                                            <div class="event-bottom">
+                                                <ul>
+                                                    <!-- 강의, 스터디, 취미 요일, 장소, 인원 li-->
+                                                    <li class="event-hosted">
+                                                        <!-- 강의, 스터디, 취미를 정기적으로 진행하는 요일 -->
+                                                        <span class="text-primary mr-3">요일</span>
+                                                        <!-- 강의, 스터디, 취미에 해당하는 요일을 DB에서 가져와야 함 -->
+                                                        <span>화, 수</span>
+                                                        <!-- 강의, 스터디, 취미 진행방식 Zoom 혹은 강의실 호수 -->
+                                                        <span class="text-primary mr-3 m-l30"><i
+                                                                class="ti-location-pin"></i></span>
+                                                        <!-- 강의, 스터디, 취미 진행방식을 DB에서 가져와야 함 -->
+                                                        <span>ZOOM</span>
+                                                        <!-- 수강 신청한 인원 및 제한 인원 -->
+                                                        <span class="text-primary m-l30 mr-3"><i
+                                                                class="fa fa-user"></i></span>
+                                                        <!-- 강의, 스터디, 취미 신청자 및 총 정원을 DB에서 가져와야 함. -->
+                                                        <span>50 / 50 명</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--================= 여기부터 게시글 반복 끝 =================-->
+                                </div>
+                                <div class="extra-cell text-right  m-t20">
+                                    <!-- 강의, 스터디, 취미 게시판들의 게시글 등록 버튼 (관련자 및 관련 게시판만 보이게 처리) -->
+                                    <!-- 강의 게시판에만 보이는 버튼임 -->
+                                    <button class="site-button radius-xl m-l10"><i class="fa fa-plus m-r5"></i>강의개설 신청
+                                    </button>
+                                    <!-- 스터디, 취미 게시판에만 보이는 버튼임 -->
+                                    <button class="site-button radius-xl m-l10"><i class="fa fa-plus m-r5"></i>등록
+                                    </button>
+                                </div>
+                                <!--========== 페이지네이션 시작 ===========-->
+                                <!-- 1페이지에 6~8개 게시글 끌고오고, 게시글이 그보다 적으면, 페이지네이션 안보이게 처리 -->
+                                <div class="pagination-bx clearfix text-center">
+                                    <ul class="pagination">
+                                        <li class="previous"><a href="javascript:void(0)"><i
+                                                class="fa fa-arrow-left"></i></a></li>
+                                        <li><a href="javascript:void(0)">1</a></li>
+                                        <li><a href="javascript:void(0)">2</a></li>
+                                        <li><a href="javascript:void(0)">...</a></li>
+                                        <li class="active"><a href="javascript:void(0)">7</a></li>
+                                        <li class="next"><a href="javascript:void(0)"><i class="fa fa-arrow-right"></i></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <!--========== 페이지네이션 끝 ===========-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 상단으로 한번에 올라가는 버튼 -->
+        <button class="scroltop fa fa-chevron-up" style="display: none;"></button>
+    </div>
+{% endblock %}

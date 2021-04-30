@@ -73,7 +73,8 @@
                                                     ({{ contest_num }}+)
                                                 </li>
                                                 <li><a href="{% url 'activity' %}">활동게시판</a>
-                                                    ({{ activity_num }}+)</li>
+                                                    ({{ activity_num }}+)
+                                                </li>
                                             </ul>
                                         </div>
                                     </div>
@@ -95,7 +96,7 @@
                                     <!-- 끌고오는 게시글 파트 -->
                                     <tbody>
                                     <!-- 게시글 출력부 -->
-                                    {% if board_len != 0 %}
+                                    {% if board_list %}
                                         {% for board in board_list %}
                                             <tr>
                                                 <!-- 게시글 번호 -->
@@ -103,7 +104,11 @@
                                                 <!-- 게시글 제목 -->
                                                 <!-- 게시글 제목 클릭 시 해당 게시글의 상세 페이지로 이동하며, 제목을 a태크 처리함 -->
                                                 <td>
-                                                    <a href="{% url 'board_detail' board_no=board.board_no %}">{{ board.board_title }}</a>
+                                                    {% if board.board_type_no.board_type_no == 4 %}
+                                                        <a href="{% url 'activity_detail' board_no=board.board_no %}">{{ board.board_title }}</a>
+                                                    {% else %}
+                                                        <a href="{% url 'board_detail' board_no=board.board_no %}">{{ board.board_title }}</a>
+                                                    {% endif %}
                                                 </td>
                                                 <!-- 게시글 작성자 -->
                                                 <td>{{ board.board_writer.user_name }}</td>
@@ -113,15 +118,15 @@
                                         {% endfor %}
                                     {% else %}
                                         <tr>
-                                            <td colspan="4" style="text-align: center">{{ message }}</td>
+                                            <td colspan="4" style="text-align: center">게시글이 존재하지 않습니다.</td>
                                         </tr>
                                     {% endif %}
 
                                     </tbody>
                                 </table>
 
-                                {% if request.session.user_stu is not None %}
-                                    {% if board_type_no == 1 and request.session.user_role <= 5 or board_type_no != 1 and board_type_no != 5 and request.session.user_auth != 3 %}
+                                {% if is_logiend %}
+                                    {% if board_type_no == 1 and logined_user.user_role.role_no <= 5 or board_type_no != 1 and board_type_no != 5 and logined_user.user_auth.auth_no != 3 %}
                                         <form action="{% url 'board_register' %}" method="get">
                                             <input type="hidden" name="board_type_no" value="{{ board_type_no }}">
                                             <div class="extra-cell text-right  m-t20">

@@ -1,4 +1,4 @@
-{% if request.session.user_stu is None %}
+{% if not is_logined %}
     {% load socialaccount %} <!-- 소셜 로그인 user를 받기 위해 사용-->
     {% providers_media_js %} <!-- 소셜 미디어 로그인 페이지와 로그아웃 페이지를 따기 위해 사용 -->
 
