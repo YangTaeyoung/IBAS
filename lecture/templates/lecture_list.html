@@ -85,7 +85,8 @@
                                         <div class="listing-info" style="height: 110px">
                                             <!-- 강의, 스터디, 취미 제목 -->
                                             <!-- 제목 클릭 시, 해당 게시글로 이동 -->
-                                            <h3 class="title"><a href="{% url 'lect_detail' lect_no=lect.lect_no %}">{{ lect.lect_title }}</a>
+                                            <h3 class="title"><a
+                                                    href="{% url 'lect_detail' lect_no=lect.lect_no %}">{{ lect.lect_title }}</a>
                                             </h3>
                                             <!-- 강의, 스터디, 취미 간단소개 -->
                                             <ul class="event-meta">
@@ -143,11 +144,19 @@
                         <!-- 강의: 강의개설 신청, 스터디 및 취미: 등록 -->
                         <div class="extra-cell text-right  m-t20">
                             <!-- 강의, 스터디, 취미 게시판들의 게시글 등록 버튼 (관련자 및 관련 게시판만 보이게 처리) -->
-                            <!-- 강의 게시판에만 보이는 버튼임 -->
-                            <button class="site-button radius-xl m-l10"><i class="fa fa-plus m-r5"></i>강의개설 신청
-                            </button>
-                            <!-- 스터디, 취미 게시판에만 보이는 버튼임 -->
-                            <button class="site-button radius-xl m-l10"><i class="fa fa-plus m-r5"></i>등록</button>
+                            <form action="{% url 'lect_register' %}" method="get">
+                                <input type="hidden" name="lect_type" value="{{ type.type_no }}">
+                                {% if type.type_no == 1 %}
+                                    <!-- 강의 게시판에만 보이는 버튼임 -->
+                                    <button class="site-button radius-xl m-l10"><i class="fa fa-plus m-r5"></i>강의개설 신청
+                                    </button>
+                                {% else %}
+                                    <!-- 스터디, 취미 게시판에만 보이는 버튼임 -->
+                                    <button type="submit" class="site-button radius-xl m-l10"><i
+                                            class="fa fa-plus m-r5"></i>등록
+                                    </button>
+                                {% endif %}
+                            </form>
                         </div>
                         <!--========== 페이지네이션 시작 ===========-->
                         <!-- 1페이지에 6~8개 게시글 끌고오고, 게시글이 그보다 적으면, 페이지네이션 안보이게 처리해야 함 -->
