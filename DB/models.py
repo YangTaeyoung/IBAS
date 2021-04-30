@@ -222,11 +222,17 @@ class ContestFile(File):
         db_table = 'CONTEST_FILE'
 
 
+# 강의 썸네일 사진 업로드 경로
+def lect_pic_upload_to(instance, filename):
+    return f'lect/pic/{instance.lect_no}/{filename}'
+
+
 class Lect(models.Model):
     lect_no = models.AutoField(db_column='LECT_NO', primary_key=True)  # Field name made lowercase.
     lect_title = models.CharField(db_column='LECT_TITLE', max_length=100)  # Field name made lowercase.
     lect_chief = models.ForeignKey('User', models.DO_NOTHING, db_column='LECT_CHIEF')  # Field name made lowercase.
-    lect_pic = models.ImageField(db_column='LECT_PIC', max_length=1000, upload_to='lect/')  # Field name made lowercase.
+    lect_pic = models.ImageField(db_column='LECT_PIC', max_length=1000,
+                                 upload_to=lect_pic_upload_to)  # Field name made lowercase.
     lect_type = models.ForeignKey('LectType', models.DO_NOTHING, db_column='LECT_TYPE')  # Field name made lowercase.
     lect_created = models.DateTimeField(db_column='LECT_CREATED', auto_now_add=True)  # Field name made lowercase.
     lect_intro = models.CharField(db_column='LECT_INTRO', max_length=300)  # Field name made lowercase.
@@ -237,10 +243,21 @@ class Lect(models.Model):
     lect_method = models.ForeignKey('MethodInfo', models.DO_NOTHING,
                                     db_column='LECT_METHOD')  # Field name made lowercase.
     lect_deadline = models.DateTimeField(db_column='LECT_DEADLINE')  # Field name made lowercase.
+    lect_reject_reason = models.CharField(db_column='LECT_REJECT_REASON', null=True, max_length=200)
 
     class Meta:
         managed = False
         db_table = 'LECT'
+
+
+class LectDay(models.Model):
+    day_no = models.AutoField(db_column='DAY_NO', primary_key=True)
+    lect_no = models.ForeignKey("Lect", on_delete=models.CASCADE, db_column="LECT_NO")
+    day_name = models.CharField(db_column='DAY_NAME', max_length=2)
+
+    class Meta:
+        managed = False
+        db_table = "LECT_DAY"
 
 
 class LectBoard(models.Model):
@@ -356,6 +373,7 @@ class LectType(models.Model):
     type_no = models.AutoField(db_column='TYPE_NO', primary_key=True)  # Field name made lowercase.
     type_name = models.IntegerField(db_column='TYPE_NAME', unique=True)  # Field name made lowercase.
     type_exp = models.CharField(db_column='TYPE_EXP', max_length=100)
+
     class Meta:
         managed = False
         db_table = 'LECT_TYPE'
