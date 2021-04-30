@@ -1,3 +1,4 @@
+from django.db import transaction
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from DB.models import Board, BoardType, Comment, ContestBoard, ContestComment, User
 from django.db.models import Q
@@ -158,9 +159,11 @@ def board_register(request):
         file_form = FileForm(request.POST, request.FILES)
 
         if board_form.is_valid() and file_form.is_valid():
-            board = board_form.save(
-                board_writer=User.objects.get(pk=request.session.get('user_stu')))
-            file_form.save(instance=board)
+            with transaction.atomic():
+                board = board_form.save(
+                    board_writer=User.objects.get(pk=request.session.get('user_stu')))
+                file_form.save(instance=board)
+
             return redirect("board_detail", board_no=board.board_no)
         else:
             return redirect("board_view", board_type_no=5)
@@ -204,10 +207,11 @@ def board_update(request, board_no):
         file_form = FileForm(request.POST, request.FILES)
 
         if board_form.is_valid() and file_form.is_valid():
-            board_form.update(pk=board_no)
-            board_files = BoardFile.objects.filter(board_no=board)  # 파일들을 갖고 옴
-            remove_files_by_user(request, board_files)  # 사용자가 제거한 파일 삭제
-            file_form.save(instance=board)
+            with transaction.atomic():
+                board_form.update(pk=board_no)
+                board_files = BoardFile.objects.filter(board_no=board)  # 파일들을 갖고 옴
+                remove_files_by_user(request, board_files)  # 사용자가 제거한 파일 삭제
+                file_form.save(instance=board)
 
         # 목록 페이지 이동
         return redirect("board_detail", board_no=board_no)
@@ -223,9 +227,9 @@ def board_update(request, board_no):
 def board_delete(request, board_no):
     board = Board.objects.get(pk=board_no)
 
-    delete_all_files_of_(board)  # 해당 게시글에 등록된 파일 모두 제거
-
-    board.delete()  # 파일과 폴더 삭제 후, 게시글 DB 에서 삭제
+    with transaction.atomic():
+        delete_all_files_of_(board)  # 해당 게시글에 등록된 파일 모두 제거
+        board.delete()  # 파일과 폴더 삭제 후, 게시글 DB 에서 삭제
 
     return redirect('board_view', board_type_no=5)
 
@@ -320,11 +324,12 @@ def contest_register(request):  # 공모전 등록
         file_form = FileForm(request.POST, request.FILES)
 
         if contest_form.is_valid() and file_form.is_valid():
-            # 학번 오류 처리 필요
-            # 파일 저장시 오류 발생하거나, 로딩 중 저장 여러번 누르는 등 부적절한 저장 피하기 => 트랜젝션
-            contest = contest_form.save(
-                contest_writer=User.objects.get(pk=request.session.get('user_stu')))
-            file_form.save(instance=contest)
+            with transaction.atomic():
+                # 학번 오류 처리 필요
+                # 파일 저장시 오류 발생하거나, 로딩 중 저장 여러번 누르는 등 부적절한 저장 피하기 => 트랜젝션
+                contest = contest_form.save(
+                    contest_writer=User.objects.get(pk=request.session.get('user_stu')))
+                file_form.save(instance=contest)
         else:
             pass
 
@@ -365,9 +370,9 @@ def contest_detail(request, contest_no):  # 게시판 상세 페이지로 이동
 def contest_delete(request, contest_no):
     contest = ContestBoard.objects.get(pk=contest_no)
 
-    delete_all_files_of_(contest)  # 해당 게시글에 등록된 파일 모두 제거
-
-    contest.delete()  # 파일과 폴더 삭제 후, 게시글 DB 에서 삭제
+    with transaction.atomic():
+        delete_all_files_of_(contest)  # 해당 게시글에 등록된 파일 모두 제거
+        contest.delete()  # 파일과 폴더 삭제 후, 게시글 DB 에서 삭제
 
     return redirect(reverse('contest_list'))
 
@@ -400,10 +405,11 @@ def contest_update(request, contest_no):
         file_form = FileForm(request.POST, request.FILES)
 
         if contest_form.is_valid() and file_form.is_valid():
-            contest_form.update(pk=contest_no)
-            contest_files = ContestFile.objects.filter(contest_no=contest)  # 게시글 파일을 불러옴
-            remove_files_by_user(request, contest_files)  # 사용자가 삭제한 파일을 제거
-            file_form.save(contest)  # 유효성 검사 문제. 썸네일이 보장되는가..?
+            with transaction.atomic():
+                contest_form.update(pk=contest_no)
+                contest_files = ContestFile.objects.filter(contest_no=contest)  # 게시글 파일을 불러옴
+                remove_files_by_user(request, contest_files)  # 사용자가 삭제한 파일을 제거
+                file_form.save(contest)  # 유효성 검사 문제. 썸네일이 보장되는가..?
 
             # 수정된 게시글 페이지로 이동
             return redirect("contest_detail", contest_no=contest.contest_no)
