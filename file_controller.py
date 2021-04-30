@@ -110,19 +110,18 @@ def delete_all_files_of_(obj):
 
 
 # ---- upload_new_files_of_contest ---- #
-# INPUT : HttpRequest 객체, Board 또는 ContestBoard 객체
+# INPUT : InMemoryUploadedFile 객체 리스트 / Board 또는 ContestBoard 객체
 # OUTPUT : 없음
 # RETURN : 없음
 # : 새로 입력받은 파일들을 업로드
-# 마지막 수정 일시 : 2021.04.13
+# 마지막 수정 일시 : 2021.04.30
 # 작성자 : 유동현
 def upload_new_files(files_to_upload, instance):
     # 새로 사용자가 파일을 첨부한 경우
-    # request.FILES 는 dict 형태 (key : value)
-    # - key 는 html에서의 form 태그 name
-    # - value 는 해당 form에서 전송받은 file들 / uploadedFile 객체 형태
+    # files_to_upload : InMemoryUploadedFile 객체 리스트를 넘겨 받는다.
+    #                   파일 폼에서 save() 할 때 이 함수를 호출!
     if isinstance(instance, ContestBoard):
-        for file in files_to_upload:  # 각각의 파일을 uploadedFile로 받아옴
+        for file in files_to_upload:  # 각각의 파일을 InMemoryUploadedFile 객체로 받아옴
             ContestFile.objects.create(
                 contest_no=ContestBoard.objects.get(pk=instance.contest_no),
                 file_path=file,  # uploadedFile 객체를 imageField 객체 할당

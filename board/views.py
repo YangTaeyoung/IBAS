@@ -149,10 +149,8 @@ def board_detail(request, board_no):  # 게시글 상세 보기
 # ---- board_register ---- #
 # : 게시글 등록
 # 작성자 : 양태영
-# 마지막 수정 일시 : 2021.04.13 (유동현)
-# 수정내용 : 코드 최적화
-#   - 파일 처리 최적화를 위한 BoardFile 모델 수정
-#   - 파일 처리 코드 모듈화 file_controller.py
+# 마지막 수정 일시 : 2021.04.30 (유동현)
+# 수정내용 : 모델 폼 적용에 따른 코드 수정
 def board_register(request):
     # 글쓰기 들어와서 등록 버튼을 누르면 실행이 되는 부분
     if request.method == "POST":
@@ -182,11 +180,8 @@ def board_register(request):
 # ---- board_update ---- #
 # : 게시글 수정
 # 작성자 : 양태영
-# 마지막 수정 일시 : 2021.04.13 (유동현)
-# 수정내용 : 코드 최적화
-#   - 파일 처리 최적화를 위한 BoardFile 모델 수정
-#   - 파일 처리 코드 모듈화 file_controller.py
-#   - context 변수 가져오는 함수 생성
+# 마지막 수정 일시 : 2021.04.30 (유동현)
+# 수정내용 : 모델 폼 적용에 따른 코드 수정
 def board_update(request, board_no):
     board = get_object_or_404(Board, pk=board_no)
 
@@ -286,7 +281,6 @@ def board_comment_update(request):
 # 작성자 : 유동현
 # 마지막 수정 일시 : 2021.04.13
 # 수정내용 :
-# 수정해야 할 사항 :: 이미지파일만 불러오기
 def contest_list(request):
     # 공모전 게시물 전부를 해당 파일과 함께 Queryset 으로 가져오기
     contest_board_list = ContestBoard.objects.all().order_by('-contest_deadline').prefetch_related("contestfile_set")
@@ -308,8 +302,8 @@ def contest_list(request):
 # ---- contest_register ---- #
 # : 공모전 글 등록하기
 # 작성자 : 유동현
-# 마지막 수정 일시 : 2021.04.27
-# 수정내용 : 폼으로 처리하는 걸로 코드 수정
+# 마지막 수정 일시 : 2021.04.30
+# 수정내용 : 모델 폼으로 처리하는 걸로 코드 수정
 # 버그 처리해야할 사항 :: 등록 버튼 누르고 가끔 로딩되면서 화면전환이 늦어질 때가 있는데,
 #                      그 때 등록버튼 연타하면 클릭한수만큼 동일한 게시글 작성됨.
 def contest_register(request):  # 공모전 등록

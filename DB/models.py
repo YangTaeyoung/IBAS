@@ -178,8 +178,9 @@ class ContestBoard(models.Model):
     contest_created = models.DateTimeField(db_column='CONTEST_CREATED', auto_now_add=True)
     contest_topic = models.CharField(db_column='CONTEST_TOPIC', max_length=500)
     contest_asso = models.CharField(db_column='CONTEST_ASSO', max_length=100)
-    contest_deadline = models.DateTimeField(db_column='CONTEST_DEADLINE')
     contest_start = models.DateTimeField(db_column='CONTEST_START')
+    contest_deadline = models.DateTimeField(db_column='CONTEST_DEADLINE')
+
 
     class Meta:
         managed = False
