@@ -339,7 +339,8 @@
                                                            data-target="#name_edit"><i class="la la-pencil"></i></a>
                                                     {% else %} {# 이미 이름 변경 신청을 한 경우 #}
                                                         <!-- 이 부분 클릭하면 변경 신청했던 내역 모달 떠서 보게 해주세요. -->
-                                                        <a href="#">이름 신청 이력 보기</a>
+                                                        <a href="javascript:void(0);" data-toggle="modal"
+                                                       data-target="#name_edit_list">이름 신청 이력 보기</a>
                                                     {% endif %}
                                                 </td>
                                             </tr>
@@ -514,6 +515,63 @@
                                                style="display: grid; justify-items: center;"
                                                onclick="goUpdate()">수정신청</a>
                                         </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Modal End -->
+
+                        <!-- 이름 수정 신청 내역 Modal -->
+                        <div class="modal fade modal-bx-info modal-lg" id="name_edit_list" tabindex="-1" role="dialog"
+                             aria-labelledby="ReportReviewsModalLongTitle" aria-hidden="true">
+                            <div class="modal-dialog " role="document">
+                                <div class="modal-content">
+                                    <!--제목부분-->
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="ReportReviewsModalLongTitle">이름 수정 신청 이력</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true"><i class="la la-close"></i></span>
+                                        </button>
+                                    </div>
+                                    <!--내용부분-->
+                                    <div class="modal-body">
+                                        <table class="table">
+                                          <thead>
+                                            <tr>
+                                              <th scope="col" style="text-align: center">신청일</th>
+                                              <th scope="col" style="text-align: center">기존이름</th>
+                                              <th scope="col" style="text-align: center">신청이름</th>
+                                              <th scope="col" style="text-align: center">상태</th>
+                                            </tr>
+                                          </thead>
+                                          <!--신청이력 뜨는 부분-->
+                                          <tbody>
+                                            <tr>
+                                              <!--신청 날짜 뜨는 부분, back : 신청일 뜨도록 수정-->
+                                              <td style="text-align: center">2021.03.03</td>
+                                              <!--기존 이름 뜨는 부분, back : 기존 이름 뜨도록 하고, 이름 변경되도 내역에는 남아있도록,,-->
+                                              <td style="text-align: center">홍길동</td>
+                                              <!--새롭게 신청한 이름 뜨는 부분, back : 신청한 이름 뜨도록 하고, 이름 재수정시에 바뀌지 않고 그대로 있도록-->
+                                              <td style="text-align: center">김채림</td>
+                                              <!--승인 상태 나타내는 부분, back : 승인되면 '승인', 승인 대기중이면 '대기' 뜨도록-->
+                                              <td style="text-align: center">승인</td>
+                                            </tr>
+                                            <tr>
+                                              <!--위와동일-->
+                                              <td style="text-align: center">2021.03.30</td>
+                                              <td style="text-align: center">김채림</td>
+                                              <td style="text-align: center">이채림</td>
+                                              <td style="text-align: center">승인</td>
+                                            </tr>
+                                            <tr>
+                                              <!--위와동일-->
+                                              <td style="text-align: center">2021.04.09</td>
+                                              <td style="text-align: center">이채림</td>
+                                              <td style="text-align: center">신승연</td>
+                                              <td style="text-align: center">대기</td>
+                                            </tr>
+                                          </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
