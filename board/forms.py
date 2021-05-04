@@ -1,6 +1,7 @@
 import sys
 from django import forms
-from IBAS.forms import FileFormBase, FileController
+from IBAS.forms import FileFormBase
+from file_controller import FileController
 from DB.models import Board, ContestBoard
 
 

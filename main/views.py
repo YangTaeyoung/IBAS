@@ -1,20 +1,17 @@
 from django.shortcuts import render, get_object_or_404, reverse, redirect
 from DB.models import *
 from pagination_handler import *
-from file_controller import *
+from file_controller import FileController
 from django.db.models import Q
 from member import session
-from django.core.paginator import Paginator
-from django.conf import settings
 from alarm.alarm_controller import create_comment_alarm, create_comment_ref_alarm
 from django.http import HttpResponseRedirect
-import os
 
 
 # 메인페이지 이동 함수
 def index(request):
     # 임시 로그인
-    session.save_session(request, User.objects.get(pk=12162359))
+    # session.save_session(request, User.objects.get(pk=12162359))
 
     return render(request, "index.html", {})
 
@@ -92,7 +89,7 @@ def activity_register(request):
             board_writer=User.objects.get(pk=request.session.get('user_stu'))  # 유저 학번 들고오는 것임
         )
 
-        upload_new_files(request, activity)  # 파일 업로드
+        FileController.upload_new_files(request, activity)  # 파일 업로드
 
         return redirect(reverse("activity"))
 
@@ -124,9 +121,9 @@ def activity_update(request):
         board.save()
 
         board_files = BoardFile.objects.filter(board_no=board)  # 파일들을 갖고 옴
-        remove_files_by_user(request, board_files)  # 사용자가 제거한 파일 삭제
+        FileController.remove_files_by_user(request, board_files)  # 사용자가 제거한 파일 삭제
 
-        upload_new_files(request, board)  # 파일 업로드
+        FileController.upload_new_files(request, board)  # 파일 업로드
 
         # 목록 페이지 이동
         return redirect("activity_detail", board_no=board.board_no)
@@ -144,7 +141,7 @@ def activity_delete(request):
     if request.method == "POST":  # 포스트로 넘어오는 경우
         board = Board.objects.get(pk=request.POST.get('board_no'))
 
-        delete_all_files_of_(board)  # 해당 게시글에 등록된 파일 모두 제거
+        FileController.delete_all_files_of_(board)  # 해당 게시글에 등록된 파일 모두 제거
 
         board.delete()  # 파일과 폴더 삭제 후, 게시글 DB 에서 삭제
 

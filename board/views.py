@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, reverse, get_object_or_404
 from DB.models import Board, BoardFile, BoardType, Comment, ContestBoard, ContestFile, ContestComment, User
 from django.db.models import Q
 from board.forms import BoardForm, ContestForm, FileForm
-from IBAS.forms import FileController
+from file_controller import FileController
 from pagination_handler import get_page_object
 from alarm.alarm_controller import create_comment_alarm, create_comment_ref_alarm
 from user_controller import login_required, writer_only
