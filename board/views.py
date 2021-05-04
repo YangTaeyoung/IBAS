@@ -1,10 +1,8 @@
-from django.contrib import messages
 from django.shortcuts import render, redirect, reverse, get_object_or_404
-from DB.models import *
+from DB.models import Board, BoardType, Comment, ContestBoard, ContestComment, User
 from django.db.models import Q
 from board.forms import *
-from pagination_handler import *
-from file_controller import *
+from pagination_handler import get_page_object
 from alarm.alarm_controller import create_comment_alarm, create_comment_ref_alarm
 
 
@@ -14,6 +12,9 @@ from alarm.alarm_controller import create_comment_alarm, create_comment_ref_alar
 # RETURN : dict Type / 각 게시판의 게시글 수
 # 작성자 : 유동현
 # 마지막 수정 일시 : 2021.04.13
+from user_controller import login_required, writer_only
+
+
 def get_sidebar_information():
     return {
         "all_num": Board.objects.all().count(),
@@ -151,6 +152,8 @@ def board_detail(request, board_no):  # 게시글 상세 보기
 # 작성자 : 양태영
 # 마지막 수정 일시 : 2021.04.30 (유동현)
 # 수정내용 : 모델 폼 적용에 따른 코드 수정
+@login_required
+@writer_only(superuser=True)
 def board_register(request):
     # 글쓰기 들어와서 등록 버튼을 누르면 실행이 되는 부분
     if request.method == "POST":
@@ -182,6 +185,8 @@ def board_register(request):
 # 작성자 : 양태영
 # 마지막 수정 일시 : 2021.04.30 (유동현)
 # 수정내용 : 모델 폼 적용에 따른 코드 수정
+@login_required
+@writer_only
 def board_update(request, board_no):
     board = get_object_or_404(Board, pk=board_no)
 
@@ -216,6 +221,7 @@ def board_update(request, board_no):
 # 작성자 : 양태영
 # 마지막 수정 일시 : 2021.04.30 (유동현)
 # 수정내용 : 모델폼 사용 => urls.py 변경에 따른 코드 수정
+@login_required
 def board_delete(request, board_no):
     board = Board.objects.get(pk=board_no)
 
@@ -227,6 +233,7 @@ def board_delete(request, board_no):
 
 
 # 댓글 달기 코드
+@login_required
 def board_comment_register(request):
     if request.method == "POST":
         board = Board.objects.get(pk=request.POST.get('board_no'))  # 게시글 번호 들고오는 것임
@@ -254,6 +261,7 @@ def board_comment_register(request):
 
 
 # 댓글 삭제 코드
+@login_required
 def board_comment_delete(request):
     if request.method == "POST":  # 댓글 삭제를 누를 경우
         board_no = request.POST.get('board_no')
@@ -265,6 +273,7 @@ def board_comment_delete(request):
 
 
 # 댓글 수정 코드
+@login_required
 def board_comment_update(request):
     if request.method == "POST":  # 정상적으로 파라미터가 넘어왔을 경우
         board_no = request.POST.get('board_no')
@@ -306,6 +315,7 @@ def contest_list(request):
 # 수정내용 : 모델 폼으로 처리하는 걸로 코드 수정
 # 버그 처리해야할 사항 :: 등록 버튼 누르고 가끔 로딩되면서 화면전환이 늦어질 때가 있는데,
 #                      그 때 등록버튼 연타하면 클릭한수만큼 동일한 게시글 작성됨.
+@login_required
 def contest_register(request):  # 공모전 등록
     if request.method == 'POST':
         contest_form = ContestForm(request.POST)
@@ -352,6 +362,8 @@ def contest_detail(request, contest_no):  # 게시판 상세 페이지로 이동
 # 작성자 : 유동현
 # 마지막 수정 일시 : 2021.04.30
 # 수정내용 : 모델 폼 사용 => urls.py 변경에 따른 코드 수정
+@login_required
+@writer_only(superuser=True)
 def contest_delete(request, contest_no):
     contest = ContestBoard.objects.get(pk=contest_no)
 
@@ -369,6 +381,8 @@ def contest_delete(request, contest_no):
 # 수정내용 : 모델 폼 사용 => urls.py 변경에 따른 코드 수정
 # 버그 처리해야할 사항 :: 수정 버튼 누르고 가끔 로딩되면서 화면전환이 늦어질 때가 있는데,
 #                      그 때 수정버튼 연타하면 클릭한수만큼 동일한 게시글 작성됨.
+@login_required
+@writer_only()
 def contest_update(request, contest_no):
     contest = get_object_or_404(ContestBoard, pk=contest_no)
 
@@ -404,6 +418,7 @@ def contest_update(request, contest_no):
 # 작성자 : 유동현
 # 마지막 수정 일시 : 2021.04.15
 # 수정내용 :
+@login_required
 def contest_comment_update(request):
     if request.method == "POST":
         contest_no = request.POST.get("contest_no")
@@ -419,6 +434,7 @@ def contest_comment_update(request):
 # 작성자 : 유동현
 # 마지막 수정 일시 : 2021.04.15
 # 수정내용 :
+@login_required
 def contest_comment_delete(request):
     if request.method == "POST":
         contest_no = request.POST.get('contest_no')
@@ -434,6 +450,7 @@ def contest_comment_delete(request):
 # 작성자 : 유동현
 # 마지막 수정 일시 : 2021.04.15
 # 수정내용 :
+@login_required
 def contest_comment_register(request):
     contest = None
 

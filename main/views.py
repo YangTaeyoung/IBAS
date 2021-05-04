@@ -14,7 +14,7 @@ import os
 # 메인페이지 이동 함수
 def index(request):
     # 임시 로그인
-    session.save_session(request, User.objects.get(pk=12162359))
+    # session.save_session(request, User.objects.get(pk=12162359))
 
     return render(request, "index.html", {})
 
