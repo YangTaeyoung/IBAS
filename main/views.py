@@ -9,6 +9,7 @@ from django.db.models import Q
 from member import session
 from alarm.alarm_controller import create_comment_alarm, create_comment_ref_alarm
 from django.http import HttpResponseRedirect
+from user_controller import login_required, writer_only
 
 
 # 메인페이지 이동 함수
@@ -80,6 +81,7 @@ def activity_detail(request, board_no):
 # 작성자 : 양태영
 # 마지막 수정 일시 : 2021.05.04 (유동현)
 # 수정내용 : 폼 처리
+@login_required
 def activity_register(request):
     # 글쓰기 들어와서 등록 버튼을 누르면 실행이 되는 부분
     if request.method == "POST":
@@ -109,6 +111,8 @@ def activity_register(request):
 # 작성자 : 양태영
 # 마지막 수정 일시 : 2021.05.04 (유동현)
 # 수정내용 : 폼 처리
+@login_required
+@writer_only
 def activity_update(request, board_no):
     board = get_object_or_404(Board, pk=board_no)
 
@@ -144,6 +148,8 @@ def activity_update(request, board_no):
 # 작성자 : 양태영
 # 마지막 수정 일시 : 2021.05.04 (유동현)
 # 수정내용 : 트랜젝션 코드 추가
+@login_required
+@writer_only
 def activity_delete(request, board_no):
     board = Board.objects.get(pk=board_no)
 
