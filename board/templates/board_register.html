@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
     <script src="{% static 'js/register.js' %}"></script>
-    <body>
+
     <div class="page-wraper">
         <div class="page-content bg-white">
             <!----------============= 상단 제목 시작 ================----------->
@@ -31,10 +31,6 @@
                   class="add-listing-form" method="post" enctype="multipart/form-data">
 
                 {% csrf_token %}
-            <!--히든태그-->
-                {% for field in board_form.hidden_fields %}
-                        {{ field }}
-                {% endfor %}
 
                 <div class="content-block">
                     <div class="section-full content-inner bg-white">
@@ -47,8 +43,8 @@
                                 </div>
 
                                 <div class="content-body">
+                                <!--제목 입력란-->
                                     <div class="form-group">
-                                        <!--제목 입력란-->
                                         {% render_field board_form.board_title class="form-control" style="font-size: 25px; height: 70px;"%}
 
                                         <br/>
@@ -58,6 +54,7 @@
                                            {{ file_form.upload_file }}
                                         </div>
                                     </div>
+
                                     <!-- 이미 존재하고 있던 이미지: 삭제 가능 (수정모드)-->
                                     {% if board_no is not None %}
                                         <div class="form-group">
@@ -88,7 +85,6 @@
                                     <!--내용입력란-->
                                     <div class="form-group">
                                         {% render_field board_form.board_cont class="jqte-test" %}
-                                        <!--input-->
                                     </div>
                                 </div>
                             </div>
@@ -113,7 +109,5 @@
             </form>
         </div>
     </div>
-    </body>
-    </html>
 
 {% endblock %}

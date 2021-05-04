@@ -2,31 +2,7 @@
 {% load static %}
 {% block content %}
     <script src="{% static 'js/register.js' %}"></script>
-    <link rel="stylesheet" href="{% static 'css/register.css' %}"/>
-    <!DOCTYPE html>
-    <html lang="en">
 
-    <head>
-        <meta charset="UTF-8">
-        <title>Title</title>
-
-        <link rel="stylesheet" type="text/css" href="{% static 'css/star-rating-svg.css' %}"/>
-        <link
-                rel="stylesheet"
-                type="text/css"
-                href="{% static 'plugins/editor/jquery-te-1.4.0.css' %}"
-        />
-
-        <link
-                rel="stylesheet"
-                type="text/css"
-                href="{% static 'plugins/drop/imageuploadify.min.css' %}"
-        />
-        <link rel="stylesheet" href="{% static 'plugins/tag-editor/jquery.tag-editor.css' %}"/>
-
-    </head>
-
-    <body>
     <div class="page-wraper">
         <div class="page-content bg-white">
             <!----------상단 제목부분----------->
@@ -46,11 +22,12 @@
                 </a>
             </div>
             <!--===============================================입력란=========================================================-->
-
-            <form action="
-                    {% if board is None %}{% url 'activity_register' %}{% else %}{% url 'activity_update' %}{% endif %}"
+            {% load widget_tweaks %}
+            <form action="{% if board_no is None %}{% url 'activity_register' %}{% else %}{% url 'activity_update' board_no %}{% endif %}"
                   class="add-listing-form" method="post" enctype="multipart/form-data">
+
                 {% csrf_token %}
+
                 <div class="content-block">
                     <div class="section-full content-inner bg-white">
                         <div class="container">
@@ -65,23 +42,19 @@
                                     <div class="content-body">
                                         <!--제목 입력란-->
                                         <div class="form-group">
-                                            <input type="text" name="board_title" value="{{ board.board_title }}"
-                                                   class="form-control" placeholder="제목을 입력하세요"
-                                                   style="font-size: 25px; height: 70px;"
-                                                   maxlength="95">
+                                           {% render_field board_form.board_title class="form-control" style="font-size: 25px; height: 70px;"%}
                                             <br/>
                                             <!--이미지, 파일 업로드란-->
                                             <div class="form-group">
-                                                <input type="file" name="upload_file"
-                                                       accept="image/*"
-                                                       multiple>
+                                                {{ file_form.upload_file }}
                                             </div>
                                         </div>
+
                                         <!-- 이미 존재하고 있던 이미지: 삭제 가능 (수정모드)-->
-                                        {% if board is not None %}
+                                        {% if board_no is not None %}
                                             <div class="form-group">
                                                 <div id="image-cont" class="image-cont">
-                                                    {% for board_file in board_file_list %}
+                                                    {% for board_file in file_list %}
                                                         <div id="image-card-{{ board_file.file_id }}"
                                                              class="image-card">
                                                             <!-- 취소 버튼, 취소를 누를 시 image-card 컨테이너가 통채로 사라짐. -->
@@ -106,22 +79,17 @@
                                         {% endif %}
                                         <!--내용입력란-->
                                         <div class="form-group">
-                                            <textarea name="board_cont" type="text"
-                                                      class="jqte-test"
-                                                      maxlength="4900">{{ board.board_cont }}</textarea>
-                                            <!--input-->
+                                            {% render_field board_form.board_cont class="jqte-test" %}
                                         </div>
                                     </div>
                                 </div>
-                                {% if board is not None %}
-                                    <input type="hidden" name="board_no" value="{{ board.board_no }}">
-                                {% endif %}
+
                                 <!--=====================-->
                                 <!--등록하기 버튼, 누르면 게시글 상세보기로-->
                                 <!--최초 글작성 시 나오는 버튼-->
                                 <div style="display: grid; justify-items: center">
                                     <button class="site-button btn-block button-md" type="submit" style="width: 30%">
-                                        {% if board is None %}
+                                        {% if board_no is None %}
                                             등록하기
                                         {% else %}
                                             수정하기
@@ -136,7 +104,5 @@
             </form>
         </div>
     </div>
-    </body>
-    </html>
 
 {% endblock %}

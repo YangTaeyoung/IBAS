@@ -128,7 +128,7 @@ class FileForm(FileFormBase):
         # 즉 is_valid 를 호출한 함수 이름을 묻는 것.
         calling_function = sys._getframe(5).f_code.co_name
 
-        if calling_function in ['contest_register', 'contest_update']:
+        if calling_function in ['contest_register', 'contest_update', 'activity_register', 'activity_update']:
             # 이미지 파일이 없는 경우
             if not self._check_contest_thumbnail():
                 self.cleaned_data['upload_file'] = None  # cleaned_data 를 비운다

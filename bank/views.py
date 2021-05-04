@@ -6,7 +6,7 @@ from DB.models import AuthUser, User, ChiefCarrier, UserRole, Board, BoardFile, 
     BoardType, Comment, History, Bank, BankFile, BankApplyInfo  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
 from member import session
 from django.core.paginator import Paginator
-from file_controller import get_file_name
+
 from django.http import HttpResponseRedirect
 from django.conf import settings
 from datetime import datetime
@@ -105,7 +105,7 @@ def bank_update(request):
         for updated_file in request.FILES.getlist('bank_file'):
             new_bank_file = BankFile.objects.create(bank_no=Bank.objects.get(pk=bank.bank_no),
                                                     bank_file_path=updated_file,
-                                                    bank_file_name=get_file_name(updated_file))
+                                                    bank_file_name=updated_file.name)
             new_bank_file.save()
         return redirect(reverse('bank_list'))
     else:  # 비정상적인 접근의 경우 (해킹시도)
@@ -143,7 +143,7 @@ def bank_register(request):
         for updated_file in request.FILES.getlist('bank_file'):
             new_bank_file = BankFile.objects.create(bank_no=Bank.objects.get(pk=bank.bank_no),
                                                     bank_file_path=updated_file,
-                                                    bank_file_name=get_file_name(updated_file))
+                                                    bank_file_name=updated_file.name)
             new_bank_file.save()
         return redirect(reverse('bank_list'))
     else:
@@ -185,7 +185,7 @@ def bank_support_register(request):
         for updated_file in request.FILES.getlist('bank_file'):
             new_bank_file = BankFile.objects.create(bank_no=Bank.objects.get(pk=bank.bank_no),
                                                     bank_file_path=updated_file,
-                                                    bank_file_name=get_file_name(updated_file))
+                                                    bank_file_name=updated_file.name)
             new_bank_file.save()
         return redirect("bank_support_detail", bank_no=bank.bank_no)
     else:
@@ -268,7 +268,7 @@ def bank_support_update(request):
             for updated_file in request.FILES.getlist('bank_file'):  # 사용자가 새롭게 추가한 파일
                 new_bank_file = BankFile.objects.create(bank_no=Bank.objects.get(pk=bank.bank_no),  # 객체 생성
                                                         bank_file_path=updated_file,
-                                                        bank_file_name=get_file_name(updated_file))
+                                                        bank_file_name=updated_file.name)
                 new_bank_file.save()  # 새롭게 저장
         return redirect("bank_support_detail", bank_no=bank.bank_no)
     else:

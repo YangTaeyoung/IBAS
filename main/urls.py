@@ -8,11 +8,11 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('', views.index, name="index"),  # 메인페이지 이동 링크
     path('introduce/', views.introduce, name='introduce'),  # 동아리 소개 작업
-    path('activity/', views.activity, name='activity'),  # 동아리 활동 게시판
+    path('activity/', views.activity_list, name='activity'),  # 동아리 활동 게시판
     path('activity/<int:board_no>/detail/', views.activity_detail, name='activity_detail'),  # 동아리 활동 자세히 보기
     path('activity/register/', views.activity_register, name='activity_register'),  # 동아리 등록하기
-    path('activity/update/', views.activity_update, name='activity_update'),  # 동아리 글 수정하기
-    path('activity/delete/', views.activity_delete, name='activity_delete'),  # 동아리 활동 글 삭제하기
+    path('activity/update/<int:board_no>/', views.activity_update, name='activity_update'),  # 동아리 글 수정하기
+    path('activity/delete/<int:board_no>/', views.activity_delete, name='activity_delete'),  # 동아리 활동 글 삭제하기
     path('activity/comment/register', views.activity_comment_register, name='activity_comment_register'),  # 동아리 댓글 쓰는 것
     path('activity/comment/delete/', views.activity_comment_delete, name='activity_comment_delete'),  # 동아리 댓글 삭제하는 것
     path('activity/comment/update/', views.activity_comment_update, name='activity_comment_update'),
