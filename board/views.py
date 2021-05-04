@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect, reverse, get_object_or_404
-from DB.models import Board, BoardType, Comment, ContestBoard, ContestComment, User
+from DB.models import Board, BoardFile, BoardType, Comment, ContestBoard, ContestFile, ContestComment, User
 from django.db.models import Q
-from board.forms import *
+from board.forms import BoardForm, ContestForm, FileForm
+from IBAS.forms import FileController
 from pagination_handler import get_page_object
 from alarm.alarm_controller import create_comment_alarm, create_comment_ref_alarm
 
@@ -36,7 +37,7 @@ def get_context_of_board_(board_no):
     board = Board.objects.get(pk=board_no)  # 해당 공모전 정보 db에서 불러오기
 
     # 게시글 파일 받아오기. (순서대로 전체파일, 이미지파일, 문서파일)
-    board_file_list, image_list, doc_list = get_images_and_files_of_(board)  # 공모전 이미지와 문서 받아오기
+    board_file_list, image_list, doc_list = FileController.get_images_and_files_of_(board)  # 공모전 이미지와 문서 받아오기
 
     # 댓글 불러오기
     comment_list = Comment.objects.filter(comment_board_no=board).filter(comment_cont_ref__isnull=True).order_by(
@@ -65,7 +66,7 @@ def get_context_of_board_(board_no):
 def get_context_of_contest_(contest_no):
     contest = ContestBoard.objects.get(pk=contest_no)  # 해당 공모전 정보 db에서 불러오기
     # 게시글 파일 받아오기. (순서대로 전체파일, 이미지파일, 문서파일)
-    contest_file_list, image_list, doc_list = get_images_and_files_of_(contest)  # 공모전 이미지와 문서 받아오기
+    contest_file_list, image_list, doc_list = FileController.get_images_and_files_of_(contest)  # 공모전 이미지와 문서 받아오기
 
     # 댓글 불러오기
     comment_list = ContestComment.objects.filter(comment_board_no=contest).filter(
@@ -209,7 +210,7 @@ def board_update(request, board_no):
         if board_form.is_valid() and file_form.is_valid():
             board_form.update(instance=board)
             board_files = BoardFile.objects.filter(board_no=board)  # 파일들을 갖고 옴
-            remove_files_by_user(request, board_files)  # 사용자가 제거한 파일 삭제
+            FileController.remove_files_by_user(request, board_files)  # 사용자가 제거한 파일 삭제
             file_form.save(instance=board)
 
         # 목록 페이지 이동
@@ -225,7 +226,7 @@ def board_update(request, board_no):
 def board_delete(request, board_no):
     board = Board.objects.get(pk=board_no)
 
-    delete_all_files_of_(board)  # 해당 게시글에 등록된 파일 모두 제거
+    FileController.delete_all_files_of_(board)  # 해당 게시글에 등록된 파일 모두 제거
 
     board.delete()  # 파일과 폴더 삭제 후, 게시글 DB 에서 삭제
 
@@ -367,7 +368,7 @@ def contest_detail(request, contest_no):  # 게시판 상세 페이지로 이동
 def contest_delete(request, contest_no):
     contest = ContestBoard.objects.get(pk=contest_no)
 
-    delete_all_files_of_(contest)  # 해당 게시글에 등록된 파일 모두 제거
+    FileController.delete_all_files_of_(contest)  # 해당 게시글에 등록된 파일 모두 제거
 
     contest.delete()  # 파일과 폴더 삭제 후, 게시글 DB 에서 삭제
 
@@ -404,7 +405,7 @@ def contest_update(request, contest_no):
         if contest_form.is_valid() and file_form.is_valid():
             contest_form.update(instance=contest)
             contest_files = ContestFile.objects.filter(contest_no=contest)  # 게시글 파일을 불러옴
-            remove_files_by_user(request, contest_files)  # 사용자가 삭제한 파일을 제거
+            FileController.remove_files_by_user(request, contest_files)  # 사용자가 삭제한 파일을 제거
             file_form.save(contest)  # 유효성 검사 문제. 썸네일이 보장되는가..?
 
             # 수정된 게시글 페이지로 이동
