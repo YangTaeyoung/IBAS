@@ -5,6 +5,11 @@ from IBAS.settings import MEDIA_ROOT
 from django import forms
 
 
+# 1. 파일 폼이 여기 있기 때문에, 파일 컨트롤러도 여기 있는게 좋지 않을까요..?
+# 2. 클래스로 선언하는게 더 좋을 듯??
+#       다른 곳에서 FileBaseForm 을 상속받아 정의할 때, 파일 컨트롤러를 사용한다면,
+#       FileController.is_image() 처럼 사용할텐데,
+#       위처럼 사용하는게, 단순히 is_image() 로 사용하는 것보다 출처가 명확하게 표현되는 장점이 있을듯
 class FileController:
     # 이미지인지 확인하는 함수. 파라미터(파일 경로)
     @staticmethod

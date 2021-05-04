@@ -171,7 +171,7 @@ def board_register(request):
             "board_type_no": board_type_no.board_type_no,
             "board_name": board_type_no.board_type_name,
             "board_exp": board_type_no.board_type_exp,
-            "board_form": BoardForm(board_type_no=board_type_no.board_type_no),
+            "board_form": BoardForm(initial={'board_type_no': board_type_no.board_type_no}),
             "file_form": FileForm(),
         }
         return render(request, "board_register.html", context)
@@ -202,7 +202,7 @@ def board_update(request, board_no):
         file_form = FileForm(request.POST, request.FILES)
 
         if board_form.is_valid() and file_form.is_valid():
-            board_form.update(pk=board_no)
+            board_form.update(instance=board)
             board_files = BoardFile.objects.filter(board_no=board)  # 파일들을 갖고 옴
             remove_files_by_user(request, board_files)  # 사용자가 제거한 파일 삭제
             file_form.save(instance=board)
@@ -388,7 +388,7 @@ def contest_update(request, contest_no):
         file_form = FileForm(request.POST, request.FILES)
 
         if contest_form.is_valid() and file_form.is_valid():
-            contest_form.update(pk=contest_no)
+            contest_form.update(instance=contest)
             contest_files = ContestFile.objects.filter(contest_no=contest)  # 게시글 파일을 불러옴
             remove_files_by_user(request, contest_files)  # 사용자가 삭제한 파일을 제거
             file_form.save(contest)  # 유효성 검사 문제. 썸네일이 보장되는가..?
