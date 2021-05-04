@@ -212,7 +212,7 @@ def board_update(request, board_no):
                 board_form.update(instance=board)
                 board_files = BoardFile.objects.filter(board_no=board)  # 파일들을 갖고 옴
                 FileController.remove_files_by_user(request, board_files)  # 사용자가 제거한 파일 삭제
-                file_form.save(instance=board)
+                file_form.save(instance=board)  # 파일 업로드
 
         # 목록 페이지 이동
         return redirect("board_detail", board_no=board_no)
