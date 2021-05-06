@@ -72,8 +72,7 @@
 
     <!-- 여기까지 기존 템플릿에 있던 것 -->
     <!--외부 css파일 받는 링크 / 이 html에서만 쓰는 것. -->
-    <link rel="stylesheet" href="{% static 'css/join.css' %}"/>
-    <link rel="stylesheet" href="{% static 'css/logo.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/login-join.css' %}"/>
     <script>
         phoneIsNotOK = 0; // 핸드폰 중복 체크를 위한 변수 0:정상 1: 중복이 있음
         stuIsNotOK = 0;// 학 중복 체크를 위한 변수 0:정상 1: 중복이 있음
@@ -126,13 +125,7 @@
             }
         }
     </script>
-    <style>
-        input[type="number"]::-webkit-outer-spin-button,
-        input[type="number"]::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-    </style>
+
 </head>
 <body id="bg">
 <div id="loading-area"></div>
