@@ -1,0 +1,117 @@
+/* activity 게시판 게시글 사진 크기 */
+.act-img-size {
+    height: 350px;
+}
+
+/* 한 줄이 넘어가는 제목에 대해서는 ...으로 표시 */
+.line1 {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: white;
+}
+
+/* 탬플릿에 설정된 기본form 디자인은 제로로 만들어줌 */
+form {
+
+}
+.board-item:hover /* 게시글 위에 마우스 커서를 올리면 투명도를 조정하게 함 */
+{
+    opacity: 0.8;
+}
+/* 동아리 활동게시판 상세의 이미지 사이즈  */
+.act-detail-img-size {
+    height: 190px;
+    width: 100%;
+}
+
+ol.comment-list li.comment .comment-body {
+    margin-left: 0;
+    border: 1px solid #e9e9e9;
+    margin-bottom: 30px;
+}
+
+ol.comment-list li.comment .reply a {
+    position: static;
+}
+
+.reply-btn-div {
+    margin-top: 15px;
+    font-weight: 400;
+    font-size: 14px;
+}
+
+* {
+    outline: none;
+}
+
+.comment-btn {
+    padding: 0;
+    color: #4611a7;
+    border-color: transparent;
+    background-color: white;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.comment-btn:hover {
+    color: #0e91e3;
+}
+
+.comment-profile-size {
+    width: 35px;
+    height: 35px;
+    border: 2px solid #606269;
+    border-radius: 17.5px;
+    margin-right: 10px;
+
+}
+
+input:disabled {
+    padding: 0px;
+    cursor: auto;
+    font-size: 14px;
+    width: 706px;
+    display: block;
+    color: #606269;
+    cursor: alias;
+    background-color: transparent;
+    border-width: 0px;
+}
+
+.happy {
+    border: 0px;
+    color: black;
+    border-radius: 2px;
+    background-color: #E6E6E6;
+    padding-left: 10px;
+    padding-top: 2px;
+    padding-bottom: 1px;
+}
+
+.demo {
+    margin-left: 100px;
+}
+
+.reply-line {
+    height: 1px;
+    position: relative;
+    margin: 20px 0;
+}
+
+/* 첨부파일 다운로드를 감싸는 박스 */
+.download-box {
+    border: 2px solid #ecebf5;
+    margin: 50px;
+    padding: 20px 30px 20px 30px;
+}
+
+.line2 { /* 한 줄 자르기 */
+    display: inline-block;
+    width: 400px;
+    height: 19px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

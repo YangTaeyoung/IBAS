@@ -1,0 +1,311 @@
+* {
+    scroll-behavior: smooth;
+
+
+}
+@font-face {
+    src: url("../fonts/NanumBarunGothic.ttf");
+    font-family: "NanumBarunGothic";
+}
+
+
+.introduce-letter-spacing_5 {
+    letter-spacing: 5px;
+}
+
+/* 쓰인 곳: 동아리 연혁 안 박스 부분의 내용 중 첫번째 연도를 제외한 나머지*/
+.introduce-margin-top_20 {
+    margin-top: 20px;
+}
+
+/* 쓰인 곳: 동아리 소개 안 카드 부분, 동아리 연혁 안 박스 부분*/
+.introduce-box-bg {
+    background: rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 30px 50px;
+    border-radius: 6px;
+    color: #fff;
+    margin: 0 25px;
+}
+
+/* 쓰인 곳: 동아리 소개 안 카드 부분의 아이콘, 동아리 소개 안 카드 부분의 설명부분, 동아리 연혁 안 박스 부분*/
+.introduce-color_black {
+    color: black;
+}
+
+/* 쓰인 곳: 동아리 연혁 안 박스 부분*/
+.introduce-history-box {
+    width: 1135px;
+    height: 430px;
+}
+
+/* 쓰인 곳: 동아리 연혁 안 박스 부분*/
+.introduce-history-grid {
+    display: grid;
+    grid-template-columns: 300px 600px 100px;
+    max-height: 370px;
+
+    /*    3칸이 그리드로 짜여 있음. 각 칸은 300 100 630 px씩 차지함. */
+}
+
+/* 쓰인 곳: 동아리 연혁 안 박스 부분의 내용 설명*/
+.introduce-align-items_start {
+    display: flex;
+    align-items: start;
+}
+
+/* 쓰인 곳: 동아리 연혁 안 박스 부분*/
+.introduce-overflow_auto {
+    overflow: auto;
+    -ms-overflow-style: none; /* IE and Edge */
+}
+
+.introduce-overflow_auto::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+}
+
+/* 쓰인 곳: 동아리 연혁 안 박스부분의 연혁 내용 부분. */
+.introduce-padding-bottom_24 {
+    padding-bottom: 24px;
+}
+
+/* 쓰인 곳: 동아리 연혁 안 박스부분의 내용부분. */
+.introduce-border-bottom {
+    border-bottom: #8f8f8f solid 1px;
+}
+
+/* 쓰인 곳:Contact Us의 내용부분*/
+.introduce-contact-flex-container {
+    display: flex;
+    justify-content: center;
+}
+/* 쓰인 곳: 동아리 소개부분 카드*/
+.introduce-flex-container {
+    display: flex;
+    justify-content: space-around;
+}
+
+/* 쓰인 곳: 동아리 소개부분 카드, Contact Us의 내용부분*/
+.introduce-contact-flex-item {
+    width: 270px;
+    margin: 0 20px
+}
+
+/* 쓰인 곳: Contact Us 카드 부분*/
+.introduce-height_310 {
+    height: 310px;
+}
+
+/* 쓰인 곳: 운영진 소개의 회장, 부회장, 회장단 카드부분*/
+.introduce-height_380 {
+    max-height: 380px;
+    min-height: 380px;
+}
+
+/* 쓰인 곳: 동아리 소개의 네비게이션 최 상단 div, 동아리 소개 최상위 div */
+.introduce-display_inline-block {
+    display: inline-block;
+}
+
+/* 쓰인 곳: Contact Us의 구글맵 부분*/
+.introduce-google-map {
+    box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+    border: 1px solid #e1e6eb;
+    margin: 0 35px;
+}
+
+/* 쓰인 곳: 동아리 소개 네비게이션 바에 적용되는 부분. */
+.introduce-nav-bar {
+    display: inline-block;
+    width: 160px;
+    text-align: center;
+    background-color: white;
+    border: #dedede solid thin;
+    position: fixed;
+    top: 100px;
+    left: 12px;
+}
+
+/* 쓰인 곳 : 동아리 소개 최상위 div*/
+.introduce-padding-top_0 {
+    padding-top: 0;
+}
+
+/* 쓰인 곳 : Contact Us 이메일 부분*/
+.introduce-margin-bottom_0 {
+    margin-bottom: 0px;
+}
+
+/* 쓰인 곳 : Contact Us 구글맵// 수정해야함. */
+.introduce-google-map-size {
+    width: 900px;
+    height: 420px;
+}
+
+/* 쓰인 곳 : introduce.html 콘텐츠 최상위 div*/
+.introduce-padding-bottom_0 {
+    padding-bottom: 0;
+}
+/* 쓰인 곳 : 동아리 연혁부분 박스*/
+.introduce-text-align_center {
+    text-align: center;
+}
+/* 쓰인 곳 : 네비게이션 바 a 태그 부분*/
+.introduce-nav-txt {
+    text-decoration: none;
+    color: black;
+    font-size: 15px;
+}
+
+/* 쓰인 곳 : Nav 부분*/
+.introduce-margin-bottom_5 {
+    margin-bottom: 5px;
+}
+
+/* 쓰인 곳 : Nav 부분*/
+.introduce-margin-bottom_10 {
+    margin-bottom: 10px;
+}
+/* 쓰인 곳 : contact us 이메일과 연락처 부분*/
+.introduce-font-size_15 {
+    font-size: 15pt;
+}
+
+/* 쓰인 곳 : 연혁박스 안 내용 시작부분*/
+.introduce-history-box-flex {
+    display: flex;
+    flex-direction: column;
+
+}
+/* 쓰인 곳: 연혁 수정 날짜 부분*/
+.introduce-update-input-date {
+    background-color: inherit;
+    border: none;
+    width: 100px;
+    padding: 0;
+    height: auto;
+    outline: none;
+}
+/* 쓰인 곳: 연혁 수정 내용 부분*/
+.introduce-update-input-txt {
+    background-color: inherit;
+    border: none;
+    width: 500px;
+    padding: 0;
+    height: auto;
+    resize: none;
+    outline: none;
+}
+/* 쓰인 곳: 동아리 연혁 추가하기 버튼*/
+.introduce-color-btn {
+    border: #091069 solid;
+    width: 180px;
+    background-color: #091069;
+    border-radius: 3px;
+    color: white;
+}
+/*///////////////////////////////////////////////////////////*/
+/*모달*/
+/*쓰인 곳: 모달 시작 div, 모달 배경 부분임. */
+.introduce-modal-bg {
+    position: fixed;;
+    width: 100%;
+    height: 100vh;
+    top:0;
+    left: 0;
+    background-color: rgba(0,0,0,0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    overflow: auto;
+    
+;
+}
+/* 쓰인 곳: 모달 배경div 밑, (실질적 모달부분)*/
+.introduce-modal {
+    border-radius: 5px;
+    background-color: white;
+    width: 450px;
+    height: 270px;
+    opacity: 1;
+    display: block;
+    align-items: start;
+    justify-content: center;
+    /*display: none;*/
+
+}
+
+/* 쓰인 곳: 모달 날짜 내용 input 감싸는 div*/
+.introduce-li-flex {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+/* 쓰인 곳: 모달 날짜 input*/
+.introduce-border_none {
+    border: none;
+}
+
+
+/* 쓰인 곳: 동아리 소개, 회장단 소개, 동아리 연혁, Contact Us*/
+.introduce-for-del-margin {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+/* 쓰인 곳: introduce.html에서 제일 밑 js 부분, */
+.introduce-change-nav {
+    font-size: 16px;
+    font-weight: bolder;
+    color: #091069;
+    transition: 0.2s;
+}
+
+/* 쓰인 곳: 동아리 소개 card */
+.introduce-card {
+    width: 340px;
+    height: 520px;
+}
+/* 쓰인 곳: 동아리 소개 card 사진*/
+.introduce-card-pic {
+    background-color: white;
+    height: 290px
+}
+/*모바일로 볼 때를 위한 미디어쿼리*/
+@media (min-width: 481px) and (max-width: 767px) {
+    /*동아리 소개 부분은 플랙스로, 디렉션을 컬럼으로 한다. */
+    .introduce-flex-container{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+    }
+    /* 네비게이션 바는 안보이게*/
+    .introduce-nav-bar{
+        display: none;
+    }
+    /*동아리 소개 부분 카드 마진을 줘서 간격을 벌린다.*/
+    .introduce-card {
+        margin-bottom: 20px;
+    }
+    /*회장단 소개는 안보이게*/
+    #introduce_cm {
+        display: none;
+    }
+    /*동아리 연혁 부분 박스 사이즈를 줄이기 위해*/
+    .introduce-history-grid {
+        display: grid;
+        grid-template-columns: 150px 300px 50px;
+        max-height: 370px;
+    }
+    /*동아리 연혁 부분 박스 사이즈를 줄이기 위해*/
+    .introduce-history-box {
+    width: 500px;
+    height: 430px;
+    }
+
+}

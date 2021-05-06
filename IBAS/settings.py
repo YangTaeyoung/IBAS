@@ -39,17 +39,23 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     # DB 관련 앱
     'DB',
     # 유저 관련 앱
     'member',
     # 메인 관련 앱
     'main',
-    
-    # 임시 어플리케이션. 실제 프로젝트 시작 시 사라질 예정.
-    #'first',
-
-
+    # 회계 관련 앱
+    'bank',
+    # 게시판 관련 앱
+    'board',
+    # 내 정보 관련 앱
+    'my_info',
+    # 회원 관리 관련 앱
+    'staff',
+    # 강의 관련 앱
+    'lecture',
     # 소셜 로그인 패키지: allauth 관련
     'allauth',
     'allauth.account',
@@ -59,6 +65,9 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.naver',
     'allauth.socialaccount.providers.kakao',
+
+    # form 템플릿 css 처리 도와주는 장고템플릿 언어
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [
@@ -76,7 +85,10 @@ ROOT_URLCONF = 'IBAS.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates', '/home/ibas/Django/IBAS/templates']
+        'DIRS': [
+            BASE_DIR / 'templates',
+            '/home/ibas/Django/IBAS/templates',
+        ]
         ,
         'APP_DIRS': True,
         'OPTIONS': {
@@ -85,6 +97,10 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'utils.context_processors.alarms',  # 알람 시스템을 위한 context_processor
+                'utils.context_processors.chief',  # 하단바 회장 정보를 불러오기 위한 context_processor
+                'utils.context_processors.login',  # 로그인을 위한 context_processor
+                'utils.context_processors.login_check',  # 로그인 확인을 위한 context_processor
             ],
         },
     },
@@ -101,7 +117,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'IBAS',
         'USER': 'root',
-        'PASSWORD': 'bigdata1156--',
+        'PASSWORD': 'webproj3971--',
         'HOST': 'localhost',
         'PORT': '3356',
     }
@@ -150,7 +166,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(ROOT_DIR, '.static_root')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
-    '/home/ibas/Django/IBAS/main/static/',
+    '/home/ibas/Django/IBAS/static/',
 ]
 # social 로그인 패키지 설정
 AUTHENTICATION_BACKENDS = (
@@ -160,8 +176,21 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend',
 )
 
+# 미디어 파일을 관리할 루트 media 디렉터리
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# 각 media file에 대한 URL prefix
+MEDIA_URL = '/media/'
+
 # 소셜 로그인 관련 설정
 SITE_ID = 1
 LOGIN_REDIRECT_URL = '/user/pass'  # 로그인 성공시 리다이렉션 되는 URL 바꿀 필요가 있을 듯..
-ACCOUNT_EMAIL_REQUIRED = True # 이메일은 꼭 받게 만들기.
-ACCOUNT_LOGOUT_ON_GET = True # 로그 아웃 시 example.com사이트로 자동이동 하는 것 제거
+ACCOUNT_EMAIL_REQUIRED = True  # 이메일은 꼭 받게 만들기.
+ACCOUNT_LOGOUT_ON_GET = True  # 로그 아웃 시 example.com사이트로 자동이동 하는 것 제거
+
+# send email
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.googlemail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'ibasmail20@gmail.com'
+EMAIL_HOST_PASSWORD = 'weloveyoukhk'

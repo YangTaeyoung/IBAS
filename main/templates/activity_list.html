@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    <!--커스텀 css-->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/seungyeon.css' %}">
+
+
+    <!--===================================== 제목 및 부제목 부 시작 =====================================-->
+    <div class="page-wraper">
+        <div class="page-content bg-white">
+            <!----------상단 제목부분----------->
+            <!--제목을 감싸는 배경-->
+            <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"
+                 style=" background-image: url('{% static 'images/board_name_img.jpg' %}'); height: 350px">
+                <a href="{% url 'activity' %}">
+                    <div class="container clearfix">
+                        <div class="dlab-bnr-inr-entry">
+                            <!--제목-->
+                            <h1 class="text-white introduce-letter-spacing_5">동아리 활동</h1>
+                            <!--부제목-->
+                            <p class="introduce-margin-top_20">동아리 수상 및 활동 내역에 대한 게시판입니다.</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="clearfix">
+
+
+                <!--===================================== 게시글 부 시작 =====================================-->
+                <div class="content-block">
+                    <div class="section-full content-inner bg-white">
+                        <div class="container">
+                            <div class="row">
+                                <!-- 게시글 리스트 출력부분 -->
+                                {% if board_list %}
+                                {% for board in board_list %}
+                                    <!--============ 게시글 박스 시작 ============-->
+                                    <div class="col-lg-4 col-md-6 col-sm-6 m-b30">
+                                        <div class="listing-bx board-item overlap"
+                                             onclick="location.href='{% url "activity_detail" board_no=board.board_no %}'">
+                                            <form action="{% url 'activity_detail' board_no=board.board_no %}"
+                                                  method="POST">
+                                                {% csrf_token %}
+
+
+                                                <!-- 게시글 박스에 보이는 대표사진 -->
+                                                <div class="listing-media act-img-size">
+                                                    <!-- 첫번째 사진만 가져오기 -->
+                                                    <img src="/media/{{ board.boardfile_set.first.file_path }}"
+                                                         alt="">
+                                                </div>
+                                                <!--게시글 제목, 작성자 및 작성시간을 담 div 시작-->
+                                                <div class="listing-info">
+                                                    <!--게시글 제목-->
+                                                    <div class="line1">
+                                                        <input type="submit" class="title line1"
+                                                               value="{{ board.board_title }}"
+                                                               style="background-color:transparent; border:0px transparent solid;">
+                                                    </div>
+                                                    <!-- 게시글 작성자 및 작성시간는 div -->
+                                                    <div class="dlab-post-meta">
+                                                        <ul class="d-flex align-items-center">
+                                                            <!-- 게시글 작성자 -->
+                                                            <li class="post-author" style="color: white"><i
+                                                                    class="ti-user"
+                                                                    style="color: white"></i>
+                                                                <a
+                                                                >{{ board.board_writer.user_name }}</a></li>
+                                                            <!--게시글 작성시간-->
+                                                            <li class="post-date" style="color: white"><i
+                                                                    class="ti-alarm-clock"
+                                                                    style="color: white"></i>
+                                                                {{ board.board_created | date:"Y-m-d h:i" }}
+                                                            </li>
+                                                            <!-- 히든으로 넘기는 것, board_no 넘김 -->
+                                                            <input type="hidden" name="board_no"
+                                                                   value="{{ board.board_no }}">
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="4" style="text-align: center">게시글이 존재하지 않습니다.</td>
+                                    </tr>
+                                {% endif %}
+                            </div>
+                            <!-- ===============세션처리 했음, 회장, 부회장, 운영팀이 user_role 1, 2, 3 임. 나중에 user_role == 5 만 지우면 됌-->
+                            <!-- 게시글 등록버튼(권한자만 보임) -->
+                            <div class="extra-cell text-right">
+                                <!-- 현재 페이지, 전 페이지가 있는지 리턴해주는 함수 -->
+                                {% if logined_user.user_role.role_no <= 3 %}
+                                    <a href="{% url 'activity_register' %}" class="site-button radius-xl m-l10"><i
+                                            class="fa fa-plus m-r5"></i>
+                                        게시글 등록</a>
+                                {% endif %}
+                            </div>
+                            <div class="pagination-bx clearfix text-center">
+                                <ul class="pagination">
+                                    {% if board_list.has_previous %}
+                                        <li class="previous"><a href="?page=1"><i class="fa fa-arrow-left"></i></a>
+                                        </li>
+                                        <li>
+                                            <a href="?page={{ board_list.previous_page_number }}"> {{ board_list.previous_page_number }}</a>
+                                        </li>
+                                    {% endif %}
+                                    <li><a href="javascript:void(0)">{{ board_list.number }}</a></li>
+                                    {% if board_list.has_next %}
+                                        <li>
+                                            <a href="?page={{ board_list.next_page_number }}"> {{ board_list.next_page_number }}</a>
+                                        </li>
+                                        <li class="next"><a href="?page={{ board_list.paginator.num_pages }}"><i
+                                                class="fa fa-arrow-right"></i></a></li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 상단으로 한번에 올라가게 하는 버튼 -->
+            <button class="scroltop fa fa-chevron-up"></button>
+        </div>
+    </div>
+{% endblock %}

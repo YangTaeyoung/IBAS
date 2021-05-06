@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    <script src="{% static 'js/register.js' %}"></script>
+
+    <div class="page-wraper">
+        <div class="page-content bg-white">
+            <!----------============= 상단 제목 시작 ================----------->
+            <!--제목을 감싸는 배경-->
+            <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"
+                 style=" background-image: url('{% static 'images/board_name_img.jpg' %}'); height: 350px">
+                <!-- 상단 제목을 클릭하면, 상위 게시판으로 이동 -->
+                <!-- (ex.자유게시판의 '용식이의 학식일기'글의 상세 페이지에서 상위 제목을 클릭하면, 자유게시판으로 이동) -->
+                <a href="{% url 'board_view' board_type_no=board_type_no %}">
+                    <div class="container clearfix">
+                        <div class="dlab-bnr-inr-entry">
+                            <!--제목-->
+                            <!-- DB에서 제목 꺼내와야 함 -->
+                            <h1 class="text-white introduce-letter-spacing_5">{{ board_name }}</h1>
+                            <!--부제목-->
+                            <!-- DB에서 제목 꺼내와야 함 -->
+                            <p class="introduce-margin-top_20">{{ board_exp }}</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+        {% load widget_tweaks %}
+            <!--===============================================입력란=========================================================-->
+            <form action="{% if board_no is None %}{% url 'board_register' %}{% else %}{% url 'board_update' board_no %}{% endif %}"
+                  class="add-listing-form" method="post" enctype="multipart/form-data">
+
+                {% csrf_token %}
+
+                <div class="content-block">
+                    <div class="section-full content-inner bg-white">
+                        <div class="container">
+                            <!--=====================-->
+                            <div class="content-box editor">
+                                <!--글쓰기-->
+                                <div class="content-header">
+                                    <h3 class="title">게시글 작성</h3>
+                                </div>
+
+                                <div class="content-body">
+                                <!--제목 입력란-->
+                                    <div class="form-group">
+                                        {% render_field board_form.board_title class="form-control" style="font-size: 25px; height: 70px;"%}
+
+                                        <br/>
+
+                                        <!--이미지, 파일 업로드란-->
+                                        <div class="form-group">
+                                           {{ file_form.upload_file }}
+                                        </div>
+                                    </div>
+
+                                    <!-- 이미 존재하고 있던 이미지: 삭제 가능 (수정모드)-->
+                                    {% if board_no is not None %}
+                                        <div class="form-group">
+                                            <div id="image-cont" class="image-cont">
+                                                {% for board_file in file_list %}
+                                                    <div id="image-card-{{ board_file.file_id }}"
+                                                         class="image-card">
+                                                        <!-- 취소 버튼, 취소를 누를 시 image-card 컨테이너가 통채로 사라짐. -->
+                                                        <button type="button"
+                                                                class="btn btn-danger fa fa-times btn-cancel"
+                                                                onclick="delImg(document.getElementById('image-card-{{ board_file.file_id }}'))"></button>
+                                                        <!-- 이미지 컨테이너 이미지 파일일 경우 img태그가, 이미지 파일이 아닐 경우 파일 모양의 아이콘이 붙음. -->
+                                                        <div id="image-{{ board_file.file_id }}"
+                                                             class="image-container"></div>
+                                                        <!--기존 파일링크를 이동시키기 위한 히든 링크 -->
+                                                        <input type="hidden"
+                                                               name="exist_file_path_{{ board_file.file_id }}"
+                                                               value="{{ board_file.file_path }}"/>
+                                                    </div>
+                                                    <script>
+                                                        // 페이지가 로딩 될 때 해당 함수도 자동으로 실행되도록 설정함. (아이콘 or img 결정)
+                                                        onload = decisionIcon(document.getElementById("image-{{ board_file.file_id }}"), '{{ board_file.file_path }}');
+                                                    </script>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                    <!--내용입력란-->
+                                    <div class="form-group">
+                                        {% render_field board_form.board_cont class="jqte-test" %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--=====================-->
+                            <!--등록하기 버튼, 누르면 게시글 상세보기로-->
+                            <!--최초 글작성 시 나오는 버튼-->
+                            <div style="display: grid; justify-items: center">
+                                <button class="site-button btn-block button-md" type="submit" style="width: 30%">
+                                    {% if board_no is None %}
+                                        등록하기
+                                    {% else %}
+                                        수정하기
+                                    {% endif %}
+                                </button>
+                            </div>
+
+                            <!-- Pagination END -->
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

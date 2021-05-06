@@ -16,12 +16,22 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from . import views
+# 이미지를 업로드하자
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     # path('', include('first.urls')),
     path('user/', include('member.urls')),
+    path('board/', include('board.urls')),
+    path('lect/', include('lecture.urls')),
     path('admin/', admin.site.urls),
     path('', include('main.urls')),
+    path('member/', include('staff.urls')),
+    path('bank/', include('bank.urls')),
+    path('staff/', include('staff.urls')),
+    path('my_info/', include('my_info.urls')),
+    # 템플릿 테스팅 링크
     path('test/add/listing/', views.add_listing, name="add_listing"),
     path('test/blog/detail/', views.blog_detail, name="blog_detail"),
     path('test/blog/standard/', views.blog_standard, name="blog_standard"),
@@ -43,3 +53,5 @@ urlpatterns = [
     path('test/listing/right/sidebar/', views.listing_right_sidebar, name="coming_soon"),
     path('test/register', views.register, name="coming_soon"),
 ]
+# 이미지 URL 설정
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

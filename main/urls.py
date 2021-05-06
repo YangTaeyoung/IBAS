@@ -1,15 +1,24 @@
-
 from django.urls import path, include
 from . import views
 
-urlpatterns = [
-    # path('test/', views.test_main, name="main"), #메인
-    path('test/top_bar/', views.test_top_bar, name='top_bar'), # 탑바 작업
-    path('test/bottom_bar/', views.test_bottom_bar, name='test_bottom_bar'), # 하단 바 작업
-    path('test/introduce/', views.test_introduce, name='test_introduce'), # 동아리 소개 작업
-    path('test/test_activity/', views.test_activity, name='test_activity'), # 동아리 활동 게시판
-    path('test/test_activity/detail/', views.test_activity_detail, name='test_activity_detail'), # 동아리 활동 자세히 보기
-    path('test/test_activity/register/', views.test_activity_register, name='test_activity_register'), # 동아리 등록하기
-    path('', views.index, name="index"),  # 메인페이지 이동 링크
-]
+# Media files 저장 및 전달 설정하기 위한 import
+from django.conf import settings
+from django.conf.urls.static import static
 
+urlpatterns = [
+    path('', views.index, name="index"),  # 메인페이지 이동 링크
+    path('introduce/', views.introduce, name='introduce'),  # 동아리 소개 작업
+    path('activity/', views.activity_list, name='activity'),  # 동아리 활동 게시판
+    path('activity/<int:board_no>/detail/', views.activity_detail, name='activity_detail'),  # 동아리 활동 자세히 보기
+    path('activity/register/', views.activity_register, name='activity_register'),  # 동아리 등록하기
+    path('activity/update/<int:board_no>/', views.activity_update, name='activity_update'),  # 동아리 글 수정하기
+    path('activity/delete/<int:board_no>/', views.activity_delete, name='activity_delete'),  # 동아리 활동 글 삭제하기
+    path('activity/comment/register', views.activity_comment_register, name='activity_comment_register'),  # 동아리 댓글 쓰는 것
+    path('activity/comment/delete/', views.activity_comment_delete, name='activity_comment_delete'),  # 동아리 댓글 삭제하는 것
+    path('activity/comment/update/', views.activity_comment_update, name='activity_comment_update'),
+    path('history/register/', views.history_register, name='history_register'),
+    path('history/update/', views.history_update, name='history_update'),
+    path('history/delete/', views.history_delete, name='history_delete'),
+    path('alarm/chk/<int:alarm_no>/', views.alarm_check, name="alarm_check")
+]
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

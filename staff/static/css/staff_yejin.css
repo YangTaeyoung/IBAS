@@ -1,0 +1,126 @@
+/*완료 상태 스타일*/
+.staff-fin{
+    color:#408558;
+    text-align: center;
+    font-style: italic;
+}
+
+/*진행중 상태 스타일*/
+.staff-ing{
+    color:#cb444a;
+    text-align: center;
+    font-style: italic;
+}
+
+/*============================================================================*/
+
+/*td 너비를 조정하기 위함*/
+.staff_width_50 {
+    width: 50px;
+}
+
+/*td 너비를 조정하기 위함*/
+.staff_width_70 {
+    width: 70px;
+}
+
+/*td 너비를 조정하기 위함*/
+.staff_width_100 {
+    width: 100px;
+}
+
+/*td 너비를 조정하기 위함*/
+.staff_width_150 {
+    width: 150px;
+}
+
+/*td 너비를 조정하기 위함*/
+.staff_width_170 {
+    width: 170px;
+}
+
+/*td 너비를 조정하기 위함*/
+.staff_width_200 {
+    width: 200px;
+}
+
+/*td 너비를 조정하기 위함*/
+.staff_width_230 {
+    width: 230px;
+}
+
+/*여기서부터 회원관리 부분 체크박스부분 스타일임. */
+input[type="checkbox"]:checked + label:before {
+    border-color: #4611a7;
+    border-width: 2px;
+}
+
+input[type=checkbox] + label:before {
+    background-color: #ffffff;
+    border: 2px solid #b6b7b8;
+    border-radius: 0;
+    content: "";
+    display: inline-block;
+    height: 16px;
+    left: 1px;
+    line-height: 1;
+    position: absolute;
+    top: 50%;
+    transition: all 0.1s linear 0s;
+    -moz-transition: all 0.1s linear 0s;
+    -webkit-transition: all 0.1s linear 0s;
+    -o-transition: all 0.1s linear 0s;
+	transform: translateY(-50%);
+	-webkit-transform: translateY(-50%);
+	-moz-transform: translateY(-50%);
+	-o-transform: translateY(-50%);
+    width: 16px;
+}
+input[type=checkbox]:checked + label:after {
+    font-size: 10px;
+    left: 2px;
+	top:50%;
+    transform: translateY(-50%);
+	-webkit-transform: translateY(-50%);
+	-moz-transform: translateY(-50%);
+	-o-transform: translateY(-50%);
+}
+input[type=checkbox] + label:after {
+    color: #4611a7;
+    content: "\f00c";
+    font-family: FontAwesome;
+    font-size: 0px;
+    -webkit-font-smoothing: antialiased;
+    left: 6px;
+    position: absolute;
+    top: 7px;
+    transition: all linear 0.1s;
+    -moz-transition: all linear 0.1s;
+    -webkit-transition: all linear 0.1s;
+    -o-transition: all linear 0.1s;
+    width: 14px;
+    text-align: center;
+}
+/*여기서까지 회원관리 부분 체크박스부분 스타일임. */
+
+/*회원관리 select 부분 스타일 적용을 위함 */
+.staff_mem_select{
+    display: inline-block;
+    width: 110px;
+}
+
+/*회원관리 적용 버튼 스타일 적용을 위함 */
+.staff_mem_btn{
+    display: inline-block;
+    margin-left: 15px;
+
+}
+/*회원관리 체크박스 가운데 정렬을 위함*/
+.staff_label_margin {
+    margin-top: 13px;
+}
+
+/*페이지네이션 밑 공간 줄이기 위함*/
+.staff_margin_bottom_0 {
+    margin-bottom: 0;
+}

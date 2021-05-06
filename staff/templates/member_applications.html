@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+
+        <link rel="stylesheet" type="text/css" href="{% static 'css/star-rating-svg.css' %}"/>
+        <link
+                rel="stylesheet"
+                type="text/css"
+                href="{% static 'plugins/editor/jquery-te-1.4.0.css' %}"
+        />
+
+        <link
+                rel="stylesheet"
+                type="text/css"
+                href="{% static 'plugins/drop/imageuploadify.min.css' %}"
+        />
+        <link rel="stylesheet" href="{% static 'plugins/tag-editor/jquery.tag-editor.css' %}"/>
+        <script>
+            function member_pass() {
+                if (confirm("지원자를 합격시키겠습니까?")) {
+                    document.getElementById("form-apply").submit();
+                }
+            }
+
+            function member_nopass() {
+                if (confirm("지원자를 탈락시키겠습니까?\n모든 DB에서 해당 지원자에 대한 기록이 사라집니다.")) {
+                    document.getElementById("form-deny").submit();
+                }
+            }
+
+        </script>
+    </head>
+
+    <body>
+    <div class="page-wraper">
+        <div class="page-content bg-white">
+            <!----------상단 제목부분----------->
+            <!--제목을 감싸는 배경-->
+            <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"
+                 style=" background-image: url('{% static 'images/board_name_img.jpg' %}'); height: 350px">
+                <!--상단 제목부분을 누르면 해당 게시판 목록으로 이동-->
+                <a href="#">
+                    <div class="container clearfix">
+                        <div class="dlab-bnr-inr-entry">
+                            <!--제목-->
+                            <h1 class="text-white introduce-letter-spacing_5">지원서</h1>
+                            <!--부제목-->
+                            {#                            <p class="introduce-margin-top_20">신입부원 지원서를 볼 수 있는 게시판입니다. </p>#}
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <!--===============================================입력란=========================================================-->
+
+            <div class="content-block">
+                <div class="section-full content-inner bg-white">
+                    <div class="container">
+                        <!--=====================-->
+                        <!--승인을 대기 중일 때 뜨는 알람-->
+                        {% if user.user_auth.auth_no == 1 %}
+                            <div class="alert alert-secondary" role="alert" style="text-align: center">
+                                <i>승인대기중</i>
+                            </div>
+                        {% elif user.user_auth.auth_no == 2 %}
+                            <!--합격 시 뜨는 알람-->
+                            <div class="alert alert-success" role="alert" style="text-align: center">
+                                <i>합격</i>
+                            </div>
+                        {% endif %}
+                        {#                        <!--불합격 시 뜨는 알람, 거절 사유 입력하면 같이 뜨게 만들기--> 각하. 불합격한 사람은 DB에 남기지 않음. 추후 Email 을 활용하여 통보할 예정. #}
+                        {#                        <div class="alert alert-danger" role="alert" style="text-align: center">#}
+                        {#                            <i>불합격 ( 불합격 사유 : )</i>#}
+                        {#                        </div>#}
+
+                        <!--====================================지원자 이름 시작==============================================-->
+                        <div class="content-box">
+                            <div class="content-header">
+                                <h3 class="title">지원자</h3>
+                            </div>
+                            <div class="content-body">
+                                <div class="form-group">
+                                    <a>{{ user.user_name }}</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!--====================================지원자 이름 끝=============================================-->
+                        <!--====================================지원 시간 시작==============================================-->
+                        <div class="content-box">
+                            <div class="content-header">
+                                <h3 class="title">지원 일시</h3>
+                            </div>
+                            <div class="content-body">
+                                <div class="form-group">
+                                    <a>{{ user.user_joined|date:"Y-m-d / H:i" }}</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!--====================================지원 시간 끝=============================================-->
+                        <!--====================================학번 시작==============================================-->
+                        <div class="content-box">
+                            <div class="content-header">
+                                <h3 class="title">학번</h3>
+                            </div>
+                            <div class="content-body">
+                                <div class="form-group">
+                                    <a>{{ user.user_stu }}</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!--====================================학번 끝=============================================-->
+                        <!--====================================학년 시작==============================================-->
+                        <div class="content-box">
+                            <div class="content-header">
+                                <h3 class="title">학년</h3>
+                            </div>
+                            <div class="content-body">
+                                <div class="form-group">
+                                    <a>{{ user.user_grade }}학년</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!--====================================학년 끝=============================================-->
+                        <!--====================================학과 시작==============================================-->
+                        <div class="content-box">
+                            <div class="content-header">
+                                <h3 class="title">학과</h3>
+                            </div>
+                            <div class="content-body">
+                                <div class="form-group">
+                                    <a>{{ user.user_major.major_name }}</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!--====================================학과 끝=============================================-->
+                        <!--====================================질문에 대한 답변 1 시작==============================================-->
+                        {% for user_answer in user_answer_list %}
+                            <div class="content-box">
+                                <div class="content-header"> <!-- 질문 -->
+                                    <h3 class="title">{{ forloop.counter }}. {{ user_answer.answer_quest.quest_name }}</h3>
+                                </div>
+                                <div class="content-body"> <!-- 답변 -->
+                                    <div class="form-group">
+                                        <a>{{ user_answer.answer_cont }}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        <!--====================================질문에 대한 답변 1 끝=============================================-->
+
+
+                        <div style="display: flex; justify-content: center; ">
+                            <button type="button" class="btn btn-outline-success btn-lg"
+                                    style="width: 200px; font-weight: bold"
+                                    onclick="member_pass()">
+                                승인
+                            </button>
+                            <form id="form-apply" action="{% url 'member_aor' %}" method="post" style="display: none">
+                                {% csrf_token %}
+                                <input type="hidden" name="user_stu" value="{{ user.user_stu }}"/>
+                                <input type="hidden" name="apply" value="1"/>
+                            </form>
+                            <!--거절-->
+                            <button type="button" class="btn btn-outline-danger btn-lg "
+                                    style="width: 200px; margin-left: 10px; font-weight: bold"
+                                    onclick="member_nopass()"
+                                    href="javascript:void(0);" data-toggle="modal" data-target="#favorite">
+                                거절
+                            </button>
+                            <form id="form-deny" action="{% url 'member_aor' %}" method="post" style="display: none">
+                                {% csrf_token %}
+                                <input type="hidden" name="user_stu" value="{{ user.user_stu }}">
+                                <input type="hidden" name="apply" value="2"/>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </body>
+    </html>
+
+{% endblock %}
