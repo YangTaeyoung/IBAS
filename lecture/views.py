@@ -5,6 +5,8 @@ from pagination_handler import get_paginator_list, get_page_object
 from user_controller import get_logined_user
 
 
+
+
 # Create your views here.
 def lect_register(request):  # 게시판 등록 페이지로 이동
     if request.method == "GET":
