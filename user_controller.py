@@ -64,16 +64,25 @@ def writer_only(func):
 
         board_no = kwargs.get('board_no')
         contest_no = kwargs.get('contest_no')
+        bank_no = kwargs.get('bank_no')
+        lect_no = kwargs.get('lect_no')
 
         # 글쓴이인가요
         if board_no is not None:
             board = Board.objects.get(pk=board_no)
             if current_user == board.board_writer:
                 is_writer = True
-
         elif contest_no is not None:
             contest = ContestBoard.objects.get(pk=contest_no)
             if current_user == contest.contest_writer:
+                is_writer = True
+        elif lect_no is not None:
+            lect = Lect.objects.get(pk=lect_no)
+            if current_user == lect.lect_chief:
+                is_writer = True
+        elif bank_no is not None:
+            bank = Bank.objects.get(pk=bank_no)
+            if current_user == bank.bank_used_user:
                 is_writer = True
         else:
             pass

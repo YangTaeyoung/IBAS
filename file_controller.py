@@ -1,5 +1,5 @@
 import shutil
-from DB.models import Board, BoardFile, ContestBoard, ContestFile
+from DB.models import Board, BoardFile, ContestBoard, ContestFile, Lect, Bank, BankFile
 import os
 from IBAS.settings import MEDIA_ROOT
 

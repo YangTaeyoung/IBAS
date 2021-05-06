@@ -26,7 +26,9 @@
                         <div class="dlab-bnr-inr-entry">
                             <!--제목-->
                             <!--강의게시판, 스터디게시판, 취미모임게시판 종류에 따라 바뀌도록 변경-->
-                            <h1 class="text-white introduce-letter-spacing_5">{{ lect_type.type_name }}</h1>
+                            <h1 class="text-white introduce-letter-spacing_5"><a
+                                    href="{% url 'lect_view' type_no=lect_type.type_no %}"
+                                    style="color: white">{{ lect_type.type_name }}</a></h1>
                             <!--부제목-->
                             <!--강의게시판, 스터디게시판, 취미모임게시판 종류에 따라 바뀌도록 변경-->
                             <p class="introduce-margin-top_20">{{ lect_type.type_exp }}</p>
@@ -39,7 +41,7 @@
             <form action="{% url 'lect_register' %}"
                   class="add-listing-form" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
-            <input type="hidden" name="lect_type" value="{{ lect_type.type_no }}"/>
+                <input type="hidden" name="lect_type" value="{{ lect_type.type_no }}"/>
                 <div class="content-block">
                     <div class="section-full content-inner bg-white">
                         <div class="container">
