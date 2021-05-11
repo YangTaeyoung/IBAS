@@ -3,7 +3,8 @@
 {% block content %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/ibas_contents.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/nav.css' %}">
-    <script src="{% static 'js/yejin.js' %}"></script>
+    <script src="{% static 'js/ibas_centents.js' %}"></script>
+    <script src="{% static 'js/nav.js' %}"></script>
     <link rel="stylesheet" type="text/css" href="{% static 'css/star-rating-svg.css' %}"/>
     <link
             rel="stylesheet"
@@ -173,7 +174,7 @@
     <!-- section id는 네비게이션바를 위해 사용함. -->
     <section id="history">
         <!--introduce-padding-bottom_0 introduce-contact-flex-container는 yejin.css에 정의되어 있음. -->
-        <div class=" bg-img-fix most-visited content-inner introduce-padding-bottom_0 introduce-contact-flex-container"
+        <div class=" bg-img-fix most-visited content-inner pb-0 introduce-contact-flex-container"
              style="background-image:url('{% static 'images/main-introduce.jpg' %}'); z-index: 0">
             <div class="container" style="margin: 0">
                 <!--introduce-for-del-margin는 yejin.css에 정의되어 있음. -->
@@ -251,7 +252,7 @@
                     <!-- ===========================동아리 연혁부분 박스================================ -->
                     <!--introduce-box-bg introduce-history-box introduce-color_black 는 yejin.css에 정의되어 있음. -->
                     <div class="icon-bx-wraper introduce-box-bg introduce-history-box
-                    introduce-color_black introduce-margin-bottom_10" style="z-index: 0; margin-left: 0">
+                    text-dark m-b10" style="z-index: 0; margin-left: 0">
                         <!-- introduce-history-grid introduce-overflow_auto는 yejin.css에 정의되어 있음. -->
                         {% for history in history_list %}
                             <form id="history-update-{{ history.history_no }}" action="{% url 'history_update' %}"
@@ -265,14 +266,14 @@
                                     <!-- ===========================여기서부터 introduce_update() introduce_del() 쓰임. ================================ -->
                                     <!-- =========================== 연혁 박스 안 내용 시작 ================================ -->
                                     <!-- 날짜 -->
-                                    <div class="introduce-text-align_center">
+                                    <div class="text-center">
                                         <!-- introduce-update-input-date introduce-margin-bottom_10는 yejin.css에 정의되어 있음. -->
                                         <!-- introduce_update()에서 disabled를 false로 만들어야 하므로 꼭 필요해여 -->
                                         <input id="date-{{ history.history_no }}" type="date"
                                                name="history_date"
                                                value="{{ history.history_date|date:'Y-m-d' }}"
                                                disabled="disabled"
-                                               class="introduce-update-input-date introduce-margin-bottom_10"
+                                               class="introduce-update-input-date m-b10"
                                                style="width: 170px">
                                     </div>
                                     <!-- 내용 -->
@@ -331,7 +332,7 @@
                     <h2 class="box-title">Contact Us</h2>
                     <div class="dlab-separator" style="background-color: #091069; z-index: 0; "></div>
                     <!-- introduce-margin-bottom_5 introduce-font-size_15는 yejin.css에 정의되어 있음. -->
-                    <p class="introduce-margin-bottom_5 introduce-font-size_15">
+                    <p class="m-b5 introduce-font-size_15">
                         <i class="ti-email"></i>
                         {{ chief.user_email }}
                     </p>
@@ -359,22 +360,22 @@
         <!--introduce-nav-bar는 yejin.css에 정의되어 있음. -->
         <div class="listing-filter-sidebar introduce-nav-bar">
             <!--introduce-margin-bottom_10는 yejin.css에 정의되어 있음. -->
-            <h4 class="title m-b30 introduce-margin-bottom_10">IBAS</h4>
+            <h4 class="title m-b30 m-b10">IBAS</h4>
             <!-- 글자 누르면 해당하는 영역으로 이동함. id를 통해 찾아가는 것임.  -->
             <!--introduce-nav-txt는 yejin.css에 정의되어 있음. -->
             <!--clickMenu()는 yejin.js에 정의되어 있음. 클릭했을 때 글자 색 변하는 것. -->
             <a id="intro-a" href="#introduce" class="intro introduce-nav-txt menu-item introduce-change-nav"
                onclick="clickMenu(0)">
-                <p class="introduce-margin-bottom_5">동아리 소개</p>
+                <p class="m-b5">동아리 소개</p>
             </a>
             <a id="intro-cm-a" href="#introduce_cm" class="intro_cm introduce-nav-txt menu-item" onclick="clickMenu(1)">
-                <p class="introduce-margin-bottom_5">회장단 소개</p>
+                <p class="m-b5">회장단 소개</p>
             </a>
             <a id="his-a" href="#history" class="his introduce-nav-txt menu-item" onclick="clickMenu(2)">
-                <p class="introduce-margin-bottom_5">동아리 연혁</p>
+                <p class="m-b5">동아리 연혁</p>
             </a>
             <a id="con-a" href="#contact" class="con introduce-nav-txt menu-item" onclick="clickMenu(3)">
-                <p class="introduce-margin-bottom_5">Contact Us</p>
+                <p class="m-b5">Contact Us</p>
             </a>
         </div>
     </nav>

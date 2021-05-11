@@ -73,6 +73,7 @@
     <!-- 여기까지 기존 템플릿에 있던 것 -->
     <!--외부 css파일 받는 링크 / 이 html에서만 쓰는 것. -->
     <link rel="stylesheet" href="{% static 'css/login-join.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/size.css' %}">
     <script>
         phoneIsNotOK = 0; // 핸드폰 중복 체크를 위한 변수 0:정상 1: 중복이 있음
         stuIsNotOK = 0;// 학 중복 체크를 위한 변수 0:정상 1: 중복이 있음
@@ -217,10 +218,10 @@
                                     </div>
                                     <p id="error_text_phone" class="error-text">입력한 핸드폰 번호가 중복됩니다.</p>
                                     <!-- 학년, 학번 컨테이너 -->
-                                    <div class="form-container-flex form-group mb-0">
+                                    <div class="form-container-flex form-group m-b0">
                                         <!--학년 컨테이너-->
                                         {% if user_role == "6" %}
-                                            <div class="form-item-flex-std-grade">
+                                            <div class="width-100">
                                                 <select name="user_grade" required="required">
                                                     <option value="1">
                                                         1학년
@@ -264,8 +265,8 @@
                                     <p id="error_text_stu" class="error-text">입력하신 {% if user_role == "6" %}
                                         학번이{% else %}교수번호가{% endif %} 이미 가입되어 있습니다.</p>
                                     <!-- 전공 input -->
-                                    <div class="form-container-flex form-group mb-0">
-                                        <div class="form-item-flex-major">
+                                    <div class="form-container-flex form-group m-b0">
+                                        <div class="width-400">
                                             <input
                                                     type="text"
                                                     id="user_major"
@@ -319,7 +320,7 @@
 <!-- 전공 검색 팝업창 -->
 <div id="major-search-popup" class="card major-search-popup ">
     <div class="card-header" style="display: flex; align-items: center; justify-content: space-between">
-        <h4 class="card-title"> 전공 검색 </h4>
+        <h4 class="m-b0"> 전공 검색 </h4>
         <!-- 닫기 버튼 -->
         <i class="fa fa-close fa-2x btn-exit" onclick="popDown()"></i>
     </div>
@@ -363,7 +364,7 @@
 
 <!-- JAVASCRIPT FILES ========================================= -->
 <!-- 직접 만든 회원 가입 관련 JS-->
-<script src="{% static 'js/join.js' %}"></script>
+<script src="{% static 'js/login-join.js' %}"></script>
 
 
 <script src="{% static 'js/jquery.min.js' %}"></script>

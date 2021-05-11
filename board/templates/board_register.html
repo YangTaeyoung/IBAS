@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-    <script src="{% static 'js/register.js' %}"></script>
+    <script src="{% static 'js/posting_register.js' %}"></script>
     <link rel="stylesheet" href="{% static 'css/posting_register.css' %}"/>
 
     <div class="page-wraper">
@@ -20,7 +20,7 @@
                             <h1 class="text-white introduce-letter-spacing_5">{{ board_name }}</h1>
                             <!--부제목-->
                             <!-- DB에서 제목 꺼내와야 함 -->
-                            <p class="introduce-margin-top_20">{{ board_exp }}</p>
+                            <p class="m-t20">{{ board_exp }}</p>
                         </div>
                     </div>
                 </a>

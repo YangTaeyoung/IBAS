@@ -32,9 +32,6 @@
     padding: 0;
 }
 
-.form-major {
-    width: 80%;
-}
 
 /* .form-select를 만든 이유는 학년 선택 input과 학번 input을 나란히 하는데 용이하게 하기 위함임.
 사용된 곳 : 단답작성란에서 학번input 상위 div의 class부분 */
@@ -49,10 +46,6 @@
     column-gap: 10px;
 }
 
-.mb-0 /*밑 마진을 0로 만듦*/
-{
-    margin-bottom: 0px;
-}
 
 .form-item-flex-std-grade {
     width: 100px; /* 학년에 적용되는 width값 작은 네모의 폭을 유지하기 위해 값을 고정*/
@@ -67,10 +60,6 @@
     /* select 버튼 높이 조절.*/
     height: 45px;
     border-radius: 20px;
-}
-
-.form-item-flex-major {
-    width: 400px; /* 전공에 적용되는 width값 작은 네모의 폭을 유지하기 위해 값을 고정*/
 }
 
 .form-item-flex-major-icon {
@@ -172,10 +161,6 @@
     opacity: 0.5;
 }
 
-/*로고의 위치(아이템)*/
-.join-logo-position {
-    justify-content: center;
-}
 
 /*임시 로고 사이즈 및 색(추후 색 삭제 예정) */
 .join-logo-size {
@@ -187,24 +172,6 @@
 .container-btn {
     display: flex;
     margin-top: 30px;
-}
-
-/*다음버튼 컨테이너 위치*/
-.container-btn-position {
-    justify-content: center;
-}
-
-/*다음버튼 커스텀 디자인*/
-.join-btn {
-    width: 170px;
-}
-
-.yjbtn {
-    width: 150px;
-}
-
-.form-text-align-center {
-    text-align: center;
 }
 
 /* 컨테이너를 flex로 변경*/
@@ -254,11 +221,6 @@
     height: 400px;
     background-color: white;
     z-index: 1000;
-}
-
-/* 카드 제목 마진을 없앰 */
-.card-title {
-    margin-bottom: 0;
 }
 
 .listBox {
@@ -369,11 +331,7 @@
   flex-direction: column;
   justify-content: center;
 }
-/* 입부신청버튼 크기 조절 역할.  */
-/* 쓰인 곳: 입부신청버튼부분 */
-.btn-width_150px {
-  width: 150px;
-}
+
 /*입부 신청 버튼 위치 조절하는 역할. */
 .submit-btn-center{
     display: flex;
@@ -386,19 +344,6 @@
   flex: 1;
 
 }
-/* 아이템 div 안에 있는 버튼을 오른쪽으로 두기 위함임.  */
-/* 쓰인 곳: 입부신청버튼부분 */
-.item-flex-btn_end {
-  justify-content: end;
-}
-
-/* 회원가입 서술 폼 위치 조정 위함. */
-/* 쓰인 곳 : 서술형 질문 시작부분. id = register*/
-.padding-top_50 {
-  padding-top: 50px;
-}
-
-
 
 /*============== 로그인 부분에 사용된 css ==============*/
 
@@ -448,11 +393,6 @@
     height: 150px;
     display: flex;
     margin-bottom: 30px;
-}
-
-/*로고의 위치(아이템)*/
-.login-logo-position {
-    justify-content: center;
 }
 
 /*하단 카피라이트 글자 색상, 크기, 위치*/
@@ -564,17 +504,6 @@
     background-color: white;
     border-radius: 3px;
 }
-
-/* 동아리 로고 시작 div*/
-.padding-bottom_20px {
-    padding-bottom: 20px;
-}
-/* 카드 안에 있는 이미지 크기 조정 위함. */
-/*사용된 것 : <img>*/
-.width_360px {
-    width: 360px;
-    }
-
 
 /*card 부분 / 보라색 div 안에 있는 큰 card임. */
 .big-card{

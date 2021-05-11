@@ -1,3 +1,4 @@
+// ================================== register 관련 js ========================================= //
 // 파일 확장자를 반환하는 함수 (.)포함
 function getExtensionOfFilename(filename) {
     var _fileLen = filename.length;
