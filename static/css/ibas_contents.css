@@ -555,3 +555,16 @@ input[type=checkbox] + label:after {
     margin-top: 13px;
 }
 
+/*=============== lectureRoom에 사용된 css ===============*/
+/*수강생관리 상태(수강중)의 폰트 색과 두께 설정을 위함*/
+.lectRoom_state_ing_font {
+    color: #408558;
+    font-weight: bolder
+}
+
+/*수강생관리 상태(수강정지)의 폰트 색과 두께 설정을 위함*/
+.lectRoom_state_stop_font {
+    color: #cb444a;
+    font-weight: bolder;
+    font-style: italic;
+}
