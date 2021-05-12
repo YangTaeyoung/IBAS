@@ -1,3 +1,4 @@
+// ================================== comment 관련 js ========================================= //
 // 대댓글창 삽입
 function addReply(comment_id, url, board_no, csrf_token) {
     // 답글달기 버튼 안보이게
@@ -111,7 +112,6 @@ function  submitRef(comment_id)
 //     $(reply_comment).focus();
 //     $(reply_comment)[0].setSelectionRange(len, len);
 // }
-
 // 댓글수정 (DB 적용X - 테스트용 ver)
 // 위에 주석처리된 것을 참고하여 수정
 // 수정필요한 부분1

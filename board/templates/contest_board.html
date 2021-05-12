@@ -1,11 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-    <link
-            rel="stylesheet"
-            type="text/css"
-            href="{% static 'css/lecture-shin.css' %}"
-    />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/posting_list.css' %}">
     <div class="page-wraper">
         <!-- 상단 제목부분 -->
         <div class="page-content bg-white">
@@ -22,7 +18,7 @@
                             <h1 class="text-white introduce-letter-spacing_5">{{ board_name }}</h1>
                             <!--부제목-->
                             <!-- DB에서 부제목 꺼내와야 함 공모전, 강의, 취미 -->
-                            <p class="introduce-margin-top_20">{{ board_exp }}</p>
+                            <p class="m-t20">{{ board_exp }}</p>
                         </div>
                     </div>
                 </a>

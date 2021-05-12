@@ -1,13 +1,6 @@
+/*================================== 이미 첨부된 파일 관련 css ==================================*/
 /* 이미 첨부되어 있는 img 태그, 사진이 아닐 경우 div에 적용되는 스타일*/
-.file-img
-{
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 3px;
-    font-size: 100px;
-    text-align: center;
-}
+
 /* 취소버튼 스타일*/
 .btn-cancel
 {

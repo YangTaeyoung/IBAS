@@ -16,7 +16,7 @@
                     {% if not is_logined %}
                         <img class="ibas_logo" onclick="location.href = '{% url "login" %}'"
                              src="{% static 'images/ibas_main_logo.png' %}"/>
-                        <div class="main_text"><img src="{% static 'images/main-text.png' %}"/></div>
+                        <div class="m-t50"><img src="{% static 'images/main-text.png' %}"/></div>
                         <div onclick="location.href = '{% url "login" %}'" class="category-bx"
                              style="margin-top: 100px; margin-bottom: 100px">
                             <a href="#" class="category" style="width: 500px;">
@@ -26,7 +26,7 @@
                     {% else %}
                         <!--======================여기는 로그인이 된 상태(세션이 등록되어 있음)====== -->
                         <img class="ibas_logo" src="{% static 'images/ibas_main_logo.png' %}"/>
-                        <div class="main_text"><img src="{% static 'images/main-text.png' %}"/></div>
+                        <div class="m-t50"><img src="{% static 'images/main-text.png' %}"/></div>
                         <div class="category-bx" style="margin-top: 100px; margin-bottom: 100px"></div>
                         <!--=================href에 아무것도 걸지 않으므로 달라진 점이 없다. ==========-->
                     {% endif %}

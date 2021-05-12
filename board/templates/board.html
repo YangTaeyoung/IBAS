@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/posting_list.css' %}">
     <div class="page-wraper">
         <!-- 상단 제목부분 -->
         <div class="page-content bg-white">
@@ -18,7 +19,7 @@
                             <h1 class="text-white introduce-letter-spacing_5">{{ board_name }}</h1>
                             <!--부제목-->
                             <!-- DB에서 제목 꺼내와야 함 -->
-                            <p class="introduce-margin-top_20">{{ board_exp }}</p>
+                            <p class="m-t20">{{ board_exp }}</p>
                         </div>
                     </div>
                 </a>
@@ -125,7 +126,7 @@
                                     </tbody>
                                 </table>
 
-                                {% if is_logiend %}
+                                {% if is_logined %}
                                     {% if board_type_no == 1 and logined_user.user_role.role_no <= 5 or board_type_no != 1 and board_type_no != 5 and logined_user.user_auth.auth_no != 3 %}
                                         <form action="{% url 'board_register' %}" method="get">
                                             <input type="hidden" name="board_type_no" value="{{ board_type_no }}">

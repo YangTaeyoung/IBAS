@@ -1,13 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-    <!DOCTYPE html>
-    <html lang="en">
-
-    <head>
-        <meta charset="UTF-8">
-        <title>Title</title>
-
+        <link rel="stylesheet" type="text/css" href="{% static 'css/posting_detail.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'css/star-rating-svg.css' %}"/>
         <link
                 rel="stylesheet"
@@ -44,7 +38,6 @@
                 }
             }
         </script>
-    </head>
 
     <body>
     <div class="page-wraper">
@@ -60,7 +53,7 @@
                             <!--제목-->
                             <h1 class="text-white introduce-letter-spacing_5">예산지원신청</h1>
                             <!--부제목-->
-                            <p class="introduce-margin-top_20">예산 지원을 신청하는 게시판입니다.</p>
+                            <p class="m-t20">예산 지원을 신청하는 게시판입니다.</p>
                         </div>
                     </div>
                 </a>

@@ -1,23 +1,11 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-    <!--커스텀 css-->
-    <link rel="stylesheet" type="text/css" href="{% static 'css/seungyeon.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/posting_detail.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/comment.css' %}">
     <script src="{% static 'js/jquery.min.js' %}"></script><!-- JQUERY.MIN JS -->
-    <script src="{% static 'js/sy.js' %}"></script>
-    <script>
-        function go_delete() {
-            if (confirm("정말 해당 게시글을 삭제하시겠습니까?")) {
-                document.getElementById("form-board-delete").submit()
-            }
-        }
+    <script src="{% static 'js/comment.js' %}"></script>
 
-        function go_update() {
-            document.getElementById('form-board-update').submit()
-        }
-
-
-    </script>
     <div class="page-wraper">
 
         <div class="page-content bg-white">
@@ -36,7 +24,7 @@
                                 <h1 class="text-white introduce-letter-spacing_5">{{ board.board_type_no.board_type_name }}</h1>
                                 <!--부제목-->
                                 <!-- DB에서 제목 꺼내와야 함 -->
-                                <p class="introduce-margin-top_20">{{ board.board_type_no.board_type_exp }}</p>
+                                <p class="m-t20">{{ board.board_type_no.board_type_exp }}</p>
                             </div>
                         </div>
                     </a>
@@ -156,31 +144,22 @@
                                         {% if logined_user.user_stu == board.board_writer.user_stu %}
                                             <!-- 게시글 수정 버튼 -->
                                             <!-- 관련자만 보이게 처리 -->
-                                            <button class="site-button radius-xl m-l10" onclick="go_update()"><i
-                                                    class="fa fa-pencil m-r5"></i>게시글 수정
+                                            <button class="site-button radius-xl m-l10"
+                                                    onclick="location.href='{% url 'board_update' board_no=board.board_no %}'">
+                                                <i class="fa fa-pencil m-r5"></i>게시글 수정
                                             </button>
-                                            <!-- 게시글 수정을 위한 폼 -->
-                                            <form id="form-board-update" action="{% url 'board_update' %}" method="GET"
-                                                  style="display: none;">
-                                                {% csrf_token %}
-                                                <input type="hidden" name="board_no" value="{{ board.board_no }}">
-                                            </form>
+
                                         {% endif %}
                                         <!-- 게시글 삭제 버튼 -->
                                         <!-- 관련자만 보이게 처리 -->
 
                                         {% if logined_user.user_stu == board.board_writer.user_stu or logiend_user.user_role.role_no <= 3 %}
 
-                                            <button class="site-button red radius-xl m-l10" onclick="go_delete()"><i
-                                                    class="fa fa-trash m-r5"></i>게시글 삭제
+                                            <button class="site-button red radius-xl m-l10"
+                                                    onclick="location.href='{% url 'board_delete' board_no=board.board_no %}'">
+                                                <i class="fa fa-trash m-r5"></i>게시글 삭제
                                             </button>
 
-                                            <!-- 게시글 삭제를 위한 폼 -->
-                                            <form id="form-board-delete" action="{% url 'board_delete' %}" method="POST"
-                                                  style="display: none;">
-                                                {% csrf_token %}
-                                                <input type="hidden" name="board_no" value="{{ board.board_no }}">
-                                            </form>
                                         {% endif %}
 
                                     </div>
@@ -393,7 +372,6 @@
                                                             <input type="submit" value="댓글등록"
                                                                    class="submit site-button" id="submit" name="submit">
                                                         </p>
-
                                                     </form>
                                                 </div>
                                             {% endif %}

@@ -1,3 +1,4 @@
+/*================================== bottom bar 관련 css ==================================*/
 .site-footer{
     height: 200px;
 }
@@ -23,15 +24,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-}
-/* 로고 width 조정을 위해 만들어짐. */
-.width_300 {
-    width: 300px;
-}
-
-/* contact us 위치 조정을 위해 만들어짐. */
-.margin-left_70 {
-    margin-left: 100px;
 }
 
 .center{
@@ -70,3 +62,4 @@
 .min-width_1400 {
     min-width: 1400px;
 }
+

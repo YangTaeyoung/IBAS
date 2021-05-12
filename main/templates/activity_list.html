@@ -2,7 +2,8 @@
 {% load static %}
 {% block content %}
     <!--커스텀 css-->
-    <link rel="stylesheet" type="text/css" href="{% static 'css/seungyeon.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/posting_list.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/size.css' %}">
 
 
     <!--===================================== 제목 및 부제목 부 시작 =====================================-->
@@ -18,7 +19,7 @@
                             <!--제목-->
                             <h1 class="text-white introduce-letter-spacing_5">동아리 활동</h1>
                             <!--부제목-->
-                            <p class="introduce-margin-top_20">동아리 수상 및 활동 내역에 대한 게시판입니다.</p>
+                            <p class="m-t20">동아리 수상 및 활동 내역에 대한 게시판입니다.</p>
                         </div>
                     </div>
                 </a>
@@ -44,7 +45,7 @@
 
 
                                                 <!-- 게시글 박스에 보이는 대표사진 -->
-                                                <div class="listing-media act-img-size">
+                                                <div class="listing-media height-350">
                                                     <!-- 첫번째 사진만 가져오기 -->
                                                     <img src="/media/{{ board.boardfile_set.first.file_path }}"
                                                          alt="">

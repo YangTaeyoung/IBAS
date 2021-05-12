@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-    <script src="{% static 'js/bank_chaerim.js' %}"></script>
-    <link rel="stylesheet" href="{% static 'css/bank_chaerim.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/posting_register.css' %}">
+    <link rel="stylesheet" href="{% static 'css/ibas_contents.css' %}"/>
     <!DOCTYPE html>
     <html lang="en">
 
@@ -24,7 +24,7 @@
         />
         <link rel="stylesheet" href="{% static 'plugins/tag-editor/jquery.tag-editor.css' %}"/>
         <script src="{% static 'js/register.js' %}"></script>
-        <link rel="stylesheet" href="{% static 'css/register.css' %}"/>
+        <link rel="stylesheet" href="{% static 'css/posting_register.css' %}"/>
     </head>
 
     <body>
@@ -41,7 +41,7 @@
                             <!--제목-->
                             <h1 class="text-white introduce-letter-spacing_5">예산지원신청</h1>
                             <!--부제목-->
-                            <p class="introduce-margin-top_20">예산 지원을 신청하는 게시판입니다.</p>
+                            <p class="m-t20">예산 지원을 신청하는 게시판입니다.</p>
                         </div>
                     </div>
                 </a>
@@ -49,6 +49,7 @@
             <!--===============================================입력란=========================================================-->
 
             <form action="
+
 
                     {% if bank is None %}{% url 'bank_support_register' %}{% else %}{% url 'bank_support_update' %}{% endif %}"
                   class="add-listing-form" method="POST" enctype="multipart/form-data">
@@ -144,7 +145,9 @@
                                                     name="bank_file"
                                                     accept="image/*"
                                                     multiple
+                                                    {% if bank is None %}
                                                     required="required"
+                                                    {% endif %}
                                             />
                                         </div>
                                     </div>

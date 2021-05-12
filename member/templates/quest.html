@@ -70,8 +70,8 @@
     />
     <!-- 여기까지 기존 템플릿에 있던 것 -->
     <!--외부 css파일 받는 링크 / 이 html에서만 쓰는 것. -->
-    <link rel="stylesheet" href="{% static 'css/join.css' %}"/>
-    <link rel="stylesheet" href="{% static 'css/join_2.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/login-join.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/size.css' %}">
 
 </head>
 <body id="bg">
@@ -131,7 +131,7 @@
                                     <!-- 체크 박스, 동의 문구 컨테이너 -->
                                     <div style="display: flex; flex-direction: column">
                                         <!-- 개인정보 제공 동의 컨테이너 -->
-                                        <div class="form-group item_flex_btn_center mb-0">
+                                        <div class="form-group item_flex_btn_center m-b0">
                                             <input type="checkbox" id="privacy-policy" required="required"/>
                                             <label for="privacy-policy"
                                             >본인은
@@ -139,7 +139,7 @@
                                                 <a href="#" class="btn-link">동아리 회칙</a>에 동의합니다.</label>
                                         </div>
                                         {% if user_grade == "3" or user_grade == "4" %}
-                                            <div class="form-group item_flex_btn_center mb-0">
+                                            <div class="form-group item_flex_btn_center m-b0">
                                                 <input type="checkbox" id="interview_policy" required="required"
                                                        onclick="alert('빠른 시일 내에 면접을 위해 연락드리겠습니다.')"/>
                                                 <label for="interview_policy">
@@ -151,8 +151,8 @@
                                     </div>
                                     <!-- 입부신청 버튼 -->
 
-                                    <div class="form-group item_flex_btn_center2 item-flex-end mb-0">
-                                        <input type="submit" class="site-button button-md yjbtn" value="입부신청"/>
+                                    <div class="form-group item_flex_btn_center2 item-flex-end m-b0">
+                                        <input type="submit" class="site-button button-md width-150" value="입부신청"/>
                                     </div>
                                 </div>
 

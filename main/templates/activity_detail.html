@@ -2,9 +2,10 @@
 {% load static %}
 {% block content %}
     <!--커스텀 css-->
-    <link rel="stylesheet" type="text/css" href="{% static 'css/seungyeon.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/posting_detail.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/comment.css' %}">
     <script src="{% static 'js/jquery.min.js' %}"></script><!-- JQUERY.MIN JS -->
-    <script src="{% static 'js/sy.js' %}"></script>
+    <script src="{% static 'js/comment.js' %}"></script>
 
     <div class="page-wraper">
 
@@ -21,7 +22,7 @@
                                 <!--제목-->
                                 <h1 class="text-white introduce-letter-spacing_5">동아리 활동</h1>
                                 <!--부제목-->
-                                <p class="introduce-margin-top_20">동아리 수상 및 활동 내역에 대한 게시판입니다.</p>
+                                <p class="m-t20">동아리 수상 및 활동 내역에 대한 게시판입니다.</p>
                             </div>
                         </div>
                     </a>
@@ -121,37 +122,24 @@
                                         </div>
 
                                     </div>
+
                                     <!-- 게시글 삭제 및 수정 div -->
                                     <div class="extra-cell text-right">
+
                                         {% if logined_user.user_stu == board.board_writer.user_stu %}
                                             <!-- 게시글 수정 버튼 -->
                                             <button type="button" class="site-button radius-xl m-l10"
-                                                    onclick="document.getElementById('form-activity-update').submit()">
-                                                <i
-                                                        class="fa fa-pencil m-r5"></i>게시글 수정
-                                            </button>
-                                            <!--게시글 수정 폼-->
-
+                                                    onclick="location.href='{% url 'activity_update' board_no=board.board_no %}'">
+                                                <i class="fa fa-pencil m-r5"></i>게시글 수정</button>
                                         {% endif %}
+
                                         {% if logined_user.user_role.role_no <= 3 or logined_user.user_stu == board.board_writer.user_stu %}
                                             <!-- 게시글 삭제 버튼 -->
                                             <button type="button" class="site-button red radius-xl m-l10"
-                                                    onclick="if(confirm('정말 삭제하시겠습니까?')){document.getElementById('form-activity-delete').submit();}">
-                                                <i
-                                                        class="fa fa-trash m-r5"></i>게시글 삭제
-                                            </button>
-                                            <!--게식글 삭제 폼-->
+                                                    onclick="if(confirm('정말 삭제하시겠습니까?')){location.href='{% url 'activity_delete' board_no=board.board_no %}'}">
+                                                <i class="fa fa-trash m-r5"></i>게시글 삭제</button>
                                         {% endif %}
-                                        <form id="form-activity-update" action="{% url 'activity_update' %}"
-                                              method="get">
-                                            {% csrf_token %}
-                                            <input type="hidden" name="board_no" value="{{ board.board_no }}"/>
-                                        </form>
-                                        <form id="form-activity-delete" action="{% url 'activity_delete' %}"
-                                              method="post">
-                                            {% csrf_token %}
-                                            <input type="hidden" name="board_no" value="{{ board.board_no }}"/>
-                                        </form>
+
                                     </div>
                                     <!-- 게시글과 댓글을 구분짓는 구분선 -->
                                     <div class="dlab-divider bg-gray-dark"></div>

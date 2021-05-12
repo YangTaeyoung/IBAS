@@ -2,10 +2,11 @@
 {% load static %}
 {% block content %}
     <!--커스텀 css-->
-    <link rel="stylesheet" type="text/css" href="{% static 'css/staff_yejin.css' %}">
-    <script src="{% static 'js/staff_yejin.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/ibas_contents.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/size.css' %}">
+    <script src="{% static 'js/ibas_centents.js' %}"></script>
     <script src="{% static 'js/jquery.min.js' %}"></script><!-- JQUERY.MIN JS -->
-    <script src="{% static 'js/sy.js' %}"></script>
+    <script src="{% static 'js/comment.js' %}"></script>
 
     <script>
         function selectAoR() {
@@ -46,7 +47,7 @@
                             <h1 class="text-white introduce-letter-spacing_5">회원관리 게시판</h1>
                             <!--부제목-->
                             <!-- DB에서 제목 꺼내와야 함 -->
-                            <p class="introduce-margin-top_20">회원 관리를 할 수 있는 게시판입니다. </p>
+                            <p class="m-t20">회원 관리를 할 수 있는 게시판입니다. </p>
                         </div>
                     </div>
                 </a>
@@ -119,14 +120,14 @@
                                                         <!-- 테이블 1행: 제목 -->
                                                         <tr id="staff_new_head">
                                                             <!-- staff_width는 staff_cr.css에 정의되어 있음.  -->
-                                                            <th class="border-top-0 staff_width_50" scope="col"></th>
-                                                            <th class="border-top-0 staff_width_50" scope="col"></th>
-                                                            <th class="border-top-0 staff_width_100" scope="col">이름</th>
-                                                            <th class="border-top-0 staff_width_100" scope="col">학년</th>
-                                                            <th class="border-top-0 staff_width_150" scope="col">학번</th>
-                                                            <th class="border-top-0 staff_width_230" scope="col">이메일
+                                                            <th class="border-top-0 width-50" scope="col"></th>
+                                                            <th class="border-top-0 width-50" scope="col"></th>
+                                                            <th class="border-top-0 width-50" scope="col">이름</th>
+                                                            <th class="border-top-0 width-50" scope="col">학년</th>
+                                                            <th class="border-top-0 width-50" scope="col">학번</th>
+                                                            <th class="border-top-0 width-50" scope="col">전화번호
                                                             </th>
-                                                            <th class="border-top-0 staff_width_230" scope="col">학과</th>
+                                                            <th class="border-top-0 width-230" scope="col">학과</th>
                                                             <th class="border-top-0" scope="col">지원서 보기</th>
                                                         </tr>
                                                         </thead>
@@ -164,8 +165,8 @@
                                                                 <td class="mem_grade">{{ new_user.user_grade }}학년</td>
                                                                 <!-- 회원 학번 -->
                                                                 <td>{{ new_user.user_stu }}</td>
-                                                                <!-- 회원 이메일 -->
-                                                                <td>{{ new_user.user_email }}</td>
+                                                                <!-- 회원 전화번호 -->
+                                                                <td>{{ new_user.user_phone }}</td>
                                                                 <!-- 회원 학과 -->
                                                                 <td>{{ new_user.user_major.major_name }}</td>
                                                                 <!-- 지원서보기 -->
@@ -191,7 +192,7 @@
                                                     <div style="display: flex; justify-content: center; align-items: center">
                                                         <nav aria-label="Page navigation example">
                                                             <!-- staff_margin_bottom_0는 staff_cr.css에 정의되어 있음.  -->
-                                                            <ul class="pagination staff_margin_bottom_0">
+                                                            <ul class="pagination m-b0">
                                                                 {% if new_user_list.has_previous %}
                                                                     <li class="page-item">
                                                                         <a class="page-link" href="?new_user_page=1"
@@ -290,23 +291,23 @@
                                                             <thead>
                                                             <tr>
                                                                 <!-- staff_width는 staff_cr.css에 정의되어 있음.  -->
-                                                                <th class="border-top-0 staff_width_50"></th>
-                                                                <th class="border-top-0 staff_width_50"
+                                                                <th class="border-top-0 width-50"></th>
+                                                                <th class="border-top-0 width-50"
                                                                     scope="col"></th>
-                                                                <th class="border-top-0 staff_width_100" scope="col">
+                                                                <th class="border-top-0 width-100" scope="col">
                                                                     이름
                                                                 </th>
-                                                                <th class="border-top-0 staff_width_150" scope="col">
+                                                                <th class="border-top-0 width-150" scope="col">
                                                                     학번
                                                                 </th>
                                                                 <th class="border-top-0" scope="col">학과</th>
-                                                                <th class="border-top-0 staff_width_170" scope="col">
+                                                                <th class="border-top-0 width-170" scope="col">
                                                                     권한
                                                                 </th>
-                                                                <th class="border-top-0 staff_width_170" scope="col">
+                                                                <th class="border-top-0 width-170" scope="col">
                                                                     역할
                                                                 </th>
-                                                                <th class="border-top-0 staff_width_70"></th>
+                                                                <th class="border-top-0 width-70"></th>
                                                             </tr>
                                                             </thead>
                                                             <!-- 댓글 내용 테이블 -->
@@ -360,7 +361,7 @@
                                                         <div style="display: flex; justify-content: center; align-items: center">
                                                             <nav aria-label="Page navigation example">
                                                                 <!-- staff_margin_bottom_0는 staff_cr.css에 정의되어 있음.  -->
-                                                                <ul class="pagination staff_margin_bottom_0">
+                                                                <ul class="pagination m-b0">
                                                                     {% if exist_user_list.has_previous %}
                                                                         <li class="page-item">
                                                                             <a class="page-link"
@@ -442,16 +443,16 @@
                                                             <thead>
                                                             <tr>
                                                                 <!-- staff_width는 staff_yejin.css에 정의되어 있음.  -->
-                                                                <th class="border-top-0 staff_width_50"></th>
-                                                                <th class="border-top-0 staff_width_50"
+                                                                <th class="border-top-0 width-50"></th>
+                                                                <th class="border-top-0 width-50"
                                                                     scope="col"></th>
-                                                                <th class="border-top-0 staff_width_100" scope="col">
+                                                                <th class="border-top-0 width-100" scope="col">
                                                                     이름
                                                                 </th>
-                                                                <th class="border-top-0 staff_width_150" scope="col">
+                                                                <th class="border-top-0 width-150" scope="col">
                                                                     학번
                                                                 </th>
-                                                                <th class="border-top-0 staff_width_230" scope="col">
+                                                                <th class="border-top-0 width-230" scope="col">
                                                                     학과
                                                                 </th>
                                                                 <th class="border-top-0" scope="col">변경 전 이름</th>
@@ -509,7 +510,7 @@
                                                         <div style="display: flex; justify-content: center; align-items: center">
                                                             <nav aria-label="Page navigation example">
                                                                 <!-- staff_margin_bottom_0는 staff_cr.css에 정의되어 있음.  -->
-                                                                <ul class="pagination staff_margin_bottom_0">
+                                                                <ul class="pagination m-b0">
                                                                     {% if exist_user_list.has_previous %}
                                                                         <li class="page-item">
                                                                             <a class="page-link"

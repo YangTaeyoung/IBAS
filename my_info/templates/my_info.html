@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-    <link rel="stylesheet" href="{% static 'css/login.css' %}"/>
-    <link rel="stylesheet" href="{% static 'css/my_info_cr.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/login-join.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/ibas_contents.css' %}"/>
 
-    <script src="{% static 'js/my_info.js' %}"></script>
+    <script src="{% static 'js/ibas_centents.js' %}"></script>
     <script>
         function goUpdate() { // 유저정보 업데이트 폼 전송.
             if (confirm('수정하시겠습니까?')) {
@@ -421,7 +421,7 @@
                                         <!--네이버 계정 연동 안했을 때-->
                                         <form class="dlab-form m-t10">
                                             <div class="text-center m-b10">
-                                                <div href="#" class="site-button gray_box" style="width: 45%">
+                                                <div href="#" class="site-button bg-secondary" style="width: 45%">
                                                     <i class="fa fa-google m-r10"></i>
                                                     구글 계정으로 로그인하였습니다.
                                                 </div>
@@ -435,11 +435,11 @@
                                         <!--네이버 계정 연동 했을 때-->
                                         <div class="m-t10">
                                             <div class="text-center m-b10">
-                                                <div href="#" class="site-button gray_box" style="width: 45%">
+                                                <div href="#" class="site-button bg-secondary" style="width: 45%">
                                                     <i class="fa fa-google m-r10"></i>
                                                     구글 계정으로 로그인하였습니다.
                                                 </div>
-                                                <div href="#" class="site-button gray_box"
+                                                <div href="#" class="site-button bg-secondary"
                                                      style="width: 45%; margin-left: 20px">
                                                     <span class="naver-logo m-r10">N</span>
                                                     네이버 계정이 연동되어 있습니다.
@@ -456,7 +456,7 @@
                                                     <i class="fa fa-google m-r10"></i>
                                                     구글 계정 연동하기
                                                 </a>
-                                                <div href="#" class="site-button gray_box"
+                                                <div href="#" class="site-button bg-secondary"
                                                      style="width: 45%; margin-left: 20px">
                                                     <span class="naver-logo m-r10">N</span>
                                                     네이버 계정으로 로그인하였습니다.
@@ -466,11 +466,11 @@
                                         <!--구글 계정 연동 했을 때-->
                                         <div>
                                             <div class="text-center m-b10 m-t10">
-                                                <div href="#" class="site-button gray_box" style="width: 45%">
+                                                <div href="#" class="site-button bg-secondary" style="width: 45%">
                                                     <i class="fa fa-google m-r10"></i>
                                                     구글 계정이 연동되어 있습니다.
                                                 </div>
-                                                <div href="#" class="site-button gray_box"
+                                                <div href="#" class="site-button bg-secondary"
                                                      style="width: 45%; margin-left: 20px">
                                                     <span class="naver-logo m-r10">N</span>
                                                     네이버 계정으로 로그인하였습니다.

@@ -1,0 +1,21 @@
+/* 동아리 활동게시판 상세의 이미지 사이즈  */
+.act-detail-img-size {
+    height: 190px;
+    width: 100%;
+}
+
+/* 첨부파일 다운로드를 감싸는 박스 */
+.download-box {
+    border: 2px solid #ecebf5;
+    margin: 50px;
+    padding: 20px 30px 20px 30px;
+}
+
+.line2 { /* 한 줄 자르기 */
+    display: inline-block;
+    width: 400px;
+    height: 19px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

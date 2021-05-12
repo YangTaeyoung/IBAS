@@ -178,8 +178,9 @@ class ContestBoard(models.Model):
     contest_created = models.DateTimeField(db_column='CONTEST_CREATED', auto_now_add=True)
     contest_topic = models.CharField(db_column='CONTEST_TOPIC', max_length=500)
     contest_asso = models.CharField(db_column='CONTEST_ASSO', max_length=100)
-    contest_deadline = models.DateTimeField(db_column='CONTEST_DEADLINE')
     contest_start = models.DateTimeField(db_column='CONTEST_START')
+    contest_deadline = models.DateTimeField(db_column='CONTEST_DEADLINE')
+
 
     class Meta:
         managed = False
@@ -210,7 +211,11 @@ class ContestComment(models.Model):
 
 
 def contest_file_upload_to(instance, filename):
-    return f'board/contest/{instance.contest_no.contest_no}/{filename}'
+    from file_controller import is_image
+    if is_image(filename):
+        return f'board/contest/{instance.contest_no.contest_no}/image/{filename}'
+    else:
+        return f'board/contest/{instance.contest_no.contest_no}/doc/{filename}'
 
 
 class ContestFile(File):
@@ -220,6 +225,7 @@ class ContestFile(File):
     class Meta:
         managed = False
         db_table = 'CONTEST_FILE'
+        ordering = ['-file_path']  # 항상 게시글의 이미지를 먼저 가져오기 위함.(썸네일 관련)
 
 
 # 강의 썸네일 사진 업로드 경로

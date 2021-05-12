@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-    <script src="{% static 'js/register.js' %}"></script>
+    <script src="{% static 'js/posting_register.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/posting_register.css' %}"/>
     <body>
     <div class="page-wraper">
         <div class="page-content bg-white">
@@ -16,14 +17,17 @@
                             <!--제목-->
                             <h1 class="text-white introduce-letter-spacing_5">공모전 게시판</h1>
                             <!--부제목-->
-                            <p class="introduce-margin-top_20">공모전 정보를 공유하는 게시판입니다.</p>
+                            <p class="m-t20">공모전 정보를 공유하는 게시판입니다.</p>
                         </div>
                     </div>
                 </a>
             </div>
             <!--===============================================입력란=========================================================-->
 
-            <form action="{% if contest is None %}{% url 'contest_register' %}{% else %}{% url 'contest_update' %}{% endif %}"
+            {% load widget_tweaks %}
+
+            <!-- contestform.contest_no.value 에 관한 설명은 바로 아래의 [공모전 번호] 주석 참고! -->
+            <form action="{% if contest_no is None %}{% url 'contest_register' %}{% else %}{% url 'contest_update' contest_no %}{% endif %}"
                   class="add-listing-form" method="POST" enctype="multipart/form-data">
 
                 {% csrf_token %}
@@ -32,157 +36,181 @@
                         <div class="container">
                             <form class="add-listing-form">
                                 <!--=====================-->
-                                    <!--제목-->
-                                    <div class="content-box">
-                                        <div class="content-header">
-                                          <h3 class="title">
-                                            공모전 이름
-                                          </h3>
-                                        </div>
-                                        <div class="content-body">
-                                          <div class="form-group">
-                                            <!--제목 입력란-->
-                                            <input type="text" name="contest_title" value="{{ contest.contest_title }}"
-                                                   class="form-control" placeholder="공모전 이름을 입력하세요"
-                                                   style="font-size: 25px; height: 70px;">
-                                          </div>
-                                        </div>
-                                    </div>
-                                    <!--주체기관-->
-                                    <div class="content-box">
-                                        <div class="content-header">
-                                          <h3 class="title">
-                                            공모전 주체기관
-                                          </h3>
-                                        </div>
-                                        <div class="content-body">
-                                          <div class="form-group">
-                                              <!--주체기관 입력란-->
-                                            <input type="text" name="contest_asso" value="{{ contest.contest_asso }}"
-                                                   class="form-control" placeholder="주체기관을 입력하세요">
-                                          </div>
-                                        </div>
-                                    </div>
-                                    <!--공모전 주제-->
-                                    <div class="content-box">
-                                        <div class="content-header">
-                                          <h3 class="title">
-                                            공모전 주제
-                                          </h3>
-                                        </div>
-                                        <div class="content-body">
-                                          <div class="form-group">
-                                            <!--공모전 주제란 / 여기에 입력한 것은 게시글 리스트에 보여지는 소개에 들어감-->
-                                            <textarea name="contest_topic" class="form-control"
-                                                      placeholder="공모전 주제를 적어주세요">{{ contest.contest_topic }}</textarea>
-                                          </div>
-                                        </div>
-                                    </div>
-                                    <!--공모전 시작일-->
-                                    <div class="content-box">
-                                        <div class="content-header">
-                                          <h3 class="title">
-                                            공모전 시작일
-                                          </h3>
-                                        </div>
-                                        <div class="content-body">
-                                          <div class="form-group">
-                                            <!--공모전 시작일 입력란-->
-                                            <input type="date" name="contest_start"
-                                                   value="{{ contest.contest_start|date:"Y-m-d" }}"
-                                                   class="form-control">
-                                          </div>
-                                        </div>
-                                    </div>
-                                    <!--공모전 마감일-->
-                                    <div class="content-box">
-                                        <div class="content-header">
-                                          <h3 class="title">
-                                            공모전 마감일
-                                          </h3>
-                                        </div>
-                                        <div class="content-body">
-                                          <div class="form-group">
-                                             <!--공모전 마감일 입력란-->
-                                            <input type="date" name="contest_deadline"
-                                                   value="{{ contest.contest_deadline|date:"Y-m-d" }}"
-                                                   class="form-control">
-                                          </div>
-                                        </div>
-                                    </div>
-                                    <!--공모전 포스터-->
-                                    <div class="content-box">
-                                        <div class="content-header">
-                                          <h3 class="title">
-                                            공모전 포스터 및 첨부파일
-                                          </h3>
-                                        </div>
-                                        <div class="content-body">
-                                          <div class="form-group">
-                                            <!--공모전 포스터 입력란-->
-                                            <input type="file" name="upload_file"
-                                                       accept=".xlsx,.xls,image/*,.doc,.docx,video/*,.ppt,.pptx,.txt,.pdf,.py,.java"
-                                                       multiple>
-                                          </div>
-                                          <!-- 이미 존재하고 있던 파일: 삭제 가능 (수정모드)-->
-                                        {% if contest is not None %}
-                                            <div class="form-group">
-                                                <div id="image-cont" class="image-cont">
-                                                    {% for contest_file in contest_file_list %}
-                                                        <div id="image-card-{{ contest_file.file_id }}"
-                                                             class="image-card">
-                                                            <!-- 취소 버튼, 취소를 누를 시 image-card 컨테이너가 통채로 사라짐. -->
-                                                            <button type="button"
-                                                                    class="btn btn-danger fa fa-times btn-cancel"
-                                                                    onclick="delImg(document.getElementById('image-card-{{ contest_file.file_id }}'))"></button>
-                                                            <!-- 이미지 컨테이너 이미지 파일일 경우 img태그가, 이미지 파일이 아닐 경우 파일 모양의 아이콘이 붙음. -->
-                                                            <div id="image-{{ contest_file.file_id }}"
-                                                                 class="image-container"></div>
-                                                            <!--기존 파일링크를 이동시키기 위한 히든 링크 -->
-                                                            <input type="hidden"
-                                                                   name="exist_file_path_{{ contest_file.file_id }}"
-                                                                   value="{{ contest_file.file_path }}"/>
-                                                        </div>
-                                                        <script>
-                                                            // 페이지가 로딩 될 때 해당 함수도 자동으로 실행되도록 설정함. (아이콘 or img 결정)
-                                                            onload = decisionIcon(document.getElementById("image-{{ contest_file.file_id }}"), '{{ contest_file.file_path }}');
-                                                        </script>
-                                                    {% endfor %}
+
+
+                            <!--
+                            [공모전 제목 / 주체기관 / 주제 / 시작일 / 마감일]
+                            - visible fields : forms.py 의 폼클래스 정의에서, hidden 이라고 명시적으로 선언하지 않은 모든 필드
+                            - forms.py 선언부 예시:
+                                    contest_title = forms.CharField(label="공모전 제목", max_length=100,
+                                                    widget=forms.TextInput(attrs={'placeholder': '공모전 이름을 입력하세요.'}))
+                            - 객체 전달 흐름 :
+                                1) (views.py) ContestForm 객체 생성 (여기서 쓰이는 객체 이름 : contestform)
+                                2) (views.py) context 변수를 통해 해당 템플릿으로 전달.
+                                3) (template) context 변수 이름을 통해 사용.
+                                4) (template) 폼 객체는 이 페이지에서 벗어나면 소멸!
+
+                            - 폼 양식 제출 후 데이터 흐름 :
+                                1) 사용자 입력 데이터는 request 객체 안에 담겨서 urls.py >> views.py
+                                2) (views.py) contest_form = ContestForm(request.POST)  # 제출된 데이터를 모두 갖는 폼 객체를 생성!
+                                3) (views.py) 적절하게 처리!
+
+                            - 아래와 같이 변환됨
+                                {{ contest_form.contest_title }}
+                                1) 글을 등록할 때 :
+                                    <input name="contest_title" max_length="100" required placeholder="공모전 이름을 입력하세요">
+                                    views.py 에서, 비어있는 폼 객체를 전달하면(폼 객체 초기값 설정 안하고!) value 값이 없음()
+                                2) 글을 수정할 때 :
+                                    <input name="contest_title" max_length="100" required placeholder="공모전 이름을 입력하세요" value="국민은행 핀테크 공모">
+                                    views.py 에서 수정 시에는, ContestForm 객체에 초기값을 할당해서 넘겨주기 때문.
+
+                            - css 효과 주기
+                                1) {% load widget_tweaks %} 패키지 사용 선언
+                                2) render_field 태그 사용!! (위의 경우에서, 단순히 css class 만 추가한 경우를 예시로 들었음.)
+                                    {% render_field contest_form.contest_title class="form-control" %}
+                                    #  <input class="form-control" name="contest_title" max_length="100" required placeholder="공모전 이름을 입력하세요">
+                            -->
+                            <!-- visible_fields (contest_cont 는 하단에!)-->
+                                {% for field in contest_form.visible_fields %}
+                                    {% if not field == contest_form.contest_cont %}
+                                        <div class="content-box">
+
+                                            <!--레이블-->
+                                            <div class="content-header">
+                                                <h3 class="title">
+                                                    {{ field.label }}
+                                                </h3>
+                                            </div>
+
+                                            <!--입력란-->
+                                            <div class="content-body">
+                                                <div class="form-group">
+                                                    {% if field == contest_form.contest_title %}
+                                                        {% render_field field class="form-control" style="font-size: 25px; height: 70px;"%}
+                                                    {% else %}
+                                                        {% render_field field class="form-control" %}
+                                                    {% endif %}
                                                 </div>
                                             </div>
-                                        {% endif %}
+
+
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            <!-- visible_fields 끝 (contest_cont 는 하단에!)-->
+
+                            <!--
+                            [공모전 포스터/문서 파일]
+                            - visible fields
+                            - forms.py 선언부 예시:
+                                    upload_file = forms.FileField(
+                                        required=False,
+                                        widget=forms.FileInput(attrs={'multiple': True,
+                                                                      'accept': ".xlsx,.xls,image/*,.doc,.docx,video/*,.ppt,.pptx,.txt,.pdf,.py,.java"})
+                                    )
+                            - 객체 전달 흐름 :
+                                1) (views.py) FileForm 객체 생성 (여기서 쓰이는 객체 이름 : fileform)
+                                2) (views.py) context 변수를 통해 해당 템플릿으로 전달.
+                                3) (template) context 변수 이름을 통해 사용.
+                                4) (template) 폼 객체는 이 페이지에서 벗어나면 소멸!.
+
+                            - 폼 양식 제출 후 데이터 흐름 :
+                                1) 사용자 입력 데이터는 request 객체 안에 담겨서 urls.py >> views.py
+                                2) (views.py) file_form = FileForm(request.POST, request.Files)  # 제출된 데이터를 모두 갖는 파일 폼 객체를 생성!
+                                3) (views.py) 적절하게 처리!
+
+                            - 아래와 같이 변환됨
+                                <input type="file" accept=".xlsx,.xls,image/*,.doc,.docx,video/*,.ppt,.pptx,.txt,.pdf,.py,.java" multiple>
+                            -->
+                            <!-- 공모전 파일 업로드 div-->
+                                <div class="content-box">
+
+                                <!-- 레이블 -->
+                                    <div class="content-header">
+                                        <h3 class="title">
+                                            공모전 포스터 및 첨부파일
+                                        </h3>
+                                    </div>
+                                <!-- 레이블 끝-->
+
+                                <!-- 파일 입력란 -->
+                                    <div class="content-body">
+                                        <div class="form-group">
+                                            {{  file_form.upload_file }}
+                                        </div>
+
+                                        <!-- 이 부분은 기존과 동일 -->
+                                            <!-- 이미 존재하고 있던 파일: 삭제 가능 (수정모드)-->
+                                            {% if contest_no is not None %}
+                                                <div class="form-group">
+                                                    <div id="image-cont" class="image-cont">
+                                                        <!-- -------------------------------------------------------------- -->
+                                                        {% for file in file_list %}
+                                                            <div id="image-card-{{ file.file_id }}"
+                                                                 class="image-card">
+                                                                <!-- 취소 버튼, 취소를 누를 시 image-card 컨테이너가 통채로 사라짐. -->
+                                                                <button type="button"
+                                                                        class="btn btn-danger fa fa-times btn-cancel"
+                                                                        onclick="delImg(document.getElementById('image-card-{{ file.file_id }}'))"></button>
+                                                                <!-- 이미지 컨테이너 이미지 파일일 경우 img태그가, 이미지 파일이 아닐 경우 파일 모양의 아이콘이 붙음. -->
+                                                                <div id="image-{{ file.file_id }}"
+                                                                     class="image-container"></div>
+                                                                <!--기존 파일링크를 이동시키기 위한 히든 링크 -->
+                                                                <input type="hidden"
+                                                                       name="exist_file_path_{{ file.file_id }}"
+                                                                       value="{{ file.file_path }}"/>
+                                                            </div>
+                                                            <script>
+                                                                // 페이지가 로딩 될 때 해당 함수도 자동으로 실행되도록 설정함. (아이콘 or img 결정)
+                                                                onload = decisionIcon(document.getElementById("image-{{ file.file_id }}"), '{{ file.file_path }}');
+                                                            </script>
+                                                        {% endfor %}
+                                                        <!-- -------------------------------------------------------------- -->
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        <!-- 이 부분은 기존과 동일 -->
+                                    </div>
+                                <!-- 파일 입력란 끝 -->
+
+                                </div>
+                            <!-- 공모전 파일 업로드 div 끝-->
+
+                            <!--공모전 상세-->
+                            <!--ContestForm visible_fields 와 동일-->
+                                <div class="content-box editor">
+                                <!--레이블-->
+                                    <div class="content-header">
+                                        <h3 class="title">
+                                            {{ contest_form.contest_cont.label }}
+                                        </h3>
+                                    </div>
+                                <!--레이블 끝-->
+
+                                <!--입력란-->
+                                    <div class="content-body">
+                                        <div class="form-group">
+                                                {% render_field contest_form.contest_cont class="jqte-test" %}
                                         </div>
                                     </div>
-                                    <!--공모전 상세-->
-                                    <div class="content-box editor">
-                                        <div class="content-header">
-                                          <h3 class="title">
-                                            공모전 상세설명
-                                          </h3>
-                                        </div>
-                                        <div class="content-body">
-                                          <div class="form-group">
-                                            <!--공모전 상세 입력란-->
-                                            <textarea name="contest_cont" type="text"
-                                                      class="jqte-test">{{ contest.contest_cont }}</textarea>
-                                          </div>
-                                        </div>
-                                    </div>
-                                {% if contest is not None %}
-                                    <input type="hidden" name="contest_no" value="{{ contest.contest_no }}">
-                                {% endif %}
-                                <!--=====================-->
-                                <!--등록하기 버튼, 누르면 게시글 상세보기로-->
-                                <!--최초 글작성 시 나오는 버튼-->
+                                <!--입력란 끝-->
+                                </div>
+                            <!--공모전 상세 끝-->
+
+                            <!--=====================-->
+                            <!--등록하기 버튼, 누르면 게시글 상세보기로-->
+                            <!--최초 글작성 시 나오는 버튼-->
                                 <div style="display: grid; justify-items: center">
                                     <button class="site-button btn-block button-md" type="submit" style="width: 30%">
-                                        {% if contest is None %}
+                                        {% if contest_no is None %}
                                             등록하기
                                         {% else %}
                                             수정하기
                                         {% endif %}
                                     </button>
                                 </div>
+                            <!--버튼 끝-->
+
                             </form>
                         </div>
                     </div>

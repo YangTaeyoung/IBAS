@@ -2,8 +2,8 @@
 {% load static %}
 {% load humanize %}
 {% block content %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/bank_yejin.css' %}">
-    <script src="{% static 'js/bank_yejin.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/ibas_contents.css' %}">
+    <script src="{% static 'js/ibas_centents.js' %}"></script>
     <!----------상단 제목부분----------->
     <!--제목을 감싸는 배경-->
     <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"
@@ -13,7 +13,7 @@
                 <!--제목-->
                 <h1 class="text-white introduce-letter-spacing_5">회계 내역</h1>
                 <!--부제목-->
-                <p class="introduce-margin-top_20">회계 내역에 대한 게시판입니다.</p>
+                <p class="m-t20">회계 내역에 대한 게시판입니다.</p>
             </div>
         </div>
 
@@ -77,7 +77,7 @@
                         <!-- bank-text-align_center는 bank_yejin.css에 정의됨. -->
                         <!-- 각 td에 스타일 padding: 10px 0;이 적용되어 있는데, 외부 css파일로 스타일 적용이 안되어 따로 지정해 준 것임.  -->
                         {% for bank in bank_list %}
-                            <tr class="bank-tr bank-text-align_center">
+                            <tr class="bank-tr text-center">
                                     <!-- 사용일 -->
                                     <td scope="row" style="padding: 10px 0; width: 100px;">
                                         <!-- bank-date-1는 bank_yejin.js에 사용됨. bank_select, bank_update 부분과 관련 -->
@@ -105,8 +105,7 @@
 
 
                                     <!-- 내용 -->
-                                    <!-- bank-text-align_start는 bank_yejin.css에 정의됨. -->
-                                    <td class="bank-text-align_start" style="width: 400px; padding: 10px 0">
+                                    <td style="width: 400px; padding: 10px 0; text-align: start">
                                         <!-- bank-txt-1는 bank_yejin.js에 사용됨. bank_update 부분과 관련 -->
                                         <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
                                         <input class="bank-input-con" type="text"

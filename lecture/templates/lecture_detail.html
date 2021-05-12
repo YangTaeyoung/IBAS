@@ -1,13 +1,8 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-    <!DOCTYPE html>
-    <html lang="en">
-
-    <head>
-        <meta charset="UTF-8">
-        <title>Title</title>
-
+        <link rel="stylesheet" type="text/css" href="{% static 'css/posting_detail.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/comment.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'css/star-rating-svg.css' %}"/>
         <link
                 rel="stylesheet"
@@ -21,7 +16,6 @@
                 href="{% static 'plugins/drop/imageuploadify.min.css' %}"
         />
         <link rel="stylesheet" href="{% static 'plugins/tag-editor/jquery.tag-editor.css' %}"/>
-    </head>
 
     <body>
     <div class="page-wraper">
@@ -39,7 +33,7 @@
                             <h1 class="text-white introduce-letter-spacing_5">{{ lect.lect_type.type_name }}</h1>
                             <!--부제목-->
                             <!--강의게시판, 스터디게시판, 취미모임게시판 종류에 따라 바뀌도록 변경-->
-                            <p class="introduce-margin-top_20">{{ lect.lect_type.type_exp }}</p>
+                            <p class="m-t20">{{ lect.lect_type.type_exp }}</p>
                         </div>
                     </div>
                 </a>

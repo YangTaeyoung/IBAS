@@ -2,22 +2,10 @@
 {% load static %}
 {% block content %}
     <!--커스텀 css-->
-    <link rel="stylesheet" type="text/css" href="{% static 'css/seungyeon.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/posting_detail.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/comment.css' %}">
     <script src="{% static 'js/jquery.min.js' %}"></script><!-- JQUERY.MIN JS -->
-    <script src="{% static 'js/sy.js' %}"></script>
-    <script>
-    function go_delete() {
-        if (confirm("정말 해당 게시글을 삭제하시겠습니까?")) {
-            document.getElementById("form-board-delete").submit()
-        }
-    }
-
-    function go_update() {
-        document.getElementById('form-board-update').submit()
-    }
-
-
-    </script>
+    <script src="{% static 'js/comment.js' %}"></script>
 
     <div class="page-wraper">
 
@@ -34,7 +22,7 @@
                                 <!--제목-->
                                 <h1 class="text-white introduce-letter-spacing_5">{{ board_name }}</h1>
                                 <!--부제목-->
-                                <p class="introduce-margin-top_20">{{ board_exp }}</p>
+                                <p class="m-t20">{{ board_exp }}</p>
                             </div>
                         </div>
                     </a>
@@ -89,23 +77,25 @@
                                         {% endfor %}
                                         <!--공모전 상세내용 나오는 곳-->
                                         <p class="font-weight-400"></p>
-
-                                        <p class="font-weight-300">{{ contest.contest_cont }}</p>
+                                            {% autoescape off %}
+                                                {{ contest.contest_cont }}
+                                            {% endautoescape %}
+                                        <p class="font-weight-300"></p>
 
                                         <!-- 첨부된 파일 불러오는 곳 -->
                                         <!-- download 쪽에 파일 경로 설정 -->
                                         {% if file_list %}
-                                        <div class="download-box">
-                                        {% for file in file_list %}
-                                            <!-- 첨부파일 1 -->
-                                             <i class="fa fa-download m-r15 "></i>
-                                            <a class="line2" href="#" download="{{ file.file_path }}">{{ file.file_name }}</a>
-                                                <!-- 파일 간 구분선 -->
-                                                {% if forloop.revcounter0 > 0 %}
-                                                    <div class="dlab-divider tb10 bg-gray-dark"></div>
-                                                {% endif %}
-                                        {% endfor %}
-                                        </div>
+                                            <div class="download-box">
+                                                {% for file in file_list %}
+                                                    <!-- 첨부파일 1 -->
+                                                     <i class="fa fa-download m-r15 "></i>
+                                                    <a class="line2" href="#" download="{{ file.file_path }}">{{ file.file_name }}</a>
+                                                        <!-- 파일 간 구분선 -->
+                                                        {% if forloop.revcounter0 > 0 %}
+                                                            <div class="dlab-divider tb10 bg-gray-dark"></div>
+                                                        {% endif %}
+                                                {% endfor %}
+                                            </div>
                                         {% endif %}
 
 
@@ -116,26 +106,18 @@
                                        <!-- 게시글 수정 버튼 -->
                                         <!-- 관련자만 보이게 처리 -->
                                         {% if logined_user.user_stu == contest.contest_writer.user_stu %}
-                                        <button class="site-button radius-xl m-l10" onclick="go_update()"><i
+                                        <button class="site-button radius-xl m-l10" onclick="location.href='{% url 'contest_update' contest.contest_no %}'"><i
                                                 class="fa fa-pencil m-r5"></i>게시글 수정
                                         </button>
-                                        <form id="form-board-update" action="{% url 'contest_update' %}" method="GET"
-                                              style="display: none;">
-                                            {% csrf_token %}
-                                           <input type="hidden" name="contest_no" value="{{ contest.contest_no }}">
-                                        </form>
+
                                         {% endif %}
                                         <!-- 게시글 삭제 버튼 -->
                                         <!-- 관련자만 보이게 처리 -->
                                         {% if logined_user.user_auth.auth_no == 1 and logined_user.user_stu == contest.contest_writer.user_stu %}
-                                        <button class="site-button red radius-xl m-l10" onclick="go_delete()"><i
+                                        <button class="site-button red radius-xl m-l10" onclick="location.href='{% url 'contest_delete' contest.contest_no %}'"><i
                                                 class="fa fa-trash m-r5"></i>게시글 삭제
                                         </button>
-                                        <form id="form-board-delete" action="{% url 'contest_delete' %}" method="POST"
-                                              style="display: none;">
-                                            {% csrf_token %}
-                                            <input type="hidden" name="contest_no" value="{{ contest.contest_no }}">
-                                        </form>
+
                                         {% endif %}
                                     </div>
                                     <!-- 게시글과 댓글을 구분짓는 구분선 -->

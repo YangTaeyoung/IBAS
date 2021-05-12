@@ -1,10 +1,11 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/posting_list.css' %}">
     <link
             rel="stylesheet"
             type="text/css"
-            href="{% static 'css/lecture-shin.css' %}"
+            href="{% static 'css/posting_list.css' %}"
     />
     <div class="page-wraper">
         <!-- 상단 제목부분 -->
@@ -22,7 +23,7 @@
                             <h1 class="text-white introduce-letter-spacing_5">{{ type.type_name }}</h1>
 
                             <!-- DB에서 부제목 꺼내와야 함 강의, 스터디, 취미 -->
-                            <p class="introduce-margin-top_20">{{ type.type_exp }}</p>
+                            <p class="m-t20">{{ type.type_exp }}</p>
                         </div>
                     </div>
                 </a>

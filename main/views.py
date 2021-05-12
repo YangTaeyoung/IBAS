@@ -1,20 +1,21 @@
+from django.db import transaction
 from django.shortcuts import render, get_object_or_404, reverse, redirect
-from DB.models import *
+from DB.models import Alarm, Board, BoardFile, BoardType, Comment, History, User
+from board.forms import FileForm
+from main.forms import ActivityForm
 from pagination_handler import *
-from file_controller import *
+from file_controller import FileController
 from django.db.models import Q
 from member import session
-from django.core.paginator import Paginator
-from django.conf import settings
 from alarm.alarm_controller import create_comment_alarm, create_comment_ref_alarm
 from django.http import HttpResponseRedirect
-import os
+from user_controller import login_required, writer_only
 
 
 # 메인페이지 이동 함수
 def index(request):
     # 임시 로그인
-    session.save_session(request, User.objects.get(pk=12162359))
+    # session.save_session(request, User.objects.get(pk=12162359))
 
     return render(request, "index.html", {})
 
@@ -41,7 +42,7 @@ def introduce(request):
 # 마지막 수정 일시 : 2021.04.15 (유동현)
 # 수정 내역:
 #   - 코드 최적화 paginator 부분
-def activity(request):
+def activity_list(request):
     # 최신순으로 정렬하고, 1:M 관계로 가져오기 위해 prefetch_related 함수 사용
     board_list = Board.objects.filter(board_type_no__board_type_no=4).order_by('-board_created').prefetch_related(
         "boardfile_set")
@@ -78,55 +79,65 @@ def activity_detail(request, board_no):
 # 동아리 활동 게시판 등록하기
 # ---- activity_register ---- #
 # 작성자 : 양태영
-# 마지막 수정 일시 : 2021.04.15 (유동현)
-# 수정내용 : 코드 최적화
-#   - 파일 업로드
-#   - create() 로 저장
+# 마지막 수정 일시 : 2021.05.04 (유동현)
+# 수정내용 : 폼 처리
+@login_required
 def activity_register(request):
     # 글쓰기 들어와서 등록 버튼을 누르면 실행이 되는 부분
     if request.method == "POST":
-        activity = Board.objects.create(  # 객체로 저장을 할 것이오
-            board_type_no=BoardType.objects.get(pk=4),
-            board_title=request.POST.get('board_title'),
-            board_cont=request.POST.get('board_cont'),
-            board_writer=User.objects.get(pk=request.session.get('user_stu'))  # 유저 학번 들고오는 것임
-        )
+        activity_form = ActivityForm(request.POST)
+        file_form = FileForm(request.POST, request.FILES)
 
-        upload_new_files(request, activity)  # 파일 업로드
+        if activity_form.is_valid() and file_form.is_valid():
+            with transaction.atomic():
+                activity = activity_form.save(
+                    board_writer=User.objects.get(pk=request.session.get('user_stu')))
+                file_form.save(instance=activity)
 
-        return redirect(reverse("activity"))
+            return redirect("activity_detail", board_no=activity.board_no)
+        else:
+            return redirect(reverse("activity"))
 
     else:  # 게시글 등록 버튼을 눌렀을 때
-
-        return render(request, "activity_register.html", {})
+        context = {
+            "board_form": ActivityForm(),
+            "file_form": FileForm(),
+        }
+        return render(request, "activity_register.html", context)
 
 
 # : 동아리 글 수정 코드
 # ---- activity_update ---- #
 # 작성자 : 양태영
-# 마지막 수정 일시 : 2021.04.15 (유동현)
-# 수정내용
-#   - 코드 최적화
-def activity_update(request):
+# 마지막 수정 일시 : 2021.05.04 (유동현)
+# 수정내용 : 폼 처리
+@login_required
+@writer_only
+def activity_update(request, board_no):
+    board = get_object_or_404(Board, pk=board_no)
+
     # 수정을 누르면 GET 방식으로 DB 에 있는 것을 꺼내 온다.
     if request.method == "GET":
-        board = Board.objects.get(pk=request.GET.get('board_no'))  # 맞는 것을 가져온다.
-        board_file_list = BoardFile.objects.filter(board_no=board)
-        context = {'board': board, 'board_file_list': board_file_list}
+        context = {
+            'board_no': board_no,
+            'board_form': ActivityForm(instance=board),
+            'file_form': FileForm(),
+            'file_list': BoardFile.objects.filter(board_no=board)
+        }
 
         return render(request, 'activity_register.html', context)  # 이거로 보내줘서 작업 가능
 
     # 수정을 하고 난 후 수정 버튼을 누를 경우 이걸로 진행 됌
     elif request.method == 'POST':
-        board = Board.objects.get(pk=request.POST.get('board_no'))  # 맞는 것을 가져온다.
-        board.board_title = request.POST.get('board_title')
-        board.board_cont = request.POST.get('board_cont')
-        board.save()
+        activity_form = ActivityForm(request.POST)
+        file_form = FileForm(request.POST, request.FILES)
 
-        board_files = BoardFile.objects.filter(board_no=board)  # 파일들을 갖고 옴
-        remove_files_by_user(request, board_files)  # 사용자가 제거한 파일 삭제
-
-        upload_new_files(request, board)  # 파일 업로드
+        if activity_form.is_valid() and file_form.is_valid():
+            with transaction.atomic():
+                activity_form.update(instance=board)
+                board_files = BoardFile.objects.filter(board_no=board)  # 파일들을 갖고 옴
+                FileController.remove_files_by_user(request, board_files)  # 사용자가 제거한 파일 삭제
+                file_form.save(instance=board)  # 파일 업로드
 
         # 목록 페이지 이동
         return redirect("activity_detail", board_no=board.board_no)
@@ -138,20 +149,18 @@ def activity_update(request):
 # : 활동게시판 상세페이지에서 삭제하는 코드
 # ---- activity_delete ---- #
 # 작성자 : 양태영
-# 마지막 수정 일시 : 2021.04.15 (유동현)
-# 수정내용 : 코드 최적화(파일 처리 코드 모듈화 file_controller.py)
-def activity_delete(request):
-    if request.method == "POST":  # 포스트로 넘어오는 경우
-        board = Board.objects.get(pk=request.POST.get('board_no'))
+# 마지막 수정 일시 : 2021.05.04 (유동현)
+# 수정내용 : 트랜젝션 코드 추가
+@login_required
+@writer_only
+def activity_delete(request, board_no):
+    board = Board.objects.get(pk=board_no)
 
-        delete_all_files_of_(board)  # 해당 게시글에 등록된 파일 모두 제거
-
+    with transaction.atomic():
+        FileController.delete_all_files_of_(board)  # 해당 게시글에 등록된 파일 모두 제거
         board.delete()  # 파일과 폴더 삭제 후, 게시글 DB 에서 삭제
 
-        return redirect(reverse('activity'))
-
-    else:  # 파라미터가 제대로 넘어오지 않은 경우, 즉 비정상적인 경로를 통해 들어간 경우 바로 나오게 해준다.
-        return redirect(reverse('activity'))
+    return redirect(reverse('activity'))
 
 
 # 댓글 달기 코드
