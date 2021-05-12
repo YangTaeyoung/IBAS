@@ -3,8 +3,11 @@
 {% block content %}
     <link rel="stylesheet" href="{% static 'css/login-join.css' %}"/>
     <link rel="stylesheet" href="{% static 'css/ibas_contents.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/size.css' %}">
 
     <script src="{% static 'js/ibas_centents.js' %}"></script>
+    <script src="{% static 'js/login-join.js' %}"></script>
+
     <script>
         function goUpdate() { // 유저정보 업데이트 폼 전송.
             if (confirm('수정하시겠습니까?')) {
@@ -594,9 +597,13 @@
                                     <div class="modal-body">
                                         <form class="dlab-form">
                                             <!--일단 input창으로 해둠, Back : 학과선택할 수 있는 창 뜰 수 있도록 수정-->
-                                            <div class="form-group">
-                                                <input name="dzName" required="" class="form-control"
-                                                       placeholder="수정하고 싶은 학과명을 적어주세요" type="text"/>
+                                            <div class="form-group" style="display: grid">
+                                                <a href="javascript:void(0);" data-toggle="modal"
+                                                           data-target="#search_major" style="display: flex">
+                                                    <i class="la la-search m-t15 m-r10"></i>
+                                                    <input name="dzName" required="" class="form-control"
+                                                       placeholder="전공을 검색하려면 클릭하세요" type="text" style="width: 95%"/>
+                                                    </a>
                                             </div>
                                             <!--수정하기 버튼, Back : 누르면 내정보에 반영되도록 수정-->
                                             <a href="#" class="site-button"
@@ -608,7 +615,111 @@
                             </div>
                         </div>
                         <!-- Modal End -->
+                        <!-- 전공 검색 Modal -->
+                        <div class="modal fade modal-bx-info modal-lg" id="search_major" tabindex="-2" role="dialog"
+                             aria-labelledby="ReportReviewsModalLongTitle" aria-hidden="true" style="width: 100%">
+                            <div class="modal-dialog " role="document">
+                                <div class="modal-content">
+                                    <!--제목부분-->
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="ReportReviewsModalLongTitle">전공 검색</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true"><i class="la la-close"></i></span>
+                                        </button>
+                                    </div>
+                                    <!--내용부분-->
+                                    <div class="modal-body">
+                                        <div class="card-body" style="width: 100%">
 
+
+                                        <!-- 검색 영역 -->
+                                        <div class="searchBox" style="width: 100%">
+                                            <input class="form-control" type="text" id="search" onkeyup="filter()" placeholder="전공을 입력하세요"/>
+                                        </div>
+                                        <!-- 전공 리스트 영역 -->
+
+                                        <hr/>
+                                        <div class="listBox" style="width: 100%">
+                                            <table class="table table-hover">
+                                                <thead>
+                                                <tr>
+                                                    <th>학교명</th>
+                                                    <th>단과대학</th>
+                                                    <th>학과명</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <!--전공 리스트를 단과대학, 학과명 순으로 가져옴-->
+
+                                                <tr class="listInner">
+                                                    <th>인하대학교</th>
+                                                    <td class="colleges">경영대학</td>
+                                                    <td class="major_names">경영학과</td>
+                                                </tr>
+                                                <tr class="listInner">
+                                                    <th>인하대학교</th>
+                                                    <td class="colleges">공과대학</td>
+                                                    <td class="major_names">컴퓨터공학과</td>
+                                                </tr>
+                                                <tr class="listInner">
+                                                    <th>인하대학교</th>
+                                                    <td class="colleges">문과대학</td>
+                                                    <td class="major_names">문화콘텐츠문화경영학과</td>
+                                                </tr>
+                                                <tr class="listInner">
+                                                    <th>인하대학교</th>
+                                                    <td class="colleges">자연과학대학</td>
+                                                    <td class="major_names">통계학과</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Modal End -->
+                        <!-- 전공 검색 팝업창 -->
+                        <div id="major-search-popup" class="card major-search-popup ">
+                            <div class="card-header" style="display: flex; align-items: center; justify-content: space-between">
+                                <h4 class="m-b0"> 전공 검색 </h4>
+                                <!-- 닫기 버튼 -->
+                                <i class="fa fa-close fa-2x btn-exit" onclick="popDown()"></i>
+                            </div>
+                            <div class="card-body">
+
+
+                                <!-- 검색 영역 -->
+                                <div class="searchBox">
+                                    <input class="form-control" type="text" id="search" onkeyup="filter()" placeholder="전공을 입력하세요"/>
+                                </div>
+                                <!-- 전공 리스트 영역 -->
+
+                                <hr/>
+                                <div class="listBox">
+                                    <table class="table table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th>학교명</th>
+                                            <th>단과대학</th>
+                                            <th>학과명</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <!--전공 리스트를 단과대학, 학과명 순으로 가져옴-->
+                                        {% for major in major_list %}
+                                            <tr class="listInner" onclick="printResult({{ major.major_no }})">
+                                                <th>인하대학교</th>
+                                                <td class="colleges">{{ major.major_colleage }}</td>
+                                                <td id="major_name_{{ major.major_no }}" class="major_names">{{ major.major_name }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                         <!-- 전화번호 수정 Modal -->
                         <div class="modal fade modal-bx-info modal-lg" id="phone_edit" tabindex="-1" role="dialog"
                              aria-labelledby="ReportReviewsModalLongTitle" aria-hidden="true">
