@@ -212,7 +212,7 @@ function staff_grade() {
 
 }
 
-// ================================== staff 관련 js ========================================= //
+// ================================== lectRoom 관련 js ========================================= //
 function lectRoom_state() {
 
     var tr_head = document.getElementById("lectRoom_head"); // table head부분 가져옴

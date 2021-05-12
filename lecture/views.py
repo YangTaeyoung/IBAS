@@ -62,9 +62,16 @@ def lect_view(request, type_no):  # 게시판 페이지로 이동
     return render(request, 'lecture_list.html', context)
 
 
-def lect_room_mem_manage(request):  # 게시판 페이지로 이동
+def lect_room_mem_manage(request):
 
     context = {
 
     }
     return render(request, 'lectRoom-mem_manage.html', context)
+
+def lect_room_attend_std(request):  # 게시판 페이지로 이동
+
+    context = {
+
+    }
+    return render(request, 'lectRoom-attend_std.html', context)

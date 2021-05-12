@@ -30,6 +30,7 @@
         }
     </script>
 
+
     <div class="page-wraper">
         <!-- 상단 제목부분 -->
         <div class="page-content bg-white">
@@ -43,10 +44,10 @@
                         <div class="dlab-bnr-inr-entry">
                             <!--제목-->
                             <!-- DB에서 제목 꺼내와야 함 -->
-                            <h1 class="text-white introduce-letter-spacing_5">수강생 관리 게시판</h1>
+                            <h1 class="text-white introduce-letter-spacing_5">파이썬 기초 강의</h1>
                             <!--부제목-->
                             <!-- DB에서 제목 꺼내와야 함 -->
-                            <p class="m-t20">수강생 관리를 할 수 있는 게시판입니다. </p>
+                            <p class="m-t20">출결 관리 </p>
                         </div>
                     </div>
                 </a>
@@ -121,62 +122,16 @@
 
                                         <div class="myinfo-table-padding">
                                             <!-- 신입부원 관리 테이블 시작 -->
-                                            <!-- staff_mem_select는 staff_cr.css에 정의되어 있음.  -->
-                                            <div class="staff_mem_select m-b20">
-                                                <!-- onchange 는 필터. staff.js 에 정의되어 있음. -->
-                                                <select id="lectRoom_select_state" name=""
-                                                        onchange="lectRoom_state()">
-                                                    <option selected="selected">상태
-                                                    </option>
-                                                    <option>수강중</option>
-                                                    <option>수강정지</option>
-                                                </select>
-                                            </div>
 
-                                            <!-- staff_mem_select는 staff_cr.css에 정의되어 있음.  -->
-                                            <div class="staff_mem_select m-b20">
-                                                <select id="select-aor" onchange="selectAoR()">
-                                                    <option selected="selected" disabled="disabled">관리
-                                                    </option>
-                                                    <option value="1">수강중</option>
-                                                    <option value="2">수강정지</option>
-                                                </select>
-                                            </div>
-                                            <!-- staff_mem_btn는 staff_cr.css에 정의되어 있음.  -->
-                                            <div class="staff_mem_btn m-b20 listing-info-right">
-                                                <!-- &nbsp;는 띄어쓰기 -->
-                                                <button class="site-button" type="button"
-                                                        onclick="submitForm('hd-form-members-aor')">
-                                                    <i
-                                                            class="la la-check m-r5"
-                                                            style="font-weight: bold"
-                                                    ></i>&nbsp;적용
-                                                </button>
-                                            </div>
-                                            <form id="hd-form-members-aor" action="{% url 'members_aor' %}"
-                                                  method="post" style="display: none">
-                                                {% csrf_token %}
-                                                {% for new_user in new_user_list %}
-                                                    <input id="new-user-check-{{ new_user.user_stu }}"
-                                                           type="checkbox" name="user_stu_list[]"
-                                                           value="{{ new_user.user_stu }}"
-                                                           style="display: none"/>
-                                                {% endfor %}
-                                                <input id="input-aor" type="hidden" name="aor" value="0"/>
-                                            </form>
                                             <table class="table">
                                                 <thead>
                                                 <!-- 테이블 1행: 제목 -->
                                                 <tr id="lectRoom_head">
                                                     <!-- staff_width는 staff_cr.css에 정의되어 있음.  -->
+                                                    <th class="border-top-0 width-70" scope="col"></th>
+                                                    <th class="border-top-0 width-100" scope="col"></th>
+                                                    <th class="border-top-0" scope="col"></th>
                                                     <th class="border-top-0 width-50" scope="col"></th>
-                                                    <th class="border-top-0 width-50" scope="col"></th>
-                                                    <th class="border-top-0 width-100" scope="col">이름</th>
-                                                    <th class="border-top-0 width-100" scope="col">학번</th>
-                                                    <th class="border-top-0 width-170" scope="col">전화번호</th>
-                                                    <th class="border-top-0 width-100" scope="col">과제 제출</th>
-                                                    <th class="border-top-0 width-100" scope="col">출석</th>
-                                                    <th class="border-top-0 width-100" scope="col">상태</th>
 
 
                                                 </tr>
@@ -193,84 +148,115 @@
                                                 {#                                                            </tr>#}
                                                 {#                                                        {% endif %}#}
 
-                                                {#                                                        {% for new_user in new_user_list %}#}
                                                 <tr class="lectRoom_tr">
-                                                    <td scope="row">
-
-                                                        {% csrf_token %}
-                                                        <div class="input-block">
-                                                            <input id="check_{{ new_user.user_stu }}"
-                                                                   type="checkbox"
-                                                                   onclick="decideChk(this,'{{ new_user.user_stu }}')">
-                                                            <!-- staff_label_margin는 staff_cr.css에 정의되어 있음.  -->
-                                                            <label for="check_{{ new_user.user_stu }}"
-                                                                   class="staff_label_margin"></label>
-                                                        </div>
-
+                                                    <!-- 주차 -->
+                                                    <th rowspan="2"
+                                                        style="text-align: center; vertical-align: middle; border-right: 1px solid #dee2e6">
+                                                        1
+                                                    </th>
+                                                    <!-- 강의 -->
+                                                    <td style="text-align: center; border-right: 1px solid #dee2e6">강의
                                                     </td>
-                                                    {#                                                            <th>{{ forloop.counter }}</th>#}
-                                                    {#                                                            <!-- 회원 이름 -->#}
-                                                    {#                                                            <td>{{ new_user.user_name }}</td>#}
-                                                    {#                                                            <!-- 회원 학번 -->#}
-                                                    {#                                                            <td>{{ new_user.user_stu }}</td>#}
-                                                    {#                                                            <!-- 회원 전화번호 -->#}
-                                                    {#                                                            <td>{{ new_user.user_phone }}</td>#}
-                                                    {#                                                            <!-- 회원 학과 -->#}
-                                                    {#                                                            <td>{{ new_user.user_major.major_name }}</td>#}
-                                                    {#                                                            <!-- 과제 미제출 수 -->#}
-                                                    {#                                                            <td>10번</td>#}
-                                                    {#                                                            <!-- 결석 수 -->#}
-                                                    {#                                                            <td>5번</td>#}
-                                                    <th>55</th>
-                                                    <!-- 회원 이름 -->
-                                                    <td>윤예진</td>
-                                                    <!-- 회원 학번 -->
-                                                    <td>12192355</td>
-                                                    <!--전화번호 -->
-                                                    <td>010-3398-8604</td>
-                                                    <!-- 과제 미제출 수 -->
-                                                    <td style="text-align: center">10 번</td>
-                                                    <!-- 결석 수 -->
-                                                    <td>5 번</td>
-                                                    <!--상태 -->
-                                                    <td class="lectRoom_state lectRoom_state_ing_font">수강중</td>
-
-
-                                                    {#                                                            <td class="lectRoom_state lectRoom_state_stop_font">수강정지</td>#}
+                                                    <!-- 강의제목 -->
+                                                    <td style="border-right: 1px solid #dee2e6"><1주차> 파이썬으로 사칙연산 하기!
+                                                    </td>
+                                                    <!-- 강의 출석 -->
+                                                    <td style="text-align: center">O</td>
+                                                </tr>
+                                                <tr class="lectRoom_tr">
+                                                    <!-- 과제 -->
+                                                    <td style="text-align: center; border-right: 1px solid #dee2e6">과제
+                                                    </td>
+                                                    <!-- 강의제목 -->
+                                                    <td style="border-right: 1px solid #dee2e6"><1주차> 파이썬으로 공학계산기
+                                                        만들어보기
+                                                    </td>
+                                                    <!-- 강의 출석 -->
+                                                    <td style="text-align: center">O</td>
                                                 </tr>
 
                                                 <tr class="lectRoom_tr">
-                                                    <td scope="row">
-
-                                                        {% csrf_token %}
-                                                        <div class="input-block">
-                                                            <input id="1"
-                                                                   type="checkbox"
-                                                                   onclick="decideChk(this,'{{ new_user.user_stu }}')">
-                                                            <!-- staff_label_margin는 staff_cr.css에 정의되어 있음.  -->
-                                                            <label for="1"
-                                                                   class="staff_label_margin"></label>
-                                                        </div>
-
+                                                    <!-- 주차 -->
+                                                    <th rowspan="2"
+                                                        style="text-align: center; vertical-align: middle; border-right: 1px solid #dee2e6">
+                                                        2
+                                                    </th>
+                                                    <!-- 강의 -->
+                                                    <td style="text-align: center; border-right: 1px solid #dee2e6">강의
                                                     </td>
-
-                                                    <th>56</th>
-                                                    <!-- 회원 이름 -->
-                                                    <td>가나다라</td>
-                                                    <!-- 회원 학번 -->
-                                                    <td>12222222</td>
-                                                    <!--전화번호 -->
-                                                    <td>010-8383-5678</td>
-                                                    <!-- 과제 미제출 수 -->
-                                                    <td style="text-align: center">20 번</td>
-                                                    <!-- 결석 수 -->
-                                                    <td>10 번</td>
-                                                    <!--상태 -->
-                                                    {#                                                            <td class="lectRoom_state lectRoom_state_ing_font">수강중</td>#}
-                                                    <td class="lectRoom_state lectRoom_state_stop_font">수강정지</td>
-
+                                                    <!-- 강의제목 -->
+                                                    <td style="border-right: 1px solid #dee2e6"><1주차> 파이썬으로 사칙연산 하기!
+                                                    </td>
+                                                    <!-- 강의 출석 -->
+                                                    <td style="text-align: center">O</td>
                                                 </tr>
-                                                {#                                                        {% endfor %}#}
+                                                <tr class="lectRoom_tr">
+                                                    <!-- 과제 -->
+                                                    <td style="text-align: center; border-right: 1px solid #dee2e6">과제
+                                                    </td>
+                                                    <!-- 강의제목 -->
+                                                    <td style="border-right: 1px solid #dee2e6"><1주차> 파이썬으로 공학계산기
+                                                        만들어보기
+                                                    </td>
+                                                    <!-- 강의 출석 -->
+                                                    <td style="text-align: center">O</td>
+                                                </tr>
+
+                                                <tr class="lectRoom_tr">
+                                                    <!-- 주차 -->
+                                                    <th rowspan="2"
+                                                        style="text-align: center; vertical-align: middle; border-right: 1px solid #dee2e6">
+                                                        3
+                                                    </th>
+                                                    <!-- 강의 -->
+                                                    <td style="text-align: center; border-right: 1px solid #dee2e6">강의
+                                                    </td>
+                                                    <!-- 강의제목 -->
+                                                    <td style="border-right: 1px solid #dee2e6"><1주차> 파이썬으로 사칙연산 하기!
+                                                    </td>
+                                                    <!-- 강의 출석 -->
+                                                    <td style="text-align: center">O</td>
+                                                </tr>
+                                                <tr class="lectRoom_tr">
+                                                    <!-- 과제 -->
+                                                    <td style="text-align: center; border-right: 1px solid #dee2e6">과제
+                                                    </td>
+                                                    <!-- 강의제목 -->
+                                                    <td style="border-right: 1px solid #dee2e6"><1주차> 파이썬으로 공학계산기
+                                                        만들어보기
+                                                    </td>
+                                                    <!-- 강의 출석 -->
+                                                    <td style="text-align: center">O</td>
+                                                </tr>
+
+                                                <tr class="lectRoom_tr">
+                                                    <!-- 주차 -->
+                                                    <th rowspan="2"
+                                                        style="text-align: center; vertical-align: middle; border-right: 1px solid #dee2e6">
+                                                        4
+                                                    </th>
+                                                    <!-- 강의 -->
+                                                    <td style="text-align: center; border-right: 1px solid #dee2e6">강의
+                                                    </td>
+                                                    <!-- 강의제목 -->
+                                                    <td style="border-right: 1px solid #dee2e6"><1주차> 파이썬으로 사칙연산 하기!
+                                                    </td>
+                                                    <!-- 강의 출석 -->
+                                                    <td style="text-align: center">O</td>
+                                                </tr>
+                                                <tr class="lectRoom_tr">
+                                                    <!-- 과제 -->
+                                                    <td style="text-align: center; border-right: 1px solid #dee2e6">과제
+                                                    </td>
+                                                    <!-- 강의제목 -->
+                                                    <td style="border-right: 1px solid #dee2e6"><1주차> 파이썬으로 공학계산기
+                                                        만들어보기
+                                                    </td>
+                                                    <!-- 강의 출석 -->
+                                                    <td style="text-align: center">O</td>
+                                                </tr>
+
+
                                                 </tbody>
                                             </table>
                                             <!--========== 페이지네이션 시작 ===========-->
@@ -298,7 +284,10 @@
                                             </div>
                                             <!--========== 페이지네이션 끝 ===========-->
                                         </div>
+
+
                                     {% endif %}
+
                                 </div>
                             </div>
                         </div>
@@ -309,5 +298,4 @@
             </div>
         </div>
     </div>
-
 {% endblock %}
