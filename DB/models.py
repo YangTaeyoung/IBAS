@@ -6,7 +6,9 @@
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from datetime import date
+import os
 from django.db import models
+from IBAS.settings import MEDIA_ROOT
 
 
 class Answer(models.Model):
@@ -37,46 +39,48 @@ class Alarm(models.Model):
 
 
 class Bank(models.Model):
-    bank_no = models.AutoField(db_column='BANK_NO', primary_key=True)  # Field name made lowercase.
-    bank_plus = models.IntegerField(db_column='BANK_PLUS', blank=True, default=0)  # Field name made lowercase.
-    bank_minus = models.IntegerField(db_column='BANK_MINUS', blank=True, default=0)  # Field name made lowercase.
-    bank_title = models.CharField(db_column='BANK_TITLE', max_length=100, blank=True,
-                                  null=True)  # Field name made lowercase.
-    bank_used = models.DateTimeField(db_column='BANK_USED', blank=True)  # Field name made lowercase.
-    bank_created = models.DateTimeField(db_column='BANK_CREATED', auto_now_add=True)  # Field name made lowercase.
-    bank_updated = models.DateTimeField(db_column='BANK_UPDATED', auto_now=True, blank=True,
-                                        null=True)  # Field name made lowercase.
+    bank_no = models.AutoField(db_column='BANK_NO', primary_key=True)
+    bank_plus = models.IntegerField(db_column='BANK_PLUS', blank=True)
+    bank_minus = models.IntegerField(db_column='BANK_MINUS', blank=True)
+    bank_title = models.CharField(db_column='BANK_TITLE', max_length=100, null=True)
+    bank_used = models.DateTimeField(db_column='BANK_USED')
+    bank_created = models.DateTimeField(db_column='BANK_CREATED', auto_now_add=True)
+    bank_updated = models.DateTimeField(db_column='BANK_UPDATED', auto_now=True, blank=True, null=True)
     bank_checked = models.DateTimeField(db_column='BANK_CHECKED', null=True)
     bank_allowed = models.DateTimeField(db_column='BANK_ALLOWED', null=True)
-
-    bank_cfo = models.ForeignKey('User', models.DO_NOTHING, db_column='BANK_CFO', null=True,
-                                 related_name="cfo")  # Field name made lowercase.
-    bank_used_user = models.ForeignKey('User', models.DO_NOTHING, db_column='BANK_USED_USER',
-                                       related_name="used_user")  # Field name made lowercase.
-    bank_apply = models.ForeignKey('BankApplyInfo', models.DO_NOTHING,
-                                   db_column='BANK_APPLY')  # Field name made lowercase.
-    bank_reason = models.CharField(db_column='BANK_REASON', max_length=300, blank=True,
-                                   null=True)  # Field name made lowercase.
-    bank_reject_reason = models.CharField(db_column='BANK_REJECT_REASON', max_length=200, blank=True,
-                                          null=True)  # Field name made lowercase.
-    bank_account = models.CharField(db_column='BANK_ACCOUNT', max_length=100, blank=True,
-                                    null=True)  # Field name made lowercase.
+    bank_cfo = models.ForeignKey('User', models.DO_NOTHING, db_column='BANK_CFO', null=True, related_name="cfo")
+    bank_used_user = models.ForeignKey('User', models.DO_NOTHING, blank=True, db_column='BANK_USED_USER',
+                                       related_name="used_user")
+    bank_apply = models.ForeignKey('BankApplyInfo', models.DO_NOTHING, db_column='BANK_APPLY')
+    bank_reason = models.CharField(db_column='BANK_REASON', max_length=300, blank=True, null=True)
+    bank_reject_reason = models.CharField(db_column='BANK_REJECT_REASON', max_length=200, blank=True, null=True)
+    bank_account = models.CharField(db_column='BANK_ACCOUNT', max_length=100, blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'BANK'
+
+    @property
+    def get_file_path(self):
+        return os.path.join(MEDIA_ROOT, 'bank', str(self.bank_no))
+
+
+# 추상클래스 File
+class File(models.Model):
+    file_id = models.AutoField(db_column='FILE_ID', primary_key=True)  # Field name made lowercase.
+    file_name = models.CharField(db_column='FILE_NAME', max_length=300)
+
+    class Meta:
+        abstract = True
 
 
 def bank_file_upload_to(instance, filename):
     return f'bank/{instance.bank_no.bank_no}/{filename}'
 
 
-class BankFile(models.Model):
+class BankFile(File):
     bank_no = models.ForeignKey(Bank, on_delete=models.CASCADE, db_column='BANK_NO')  # Field name made lowercase.
-    bank_file_id = models.AutoField(db_column='BANK_FILE_ID', primary_key=True)  # Field name made lowercase.
-    bank_file_path = models.FileField(db_column='BANK_FILE_PATH', max_length=1000,
-                                      upload_to=bank_file_upload_to)  # Field name made lowercase.
-    bank_file_name = models.CharField(db_column='BANK_FILE_NAME', max_length=500)
+    file_path = models.FileField(db_column='FILE_PATH', max_length=1000, upload_to=bank_file_upload_to)
 
     class Meta:
         managed = False
@@ -105,23 +109,15 @@ class Board(models.Model):
         managed = False
         db_table = 'BOARD'
 
-    def get_board_pk(self):
-        return self.board_no
+    @property
+    def get_file_path(self):
+        return os.path.join(MEDIA_ROOT, 'board', str(self.board_no))
 
 
 # 제발... 제발.... 되라...
 # 게시판 번호에 맞게 경로를 정하고 지정된 경로에 파일을 업로드 하는 함수.
 def board_file_upload_to(instance, filename):
     return f'board/{instance.board_no.board_no}/{filename}'
-
-
-# 추상클래스 File
-class File(models.Model):
-    file_id = models.AutoField(db_column='FILE_ID', primary_key=True)  # Field name made lowercase.
-    file_name = models.CharField(db_column='FILE_NAME', max_length=300)
-
-    class Meta:
-        abstract = True
 
 
 class BoardFile(File):
@@ -181,7 +177,6 @@ class ContestBoard(models.Model):
     contest_start = models.DateTimeField(db_column='CONTEST_START')
     contest_deadline = models.DateTimeField(db_column='CONTEST_DEADLINE')
 
-
     class Meta:
         managed = False
         db_table = 'CONTEST_BOARD'
@@ -194,6 +189,10 @@ class ContestBoard(models.Model):
             return True
         else:
             return False
+
+    @property
+    def get_file_path(self):
+        return os.path.join(MEDIA_ROOT, 'contest', str(self.contest_no))
 
 
 class ContestComment(models.Model):
@@ -211,8 +210,8 @@ class ContestComment(models.Model):
 
 
 def contest_file_upload_to(instance, filename):
-    from file_controller import is_image
-    if is_image(filename):
+    from file_controller import FileController
+    if FileController.is_image(filename):
         return f'board/contest/{instance.contest_no.contest_no}/image/{filename}'
     else:
         return f'board/contest/{instance.contest_no.contest_no}/doc/{filename}'
