@@ -601,8 +601,7 @@
                                                 <a href="javascript:void(0);" data-toggle="modal"
                                                            data-target="#search_major" style="display: flex">
                                                     <i class="la la-search m-t10 m-r10"></i>
-                                                    <input name="dzName" required="" class="form-control"
-                                                       placeholder="전공을 검색하려면 클릭하세요" type="text" style="width: 95%"/>
+                                                    <input id="user_major" name="user_major" class="form-control"  placeholder="전공을 검색하려면 클릭하세요" type="text" style="width: 95%"/>
                                                     </a>
                                             </div>
                                             <!--수정하기 버튼, Back : 누르면 내정보에 반영되도록 수정-->
@@ -647,25 +646,25 @@
                                                 <tbody>
                                                 <!--전공 리스트를 단과대학, 학과명 순으로 가져옴-->
 
-                                                <tr class="listInner">
+                                                <tr class="listInner" onclick="printResult(1)">
                                                     <th>인하대학교</th>
                                                     <td class="colleges">경영대학</td>
-                                                    <td class="major_names">경영학과</td>
+                                                    <td class="major_names" id="major_name_1" data-dismiss="modal" aria-label="Close">경영학과</td>
                                                 </tr>
-                                                <tr class="listInner">
+                                                <tr class="listInner" onclick="printResult(2)">
                                                     <th>인하대학교</th>
                                                     <td class="colleges">공과대학</td>
-                                                    <td class="major_names">컴퓨터공학과</td>
+                                                    <td class="major_names" id="major_name_2" data-dismiss="modal" aria-label="Close">컴퓨터공학과</td>
                                                 </tr>
-                                                <tr class="listInner">
+                                                <tr class="listInner" onclick="printResult(3)">
                                                     <th>인하대학교</th>
                                                     <td class="colleges">문과대학</td>
-                                                    <td class="major_names">문화콘텐츠문화경영학과</td>
+                                                    <td class="major_names" id="major_name_3" data-dismiss="modal" aria-label="Close">문화콘텐츠문화경영학과</td>
                                                 </tr>
-                                                <tr class="listInner">
+                                                <tr class="listInner" onclick="printResult(4)">
                                                     <th>인하대학교</th>
                                                     <td class="colleges">자연과학대학</td>
-                                                    <td class="major_names">통계학과</td>
+                                                    <td class="major_names" id="major_name_4" data-dismiss="modal" aria-label="Close">통계학과</td>
                                                 </tr>
                                                 </tbody>
                                             </table>

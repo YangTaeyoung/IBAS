@@ -43,7 +43,17 @@
             <div class="content-block">
                 <div class="section-full content-inner bg-white">
                     <div class="container">
-
+                            <div class="alert alert-secondary" role="alert" style="text-align: center">
+                                <i>승인대기중</i>
+                            </div>
+                            <!--승인 완료 시 뜨는 알람-->
+                            <div class="alert alert-success" role="alert" style="text-align: center">
+                                <i>승인완료</i>
+                            </div>
+                            <!--승인 거절 시 뜨는 알람, 거절 사유 입력하면 같이 뜨게 만들기-->
+                            <div class="alert alert-danger" role="alert" style="text-align: center">
+                                <i>승인거절 ( 거절사유 : 마음에 안들어서 )</i>
+                            </div>
                         <!--====================================내용 시작==============================================-->
                         <div class="content-box">
                             <!--게시글 작성자, 작성시간 나옴(게시글 정보)-->
@@ -303,7 +313,7 @@
                                                     <input class="form-control"
                                                            name="lect_reject_reason"
                                                            placeholder="승인거절 사유를 입력해주세요"
-                                                           type="text"/>
+                                                           type="text" maxlength="50"/>
                                                 </div>
                                                 <!--거절버튼-->
                                                 <div class="form-group">

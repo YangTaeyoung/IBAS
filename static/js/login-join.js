@@ -78,3 +78,10 @@ function printResult(major_no) {
     document.getElementById("user_major").value = document.getElementById("major_name_" + major_no.toString()).innerHTML;
     popDown();
 }
+
+// pass_form 관련 js //
+function passRole(user_role)
+{
+    document.getElementById("user_role").value = user_role;
+    document.getElementById("hd_form").submit();
+}
