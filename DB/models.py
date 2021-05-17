@@ -42,7 +42,7 @@ class Bank(models.Model):
     bank_no = models.AutoField(db_column='BANK_NO', primary_key=True)
     bank_plus = models.IntegerField(db_column='BANK_PLUS', blank=True)
     bank_minus = models.IntegerField(db_column='BANK_MINUS', blank=True)
-    bank_title = models.CharField(db_column='BANK_TITLE', max_length=100, null=True)
+    bank_title = models.CharField(db_column='BANK_TITLE', max_length=100)
     bank_used = models.DateTimeField(db_column='BANK_USED')
     bank_created = models.DateTimeField(db_column='BANK_CREATED', auto_now_add=True)
     bank_updated = models.DateTimeField(db_column='BANK_UPDATED', auto_now=True, blank=True, null=True)
@@ -54,7 +54,7 @@ class Bank(models.Model):
     bank_apply = models.ForeignKey('BankApplyInfo', models.DO_NOTHING, db_column='BANK_APPLY')
     bank_reason = models.CharField(db_column='BANK_REASON', max_length=300, blank=True, null=True)
     bank_reject_reason = models.CharField(db_column='BANK_REJECT_REASON', max_length=200, blank=True, null=True)
-    bank_account = models.CharField(db_column='BANK_ACCOUNT', max_length=100, blank=True, null=True)
+    bank_account = models.CharField(db_column='BANK_ACCOUNT', max_length=100, null=True)
 
     class Meta:
         managed = False

@@ -5,7 +5,7 @@ from django.shortcuts import render, get_object_or_404, reverse, redirect
 from allauth.socialaccount.models import SocialAccount  # 소셜 계정 DB, socialaccount_socialaccount 테이블을 사용하기 위함.
 from DB.models import AuthUser, User, ChiefCarrier, UserRole, Board, BoardFile, \
     BoardType, Comment, History, Bank, BankFile, BankApplyInfo  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
-from bank.forms import BankForm, FileForm
+from bank.forms import BankForm, FileForm, BankSupportForm
 from member import session
 from django.core.paginator import Paginator
 
@@ -48,8 +48,8 @@ def bank(request):
         "bank_list": item,
         "year_list": year_list,
         "balance": balance,
-        'bank_form_register': bank_form,
-        'file_form_register': file_form,
+        'bank_form': bank_form,
+        'file_form': file_form,
     }
 
     return render(request, 'bank_list.html', context)
@@ -101,67 +101,60 @@ def bank_register(request):
 
         return redirect(reverse('bank_list'))
 
-    return redirect(reverse("index"))
-
-
-def bank_support_board(request):
-    bank_list = Bank.objects.filter(~Q(bank_apply__bank_apply_no=4))
-    # 페이지네이션 설정
-    paginator = Paginator(bank_list, 15)  # 페이지네이터로 15개씩 보이게 설정
-    page = request.GET.get('page')
-    item = paginator.get_page(page)
-    context = {
-        "bank_list": item,
-        "bank_len": len(bank_list)
-    }
-    if is_logined(request):
-        return render(request, 'bank_support_board.html', context)  # 게시판 목록
     else:
         return redirect(reverse("index"))
 
 
+@login_required
+def bank_support_board(request):
+    bank_list = Bank.objects.filter(~Q(bank_apply__bank_apply_no=4))
+
+    # 페이지네이터 설정
+    item = get_page_object(request, bank_list, 15)  # 페이지네이션 15개씩 보이게 설정
+
+    context = {
+        "bank_list": item,
+        "bank_len": len(bank_list)
+    }
+
+    return render(request, 'bank_support_board.html', context)  # 게시판 목록
+
+
+@login_required
 def bank_support_register(request):
-    context = {}
-    print(request.POST.get("bank_used_user"))
     if request.method == "POST":
-        bank = Bank.objects.create(
-            bank_used=request.POST.get('bank_used'),
-            bank_title=request.POST.get('bank_title'),
-            bank_reason=request.POST.get("bank_reason"),
-            bank_plus=0,
-            bank_minus=request.POST.get("bank_minus"),
-            bank_account=request.POST.get("bank_account"),
-            # 사용한 사람은 user_stu 임
-            bank_used_user=User.objects.get(pk=request.POST.get("bank_used_user")),
-            bank_apply=BankApplyInfo.objects.get(pk=request.POST.get("bank_apply"))  # 총무가 추가하는 경우 바로 처리됨.
-        )
-        bank.save()
-        for updated_file in request.FILES.getlist('bank_file'):
-            new_bank_file = BankFile.objects.create(bank_no=Bank.objects.get(pk=bank.bank_no),
-                                                    bank_file_path=updated_file,
-                                                    bank_file_name=updated_file.name)
-            new_bank_file.save()
+        bank_support_form = BankSupportForm(request.POST)
+        file_form = FileForm(request.POST, request.FILES)
+
+        if bank_support_form.is_valid() and file_form.is_valid():
+            with transaction.atomic():
+                bank = bank_support_form.save(user=get_logined_user(request))
+                file_form.save(instance=bank)
+
         return redirect("bank_support_detail", bank_no=bank.bank_no)
-    else:
-        if is_logined(request):
-            return render(request, 'bank_support_register.html', context)  # 등록
-        else:
-            return redirect(reverse("index"))
+
+    elif request.method == 'GET':
+        context = {
+            'bank_support_form': BankSupportForm(),
+            'file_form':  FileForm()
+        }
+        return render(request, 'bank_support_register.html', context)
 
 
+@login_required
 def bank_support_detail(request, bank_no):
-    bank = Bank.objects.get(pk=bank_no)
+    bank = get_object_or_404(Bank, pk=bank_no)
     bank_file_list = BankFile.objects.filter(bank_no=bank)
     context = {
         "bank": bank,
         "bank_file_list": bank_file_list
     }
-    if is_logined(request):
-        return render(request, 'bank_support_detail.html', context)  # 상세보기
-    else:
-        return redirect(redirect("index"))
+
+    return render(request, 'bank_support_detail.html', context)  # 상세보기
 
 
+
+@login_required
 def bank_support_aor(request):  # 총무가 승인, 승인거절, 지급완료를 눌렀을 때의 과정
     if request.method == "POST":
         bank = Bank.objects.get(pk=request.POST.get("bank_no"))
@@ -184,6 +177,7 @@ def bank_support_aor(request):  # 총무가 승인, 승인거절, 지급완료�
             return redirect(reverse("index"))
 
 
+@login_required
 def bank_support_update(request):
     if request.method == "POST":
         if request.POST.get("is_move") is not None:  # 단순 수정페이지 이동의 경우
@@ -232,6 +226,7 @@ def bank_support_update(request):
             return redirect(reverse("index"))
 
 
+@login_required
 def bank_support_delete(request):  # 예산지원 삭제
     if request.method == "POST":  # 포스트로 넘어오는 경우
         bank = Bank.objects.get(pk=request.POST.get('bank_no'))

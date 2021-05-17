@@ -47,11 +47,8 @@
                 </a>
             </div>
             <!--===============================================입력란=========================================================-->
-
-            <form action="
-
-
-                    {% if bank is None %}{% url 'bank_support_register' %}{% else %}{% url 'bank_support_update' %}{% endif %}"
+            {% load widget_tweaks %}
+            <form action="{% if bank is None %}{% url 'bank_support_register' %}{% else %}{% url 'bank_support_update' %}{% endif %}"
                   class="add-listing-form" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <input type="hidden" name="bank_apply" value="1"/>
@@ -60,78 +57,27 @@
                         <div class="container">
                             <form class="add-listing-form">
                                 <!--=====================-->
-                                <!--====================================제목 입력 시작==============================================-->
+
+                            <!--====================================예산지원 폼 입력 시작=============================================-->
+                            {% for field in bank_support_form.visible_fields %}
                                 <div class="content-box">
                                     <div class="content-header">
-                                        <h3 class="title">제목</h3>
+                                        <h3 class="title">{{ field.label }}</h3>
                                     </div>
                                     <div class="content-body">
                                         <div class="form-group">
-                                            <input type="text" name="bank_title" value="{{ bank.bank_title }}"
-                                                   class="form-control" placeholder="제목을 입력하세요" required="required"
-                                                   style="font-size: 25px; height: 70px;">
+                                            {% if field == bank_support_form.bank_title %}
+                                                {% render_field field class="form-control" required="required" style="font-size: 25px; height: 70px;"%}
+                                            {% else %}
+                                                {% render_field field class="form-control" required="required"%}
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </div>
-                                <!--====================================제목 입력 끝=============================================-->
-                                <!--====================================지출 날짜 시작==============================================-->
-                                <div class="content-box">
-                                    <div class="content-header">
-                                        <h3 class="title">지출날짜</h3>
-                                    </div>
-                                    <div class="content-body">
-                                        <div class="form-group">
-                                            <input class="form-control" type="date" name="bank_used"
-                                                   value="{{ bank.bank_used|date:"Y-m-d" }}" required="required"/>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--====================================지출 날짜 끝=============================================-->
-                                <!--====================================지출 내용 시작==============================================-->
-                                <div class="content-box">
-                                    <div class="content-header">
-                                        <h3 class="title">지출내용</h3>
-                                    </div>
-                                    <div class="content-body">
-                                        <div class="form-group">
-                                            <textarea class="form-control" placeholder="지출 목적 및 사용 내용을 입력해주세요"
-                                                      name="bank_reason"
-                                                      required="required">{{ bank.bank_reason }}</textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--====================================지출내용 끝=============================================-->
-                                <!--====================================지출금액 시작==============================================-->
-                                <div class="content-box">
-                                    <div class="content-header">
-                                        <h3 class="title">지출금액</h3>
-                                    </div>
-                                    <div class="content-body">
-                                        <div class="form-group">
-                                            <input type="number" class="form-control" placeholder="정확한 지출금액을 입력해주세요"
-                                                   name="bank_minus" value="{{ bank.bank_minus }}" required="required"/>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--====================================지출금액 끝=============================================-->
-                                <!--====================================사용인 시작==============================================-->
-                                <input type="hidden" class="form-control" name="bank_used_user"
-                                       value="{{ logined_user.user_stu }}" required="required"/>
-                                <!--====================================사용인 끝=============================================-->
-                                <!--====================================입금계좌 시작==============================================-->
-                                <div class="content-box">
-                                    <div class="content-header">
-                                        <h3 class="title">입금받을 계좌</h3>
-                                    </div>
-                                    <div class="content-body">
-                                        <div class="form-group">
-                                            <input type="text" class="form-control" placeholder="은행명, 계좌번호, 예금주를 입력해주세요"
-                                                   name="bank_account" value="{{ bank.bank_account }}"
-                                                   required="required"/>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--====================================입금계좌 끝=============================================-->
+                            {% endfor %}
+                            <!--====================================예산지원 폼 입력 끝=============================================-->
+
+
                                 <!--====================================영수증 입력 시작=============================================-->
 
                                 <div class="content-box">
@@ -140,20 +86,12 @@
                                     </div>
                                     <div class="content-body">
                                         <div class="form-group">
-                                            <input
-                                                    type="file"
-                                                    name="bank_file"
-                                                    accept="image/*"
-                                                    multiple
-                                                    {% if bank is None %}
-                                                    required="required"
-                                                    {% endif %}
-                                            />
+                                            {{ file_form.upload_file }}
                                         </div>
                                     </div>
                                 </div>
                                 <!--==============================이미 존재하고 있는 영수증 시작============================================-->
-                                {% if bank_file_list is not None and bank_file_list|length != 0 %}
+                                {% if bank_file_list %}
                                     <div class="content-box">
                                         <div class="content-header">
                                             <h3 class="title"> 기존 영수증 파일</h3>

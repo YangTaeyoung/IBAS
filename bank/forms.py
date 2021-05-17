@@ -1,12 +1,10 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from django.utils.datetime_safe import date
-
+from django.utils.datetime_safe import date, datetime
 from DB.models import Bank, BankApplyInfo, User
 from IBAS.forms import FileFormBase
 from django.utils.translation import gettext_lazy as _
-
-
+import pytz
 
 class BankForm(forms.ModelForm):
     class Meta:
@@ -85,12 +83,12 @@ class BankForm(forms.ModelForm):
 
     def clean_bank_used(self):
         used_date = self.cleaned_data['bank_used']
-        if used_date > date.today():
+        if used_date > pytz.utc.localize(datetime.today()):
             raise ValidationError(
-                _('미래 날짜를 지정할 수 없습니다!'),
+                _('사용한 날짜를 정확히 입력해주세요!'),
                 code='invalid'
             )
-        return date
+        return used_date
 
     def clean(self):
         if self.cleaned_data['bank_plus'] == 0 and self.cleaned_data['bank_minus'] == 0:
@@ -102,8 +100,61 @@ class BankForm(forms.ModelForm):
 
 class FileForm(FileFormBase):
     upload_file = forms.FileField(
-        required=False,
+        required=True,
         widget=forms.FileInput(
             attrs={'multiple': True,
                    'accept': "image/*,.doc,.pdf,.hwp,.docx"})
     )
+
+
+class BankSupportForm(forms.ModelForm):
+    class Meta:
+        model = Bank
+        fields = ('bank_title', 'bank_used', 'bank_reason', 'bank_minus', 'bank_account')
+
+        widgets = {
+            'bank_used': forms.DateInput(attrs={'type': 'date'}),
+            'bank_title': forms.TextInput(attrs={'placeholder': _('제목을 입력하세요')}),
+            'bank_reason': forms.TextInput(attrs={'placeholder': _("지출 목적 및 사용 내역을 입력하세요.")}),
+            'bank_minus': forms.NumberInput(attrs={'placeholder': _("정확한 지출액을 입력하세요")}),
+            'bank_account': forms.TextInput(attrs={'placeholder': _("은행명, 계좌번호, 예금주를 입력해주세요")})
+        }
+        labels = {
+            'bank_title': _("제목"),
+            'bank_used': _("지출날짜"),
+            'bank_reason': _("지출내역"),
+            'bank_minus': _("지출금액"),
+            'bank_account': _("입금받을 계좌"),
+        }
+
+    def save(self, user):
+        bank = super().save(commit=False)
+        bank.bank_plus = 0
+        bank.bank_used_user = user
+        bank.bank_apply = BankApplyInfo.objects.get(pk=1)
+        bank.save()
+
+        return bank
+
+    def update(self):
+        pass
+
+    def clean_bank_used(self):
+        use_date = self.cleaned_data['bank_used']
+        if use_date > pytz.utc.localize(datetime.today()):
+            raise ValidationError(
+                _('사용한 날짜를 정확히 입력해주세요!'),
+                code='invalid'
+            )
+
+        return use_date
+
+    def clean_bank_minus(self):
+        outcome = self.cleaned_data['bank_minus']
+        if outcome < 0:
+            raise ValidationError(
+                _('지출 금액을 확인해주세요!'),
+                code='invalid'
+            )
+
+        return outcome

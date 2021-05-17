@@ -188,14 +188,14 @@
                                     {% for bank_file in bank_file_list %}
                                         {% if forloop.counter < 4 %}
                                             <li>
-                                                            <span data-exthumbimage="/media/{{ bank_file.bank_file_path }}"
-                                                                  data-src="/media/{{ bank_file.bank_file_path }}"
+                                                            <span data-exthumbimage="/media/{{ bank_file.file_path }}"
+                                                                  data-src="/media/{{ bank_file.file_path }}"
                                                                   class="check-km "
-                                                                  title="{{ bank_file.bank_file_name }}">
+                                                                  title="{{ bank_file.file_name }}">
                                                                 <a href="javascript:void(0);">
                                                                     <div class="dlab-post-thum act-detail-img-size">
                                                                         <img style="height: 190px"
-                                                                             src="/media/{{ bank_file.bank_file_path }}"
+                                                                             src="/media/{{ bank_file.file_path }}"
                                                                              alt=""/>
                                                                     </div>
                                                                 </a>
@@ -203,14 +203,14 @@
                                             </li>
                                         {% elif forloop.counter == 4 %}
                                             <li>
-                                                            <span data-exthumbimage="/media/{{ bank_file.bank_file_path }}"
-                                                                  data-src="/media/{{ bank_file.bank_file_path }}"
+                                                            <span data-exthumbimage="/media/{{ bank_file.file_path }}"
+                                                                  data-src="/media/{{ bank_file.file_path }}"
                                                                   class="check-km act-detail-img-siz"
-                                                                  title="{{ bank_file.bank_file_name }}">
+                                                                  title="{{ bank_file.file_name }}">
                                                                 <a href="javascript:void(0);">
                                                                     <div class="dlab-post-thum "><img
                                                                             style="height: 190px"
-                                                                            src="/media/{{ bank_file.bank_file_path }}"
+                                                                            src="/media/{{ bank_file.file_path }}"
                                                                             alt=""></div>
                                                                     {% if forloop.revcounter0 > 0 %}
                                                                         <!-- 사용자가 업로드한 사진이 딱 4개인 경우 남은 이미지 개수를 출력하지 않음.-->
