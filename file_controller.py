@@ -86,19 +86,11 @@ class FileController:
     # OUTPUT : 없음
     # RETURN : 없음
     # : 해당 게시글의 모든 파일을 삭제한다.
-    # 마지막 수정 일시 : 2021.04.13
+    # 마지막 수정 일시 : 2021.05.18
     # 작성자 : 유동현
     @staticmethod
     def delete_all_files_of_(obj):
-        location = ''
-
-        # Board 객체인 경우
-        if isinstance(obj, Board):
-            location = os.path.join(MEDIA_ROOT, 'board', str(obj.board_no))
-
-        # ContestBoard 객체인 경우
-        elif isinstance(obj, ContestBoard):
-            location = os.path.join(MEDIA_ROOT, 'board', 'contest', str(obj.contest_no))
+        location = obj.get_file_path  # get_file_path : DB model 별 멤버변수로 선언해줘야함.
 
         try:
             if os.path.exists(location):  # 해당 경로가 존재하지 않는 경우에는 db 에서만 지워주면 된다.
@@ -133,4 +125,11 @@ class FileController:
                     file_path=file,  # uploadedFile 객체를 imageField 객체 할당
                     file_name=file.name.replace(' ', '_')  # imageField 객체에 의해 파일 이름 공백이 '_'로 치환되어 서버 저장
                     # 따라서 db 에도 이름 공백을 '_'로 치환하여 저장
+                )
+        elif isinstance(instance, Bank):
+            for file in files_to_upload:
+                BankFile.objects.create(
+                    bank_no=Bank.objects.get(pk=instance.bank_no),
+                    file_path=file,
+                    file_name=file.name.replace(' ', '_')
                 )

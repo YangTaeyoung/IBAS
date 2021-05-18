@@ -109,20 +109,9 @@ class ContestForm(forms.ModelForm):
 
 class FileForm(FileFormBase):
     # overriding
-    def save(self, instance):
-        # 이 폼은 여러개의 파일을 갖고 있을 것이다.
-        # upload_new_files 이용해서 저장하기
-        # 파일 폼 객체는 files 라는 Query dict 객체 존재  {'upload_file' : InMemoryUploadedFile 리스트}
-        FileController.upload_new_files(
-            files_to_upload=self.cleaned_data.get('upload_file'),
-            instance=instance
-        )
-
-    # overriding
     # is_valid 호출 시 내부에서 자동적으로 clean 호출
     def clean(self):
         super().clean()
-        self.cleaned_data['upload_file'] = self.files.getlist('upload_file')
 
         # 호출 함수 이름 반환 : sys._getframe(5).f_code.co_name
         # 함수 호출 스택 : clean(0계층, 현재 함수) << _clean_form(1계층) << full_clean(2계층) << errors(3계층) << is_valid(4계층)

@@ -331,7 +331,7 @@ def contest_register(request):  # 공모전 등록
                     contest_writer=User.objects.get(pk=request.session.get('user_stu')))
                 file_form.save(instance=contest)
         else:
-            pass
+            pass  # 오류처리 필요
 
         # form의 유효성과 관계없이 게시글 목록으로 이동
         return redirect(reverse('contest_list'))
