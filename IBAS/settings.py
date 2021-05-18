@@ -56,6 +56,8 @@ INSTALLED_APPS = [
     'staff',
     # 강의 관련 앱
     'lecture',
+    # widget_tweaks
+    'widget_tweaks',
     # 소셜 로그인 패키지: allauth 관련
     'allauth',
     'allauth.account',
@@ -112,11 +114,11 @@ WSGI_APPLICATION = 'IBAS.wsgi.application'
 DATABASES = {
      'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'ibas_local',
+        'NAME': 'IBAS',
         'USER': 'root',
-        'PASSWORD': '1234',
+        'PASSWORD': 'webproj3971--',
         'HOST': 'localhost',
-        'PORT': '3306',
+        'PORT': '3356',
     }
 }
 

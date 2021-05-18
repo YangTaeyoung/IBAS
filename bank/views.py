@@ -1,14 +1,13 @@
 from django.db import transaction
 from django.db.models import Sum, Q
 from django.shortcuts import render, get_object_or_404, reverse, redirect
-from allauth.socialaccount.models import SocialAccount  # 소셜 계정 DB, socialaccount_socialaccount 테이블을 사용하기 위함.
 from DB.models import AuthUser, User, ChiefCarrier, UserRole, Board, BoardFile, \
     BoardType, Comment, History, Bank, BankFile, BankApplyInfo  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
 from bank.forms import BankForm, FileForm, BankSupportForm
 from date_controller import today
 from file_controller import FileController
 from pagination_handler import get_page_object
-from user_controller import login_required, get_logined_user, writer_only
+from user_controller import login_required, get_logined_user, writer_only, cfo_only
 
 
 @login_required
@@ -44,7 +43,7 @@ def bank(request):
     return render(request, 'bank_list.html', context)
 
 
-@login_required
+@cfo_only
 def bank_delete(request, bank_no):
     if request.method == "POST":  # 포스트로 넘어오는 경우
         bank = get_object_or_404(Bank, pk=bank_no)
@@ -56,7 +55,7 @@ def bank_delete(request, bank_no):
     return redirect(reverse("index"))
 
 
-@login_required
+@cfo_only
 def bank_update(request, bank_no):
     if request.method == "POST":
         bank = get_object_or_404(Bank, pk=bank_no)
@@ -75,7 +74,7 @@ def bank_update(request, bank_no):
         return redirect(reverse("index"))  # 메인페이지로 보내버림
 
 
-@login_required
+@cfo_only
 def bank_register(request):
     if request.method == "POST":
         bank_form = BankForm(request.POST)
@@ -142,7 +141,7 @@ def bank_support_detail(request, bank_no):
     return render(request, 'bank_support_detail.html', context)  # 상세보기
 
 
-@login_required
+@cfo_only
 def bank_support_aor(request, bank_no):  # 총무가 승인, 승인거절, 지급완료를 눌렀을 때의 과정
     if request.method == "POST":
         bank = Bank.objects.get(pk=bank_no)
@@ -163,8 +162,7 @@ def bank_support_aor(request, bank_no):  # 총무가 승인, 승인거절, 지�
         return redirect(reverse("bank_support_board"))
 
 
-@login_required
-@writer_only
+@writer_only()
 def bank_support_update(request, bank_no):
     bank = get_object_or_404(Bank, pk=bank_no)
 
@@ -195,7 +193,7 @@ def bank_support_update(request, bank_no):
     return redirect(reverse("bank_support_board"))
 
 
-@login_required
+@writer_only(superuser=True)
 def bank_support_delete(request, bank_no):  # 예산지원 삭제
     if request.method == "POST":  # 포스트로 넘어오는 경우
         bank = get_object_or_404(Bank, pk=bank_no)

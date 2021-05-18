@@ -186,8 +186,7 @@ def board_register(request):
 # 작성자 : 양태영
 # 마지막 수정 일시 : 2021.04.30 (유동현)
 # 수정내용 : 모델 폼 적용에 따른 코드 수정
-@login_required
-@writer_only
+@writer_only()
 def board_update(request, board_no):
     board = get_object_or_404(Board, pk=board_no)
 
@@ -223,7 +222,7 @@ def board_update(request, board_no):
 # 작성자 : 양태영
 # 마지막 수정 일시 : 2021.04.30 (유동현)
 # 수정내용 : 모델폼 사용 => urls.py 변경에 따른 코드 수정
-@login_required
+@writer_only(superuser=True)
 def board_delete(request, board_no):
     board = Board.objects.get(pk=board_no)
 
@@ -263,7 +262,7 @@ def board_comment_register(request):
 
 
 # 댓글 삭제 코드
-@login_required
+@writer_only(superuser=True)
 def board_comment_delete(request):
     if request.method == "POST":  # 댓글 삭제를 누를 경우
         board_no = request.POST.get('board_no')
@@ -275,7 +274,7 @@ def board_comment_delete(request):
 
 
 # 댓글 수정 코드
-@login_required
+@writer_only()
 def board_comment_update(request):
     if request.method == "POST":  # 정상적으로 파라미터가 넘어왔을 경우
         board_no = request.POST.get('board_no')
@@ -365,8 +364,7 @@ def contest_detail(request, contest_no):  # 게시판 상세 페이지로 이동
 # 작성자 : 유동현
 # 마지막 수정 일시 : 2021.04.30
 # 수정내용 : 모델 폼 사용 => urls.py 변경에 따른 코드 수정
-@login_required
-@writer_only
+@writer_only(superuser=True)
 def contest_delete(request, contest_no):
     contest = ContestBoard.objects.get(pk=contest_no)
 
@@ -384,8 +382,7 @@ def contest_delete(request, contest_no):
 # 수정내용 : 모델 폼 사용 => urls.py 변경에 따른 코드 수정
 # 버그 처리해야할 사항 :: 수정 버튼 누르고 가끔 로딩되면서 화면전환이 늦어질 때가 있는데,
 #                      그 때 수정버튼 연타하면 클릭한수만큼 동일한 게시글 작성됨.
-@login_required
-@writer_only
+@writer_only()
 def contest_update(request, contest_no):
     contest = get_object_or_404(ContestBoard, pk=contest_no)
 
@@ -422,7 +419,7 @@ def contest_update(request, contest_no):
 # 작성자 : 유동현
 # 마지막 수정 일시 : 2021.04.15
 # 수정내용 :
-@login_required
+@writer_only()
 def contest_comment_update(request):
     if request.method == "POST":
         contest_no = request.POST.get("contest_no")
@@ -438,7 +435,7 @@ def contest_comment_update(request):
 # 작성자 : 유동현
 # 마지막 수정 일시 : 2021.04.15
 # 수정내용 :
-@login_required
+@writer_only(superuser=True)
 def contest_comment_delete(request):
     if request.method == "POST":
         contest_no = request.POST.get('contest_no')

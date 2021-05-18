@@ -64,7 +64,7 @@
                             <th scope="col" style="width: 123px;">수입액</th>
                             <th scope="col" style="width: 123px;">지출액</th>
                             <th scope="col" style="width: 86px;">증빙</th>
-                            {% if logined_user.user_role.role_no == 4 %}
+                            {% if logined_user.user_role.role_no <= 4 %}
                                 <th scope="col" style="width: 54px;" colspan="2">비고</th>
                             {% endif %}
                         </tr>
@@ -140,7 +140,7 @@
                                             <i class="fa fa-file-text-o"></i>
                                         </a>
                                     </td>
-                                    {% if logined_user.user_role.role_no == 4 %}
+                                    {% if logined_user.user_role.role_no <= 4 %}
                                         <!-- 수정 -->
                                         <!-- bank_update는 bank_yejin.js에 정의됨. -->
                                         <td style="width: 55px; padding: 10px 0;">
@@ -345,7 +345,7 @@
 
                     <!-- 회계내역 추가 버튼  -->
                     <!-- bank-btn-add-divr는 bank_yejin.css에 정의됨. -->
-                    {% if logined_user.user_role.role_no == 4 %}
+                    {% if logined_user.user_role.role_no <= 4 %}
                         <div class="bank-btn-add-div">
                             <div>
                                 <!-- 회계내역 추가 버튼 누르면 회계내역 추가 모달이 나옴.  -->
