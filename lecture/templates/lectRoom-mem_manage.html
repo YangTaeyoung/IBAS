@@ -55,7 +55,6 @@
             <div class="content-block">
                 <div class="section-full content-inner bg-white">
                     <div class="container">
-                        {#                        {% if request.session.user_role <= 3 %}#}
                         <!--회원관리-->
                         <div id="listing_user_setting" class="tab-pane">
                             <div class="row">
@@ -91,15 +90,14 @@
 
                                 <!--=======================수강생 관리=========================-->
                                 <div class="col-lg-11 col-xl-8 p-b30">
-                                    {% if logined_user.user_role.role_no != 4 %}
 
-                                        <!-- 신입부원 관리 콘텐츠 시작 -->
-
-                                        <div style="width: 850px">
+                                    <!-- 신입부원 관리 콘텐츠 시작 -->
+                                    <form>
+                                        <div class="width-870">
                                             <!-- 신입부원 관리 테이블 시작 -->
-                                            <!-- staff_mem_select는 staff_cr.css에 정의되어 있음.  -->
+                                            <!-- 필터부분 시작-->
                                             <div class="staff_mem_select m-b20">
-                                                <!-- onchange 는 필터. staff.js 에 정의되어 있음. -->
+                                                <!-- onchange 는 필터임. -->
                                                 <select id="lectRoom_select_state" name=""
                                                         onchange="lectRoom_state()">
                                                     <option selected="selected">상태
@@ -108,8 +106,9 @@
                                                     <option>수강정지</option>
                                                 </select>
                                             </div>
+                                            <!-- 필터부분 종료-->
 
-                                            <!-- staff_mem_select는 staff_cr.css에 정의되어 있음.  -->
+                                            <!-- 권한부여부분 시작-->
                                             <div class="staff_mem_select m-b20">
                                                 <select id="select-aor" onchange="selectAoR()">
                                                     <option selected="selected" disabled="disabled">관리
@@ -118,7 +117,9 @@
                                                     <option value="2">수강정지</option>
                                                 </select>
                                             </div>
-                                            <!-- staff_mem_btn는 staff_cr.css에 정의되어 있음.  -->
+                                            <!-- 권한부여부분 종료-->
+
+
                                             <div class="staff_mem_btn m-b20 listing-info-right">
                                                 <!-- &nbsp;는 띄어쓰기 -->
                                                 <button class="site-button" type="button"
@@ -144,60 +145,45 @@
                                                 <thead>
                                                 <!-- 테이블 1행: 제목 -->
                                                 <tr id="lectRoom_head">
-                                                    <!-- staff_width는 staff_cr.css에 정의되어 있음.  -->
                                                     <th class="border-top-0 width-50" scope="col"></th>
                                                     <th class="border-top-0 width-50" scope="col"></th>
                                                     <th class="border-top-0 width-100" scope="col">이름</th>
                                                     <th class="border-top-0 width-100" scope="col">학번</th>
                                                     <th class="border-top-0 width-230" scope="col">전화번호</th>
                                                     <th class="border-top-0" scope="col">이메일</th>
-                                                    <th class="border-top-0 width-100" scope="col">과제 제출</th>
+                                                    <th class="border-top-0 width-120" scope="col">과제 제출</th>
                                                     <th class="border-top-0 width-100" scope="col">출석</th>
-                                                    <th class="border-top-0 width-100" scope="col">상태</th>
-
-
+                                                    <th class="border-top-0 width-120" scope="col">상태</th>
                                                 </tr>
                                                 </thead>
-                                                <!-- 신입부원 관리 테이블 내용 시작 -->
-                                                <tbody>
-                                                <!-- =========================== 여기부터 복붙 ============================== -->
-                                                {#                                                        {% if new_user_len == 0 %}#}
-                                                {#                                                            <tr>#}
-                                                {#                                                                <td colspan="8" style="text-align: center"> 입부 신청 대기중인#}
-                                                {#                                                                    회원이#}
-                                                {#                                                                    없습니다.#}
-                                                {#                                                                </td>#}
-                                                {#                                                            </tr>#}
-                                                {#                                                        {% endif %}#}
 
-                                                {#                                                        {% for new_user in new_user_list %}#}
+                                                <!-- 테이블 2행: 수강생 관리 테이블 내용 시작 -->
+                                                <tbody>
+
+                                                <!-- 수강생이 없을 때 나오는 열 -->
+                                                <tr>
+                                                    <td colspan="9" style="text-align: center"> 강의를 수강하고 있는 회원이 없습니다.
+                                                    </td>
+                                                </tr>
+
+                                                <!-- 수강생이 있을 때 나오는 열 -->
+                                                <!--========================여기부터 복붙==========================-->
                                                 <tr class="lectRoom_tr">
                                                     <td scope="row">
 
                                                         {% csrf_token %}
+                                                        <!-- 체크박스 -->
                                                         <div class="input-block">
-                                                            <input id="check_{{ new_user.user_stu }}"
+                                                            <input id="check_"
                                                                    type="checkbox"
-                                                                   onclick="decideChk(this,'{{ new_user.user_stu }}')">
-                                                            <!-- staff_label_margin는 staff_cr.css에 정의되어 있음.  -->
+                                                                   onclick="decideChk(this,'')">
+                                                            <!-- label이 html에 보이는 것. 역할은 input에 체크하기 위함.   -->
                                                             <label for="check_{{ new_user.user_stu }}"
                                                                    class="staff_label_margin"></label>
                                                         </div>
 
                                                     </td>
-                                                    {#                                                            <th>{{ forloop.counter }}</th>#}
-                                                    {#                                                            <!-- 회원 이름 -->#}
-                                                    {#                                                            <td>{{ new_user.user_name }}</td>#}
-                                                    {#                                                            <!-- 회원 학번 -->#}
-                                                    {#                                                            <td>{{ new_user.user_stu }}</td>#}
-                                                    {#                                                            <!-- 회원 전화번호 -->#}
-                                                    {#                                                            <td>{{ new_user.user_phone }}</td>#}
-                                                    {#                                                            <!-- 회원 학과 -->#}
-                                                    {#                                                            <td>{{ new_user.user_major.major_name }}</td>#}
-                                                    {#                                                            <!-- 과제 미제출 수 -->#}
-                                                    {#                                                            <td>10번</td>#}
-                                                    {#                                                            <!-- 결석 수 -->#}
-                                                    {#                                                            <td>5번</td>#}
+                                                    <!--수강생 번호-->
                                                     <th>55</th>
                                                     <!-- 회원 이름 -->
                                                     <td>윤예진</td>
@@ -214,11 +200,12 @@
                                                     <td>5 번</td>
                                                     <!--상태 -->
                                                     <td class="lectRoom_state lectRoom_state_ing_font">수강중</td>
-
-
-                                                    {#                                                            <td class="lectRoom_state lectRoom_state_stop_font">수강정지</td>#}
+                                                    {#<td class="lectRoom_state lectRoom_state_stop_font">수강정지</td>#}
                                                 </tr>
 
+                                                <!--========================여기까지 복붙==========================-->
+
+                                                <!--========================여기부터 삭제==========================-->
                                                 <tr class="lectRoom_tr">
                                                     <td scope="row">
 
@@ -234,51 +221,48 @@
 
                                                     </td>
 
-                                                    <th>100</th>
+                                                    <th>33</th>
                                                     <!-- 회원 이름 -->
-                                                    <td>가나다라</td>
+                                                    <td>임꺽정</td>
                                                     <!-- 회원 학번 -->
-                                                    <td>12222222</td>
+                                                    <td>12339876</td>
                                                     <!--전화번호 -->
-                                                    <td>010-8383-5678</td>
+                                                    <td>010-0987-6543</td>
+                                                    <!--이메일 -->
+                                                    <td>iLovePineapple@gmail.com</td>
                                                     <!-- 과제 미제출 수 -->
-                                                    <td style="text-align: center">20 번</td>
+                                                    <td style="text-align: center">1 번</td>
                                                     <!-- 결석 수 -->
-                                                    <td>10 번</td>
+                                                    <td>0 번</td>
                                                     <!--상태 -->
                                                     {#                                                            <td class="lectRoom_state lectRoom_state_ing_font">수강중</td>#}
                                                     <td class="lectRoom_state lectRoom_state_stop_font">수강정지</td>
 
+
                                                 </tr>
-                                                {#                                                        {% endfor %}#}
+                                                <!--========================여기까지 삭제==========================-->
                                                 </tbody>
                                             </table>
+
+
                                             <!--========== 페이지네이션 시작 ===========-->
-                                            <!-- 1페이지에 15개 게시글 끌고오고, 게시글이 그보다 적으면, 페이지네이션 안보이게 처리 -->
+                                            <!-- 1페이지에 수강생 끌고오고, 수강생이 그보다 적으면, 페이지네이션 안보이게 처리 -->
                                             <div class="pagination-bx clearfix text-center">
                                                 <ul class="pagination">
-                                                    {% if board_list.has_previous %}
-                                                        <li class="previous"><a href="?page=1"><i
-                                                                class="fa fa-arrow-left"></i></a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="?page={{ board_list.previous_page_number }}"> {{ board_list.previous_page_number }}</a>
-                                                        </li>
-                                                    {% endif %}
-                                                    <li><a href="javascript:void(0)">{{ board_list.number }}</a></li>
-                                                    {% if board_list.has_next %}
-                                                        <li>
-                                                            <a href="?page={{ board_list.next_page_number }}"> {{ board_list.next_page_number }}</a>
-                                                        </li>
-                                                        <li class="next"><a
-                                                                href="?page={{ board_list.paginator.num_pages }}"><i
-                                                                class="fa fa-arrow-right"></i></a></li>
-                                                    {% endif %}
+                                                    <li class="previous"><a href="javascript:void(0)"><i
+                                                            class="fa fa-arrow-left"></i></a></li>
+                                                    <li><a href="javascript:void(0)">1</a></li>
+                                                    <li><a href="javascript:void(0)">2</a></li>
+                                                    <li><a href="javascript:void(0)">...</a></li>
+                                                    <li class="active"><a href="javascript:void(0)">7</a></li>
+                                                    <li class="next"><a href="javascript:void(0)"><i
+                                                            class="fa fa-arrow-right"></i></a></li>
                                                 </ul>
                                             </div>
                                             <!--========== 페이지네이션 끝 ===========-->
                                         </div>
-                                    {% endif %}
+                                    </form>
+
                                 </div>
                             </div>
                         </div>
