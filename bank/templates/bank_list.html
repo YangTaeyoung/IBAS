@@ -141,7 +141,7 @@
                                             <i class="fa fa-file-text-o"></i>
                                         </a>
                                     </td>
-                                    {% if logined_user.user_role.role_no <= 4 %}
+                                    {% if logined_user.user_role.role_no == 4 %}
                                         <!-- 수정 -->
                                         <!-- bank_update는 bank_yejin.js에 정의됨. -->
                                         <td style="width: 55px; padding: 10px 0;">
@@ -152,12 +152,10 @@
                                                 <i id="bank-update" class="fa fa-pencil " style="color: #606269"></i>
                                             </a>
                                         </td>
-                                    {% endif %}
-                                {% if logined.user_role.role_no <= 4 %}
-                                    <form id="form-bank-delete-{{ bank.bank_no }}" action="{% url 'bank_delete' %}"
+
+                                    <form id="form-bank-delete-{{ bank.bank_no }}" action="{% url 'bank_delete' bank.bank_no %}"
                                           method="post">
                                         {% csrf_token %}
-                                        <input type="hidden" name="bank_no" value="{{ bank.bank_no }}"/>
                                         <!-- 삭제 -->
                                         <!-- bank_del는 bank_yejin.js에 정의됨. -->
                                         <td onclick="bank_del({{ bank.bank_no }})" style="padding: 10px 0;">
@@ -213,7 +211,7 @@
                                         <!-- 영수증 이미지 출력부 -->
                                             {% for bank_file in bank.bankfile_set.all %}
                                                 <div class="bank-image-flex">
-                                                    <img src="/media/{{ bank_file.bank_file_path }}"
+                                                    <img src="/media/{{ bank_file.file_path }}"
                                                          alt="현재 브라우저에서 지원하지 않는 형식입니다.">
                                                 </div>
                                             {% endfor %}
@@ -239,10 +237,9 @@
 
                                         <div class="content-body">
                                             <form id="form-bank-update-{{ bank.bank_no }}" class="dlab-form"
-                                                  action="{% url 'bank_update' %}" method="post"
+                                                  action="{% url 'bank_update' bank.bank_no %}" method="post"
                                                   enctype="multipart/form-data">
                                                 {% csrf_token %}
-                                                <input type="hidden" name="bank_no" value="{{ bank.bank_no }}"/>
                                                 <input type="hidden" name="bank_cfo" value="{{ logined_user.user_stu }}"/>
                                                 <!-- 날짜 -->
                                                 <div class="form-group">
@@ -293,21 +290,10 @@
 
                                         <!-- 첨부된 파일 불러오기 -->
                                         <!-- 파일 리스트 길이가 0이 아닐 경우에만 파일 리스트를 출력하게 함. -->
-{#                                        {% if file_len != 0 %}#}
                                             <div id="bank-update-file-parent" class="download-box" style="font-size: 13px">
-{#                                                {% for bank_file in bank_file_list %}#}
-                                                    <!-- 첨부파일 1 -->
-                                                    <div id="bank-update-file-1">
-                                                         <i class="fa fa-download m-r15"></i><a class="line2" href="#">{{ bank.bank_file_name}}</a>
-                                                        <input type="hidden" name="exist-bank-file-{{ bank_file.bank_file_id }}" value="{{ bank_file.bank_file_path }}"/>
-                                                        <!-- 첨부파일 지우기 버튼 -->
-                                                        <button onclick="bank_update_del({{ bank_file.bank_file_id }})" id="bank-update-x-1" type="button" class="close">
-                                                            <span aria-hidden="true"><i class="la la-close"></i></span>
-                                                        </button>
-                                                    </div>
-                                                <!-- 첨부된 파일 불러오기 -->
+                                                 <!-- 첨부된 파일 불러오기 -->
                                                 <!-- 파일 리스트 길이가 0이 아닐 경우에만 파일 리스트를 출력하게 함. -->
-                                                {% if bank.bankfile_set.all|length > 0 %}
+                                                {% if bank.bankfile_set.all %}
                                                     <div id="bank-update-file-parent" class="download-box mb-3"
                                                          style="font-size: 13px">
                                                         {% for bank_file in bank.bankfile_set.all %}
@@ -318,7 +304,7 @@
                                                                     {{ bank_file.file_name }}
                                                                 </a>
                                                                 <input type="hidden"
-                                                                       name="exist_bank_file_{{ bank_file.file_id }}"
+                                                                       name="exist_file_path_{{ bank_file.file_id }}"
                                                                        value="/media/{{ bank_file.file_path }}"/>
                                                                 <!-- 첨부파일 지우기 버튼 -->
                                                                 <button onclick="bank_update_del({{ bank_file.file_id }})"
@@ -339,11 +325,7 @@
                                                 <div class="form-group">
                                                     <div class="form-group">
                                                         <label style="font-size: 13px; font-weight: 100"><b>증빙자료 첨부</b></label>
-                                                        <input type="file"
-                                                               accept="image/*,.doc,.pdf,.hwp,.docx"
-                                                               name="upload_file"
-                                                               multiple
-                                                        >
+                                                        {{ file_form.upload_file }}
                                                     </div>
                                                 </div>
                                                 <!-- 수정버튼 -->
@@ -364,7 +346,7 @@
 
                     <!-- 회계내역 추가 버튼  -->
                     <!-- bank-btn-add-divr는 bank_yejin.css에 정의됨. -->
-                    {% if logined_user.user_role.role_no <= 4 %}
+                    {% if logined_user.user_role.role_no == 4 %}
                         <div class="bank-btn-add-div">
                             <div>
                                 <!-- 회계내역 추가 버튼 누르면 회계내역 추가 모달이 나옴.  -->
@@ -400,6 +382,7 @@
                                     <form class="dlab-form" action="{% url 'bank_register' %}" method="post"
                                           enctype="multipart/form-data">
                                         {% csrf_token %}
+                                        <input type="hidden" value="{{ logined_user.user_stu }}" name="bank_cto"/>
                                         {% for field in bank_form.visible_fields %}
                                             <div class="form-group">
                                                 {% render_field field class="form-control" %}

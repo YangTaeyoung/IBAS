@@ -6,6 +6,7 @@ from IBAS.forms import FileFormBase
 from django.utils.translation import gettext_lazy as _
 import pytz
 
+
 class BankForm(forms.ModelForm):
     class Meta:
         model = Bank
@@ -28,12 +29,13 @@ class BankForm(forms.ModelForm):
             'bank_minus': "",
         }
 
-    def save(self, bank_cfo):
+    # bank_cfo 입력 받아야 함!
+    def save(self, **kwargs):
         bank = super().save(commit=False)  # db에 아직 저장하지는 않고, 객체만 생성
         bank.bank_apply = BankApplyInfo.objects.get(pk=4)
-        bank.bank_cfo = bank_cfo
-        if self.cleaned_data['bank_used_user'] is None:
-            bank.bank_used_user = bank_cfo
+        bank.bank_cfo = kwargs.get('bank_cfo')
+        if self.cleaned_data.get('bank_used_user') is None:
+            self.cleaned_data['bank_used_user'] = bank.bank_cfo
         bank.save()
 
         return bank
@@ -42,7 +44,7 @@ class BankForm(forms.ModelForm):
         bank = instance
         bank.bank_used = self.cleaned_data.get('bank_used')
         bank.bank_title = self.cleaned_data.get('bank_title')
-        bank.bank_used_user = User.objects.get(pk=self.cleaned_data.get('bank_used_user'))
+        bank.bank_used_user = self.cleaned_data.get('bank_used_user')
         bank.bank_plus = self.cleaned_data.get('bank_plus')
         bank.bank_minus = self.cleaned_data.get('bank_minus')
 
@@ -100,11 +102,25 @@ class BankForm(forms.ModelForm):
 
 class FileForm(FileFormBase):
     upload_file = forms.FileField(
-        required=True,
+        required=False,
         widget=forms.FileInput(
             attrs={'multiple': True,
                    'accept': "image/*,.doc,.pdf,.hwp,.docx"})
     )
+
+    # 하나 이상의 파일이 있는지 검사!
+    def clean(self):
+        super().clean()
+
+        total_file_num = 0
+        total_file_num += len([value for key, value in self.data.items() if "exist_file_path_" in key])
+        total_file_num += len(self.cleaned_data['upload_file'])
+
+        if total_file_num == 0:
+            raise ValidationError(
+                _("하나 이상의 증빙 파일을 올려주세요!"),
+                code='invalid'
+            )
 
 
 class BankSupportForm(forms.ModelForm):
@@ -127,17 +143,26 @@ class BankSupportForm(forms.ModelForm):
             'bank_account': _("입금받을 계좌"),
         }
 
-    def save(self, user):
+    # bank_used_user 입력 받아야 함!
+    def save(self, **kwargs):
         bank = super().save(commit=False)
         bank.bank_plus = 0
-        bank.bank_used_user = user
+        bank.bank_used_user = kwargs.get('user')
         bank.bank_apply = BankApplyInfo.objects.get(pk=1)
         bank.save()
 
         return bank
 
-    def update(self):
-        pass
+    def update(self, instance):
+        instance.bank_used = self.cleaned_data['bank_used']
+        instance.bank_title = self.cleaned_data['bank_title']
+        instance.bank_reason = self.cleaned_data['bank_reason']
+        instance.bank_plus = 0
+        instance.bank_minus = self.cleaned_data['bank_minus']
+        instance.bank_account = self.cleaned_data['bank_account']
+        instance.save()
+
+        return instance
 
     def clean_bank_used(self):
         use_date = self.cleaned_data['bank_used']
