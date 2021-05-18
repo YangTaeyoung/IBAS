@@ -170,11 +170,10 @@ def bank_support_aor(request):  # 총무가 승인, 승인거절, 지급완료�
             bank.bank_allowed = today()  # 지급 완료일, 오늘
         bank.save()
         return redirect("bank_support_detail", bank_no=bank.bank_no)
+
     else:
-        if is_logined(request):
-            return redirect(reverse("bank_support_board"))
-        else:
-            return redirect(reverse("index"))
+        return redirect(reverse("bank_support_board"))
+
 
 
 @login_required
@@ -229,21 +228,15 @@ def bank_support_update(request):
 @login_required
 def bank_support_delete(request):  # 예산지원 삭제
     if request.method == "POST":  # 포스트로 넘어오는 경우
-        bank = Bank.objects.get(pk=request.POST.get('bank_no'))
-        try:
-            file_list = list(BankFile.objects.filter(bank_no=bank))
-            # file_list 라는 변수 선언 (여러개의 파일을 올릴 수 있으므로 list 로 변환)
-            for i in range(len(file_list)):
-                # file_list 의 크기 만큼 for 문으로 돌려서 파일 삭제 후 폴더 삭제
-                os.remove(settings.MEDIA_ROOT + "/" + str(file_list[i].bank_file_path))
-            os.rmdir(settings.MEDIA_ROOT + '/bank/' + str(bank.bank_no))
-            # 파일이 안에 있는 삭제에서 폴더를 삭제할 경우 오류 만남.
-        except FileNotFoundError:
-            pass  # 파일이 없는 경우 그냥 통과시킨다.
+        bank = get_object_or_404(Bank, pk=request.POST.get('bank_no'))
+
+        FileController.delete_all_files_of_(bank)  # 로컬 파일 삭제
+
         bank.delete()  # 파일과 폴더 삭제 후, 회계 DB 에서 삭제
-        return redirect(reverse('bank_support_board'))  # 예산 지원 신청 게시판으로 이동
-    else:  # get으로 넘어온 경우(해킹시도)
-        if is_logined(request):
-            return redirect(reverse('bank_support_board'))  # 삭제를 건너뛰고 예산 지원 신청 게시판으로 이동
-        else:
-            return redirect(reverse("index"))
+
+    # 삭제 성공 유무와 상관없이 이동.
+    return redirect(reverse('bank_support_board'))  # 예산 지원 신청 게시판으로 이동
+
+
+
+

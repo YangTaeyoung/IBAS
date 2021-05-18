@@ -86,11 +86,11 @@ class FileController:
     # OUTPUT : 없음
     # RETURN : 없음
     # : 해당 게시글의 모든 파일을 삭제한다.
-    # 마지막 수정 일시 : 2021.04.13
+    # 마지막 수정 일시 : 2021.05.18
     # 작성자 : 유동현
     @staticmethod
     def delete_all_files_of_(obj):
-        location = obj.get_file_path()
+        location = obj.get_file_path  # get_file_path : DB model 별 멤버변수로 선언해줘야함.
 
         try:
             if os.path.exists(location):  # 해당 경로가 존재하지 않는 경우에는 db 에서만 지워주면 된다.
