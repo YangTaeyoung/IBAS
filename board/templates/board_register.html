@@ -33,6 +33,12 @@
 
                 {% csrf_token %}
 
+                <!-- 히든태그!! 몽땅!!-->
+                {% for field in board_form.hidden_fields %}
+                    {{ field }}
+                {% endfor %}
+                <!-- 히든태그!! 몽땅!!-->
+
                 <div class="content-block">
                     <div class="section-full content-inner bg-white">
                         <div class="container">
