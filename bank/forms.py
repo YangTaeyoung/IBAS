@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.datetime_safe import date, datetime
-from DB.models import Bank, BankApplyInfo, User
+from DB.models import Bank, BankApplyInfo, User, UserRole
 from IBAS.forms import FileFormBase
 from django.utils.translation import gettext_lazy as _
 import pytz
@@ -35,8 +35,6 @@ class BankForm(forms.ModelForm):
         bank = super().save(commit=False)  # db에 아직 저장하지는 않고, 객체만 생성
         bank.bank_apply = BankApplyInfo.objects.get(pk=4)
         bank.bank_cfo = kwargs.get('bank_cfo')
-        if self.cleaned_data.get('bank_used_user') is None:
-            self.cleaned_data['bank_used_user'] = bank.bank_cfo
         bank.save()
 
         return bank
@@ -92,6 +90,14 @@ class BankForm(forms.ModelForm):
                 code='invalid'
             )
         return used_date
+
+    # 수정해야함.
+    def clean_bank_used_user(self):
+        user = self.cleaned_data.get('bank_used_user')
+        if user is None:
+            user = User.objects.filter(user_role=UserRole.objects.get(pk=4)).first()
+
+        return user
 
     # overriding
     def clean(self):
