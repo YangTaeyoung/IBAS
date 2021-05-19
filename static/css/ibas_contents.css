@@ -568,3 +568,24 @@ input[type=checkbox] + label:after {
     font-weight: bolder;
     font-style: italic;
 }
+
+/*글자 가운데 정렬을 위함*/
+.lectRoom_text_align_center {
+    text-align: center;
+}
+
+/*출결 관리 주차에 대한 폰트 설정을 위함*/
+.lectRoom_week {
+    /*display: inline-block;*/
+    vertical-align: middle !important;
+    text-align: center;
+    border-right: 1px solid #dee2e6
+}
+
+.lectRoom_devi {
+    border-right: 1px solid #dee2e6
+}
+
+.lectRoom_border_top {
+    border-top: 1px solid #dee2e6;
+}
