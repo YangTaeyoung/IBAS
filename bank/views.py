@@ -24,6 +24,10 @@ def bank(request):
     # 수입, 지출 합계
     total_income = Bank.objects.filter(bank_apply__bank_apply_no=4).aggregate(Sum("bank_plus"))["bank_plus__sum"]
     total_outcome = Bank.objects.filter(bank_apply__bank_apply_no=4).aggregate(Sum("bank_minus"))["bank_minus__sum"]
+    if total_income is None:
+        total_income = 0
+    if total_outcome is None:
+        total_outcome = 0
     balance = total_income - total_outcome
 
     # 페이지네이션 설정
