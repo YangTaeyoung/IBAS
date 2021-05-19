@@ -29,7 +29,8 @@ class BankForm(forms.ModelForm):
             'bank_minus': "",
         }
 
-    # bank_cfo 입력 받아야 함!
+    # overriding
+    # kwargs 로 bank_cfo 입력 받아야 함!
     def save(self, **kwargs):
         bank = super().save(commit=False)  # db에 아직 저장하지는 않고, 객체만 생성
         bank.bank_apply = BankApplyInfo.objects.get(pk=4)
@@ -92,6 +93,7 @@ class BankForm(forms.ModelForm):
             )
         return used_date
 
+    # overriding
     def clean(self):
         if self.cleaned_data['bank_plus'] == 0 and self.cleaned_data['bank_minus'] == 0:
             raise ValidationError(
@@ -108,6 +110,7 @@ class FileForm(FileFormBase):
                    'accept': "image/*,.doc,.pdf,.hwp,.docx"})
     )
 
+    # overriding
     # 하나 이상의 파일이 있는지 검사!
     def clean(self):
         super().clean()
@@ -143,6 +146,7 @@ class BankSupportForm(forms.ModelForm):
             'bank_account': _("입금받을 계좌"),
         }
 
+    # overriding
     # bank_used_user 입력 받아야 함!
     def save(self, **kwargs):
         bank = super().save(commit=False)
