@@ -7,4 +7,5 @@ urlpatterns = [
     path('<int:type_no>/view/', views.lect_view, name="lect_view"), # 공모전 게시판페이지로 이동
     path('room/mem/manage', views.lect_room_mem_manage, name="lect_room_mem_manage"),
     path('room/attend/std', views.lect_room_attend_std, name="lect_room_attend_std"),
+    path('room/attend/teacher', views.lect_room_attend_teacher, name="lect_room_attend_teacher")
 ]

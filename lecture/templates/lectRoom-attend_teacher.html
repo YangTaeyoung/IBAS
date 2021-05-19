@@ -45,10 +45,10 @@
                         <div class="dlab-bnr-inr-entry">
                             <!--제목-->
                             <!-- DB에서 제목 꺼내와야 함 -->
-                            <h1 class="text-white introduce-letter-spacing_5">수강생 관리 게시판</h1>
+                            <h1 class="text-white introduce-letter-spacing_5">출결 관리 게시판</h1>
                             <!--부제목-->
                             <!-- DB에서 제목 꺼내와야 함 -->
-                            <p class="m-t20">수강생 관리를 할 수 있는 게시판입니다. </p>
+                            <p class="m-t20">수강생의 출결을 관리할 수 있는 게시판입니다. </p>
                         </div>
                     </div>
                 </a>
@@ -102,34 +102,47 @@
                                                 <!-- onchange 는 필터임. -->
                                                 <select id="lectRoom_select_state" name=""
                                                         onchange="lectRoom_state()">
-                                                    <option selected="selected">상태
+                                                    <option selected="selected">1주차
                                                     </option>
-                                                    <option>수강중</option>
-                                                    <option>수강정지</option>
+                                                    <option>2주차</option>
+                                                    <option>3주차</option>
                                                 </select>
                                             </div>
                                             <!-- 필터부분 종료-->
 
-                                            <!-- 권한부여부분 시작-->
+                                            <!-- 필터부분 시작-->
                                             <div class="staff_mem_select m-b20">
-                                                <select id="select-aor" onchange="selectAoR()">
-                                                    <option selected="selected" disabled="disabled">관리
+                                                <!-- onchange 는 필터임. -->
+                                                <select id="lectRoom_select_state" name=""
+                                                        onchange="lectRoom_state()">
+                                                    <option selected="selected">출결
                                                     </option>
-                                                    <option value="1">수강중</option>
-                                                    <option value="2">수강정지</option>
+                                                    <option>출석</option>
+                                                    <option>결석</option>
                                                 </select>
                                             </div>
-                                            <!-- 권한부여부분 종료-->
+                                            <!-- 필터부분 종료-->
 
+                                            <!-- 필터부분 시작-->
+                                            <div class="staff_mem_select m-b20">
+                                                <!-- onchange 는 필터임. -->
+                                                <select id="lectRoom_select_state" name=""
+                                                        onchange="lectRoom_state()">
+                                                    <option selected="selected">과제
+                                                    </option>
+                                                    <option>제출</option>
+                                                    <option>미제출</option>
+                                                </select>
+                                            </div>
+                                            <!-- 필터부분 종료-->
 
-                                            <div class="staff_mem_btn m-b20 listing-info-right">
+                                            <div class="staff_mem_btn m-b20 listing-info-right" style="float: right">
                                                 <!-- &nbsp;는 띄어쓰기 -->
                                                 <button class="site-button" type="button"
                                                         onclick="submitForm('hd-form-members-aor')">
                                                     <i
-                                                            class="la la-check m-r5"
-                                                            style="font-weight: bold"
-                                                    ></i>&nbsp;적용
+                                                            class="la la-pencil m-r5"
+                                                    ></i>&nbsp;수정하기
                                                 </button>
                                             </div>
                                             <form id="hd-form-members-aor" action="{% url 'members_aor' %}"
@@ -147,102 +160,110 @@
                                                 <thead>
                                                 <!-- 테이블 1행: 제목 -->
                                                 <tr id="lectRoom_head">
-                                                    <th class="border-top-0 width-50" scope="col"></th>
-                                                    <th class="border-top-0 width-50" scope="col"></th>
-                                                    <th class="border-top-0 width-100" scope="col">이름</th>
-                                                    <th class="border-top-0 width-100" scope="col">학번</th>
-                                                    <th class="border-top-0 width-230" scope="col">전화번호</th>
-                                                    <th class="border-top-0" scope="col">이메일</th>
-                                                    <th class="border-top-0 width-120" scope="col">과제 제출</th>
-                                                    <th class="border-top-0 width-100" scope="col">출석</th>
-                                                    <th class="border-top-0 width-120" scope="col">상태</th>
+                                                    <th class="border-top-0 width-100 text-center" scope="col">이름</th>
+                                                    <th class="border-top-0 width-70 text-center" scope="col">학번</th>
+                                                    <th class="border-top-0 width-70 text-center" scope="col">출결</th>
+                                                    <th class="border-top-0 width-70 text-center" scope="col">과제</th>
+                                                    <th class="border-top-0 width-120 text-center" scope="col">제출 시간</th>
+                                                    <th class="border-top-0" scope="col">제출된 과제</th>
+
                                                 </tr>
                                                 </thead>
 
                                                 <!-- 테이블 2행: 수강생 관리 테이블 내용 시작 -->
                                                 <tbody>
 
-                                                <!-- 수강생이 없을 때 나오는 열 -->
-                                                <tr>
-                                                    <td colspan="9" style="text-align: center"> 강의를 수강하고 있는 회원이 없습니다.
-                                                    </td>
-                                                </tr>
+{#                                                <!-- 수강생이 없을 때 나오는 열 -->#}
+{#                                                <tr>#}
+{#                                                    <td colspan="9" style="text-align: center"> 강의를 수강하고 있는 회원이 없습니다.#}
+{#                                                    </td>#}
+{#                                                </tr>#}
 
                                                 <!-- 수강생이 있을 때 나오는 열 -->
                                                 <!--========================여기부터 복붙==========================-->
-                                                <tr class="lectRoom_tr">
-                                                    <td scope="row">
+                                                <tr class="lectRoom_tr align-middle">
 
-                                                        {% csrf_token %}
-                                                        <!-- 체크박스 -->
-                                                        <div class="input-block">
-                                                            <input id="check_"
-                                                                   type="checkbox"
-                                                                   onclick="decideChk(this,'')">
-                                                            <!-- label이 html에 보이는 것. 역할은 input에 체크하기 위함.   -->
-                                                            <label for="check_{{ new_user.user_stu }}"
-                                                                   class="staff_label_margin"></label>
-                                                        </div>
-
-                                                    </td>
-                                                    <!--수강생 번호-->
-                                                    <th>55</th>
                                                     <!-- 회원 이름 -->
-                                                    <td>윤예진</td>
+                                                    <td class="align-middle text-center">윤예진</td>
                                                     <!-- 회원 학번 -->
-                                                    <td>12192355</td>
-                                                    <!--전화번호 -->
-                                                    <td>010-3398-8604</td>
-                                                    <!--이메일 -->
-                                                    <td>abcdefghijklmnop@gmail.com</td>
+                                                    <td class="align-middle">12192355</td>
+                                                    <!-- 출결 -->
+                                                    <td>
+                                                        <select>
+                                                            <option selected>출석</option>
+                                                            <option>결석</option>
+                                                        </select></td>
+                                                    <!--과제 -->
+                                                    <td>
+                                                        <select>
+                                                            <option>제출</option>
+                                                            <option selected>미제출</option>
+                                                        </select></td>
+                                                    <!--제출시간 -->
+                                                    <td class="align-middle text-center">2020-01-31</td>
+                                                    <!-- 과제 파일 -->
+                                                    <td class="align-middle">ibasLecture.py</td>
 
-                                                    <!-- 과제 미제출 수 -->
-                                                    <td style="text-align: center">10 번</td>
-                                                    <!-- 결석 수 -->
-                                                    <td>5 번</td>
-                                                    <!--상태 -->
-                                                    <td class="lectRoom_state lectRoom_state_ing_font">수강중</td>
-                                                    {#<td class="lectRoom_state lectRoom_state_stop_font">수강정지</td>#}
+
                                                 </tr>
-
                                                 <!--========================여기까지 복붙==========================-->
 
-                                                <!--========================여기부터 삭제==========================-->
-                                                <tr class="lectRoom_tr">
-                                                    <td scope="row">
+                                                <!--========================여기부터 복붙==========================-->
+                                                <tr class="lectRoom_tr align-middle">
 
-                                                        {% csrf_token %}
-                                                        <div class="input-block">
-                                                            <input id="1"
-                                                                   type="checkbox"
-                                                                   onclick="decideChk(this,'{{ new_user.user_stu }}')">
-                                                            <!-- staff_label_margin는 staff_cr.css에 정의되어 있음.  -->
-                                                            <label for="1"
-                                                                   class="staff_label_margin"></label>
-                                                        </div>
-
-                                                    </td>
-
-                                                    <th>33</th>
                                                     <!-- 회원 이름 -->
-                                                    <td>임꺽정</td>
+                                                    <td class="align-middle text-center">윤예진</td>
                                                     <!-- 회원 학번 -->
-                                                    <td>12339876</td>
-                                                    <!--전화번호 -->
-                                                    <td>010-0987-6543</td>
-                                                    <!--이메일 -->
-                                                    <td>iLovePineapple@gmail.com</td>
-                                                    <!-- 과제 미제출 수 -->
-                                                    <td style="text-align: center">1 번</td>
-                                                    <!-- 결석 수 -->
-                                                    <td>0 번</td>
-                                                    <!--상태 -->
-                                                    {#                                                            <td class="lectRoom_state lectRoom_state_ing_font">수강중</td>#}
-                                                    <td class="lectRoom_state lectRoom_state_stop_font">수강정지</td>
+                                                    <td class="align-middle">12192355</td>
+                                                    <!-- 출결 -->
+                                                    <td>
+                                                        <select>
+                                                            <option selected>출석</option>
+                                                            <option>결석</option>
+                                                        </select></td>
+                                                    <!--과제 -->
+                                                    <td>
+                                                        <select>
+                                                            <option>제출</option>
+                                                            <option selected>미제출</option>
+                                                        </select></td>
+                                                    <!--제출시간 -->
+                                                    <td class="align-middle text-center">2020-01-31</td>
+                                                    <!-- 과제 파일 -->
+                                                    <td class="align-middle">ibasLecture.py</td>
 
 
                                                 </tr>
-                                                <!--========================여기까지 삭제==========================-->
+                                                <!--========================여기까지 복붙==========================-->
+
+                                                <!--========================여기부터 복붙==========================-->
+                                                <tr class="lectRoom_tr align-middle">
+
+                                                    <!-- 회원 이름 -->
+                                                    <td class="align-middle text-center">윤예진</td>
+                                                    <!-- 회원 학번 -->
+                                                    <td class="align-middle">12888888</td>
+                                                    <!-- 출결 -->
+                                                    <td>
+                                                        <select>
+                                                            <option selected>출석</option>
+                                                            <option>결석</option>
+                                                        </select></td>
+                                                    <!--과제 -->
+                                                    <td>
+                                                        <select>
+                                                            <option>제출</option>
+                                                            <option selected>미제출</option>
+                                                        </select></td>
+                                                    <!--제출시간 -->
+                                                    <td class="align-middle text-center">2020-01-31</td>
+                                                    <!-- 과제 파일 -->
+                                                    <td class="align-middle">ibasLecture.py</td>
+
+
+                                                </tr>
+                                                <!--========================여기까지 복붙==========================-->
+
                                                 </tbody>
                                             </table>
 

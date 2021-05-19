@@ -75,3 +75,12 @@ def lect_room_attend_std(request):  # 게시판 페이지로 이동
 
     }
     return render(request, 'lectRoom-attend_std.html', context)
+
+def lect_room_attend_teacher(request):  # 게시판 페이지로 이동
+
+    context = {
+
+    }
+    return render(request, 'lectRoom-attend_teacher.html', context)
+
+
