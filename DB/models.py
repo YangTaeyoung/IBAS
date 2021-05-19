@@ -181,7 +181,6 @@ class ContestBoard(models.Model):
     contest_start = models.DateTimeField(db_column='CONTEST_START')
     contest_deadline = models.DateTimeField(db_column='CONTEST_DEADLINE')
 
-
     class Meta:
         managed = False
         db_table = 'CONTEST_BOARD'
@@ -228,6 +227,22 @@ class ContestFile(File):
         ordering = ['-file_path']  # 항상 게시글의 이미지를 먼저 가져오기 위함.(썸네일 관련)
 
 
+class MethodInfo(models.Model):
+    method_no = models.AutoField(db_column='METHOD_NO', primary_key=True)  # Field name made lowercase.
+    method_name = models.CharField(db_column='METHOD_NAME', max_length=100)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'METHOD_INFO'
+
+
+# 메소드 선택지를 위한 튜플  변수 생성
+METHOD_CHOICES = []
+for method in MethodInfo.objects.all():
+    METHOD_CHOICES.append((method.method_no, method.method_name))
+METHOD_CHOICES = tuple(METHOD_CHOICES)
+
+
 # 강의 썸네일 사진 업로드 경로
 def lect_pic_upload_to(instance, filename):
     return f'lect/pic/{instance.lect_no}/{filename}'
@@ -242,12 +257,13 @@ class Lect(models.Model):
     lect_type = models.ForeignKey('LectType', models.DO_NOTHING, db_column='LECT_TYPE')  # Field name made lowercase.
     lect_created = models.DateTimeField(db_column='LECT_CREATED', auto_now_add=True)  # Field name made lowercase.
     lect_intro = models.CharField(db_column='LECT_INTRO', max_length=300)  # Field name made lowercase.
-    lect_state = models.ForeignKey('StateInfo', models.DO_NOTHING, db_column='LECT_STATE')  # Field name made lowercase.
+    lect_state = models.ForeignKey('StateInfo', models.DO_NOTHING, db_column='LECT_STATE',
+                                   default=1)  # Field name made lowercase.
     lect_curri = models.TextField(db_column='LECT_CURRI')  # Field name made lowercase.
     lect_limit_num = models.IntegerField(db_column='LECT_LIMIT_NUM')  # Field name made lowercase.
     lect_place_or_link = models.CharField(db_column='LECT_PLACE_OR_LINK', max_length=1000)  # Field name made lowercase.
-    lect_method = models.ForeignKey('MethodInfo', models.DO_NOTHING,
-                                    db_column='LECT_METHOD')  # Field name made lowercase.
+    lect_method = models.ForeignKey('MethodInfo', models.DO_NOTHING, db_column='LECT_METHOD',
+                                    choices=METHOD_CHOICES)  # Field name made lowercase.
     lect_deadline = models.DateTimeField(db_column='LECT_DEADLINE')  # Field name made lowercase.
     lect_reject_reason = models.CharField(db_column='LECT_REJECT_REASON', null=True, max_length=200)
 
@@ -403,15 +419,6 @@ class MajorInfo(models.Model):
     class Meta:
         managed = False
         db_table = 'MAJOR_INFO'
-
-
-class MethodInfo(models.Model):
-    method_no = models.AutoField(db_column='METHOD_NO', primary_key=True)  # Field name made lowercase.
-    method_name = models.CharField(db_column='METHOD_NAME', max_length=100)  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'METHOD_INFO'
 
 
 class QuestForm(models.Model):
