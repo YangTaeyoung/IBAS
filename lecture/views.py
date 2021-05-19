@@ -3,36 +3,35 @@ from DB.models import LectType, Lect, LectDay, LectUser, StateInfo, MethodInfo
 from django.db.models import Q
 from pagination_handler import get_paginator_list, get_page_object
 from user_controller import get_logined_user
-
-
+from lecture.forms import LectForm
+from user_controller import login_required
 
 
 # Create your views here.
-def lect_register(request):  # 게시판 등록 페이지로 이동
+@login_required
+def lect_register(request):  # 강의/스터디/취미모임 등록 페이지로 이동하는 것
     if request.method == "GET":
+        lect_type = LectType.objects.get(pk=request.GET.get("lect_type"))
+        init_dict = {"lect_type": lect_type.type_no, "lect_reject_reason": None}
+        if lect_type == 1:  # 강의일 때
+            init_dict.update(lect_state=1)
+        else:  # 강의가 아닐 때
+            init_dict.update(lect_state=3)
         context = {
-            "lect_type": LectType.objects.get(pk=request.GET.get("lect_type")),
-            "method_list": MethodInfo.objects.all()
+            "lect_type": lect_type,
+            "method_list": MethodInfo.objects.all(),
+            "lect_form": LectForm(initial=init_dict)
         }
         return render(request, 'lecture_register.html', context)
-    else:
-        lect = Lect()
-        lect.lect_type = LectType.objects.get(pk=request.POST.get("lect_type"))
-        if request.POST.get("lect_type") == 1:  # 강의일 경우 승인 여부에 따라 개설 결정
-            lect.lect_state = StateInfo.objects.get(pk=1)
-        else:  # 스터디, 취미모임의 경우 자동 승인
-            lect.lect_state = StateInfo.objects.get(pk=3)
-        lect.lect_chief = get_logined_user(request)
-        lect.lect_deadline = request.POST.get("lect_deadline")
-        lect.lect_title = request.POST.get("lect_title")
-        lect.lect_intro = request.POST.get("lect_intro")
-        lect.lect_curri = request.POST.get("lect_curri")
-        lect.lect_limit_num = request.POST.get("lect_limit_num")
-        lect.lect_pic = request.FILES.get("lect_pic")
-        lect.lect_method = MethodInfo.objects.get(pk=request.POST.get("lect_method"))
-        lect.lect_place_or_link = request.POST.get("lect_place_or_link")
-        lect.save()
-        return redirect("lect_detail", lect_no=lect.lect_no)
+    else:  # 강의/스터디/취미 모임 폼을 입력하고 전송 버튼을 눌렀을 경우
+        lect_form = LectForm(request.POST, request.FILES)
+        if lect_form.is_valid():
+            print("유효성 검사 성공")
+            lect = lect_form.save(lect_chief=get_logined_user(request))
+            return redirect("lect_detail", lect_no=lect.lect_no)
+        else:  # 유효성 검사 실패 시
+            print("유효성 검사 실패")
+            return redirect("lect_view", type_no=1)
 
 
 def lect_detail(request, lect_no):  # 게시판 상세 페이지로 이동
