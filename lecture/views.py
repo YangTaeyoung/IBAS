@@ -24,10 +24,10 @@ def lect_register(request):  # 강의/스터디/취미모임 등록 페이지로
         }
         return render(request, 'lecture_register.html', context)
     else:  # 강의/스터디/취미 모임 폼을 입력하고 전송 버튼을 눌렀을 경우
-        lect_form = LectForm(request.POST)
+        lect_form = LectForm(request.POST, request.FILES)
         if lect_form.is_valid():
             print("유효성 검사 성공")
-            lect = lect_form.save()
+            lect = lect_form.save(lect_chief=get_logined_user(request))
             return redirect("lect_detail", lect_no=lect.lect_no)
         else:  # 유효성 검사 실패 시
             print("유효성 검사 실패")

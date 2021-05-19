@@ -24,8 +24,8 @@ class LectForm(forms.ModelForm):
 
     def save(self, **kwargs):
         print("와?")
-        lect = super().save(self, commit=False)
-        lect.lect_chief = get_logined_user
+        lect = super().save(commit=False)
+        lect.lect_chief = kwargs["lect_chief"]
         lect.lect_type = self.cleaned_data.get("lect_type")
         lect.lect_state = self.cleaned_data.get("lect_state")
         lect.save()
