@@ -63,7 +63,7 @@
                                 <!-- 끌고오는 게시글 파트 -->
                                 <tbody>
                                 <!-- 게시글 1 -->
-                                {% if bank_len == 0 %}
+                                {% if not bank_list %}
                                     <td colspan="5" style="text-align: center"> 예산 지원 신청 게시글이 없습니다.</td>
                                 {% endif %}
                                 {% for bank in bank_list %}
