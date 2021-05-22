@@ -35,7 +35,7 @@
                         <!-- 검색창 및 진행중/마감 필터바 -->
                         <div class="listing-filter m-b40">
                             <!-- 검색창용 form 태그 -->
-                            <form role="search" action="/board/search/" method="get">
+                            <form action="{% url 'lect_search' type_no=type.type_no %}" method="get">
                                 <div class="input-group">
                                     <!-- 필터바(해당 게시글만 보이게하는 것 구현 진행중 - 커밍쑨) -->
                                     <div class="m-r15">
@@ -55,6 +55,7 @@
                                     <!-- 검색창 div -->
                                     <div class="lect-search-bar">
                                         <!-- 검색창 input 태그 -->
+
                                         <input name="keyword" type="text" class="form-control"
                                                placeholder="검색어를 입력하세요.">
                                         <span class="input-group-btn ">
@@ -63,6 +64,7 @@
                                                 <i class="fa fa-search"></i>
                                             </button>
                                         </span>
+
                                     </div>
                                 </div>
                             </form>

@@ -7,5 +7,6 @@ urlpatterns = [
     path('<int:type_no>/view/', views.lect_view, name="lect_view"),  # 강의 리스트 페이지로 이동
     path('aor/<int:lect_no>/', views.lect_aor, name="lect_aor"),  # 강의 등록 거절 페이지
     path('update/<int:lect_no>', views.lect_update, name="lect_update"),
-    path('delete/<int:lect_no>', views.lect_delete, name="lect_delete")
+    path('delete/<int:lect_no>', views.lect_delete, name="lect_delete"),
+    path('<int:type_no>/search/', views.lect_search, name="lect_search")
 ]
