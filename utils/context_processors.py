@@ -42,8 +42,7 @@ def login_check(request):
 
 # 로그인한 유저가 관리자인지 확인하는 함수
 def superuser_check(request):
-    current_user = get_logined_user(request)
     if is_logined(request):
-        return {"is_superuser": current_user.user_role.role_no <= 3}
+        return {"is_superuser": get_logined_user(request).user_role.role_no <= 3}
     else:
         return {"is_superuser": False}
