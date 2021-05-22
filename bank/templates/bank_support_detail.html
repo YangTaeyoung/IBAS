@@ -159,16 +159,18 @@
                         </div>
                         <!--====================================사용인 끝=============================================-->
                         <!--====================================입금계좌 시작==============================================-->
-                        <div class="content-box">
-                            <div class="content-header">
-                                <h3 class="title">입금받을 계좌</h3>
-                            </div>
-                            <div class="content-body">
-                                <div class="form-group">
-                                    <a>{{ bank.bank_account }}</a>
+                        {% if logined_user.user_role.role_no == 4 %}
+                            <div class="content-box">
+                                <div class="content-header">
+                                    <h3 class="title">입금받을 계좌</h3>
+                                </div>
+                                <div class="content-body">
+                                    <div class="form-group">
+                                        <a>{{ bank.bank_account }}</a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        {% endif %}
                         <!--====================================입금계좌 끝=============================================-->
                         <!--====================================영수증 시작=============================================-->
 

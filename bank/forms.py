@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.datetime_safe import date, datetime
-from DB.models import Bank, BankApplyInfo, User
+from DB.models import Bank, BankApplyInfo, User, UserRole
 from IBAS.forms import FileFormBase
 from django.utils.translation import gettext_lazy as _
 import pytz
@@ -29,13 +29,12 @@ class BankForm(forms.ModelForm):
             'bank_minus': "",
         }
 
-    # bank_cfo 입력 받아야 함!
+    # overriding
+    # kwargs 로 bank_cfo 입력 받아야 함!
     def save(self, **kwargs):
         bank = super().save(commit=False)  # db에 아직 저장하지는 않고, 객체만 생성
         bank.bank_apply = BankApplyInfo.objects.get(pk=4)
         bank.bank_cfo = kwargs.get('bank_cfo')
-        if self.cleaned_data.get('bank_used_user') is None:
-            self.cleaned_data['bank_used_user'] = bank.bank_cfo
         bank.save()
 
         return bank
@@ -92,6 +91,15 @@ class BankForm(forms.ModelForm):
             )
         return used_date
 
+    # 수정해야함.
+    def clean_bank_used_user(self):
+        user = self.cleaned_data.get('bank_used_user')
+        if user is None:
+            user = User.objects.filter(user_role=UserRole.objects.get(pk=4)).first()
+
+        return user
+
+    # overriding
     def clean(self):
         if self.cleaned_data['bank_plus'] == 0 and self.cleaned_data['bank_minus'] == 0:
             raise ValidationError(
@@ -108,6 +116,7 @@ class FileForm(FileFormBase):
                    'accept': "image/*,.doc,.pdf,.hwp,.docx"})
     )
 
+    # overriding
     # 하나 이상의 파일이 있는지 검사!
     def clean(self):
         super().clean()
@@ -143,6 +152,7 @@ class BankSupportForm(forms.ModelForm):
             'bank_account': _("입금받을 계좌"),
         }
 
+    # overriding
     # bank_used_user 입력 받아야 함!
     def save(self, **kwargs):
         bank = super().save(commit=False)

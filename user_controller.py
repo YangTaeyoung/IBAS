@@ -71,6 +71,7 @@ def writer_only(superuser=False):
             contest_no = kwargs.get('contest_no')
             bank_no = kwargs.get('bank_no')
             lect_no = kwargs.get('lect_no')
+            # comment_no = kwargs.get('comment_no')
 
             # 글쓴이인가요
             if board_no is not None:

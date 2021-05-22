@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.db import transaction
 from django.db.models import Sum, Q
 from django.shortcuts import render, get_object_or_404, reverse, redirect
@@ -24,6 +25,10 @@ def bank(request):
     # 수입, 지출 합계
     total_income = Bank.objects.filter(bank_apply__bank_apply_no=4).aggregate(Sum("bank_plus"))["bank_plus__sum"]
     total_outcome = Bank.objects.filter(bank_apply__bank_apply_no=4).aggregate(Sum("bank_minus"))["bank_minus__sum"]
+    if total_income is None:
+        total_income = 0
+    if total_outcome is None:
+        total_outcome = 0
     balance = total_income - total_outcome
 
     # 페이지네이션 설정
@@ -85,7 +90,7 @@ def bank_register(request):
                 bank = bank_form.save(bank_cfo=get_logined_user(request))
                 file_form.save(instance=bank)
         else:
-            pass  # 오류처리 필요
+            pass
 
         return redirect(reverse('bank_list'))
 
@@ -102,7 +107,6 @@ def bank_support_board(request):
 
     context = {
         "bank_list": item,
-        "bank_len": len(bank_list)
     }
 
     return render(request, 'bank_support_board.html', context)  # 게시판 목록

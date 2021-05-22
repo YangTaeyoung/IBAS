@@ -3,6 +3,7 @@ from django import forms
 from IBAS.forms import FileFormBase
 from file_controller import FileController
 from DB.models import Board, ContestBoard
+from django.utils.translation import gettext_lazy as _
 
 
 class BoardForm(forms.ModelForm):
@@ -15,18 +16,19 @@ class BoardForm(forms.ModelForm):
         # widgets 에 pk 인 board_no를 선언해도 템플릿에서는 인식되지 않는다.
         widgets = {
             'board_type_no': forms.HiddenInput(),
-            'board_title': forms.TextInput(attrs={'placeholder': '제목을 입력하세요.'}),
+            'board_title': forms.TextInput(attrs={'placeholder': _('제목을 입력하세요.')}),
             'board_cont': forms.Textarea(),
         }
 
     # overriding
-    def save(self, board_writer):
+    # kwargs 로 board_writer 꼭 받아야함.
+    def save(self, **kwargs):
         # save(commit=True) 이면 1) form.cleaned_data 를 이용해 데이터 모델 객체를 생성, 2) db에 저장
         # save(commit=False) 이면 위의 1번만 실행,
         #   - default 는 commit=True
         board = super().save(commit=False)
         board.board_type_no = self.cleaned_data.get('board_type_no')
-        board.board_writer = board_writer
+        board.board_writer = kwargs.get('board_writer')
         board.save()
 
         return board
@@ -53,25 +55,27 @@ class ContestForm(forms.ModelForm):
         # 히든태그로 템플릿에 전달했을 때 html 개발자 도구를 통해 편집할 수 있는 가능성을 차단.
         # widgets 에 pk 인 contest_no를 선언해도 템플릿에서는 인식되지 않는다.
         widgets = {
-            'contest_title': forms.TextInput(attrs={'placeholder': '공모전 이름을 입력하세요.'}),
-            'contest_asso': forms.TextInput(attrs={'placeholder': '주최기관을 입력하세요.'}),
-            'contest_topic': forms.TextInput(attrs={'placeholder': '공모전 주제를 적어주세요.'}),
+            'contest_title': forms.TextInput(attrs={'placeholder': _('공모전 이름을 입력하세요.')}),
+            'contest_asso': forms.TextInput(attrs={'placeholder': _('주최기관을 입력하세요.')}),
+            'contest_topic': forms.TextInput(attrs={'placeholder': _('공모전 주제를 적어주세요.')}),
             'contest_start': forms.DateInput(attrs={'type': 'date'}),
             'contest_deadline': forms.DateInput(attrs={'type': 'date'}),
             'contest_cont': forms.Textarea(),
         }
         labels = {
-            'contest_title': '공모전 제목',
-            'contest_asso': '공모전 주최기관',
-            'contest_topic': '공모전 주제',
-            'contest_start': '공모전 시작일',
-            'contest_deadline': '공모전 마감일',
-            'contest_cont': '공모전 상세 설명',
+            'contest_title': _('공모전 제목'),
+            'contest_asso': _('공모전 주최기관'),
+            'contest_topic': _('공모전 주제'),
+            'contest_start': _('공모전 시작일'),
+            'contest_deadline': _('공모전 마감일'),
+            'contest_cont': _('공모전 상세 설명'),
         }
 
-    def save(self, contest_writer):
+    # overriding
+    # kwargs 로 contest_writer 꼭 받아야함.
+    def save(self, **kwargs):
         contest = super().save(commit=False)  # db에 아직 저장하지는 않고, 객체만 생성
-        contest.contest_writer = contest_writer  # 유저정보 받고
+        contest.contest_writer = kwargs.get('contest_writer')  # 유저정보 받고
         contest.save()  # db에 저장
 
         return contest
@@ -92,6 +96,7 @@ class ContestForm(forms.ModelForm):
 
         return contest
 
+    # overriding
     def clean(self):
         cleaned_data = super().clean()
         start_date = self.cleaned_data.get('contest_start')
@@ -99,12 +104,13 @@ class ContestForm(forms.ModelForm):
 
         errors = []
         if not start_date <= finish_date:
-            errors.append(forms.ValidationError('공모전 시작일과 마감일을 확인해주세요!'))
+            errors.append(forms.ValidationError(
+                _('공모전 시작일과 마감일을 확인해주세요!'),
+                code='invalid'
+            ))
 
         if errors:
             raise forms.ValidationError(errors)
-
-        return cleaned_data
 
 
 class FileForm(FileFormBase):
@@ -122,7 +128,10 @@ class FileForm(FileFormBase):
             # 이미지 파일이 없는 경우
             if not self._check_contest_thumbnail():
                 self.cleaned_data['upload_file'] = None  # cleaned_data 를 비운다
-                raise forms.ValidationError('공모전 이미지를 적어도 한 개 이상 등록해주세요!')
+                raise forms.ValidationError(
+                    _('공모전 이미지를 적어도 한 개 이상 등록해주세요!'),
+                    code='invalid'
+                )
 
     # protected
     # contest 경우에는 이미지 파일이 항상 첫번째로 오게 해야함.
