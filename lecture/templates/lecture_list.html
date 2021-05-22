@@ -79,7 +79,7 @@
                                         <!-- 게시글 대표 이미지 -->
                                         <!-- 이미지를 클릭하면, 해당 게시글로 이동함 -->
                                         <a href="{% url 'lect_detail' lect_no=lect.lect_no %}">
-                                            <img class="lect-thumbnail" src="{{ lect.lect_pic }}"
+                                            <img class="lect-thumbnail" src="/media/{{ lect.lect_pic }}"
                                                  alt="">
                                         </a>
                                         <!-- 강의, 스터디, 취미 내용 간단소개 div -->

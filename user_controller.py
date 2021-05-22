@@ -15,9 +15,10 @@ def role_check(request, role_no):
     return get_logined_user(request).user_role.role_no == role_no
 
 
-# 권한이 맞는지 확인하는 함수
-def auth_check(request, auth_no):
-    return get_logined_user(request).user_auth.auth_no == auth_no
+#
+# # 권한이 맞는지 확인하는 함수
+# def auth_check(request, auth_no):
+#     return get_logined_user(request).user_auth.auth_no == auth_no
 
 
 # 유저 관련 객체를 반환하는 컨트롤러
@@ -49,6 +50,7 @@ def login_required(func):
             return func(request, *args, **kwargs)
         else:
             return redirect(reverse("index"))
+
     return wrapper
 
 
@@ -102,9 +104,27 @@ def writer_only(superuser=False):
                 return redirect(reverse("index"))
 
         return wrapper
+
     return decorator
 
 
+# 데코레이터
+# 관리자 권한이 있는지 확인하는 함수
+def superuser_only(func):
+    @login_required
+    @functools.wraps(func)
+    def wrapper(request, *args, **kwargs):
+        current_user = get_logined_user(request)
+        if current_user.user_role.role_no <= 3:
+            return func(request, *args, **kwargs)
+        else:
+            return redirect(reverse("index"))
+
+    return wrapper
+
+
+# 데코레이터
+# 총무 권한이 있는지 확인하는 함수
 def cfo_only(func):
     @login_required
     @functools.wraps(func)
@@ -120,4 +140,24 @@ def cfo_only(func):
     return wrapper
 
 
+# 데코레이터
+# 사용자 권한을 확인하는 함수(활동회원 or 비활동회원)
+# 전체 회원 중 일원인지만 확인할 경우: active=False
+# 납입 회원인지 확인할 경우: active=True
+def auth_check(active=False):
+    def decorator(func):
+        @login_required
+        @functools.wraps(func)
+        def wrapper(request, *args, **kwargs):
+            current_user = get_logined_user(request)
+            if active:
+                boundary = current_user.user_auth.auth_no == 1
+            else:
+                boundary = current_user.user_auth.auth_no <= 2
 
+            if boundary:
+                return func(request, *args, **kwargs)
+            else:
+                return redirect(reverse("index"))
+        return wrapper
+    return decorator

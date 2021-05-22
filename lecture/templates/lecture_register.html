@@ -54,11 +54,15 @@
             </div>
             <!--===============================================입력란=========================================================-->
             {% load widget_tweaks %}
-            <form action="{% url 'lect_register' %}"
+            <form action="
+
+                    {% if is_update %}{% url 'lect_update' lect_no=lect_no %}{% else %}{% url 'lect_register' %}{% endif %}"
                   class="add-listing-form" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
-                {% render_field lect_form.lect_type %}
-                {% render_field lect_form.lect_state %}
+                {# 히든태그 #}
+                {% for field in lect_form.hidden_fields %}
+                    {{ field }}
+                {% endfor %}
                 <div class="content-block">
                     <div class="section-full content-inner bg-white">
                         <div class="container">
@@ -67,13 +71,7 @@
                             <div class="content-box">
                                 <div class="content-header">
                                     <!--공통으로 지을만한 이름이 없어서 이 부분만 이렇게 성정하였음, 게시판별로 다르게 보이도록 변경-->
-                                    {% if lect_type.type_no == 1 %}
-                                        <h3 class="title">강의 이름</h3>
-                                    {% elif lect_type.type_no == 2 %}
-                                        <h3 class="title">스터디 이름</h3>
-                                    {% else %}
-                                        <h3 class="title">소모임 이름</h3>
-                                    {% endif %}
+                                    <h3 class="title">{{ lect_type.type_name }} 이름</h3>
                                 </div>
                                 <div class="content-body">
                                     <div class="form-group">
@@ -89,7 +87,7 @@
                             <!--====================================소개 입력 시작==============================================-->
                             <div class="content-box">
                                 <div class="content-header">
-                                    <h3 class="title">소개</h3>
+                                    <h3 class="title">{{ lect_type.type_name }} 소개</h3>
                                 </div>
                                 <div class="content-body">
                                     <div class="form-group">
@@ -102,12 +100,11 @@
                             <!--====================================일정계획 입력 시작==============================================-->
                             <div class="content-box">
                                 <div class="content-header">
-                                    <h3 class="title">일정계획</h3>
+                                    <h3 class="title">{{ lect_type.type_name }} 일정계획</h3>
                                 </div>
                                 <div class="content-body">
                                     <div class="form-group">
                                         <!--입력하는 곳-->
-                                        {% render_field lect_form.lect_reject_reason %}
                                         {% render_field lect_form.lect_curri class="form-control" %}
                                     </div>
                                 </div>
@@ -117,7 +114,7 @@
                             <!--=======강의, 스터디 게시판에서만 사용하기 때문에 취미모임 게시판일 경우에는 뜨지 않도록 수정======-->
                             <div class="content-box">
                                 <div class="content-header">
-                                    <h3 class="title">제한인원</h3>
+                                    <h3 class="title">{{ lect_type.type_name }} 제한인원</h3>
                                 </div>
                                 <div class="content-body">
                                     <div class="form-group">
@@ -128,35 +125,38 @@
                             </div>
                             <!--====================================제한인원 입력 끝=============================================-->
                             <!--====================================방식 입력 시작==============================================-->
-                            <div class="content-box">
-                                <div class="content-header">
-                                    <h3 class="title">방식</h3>
-                                </div>
-                                <div class="content-body">
-                                    <div class="form-group">
-                                        {% render_field lect_form.lect_method id="lect_method" %}
+                            {% if lect_type.type_no != 3 %}
+                                <div class="content-box">
+                                    <div class="content-header">
+                                        <h3 class="title">{{ lect_type.type_name }} 진행 방식</h3>
+                                    </div>
+                                    <div class="content-body">
+                                        <div class="form-group">
+                                            {% render_field lect_form.lect_method id="lect_method" %}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <!--====================================방식 입력 끝=============================================-->
-                            <!--====================================장소 입력 시작==============================================-->
-                            <div class="content-box">
-                                <div class="content-header">
-                                    <h3 id="method_name" class="title">장소</h3>
-                                </div>
-                                <div class="content-body">
-                                    <div class="form-group">
-                                        <!--입력하는 곳-->
-                                        {% render_field lect_form.lect_place_or_link class="form-control" id="lect_place_or_link" %}
+
+                                <!--====================================방식 입력 끝=============================================-->
+                                <!--====================================장소 입력 시작==============================================-->
+                                <div class="content-box">
+                                    <div class="content-header">
+                                        <h3 id="method_name" class="title">{{ pol_name }}</h3>
+                                    </div>
+                                    <div class="content-body">
+                                        <div class="form-group">
+                                            <!--입력하는 곳-->
+                                            {% render_field lect_form.lect_place_or_link class="form-control" id="lect_place_or_link" %}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            {% endif %}
                             <!--====================================장소 입력 끝=============================================-->
                             <!--====================================신청마감일 입력 시작==============================================-->
                             <!--=======강의, 스터디 게시판에서만 사용하기 때문에 취미모임 게시판일 경우에는 뜨지 않도록 수정======-->
                             <div class="content-box">
                                 <div class="content-header">
-                                    <h3 class="title">신청마감일</h3>
+                                    <h3 class="title">{{ lect_type.type_name }} 신청마감일</h3>
                                 </div>
                                 <div class="content-body">
                                     <div class="form-group">
@@ -174,15 +174,14 @@
                                 </div>
                                 <div class="content-body">
                                     <div class="form-group">
-                                        {#                                            <!--입력하는 곳-->#}
-                                        {#                                            <input#}
-                                        {#                                                    type="file"#}
-                                        {#                                                    name="lect_pic"#}
-                                        {#                                                    accept="image/*"#}
-                                        {#                                                    multiple#}
-                                        {#                                                    required="required"#}
-                                        {#                                            />#}
-                                        {% render_field lect_form.lect_pic %}
+                                        {% render_field lect_pic_form.lect_pic %}
+                                        {% if is_update %}
+                                            <p class="font-10 mb-1 mt-3" style="text-align:center; color:red">
+                                                사진을 등록하지 않을 시, 기존 사진을 유지하며, 새로운 사진을 등록할 경우, 기존 사진이 대체됩니다.</p>
+                                        {% else %}
+                                            <p class="font-10 mb-1 mt-3" style="text-align:center; color:red">
+                                                두 장 이상의 사진을 첨부 할 경우 마지막 사진이 등록됩니다.</p>
+                                        {% endif %}
                                     </div>
                                     <!-- 이미 존재하고 있던 이미지: 삭제 가능 (수정모드)-->
                                     {% if lect is not None %}

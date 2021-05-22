@@ -164,7 +164,6 @@ def board_register(request):
                 board = board_form.save(
                     board_writer=User.objects.get(pk=request.session.get('user_stu')))
                 file_form.save(instance=board)
-
             return redirect("board_detail", board_no=board.board_no)
         else:
             return redirect("board_view", board_type_no=5)
