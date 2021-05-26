@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
+    <!--코드 뷰어 스크립트-->
+    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?skin=desert"></script>
     <div class="page-wraper">
         <!-- 상단 제목부분 -->
         <div class="page-content bg-white">
@@ -77,10 +79,8 @@
                             </div>
                             <!--========== 왼쪽 검색창 및 강의룸 네비게이션바 끝 ==========-->
                             <!--========== 오른쪽 강의룸 메인 콘텐츠 시작 ===========-->
-                            <form>
-                            <div class="col-lg-10 col-xl-8 p-b30">
-                                <div class="row">
-                                    <div class="col-xl-12">
+                            <div class="col-xl-8 col-lg-7 col-md-12 m-b30">
+                                <form class="add-listing-form">
                                         <!-- ======================제목 박스====================== -->
                                          <div class="content-box">
                                             <div class="content-header">
@@ -145,6 +145,31 @@
                                                     <!--입력하는 곳-->
                                                     <input type="text" class="form-control"
                                                            placeholder="강의 링크를 적어주세요."/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--=====================코드 테스트 박스=======================-->
+                                        <div class="content-box">
+                                            <div class="content-header">
+                                                <h3 class="title">코드</h3>
+                                            </div>
+                                            <div class="content-body">
+                                                <div class="form-group">
+                                                    <pre class="prettyprint" style="overflow-x: auto; border-radius: 10px">
+def lect_view(request, type_no):  # 게시판 페이지로 이동
+    lect_type = LectType.objects.get(pk=type_no)
+
+    # 회장단에 의해 승인된 강의만 등록, 스터디는 등록 시 이미 승인.
+    lect_list = get_page_object(request, Lect.objects.filter(
+        Q(lect_type=lect_type) & Q(lect_state__state_no=3)).prefetch_related(
+        "lectday_set").prefetch_related("lectuser_set"))
+    context = {
+        "type": lect_type,
+        "lecture": LectType.objects.get(pk=1),
+        "lect_list": lect_list
+    }
+    return render(request, 'lecture_list.html', context)
+                                                    </pre>
                                                 </div>
                                             </div>
                                         </div>
@@ -246,11 +271,8 @@
                                                 등록하기
                                             </button>
                                         </div>
-
-                                    </div>
-                                </div>
+                                </form>
                             </div>
-                            </form>
                             <!--========================= 강의룸 등록 부분 끝 =========================-->
                         </div>
                     </div>

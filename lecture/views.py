@@ -64,5 +64,5 @@ def lect_view(request, type_no):  # 게시판 페이지로 이동
 def lectRoom_main(request):  # 강의룸 페이지로 이동
     return render(request, 'lectRoom_main.html', {})
 
-def lect_room_register(request):  # 강의룸 페이지로 이동
+def lect_room_register(request):  # 강의룸 등록 페이지로 이동
     return render(request, 'lect_room_register.html', {})
