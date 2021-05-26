@@ -69,18 +69,26 @@ def lect_room_mem_manage(request):
     }
     return render(request, 'lectRoom-mem_manage.html', context)
 
-def lect_room_attend_std(request):  # 게시판 페이지로 이동
+def lect_room_attend_std(request):
 
     context = {
 
     }
     return render(request, 'lectRoom-attend_std.html', context)
 
-def lect_room_attend_teacher(request):  # 게시판 페이지로 이동
+def lect_room_attend_teacher(request):
 
     context = {
 
     }
     return render(request, 'lectRoom-attend_teacher.html', context)
+
+def lect_room_detail(request):
+
+    context = {
+
+    }
+    return render(request, 'lectRoom_detail.html', context)
+
 
 
