@@ -8,7 +8,9 @@
 from datetime import date
 import os
 from django.db import models
+from datetime import datetime
 from IBAS.settings import MEDIA_ROOT
+import pytz
 
 
 class Answer(models.Model):
@@ -270,6 +272,10 @@ class Lect(models.Model):
     @property
     def get_file_path(self):
         return os.path.join(MEDIA_ROOT, 'lect', "pic", str(self.lect_no))
+
+    @property
+    def is_expired(self):
+        return pytz.UTC.localize(datetime.now()) < self.lect_deadline
 
 
 class LectDay(models.Model):
