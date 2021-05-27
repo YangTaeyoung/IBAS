@@ -101,7 +101,7 @@ TEMPLATES = [
                 'utils.context_processors.chief',  # 하단바 회장 정보를 불러오기 위한 context_processor
                 'utils.context_processors.login',  # 로그인을 위한 context_processor
                 'utils.context_processors.login_check',  # 로그인 확인을 위한 context_processor
-                'utils.context_processors.superuser_check' # 슈퍼유저 확인을 위한 context_processor
+                'utils.context_processors.superuser_check', # 슈퍼유저 확인을 위한 context_processor
             ],
         },
     },
@@ -195,3 +195,6 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'ibasmail20@gmail.com'
 EMAIL_HOST_PASSWORD = 'weloveyoukhk'
+
+# 브라우져 종료시 세션 만료
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
