@@ -19,6 +19,32 @@ def get_pol_name(method_no):
         pol_name = pol_name + " 개인 채널 링크"
     return pol_name
 
+# 타입에 맞는 강의 리스트를 반환하는 함수
+def get_lect_list(request, type_no):
+    if type_no != 4:  # 강의 개설 신청 게시판이 아닌 일반 게시판(강의, 스터디, 취미모임)의 경우
+        lect_type = LectType.objects.get(pk=type_no)
+        lect_list = Lect.objects.filter(Q(lect_type=lect_type) & Q(lect_state__state_no=3)).prefetch_related(
+            "lectday_set").prefetch_related("lectuser_set")
+    else:
+        lect_list = Lect.objects.filter(Q(lect_type=LectType.objects.get(pk=1)) & Q(lect_state__state_no=1) | Q(
+            lect_state__state_no=2)).prefetch_related("lectday_set").prefetch_related("lectuser_set")
+    return lect_list
+
+
+# 타입에 맞는 강의 타입 인스턴스를 반환하는 함수
+def get_lect_type(request, type_no):
+    if type_no != 4:
+        lect_type = LectType.objects.get(pk=type_no)
+    else:
+        if not is_logined(request) or not is_superuser(request):  # 강의 개설 관련 처리는 관리자만 할 수 있으므로 관리자 권한 체크
+            return redirect(reverse("index"))
+        lect_type = LectType()
+        lect_type.type_no = type_no
+        lect_type.type_no = 4
+        lect_type.type_name = "강의 개설 신청"
+        lect_type.type_exp = "개설 신청된 강의 목록입니다."
+    return lect_type
+
 
 # Create your views here.
 @auth_check(active=True)
@@ -122,28 +148,11 @@ def lect_delete(request, lect_no):
 
 # 강의 리스트 이동 함수
 def lect_view(request, type_no):  # 게시판 페이지로 이동
-    if type_no != 4:  # 강의 개설 신청 게시판이 아닌 일반 게시판(강의, 스터디, 취미모임)의 경우
-        lect_type = LectType.objects.get(pk=type_no)
-        lect_list = get_page_object(request, Lect.objects.filter(
-            Q(lect_type=lect_type) & Q(lect_state__state_no=3)).prefetch_related(
-            "lectday_set").prefetch_related("lectuser_set"))
-    else:  # 강의 개설 게시판의 경우
-        if is_logined(request) and is_superuser(request):  # 강의 개설 관련 처리는 관리자만 할 수 있으므로 관리자 권한 체크
-            lect_type = LectType()  # 강의 개설신청을 담을 임시 인스턴트변수 생성ㄴ
-            lect_type.type_no = 4
-            lect_type.type_name = "강의 개설 신청"
-            lect_type.type_exp = "개설 신청된 강의 목록입니다."
-            lect_list = get_page_object(request, Lect.objects.filter(
-                Q(lect_type=LectType.objects.get(pk=1)) & Q(lect_state__state_no=1) | Q(
-                    lect_state__state_no=2)).prefetch_related(
-                "lectday_set").prefetch_related("lectuser_set"))
-        else:  # 권한정보가 부족할 시 홈으로 강제 이동(해킹시도)
-            return redirect(reverse("index"))
-
+    lect_list = get_page_object(request, get_lect_list(request, type_no))
+    lect_type = get_lect_type(request, type_no)
     context = {
         "type": lect_type,
-        "lecture": LectType.objects.get(pk=1),
-        "lect_list": lect_list
+        "item_list": lect_list
     }
     return render(request, 'lecture_list.html', context)  # 정상 처리
 
@@ -151,32 +160,14 @@ def lect_view(request, type_no):  # 게시판 페이지로 이동
 # 게시글 검색 시 이동 함수
 def lect_search(request, type_no):
     keyword = request.GET.get("keyword")
-    if type_no != 4:  # 강의 개설 신청 게시판이 아닌 일반 게시판(강의, 스터디, 취미모임)의 경우
-        lect_type = LectType.objects.get(pk=type_no)
-        lect_list = get_page_object(request, Lect.objects.filter(
-            Q(lect_type=lect_type) & Q(lect_state__state_no=3)).prefetch_related(
-            "lectday_set").prefetch_related("lectuser_set").filter(
-            Q(lect_title__icontains=keyword) | Q(lect_intro__icontains=keyword) | Q(
-                lect_chief__user_name__icontains=keyword) | Q(lect_curri__icontains=keyword)))
-    else:  # 강의 개설 게시판의 경우
-        # 강의 개설 관련 처리는 관리자만 할 수 있으므로 관리자 권한 체크
-        if is_logined(request) and is_superuser(request):
-            lect_type = LectType()  # 강의 개설신청을 담을 임시 인스턴트변수 생성
-            lect_type.type_no = 4
-            lect_type.type_name = "강의 개설 신청"
-            lect_type.type_exp = "개설 신청된 강의 목록입니다."
-            lect_list = get_page_object(request, Lect.objects.filter(
-                Q(lect_type=LectType.objects.get(pk=1)) & Q(lect_state__state_no=1) | Q(
-                    lect_state__state_no=2)).prefetch_related(
-                "lectday_set").prefetch_related("lectuser_set").filter(
-                Q(lect_title__icontains=keyword) | Q(lect_intro__icontains=keyword) | Q(
-                    lect_chief__user_name__icontains=keyword) | Q(lect_curri__icontains=keyword)))
-        else:  # 권한정보가 부족할 시 홈으로 강제 이동(해킹시도)
-            return redirect(reverse("index"))
+    lect_type = get_lect_type(request,type_no)
+    # 기존 리스트에 검색 필터 추가 (검색 범위: 강의 제목, 강의 계획, 강의 소개)
+    lect_list = get_page_object(request, get_lect_list(request, type_no).filter(
+        Q(lect_intro__icontains=keyword) | Q(lect_title__icontains=keyword) | Q(
+            lect_chief__user_name__icontains=keyword)), num_of_boards_in_one_page=9)
     lect_type.type_exp = "\"" + keyword + "\"(으)로 검색한 결과입니다."
     context = {
         "type": lect_type,
-        "lecture": LectType.objects.get(pk=1),
-        "lect_list": lect_list
+        "item_list": lect_list
     }
     return render(request, 'lecture_list.html', context)  # 정상 처리
