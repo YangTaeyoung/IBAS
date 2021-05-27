@@ -71,10 +71,10 @@
                         </div>
                         <div class="row">
                             <!--================= 여기부터 게시글 반복시작 =================-->
-                            {% if lect_list|length == 0 %}
+                            {% if item_list|length == 0 %}
                                 등록된 강의가 없습니다.
                             {% endif %}
-                            {% for lect in lect_list %}
+                            {% for lect in item_list %}
                                 <!-- 게시글 1 -->
                                 <div class="col-lg-4 col-md-6 col-sm-6 m-b30">
                                     <div class="listing-bx event-listing m-b10">
@@ -99,11 +99,16 @@
                                                     <!-- 마감 월 (영어로 표기됨 - 월 끌고 오면 처리 예정) -->
                                                     <span class="text-primary">{{ lect.lect_deadline|date:'M' }}</span>
                                                     <!-- 마감일 -->
-                                                    <strong>{{ lect.lect_dateline|date:'d' }}</strong>
+                                                    <strong>{{ lect.lect_deadline|date:'d' }}</strong>
                                                     <!-- 모집 및 마감 상태 -->
                                                     <!-- 강의, 스터디, 취미 기간 중에 있으면 모집 span 태그가 보이고, 모집 기간이 자나면, 자동으로 마감으로 뜨게 처리 -->
-                                                    <span class="recruiting">모 집</span>
-                                                    {#                                                        <span class="recruiting-end">마 감</span>#}
+
+                                                    {% if lect.is_expired %}
+                                                        <span class="recruiting">모 집</span>
+                                                    {% else %}
+                                                        <span class="recruiting-end">마 감</span>
+                                                    {% endif %}
+
                                                 </li>
                                                 <!-- 강의, 스터디, 취미에 대한 간단소개 -->
                                                 <li class="text-cut">{{ lect.lect_intro }}
@@ -116,6 +121,7 @@
                                                 <li class="event-hosted">
                                                     <!-- 강의를 정기적으로 진행하는 요일 -->
                                                     <span class="text-primary mr-3">요일</span>
+
                                                     <!-- 강의에 해당하는 요일을 DB에서 가져와야 함 -->
                                                     <span>
                                                         {% for lect_day in lect.lectday_set.all %}
@@ -163,18 +169,9 @@
                         </div>
                         <!--========== 페이지네이션 시작 ===========-->
                         <!-- 1페이지에 6~8개 게시글 끌고오고, 게시글이 그보다 적으면, 페이지네이션 안보이게 처리해야 함 -->
-                        <div class="pagination-bx clearfix text-center">
-                            <ul class="pagination">
-                                <li class="previous"><a href="javascript:void(0)"><i
-                                        class="fa fa-arrow-left"></i></a></li>
-                                <li><a href="javascript:void(0)">1</a></li>
-                                <li><a href="javascript:void(0)">2</a></li>
-                                <li><a href="javascript:void(0)">...</a></li>
-                                <li class="active"><a href="javascript:void(0)">7</a></li>
-                                <li class="next"><a href="javascript:void(0)"><i class="fa fa-arrow-right"></i></a>
-                                </li>
-                            </ul>
-                        </div>
+                        {% if item_list|length != 0 %}
+                            {% include "pagination.html" %}
+                        {% endif %}
                         <!--========== 페이지네이션 끝 ===========-->
                     </div>
                 </div>
