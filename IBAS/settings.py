@@ -167,7 +167,8 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(ROOT_DIR, '.static_root')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
-    '/home/ibas/Django/IBAS/static',
+    #'/home/ibas/Django/IBAS/static',
+    'C:/proj/Django/IBAS/static',
 ]
 # social 로그인 패키지 설정
 AUTHENTICATION_BACKENDS = (
