@@ -2,6 +2,7 @@ import shutil
 from DB.models import Board, BoardFile, ContestBoard, ContestFile, Lect, Bank, BankFile
 import os
 from IBAS.settings import MEDIA_ROOT
+from django.conf import settings
 
 
 # 1. 파일 폼이 여기 있기 때문에, 파일 컨트롤러도 여기 있는게 좋지 않을까요..?
@@ -22,8 +23,29 @@ class FileController:
 
     # 파일인지 확인 하는 함수 파라미터(파일 경로).
     @staticmethod
+    def is_code_file(file_path):
+        path, ext = os.path.splitext(str(file_path))
+        if ext in ['.py', '.java', '.css', 'js', '.html', '.r', '.ipynb', 'txt']:
+            return True
+        else:
+            return False
+
+    @staticmethod
     def is_file(file_path):
         return not FileController.is_image(file_path)
+
+    # ------ get_code_in_file ------- #
+    # INPUT : 해석할 파일 경로(미디어 루트 제외)
+    # OUTPUT : 없음
+    # RETURN : 파일에 있던 코드가 STR형으로 반환
+    # 최종 수정일시 : 21.05.28
+    # 설명: JS code view API에 코드 파일을 str형으로 넣기 위해서 코드를 해석하기 위한 함수
+    # 작성자: 양태영
+    @staticmethod
+    def get_code_in_file(file_path):
+        with open(os.path.join(settings.MEDIA_ROOT, file_path), mode="r") as file:
+            lines = file.read()
+            return lines
 
     # ---- get_images_and_files_of_ ---- #
     # INPUT : Board 객체 or ContestBoard 객체
