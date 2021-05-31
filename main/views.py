@@ -81,7 +81,7 @@ def activity_detail(request, board_no):
 # 작성자 : 양태영
 # 마지막 수정 일시 : 2021.05.04 (유동현)
 # 수정내용 : 폼 처리
-@auth_check()
+@superuser_only
 def activity_register(request):
     # 글쓰기 들어와서 등록 버튼을 누르면 실행이 되는 부분
     if request.method == "POST":

@@ -113,7 +113,7 @@
                                         {% endif %}
                                         <!-- 게시글 삭제 버튼 -->
                                         <!-- 관련자만 보이게 처리 -->
-                                        {% if logined_user.user_auth.auth_no == 1 and logined_user.user_stu == contest.contest_writer.user_stu %}
+                                        {% if logined_user.user_auth.auth_no <= 3 and logined_user.user_stu == contest.contest_writer.user_stu %}
                                         <button class="site-button red radius-xl m-l10" onclick="location.href='{% url 'contest_delete' contest.contest_no %}'"><i
                                                 class="fa fa-trash m-r5"></i>게시글 삭제
                                         </button>
