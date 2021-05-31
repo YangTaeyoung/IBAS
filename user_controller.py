@@ -1,6 +1,4 @@
 import functools
-
-from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import redirect, reverse
 from DB.models import User, ContestBoard, Board, Bank, Lect, LectBoard
 

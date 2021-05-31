@@ -1,4 +1,3 @@
-from django.contrib import messages
 from django.db import transaction
 from django.db.models import Sum, Q
 from django.shortcuts import render, get_object_or_404, reverse, redirect
@@ -90,7 +89,7 @@ def bank_register(request):
                 bank = bank_form.save(bank_cfo=get_logined_user(request))
                 file_form.save(instance=bank)
         else:
-            pass
+            pass  # 오류처리 필요
 
         return redirect(reverse('bank_list'))
 

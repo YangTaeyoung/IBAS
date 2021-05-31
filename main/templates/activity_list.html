@@ -100,25 +100,13 @@
                                         게시글 등록</a>
                                 {% endif %}
                             </div>
-                            <div class="pagination-bx clearfix text-center">
-                                <ul class="pagination">
-                                    {% if board_list.has_previous %}
-                                        <li class="previous"><a href="?page=1"><i class="fa fa-arrow-left"></i></a>
-                                        </li>
-                                        <li>
-                                            <a href="?page={{ board_list.previous_page_number }}"> {{ board_list.previous_page_number }}</a>
-                                        </li>
-                                    {% endif %}
-                                    <li><a href="javascript:void(0)">{{ board_list.number }}</a></li>
-                                    {% if board_list.has_next %}
-                                        <li>
-                                            <a href="?page={{ board_list.next_page_number }}"> {{ board_list.next_page_number }}</a>
-                                        </li>
-                                        <li class="next"><a href="?page={{ board_list.paginator.num_pages }}"><i
-                                                class="fa fa-arrow-right"></i></a></li>
-                                    {% endif %}
-                                </ul>
-                            </div>
+
+                       <!--========== 페이지네이션 시작 ===========-->
+                        <!-- 1페이지에 6~8개 게시글 끌고오고, 게시글이 그보다 적으면, 페이지네이션 안보이게 처리해야 함 -->
+                        {% if board_list|length != 0 %}
+                            {% include 'pagination.html' with item_list=board_list%}
+                        {% endif %}
+                        <!--========== 페이지네이션 끝 ===========-->
                         </div>
                     </div>
                 </div>
