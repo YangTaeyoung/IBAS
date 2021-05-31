@@ -7,10 +7,10 @@ from bank.forms import BankForm, FileForm, BankSupportForm
 from date_controller import today
 from file_controller import FileController
 from pagination_handler import get_page_object
-from user_controller import login_required, get_logined_user, writer_only, cfo_only
+from user_controller import login_required, get_logined_user, writer_only, cfo_only, auth_check
 
 
-@login_required
+@auth_check()
 def bank(request):
     # 회계 내역
     bank_list = Bank.objects.filter(bank_apply__bank_apply_no=4).order_by('bank_used').prefetch_related(
@@ -97,7 +97,7 @@ def bank_register(request):
         return redirect(reverse("index"))
 
 
-@login_required
+@auth_check()
 def bank_support_board(request):
     bank_list = Bank.objects.filter(~Q(bank_apply__bank_apply_no=4))
 
@@ -111,7 +111,7 @@ def bank_support_board(request):
     return render(request, 'bank_support_board.html', context)  # 게시판 목록
 
 
-@login_required
+@auth_check()
 def bank_support_register(request):
     if request.method == "POST":
         bank_support_form = BankSupportForm(request.POST)
@@ -132,7 +132,7 @@ def bank_support_register(request):
         return render(request, 'bank_support_register.html', context)
 
 
-@login_required
+@auth_check()
 def bank_support_detail(request, bank_no):
     bank = get_object_or_404(Bank, pk=bank_no)
     bank_file_list = BankFile.objects.filter(bank_no=bank)
