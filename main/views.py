@@ -46,9 +46,9 @@ def activity_list(request):
     # 최신순으로 정렬하고, 1:M 관계로 가져오기 위해 prefetch_related 함수 사용
     board_list = Board.objects.filter(board_type_no__board_type_no=4).order_by('-board_created').prefetch_related(
         "boardfile_set")
-    item = get_page_object(request, board_list, 6)
+    board_list = get_page_object(request, board_list, 6)
 
-    return render(request, 'activity_list.html', {'board_list': item})
+    return render(request, 'activity_list.html', {'board_list': board_list})
 
 
 # 동아리 활동 게시판 상세보기

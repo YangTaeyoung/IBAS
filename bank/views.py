@@ -31,13 +31,13 @@ def bank(request):
     balance = total_income - total_outcome
 
     # 페이지네이션 설정
-    item = get_page_object(request, bank_list, 15)  # 페이지네이션 15개씩 보이게 설정
+    bank_list = get_page_object(request, bank_list, 15)  # 페이지네이션 15개씩 보이게 설정
 
     # 폼 객체
     bank_form = BankForm()
     file_form = FileForm()
     context = {
-        "bank_list": item,
+        "bank_list": bank_list,
         "year_list": year_list,
         "balance": balance,
         'bank_form': bank_form,
@@ -102,10 +102,10 @@ def bank_support_board(request):
     bank_list = Bank.objects.filter(~Q(bank_apply__bank_apply_no=4))
 
     # 페이지네이터 설정
-    item = get_page_object(request, bank_list, 15)  # 페이지네이션 15개씩 보이게 설정
+    bank_list = get_page_object(request, bank_list, 15)  # 페이지네이션 15개씩 보이게 설정
 
     context = {
-        "bank_list": item,
+        "bank_list": bank_list,
     }
 
     return render(request, 'bank_support_board.html', context)  # 게시판 목록

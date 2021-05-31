@@ -96,9 +96,9 @@ def board_view(request, board_type_no):  # 게시판 페이지로 이동
         board_list = Board.objects.filter(board_type_no=BoardType.objects.get(pk=board_type_no)).select_related(
             "board_writer").order_by("-board_created")
 
-    item = get_page_object(request, board_list)
+    board_list = get_page_object(request, board_list)
     context = {
-        "board_list": item,
+        "board_list": board_list,
         "board_name": BoardType.objects.get(pk=board_type_no).board_type_name,
         "board_exp": BoardType.objects.get(pk=board_type_no).board_type_exp,
         "board_type_no": board_type_no,
@@ -295,10 +295,10 @@ def contest_list(request):
     contest_board_list = ContestBoard.objects.all().order_by('-contest_deadline').prefetch_related("contestfile_set")
 
     # pagination 을 위한 page 객체 (page 객체 안에는 한 페이지에 보여줄만큼의 게시물이 들어있다.)
-    item = get_page_object(request, contest_board_list, num_of_boards_in_one_page=6)
+    contest__list = get_page_object(request, contest_board_list, num_of_boards_in_one_page=6)
 
     context = {
-        "contest_list": item,
+        "contest_list": contest__list,
         "board_name": "공모전 게시판",
         "board_exp": "공모전 정보를 알려주는 게시판",
     }
