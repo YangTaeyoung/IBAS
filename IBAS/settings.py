@@ -59,6 +59,8 @@ INSTALLED_APPS = [
     'lecture',
     # widget_tweaks
     'widget_tweaks',
+    # axios 비동기 처리
+    'corsheaders',
     # 소셜 로그인 패키지: allauth 관련
     'allauth',
     'allauth.account',
@@ -71,6 +73,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',  # 비동기 처리
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -199,3 +202,10 @@ EMAIL_HOST_PASSWORD = 'weloveyoukhk'
 
 # 브라우져 종료시 세션 만료
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+# 비동기 처리
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:8080',  # vue.js port 번호를 입력해주시면 됩니다.
+    'http://172.30.1.15:8080'
+)
