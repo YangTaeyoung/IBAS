@@ -275,7 +275,7 @@ def board_comment_delete(request):
 
 
 # 댓글 수정 코드
-@writer_only()
+#@writer_only()
 def board_comment_update(request):
     if request.method == "POST":  # 정상적으로 파라미터가 넘어왔을 경우
         board_no = request.POST.get('board_no')
