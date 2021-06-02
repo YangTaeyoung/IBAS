@@ -121,15 +121,42 @@ def comment_update(request):
 
 
 def axios_response(request):
-    comments = Comment.objects.all().annotate(
+    comments = Comment.objects.all() \
+        .filter(comment_cont_ref__isnull=True) \
+        .order_by("comment_created") \
+        .annotate(
         writer_name=F('comment_writer__user_name'),
-        writer_major=F('comment_writer__user_major__major_name')
-    ).values(
-        'comment_id', 'writer_name', 'writer_major', 'comment_writer', 'comment_cont', 'comment_created',
-        'comment_cont_ref'
-    )
+        writer_major=F('comment_writer__user_major__major_name')) \
+        .prefetch_related("comment_set")
 
-    return JsonResponse(list(comments), safe=False)
+    comment_set_list = [
+        list(
+            comment.comment_set.all() \
+                .annotate(
+                    writer_name=F('comment_writer__user_name'),
+                    writer_major=F('comment_writer__user_major__major_name')) \
+                .values(
+                    'comment_id', 'writer_name', 'writer_major', 'comment_writer',
+                    'comment_cont', 'comment_created', 'comment_cont_ref')
+        )
+        for comment in comments]
 
-    # comments_to_json = serializers.serialize('json', comments)
-    # return HttpResponse(comments_to_json, content_type="applications/json")
+    comments = comments.values('comment_id', 'writer_name', 'writer_major', 'comment_writer',
+                               'comment_cont', 'comment_created', 'comment_cont_ref')
+
+    return JsonResponse({'comment_list': list(comments), 'comment_set_list': comment_set_list}, safe=False)
+
+
+def update(request):
+    print("수정!!")
+    comment = {
+        'comment_id': request.POST.get('comment_id'),
+        'writer_name': request.POST.get('writer_name'),
+        'writer_major': request.POST.get('writer_major'),
+        'comment_writer': request.POST.get('comment_writer'),
+        'comment_cont': request.POST.get('comment_cont'),
+        'comment_created': request.POST.get('comment_created'),
+        'comment_cont_ref': request.POST.get('comment_cont_ref')
+    }
+    print(comment)
+    return JsonResponse({'msg': 'django성공!!'}, safe=False)

@@ -209,3 +209,6 @@ CORS_ORIGIN_WHITELIST = (
     'http://localhost:8080',  # vue.js port 번호를 입력해주시면 됩니다.
     'http://172.30.1.15:8080'
 )
+
+# axios 비동기 통신시 csrf 사용
+CSRF_COOKIE_NAME = "XSRF-TOKEN"

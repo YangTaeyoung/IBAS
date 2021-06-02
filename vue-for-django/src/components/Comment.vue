@@ -36,15 +36,14 @@
 
     <input type="hidden" id="comment_id" :value="comment.comment_id">
 
-    <div :id="'comment_no_' +  comment.comment_id"
-         class="reply-btn-div">
+    <div class="reply-btn-div">
       <button class="btnAdd comment-btn m-r20">
         <i class="fa fa-commenting m-r5"></i>답글쓰기
       </button>
-      <button @click="updateComment(comment.comment_id)" class="comment-btn m-r10">
+      <button @click="updateComment()" class="comment-btn m-r10">
         <i class="fa fa-pencil m-r5"></i>수정
       </button>
-      <button @click="deleteComment(comment.comment_id)" class="comment-btn m-r10">
+      <button @click="deleteComment()" class="comment-btn m-r10">
         <i class="fa fa-trash m-r5"></i>삭제</button>
     </div>
   </div>
@@ -67,23 +66,17 @@ export default {
   },
 
   methods: {  // CRUD 로직이 들어갈 부분
-    updateComment: function (comment_id) {
+    updateComment: function () {
       if (this.isDisabled === false) {
-        console.log('수정했다!' + comment_id);
-      }
-      else {
-        console.log('수정할거야!' + comment_id);
+        this.$emit("updateComment")
       }
       this.isDisabled = !this.isDisabled
     },
 
-    deleteComment: function (comment_id) {
-      console.log(comment_id)
-      // 관련 처리 axios
-      this.$emit("delete")  // 이벤트가 상위 컴포넌트에서 실행된 후에 다음 코드 실행됨.
-      // li 까지 없애야함!!
-      this.$destroy();
-      this.$el.parentNode.removeChild(this.$el);
+    deleteComment: function () {
+      this.$emit("deleteComment")  // 이벤트가 상위 컴포넌트에서 실행된 후에 다음 코드 실행됨.
+      this.$destroy()
+      this.$el.parentNode.removeChild(this.$el)
     },
   },
 
