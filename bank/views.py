@@ -1,4 +1,3 @@
-from django.contrib import messages
 from django.db import transaction
 from django.db.models import Sum, Q
 from django.shortcuts import render, get_object_or_404, reverse, redirect
@@ -8,10 +7,10 @@ from bank.forms import BankForm, FileForm, BankSupportForm
 from date_controller import today
 from file_controller import FileController
 from pagination_handler import get_page_object
-from user_controller import login_required, get_logined_user, writer_only, cfo_only
+from user_controller import login_required, get_logined_user, writer_only, cfo_only, auth_check
 
 
-@login_required
+@auth_check()
 def bank(request):
     # 회계 내역
     bank_list = Bank.objects.filter(bank_apply__bank_apply_no=4).order_by('bank_used').prefetch_related(
@@ -32,13 +31,13 @@ def bank(request):
     balance = total_income - total_outcome
 
     # 페이지네이션 설정
-    item = get_page_object(request, bank_list, 15)  # 페이지네이션 15개씩 보이게 설정
+    bank_list = get_page_object(request, bank_list, 15)  # 페이지네이션 15개씩 보이게 설정
 
     # 폼 객체
     bank_form = BankForm()
     file_form = FileForm()
     context = {
-        "bank_list": item,
+        "bank_list": bank_list,
         "year_list": year_list,
         "balance": balance,
         'bank_form': bank_form,
@@ -90,7 +89,7 @@ def bank_register(request):
                 bank = bank_form.save(bank_cfo=get_logined_user(request))
                 file_form.save(instance=bank)
         else:
-            pass
+            pass  # 오류처리 필요
 
         return redirect(reverse('bank_list'))
 
@@ -98,21 +97,21 @@ def bank_register(request):
         return redirect(reverse("index"))
 
 
-@login_required
+@auth_check()
 def bank_support_board(request):
     bank_list = Bank.objects.filter(~Q(bank_apply__bank_apply_no=4))
 
     # 페이지네이터 설정
-    item = get_page_object(request, bank_list, 15)  # 페이지네이션 15개씩 보이게 설정
+    bank_list = get_page_object(request, bank_list, 15)  # 페이지네이션 15개씩 보이게 설정
 
     context = {
-        "bank_list": item,
+        "bank_list": bank_list,
     }
 
     return render(request, 'bank_support_board.html', context)  # 게시판 목록
 
 
-@login_required
+@auth_check()
 def bank_support_register(request):
     if request.method == "POST":
         bank_support_form = BankSupportForm(request.POST)
@@ -133,7 +132,7 @@ def bank_support_register(request):
         return render(request, 'bank_support_register.html', context)
 
 
-@login_required
+@auth_check()
 def bank_support_detail(request, bank_no):
     bank = get_object_or_404(Bank, pk=bank_no)
     bank_file_list = BankFile.objects.filter(bank_no=bank)

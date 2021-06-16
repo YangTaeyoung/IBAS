@@ -9,7 +9,7 @@ from django.db.models import Q
 from member import session
 from alarm.alarm_controller import create_comment_alarm, create_comment_ref_alarm
 from django.http import HttpResponseRedirect
-from user_controller import login_required, writer_only
+from user_controller import login_required, writer_only, auth_check, superuser_only
 
 
 # 메인페이지 이동 함수
@@ -46,9 +46,9 @@ def activity_list(request):
     # 최신순으로 정렬하고, 1:M 관계로 가져오기 위해 prefetch_related 함수 사용
     board_list = Board.objects.filter(board_type_no__board_type_no=4).order_by('-board_created').prefetch_related(
         "boardfile_set")
-    item = get_page_object(request, board_list, 6)
+    board_list = get_page_object(request, board_list, 6)
 
-    return render(request, 'activity_list.html', {'board_list': item})
+    return render(request, 'activity_list.html', {'board_list': board_list})
 
 
 # 동아리 활동 게시판 상세보기
@@ -81,7 +81,7 @@ def activity_detail(request, board_no):
 # 작성자 : 양태영
 # 마지막 수정 일시 : 2021.05.04 (유동현)
 # 수정내용 : 폼 처리
-@login_required
+@superuser_only
 def activity_register(request):
     # 글쓰기 들어와서 등록 버튼을 누르면 실행이 되는 부분
     if request.method == "POST":
@@ -111,8 +111,7 @@ def activity_register(request):
 # 작성자 : 양태영
 # 마지막 수정 일시 : 2021.05.04 (유동현)
 # 수정내용 : 폼 처리
-@login_required
-@writer_only
+@writer_only()
 def activity_update(request, board_no):
     board = get_object_or_404(Board, pk=board_no)
 
@@ -151,8 +150,7 @@ def activity_update(request, board_no):
 # 작성자 : 양태영
 # 마지막 수정 일시 : 2021.05.04 (유동현)
 # 수정내용 : 트랜젝션 코드 추가
-@login_required
-@writer_only
+@writer_only(superuser=True)
 def activity_delete(request, board_no):
     board = Board.objects.get(pk=board_no)
 
@@ -164,6 +162,7 @@ def activity_delete(request, board_no):
 
 
 # 댓글 달기 코드
+@auth_check()
 def activity_comment_register(request):
     user_stu = User.objects.get(pk=request.session.get('user_stu'))  # 유저 학번 들고오는 것임
     if request.method == "POST":
@@ -195,6 +194,7 @@ def activity_comment_register(request):
 
 
 # 댓글 삭제 코드
+@writer_only(superuser=True)
 def activity_comment_delete(request):
     board_no = request.POST.get("board_no")
     if request.method == "POST":  # 댓글 삭제를 누를 경우
@@ -205,6 +205,7 @@ def activity_comment_delete(request):
 
 
 # 댓글 수정 코드
+@writer_only()
 def activity_comment_update(request):
     if request.method == "POST":  # 정상적으로 파라미터가 넘어왔을 경우
         comment = get_object_or_404(Comment, pk=request.POST.get('comment_id'))  # 가져온 comment_id를 토대로 수정 내역을 적용
@@ -219,6 +220,7 @@ def activity_comment_update(request):
 # 마지막 수정 일시 : 2021.04.15 (유동현)
 # 수정내용
 #   - 단순 코드 정리 history.save 없애도 되서 없앴음.
+@superuser_only
 def history_register(request):  # 연혁 등록
     if request.method == "POST":  # 정상적으로 값이 넘어왔을 경우
         History.objects.create(  # history 객체 생성 후 받은 값을 집어넣음.
@@ -237,6 +239,7 @@ def history_register(request):  # 연혁 등록
 # : 연혁 수정하는 코드
 # 작성자 : 양태영
 # 마지막 수정 일시 :
+@superuser_only
 def history_update(request):  # 연혁 수정
     if request.method == "POST":  # 정상적으로 파라미터가 넘어왔을 경우
         history = History.objects.get(pk=request.POST.get("history_no"))  # 가져온 history_no를 토대로 수정 내역을 적용
@@ -253,6 +256,7 @@ def history_update(request):  # 연혁 수정
 # : 연혁 삭제하는 코드
 # 작성자 : 양태영
 # 마지막 수정 일시 :
+@superuser_only
 def history_delete(request):  # 연혁 삭제
     if request.method == "POST":  # 정상적으로 파라미터가 넘어왔을 경우
         history = History.objects.get(pk=request.POST.get("history_no"))  # 가져온 history_no를 토대로 삭제할 대상을 가져옴

@@ -153,7 +153,7 @@
                                         <!-- 게시글 삭제 버튼 -->
                                         <!-- 관련자만 보이게 처리 -->
 
-                                        {% if logined_user.user_stu == board.board_writer.user_stu or logiend_user.user_role.role_no <= 3 %}
+                                        {% if logined_user.user_stu == board.board_writer.user_stu or logined_user.user_role.role_no <= 3 %}
 
                                             <button class="site-button red radius-xl m-l10"
                                                     onclick="location.href='{% url 'board_delete' board_no=board.board_no %}'">

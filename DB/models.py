@@ -52,7 +52,7 @@ class Bank(models.Model):
     bank_allowed = models.DateTimeField(db_column='BANK_ALLOWED', null=True)
     bank_cfo = models.ForeignKey('User', models.DO_NOTHING, db_column='BANK_CFO', null=True, related_name="cfo")
     bank_used_user = models.ForeignKey('User', models.DO_NOTHING, blank=True, db_column='BANK_USED_USER',
-                                       related_name="used_user")
+                                       related_name="used_user", null=True)
     bank_apply = models.ForeignKey('BankApplyInfo', models.DO_NOTHING, db_column='BANK_APPLY')
     bank_reason = models.CharField(db_column='BANK_REASON', max_length=300, blank=True, null=True)
     bank_reject_reason = models.CharField(db_column='BANK_REJECT_REASON', max_length=200, blank=True, null=True)
