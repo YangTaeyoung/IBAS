@@ -54,18 +54,18 @@
                         <table class="table table-hover">
                             <!-- 테이블의 제목(1행) -->
                             <thead>
-                            <tr>
-                                <th scope="col" style="text-align: center">no.</th>
+                            <tr id="staff-del-list-head">
+                                <th scope="col" style="width: 100px; text-align: center">no.</th>
                                 <th scope="col" style="width: 500px; text-align: center">제목</th>
-                                <th scope="col" style="text-align: center">작성자</th>
+                                <th scope="col" style="width: 150px; text-align: center">작성자</th>
                                 <th scope="col" style="text-align: center">작성일</th>
-                                <th scope="col" style="text-align: center">상태</th>
+                                <th scope="col" style="width: 150px; text-align: center">상태</th>
                             </tr>
                             </thead>
                             <!-- 끌고오는 게시글 파트 -->
                             <tbody>
                             <!-- 게시글 1 -->
-                            <tr id="staff-tr-1">
+                            <tr class="staff-del-list-tr">
                                 <!-- 게시글 번호 -->
                                 <th scope="row" style="text-align: center">1</th>
                                 <!-- 게시글 제목 -->
@@ -75,75 +75,9 @@
                                 <!-- 게시글 작성일자 -->
                                 <td style="text-align: center">2021-03-01</td>
                                 <!-- 상태 : 진행중 -->
-                                <td id="staff-td-1" class="staff-ing">진행중</td>
+                                <!-- 진행중은 staff-ing를 적용시켜야 함.  -->
+                                <td class="staff-ing staff-progress">진행중</td>
                             </tr>
-                            <!-- 게시글 2 -->
-                            <tr id="staff-tr-2">
-                                <!-- 게시글 번호 -->
-                                <th scope="row" style="text-align: center">2</th>
-                                <!-- 게시글 제목 -->
-                                <td><a href="#">김아무개 제명 건에 관하여</a></td>
-                                <!-- 게시글 작성자 -->
-                                <td style="text-align: center">김채림</td>
-                                <!-- 게시글 작성일자 -->
-                                <td style="text-align: center">2021-03-01</td>
-                                <!-- 상태 : 진행중 -->
-                                <td id="staff-td-2" class="staff-ing">진행중</td>
-                            </tr>
-                            <!-- 게시글 3 -->
-                            <tr id="staff-tr-3">
-                                <!-- 게시글 번호 -->
-                                <th scope="row" style="text-align: center">3</th>
-                                <!-- 게시글 제목 -->
-                                <td><a href="#">김아무개 제명 건에 관하여</a></td>
-                                <!-- 게시글 작성자 -->
-                                <td style="text-align: center">김채림</td>
-                                <!-- 게시글 작성일자 -->
-                                <td style="text-align: center">2021-03-01</td>
-                                <!-- 상태 : 진행중 -->
-                                <td id="staff-td-3" class="staff-ing">진행중</td>
-                            </tr>
-                            <!-- 게시글 4 -->
-                            <tr id="staff-tr-4">
-                                <!-- 게시글 번호 -->
-                                <th scope="row" style="text-align: center">4</th>
-                                <!-- 게시글 제목 -->
-                                <td><a href="#">김아무개 제명 건에 관하여</a></td>
-                                <!-- 게시글 작성자 -->
-                                <td style="text-align: center">김채림</td>
-                                <!-- 게시글 작성일자 -->
-                                <td style="text-align: center">2021-03-01</td>
-                                <!-- 상태 : 승인완료 -->
-                                <td id="staff-td-4" class="staff-fin">완료</td>
-                            </tr>
-                            <!-- 게시글 5 -->
-                            <tr id="staff-tr-5">
-                                <!-- 게시글 번호 -->
-                                <th scope="row" style="text-align: center">5</th>
-                                <!-- 게시글 제목 -->
-                                <td><a href="#">김아무개 제명 건에 관하여</a></td>
-                                <!-- 게시글 작성자 -->
-                                <td style="text-align: center">김채림</td>
-                                <!-- 게시글 작성일자 -->
-                                <td style="text-align: center">2021-03-01</td>
-                                <!-- 상태 : 승인완료 -->
-                                <td id="staff-td-5" class="staff-fin">완료</td>
-                            </tr>
-                            <!-- 게시글 6 -->
-                            <tr id="staff-tr-6">
-                                <!-- 게시글 번호 -->
-                                <th scope="row" style="text-align: center">6</th>
-                                <!-- 게시글 제목 -->
-                                <td><a href="#">김아무개 제명 건에 관하여</a></td>
-                                <!-- 게시글 작성자 -->
-                                <td style="text-align: center">김채림</td>
-                                <!-- 게시글 작성일자 -->
-                                <td style="text-align: center">2021-03-01</td>
-                                <!-- 상태 : 승인완료 -->
-                                <td id="staff-td-6" class="staff-fin">완료</td>
-                            </tr>
-
-
                             </tbody>
                         </table>
 
