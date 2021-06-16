@@ -580,3 +580,7 @@ input[type=checkbox] + label:after {
 .lectRoom_padding_6_0 {
     padding: 6px 0;
 }
+
+.mt-7 {
+    margin-top: 7px;
+}
