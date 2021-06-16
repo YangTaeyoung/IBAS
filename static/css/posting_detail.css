@@ -19,3 +19,10 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+/*회원 제명 상세에서 제명 명단의 학과 학번 부분*/
+.staff-mem-major {
+    list-style: none;
+    margin-left: 22px;
+    font-size: 9pt;
+}
