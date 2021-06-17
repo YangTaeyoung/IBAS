@@ -10,7 +10,7 @@ class UserDeleteForm(forms.ModelForm):
 
         widgets = {
             "user_delete_title": forms.TextInput(attrs={"placeholder": "제목을 입력하세요"}),
-            "user_delete_content": forms.Textarea(attrs={"placeholder": "내용을 입력하세요"}),
+            "user_delete_content": forms.Textarea(),
             "deleted_user": forms.HiddenInput(),
         }
 

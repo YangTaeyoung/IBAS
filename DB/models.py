@@ -479,11 +479,11 @@ class UserAuth(models.Model):
 
 
 class UserDelete(models.Model):
-    user_delete_no = models.AutoField(db_column="USER_DELETE_NO", primary_key=True),
-    user_delete_title = models.CharField(db_column="USER_DELETE_TITLE", max_length=100),
-    user_delete_content = models.CharField(db_column="USER_DELETE_CONTENT", max_length=5000),
-    user_delete_created = models.DateTimeField(db_column="USER_DELETE_CREATED", auto_now_add=True),
-    deleted_user = models.ForeignKey(User, on_delete=models.CASCADE, db_column='DELETED_USER', related_name="DELETED_USER"),
+    user_delete_no = models.AutoField(db_column="USER_DELETE_NO", primary_key=True)
+    user_delete_title = models.CharField(db_column="USER_DELETE_TITLE", max_length=100)
+    user_delete_content = models.CharField(db_column="USER_DELETE_CONTENT", max_length=5000)
+    user_delete_created = models.DateTimeField(db_column="USER_DELETE_CREATED", auto_now_add=True)
+    deleted_user = models.ForeignKey(User, on_delete=models.CASCADE, db_column='DELETED_USER', related_name="DELETED_USER")
     suggest_user = models.ForeignKey(User, models.DO_NOTHING, db_column='SUGGEST_USER', related_name="SUGGEST_USER")
 
     class Meta:

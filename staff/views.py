@@ -1,6 +1,8 @@
 from django.shortcuts import render, reverse, redirect
-from DB.models import User, UserRole, UserAuth, Answer, UserUpdateRequest # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
+from DB.models import User, UserRole, UserAuth, Answer, UserUpdateRequest, \
+    UserDelete  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
 from staff.forms import UserDeleteForm
+from pagination_handler import get_page_object
 from IBAS.forms import FileFormBase
 import os
 from user_controller import superuser_only
@@ -188,7 +190,11 @@ def members_aor(request):  # 여러명 일괄 처리시.
 
 @superuser_only(cfo_included=True)
 def member_delete_list(request):
-    return render(request, "member_delete_list.html", {})
+    user_delete_list = get_page_object(request, UserDelete.objects.all())
+    context = {
+        "user_delete_list": user_delete_list,
+    }
+    return render(request, "member_delete_list.html", context)
 
 
 @superuser_only(cfo_included=True)
@@ -202,7 +208,6 @@ def member_delete_register(request):
                 "user_delete_form": UserDeleteForm(initial={"deleted_user": deleted_user}),
                 "user_delete_file_form": FileFormBase()
             }
-
             return render(request, "member_delete_register.html", context)
         else:
             user_delete_form = UserDeleteForm(request.POST)
@@ -215,7 +220,7 @@ def member_delete_register(request):
         return redirect(reverse("index"))
 
 
-def member_delete_detail(request):
+def member_delete_detail(request, user_delete_no):
     context = {}
     return render(request, 'member_delete_detail.html', context)
 
