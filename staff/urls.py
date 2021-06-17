@@ -10,11 +10,10 @@ urlpatterns = [
     path("member/update/", views.staff_member_update, name="staff_member_update"), # 이거 뭐죠 백앤드가 작업 하지 않은 거면 삭제해야함
     path('member/delete/list/', views.member_delete_list, name='member_delete_list'),
     path('member/delete/detail/', views.member_delete_detail, name='member_delete_detail'),
+    path('member/delete/update/', views.member_delete_update, name="member_delete_update"),
     path('member/delete/register/', views.member_delete_register, name='member_delete_register'),
     path('member/applications/', views.member_applications, name='member_applications'),
     path('member/aor/', views.member_aor, name="member_aor"),
     path('members/aor/', views.members_aor, name="members_aor")
-
-
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

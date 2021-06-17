@@ -107,7 +107,7 @@ def writer_only(superuser=False):
             else:
                 if is_writer(request, **kwargs):
                     return func(request, *args, **kwargs)
-            
+
             return redirect(reverse("index"))
 
         return wrapper
@@ -116,18 +116,27 @@ def writer_only(superuser=False):
 
 
 # 데코레이터
+# 수정자:양태영
+# 수정일시: 6월 16일
+# 수정내용: 총무 권한을 추가할지 추가하지 않을지 결정하는 함수. True일 경우 총무여도 권한 허용.
 # 관리자 권한이 있는지 확인하는 함수
-def superuser_only(func):
-    @login_required
-    @functools.wraps(func)
-    def wrapper(request, *args, **kwargs):
-        current_user = get_logined_user(request)
-        if current_user.user_role.role_no <= 3:
-            return func(request, *args, **kwargs)
-        else:
-            return redirect(reverse("index"))
+def superuser_only(cfo_included=False):
+    def decorator(func):
+        @login_required
+        @functools.wraps(func)
+        def wrapper(request, *args, **kwargs):
+            current_user = get_logined_user(request)
+            flag = 3
+            if cfo_included:
+                flag = 4
+            if current_user.user_role.role_no <= flag:
+                return func(request, *args, **kwargs)
+            else:
+                return redirect(reverse("index"))
 
-    return wrapper
+        return wrapper
+
+    return decorator
 
 
 # 데코레이터

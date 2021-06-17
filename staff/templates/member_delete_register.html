@@ -3,19 +3,19 @@
 {% block content %}
     <script src="{% static 'js/posting_register.js' %}"></script>
     <link rel="stylesheet" href="{% static 'css/posting_register.css' %}"/>
-        <link rel="stylesheet" type="text/css" href="{% static 'css/star-rating-svg.css' %}"/>
-        <link
-                rel="stylesheet"
-                type="text/css"
-                href="{% static 'plugins/editor/jquery-te-1.4.0.css' %}"
-        />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/star-rating-svg.css' %}"/>
+    <link
+            rel="stylesheet"
+            type="text/css"
+            href="{% static 'plugins/editor/jquery-te-1.4.0.css' %}"
+    />
 
-        <link
-                rel="stylesheet"
-                type="text/css"
-                href="{% static 'plugins/drop/imageuploadify.min.css' %}"
-        />
-        <link rel="stylesheet" href="{% static 'plugins/tag-editor/jquery.tag-editor.css' %}"/>
+    <link
+            rel="stylesheet"
+            type="text/css"
+            href="{% static 'plugins/drop/imageuploadify.min.css' %}"
+    />
+    <link rel="stylesheet" href="{% static 'plugins/tag-editor/jquery.tag-editor.css' %}"/>
 
     <body>
     <div class="page-wraper">
@@ -37,10 +37,8 @@
                 </a>
             </div>
             <!--===============================================입력란=========================================================-->
-
+            {% load widget_tweaks %}
             <form action="
-
-
                     {% if board is None %}{% url 'activity_register' %}{% else %}{% url 'activity_update' %}{% endif %}"
                   class="add-listing-form" method="POST" enctype="multipart/form-data">
 
@@ -59,16 +57,15 @@
                                     <div class="content-body">
                                         <!--제목 입력란-->
                                         <div class="form-group">
-                                            <input type="text" name="board_title" value="{{ board.board_title }}"
-                                                   class="form-control" placeholder="제목을 입력하세요"
-                                                   style="font-size: 25px; height: 70px;">
-                                            <br/>
+
+                                            {% render_field user_delete_form.user_delete_title class="form-control" style="font-size: 25px; height: 70px;"%}
                                             <!--이미지, 파일 업로드란-->
                                             <div class="form-group">
                                                 <input type="file" name="board_file"
                                                        accept=".xlsx,.xls,image/*,.doc,.docx,video/*,.ppt,.pptx,.txt,.pdf,.py,.java"
                                                        multiple>
                                             </div>
+                                            {{ user_delete_file_form.upload_file }}
                                         </div>
                                         <!-- 이미 존재하고 있던 이미지: 삭제 가능 (수정모드)-->
                                         {% if board is not None %}

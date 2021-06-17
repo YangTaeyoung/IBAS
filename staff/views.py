@@ -1,8 +1,9 @@
-from django.shortcuts import render, get_object_or_404, reverse, redirect
-from allauth.socialaccount.models import SocialAccount  # 소셜 계정 DB, socialaccount_socialaccount 테이블을 사용하기 위함.
-from DB.models import AuthUser, User, ChiefCarrier, UserRole, Board, BoardFile, \
-    BoardType, Comment, History, UserAuth, QuestForm, Answer, UserUpdateRequest  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
+from django.shortcuts import render, reverse, redirect
+from DB.models import User, UserRole, UserAuth, Answer, UserUpdateRequest # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
+from staff.forms import UserDeleteForm
+from IBAS.forms import FileFormBase
 import os
+from user_controller import superuser_only
 from django.db.models import Q
 from django.core.mail import send_mail
 from django.conf import settings
@@ -10,13 +11,14 @@ from pagination_handler import get_paginator_list
 from alarm.alarm_controller import create_user_auth_update_alarm, create_user_role_update_alarm
 from user_controller import get_logined_user
 
+
 # Create your views here.
 
 def staff_member_list(request):
     user = get_logined_user(request)
     if user.user_role.role_no <= 4:  # 회원에 대한 관리는 회장단만
         new_user_list = User.objects.filter(user_auth__auth_no=3)  # 신입 부원 리스트
-        if user.user_role.role_no == 4: # 총무일 경우
+        if user.user_role.role_no == 4:  # 총무일 경우
             exist_user_list = User.objects.filter(~Q(user_auth__auth_no=3) & Q(user_role__role_no=6))
         else:
             exist_user_list = User.objects.filter(~Q(user_auth__auth_no=3) & ~Q(user_role__role_no=1))  # 기존 회원 리스트
@@ -41,6 +43,7 @@ def staff_member_list(request):
             "role_list": role_list,
             "user_update_request_list": user_update_request_items
         }
+
         return render(request, "member_manage.html", context)  # 유저 리스트 페이지를 랜더링
     else:  # 그 외의 권한을 가진 자가 접근할 경우 (해킹 시도)
         return redirect(reverse("index"))  # 메인페이지로 보냄
@@ -65,7 +68,7 @@ def staff_member_update(request):
                 int(user_role) == 2 and len(user_stu_list) == 1):  # 회장 위임의 조건을 충족한 경우. (한명만 골랐을 때)
             # 기존 회장, 부회장 권한 수정 -> 일반회원
             user = User.objects.filter(user_role__role_no=user_role).first()
-            user.user_role = UserRole.objects.get(pk=6) # 바꾸고자 하는 사람은 일반 회원으로 역할 변경됨.
+            user.user_role = UserRole.objects.get(pk=6)  # 바꾸고자 하는 사람은 일반 회원으로 역할 변경됨.
             user.save()
             create_user_role_update_alarm(user)
             # 새로운 회장 부회장.
@@ -91,11 +94,6 @@ def staff_member_update(request):
         return redirect(reverse("staff_member_list"))
     else:  # GET으로 넘어온 경우 비정상적인 접근.
         return redirect(reverse("index"))
-
-
-def member_delete_list(request):
-    context = {}
-    return render(request, 'member_delete_list.html', context)
 
 
 def member_applications(request):
@@ -188,10 +186,40 @@ def members_aor(request):  # 여러명 일괄 처리시.
     return redirect(reverse("index"))  # 비정상적인 요청의 경우.
 
 
+@superuser_only(cfo_included=True)
+def member_delete_list(request):
+    return render(request, "member_delete_list.html", {})
+
+
+@superuser_only(cfo_included=True)
 def member_delete_register(request):
-    context = {}
-    return render(request, 'member_delete_register.html', context)
+    if request.method == "POST":
+        is_register = bool(int(request.POST.get("is_register")))
+        deleted_user = request.POST.get("deleted_user")
+        if is_register:
+            context = {
+                "is_update": False,
+                "user_delete_form": UserDeleteForm(initial={"deleted_user": deleted_user}),
+                "user_delete_file_form": FileFormBase()
+            }
+
+            return render(request, "member_delete_register.html", context)
+        else:
+            user_delete_form = UserDeleteForm(request.POST)
+            user_delete_file_form = FileFormBase(request.POST, request.FILES)
+            if user_delete_file_form.is_valid() and user_delete_form.is_valid():
+                user_delete = user_delete_form.save(suggest_user=get_logined_user(request))
+                user_delete_file_form.save(instance=user_delete)
+            return redirect("member_delete_list")
+    else:
+        return redirect(reverse("index"))
+
 
 def member_delete_detail(request):
     context = {}
     return render(request, 'member_delete_detail.html', context)
+
+
+def member_delete_update(request):
+    context = {}
+    return render(request, "member_delete_register.html", context)

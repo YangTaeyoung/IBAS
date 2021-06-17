@@ -212,7 +212,7 @@ class ContestComment(models.Model):
 
 
 def contest_file_upload_to(instance, filename):
-        return f'board/contest/{instance.contest_no.contest_no}/{filename}'
+    return f'board/contest/{instance.contest_no.contest_no}/{filename}'
 
 
 class ContestFile(File):
@@ -259,7 +259,8 @@ class Lect(models.Model):
                                    default=1, null=True, blank=True)  # Field name made lowercase.
     lect_curri = models.TextField(db_column='LECT_CURRI')  # Field name made lowercase.
     lect_limit_num = models.IntegerField(db_column='LECT_LIMIT_NUM')  # Field name made lowercase.
-    lect_place_or_link = models.CharField(db_column='LECT_PLACE_OR_LINK', max_length=1000, null=True, blank=True)  # Field name made lowercase.
+    lect_place_or_link = models.CharField(db_column='LECT_PLACE_OR_LINK', max_length=1000, null=True,
+                                          blank=True)  # Field name made lowercase.
     lect_method = models.ForeignKey('MethodInfo', models.DO_NOTHING, db_column='LECT_METHOD',
                                     choices=METHOD_CHOICES, null=True, blank=True)  # Field name made lowercase.
     lect_deadline = models.DateTimeField(db_column='LECT_DEADLINE')  # Field name made lowercase.
@@ -477,15 +478,52 @@ class UserAuth(models.Model):
         db_table = 'USER_AUTH'
 
 
+class UserDelete(models.Model):
+    user_delete_no = models.AutoField(db_column="USER_DELETE_NO", primary_key=True),
+    user_delete_title = models.CharField(db_column="USER_DELETE_TITLE", max_length=100),
+    user_delete_content = models.CharField(db_column="USER_DELETE_CONTENT", max_length=5000),
+    user_delete_created = models.DateTimeField(db_column="USER_DELETE_CREATED", auto_now_add=True),
+    deleted_user = models.ForeignKey(User, on_delete=models.CASCADE, db_column='DELETED_USER', related_name="DELETED_USER"),
+    suggest_user = models.ForeignKey(User, models.DO_NOTHING, db_column='SUGGEST_USER', related_name="SUGGEST_USER")
+
+    class Meta:
+        managed = False
+        db_table = 'USER_DELETE'
+
+    @property
+    def get_file_path(self):
+        return os.path.join(MEDIA_ROOT, 'member', 'delete', str(self.user_delete_no))
+
+
+# 제명 증거자료 올라가는 경로
+def user_delete_upload_to(instance, filename):
+    return f'staff/user/delete/{instance.user_delete_no}/{filename}'
+
+
 class UserDeleteFile(models.Model):
-    user_delete_id = models.AutoField(db_column='USER_DELETE_ID', primary_key=True)  # Field name made lowercase.
-    user_stu = models.ForeignKey(User, on_delete=models.CASCADE, db_column='USER_STU')  # Field name made lowercase.
-    user_delete_file_path = models.CharField(db_column='USER_DELETE_FILE_PATH',
-                                             max_length=1000)  # Field name made lowercase.
+    user_delete_fild_id = models.AutoField(db_column='USER_DELETE_FILE_ID',
+                                           primary_key=True)  # Field name made lowercase.
+    user_delete_no = models.ForeignKey(UserDelete, db_column="USER_DELETE_NO", on_delete=models.DO_NOTHING)
+    user_delete_file_name = models.CharField(db_column='USER_DELETE_FILE_NAME'),
+    user_delete_file_path = models.FileField(db_column='USER_DELETE_FILE_PATH',
+                                             max_length=1000,
+                                             upload_to=user_delete_upload_to)  # Field name made lowercase.
 
     class Meta:
         managed = False
         db_table = 'USER_DELETE_FILE'
+
+
+class UserDeleteAor(models.Model):
+    aor_no = models.AutoField(db_column="AOR_NO", primary_key=True),
+    aor_user = models.ForeignKey(User, db_column="AOR_USER", on_delete=models.CASCADE)
+    user_delete_no = models.ForeignKey(UserDelete, db_column="USER_DELETE_NO", on_delete=models.CASCADE),
+    aor_created = models.DateTimeField(db_column="AOR_CREATED", auto_now=True)
+    aor = models.IntegerField(db_column="AOR")
+
+    class Meta:
+        managed = False
+        db_table = "USER_DELETE_AOR"
 
 
 class UserEmail(models.Model):

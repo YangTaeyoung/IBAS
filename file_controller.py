@@ -1,5 +1,5 @@
 import shutil
-from DB.models import Board, BoardFile, ContestBoard, ContestFile, Lect, Bank, BankFile
+from DB.models import Board, BoardFile, ContestBoard, ContestFile, Lect, Bank, BankFile,UserDelete,UserDeleteFile
 import os
 from IBAS.settings import MEDIA_ROOT
 from django.conf import settings
@@ -154,4 +154,12 @@ class FileController:
                     bank_no=Bank.objects.get(pk=instance.bank_no),
                     file_path=file,
                     file_name=file.name.replace(' ', '_')
+                )
+
+        elif isinstance(instance, UserDelete):
+            for file in files_to_upload:
+                UserDeleteFile.objects.create(
+                    user_delete_no=UserDelete.objects.get(pk=instance.user_delete_no),
+                    user_delete_file_path=file,
+                    user_delete_file_name=file.name.replace(' ', '_')
                 )
