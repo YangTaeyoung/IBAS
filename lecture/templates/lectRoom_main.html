@@ -18,7 +18,7 @@
                             <h1 class="text-white introduce-letter-spacing_5">파이썬 기초 강의</h1>
                             <!--부제목-->
                             <!-- DB에서 제목 꺼내와야 함 (강의 간단소개 db 가져오면 됨) -->
-                            <p class="introduce-margin-top_20">파이썬을 처음 접하는 분들을 위한 강의입니다.</p>
+                            <p class="m-t20">파이썬을 처음 접하는 분들을 위한 강의입니다.</p>
                         </div>
                     </div>
                 </a>
@@ -69,7 +69,7 @@
                                                 <!-- 강의자만 보이는 메뉴: 출석 및 과제 관리, 수강생 관리, 제출된 과제 리스트 -->
                                                 <li><a href="javascript:void(0);">출석 및 과제 관리</a>&nbsp;</li>
                                                 <li><a href="javascript:void(0);">수강생 관리</a>&nbsp;</li>
-                                                <li><a href="javascript:void(0);">제출된 과제 리스트</a>&nbsp;</li>
+                                                <li><a href="javascript:void(0);">제출한 과제 리스트</a>&nbsp;</li>
                                             </ul>
                                         </div>
                                     </div>
@@ -136,6 +136,7 @@
                                                     </tr>
                                                     </tbody>
                                                 </table>
+
                                             </div>
                                         </div>
                                         <!-- 강의룸 내 강의 페이지 글을 담는 박스 -->
@@ -213,8 +214,8 @@
                                                         <th class="border-top-0" scope="col">번호</th>
                                                         <th class="border-top-0" style="width: 400px" scope="col">제목
                                                         </th>
-                                                        <th class="border-top-0" scope="col">과제 마감일</th>
                                                         <th class="border-top-0 text-xl-center" scope="col">제출</th>
+                                                        <th class="border-top-0" scope="col">과제 마감일</th>
                                                     </tr>
                                                     </thead>
                                                     <!-- 테이블 2행 ~: 과제 페이지 내 최근 3개 게시글 불러옴 -->
@@ -224,35 +225,35 @@
                                                         <td>1</td>
                                                         <!-- 게시글 제목: a태그 클릭하면, 해당 게시글로 이동 -->
                                                         <td><a href="#">파이썬으로 거북이 소환</a></td>
-                                                        <!-- 과제 마감일 -->
-                                                        <td>2021-05-20</td>
                                                         <!-- 수강생: 과제 제출 여부 (제출/미제출) 보임 -->
                                                         <!-- 과제 제출 전이라면, 과제 안내 페이지로 넘어갈 수 있도록 처리필요 -->
                                                         <!-- 강의자: 과제를 제출한 사람수 보임 -->
                                                         <td class="text-xl-center text-red">미제출</td>
+                                                        <!-- 과제 마감일 -->
+                                                        <td>2021-05-20</td>
                                                     </tr>
                                                     <tr>
                                                         <!-- 게시글 번호 (고정됨) -->
                                                         <td>2</td>
                                                         <!-- 게시글 제목: a태그 클릭하면, 해당 게시글로 이동 -->
                                                         <td><a href="#">파이썬 설치</a></td>
-                                                        <!-- 과제 마감일 -->
-                                                        <td>2021-04-30</td>
                                                         <!-- 수강생: 과제 제출 여부 (제출/미제출) 보임 -->
                                                         <!-- 만약 과제를 제출했다면, 제출한 과제물을 볼 수 있는 페이지로 넘어가게끔 처리필요 -->
                                                         <!-- 강의자: 과제를 제출한 사람수 보임 -->
                                                         <td class="text-xl-center text-green">제출</td>
+                                                        <!-- 과제 마감일 -->
+                                                        <td>2021-04-30</td>
                                                     </tr>
                                                     <tr>
                                                         <!-- 게시글 번호 (고정됨) -->
                                                         <td>3</td>
                                                         <!-- 게시글 제목: a태그 클릭하면, 해당 게시글로 이동 -->
                                                         <td><a href="#">파이썬 삼행시</a></td>
-                                                        <!-- 과제 마감일 -->
-                                                        <td>2021-03-20</td>
                                                         <!-- 수강생: 과제 제출 여부 (제출/미제출) 보임 -->
                                                         <!-- 강의자: 과제를 제출한 사람수 보임 -->
                                                         <td class="text-xl-center">10명</td>
+                                                        <!-- 과제 마감일 -->
+                                                        <td>2021-03-20</td>
                                                     </tr>
                                                     </tbody>
                                                 </table>

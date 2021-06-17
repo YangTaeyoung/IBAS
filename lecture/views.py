@@ -61,5 +61,8 @@ def lect_view(request, type_no):  # 게시판 페이지로 이동
     }
     return render(request, 'lecture_list.html', context)
 
-def lectRoom_main(request):  # 강의룸 페이지로 이동
-    return render(request, 'lectRoom_main.html', {})
+def lectroom_main(request):  # 강의룸 페이지로 이동
+    return render(request, 'lectroom_main.html', {})
+
+def lectroom_list(request):  # 강의룸 내 공지사항, 강의, 과제, 제출된 과제 리스트 페이지로 이동
+    return render(request, 'lectroom_list.html', {})
