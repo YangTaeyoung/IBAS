@@ -1,17 +1,18 @@
-from django.shortcuts import render, reverse, redirect
+from django.shortcuts import render, reverse, redirect, get_object_or_404
 from DB.models import User, UserRole, UserAuth, Answer, UserUpdateRequest, \
-    UserDelete  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
+    UserDelete, UserDeleteAor, UserDeleteFile  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
 from staff.forms import UserDeleteForm
 from pagination_handler import get_page_object
 from IBAS.forms import FileFormBase
 import os
-from user_controller import superuser_only
-from django.db.models import Q
+from user_controller import superuser_only, writer_only
+from django.db.models import Q, Count, Aggregate
 from django.core.mail import send_mail
 from django.conf import settings
 from pagination_handler import get_paginator_list
 from alarm.alarm_controller import create_user_auth_update_alarm, create_user_role_update_alarm
 from user_controller import get_logined_user
+from file_controller import FileController
 
 
 # Create your views here.
@@ -221,10 +222,48 @@ def member_delete_register(request):
 
 
 def member_delete_detail(request, user_delete_no):
-    context = {}
+    user_delete = UserDelete.objects.get(pk=user_delete_no)
+    user_delete_aor_apply = UserDeleteAor.objects.filter(Q(user_delete_no=user_delete) & Q(aor=1))
+    user_delete_aor_reject = UserDeleteAor.objects.filter(Q(user_delete_no=user_delete) & Q(aor=0))
+    total_chief_num = len(User.objects.filter(Q(user_role__role_no__lte=4) & Q(user_auth__auth_no=1)))
+    file_list, img_list, doc_list = FileController.get_images_and_files_of_(user_delete)
+    context = {
+        "is_writer": get_logined_user(request) == user_delete.suggest_user,
+        "doc_list": doc_list,
+        "img_list": img_list,
+        "user_delete": user_delete,
+        "user_delete_aor_apply": user_delete_aor_apply,
+        "user_delete_aor_reject": user_delete_aor_reject,
+        "total_chief_num": total_chief_num
+    }
+    if len(user_delete_aor_apply) + len(user_delete_aor_reject) != 0:
+        apply_ratio = (len(user_delete_aor_apply)//(len(user_delete_aor_reject) + len(user_delete_aor_apply))) * 100
+        reject_ratio = 100 - apply_ratio
+        context.update(apply_ratio=apply_ratio, reject_ratio=reject_ratio)
     return render(request, 'member_delete_detail.html', context)
 
 
-def member_delete_update(request):
+# 일반 게시글과 다르기 때문에 관리자가 임의로 삭제할 수 없음.
+@writer_only(superuser=False)
+def member_delete_delete(request):
+    if request.method == "POST":
+        user_delete = get_object_or_404(UserDelete, pk=request.POST.get('user_delete_no'))
+        FileController.delete_all_files_of_(user_delete)
+        user_delete.delete()
+        return redirect(reverse("member_delete_list"))
+    else:
+        return redirect(reverse("member_delete_list"))
+
+
+@writer_only(superuser=False)
+def member_delete_update(request, user_delete_no):
+    if request.method == "GET":
+        context = {
+            "user_delete_form": UserDeleteForm(instance=UserDelete.objects.get(pk=user_delete_no)),
+            "user_delete_file_form": FileFormBase(),
+            "user_delete_file_list": UserDeleteFile.objects.filter(
+                user_delete_no=UserDelete.objects.get(pk=user_delete_no)),
+            "is_update": True
+        }
     context = {}
     return render(request, "member_delete_register.html", context)

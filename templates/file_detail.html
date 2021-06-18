@@ -1,0 +1,74 @@
+<!-- 첨부된 파일 불러오는 곳 -->
+<!-- download 쪽에 파일 경로 설정 -->
+<!-- 파일 리스트 길이가 0이 아닐 경우에만 파일 리스트를 출력하게 함. -->
+{% if doc_list %}
+    <div class="download-box">
+        {% for doc in doc_list %}
+            <!-- 첨부파일 -->
+             <i class="fa fa-download m-r15 "></i>
+            <a class="line2" download href="/media/{{ doc.file_path }}">
+                {{ doc.file_name }}
+            </a>
+            <!-- 파일 간 구분선 마지막 파일은 구분선을 출력하지 않도록 설정.-->
+            {% if forloop.revcounter0 != 0 %}
+                <div class="dlab-divider tb10 bg-gray-dark"></div>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endif %}
+<!-- 게시글 속 사진 모음 -->
+<div class="widget widget_gallery gallery-grid-4 lightgallery">
+    <ul>
+        {% for img in img_list %}
+            {% if forloop.counter < 4 %}
+                <li>
+                    <span data-exthumbimage="/media/{{ img.file_path }}"
+                          data-src="/media/{{ img.file_path }}"
+                          class="check-km "
+                          title="{{ img.file_name }}">
+                        <a href="javascript:void(0);">
+                            <div class="dlab-post-thum act-detail-img-size">
+                                <img style="height: 190px" src="/media/{{ img.file_path }}" alt=""/>
+                            </div>
+                        </a>
+                    </span>
+                </li>
+            {% elif forloop.counter == 4 %}
+                <li>
+                    <span data-exthumbimage="/media/{{ img.file_path }}"
+                          data-src="/media/{{ img.file_path }}"
+                          class="check-km act-detail-img-siz"
+                          title="{{ img.file_name }}">
+                        <a href="javascript:void(0);">
+                            <div class="dlab-post-thum ">
+                                <img style="height: 190px" src="/media/{{ img.file_path }}" alt=""/>
+                            </div>
+                            {% if forloop.revcounter0 > 0 %}
+                                <!-- 사용자가 업로드한 사진이 딱 4개인 경우 남은 이미지 개수를 출력하지 않음.-->
+                                <div class="more-images">
+                                    <div>
+                                        <strong>{{ forloop.revcounter0 }}</strong>
+                                        <span>More Images</span>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </a>
+                    </span>
+                </li>
+            {% else %}
+                <li style="display: none;">
+                    <span data-exthumbimage="/media/{{ img.file_path }}"
+                          data-src="/media/{{ img.file_path }}"
+                          class="check-km "
+                          title="{{ img.file_name }}">
+                        <a href="javascript:void(0);">
+                            <div class="dlab-post-thum act-detail-img-size">
+                                <img style="height: 190px" src="/media/{{ img.file_path }}" alt=""/>
+                            </div>
+                        </a>
+                    </span>
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+</div>

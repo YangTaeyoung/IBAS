@@ -60,6 +60,8 @@ INSTALLED_APPS = [
     'lecture',
     # widget_tweaks
     'widget_tweaks',
+    # 템플릿에서 산술연산을 하기 위한 앱
+    'mathfilters',
     # 소셜 로그인 패키지: allauth 관련
     'allauth',
     'allauth.account',

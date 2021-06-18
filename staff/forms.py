@@ -17,5 +17,5 @@ class UserDeleteForm(forms.ModelForm):
     def save(self, **kwargs):
         user_delete = super().save(commit=False)
         user_delete.suggest_user = kwargs.get("suggest_user")
-        user_delete = user_delete.save()
+        user_delete.save()
         return user_delete

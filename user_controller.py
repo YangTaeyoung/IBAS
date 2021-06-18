@@ -1,6 +1,6 @@
 import functools
 from django.shortcuts import redirect, reverse
-from DB.models import User, ContestBoard, Board, Bank, Lect, LectBoard
+from DB.models import User, ContestBoard, Board, Bank, Lect, LectBoard, UserDelete
 
 
 # 로그인 했는지 여부를 반환하는 함수
@@ -21,6 +21,8 @@ def is_writer(request, **kwargs):
     contest_no = kwargs.get('contest_no')
     bank_no = kwargs.get('bank_no')
     lect_no = kwargs.get('lect_no')
+    user_delete_no = kwargs.get('user_delete_no')
+
     # comment_no = kwargs.get('comment_no')
 
     # 글쓴이인가요
@@ -39,6 +41,10 @@ def is_writer(request, **kwargs):
     elif bank_no is not None:
         bank = Bank.objects.get(pk=bank_no)
         if current_user == bank.bank_used_user:
+            return True
+    elif user_delete_no is not None:
+        user_delete = UserDelete.objects.get(pk=user_delete_no)
+        if current_user == user_delete.suggest_user:
             return True
     else:
         return False

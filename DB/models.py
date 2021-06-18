@@ -483,7 +483,8 @@ class UserDelete(models.Model):
     user_delete_title = models.CharField(db_column="USER_DELETE_TITLE", max_length=100)
     user_delete_content = models.CharField(db_column="USER_DELETE_CONTENT", max_length=5000)
     user_delete_created = models.DateTimeField(db_column="USER_DELETE_CREATED", auto_now_add=True)
-    deleted_user = models.ForeignKey(User, on_delete=models.CASCADE, db_column='DELETED_USER', related_name="DELETED_USER")
+    deleted_user = models.ForeignKey(User, on_delete=models.CASCADE, db_column='DELETED_USER',
+                                     related_name="DELETED_USER")
     suggest_user = models.ForeignKey(User, models.DO_NOTHING, db_column='SUGGEST_USER', related_name="SUGGEST_USER")
 
     class Meta:
@@ -497,17 +498,13 @@ class UserDelete(models.Model):
 
 # 제명 증거자료 올라가는 경로
 def user_delete_upload_to(instance, filename):
-    return f'staff/user/delete/{instance.user_delete_no}/{filename}'
+    return f'staff/user/delete/{instance.user_delete_no.user_delete_no}/{filename}'
 
 
-class UserDeleteFile(models.Model):
-    user_delete_fild_id = models.AutoField(db_column='USER_DELETE_FILE_ID',
-                                           primary_key=True)  # Field name made lowercase.
-    user_delete_no = models.ForeignKey(UserDelete, db_column="USER_DELETE_NO", on_delete=models.DO_NOTHING)
-    user_delete_file_name = models.CharField(db_column='USER_DELETE_FILE_NAME'),
-    user_delete_file_path = models.FileField(db_column='USER_DELETE_FILE_PATH',
-                                             max_length=1000,
-                                             upload_to=user_delete_upload_to)  # Field name made lowercase.
+class UserDeleteFile(File):
+    user_delete_no = models.ForeignKey(UserDelete, db_column="USER_DELETE_NO", on_delete=models.CASCADE)
+    file_path = models.FileField(db_column='FILE_PATH', max_length=100,
+                                 upload_to=user_delete_upload_to)  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -515,9 +512,9 @@ class UserDeleteFile(models.Model):
 
 
 class UserDeleteAor(models.Model):
-    aor_no = models.AutoField(db_column="AOR_NO", primary_key=True),
+    aor_no = models.AutoField(db_column="AOR_NO", primary_key=True)
     aor_user = models.ForeignKey(User, db_column="AOR_USER", on_delete=models.CASCADE)
-    user_delete_no = models.ForeignKey(UserDelete, db_column="USER_DELETE_NO", on_delete=models.CASCADE),
+    user_delete_no = models.ForeignKey(UserDelete, db_column="USER_DELETE_NO", on_delete=models.CASCADE)
     aor_created = models.DateTimeField(db_column="AOR_CREATED", auto_now=True)
     aor = models.IntegerField(db_column="AOR")
 

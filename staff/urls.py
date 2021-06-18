@@ -11,6 +11,7 @@ urlpatterns = [
     path('member/delete/list/', views.member_delete_list, name='member_delete_list'),
     path('member/delete/detail/<int:user_delete_no>', views.member_delete_detail, name='member_delete_detail'),
     path('member/delete/update/', views.member_delete_update, name="member_delete_update"),
+    path('member/delete/delete/', views.member_delete_delete, name="member_delete_delete"),
     path('member/delete/register/', views.member_delete_register, name='member_delete_register'),
     path('member/applications/', views.member_applications, name='member_applications'),
     path('member/aor/', views.member_aor, name="member_aor"),
