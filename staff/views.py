@@ -189,6 +189,10 @@ def members_aor(request):  # 여러명 일괄 처리시.
     return redirect(reverse("index"))  # 비정상적인 요청의 경우.
 
 
+def is_voted(request, user_delete):
+    return len(UserDeleteAor.objects.filter(Q(user_delete_no=user_delete) & Q(aor_user=get_logined_user(request)))) != 0
+
+
 @superuser_only(cfo_included=True)
 def member_delete_list(request):
     user_delete_list = get_page_object(request, UserDelete.objects.all())
@@ -229,15 +233,18 @@ def member_delete_detail(request, user_delete_no):
     file_list, img_list, doc_list = FileController.get_images_and_files_of_(user_delete)
     context = {
         "is_writer": get_logined_user(request) == user_delete.suggest_user,
+        "is_voted" : is_voted(request, user_delete),
         "doc_list": doc_list,
         "img_list": img_list,
         "user_delete": user_delete,
-        "user_delete_aor_apply": user_delete_aor_apply,
-        "user_delete_aor_reject": user_delete_aor_reject,
+        "user_delete_aor_list": UserDeleteAor.objects.filter(user_delete_no=user_delete),
         "total_chief_num": total_chief_num
     }
     if len(user_delete_aor_apply) + len(user_delete_aor_reject) != 0:
-        apply_ratio = (len(user_delete_aor_apply)//(len(user_delete_aor_reject) + len(user_delete_aor_apply))) * 100
+        apply_ratio = (len(UserDeleteAor.objects.filter(Q(user_delete_no=user_delete) & Q(aor=1))) // (
+                len(UserDeleteAor.objects.filter(Q(user_delete_no=user_delete) & Q(aor=0))) +
+                len(UserDeleteAor.objects.filter(Q(user_delete_no=user_delete) & Q(aor=1)))
+        )) * 100
         reject_ratio = 100 - apply_ratio
         context.update(apply_ratio=apply_ratio, reject_ratio=reject_ratio)
     return render(request, 'member_delete_detail.html', context)
@@ -257,13 +264,25 @@ def member_delete_delete(request):
 
 @writer_only(superuser=False)
 def member_delete_update(request, user_delete_no):
+    user_delete = UserDelete.objects.get(pk=user_delete_no)
     if request.method == "GET":
         context = {
-            "user_delete_form": UserDeleteForm(instance=UserDelete.objects.get(pk=user_delete_no)),
+            "user_delete_form": UserDeleteForm(instance=user_delete),
             "user_delete_file_form": FileFormBase(),
             "user_delete_file_list": UserDeleteFile.objects.filter(
                 user_delete_no=UserDelete.objects.get(pk=user_delete_no)),
-            "is_update": True
+            "is_update": True,
+            "user_delete_no": user_delete_no
         }
-    context = {}
-    return render(request, "member_delete_register.html", context)
+        return render(request, "member_delete_register.html", context)
+    else:
+        user_delete_form = UserDeleteForm(request.POST)
+        user_delete_file_form = FileFormBase(request.POST, request.FILES)
+        user_delete_file_list = UserDeleteFile.objects.filter(user_delete_no=user_delete)
+        user_delete_form.update(instance=user_delete)
+        FileController.remove_files_by_user(request, user_delete_file_list)
+        user_delete_file_form.save(instance=user_delete)
+        return redirect("member_delete_detail", user_delete_no=user_delete_no)
+
+def member_delete_aor(request):
+    return redirect("member_delete_list")

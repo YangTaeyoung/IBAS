@@ -19,3 +19,11 @@ class UserDeleteForm(forms.ModelForm):
         user_delete.suggest_user = kwargs.get("suggest_user")
         user_delete.save()
         return user_delete
+
+    def update(self, instance: UserDelete):
+        user_delete = instance
+        if self.has_changed():
+            user_delete.user_delete_title = self.cleaned_data.get('user_delete_title')
+            user_delete.user_delete_content = self.cleaned_data.get('user_delete_content')
+            return user_delete.save()
+        return user_delete

@@ -39,7 +39,7 @@
             <!--===============================================입력란=========================================================-->
             {% load widget_tweaks %}
             <form action="
-                    {% if is_update %}{% url 'member_delete_update' %}{% else %}{% url 'member_delete_register' %}{% endif %}"
+                    {% if is_update %}{% url 'member_delete_update' user_delete_no=user_delete_no %}{% else %}{% url 'member_delete_register' %}{% endif %}"
                   class="add-listing-form" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 {% for field in user_delete_form.hidden_fields %}
