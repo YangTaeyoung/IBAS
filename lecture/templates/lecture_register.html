@@ -2,6 +2,7 @@
 {% load static %}
 {% block content %}
     <link rel="stylesheet" href="{% static 'css/posting_register.css' %}"/>
+    <script src="{% static 'js/checkbox.js' %}"></script>
     <script>
         function selectMethod(obj) { // 방식 선택에 따라 링크 기입란이 바뀌도록 하는 함수.
             const method_name = document.getElementById("method_name");
@@ -106,20 +107,21 @@
                                     <div class="content-body">
                                         <div class="form-group">
                                             <!--입력하는 곳-->
-                                             <input id="mon" type="checkbox"/>
+                                            <input name="day" id="mon" value="월" type="checkbox" onclick="getCheckboxValue()"/>
                                             <label for="mon">월요일</label>
-                                            <input id="tue" type="checkbox"/>
+                                            <input name="day" id="tue" value="화" type="checkbox" onclick="getCheckboxValue()"/>
                                             <label for="tue">화요일</label>
-                                            <input id="wen" type="checkbox"/>
+                                            <input name="day" id="wen" value="수" type="checkbox" onclick="getCheckboxValue()"/>
                                             <label for="wen">수요일</label>
-                                            <input id="thu" type="checkbox"/>
+                                            <input name="day" id="thu" value="목" type="checkbox" onclick="getCheckboxValue()"/>
                                             <label for="thu">목요일</label>
-                                            <input id="fri" type="checkbox"/>
+                                            <input name="day" id="fri" value="금" type="checkbox" onclick="getCheckboxValue()"/>
                                             <label for="fri">금요일</label>
-                                            <input id="sat" type="checkbox"/>
+                                            <input name="day" id="sat" value="토" type="checkbox" onclick="getCheckboxValue()"/>
                                             <label for="sat">토요일</label>
-                                            <input id="sun" type="checkbox"/>
+                                            <input name="day" id="sun" value="일" type="checkbox" onclick="getCheckboxValue()"/>
                                             <label for="sun">일요일</label>
+                                            <input id="result" value="" type="hidden"/>
                                         </div>
                                     </div>
                                 </div>
