@@ -244,3 +244,54 @@ function lectRoom_state() {
     }
 
 }
+
+function lectRoom_manage() {
+    let tr_head = document.getElementById("lectRoom_mhead"); // table head부분 가져옴
+    let tr_list = document.getElementsByClassName("lectRoom_mtr"); // table body에 있는 tr부분 다 가져옴.
+    let selectAttend = String(document.getElementById("lectRoom_select_attend").value); // 선택된 select를 string형으로 형변환
+    let selectHw = String(document.getElementById("lectRoom_select_hw").value); // 선택된 select를 string형으로 형변환
+    // var bootstrap = document.getElementsByClassName("bootstrap-select");
+    // var dropdown = document.getElementsByClassName("dropdown-toggle");
+
+    //tr_list 수(tr 수)만큼 for문 돌린다.
+    for (i = 0; i < tr_list.length; i++) {
+        var attend = String(document.getElementsByClassName("lectRoom_attend")[i].innerHTML); // 테이블 안 출결을 다 가져와야 함.
+        var hw = String(document.getElementsByClassName("lectRoom_hw")[i].innerHTML); // 테이블 안 출결을 다 가져와야 함.
+        // var hw = String(document.getElementsByClassName("lectRoom_hw")[i].innerHTML); // 테이블 안 과제출 다 가져와야 함.
+
+        // 상태라는 옵션과 선택된 select가 같으면
+        if (("출결" === selectAttend) && ("과제" === selectHw)) {
+            tr_head.style.display = "table-header-group"; // 이거 해야 테이블 형태 안무너짐 // 테이블 헤드 부분
+            tr_list[i].style.display = "table-row"; // 테이블 내용 부분
+            // dropdown.style.border = "none !important";
+            // dropdown.style.backgroundColor = "#fff !important";
+            // dropdown.style.height = "40px";
+            // dropdown.style.fontSize = "16px";
+            // dropdown.style.color = "#333";
+            // dropdown.style.fontWeight = "bold";
+        }
+        else if((attend === selectAttend) && ("과제" === selectHw)) {
+            tr_head.style.display = "table-header-group"; // 이거 해야 테이블 형태 안무너짐 // 테이블 헤드 부분
+            tr_list[i].style.display = "table-row"; // 테이블 내용 부분
+        }
+
+        else if(("출결" === selectAttend) && (hw === selectHw)) {
+            tr_head.style.display = "table-header-group"; // 이거 해야 테이블 형태 안무너짐 // 테이블 헤드 부분
+            tr_list[i].style.display = "table-row"; // 테이블 내용 부분
+        }
+        else if ((hw === selectHw) && (attend === selectAttend)) {
+            tr_head.style.display = "table-header-group"; // 이거 해야 테이블 형태 안무너짐 // 테이블 헤드 부분
+            tr_list[i].style.display = "table-row"; // 테이블 내용 부분
+
+        }
+
+        // option 안 학년과 선택된 select가 같지 않으면
+        else {
+            tr_list[i].style.display = "none"; // 테이블 내용 부분
+            tr_head.style.display = "table-header-group"; // 이거 해야 테이블 형태 안무너짐 // 테이블 헤드 부분
+
+        }
+
+    }
+
+}

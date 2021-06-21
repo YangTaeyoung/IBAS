@@ -1,12 +1,21 @@
 .width-30{
     width: 30px;
 }
+
 .width-50{
     width: 50px;
 }
 
+.width-65{
+    width: 65px;
+}
+
 .width-70{
     width: 70px;
+}
+
+.width-90{
+    width: 90px;
 }
 
 .width-100{
@@ -35,6 +44,10 @@
 
 .width-230{
     width: 230px;
+}
+
+.width-310{
+    width: 310px;
 }
 
 .width-360{
@@ -66,3 +79,32 @@
     max-width: 100px;
     min-width: 100px;
 }
+
+.min-width-30{
+    min-width: 30px;
+}
+
+.min-width-65 {
+    min-width: 65px;
+}
+
+.min-width-70{
+    min-width: 70px;
+}
+
+.min-width-90 {
+    min-width: 90px;
+}
+
+.min-width-100{
+    min-width: 100px;
+}
+
+.min-width-120{
+    min-width: 120px;
+}
+
+.min-width-310{
+    min-width: 310px;
+}
+

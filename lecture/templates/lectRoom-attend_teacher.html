@@ -7,6 +7,65 @@
     <script src="{% static 'js/ibas_centents.js' %}"></script>
     <script src="{% static 'js/jquery.min.js' %}"></script><!-- JQUERY.MIN JS -->
     <script src="{% static 'js/comment.js' %}"></script>
+    <style>
+
+    .bootstrap-select .dropdown-toggle {
+        border: none !important;
+        background-color: #fff !important;
+        height: 40px;
+        font-size: 16px;
+        color: #333;
+        font-weight: bold;
+    }
+
+    .bootstrap-select:focus .dropdown-togglefocus:focus {
+        border: none !important;
+        background-color: #fff !important;
+        height: 40px;
+        font-size: 16px;
+        color: #333;
+        font-weight: bold;
+    }
+
+    .bootstrap-select::before .dropdown-toggle::before {
+        border: none !important;
+        background-color: #fff !important;
+        height: 40px;
+        font-size: 16px;
+        color: #333;
+        font-weight: bold;
+    }
+
+    .bootstrap-select::after .dropdown-toggle::after {
+        border: none !important;
+        background-color: #fff !important;
+        height: 40px;
+        font-size: 16px;
+        color: #333;
+        font-weight: bold;
+
+    }
+
+    .bootstrap-select:hover .dropdown-toggle:hover {
+        border: none !important;
+        background-color: #fff !important;
+        height: 40px;
+        font-size: 16px;
+        color: #333;
+        font-weight: bold;
+    }
+
+    .bootstrap-select::selection .dropdown-toggle::selection {
+        border: none !important;
+        background-color: #fff !important;
+        height: 40px;
+        font-size: 16px;
+        color: #333;
+        font-weight: bold;
+    }
+
+
+    </style>
 
 
     <div class="page-wraper">
@@ -99,35 +158,36 @@
                                             </div>
 
                                             <table class="table">
-                                                <thead>
+                                                <thead id="lectRoom_mhead">
                                                 <!-- 테이블 1행: 제목 -->
                                                 <tr id="lectRoom_head">
-                                                    <th class="border-top-0 width-30 text-center align-middle"
+                                                    <th class="border-top-0 width-65 min-width-65 text-center align-middle"
                                                         scope="col"></th>
-                                                    <th class="border-top-0 width-100 text-center align-middle"
+                                                    <th class="border-top-0 width-100 min-width-100 text-center align-middle"
                                                         scope="col">이름
                                                     </th>
-                                                    <th class="border-top-0 width-70 text-center align-middle"
+                                                    <th class="border-top-0 width-90 min-width-90 text-center align-middle"
                                                         scope="col">학번
                                                     </th>
-                                                    <th class="border-top-0 width-70 text-center align-middle"
+                                                    <th class="border-top-0 width-70 min-width-70 text-center align-middle"
                                                         scope="col">
-                                                        <select>
-                                                            <option disabled selected>출결</option>
+                                                        <select id="lectRoom_select_attend" class="lectRoom_select" onchange="lectRoom_manage()">
+                                                            <option selected>출결</option>
                                                             <option>출석</option>
                                                             <option>결석</option>
                                                         </select>
                                                     </th>
-                                                    <th class="border-top-0 width-70 text-center" scope="col"><select>
-                                                        <option disabled selected>과제</option>
+                                                    <th class="border-top-0 width-70 min-width-70 text-center" scope="col">
+                                                        <select id="lectRoom_select_hw" onchange="lectRoom_manage()">
+                                                        <option selected>과제</option>
                                                         <option>승인</option>
                                                         <option>기각</option>
                                                         <option>미제출</option>
                                                     </select></th>
-                                                    <th class="border-top-0 width-120 text-center align-middle"
+                                                    <th class="border-top-0 width-120 min-width-120 text-center align-middle"
                                                         scope="col">제출 시간
                                                     </th>
-                                                    <th class="border-top-0 align-middle" scope="col">제출된 과제</th>
+                                                    <th class="border-top-0 align-middle width-310 min-width-310" scope="col">제출된 과제</th>
 
                                                 </tr>
                                                 </thead>
@@ -143,7 +203,7 @@
 
                                                 <!-- 수강생이 있을 때 나오는 열 -->
                                                 <!--========================여기부터 복붙==========================-->
-                                                <tr class="lectRoom_tr align-middle">
+                                                <tr class="lectRoom_mtr align-middle">
 
                                                     <td scope="row">
 
@@ -163,9 +223,9 @@
                                                     <!-- 회원 학번 -->
                                                     <td class="text-center">12192355</td>
                                                     <!-- 출결 -->
-                                                    <td class="text-center">출석</td>
+                                                    <td class="text-center lectRoom_attend">출석</td>
                                                     <!--과제 -->
-                                                    <td class="text-center">미제출</td>
+                                                    <td class="text-center lectRoom_hw">미제출</td>
                                                     <!--제출시간 -->
                                                     <td class="text-center">2020-01-31</td>
                                                     <!-- 과제 파일 -->
@@ -175,7 +235,7 @@
                                                 </tr>
                                                 <!--========================여기까지 복붙==========================-->
                                                 <!--========================여기부터 복붙==========================-->
-                                                <tr class="lectRoom_tr align-middle">
+                                                <tr class="lectRoom_mtr align-middle">
 
                                                     <td scope="row">
 
@@ -195,9 +255,9 @@
                                                     <!-- 회원 학번 -->
                                                     <td class="text-center">12192355</td>
                                                     <!-- 출결 -->
-                                                    <td class="text-center">출석</td>
+                                                    <td class="text-center lectRoom_attend">결석</td>
                                                     <!--과제 -->
-                                                    <td class="text-center">미제출</td>
+                                                    <td class="text-center lectRoom_hw">승인</td>
                                                     <!--제출시간 -->
                                                     <td class="text-center">2020-01-31</td>
                                                     <!-- 과제 파일 -->
