@@ -185,3 +185,26 @@ def auth_check(active=False):
         return wrapper
 
     return decorator
+
+
+# 데코레이터
+# 제작일: 21.6.21 15.43
+# 제작자: 양태영
+# 용도: 회장인지 아닌지 판별하는 데코레이터 vice가 True 일 경우 부화장인지 봄
+def chief_only(vice=False):
+    def decorator(func):
+        @login_required
+        @auth_check(True)
+        @functools.wraps(func)
+        def wrapper(request, *args, **kwargs):
+            current_user = get_logined_user(request)
+            if vice and current_user.user_role.role_no <= 2:
+                return func(request, *args, **kwargs)
+            elif not vice and current_user.user_role.role_no == 1:
+                return func(request, *args, **kwargs)
+            else:
+                return redirect(reverse("index"))
+
+        return wrapper
+
+    return decorator

@@ -38,8 +38,9 @@
                                         <li>
                                             <select id="staff-select" onchange="staff_select()">
                                                 <option>선택</option>
-                                                <option>진행중</option>
-                                                <option>완료</option>
+                                                {% for user_delete_state in user_delete_state_list %}
+                                                    <option>{{ user_delete_state.state_name }}</option>
+                                                {% endfor %}
                                             </select>
                                         </li>
                                     </ul>
@@ -82,7 +83,7 @@
                                         <td style="text-align: center">{{ user_delete.user_delete_created |date:"Y-m-d" }}</td>
                                         <!-- 상태 : 진행중 -->
                                         <!-- 진행중은 staff-ing를 적용시켜야 함.  -->
-                                        <td class="staff-ing staff-progress">진행중</td>
+                                        <td class="{% if user_delete.user_delete_state.state_no == 1 %}staff-ing{% else %}staff_fin{% endif %} staff-progress">{{ user_delete.user_delete_state.state_name }}</td>
                                     </tr>
                                 {% endfor %}
                             {% endif %}
