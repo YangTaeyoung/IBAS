@@ -217,12 +217,7 @@
                                                 onclick="goApply()">
                                             승인
                                         </button>
-                                        <form id="form-bank-support-apply" action="{% url 'bank_support_aor' %}"
-                                              method="post" style="display: none">
-                                            {% csrf_token %}
-                                            <input type="hidden" name="bank_no" value="{{ bank.bank_no }}"/>
-                                            <input type="hidden" name="bank_apply_no" value="2"/>
-                                        </form>
+
 
                                         <button type="button" class="btn btn-outline-danger btn-lg"
                                                 style="width: 200px; margin-left: 10px; font-weight: bold"
