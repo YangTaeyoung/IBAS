@@ -5,33 +5,6 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/staff_yejin.css' %}">
     <script src="{% static 'js/jquery.min.js' %}"></script><!-- JQUERY.MIN JS -->
     <script src="{% static 'js/sy.js' %}"></script>
-
-    <script>
-        function goUpdate() {
-            if (confirm('수정하시겠습니까?')) {
-                document.getElementById("form-user-update-request").submit();
-            }
-        }
-
-        function goUpdatePic() {
-            document.getElementById('form-user-pic-update').submit();
-        }
-
-        function selectAoR() {
-            itemidSelect = document.getElementById('select-aor');
-            document.getElementById("input-aor").value = itemidSelect.options[itemidSelect.selectedIndex].value;
-        }
-
-        function decideChk(obj, user_stu) {
-            if (obj.checked === true) {
-                document.getElementById('new-user-check-' + user_stu).checked = true;
-            } else {
-                document.getElementById('new-user-check-' + user_stu).checked = false;
-            }
-        }
-    </script>
-
-
     <div class="page-wraper">
         <!-- 상단 제목부분 -->
         <div class="page-content bg-white">
