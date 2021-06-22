@@ -205,8 +205,8 @@ def lect_room_detail(request):
 
 
 
-def lectRoom_main(request):  # 강의룸 페이지로 이동
-    return render(request, 'lect_room_main.html', {})
+def lect_room_main(request, room_no):  # 강의룸 페이지로 이동
+    return render(request, 'lect_room_main.html', {'room_no': room_no})
 
 
 def lect_room_register(request):  # 강의룸 등록 페이지로 이동
