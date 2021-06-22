@@ -171,3 +171,6 @@ def lect_search(request, type_no):
         "item_list": lect_list
     }
     return render(request, 'lecture_list.html', context)  # 정상 처리
+
+def lectRoom_main(request):  # 강의룸 페이지로 이동
+    return render(request, 'lectRoom_main.html', {})

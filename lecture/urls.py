@@ -8,5 +8,6 @@ urlpatterns = [
     path('aor/<int:lect_no>/', views.lect_aor, name="lect_aor"),  # 강의 등록 거절 페이지
     path('update/<int:lect_no>', views.lect_update, name="lect_update"),
     path('delete/<int:lect_no>', views.lect_delete, name="lect_delete"),
-    path('<int:type_no>/search/', views.lect_search, name="lect_search")
+    path('<int:type_no>/search/', views.lect_search, name="lect_search"),
+    path('room/main/', views.lectRoom_main, name="lectRoom_main"), # 강의룸 메인 게시판으로 이동
 ]
