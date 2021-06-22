@@ -173,6 +173,38 @@ def lect_search(request, type_no):
     return render(request, 'lecture_list.html', context)  # 정상 처리
 
 
+
+def lect_room_mem_manage(request):
+
+    context = {
+
+    }
+    return render(request, 'lectRoom-mem_manage.html', context)
+
+def lect_room_attend_std(request):
+
+    context = {
+
+    }
+    return render(request, 'lectRoom-attend_std.html', context)
+
+def lect_room_attend_teacher(request):
+
+    context = {
+
+    }
+    return render(request, 'lectRoom-attend_teacher.html', context)
+
+def lect_room_detail(request):
+
+    context = {
+
+    }
+    return render(request, 'lectRoom_detail.html', context)
+
+
+
+
 def lectRoom_main(request):  # 강의룸 페이지로 이동
     return render(request, 'lect_room_main.html', {})
 

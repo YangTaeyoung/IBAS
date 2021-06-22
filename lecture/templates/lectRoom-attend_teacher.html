@@ -1,0 +1,262 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    <!--커스텀 css-->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/ibas_contents.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/size.css' %}">
+    <script src="{% static 'js/ibas_centents.js' %}"></script>
+    <script src="{% static 'js/jquery.min.js' %}"></script><!-- JQUERY.MIN JS -->
+    <script src="{% static 'js/comment.js' %}"></script>
+
+
+    <div class="page-wraper">
+        <!-- 상단 제목부분 -->
+        <div class="page-content bg-white">
+            <!----------============= 상단 제목 시작 ================----------->
+            <!--제목을 감싸는 배경-->
+            <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"
+                 style=" background-image: url('{% static 'images/board_name_img.jpg' %}'); height: 350px">
+                <!-- 상단 제목을 클릭하면, 상위 게시판으로 이동 -->
+                <a>
+                    <div class="container clearfix">
+                        <div class="dlab-bnr-inr-entry">
+                            <!--제목-->
+                            <!-- DB에서 제목 꺼내와야 함 -->
+                            <h1 class="text-white introduce-letter-spacing_5">출결 관리 게시판</h1>
+                            <!--부제목-->
+                            <!-- DB에서 제목 꺼내와야 함 -->
+                            <p class="m-t20">수강생의 출결을 관리할 수 있는 게시판입니다. </p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <!----------============= 본문 시작 ================----------->
+            <div class="content-block">
+                <div class="section-full content-inner bg-white">
+                    <div class="container">
+                        <!--회원관리-->
+                        <div id="listing_user_setting" class="tab-pane">
+                            <div class="row">
+                                <!--========== 왼쪽 강의룸 네비게이션바 시작 ==========-->
+                                <div class="col-lg-3 col-xl-3">
+                                    <div class="sticky-top">
+                                        <!-- 강의룸 내 페이지 리스트 -->
+                                        <!-- 클릭한 게시글을 끌고옴 -->
+                                        <div class="listing-filter-sidebar">
+                                            <h4 class="title">강의실</h4>
+                                            <div class="widget_tag">
+                                                <ul class="m-b0">
+                                                    <!-- [메뉴바 > 강의실 > 강의] 게시판 내 강의소개 페이지로 이동 -->
+                                                    <li><a href="javascript:void(0);">강의소개</a>&nbsp;</li>
+                                                    <!-- 공지사항, 강의, 과제, 제출된 과제 페이지들은 모두 동일한 레이아웃임 -->
+                                                    <!-- 다만 과제 페이지의 경우 강의자, 수강생 별 보이는 게 다르게끔 세션처리 필요 (해당 게시판 주석 참조) -->
+                                                    <!-- 강의자, 수강생 모두 모이는 메뉴: 공지사항, 강의, 과제 -->
+                                                    <li><a href="javascript:void(0);">공지사항</a>&nbsp;</li>
+                                                    <li><a href="javascript:void(0);">강의</a>&nbsp;</li>
+                                                    <li><a href="javascript:void(0);">과제</a>&nbsp;</li>
+                                                    <!-- 수강생만 보이는 메뉴: 출석 및 과제 현황 -->
+                                                    <li><a href="javascript:void(0);">출석 및 과제 현황</a>&nbsp;</li>
+                                                    <!-- 강의자만 보이는 메뉴: 출석 및 과제 관리, 수강생 관리, 제출된 과제 리스트 -->
+                                                    <li><a href="javascript:void(0);">출석 및 과제 관리</a>&nbsp;</li>
+                                                    <li><a href="javascript:void(0);">수강생 관리</a>&nbsp;</li>
+                                                    <li><a href="javascript:void(0);">제출된 과제 리스트</a>&nbsp;</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--========== 왼쪽 강의룸 네비게이션바 끝 ==========-->
+
+                                <!--=======================수강생 관리=========================-->
+                                <div class="col-lg-11 col-xl-8 p-b30">
+
+                                    <!-- 신입부원 관리 콘텐츠 시작 -->
+                                    <form>
+                                        <div class="width-870">
+                                            <!-- 신입부원 관리 테이블 시작 -->
+
+                                            <div class="listing-filter m-b40">
+                                                <!-- bank-flex는 bank_yejin.css에 정의되어 있음.  -->
+                                                <div class="bank-flex">
+                                                    <div class="mr-auto">
+                                                        <div>
+                                                            <h3 id="bank-year" class="title m-b0"
+                                                                style="font-size: 22px">애거서 크리스티의 추리문학 베스트</h3>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <ul class="filter m-b0">
+                                                            <li>
+                                                                <select>
+                                                                    <option>1회차</option>
+                                                                </select>
+                                                            </li>
+                                                            <li>
+                                                                <select>
+                                                                    <option disabled selected>출결관리</option>
+                                                                    <option>출석</option>
+                                                                    <option>결석</option>
+                                                                </select>
+                                                            </li>
+                                                            <li>
+                                                                <select>
+                                                                    <option disabled selected>과제관리</option>
+                                                                    <option>제출</option>
+                                                                    <option>미제출</option>
+                                                                </select>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <table class="table">
+                                                <thead>
+                                                <!-- 테이블 1행: 제목 -->
+                                                <tr id="lectRoom_head">
+                                                    <th class="border-top-0 width-30 text-center align-middle"
+                                                        scope="col"></th>
+                                                    <th class="border-top-0 width-100 text-center align-middle"
+                                                        scope="col">이름
+                                                    </th>
+                                                    <th class="border-top-0 width-70 text-center align-middle"
+                                                        scope="col">학번
+                                                    </th>
+                                                    <th class="border-top-0 width-70 text-center align-middle"
+                                                        scope="col">
+                                                        <select>
+                                                            <option disabled selected>출결관리</option>
+                                                            <option>출석</option>
+                                                            <option>결석</option>
+                                                        </select>
+                                                    </th>
+                                                    <th class="border-top-0 width-70 text-center" scope="col"><select>
+                                                        <option disabled selected>과제관리</option>
+                                                        <option>제출</option>
+                                                        <option>미제출</option>
+                                                    </select></th>
+                                                    <th class="border-top-0 width-120 text-center align-middle"
+                                                        scope="col">제출 시간
+                                                    </th>
+                                                    <th class="border-top-0 align-middle" scope="col">제출된 과제</th>
+
+                                                </tr>
+                                                </thead>
+
+                                                <!-- 테이블 2행: 수강생 관리 테이블 내용 시작 -->
+                                                <tbody>
+
+                                                {#                                                <!-- 수강생이 없을 때 나오는 열 -->#}
+                                                {#                                                <tr>#}
+                                                {#                                                    <td colspan="9" style="text-align: center"> 강의를 수강하고 있는 회원이 없습니다.#}
+                                                {#                                                    </td>#}
+                                                {#                                                </tr>#}
+
+                                                <!-- 수강생이 있을 때 나오는 열 -->
+                                                <!--========================여기부터 복붙==========================-->
+                                                <tr class="lectRoom_tr align-middle">
+
+                                                    <td scope="row">
+
+                                                        {% csrf_token %}
+                                                        <div>
+                                                            <input id="check_{{ new_user.user_stu }}"
+                                                                   type="checkbox"
+                                                                   onclick="decideChk(this,'{{ new_user.user_stu }}')">
+                                                            <!-- staff_label_margin는 staff_cr.css에 정의되어 있음.  -->
+                                                            <label for="check_{{ new_user.user_stu }}"
+                                                                   class="staff_label_margin m-l20"></label>
+                                                        </div>
+
+                                                    </td>
+                                                    <!-- 회원 이름 -->
+                                                    <td class="align-middle text-center">윤예진</td>
+                                                    <!-- 회원 학번 -->
+                                                    <td class="text-center">12192355</td>
+                                                    <!-- 출결 -->
+                                                    <td class="text-center">출석</td>
+                                                    <!--과제 -->
+                                                    <td class="text-center">미제출</td>
+                                                    <!--제출시간 -->
+                                                    <td class="text-center">2020-01-31</td>
+                                                    <!-- 과제 파일 -->
+                                                    <td class="align-middle">ibasLecture.py</td>
+
+
+                                                </tr>
+                                                <!--========================여기까지 복붙==========================-->
+                                                <!--========================여기부터 복붙==========================-->
+                                                <tr class="lectRoom_tr align-middle">
+
+                                                    <td scope="row">
+
+                                                        {% csrf_token %}
+                                                        <div>
+                                                            <input id="check_{{ new_user.user_stu }}"
+                                                                   type="checkbox"
+                                                                   onclick="decideChk(this,'{{ new_user.user_stu }}')">
+                                                            <!-- staff_label_margin는 staff_cr.css에 정의되어 있음.  -->
+                                                            <label for="check_{{ new_user.user_stu }}"
+                                                                   class="staff_label_margin m-l20"></label>
+                                                        </div>
+
+                                                    </td>
+                                                    <!-- 회원 이름 -->
+                                                    <td class="align-middle text-center">윤예진</td>
+                                                    <!-- 회원 학번 -->
+                                                    <td class="text-center">12192355</td>
+                                                    <!-- 출결 -->
+                                                    <td class="text-center">출석</td>
+                                                    <!--과제 -->
+                                                    <td class="text-center">미제출</td>
+                                                    <!--제출시간 -->
+                                                    <td class="text-center">2020-01-31</td>
+                                                    <!-- 과제 파일 -->
+                                                    <td class="align-middle">ibasLecture.py</td>
+
+
+                                                </tr>
+                                                <!--========================여기까지 복붙==========================-->
+
+                                                </tbody>
+                                            </table>
+
+                                            <div class="staff_mem_btn m-b20 listing-info-right float-right">
+                                                <!-- &nbsp;는 띄어쓰기 -->
+                                                <button class="site-button" type="submit"><i
+                                                        class="la la-check m-r5"
+                                                        style="font-weight: bold"></i>&nbsp;적용
+                                                </button>
+                                            </div>
+
+
+                                            <!--========== 페이지네이션 시작 ===========-->
+                                            <!-- 1페이지에 수강생 끌고오고, 수강생이 그보다 적으면, 페이지네이션 안보이게 처리 -->
+                                            <div class="pagination-bx clearfix text-center">
+                                                <ul class="pagination">
+                                                    <li class="previous"><a href="javascript:void(0)"><i
+                                                            class="fa fa-arrow-left"></i></a></li>
+                                                    <li><a href="javascript:void(0)">1</a></li>
+                                                    <li><a href="javascript:void(0)">2</a></li>
+                                                    <li><a href="javascript:void(0)">...</a></li>
+                                                    <li class="active"><a href="javascript:void(0)">7</a></li>
+                                                    <li class="next"><a href="javascript:void(0)"><i
+                                                            class="fa fa-arrow-right"></i></a></li>
+                                                </ul>
+                                            </div>
+                                            <!--========== 페이지네이션 끝 ===========-->
+                                        </div>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 상단으로 한번에 올라가는 버튼 -->
+                    <button class="scroltop fa fa-chevron-up" style="display: none;"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -11,4 +11,9 @@ urlpatterns = [
     path('<int:type_no>/search/', views.lect_search, name="lect_search"),
     path('room/main/', views.lectRoom_main, name="lectRoom_main"), # 강의룸 메인 게시판으로 이동
     path('room/register/', views.lect_room_register, name="lect_room_register"), # 강의룸 게시글 등록페이지로 이동
+    path('room/mem/manage', views.lect_room_mem_manage, name="lect_room_mem_manage"),
+    path('room/attend/std', views.lect_room_attend_std, name="lect_room_attend_std"),
+    path('room/attend/teacher', views.lect_room_attend_teacher, name="lect_room_attend_teacher"),
+    path('room/detail', views.lect_room_detail, name="lect_room_detail"),
+
 ]
