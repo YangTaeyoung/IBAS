@@ -604,17 +604,61 @@ input[type=checkbox] + label:after {
     margin-top: 7px;
 }
 
-/*.lectRoom_select ~ .dropdown-toggle{*/
-/*    !*-webkit-appearance: none; !* 네이티브 외형 감추기 *!*!*/
-/*    !*-moz-appearance: none;*!*/
-/*    !*appearance: none;*!*/
-/*    !*background: none; !* 화살표 모양의 이미지 *!*!*/
-/*    border: none !important;*/
-/*    background-color: #fff!important;*/
-/*	height: 40px;*/
-/*	font-size: 16px;*/
-/*	color: #333;*/
-/*    font-weight: bold;*/
-/*}*/
+
+/*테이블 헤드에 있는 필터 css 적용을 위한 것.*/
+.lectRoom_select .dropdown-toggle {
+    border: none !important;
+    background-color: #fff !important;
+    height: 40px;
+    font-size: 16px;
+    color: #333;
+    font-weight: bold;
+}
+/*테이블 헤드에 있는 필터 css 적용을 위한 것.*/
+.lectRoom_select:focus .dropdown-togglefocus:focus {
+    border: none !important;
+    background-color: #fff !important;
+    height: 40px;
+    font-size: 16px;
+    color: #333;
+    font-weight: bold;
+}
+/*테이블 헤드에 있는 필터 css 적용을 위한 것.*/
+.lectRoom_select::before .dropdown-toggle::before {
+    border: none !important;
+    background-color: #fff !important;
+    height: 40px;
+    font-size: 16px;
+    color: #333;
+    font-weight: bold;
+}
+/*테이블 헤드에 있는 필터 css 적용을 위한 것.*/
+.lectRoom_select::after .dropdown-toggle::after {
+    border: none !important;
+    background-color: #fff !important;
+    height: 40px;
+    font-size: 16px;
+    color: #333;
+    font-weight: bold;
+
+}
+/*테이블 헤드에 있는 필터 css 적용을 위한 것.*/
+.lectRoom_select:hover .dropdown-toggle:hover {
+    border: none !important;
+    background-color: #fff !important;
+    height: 40px;
+    font-size: 16px;
+    color: #333;
+    font-weight: bold;
+}
+/*테이블 헤드에 있는 필터 css 적용을 위한 것.*/
+.lectRoom_select::selection .dropdown-toggle::selection {
+    border: none !important;
+    background-color: #fff !important;
+    height: 40px;
+    font-size: 16px;
+    color: #333;
+    font-weight: bold;
+}
 
 
