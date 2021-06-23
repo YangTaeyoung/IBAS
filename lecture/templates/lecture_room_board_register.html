@@ -36,22 +36,7 @@
                                 <div class="sticky-top">
                                     <!-- 강의룸 내 검색창 -->
                                     <!-- 검색 시, 강의룸 내 게시글들(공지사항, 강의목록, 과제 등) 중 해당 키워드를 포함한 게시글을 모두 끌고옴 -->
-                                    <div class="listing-filter-sidebar" style="margin-bottom: 30px">
-                                        <div style="margin-bottom: 20px">
-                                            <h4 class="title">강의실 내 검색</h4>
-                                            <div class="">
-                                                <form role="search" method="post">
-                                                    <div class="input-group">
-                                                        <input name="text" type="text" class="form-control"
-                                                               placeholder="검색어를 입력하세요.">
-                                                        <span class="input-group-btn">
-												<button type="submit" class="site-button"><i
-                                                        class="fa fa-search"></i></button></span>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    {% include "_search_bar.html" %}
                                     <!-- 강의룸 내 페이지 리스트 -->
                                     <!-- 클릭한 게시글을 끌고옴 -->
                                     {% include "_navigation_bar.html" %}
@@ -102,6 +87,7 @@
                                         </div>
                                     </div>
 
+                                    {% if board_type > 1 %}
                                         <!--=====================코드 테스트 박스=======================-->
                                         <div class="content-box">
                                             <div class="content-header">
@@ -129,7 +115,7 @@ def lect_view(request, type_no):  # 게시판 페이지로 이동
                                         </div>
 
                                         <!-- ======================과제 입력 박스/강의글 등록할 때만 뜨도록 수정====================== -->
-                                         <div class="content-box">
+                                        <div class="content-box">
                                             <div class="content-header">
                                                 <!--내용-->
                                                 <h3 class="title">과제</h3>
@@ -204,7 +190,8 @@ def lect_view(request, type_no):  # 게시판 페이지로 이동
                                                       </div>
                                                 </div>
                                             </div>
-                                         </div>
+                                        </div>
+                                    {% endif %}
                                         <!--등록버튼, 수정할 때는 수정하기로 뜨도록 수정필요-->
                                         <div style="display: grid; justify-items: center">
                                             <button class="site-button btn-block button-md" type="submit" style="width: 30%">

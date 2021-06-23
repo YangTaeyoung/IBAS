@@ -107,7 +107,7 @@ class LectBoardForm(forms.ModelForm):
             'lect_board_cont': forms.Textarea()
         }
         labels = {
-            'lect_board_title': _("제목"),
+            'lect_board_title': _("강의 제목"),
             'lect_board_link': _("강의 링크"),
             'lect_board_cont': _("내용")
         }
@@ -132,5 +132,39 @@ class LectBoardForm(forms.ModelForm):
         return lect_board
 
 
+class LectNoticeForm(LectBoardForm):
+    class Meta(LectBoardForm.Meta):
+        exclude = ('lect_board_link',)
+
+        labels = {
+            'lect_board_title': _("공지사항"),
+            'lect_board_cont': _("공지 내용")
+        }
+
+    def update(self, instance):
+        lect_board = instance
+        lect_board.lect_board_title = self.cleaned_data['lect_board_title']
+        lect_board.lect_board_cont = self.cleaned_data['lect_board_cont']
+
+        if self.has_changed():
+            lect_board.save()
+
+        return lect_board
+
+
+def make_lect_board_form(board_type, *args):
+    if args:
+        if board_type == 1:
+            return LectNoticeForm(*args)
+        elif board_type == 2:
+            return LectBoardForm(*args)
+    else:
+        if board_type == 1:
+            return LectNoticeForm(initial={'lect_board_type_no': 1})
+        elif board_type == 2:
+            return LectBoardForm(initial={'lect_board_type_no': 2})
+
+
+# 이거 지우면 큰일 남
 class LectBoardFileForm(FileFormBase):
     pass

@@ -5,7 +5,7 @@ from django.db.models import Q
 
 from IBAS.forms import FileFormBase
 from pagination_handler import get_paginator_list, get_page_object
-from lecture.forms import LectForm, LectRejectForm, LectPicForm, LectBoardForm, LectBoardFileForm
+from lecture.forms import LectForm, LectRejectForm, LectPicForm, LectBoardForm, LectBoardFileForm, make_lect_board_form
 from user_controller import get_logined_user, login_required, superuser_only, writer_only, auth_check, is_superuser, \
     is_logined
 from file_controller import FileController
@@ -204,7 +204,7 @@ def lect_room_list(request, room_no, board_type):
 def lect_board_register(request, room_no, board_type):  # 강의룸 등록 페이지로 이동
     if request.method == "GET":
         context = {
-            'lect_board_form': LectBoardForm(initial={'lect_board_type_no': board_type}),
+            'lect_board_form': make_lect_board_form(board_type),
             'file_form': LectBoardFileForm(),
             'lect': Lect.objects.get(pk=room_no),
             'board_type': board_type
@@ -212,7 +212,7 @@ def lect_board_register(request, room_no, board_type):  # 강의룸 등록 페�
         return render(request, 'lecture_room_board_register.html', context)
 
     elif request.method == "POST":
-        lect_board_form = LectBoardForm(request.POST)
+        lect_board_form = make_lect_board_form(board_type, request.POST)
         file_form = LectBoardFileForm(request.POST, request.FILES)
 
         if lect_board_form.is_valid() and file_form:
