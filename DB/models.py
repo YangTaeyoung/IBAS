@@ -70,7 +70,7 @@ class Bank(models.Model):
 
 # 추상클래스 File
 class File(models.Model):
-    #@abstractmethod
+    @abstractmethod
     def file_upload_to(self, filename):
         pass
 
@@ -80,6 +80,23 @@ class File(models.Model):
 
     class Meta:
         abstract = True
+
+
+# 추상클래스 Comment
+class CommentBase(models.Model):
+    comment_id = models.AutoField(db_column='COMMENT_ID', primary_key=True)
+    comment_writer = models.ForeignKey('User', models.DO_NOTHING, db_column='COMMENT_WRITER', null=True)
+    comment_cont = models.CharField(db_column='COMMENT_CONT', max_length=5000)
+    comment_cont_ref = models.ForeignKey('self', on_delete=models.CASCADE, db_column='COMMENT_CONT_REF', blank=True,
+                                         null=True)  # Field name made lowercase.
+    comment_created = models.DateTimeField(db_column='COMMENT_CREATED', auto_now_add=True)  # Field name made lowercase.
+
+    class Meta:
+        abstract = True
+
+
+def bank_file_upload_to(instance, filename):
+    return f'bank/{instance.bank_no.bank_no}/{filename}'
 
 
 class BankFile(File):
@@ -480,6 +497,10 @@ class User(models.Model):
         managed = False
         db_table = 'USER'
 
+    @property
+    def get_file_path(self):
+        return os.path.join(MEDIA_ROOT, "member", str(self.user_stu))
+
 
 class UserAuth(models.Model):
     auth_no = models.AutoField(db_column='AUTH_NO', primary_key=True)  # Field name made lowercase.
@@ -490,15 +511,67 @@ class UserAuth(models.Model):
         db_table = 'USER_AUTH'
 
 
-class UserDeleteFile(models.Model):
-    user_delete_id = models.AutoField(db_column='USER_DELETE_ID', primary_key=True)  # Field name made lowercase.
-    user_stu = models.ForeignKey(User, on_delete=models.CASCADE, db_column='USER_STU')  # Field name made lowercase.
-    user_delete_file_path = models.CharField(db_column='USER_DELETE_FILE_PATH',
-                                             max_length=1000)  # Field name made lowercase.
+class UserDelete(models.Model):
+    user_delete_no = models.AutoField(db_column="USER_DELETE_NO", primary_key=True)
+    user_delete_title = models.CharField(db_column="USER_DELETE_TITLE", max_length=100)
+    user_delete_content = models.CharField(db_column="USER_DELETE_CONTENT", max_length=5000)
+    user_delete_created = models.DateTimeField(db_column="USER_DELETE_CREATED", auto_now_add=True)
+    deleted_user = models.ForeignKey(User, on_delete=models.CASCADE, db_column='DELETED_USER',
+                                     related_name="DELETED_USER")
+    suggest_user = models.ForeignKey(User, models.DO_NOTHING, db_column='SUGGEST_USER', related_name="SUGGEST_USER")
+    user_delete_state = models.ForeignKey("UserDeleteState", on_delete=models.CASCADE, db_column="USER_DELETE_STATE")
+
+    class Meta:
+        managed = False
+        db_table = 'USER_DELETE'
+
+    @property
+    def get_file_path(self):
+        return os.path.join(MEDIA_ROOT, 'member', 'delete', str(self.user_delete_no))
+
+
+# 제명 증거자료 올라가는 경로
+def user_delete_upload_to(instance, filename):
+    return f'staff/user/delete/{instance.user_delete_no.user_delete_no}/{filename}'
+
+
+class UserDeleteFile(File):
+    user_delete_no = models.ForeignKey(UserDelete, db_column="USER_DELETE_NO", on_delete=models.CASCADE)
+    file_path = models.FileField(db_column='FILE_PATH', max_length=100,
+                                 upload_to=user_delete_upload_to)  # Field name made lowercase.
 
     class Meta:
         managed = False
         db_table = 'USER_DELETE_FILE'
+
+
+class UserDeleteAor(models.Model):
+    aor_no = models.AutoField(db_column="AOR_NO", primary_key=True)
+    aor_user = models.ForeignKey(User, db_column="AOR_USER", on_delete=models.CASCADE)
+    user_delete_no = models.ForeignKey(UserDelete, db_column="USER_DELETE_NO", on_delete=models.CASCADE)
+    aor_created = models.DateTimeField(db_column="AOR_CREATED", auto_now=True)
+    aor = models.IntegerField(db_column="AOR")
+
+    class Meta:
+        managed = False
+        db_table = "USER_DELETE_AOR"
+
+
+class UserDeleteState(models.Model):
+    state_no = models.AutoField(db_column="STATE_NO", primary_key=True)
+    state_name = models.CharField(db_column="STATE_NAME", unique=True, max_length=20)
+
+    class Meta:
+        managed = False
+        db_table = "USER_DELETE_STATE"
+
+
+class UserDeleteComment(CommentBase):
+    user_delete_no = models.ForeignKey(UserDelete, on_delete=models.CASCADE, db_column="USER_DELETE_NO")
+
+    class Meta:
+        managed = False
+        db_table = "USER_DELETE_COMMENT"
 
 
 class UserEmail(models.Model):

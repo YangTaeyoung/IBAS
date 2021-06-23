@@ -1,14 +1,18 @@
-from django.shortcuts import render, get_object_or_404, reverse, redirect
-from allauth.socialaccount.models import SocialAccount  # 소셜 계정 DB, socialaccount_socialaccount 테이블을 사용하기 위함.
-from DB.models import AuthUser, User, ChiefCarrier, UserRole, Board, BoardFile, \
-    BoardType, Comment, History, UserAuth, QuestForm, Answer, UserUpdateRequest  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
+from django.shortcuts import render, reverse, redirect, get_object_or_404
+from DB.models import User, UserRole, UserAuth, Answer, UserUpdateRequest, \
+    UserDelete, UserDeleteAor, UserDeleteFile, UserDeleteComment, UserDeleteState  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
+from staff.forms import UserDeleteForm
+from pagination_handler import get_page_object
+from IBAS.forms import FileFormBase, CommentBaseForm
 import os
-from django.db.models import Q
+from user_controller import superuser_only, writer_only, get_logined_user, chief_only
+from django.db.models import Q, Count, Aggregate
 from django.core.mail import send_mail
 from django.conf import settings
 from pagination_handler import get_paginator_list
 from alarm.alarm_controller import create_user_auth_update_alarm, create_user_role_update_alarm
-from user_controller import get_logined_user
+from file_controller import FileController
+
 
 # Create your views here.
 
@@ -16,7 +20,7 @@ def staff_member_list(request):
     user = get_logined_user(request)
     if user.user_role.role_no <= 4:  # 회원에 대한 관리는 회장단만
         new_user_list = User.objects.filter(user_auth__auth_no=3)  # 신입 부원 리스트
-        if user.user_role.role_no == 4: # 총무일 경우
+        if user.user_role.role_no == 4:  # 총무일 경우
             exist_user_list = User.objects.filter(~Q(user_auth__auth_no=3) & Q(user_role__role_no=6))
         else:
             exist_user_list = User.objects.filter(~Q(user_auth__auth_no=3) & ~Q(user_role__role_no=1))  # 기존 회원 리스트
@@ -41,6 +45,7 @@ def staff_member_list(request):
             "role_list": role_list,
             "user_update_request_list": user_update_request_items
         }
+
         return render(request, "member_manage.html", context)  # 유저 리스트 페이지를 랜더링
     else:  # 그 외의 권한을 가진 자가 접근할 경우 (해킹 시도)
         return redirect(reverse("index"))  # 메인페이지로 보냄
@@ -65,7 +70,7 @@ def staff_member_update(request):
                 int(user_role) == 2 and len(user_stu_list) == 1):  # 회장 위임의 조건을 충족한 경우. (한명만 골랐을 때)
             # 기존 회장, 부회장 권한 수정 -> 일반회원
             user = User.objects.filter(user_role__role_no=user_role).first()
-            user.user_role = UserRole.objects.get(pk=6) # 바꾸고자 하는 사람은 일반 회원으로 역할 변경됨.
+            user.user_role = UserRole.objects.get(pk=6)  # 바꾸고자 하는 사람은 일반 회원으로 역할 변경됨.
             user.save()
             create_user_role_update_alarm(user)
             # 새로운 회장 부회장.
@@ -91,11 +96,6 @@ def staff_member_update(request):
         return redirect(reverse("staff_member_list"))
     else:  # GET으로 넘어온 경우 비정상적인 접근.
         return redirect(reverse("index"))
-
-
-def member_delete_list(request):
-    context = {}
-    return render(request, 'member_delete_list.html', context)
 
 
 def member_applications(request):
@@ -188,6 +188,155 @@ def members_aor(request):  # 여러명 일괄 처리시.
     return redirect(reverse("index"))  # 비정상적인 요청의 경우.
 
 
+# 자기 자신이 투표했는지 확인
+def is_voted(request, user_delete):
+    return len(UserDeleteAor.objects.filter(Q(user_delete_no=user_delete) & Q(aor_user=get_logined_user(request)))) != 0
+
+
+# 회장단 전체가 투표했는지 확인
+def is_finished(user_delete):
+    total_chief_num = len(User.objects.filter(Q(user_role__role_no__lte=4) & Q(user_auth__auth_no=1)))
+    user_delete_aor_list = UserDeleteAor.objects.filter(user_delete_no=user_delete)
+    return total_chief_num == len(user_delete_aor_list)
+
+
+# 찬성이 과반이며 회장단 모두가 투표했는지 확인
+def is_decided(user_delete):
+    total_chief_num = len(User.objects.filter(Q(user_role__role_no__lte=4) & Q(user_auth__auth_no=1)))
+    user_delete_aor_list = UserDeleteAor.objects.filter(user_delete_no=user_delete)
+    return is_finished(user_delete) and len(user_delete_aor_list.filter(aor=1)) > (
+            total_chief_num / 2)
+
+
+@superuser_only(cfo_included=True)
+def member_delete_list(request):
+    user_delete_list = get_page_object(request, UserDelete.objects.all().order_by("user_delete_state__state_no"))
+    user_delete_state_list = UserDeleteState.objects.all()
+    context = {
+        "user_delete_list": user_delete_list,
+        "user_delete_state_list": user_delete_state_list
+    }
+    return render(request, "member_delete_list.html", context)
+
+
+@superuser_only(cfo_included=True)
 def member_delete_register(request):
-    context = {}
-    return render(request, 'member_delete_register.html', context)
+    if request.method == "POST":
+        is_register = bool(int(request.POST.get("is_register")))
+        deleted_user = request.POST.get("deleted_user")
+        if is_register:
+            context = {
+                "is_update": False,
+                "user_delete_form": UserDeleteForm(initial={"deleted_user": deleted_user}),
+                "user_delete_file_form": FileFormBase()
+            }
+            return render(request, "member_delete_register.html", context)
+        else:
+            user_delete_form = UserDeleteForm(request.POST)
+            user_delete_file_form = FileFormBase(request.POST, request.FILES)
+            if user_delete_file_form.is_valid() and user_delete_form.is_valid():
+                user_delete = user_delete_form.save(suggest_user=get_logined_user(request))
+                user_delete_file_form.save(instance=user_delete)
+            return redirect("member_delete_list")
+    else:
+        return redirect(reverse("index"))
+
+
+def member_delete_detail(request, user_delete_no):
+    user_delete = UserDelete.objects.get(pk=user_delete_no)
+    user_delete_aor_apply = UserDeleteAor.objects.filter(Q(user_delete_no=user_delete) & Q(aor=1))
+    user_delete_aor_reject = UserDeleteAor.objects.filter(Q(user_delete_no=user_delete) & Q(aor=0))
+    total_chief_num = len(User.objects.filter(Q(user_role__role_no__lte=4) & Q(user_auth__auth_no=1)))
+    file_list, img_list, doc_list = FileController.get_images_and_files_of_(user_delete)
+    context = {
+        "is_writer": get_logined_user(request) == user_delete.suggest_user,
+        "is_voted": is_voted(request, user_delete),
+        "doc_list": doc_list,
+        "img_list": img_list,
+        "user_delete": user_delete,
+        "user_delete_aor_list": UserDeleteAor.objects.filter(user_delete_no=user_delete),
+        "total_chief_num": total_chief_num,
+        "is_decided": is_decided(user_delete),
+    }
+    if len(user_delete_aor_apply) + len(user_delete_aor_reject) != 0:
+        apply_ratio = (len(UserDeleteAor.objects.filter(Q(user_delete_no=user_delete) & Q(aor=1))) // (
+                len(UserDeleteAor.objects.filter(Q(user_delete_no=user_delete) & Q(aor=0))) +
+                len(UserDeleteAor.objects.filter(Q(user_delete_no=user_delete) & Q(aor=1)))
+        )) * 100
+        reject_ratio = 100 - apply_ratio
+        context.update(apply_ratio=apply_ratio, reject_ratio=reject_ratio)
+    return render(request, 'member_delete_detail.html', context)
+
+
+# 일반 게시글과 다르기 때문에 관리자가 임의로 삭제할 수 없음.
+@writer_only(superuser=False)
+def member_delete_delete(request, user_delete_no):
+    if request.method == "POST":
+        user_delete = get_object_or_404(UserDelete, pk=user_delete_no)
+        FileController.delete_all_files_of_(user_delete)
+        user_delete.delete()
+        return redirect(reverse("member_delete_list"))
+    else:
+        return redirect(reverse("index"))
+
+
+@writer_only(superuser=False)
+def member_delete_update(request, user_delete_no):
+    user_delete = UserDelete.objects.get(pk=user_delete_no)
+    if request.method == "GET":
+        context = {
+            "user_delete_form": UserDeleteForm(instance=user_delete),
+            "user_delete_file_form": FileFormBase(),
+            "user_delete_file_list": UserDeleteFile.objects.filter(
+                user_delete_no=UserDelete.objects.get(pk=user_delete_no)),
+            "is_update": True,
+            "user_delete_no": user_delete_no
+        }
+        return render(request, "member_delete_register.html", context)
+    else:
+        user_delete_form = UserDeleteForm(request.POST)
+        user_delete_file_form = FileFormBase(request.POST, request.FILES)
+        user_delete_file_list = UserDeleteFile.objects.filter(user_delete_no=user_delete)
+        if user_delete_file_form.is_valid() and user_delete_form.is_valid():
+            user_delete_form.update(instance=user_delete)
+            FileController.remove_files_by_user(request, user_delete_file_list)
+            user_delete_file_form.save(instance=user_delete)
+            return redirect("member_delete_detail", user_delete_no=user_delete_no)
+        else:
+            redirect("member_delete_detail", user_delete_no=user_delete_no)
+
+
+# 각 회장단이 찬성, 반대를 클릭했을 때
+@superuser_only(cfo_included=True)
+def member_delete_aor(request, user_delete_no):
+    if request.method == "POST":
+        user_delete = UserDelete.objects.get(pk=user_delete_no)
+        # 투표하지 않은 상태에서 클릭한 경우만 반영
+        if not is_voted(request, user_delete):
+            UserDeleteAor.objects.create(
+                user_delete_no=user_delete,
+                aor_user=get_logined_user(request),
+                aor=int(request.POST.get('aor')),
+            )
+        # 회장단 전체가 투표한 경우, 완료로 상태 변경.
+        if is_finished(user_delete):
+            user_delete.user_delete_state = UserDeleteState.objects.get(pk=2)
+            user_delete.save()
+        return redirect("member_delete_detail", user_delete_no=user_delete_no)
+    return redirect("member_delete_list")
+
+
+# 투표가 끝나고, 회장이 제명 버튼을 눌렀을 때.
+@chief_only(vice=True)
+def member_delete_decide(request, user_delete_no):
+    if request.method == "POST":
+        user_delete = UserDelete.objects.get(pk=user_delete_no)
+        # 회장단 수와 해당 안건에 투표한 수가 동률이며 찬성이 과반수 이상인지 확인
+        if is_decided(user_delete):
+            deleted_user = user_delete.deleted_user
+            FileController.delete_all_files_of_(deleted_user)
+            deleted_user.delete()
+            return redirect(reverse("member_delete_list"))
+        return redirect("member_delete_detail", user_delete_no=user_delete_no)
+    else:  # 비정상적인 접근.
+        return redirect(reverse("index"))

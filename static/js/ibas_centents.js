@@ -74,7 +74,7 @@ function introduce_update(history_no) {
     //날짜 input 에 포커스
 
     //아이콘 바꾸어 주기 위해 변수 선언. 수정 아이콘을 바꾸어 주어야 하므로 id로 update를 가져옴.
-    var icon = document.getElementById('update-'+ history_no)
+    var icon = document.getElementById('update-' + history_no)
     // 아이콘 class 속성을 바꾸어 주어 아이콘 변경하기
     icon.setAttribute("class", "fa fa-check")
 
@@ -133,7 +133,7 @@ function my_info_grade() {
             tr_head.style.display = "table-row"; // 이거 해야 테이블 형태 안무너짐 // 테이블 헤드 부분
             tr_list[i].style.display = "table-row"; // 테이블 내용 부분
 
-        // option 안 학년과 선택된 select가 같으면
+            // option 안 학년과 선택된 select가 같으면
         } else if (grade === selectString) {
             tr_head.style.display = "table-row"; // 이거 해야 테이블 형태 안무너짐 // 테이블 헤드 부분
             tr_list[i].style.display = "table-row"; // 테이블 내용 부분
@@ -153,8 +153,7 @@ function my_info_grade() {
 // ================================== staff 관련 js ========================================= //
 // select 값 설정했을때 연도도 바뀌고, 연도에 맞는 내용으로 정렬
 function staff_select() {
-    for (i = 0 ; i < 6; i++) {
-        ㄴ
+    for (i = 0; i < 6; i++) {
         var staffTdInner = document.getElementById("staff-td-" + i).innerText;
 
         var staffTr = document.getElementById("staff-tr-" + i);
@@ -195,7 +194,7 @@ function staff_grade() {
             tr_head.style.display = "table-row"; // 이거 해야 테이블 형태 안무너짐 // 테이블 헤드 부분
             tr_list[i].style.display = "table-row"; // 테이블 내용 부분
 
-        // option 안 학년과 선택된 select가 같으면
+            // option 안 학년과 선택된 select가 같으면
         } else if (grade === selectString) {
             tr_head.style.display = "table-row"; // 이거 해야 테이블 형태 안무너짐 // 테이블 헤드 부분
             tr_list[i].style.display = "table-row"; // 테이블 내용 부분

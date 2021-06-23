@@ -3,19 +3,19 @@
 {% block content %}
     <script src="{% static 'js/posting_register.js' %}"></script>
     <link rel="stylesheet" href="{% static 'css/posting_register.css' %}"/>
-        <link rel="stylesheet" type="text/css" href="{% static 'css/star-rating-svg.css' %}"/>
-        <link
-                rel="stylesheet"
-                type="text/css"
-                href="{% static 'plugins/editor/jquery-te-1.4.0.css' %}"
-        />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/star-rating-svg.css' %}"/>
+    <link
+            rel="stylesheet"
+            type="text/css"
+            href="{% static 'plugins/editor/jquery-te-1.4.0.css' %}"
+    />
 
-        <link
-                rel="stylesheet"
-                type="text/css"
-                href="{% static 'plugins/drop/imageuploadify.min.css' %}"
-        />
-        <link rel="stylesheet" href="{% static 'plugins/tag-editor/jquery.tag-editor.css' %}"/>
+    <link
+            rel="stylesheet"
+            type="text/css"
+            href="{% static 'plugins/drop/imageuploadify.min.css' %}"
+    />
+    <link rel="stylesheet" href="{% static 'plugins/tag-editor/jquery.tag-editor.css' %}"/>
 
     <body>
     <div class="page-wraper">
@@ -25,7 +25,7 @@
             <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"
                  style=" background-image: url('{% static 'images/board_name_img.jpg' %}'); height: 350px">
                 <!--상단 제목부분을 누르면 해당 게시판 목록으로 이동-->
-                <a href="{% url 'activity' %}">
+                <a href="{% url 'member_delete_list' %}">
                     <div class="container clearfix">
                         <div class="dlab-bnr-inr-entry">
                             <!--제목-->
@@ -37,14 +37,15 @@
                 </a>
             </div>
             <!--===============================================입력란=========================================================-->
-
+            {% load widget_tweaks %}
             <form action="
-
-
-                    {% if board is None %}{% url 'activity_register' %}{% else %}{% url 'activity_update' %}{% endif %}"
+                    {% if is_update %}{% url 'member_delete_update' user_delete_no=user_delete_no %}{% else %}{% url 'member_delete_register' %}{% endif %}"
                   class="add-listing-form" method="POST" enctype="multipart/form-data">
-
                 {% csrf_token %}
+                {% for field in user_delete_form.hidden_fields %}
+                    {{ field }}
+                {% endfor %}
+                <input type="hidden" name="is_register" value="0"/>
                 <div class="content-block">
                     <div class="section-full content-inner bg-white">
                         <div class="container">
@@ -53,70 +54,38 @@
                                 <div class="content-box editor">
                                     <!--글쓰기-->
                                     <div class="content-header">
-                                        <h3 class="title">게시글 작성</h3>
+                                        <h3 class="title">제명 안건 작성</h3>
                                     </div>
-
                                     <div class="content-body">
                                         <!--제목 입력란-->
                                         <div class="form-group">
-                                            <input type="text" name="board_title" value="{{ board.board_title }}"
-                                                   class="form-control" placeholder="제목을 입력하세요"
-                                                   style="font-size: 25px; height: 70px;">
-                                            <br/>
+
+                                            {% render_field user_delete_form.user_delete_title class="form-control" style="font-size: 25px; height: 70px;" %}
                                             <!--이미지, 파일 업로드란-->
                                             <div class="form-group">
-                                                <input type="file" name="board_file"
-                                                       accept=".xlsx,.xls,image/*,.doc,.docx,video/*,.ppt,.pptx,.txt,.pdf,.py,.java"
-                                                       multiple>
+                                                {{ user_delete_file_form.upload_file }}
                                             </div>
                                         </div>
                                         <!-- 이미 존재하고 있던 이미지: 삭제 가능 (수정모드)-->
-                                        {% if board is not None %}
-                                            <div class="form-group">
-                                                <div id="image-cont" class="image-cont">
-                                                    {% for board_file in board_file_list %}
-                                                        <div id="image-card-{{ board_file.board_file_id }}"
-                                                             class="image-card">
-                                                            <!-- 취소 버튼, 취소를 누를 시 image-card 컨테이너가 통채로 사라짐. -->
-                                                            <button type="button"
-                                                                    class="btn btn-danger fa fa-times btn-cancel"
-                                                                    onclick="delImg(document.getElementById('image-card-{{ board_file.board_file_id }}'))"></button>
-                                                            <!-- 이미지 컨테이너 이미지 파일일 경우 img태그가, 이미지 파일이 아닐 경우 파일 모양의 아이콘이 붙음. -->
-                                                            <div id="image-{{ board_file.board_file_id }}"
-                                                                 class="image-container"></div>
-                                                            <!--기존 파일링크를 이동시키기 위한 히든 링크 -->
-                                                            <input type="hidden"
-                                                                   name="exist_file_path_{{ board_file.board_file_id }}"
-                                                                   value="{{ board_file.board_file_path }}"/>
-                                                        </div>
-                                                        <script>
-                                                            // 페이지가 로딩 될 때 해당 함수도 자동으로 실행되도록 설정함. (아이콘 or img 결정)
-                                                            onload = decisionIcon(document.getElementById("image-{{ board_file.board_file_id }}"), '{{ board_file.board_file_path }}');
-                                                        </script>
-                                                    {% endfor %}
-                                                </div>
-                                            </div>
+                                        {% if is_update %}
+                                            {% include "file_update_box.html" with file_list=user_delete_file_list%}
                                         {% endif %}
                                         <!--내용입력란-->
                                         <div class="form-group">
-                                            <textarea name="board_cont" type="text"
-                                                      class="jqte-test">{{ board.board_cont }}</textarea>
+                                            {% render_field user_delete_form.user_delete_content class="jqte-test" %}
                                             <!--input-->
                                         </div>
                                     </div>
                                 </div>
-                                {% if board is not None %}
-                                    <input type="hidden" name="board_no" value="{{ board.board_no }}">
-                                {% endif %}
                                 <!--=====================-->
                                 <!--등록하기 버튼, 누르면 게시글 상세보기로-->
                                 <!--최초 글작성 시 나오는 버튼-->
                                 <div style="display: grid; justify-items: center">
                                     <button class="site-button btn-block button-md" type="submit" style="width: 30%">
-                                        {% if board is None %}
-                                            등록하기
-                                        {% else %}
+                                        {% if is_update %}
                                             수정하기
+                                        {% else %}
+                                            등록하기
                                         {% endif %}
                                     </button>
                                 </div>

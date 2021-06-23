@@ -20,6 +20,7 @@ def get_pol_name(method_no):
         pol_name = pol_name + " 개인 채널 링크"
     return pol_name
 
+
 # 타입에 맞는 강의 리스트를 반환하는 함수
 def get_lect_list(request, type_no):
     if type_no != 4:  # 강의 개설 신청 게시판이 아닌 일반 게시판(강의, 스터디, 취미모임)의 경우
@@ -161,7 +162,7 @@ def lect_view(request, type_no):  # 게시판 페이지로 이동
 # 게시글 검색 시 이동 함수
 def lect_search(request, type_no):
     keyword = request.GET.get("keyword")
-    lect_type = get_lect_type(request,type_no)
+    lect_type = get_lect_type(request, type_no)
     # 기존 리스트에 검색 필터 추가 (검색 범위: 강의 제목, 강의 계획, 강의 소개)
     lect_list = get_page_object(request, get_lect_list(request, type_no).filter(
         Q(lect_intro__icontains=keyword) | Q(lect_title__icontains=keyword) | Q(

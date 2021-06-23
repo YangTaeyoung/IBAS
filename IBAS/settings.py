@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
+from my_root import *
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 
@@ -59,6 +60,8 @@ INSTALLED_APPS = [
     'lecture',
     # widget_tweaks
     'widget_tweaks',
+    # 템플릿에서 산술연산을 하기 위한 앱
+    'mathfilters',
     # 소셜 로그인 패키지: allauth 관련
     'allauth',
     'allauth.account',
@@ -87,7 +90,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             BASE_DIR / 'templates',
-            '/home/ibas/Django/IBAS/templates',
+            MY_TEMPLATE_ROOT,
         ]
         ,
         'APP_DIRS': True,
@@ -101,7 +104,7 @@ TEMPLATES = [
                 'utils.context_processors.chief',  # 하단바 회장 정보를 불러오기 위한 context_processor
                 'utils.context_processors.login',  # 로그인을 위한 context_processor
                 'utils.context_processors.login_check',  # 로그인 확인을 위한 context_processor
-                'utils.context_processors.superuser_check', # 슈퍼유저 확인을 위한 context_processor
+                'utils.context_processors.superuser_check',  # 슈퍼유저 확인을 위한 context_processor
             ],
         },
     },
@@ -113,16 +116,7 @@ WSGI_APPLICATION = 'IBAS.wsgi.application'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 
-DATABASES = {
-     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'IBAS',
-        'USER': 'root',
-        'PASSWORD': 'webproj3971--',
-        'HOST': 'localhost',
-        'PORT': '3356',
-    }
-}
+DATABASES = MY_DATABASE
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -167,8 +161,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(ROOT_DIR, '.static_root')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
-    #'/home/ibas/Django/IBAS/static',
-    'C:/proj/Django/IBAS/static',
+    MY_STATIC_ROOT
 ]
 # social 로그인 패키지 설정
 AUTHENTICATION_BACKENDS = (

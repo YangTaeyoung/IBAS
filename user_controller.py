@@ -1,6 +1,6 @@
 import functools
 from django.shortcuts import redirect, reverse
-from DB.models import User, ContestBoard, Board, Bank, Lect, LectBoard
+from DB.models import User, ContestBoard, Board, Bank, Lect, LectBoard, UserDelete
 
 
 # 로그인 했는지 여부를 반환하는 함수
@@ -21,6 +21,8 @@ def is_writer(request, **kwargs):
     contest_no = kwargs.get('contest_no')
     bank_no = kwargs.get('bank_no')
     lect_no = kwargs.get('lect_no')
+    user_delete_no = kwargs.get('user_delete_no')
+
     # comment_no = kwargs.get('comment_no')
 
     # 글쓴이인가요
@@ -39,6 +41,10 @@ def is_writer(request, **kwargs):
     elif bank_no is not None:
         bank = Bank.objects.get(pk=bank_no)
         if current_user == bank.bank_used_user:
+            return True
+    elif user_delete_no is not None:
+        user_delete = UserDelete.objects.get(pk=user_delete_no)
+        if current_user == user_delete.suggest_user:
             return True
     else:
         return False
@@ -107,7 +113,7 @@ def writer_only(superuser=False):
             else:
                 if is_writer(request, **kwargs):
                     return func(request, *args, **kwargs)
-            
+
             return redirect(reverse("index"))
 
         return wrapper
@@ -116,18 +122,27 @@ def writer_only(superuser=False):
 
 
 # 데코레이터
+# 수정자:양태영
+# 수정일시: 6월 16일
+# 수정내용: 총무 권한을 추가할지 추가하지 않을지 결정하는 함수. True일 경우 총무여도 권한 허용.
 # 관리자 권한이 있는지 확인하는 함수
-def superuser_only(func):
-    @login_required
-    @functools.wraps(func)
-    def wrapper(request, *args, **kwargs):
-        current_user = get_logined_user(request)
-        if current_user.user_role.role_no <= 3:
-            return func(request, *args, **kwargs)
-        else:
-            return redirect(reverse("index"))
+def superuser_only(cfo_included=False):
+    def decorator(func):
+        @login_required
+        @functools.wraps(func)
+        def wrapper(request, *args, **kwargs):
+            current_user = get_logined_user(request)
+            flag = 3
+            if cfo_included:
+                flag = 4
+            if current_user.user_role.role_no <= flag:
+                return func(request, *args, **kwargs)
+            else:
+                return redirect(reverse("index"))
 
-    return wrapper
+        return wrapper
+
+    return decorator
 
 
 # 데코레이터
@@ -163,6 +178,29 @@ def auth_check(active=False):
                 boundary = current_user.user_auth.auth_no <= 2
 
             if boundary:
+                return func(request, *args, **kwargs)
+            else:
+                return redirect(reverse("index"))
+
+        return wrapper
+
+    return decorator
+
+
+# 데코레이터
+# 제작일: 21.6.21 15.43
+# 제작자: 양태영
+# 용도: 회장인지 아닌지 판별하는 데코레이터 vice가 True 일 경우 부화장인지 봄
+def chief_only(vice=False):
+    def decorator(func):
+        @login_required
+        @auth_check(True)
+        @functools.wraps(func)
+        def wrapper(request, *args, **kwargs):
+            current_user = get_logined_user(request)
+            if vice and current_user.user_role.role_no <= 2:
+                return func(request, *args, **kwargs)
+            elif not vice and current_user.user_role.role_no == 1:
                 return func(request, *args, **kwargs)
             else:
                 return redirect(reverse("index"))

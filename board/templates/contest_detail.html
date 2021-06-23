@@ -38,7 +38,8 @@
                                         <ul class="d-flex align-items-center">
                                             <!-- 게시글 작성자 -->
                                             <li class="post-author"><i class="ti ti-user"></i>By <a
-                                                    href="javascript:void(0);">{{ contest.contest_writer.user_name }}</a></li>
+                                                    href="javascript:void(0);">{{ contest.contest_writer.user_name }}</a>
+                                            </li>
                                             <!-- 게시글 작성시간 -->
                                             <li class="post-comment"><i class="ti ti-alarm-clock"></i> <a
                                                     href="javascript:void(0);">{{ contest.contest_created }}</a></li>
@@ -58,7 +59,8 @@
                                                     href="javascript:void(0);">{{ contest.contest_asso }}</a></li>
                                             <!-- 공모전 기간 -->
                                             <li class="post-comment"><i class="ti ti-calendar"></i> <a
-                                                    href="javascript:void(0);">{{ contest.contest_start|date:"Y-m-d" }} ~ {{ contest.contest_deadline|date:"Y-m-d" }}</a></li>
+                                                    href="javascript:void(0);">{{ contest.contest_start|date:"Y-m-d" }}
+                                                ~ {{ contest.contest_deadline|date:"Y-m-d" }}</a></li>
                                         </ul>
                                     </div>
                                     <!--============================== 게시글 본문 시작 ==============================-->
@@ -68,18 +70,19 @@
                                         <div class="dlab-divider bg-gray-dark" style="margin-bottom: 15px"></div>
                                         <h5 style="text-align: center">공모전 주제</h5>
                                         <div class="dlab-divider bg-gray-dark" style="margin-top: 0px"></div>
-                                        <p class="font-weight-300" style="text-align: center">{{ contest.contest_topic }}</p>
+                                        <p class="font-weight-300"
+                                           style="text-align: center">{{ contest.contest_topic }}</p>
                                         <div class="dlab-divider bg-gray-dark"></div>
 
                                         <!-- 포스터 나오는 곳 img파일은 이곳에 나오도록 -->
                                         {% for image in image_list %}
-                                        <img class="img-cover" src="/media/{{ image.file_path }}" alt="" />
+                                            <img class="img-cover" src="/media/{{ image.file_path }}" alt=""/>
                                         {% endfor %}
                                         <!--공모전 상세내용 나오는 곳-->
                                         <p class="font-weight-400"></p>
-                                            {% autoescape off %}
-                                                {{ contest.contest_cont }}
-                                            {% endautoescape %}
+                                        {% autoescape off %}
+                                            {{ contest.contest_cont }}
+                                        {% endautoescape %}
                                         <p class="font-weight-300"></p>
 
                                         <!-- 첨부된 파일 불러오는 곳 -->
@@ -89,11 +92,12 @@
                                                 {% for file in file_list %}
                                                     <!-- 첨부파일 1 -->
                                                      <i class="fa fa-download m-r15 "></i>
-                                                    <a class="line2" href="#" download="{{ file.file_path }}">{{ file.file_name }}</a>
-                                                        <!-- 파일 간 구분선 -->
-                                                        {% if forloop.revcounter0 > 0 %}
-                                                            <div class="dlab-divider tb10 bg-gray-dark"></div>
-                                                        {% endif %}
+                                                    <a class="line2" href="#"
+                                                       download="{{ file.file_path }}">{{ file.file_name }}</a>
+                                                    <!-- 파일 간 구분선 -->
+                                                    {% if forloop.revcounter0 > 0 %}
+                                                        <div class="dlab-divider tb10 bg-gray-dark"></div>
+                                                    {% endif %}
                                                 {% endfor %}
                                             </div>
                                         {% endif %}
@@ -103,20 +107,23 @@
                                     <!-- 게시글 삭제 및 수정 div -->
                                     <div class="extra-cell text-right">
 
-                                       <!-- 게시글 수정 버튼 -->
+                                        <!-- 게시글 수정 버튼 -->
                                         <!-- 관련자만 보이게 처리 -->
                                         {% if logined_user.user_stu == contest.contest_writer.user_stu %}
-                                        <button class="site-button radius-xl m-l10" onclick="location.href='{% url 'contest_update' contest.contest_no %}'"><i
-                                                class="fa fa-pencil m-r5"></i>게시글 수정
-                                        </button>
+                                            <button class="site-button radius-xl m-l10"
+                                                    onclick="location.href='{% url 'contest_update' contest.contest_no %}'">
+                                                <i
+                                                        class="fa fa-pencil m-r5"></i>게시글 수정
+                                            </button>
 
                                         {% endif %}
                                         <!-- 게시글 삭제 버튼 -->
                                         <!-- 관련자만 보이게 처리 -->
                                         {% if logined_user.user_auth.auth_no <= 3 and logined_user.user_stu == contest.contest_writer.user_stu %}
-                                        <button class="site-button red radius-xl m-l10" onclick="location.href='{% url 'contest_delete' contest.contest_no %}'"><i
-                                                class="fa fa-trash m-r5"></i>게시글 삭제
-                                        </button>
+                                            <button class="site-button red radius-xl m-l10"
+                                                    onclick="goPage('{% url 'contest_delete' contest.contest_no %}', true, '게시글은 삭제가 되면 복구가 불가능합니다.\n정말 삭제하시겠습니까?')">
+                                                <i class="fa fa-trash m-r5"></i>게시글 삭제
+                                            </button>
 
                                         {% endif %}
                                     </div>
@@ -129,60 +136,60 @@
                                         <h3 class="font-26">팀원 모집</h3>
                                         <div class="clearfix">
                                             <ol class="comment-list">
-                                            <!-- 댓글 1 -->
-                                            {% for comment in comment_list %}
-                                                <li class="comment">
-                                                    <div class="comment-body">
-                                                        <!-- 댓글 작성자 프로필자신 및 이름을 담는 div -->
-                                                        <div class="comment-author vcard"><cite class="fn"><img
-                                                                src="/media/{{ comment.comment_writer.user_pic }}"
-                                                                width="35"
-                                                                height="35" class="comment-profile-size"
-                                                                alt="현재 브라우저에서 지원하지 않는 형식입니다.">{{ comment.comment_writer.user_name }}
-                                                        </cite></div>
-                                                        <!-- 댓글 작성자 학과, 학번 및 작성시간 div -->
-                                                        <div class="dlab-post-meta m-l10">
-                                                            <ul class="d-flex">
-                                                                <!-- 학과 및 학번 -->
-                                                                <li class="post-author"><a
-                                                                        href="javascript:void(0);">{{ comment.comment_writer.user_major.major_name }}
-                                                                    {{ comment.comment_writer.user_stu|stringformat:"s" |slice:"2:4" }}학번</a>
-                                                                </li>
-                                                                <!-- 작성시간 -->
-                                                                <li class="post-comment"><i
-                                                                        class="ti ti-alarm-clock"></i>
-                                                                    <a href="javascript:void(0);">
-                                                                        {{ comment.comment_created|date:"Y-m-d h:m:s" }}
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                        <!-- 댓글 내용란 (DB에서 가져옴) -->
-                                                        <form id="form-comment-update-{{ comment.comment_id }}"
-                                                              action="{% url 'contest_comment_update' %}"
-                                                              method="post">
-                                                            {% csrf_token %}
-                                                            <input type="hidden" name="comment_id"
-                                                                   value="{{ comment.comment_id }}"/>
-                                                            <input type="hidden" name="contest_no"
-                                                                   value="{{ contest.contest_no }}"/>
-                                                            <input type="text" disabled="disabled"
-                                                                   style="width: 706px"
-                                                                   name="comment_cont"
-                                                                   class="comments-area"
-                                                                   id="correcting-no-{{ comment.comment_id }}"
-                                                                   value="{{ comment.comment_cont }}"
-                                                                   autofocus>
-                                                        </form>
+                                                <!-- 댓글 1 -->
+                                                {% for comment in comment_list %}
+                                                    <li class="comment">
+                                                        <div class="comment-body">
+                                                            <!-- 댓글 작성자 프로필자신 및 이름을 담는 div -->
+                                                            <div class="comment-author vcard"><cite class="fn"><img
+                                                                    src="/media/{{ comment.comment_writer.user_pic }}"
+                                                                    width="35"
+                                                                    height="35" class="comment-profile-size"
+                                                                    alt="현재 브라우저에서 지원하지 않는 형식입니다.">{{ comment.comment_writer.user_name }}
+                                                            </cite></div>
+                                                            <!-- 댓글 작성자 학과, 학번 및 작성시간 div -->
+                                                            <div class="dlab-post-meta m-l10">
+                                                                <ul class="d-flex">
+                                                                    <!-- 학과 및 학번 -->
+                                                                    <li class="post-author"><a
+                                                                            href="javascript:void(0);">{{ comment.comment_writer.user_major.major_name }}
+                                                                        {{ comment.comment_writer.user_stu|stringformat:"s" |slice:"2:4" }}학번</a>
+                                                                    </li>
+                                                                    <!-- 작성시간 -->
+                                                                    <li class="post-comment"><i
+                                                                            class="ti ti-alarm-clock"></i>
+                                                                        <a href="javascript:void(0);">
+                                                                            {{ comment.comment_created|date:"Y-m-d h:m:s" }}
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                            <!-- 댓글 내용란 (DB에서 가져옴) -->
+                                                            <form id="form-comment-update-{{ comment.comment_id }}"
+                                                                  action="{% url 'contest_comment_update' %}"
+                                                                  method="post">
+                                                                {% csrf_token %}
+                                                                <input type="hidden" name="comment_id"
+                                                                       value="{{ comment.comment_id }}"/>
+                                                                <input type="hidden" name="contest_no"
+                                                                       value="{{ contest.contest_no }}"/>
+                                                                <input type="text" disabled="disabled"
+                                                                       style="width: 706px"
+                                                                       name="comment_cont"
+                                                                       class="comments-area"
+                                                                       id="correcting-no-{{ comment.comment_id }}"
+                                                                       value="{{ comment.comment_cont }}"
+                                                                       autofocus>
+                                                            </form>
 
-                                                        <div id="comment_no_{{ comment.comment_id }}"
+                                                            <div id="comment_no_{{ comment.comment_id }}"
                                                                  class="reply-btn-div">
-                                                            <!-- 답글쓰기버튼 클릭 시, jqury로 버튼을 담는 div 밑에 대댓글 작성 란 생김 -->
+                                                                <!-- 답글쓰기버튼 클릭 시, jqury로 버튼을 담는 div 밑에 대댓글 작성 란 생김 -->
                                                                 <form id="form-comment-delete-{{ comment.comment_id }}"
                                                                       action="{% url 'contest_comment_delete' %}"
                                                                       method="post">
 
-                                                                    {% if logined_user.user_stu is not None and logined_user.user_auth.auth_no < 3  %}
+                                                                    {% if logined_user.user_stu is not None and logined_user.user_auth.auth_no < 3 %}
                                                                         <button type="button"
                                                                                 id="btnAdd-{{ comment.comment_id }}"
                                                                                 onclick="addReply({{ comment.comment_id }},'{% url "contest_comment_register" %}', {{ contest.contest_no }})"
@@ -296,8 +303,8 @@
                                                                 </div>
                                                             {% endfor %}
                                                         </div>
-                                                </li>
-                                            {% endfor %}
+                                                    </li>
+                                                {% endfor %}
                                             </ol>
                                             <!-- 작성된 댓글과 댓글입력 부분을 나누는 구분선 -->
                                             <div class="dlab-divider bg-gray-dark"></div>
@@ -307,7 +314,7 @@
                                                       action="{% url "contest_comment_register" %}">
                                                     {% csrf_token %}
                                                     <input type="hidden" name="contest_no"
-                                                               value="{{ contest.contest_no }}"/>
+                                                           value="{{ contest.contest_no }}"/>
                                                     <!-- 댓글입력창 -->
                                                     <p class="comment-form-comment">
                                                         <label for="comment">Comments</label>
