@@ -1,5 +1,6 @@
 from django import forms
-from DB.models import Lect, MethodInfo
+from DB.models import Lect, MethodInfo, LectBoard
+from django.utils.translation import gettext_lazy as _
 from user_controller import get_logined_user
 
 
@@ -89,3 +90,42 @@ class LectRejectForm(forms.ModelForm):
         if self.has_changed():
             lect.save()
         return lect
+
+
+class LectBoardForm(forms.ModelForm):
+    class Meta:
+        model = LectBoard
+
+        fields = ('lect_board_title', 'lect_board_link', 'lect_board_cont', 'lect_board_type_no')
+
+        widgets = {
+            'lect_board_title': forms.TextInput(attrs={"placeholder": _("제목을 입력하세요."),
+                                                       "style": "font-size: 25px; height: 70px;"}),
+            'lect_board_link': forms.TextInput(attrs={"placeholder": _("강의 링크를 적어주세요.")}),
+            'lect_board_type_no': forms.HiddenInput(),
+            'lect_board_cont': forms.Textarea()
+        }
+        labels = {
+            'lect_board_title': _("제목"),
+            'lect_board_link': _("강의 링크"),
+            'lect_board_cont': _("내용")
+        }
+
+    def save(self, **kwargs):
+        lect_board = super().save(commit=False)
+        lect_board.lect_board_writer = kwargs.get('lect_board_writer')
+        lect_board.lect_no = kwargs.get('lect_no')
+        lect_board.save()
+
+        return lect_board
+
+    def update(self, instance):
+        lect_board = instance
+        lect_board.lect_board_title = self.cleaned_data['lect_board_title']
+        lect_board.lect_board_cont = self.cleaned_data['lect_board_cont']
+        lect_board.lect_board_link = self.cleaned_data['lect_board_link']
+
+        if self.has_changed():
+            lect_board.save()
+
+        return lect_board

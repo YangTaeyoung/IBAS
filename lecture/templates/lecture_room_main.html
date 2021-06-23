@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load custom_tags %}
 {% block content %}
     <div class="page-wraper">
         <!-- 상단 제목부분 -->
@@ -15,10 +16,10 @@
                         <div class="dlab-bnr-inr-entry">
                             <!-- 제목 -->
                             <!-- DB에서 제목 꺼내와야 함 -->
-                            <h1 class="text-white introduce-letter-spacing_5">파이썬 기초 강의</h1>
+                            <h1 class="text-white introduce-letter-spacing_5">{{ lect.lect_title }}</h1>
                             <!--부제목-->
                             <!-- DB에서 제목 꺼내와야 함 (강의 간단소개 db 가져오면 됨) -->
-                            <p class="introduce-margin-top_20">파이썬을 처음 접하는 분들을 위한 강의입니다.</p>
+                            <p class="introduce-margin-top_20">{{ lect.lect_intro }}</p>
                         </div>
                     </div>
                 </a>
@@ -57,7 +58,7 @@
                                         <div class="widget_tag">
                                             <ul class="m-b0">
                                                 <!-- [메뉴바 > 강의실 > 강의] 게시판 내 강의소개 페이지로 이동 -->
-                                                <li><a href="javascript:void(0);">강의소개</a>&nbsp;</li>
+                                                <li><a href="{% url "lect_detail" lect.lect_no %}">강의소개</a>&nbsp;</li>
                                                 <!-- 공지사항, 강의, 과제, 제출된 과제 페이지들은 모두 동일한 레이아웃임 -->
                                                 <!-- 다만 과제 페이지의 경우 강의자, 수강생 별 보이는 게 다르게끔 세션처리 필요 (해당 게시판 주석 참조) -->
                                                 <!-- 강의자, 수강생 모두 모이는 메뉴: 공지사항, 강의, 과제 -->
@@ -86,11 +87,17 @@
                                             <!-- 박스 제목 div -->
                                             <div class="content-header d-flex justify-content-between">
                                                 <h3 class="title"><i class="fa fa-microphone m-r5"></i>공지사항</h3>
-                                                <!-- 더보기 a태크 클릭 시, 강의룸 내 공지사항 페이지로 이동 -->
-                                                <a href="#">더보기</a>
+                                                {% if notice_list %}
+                                                    <!-- 더보기 a태크 클릭 시, 강의룸 내 공지사항 페이지로 이동 -->
+                                                    <a href="#">더보기</a>
+                                                {% elif logined_user == lect.lect_chief %}
+                                                    <a href="#">등록하기</a>
+                                                {% endif %}
+
                                             </div>
                                             <div class="content-body">
                                                 <!-- 공지사항 게시글 테이블 -->
+                                                {% if notice_list %}
                                                 <table class="table">
                                                     <!-- 테이블 1행: 제목 -->
                                                     <thead>
@@ -104,38 +111,23 @@
                                                     </thead>
                                                     <!-- 테이블 2행 ~: 공지사항 최근 3개 게시글 불러옴 -->
                                                     <tbody>
-                                                    <tr>
-                                                        <!-- 게시글 번호 (고정됨) -->
-                                                        <td>1</td>
-                                                        <!-- 게시글 제목: a태그 클릭하면, 해당 게시글로 이동 -->
-                                                        <td><a href="#">5/12일 휴강</a></td>
-                                                        <!-- 게시글 작성자: 복수 강의자일 경우, 해당 게시글을 올린 강의자 이름을 불러올 것 -->
-                                                        <td>신승연</td>
-                                                        <!-- 게시글 작성일 -->
-                                                        <td>2021-05-11</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <!-- 게시글 번호 (고정됨) -->
-                                                        <td>2</td>
-                                                        <!-- 게시글 제목: a태그 클릭하면, 해당 게시글로 이동 -->
-                                                        <td><a href="#">수업에 필요한 관련 교재</a></td>
-                                                        <!-- 게시글 작성자: 복수 강의자일 경우, 해당 게시글을 올린 강의자 이름을 불러올 것 -->
-                                                        <td>신승연</td>
-                                                        <!-- 게시글 작성일 -->
-                                                        <td>2021-04-21</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <!-- 게시글 번호 (고정됨) -->
-                                                        <td>3</td>
-                                                        <!-- 게시글 제목: a태그 클릭하면, 해당 게시글로 이동 -->
-                                                        <td><a href="#">모든 수강생 필독 공지사랑</a></td>
-                                                        <!-- 게시글 작성자: 복수 강의자일 경우, 해당 게시글을 올린 강의자 이름을 불러올 것 -->
-                                                        <td>김예진</td>
-                                                        <!-- 게시글 작성일 -->
-                                                        <td>2021-03-02</td>
-                                                    </tr>
+                                                    {% for notice in notice_list %}
+                                                        <tr>
+                                                            <!-- 공지사항 번호 (고정됨) -->
+                                                            <td>{{ forloop.counter }}</td>
+                                                            <!-- 공지사항 제목-->
+                                                            <td><a href="#">{{ notice.title }}</a></td>
+                                                            <!-- 공지사항 작성자: 복수 강의자일 경우, 해당 게시글을 올린 강의자 이름을 불러올 것 -->
+                                                            <td>{{ notice.writer }}</td>
+                                                            <!-- 게시글 작성일 -->
+                                                            <td>{{ notice.created }}</td>
+                                                        </tr>
+                                                    {% endfor %}
                                                     </tbody>
                                                 </table>
+                                            {% else %}
+                                                <p>공지사항이 없습니다.</p>
+                                            {% endif %}
                                             </div>
                                         </div>
                                         <!-- 강의룸 내 강의 페이지 글을 담는 박스 -->
@@ -143,10 +135,15 @@
                                             <!-- 박스 제목 div -->
                                             <div class="content-header d-flex justify-content-between">
                                                 <h3 class="title"><i class="fa fa-book m-r5"></i>강의목록</h3>
-                                                <!-- 더보기 a태크 클릭 시, 강의룸 내 강의 페이지로 이동 -->
-                                                <a href="#">더보기</a>
+                                                {% if lect_board_list %}
+                                                    <!-- 더보기 a태크 클릭 시, 강의룸 내 강의리스트 페이지로 이동 -->
+                                                    <a href="#">더보기</a>
+                                                {% elif logined_user == lect.lect_chief %}
+                                                    <a href={% url "lect_board_register" lect.lect_no %}>등록하기</a>
+                                                {% endif %}
                                             </div>
                                             <div class="content-body">
+                                            {% if lect_board_list %}
                                                 <!-- 강의목록(강의페이지) 게시글 테이블 -->
                                                 <table class="table">
                                                     <!-- 테이블 1행: 제목 -->
@@ -161,38 +158,24 @@
                                                     </thead>
                                                     <!-- 테이블 2행 ~: 강의목록(강의) 페이지 내 최근 3개 게시글 불러옴 -->
                                                     <tbody>
-                                                    <tr>
-                                                        <!-- 게시글 번호 (고정됨) -->
-                                                        <td>1</td>
-                                                        <!-- 게시글 제목: a태그 클릭하면, 해당 게시글로 이동 -->
-                                                        <td><a href="#">거북이를 소환하여 그림그리기</a></td>
-                                                        <!-- 게시글 작성자: 복수 강의자일 경우, 해당 게시글을 올린 강의자 이름을 불러올 것 -->
-                                                        <td>신승연</td>
-                                                        <!-- 게시글 작성일 -->
-                                                        <td>2021-05-11</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <!-- 게시글 번호 (고정됨) -->
-                                                        <td>2</td>
-                                                        <!-- 게시글 제목: a태그 클릭하면, 해당 게시글로 이동 -->
-                                                        <td><a href="#">파이썬에 대한 전반적인 지식</a></td>
-                                                        <!-- 게시글 작성자: 복수 강의자일 경우, 해당 게시글을 올린 강의자 이름을 불러올 것 -->
-                                                        <td>양태영</td>
-                                                        <!-- 게시글 작성일 -->
-                                                        <td>2021-04-21</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <!-- 게시글 번호 (고정됨) -->
-                                                        <td>3</td>
-                                                        <!-- 게시글 제목: a태그 클릭하면, 해당 게시글로 이동 -->
-                                                        <td><a href="#">오리엔테이션</a></td>
-                                                        <!-- 게시글 작성자: 복수 강의자일 경우, 해당 게시글을 올린 강의자 이름을 불러올 것 -->
-                                                        <td>신승연</td>
-                                                        <!-- 게시글 작성일 -->
-                                                        <td>2021-03-02</td>
-                                                    </tr>
+                                                    {% for board in lect_board_list|slice:':3' %}
+                                                        <tr>
+                                                            <!-- 공지사항 번호 (고정됨) -->
+                                                            <td>{{ lect_board_list|length |subtract:forloop.counter0}}</td>
+                                                            <!-- 공지사항 제목-->
+                                                            <td><a href={% url 'lect_board_detail' room_no=lect.lect_no board_no=board.lect_board_no %}>{{ board.lect_board_title }}</a></td>
+                                                            <!-- 공지사항 작성자: 복수 강의자일 경우, 해당 게시글을 올린 강의자 이름을 불러올 것 -->
+                                                            <td>{{ board.lect_board_writer.user_name }}</td>
+                                                            <!-- 게시글 작성일 -->
+                                                            <td>{{ board.lect_board_created | date:"Y-m-d"}}</td>
+                                                        </tr>
+
+                                                    {% endfor %}
                                                     </tbody>
                                                 </table>
+                                            {% else %}
+                                                <p>강의가 없습니다.</p>
+                                            {% endif %}
 
                                             </div>
                                         </div>
@@ -202,9 +185,15 @@
                                             <div class="content-header d-flex justify-content-between">
                                                 <h3 class="title"><i class="fa fa-check-square-o m-r5"></i>과제</h3>
                                                 <!-- 더보기 a태크 클릭 시, 강의룸 내 과제 페이지로 이동 -->
-                                                <a href="#">더보기</a>
+                                                {% if assignment_list %}
+                                                    <!-- 더보기 a태크 클릭 시, 강의룸 내 강의리스트 페이지로 이동 -->
+                                                    <a href="#">더보기</a>
+                                                {% elif logined_user == lect.lect_chief %}
+                                                    <a href="#">등록하기</a>
+                                                {% endif %}
                                             </div>
                                             <div class="content-body">
+                                            {% if assignment_list %}
                                                 <!-- 과제 게시글 테이블 -->
                                                 <table class="table">
                                                     <!-- 테이블 1행: 제목 -->
@@ -219,43 +208,25 @@
                                                     </thead>
                                                     <!-- 테이블 2행 ~: 과제 페이지 내 최근 3개 게시글 불러옴 -->
                                                     <tbody>
-                                                    <tr>
-                                                        <!-- 게시글 번호 (고정됨) -->
-                                                        <td>1</td>
-                                                        <!-- 게시글 제목: a태그 클릭하면, 해당 게시글로 이동 -->
-                                                        <td><a href="#">파이썬으로 거북이 소환</a></td>
-                                                        <!-- 과제 마감일 -->
-                                                        <td>2021-05-20</td>
-                                                        <!-- 수강생: 과제 제출 여부 (제출/미제출) 보임 -->
-                                                        <!-- 과제 제출 전이라면, 과제 안내 페이지로 넘어갈 수 있도록 처리필요 -->
-                                                        <!-- 강의자: 과제를 제출한 사람수 보임 -->
-                                                        <td class="text-xl-center text-red">미제출</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <!-- 게시글 번호 (고정됨) -->
-                                                        <td>2</td>
-                                                        <!-- 게시글 제목: a태그 클릭하면, 해당 게시글로 이동 -->
-                                                        <td><a href="#">파이썬 설치</a></td>
-                                                        <!-- 과제 마감일 -->
-                                                        <td>2021-04-30</td>
-                                                        <!-- 수강생: 과제 제출 여부 (제출/미제출) 보임 -->
-                                                        <!-- 만약 과제를 제출했다면, 제출한 과제물을 볼 수 있는 페이지로 넘어가게끔 처리필요 -->
-                                                        <!-- 강의자: 과제를 제출한 사람수 보임 -->
-                                                        <td class="text-xl-center text-green">제출</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <!-- 게시글 번호 (고정됨) -->
-                                                        <td>3</td>
-                                                        <!-- 게시글 제목: a태그 클릭하면, 해당 게시글로 이동 -->
-                                                        <td><a href="#">파이썬 삼행시</a></td>
-                                                        <!-- 과제 마감일 -->
-                                                        <td>2021-03-20</td>
-                                                        <!-- 수강생: 과제 제출 여부 (제출/미제출) 보임 -->
-                                                        <!-- 강의자: 과제를 제출한 사람수 보임 -->
-                                                        <td class="text-xl-center">10명</td>
-                                                    </tr>
+                                                    {% for assignment in assignment_list %}
+                                                        <tr>
+                                                            <!-- 게시글 번호 (고정됨) -->
+                                                            <td>{{ forloop.counter }}</td>
+                                                            <!-- 게시글 제목: a태그 클릭하면, 해당 게시글로 이동 -->
+                                                            <td><a href="#">assignment.title</a></td>
+                                                            <!-- 과제 마감일 -->
+                                                            <td>assignment.deadline</td>
+                                                            <!-- 수강생: 과제 제출 여부 (제출/미제출) 보임 -->
+                                                            <!-- 과제 제출 전이라면, 과제 안내 페이지로 넘어갈 수 있도록 처리필요 -->
+                                                            <!-- 강의자: 과제를 제출한 사람수 보임 -->
+                                                            <td class="text-xl-center text-red">미제출</td>
+                                                        </tr>
+                                                    {% endfor %}
                                                     </tbody>
                                                 </table>
+                                            {% else %}
+                                                <p>과제가 없습니다.</p>
+                                            {% endif %}
                                             </div>
                                         </div>
                                     </div>

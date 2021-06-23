@@ -289,19 +289,34 @@ class LectDay(models.Model):
 
 
 class LectBoard(models.Model):
-    lect_board_no = models.AutoField(db_column='LECT_BOARD_NO', primary_key=True)  # Field name made lowercase.
-    lect_board_title = models.CharField(db_column='LECT_BOARD_TITLE', max_length=100)  # Field name made lowercase.
-    lect_board_created = models.DateTimeField(db_column='LECT_BOARD_CREATED',
-                                              auto_now_add=True)  # Field name made lowercase.
-    lect_board_cont = models.TextField(db_column='LECT_BOARD_CONT')  # Field name made lowercase.
-    lect_board_writer = models.ForeignKey('User', models.DO_NOTHING,
-                                          db_column='LECT_BOARD_WRITER')  # Field name made lowercase.
-    lect_no = models.ForeignKey(Lect, models.DO_NOTHING, db_column='LECT_NO')  # Field name made lowercase.
-    lect_board_deadline = models.DateTimeField(db_column='LECT_BOARD_DEADLINE')  # Field name made lowercase.
+    lect_board_no = models.AutoField(db_column='LECT_BOARD_NO', primary_key=True)
+    lect_board_title = models.CharField(db_column='LECT_BOARD_TITLE', max_length=100)
+    lect_board_created = models.DateTimeField(db_column='LECT_BOARD_CREATED', auto_now_add=True)
+    lect_board_cont = models.TextField(db_column='LECT_BOARD_CONT')
+    lect_board_writer = models.ForeignKey('User', models.DO_NOTHING, db_column='LECT_BOARD_WRITER')
+    lect_no = models.ForeignKey(Lect, models.DO_NOTHING, db_column='LECT_NO')
+    lect_board_deadline = models.DateTimeField(db_column='LECT_BOARD_DEADLINE', null=True, blank=True)
+    lect_board_type_no = models.ForeignKey('LectBoardType', models.DO_NOTHING, db_column='LECT_BOARD_TYPE_NO')
+    lect_board_link = models.CharField(db_column='LECT_BOARD_LINK', max_length=500, null=True, blank=True)
 
     class Meta:
         managed = False
         db_table = 'LECT_BOARD'
+        ordering = ['-lect_board_created']
+
+    @property
+    def get_file_path(self):
+        return os.path.join(MEDIA_ROOT, 'lect', 'board', str(self.lect_board_no))
+
+
+class LectBoardType(models.Model):
+    lect_board_type_no = models.AutoField(db_column='LECT_BOARD_TYPE_NO', primary_key=True)
+    lect_board_type_name = models.CharField(db_column='LECT_BOARD_TYPE_NAME', max_length=20)
+    lect_board_type_exp = models.CharField(db_column='LECT_BOARD_TYPE_EXP', max_length=20)
+
+    class Meta:
+        managed = False
+        db_table = 'LECT_BOARD_TYPE'
 
 
 class LectBoardAnswer(models.Model):

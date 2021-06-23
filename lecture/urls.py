@@ -9,11 +9,15 @@ urlpatterns = [
     path('update/<int:lect_no>', views.lect_update, name="lect_update"),
     path('delete/<int:lect_no>', views.lect_delete, name="lect_delete"),
     path('<int:type_no>/search/', views.lect_search, name="lect_search"),
+
     path('room/<int:room_no>/main/', views.lect_room_main, name="lect_room_main"), # 강의룸 메인 게시판으로 이동
-    path('room/register/', views.lect_room_register, name="lect_room_register"), # 강의룸 게시글 등록페이지로 이동
+    path('room/<int:room_no>/register/', views.lect_board_register, name="lect_board_register"), # 강의룸 게시글 등록페이지로 이동
+    path('room/<int:room_no>/detail/<int:board_no>', views.lect_board_detail, name="lect_board_detail"),
+    path('room/<int:room_no>/delete/<int:board_no>', views.lect_board_delete, name="lect_board_delete"),
+    path('room/<int:room_no>/update/<int:board_no>', views.lect_board_update, name="lect_board_update"),
     path('room/mem/manage', views.lect_room_mem_manage, name="lect_room_mem_manage"),
     path('room/attend/std', views.lect_room_attend_std, name="lect_room_attend_std"),
     path('room/attend/teacher', views.lect_room_attend_teacher, name="lect_room_attend_teacher"),
-    path('room/detail', views.lect_room_detail, name="lect_room_detail"),
+
 
 ]

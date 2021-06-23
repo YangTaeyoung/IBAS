@@ -1,8 +1,9 @@
-from django.shortcuts import render, redirect, reverse
-from DB.models import LectType, Lect, LectDay, LectUser, StateInfo, MethodInfo
+from django.db import transaction
+from django.shortcuts import render, redirect, reverse, get_object_or_404
+from DB.models import LectType, Lect, LectDay, LectUser, StateInfo, MethodInfo, LectBoard
 from django.db.models import Q
 from pagination_handler import get_paginator_list, get_page_object
-from lecture.forms import LectForm, LectRejectForm, LectPicForm
+from lecture.forms import LectForm, LectRejectForm, LectPicForm, LectBoardForm
 from user_controller import get_logined_user, login_required, superuser_only, writer_only, auth_check, is_superuser, \
     is_logined
 from file_controller import FileController
@@ -195,19 +196,77 @@ def lect_room_attend_teacher(request):
     }
     return render(request, 'lectRoom-attend_teacher.html', context)
 
-def lect_room_detail(request):
-
-    context = {
-
-    }
-    return render(request, 'lectRoom_detail.html', context)
-
-
-
 
 def lect_room_main(request, room_no):  # 강의룸 페이지로 이동
-    return render(request, 'lect_room_main.html', {'room_no': room_no})
+    # navigation_bar_info = get()
+    context = {
+        'lect': Lect.objects.get(pk=room_no),
+        # 'notice_list': ,
+        'lect_board_list': LectBoard.objects.filter(lect_board_type_no__lect_board_type_no=2).order_by('-lect_board_created'),
+        # 'assignment_list:
+        #
+    }
+    return render(request, 'lecture_room_main.html', context)
 
 
-def lect_room_register(request):  # 강의룸 등록 페이지로 이동
-    return render(request, 'lect_room_register.html', {})
+def lect_board_register(request, room_no):  # 강의룸 등록 페이지로 이동
+    if request.method == "GET":
+        context = {
+            'lect_board_form': LectBoardForm(initial={'lect_board_type_no': 2}),
+            'lect': Lect.objects.get(pk=room_no),
+        }
+        return render(request, 'lecture_board_register.html', context)
+
+    elif request.method == "POST":
+        lect_board_form = LectBoardForm(request.POST)
+
+        if lect_board_form.is_valid():
+            lect_board_form.save(
+                lect_board_writer=get_logined_user(request),
+                lect_no=Lect.objects.get(pk=room_no),
+            )
+
+        return redirect('lect_room_main', room_no=room_no)
+
+
+def lect_board_detail(request, room_no, board_no):
+
+    context = {
+        'lect': get_object_or_404(Lect, pk=room_no),
+        'board': get_object_or_404(LectBoard, pk=board_no)
+    }
+    return render(request, 'lecture_board_detail.html', context)
+
+
+def lect_board_delete(request, room_no, board_no):
+    lect_board = get_object_or_404(LectBoard, pk=board_no)
+
+    FileController.delete_all_files_of_(lect_board)
+    lect_board.delete()
+
+    return redirect('lect_room_main', room_no=room_no)
+
+
+def lect_board_update(request, room_no, board_no):
+    board = get_object_or_404(LectBoard, pk=board_no)
+
+    if request.method == "GET":
+        context = {
+            'lect': Lect.objects.get(pk=room_no),
+            'lect_board_form': LectBoardForm(instance=board),
+            'board_no': board_no
+        }
+        print(context['board_no'])
+        return render(request, 'lecture_board_register.html', context)
+
+    elif request.method == "POST":
+        lect_board_form = LectBoardForm(request.POST)
+        # file_form = FileForm(request.POST, request.FILES)
+
+        if lect_board_form.is_valid():
+            with transaction.atomic():
+                lect_board_form.update(instance=board)
+                # FileController.remove_files_by_user(request, LectBoardFile.objects.filter(lect_board_no=board))
+                # file_form.save(instance=board)
+
+        return redirect('lect_board_detail', room_no=room_no, board_no=board_no)

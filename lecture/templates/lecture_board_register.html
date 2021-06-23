@@ -12,15 +12,15 @@
                  style=" background-image: url('{% static 'images/board_name_img.jpg' %}'); height: 350px">
                 <!-- 상단 제목을 클릭하면, 강의룸 메인 페이지로 이동 -->
                 <!-- (ex. 강의룸 내 출결확인 페이지에서 상단 제목을 클릭하면, 강의룸 메인으로 돌아갈 수 있음) -->
-                <a href="#">
+                <a href="{% url "lect_room_main" lect.lect_no %}">
                     <div class="container clearfix">
                         <div class="dlab-bnr-inr-entry">
                             <!-- 제목 -->
                             <!-- DB에서 제목 꺼내와야 함 -->
-                            <h1 class="text-white introduce-letter-spacing_5">파이썬 기초 강의</h1>
+                            <h1 class="text-white introduce-letter-spacing_5">{{ lect.lect_title }}</h1>
                             <!--부제목-->
                             <!-- DB에서 제목 꺼내와야 함 (강의 간단소개 db 가져오면 됨) -->
-                            <p class="introduce-margin-top_20">파이썬을 처음 접하는 분들을 위한 강의입니다.</p>
+                            <p class="introduce-margin-top_20">{{ lect.lect_intro }}</p>
                         </div>
                     </div>
                 </a>
@@ -79,23 +79,34 @@
                             </div>
                             <!--========== 왼쪽 검색창 및 강의룸 네비게이션바 끝 ==========-->
                             <!--========== 오른쪽 강의룸 메인 콘텐츠 시작 ===========-->
+                        {% load widget_tweaks %}
                             <div class="col-xl-8 col-lg-7 col-md-12 m-b30">
-                                <form class="add-listing-form">
+                                <form class="add-listing-form" method="post" enctype="multipart/form-data"
+                                      action="{% if board_no %}{% url "lect_board_update" lect.lect_no board_no%}{% else %}{% url "lect_board_register" lect.lect_no %}{% endif %}">
+                                    {% csrf_token %}
+
+                                    {% for hidden_field in lect_board_form.hidden_fields %}
+                                        {{ hidden_field }}
+                                    {% endfor %}
+                                    {% for field in lect_board_form.visible_fields %}
                                         <!-- ======================제목 박스====================== -->
                                          <div class="content-box">
                                             <div class="content-header">
                                                 <!--제목-->
-                                                <h3 class="title">제목</h3>
+                                                <h3 class="title">{{ field.label }}</h3>
                                             </div>
-                                            <div class="content-body">
+                                            <div class="content-body editor">
                                                 <div class="form-group">
                                                     <!--제목 입력하는 곳-->
-                                                    <input type="text" name="lect_title"
-                                                   class="form-control" required="required" placeholder="제목을 적어주세요."
-                                                   style="font-size: 25px; height: 70px;"/>
+                                                    {% if field == lect_board_form.lect_board_cont %}
+                                                        {% render_field field class="jqte-test" %}
+                                                    {% else %}
+                                                        {% render_field field class="form-control" %}
+                                                    {% endif %}
                                                 </div>
                                             </div>
                                          </div>
+                                    {% endfor %}
                                         <!--======================파일 첨부 박스======================-->
                                         <div class="content-box">
                                             <div class="content-header">
@@ -135,19 +146,7 @@
                                                 {% endif %}
                                             </div>
                                         </div>
-                                        <!--=====================강의링크 입력 박스=======================-->
-                                        <div class="content-box">
-                                            <div class="content-header">
-                                                <h3 class="title">강의링크</h3>
-                                            </div>
-                                            <div class="content-body">
-                                                <div class="form-group">
-                                                    <!--입력하는 곳-->
-                                                    <input type="text" class="form-control"
-                                                           placeholder="강의 링크를 적어주세요."/>
-                                                </div>
-                                            </div>
-                                        </div>
+
                                         <!--=====================코드 테스트 박스=======================-->
                                         <div class="content-box">
                                             <div class="content-header">
@@ -173,21 +172,7 @@ def lect_view(request, type_no):  # 게시판 페이지로 이동
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- ======================내용 입력 박스====================== -->
-                                         <div class="content-box">
-                                            <div class="content-header">
-                                                <!--내용-->
-                                                <h3 class="title">내용</h3>
-                                            </div>
-                                            <div class="content-body editor">
-                                                <div class="form-group">
-                                                    <!--내용 입력하는 곳-->
-                                                    <input
-                                                      type="text"
-                                                      class="jqte-test"/>
-                                                </div>
-                                            </div>
-                                         </div>
+
                                         <!-- ======================과제 입력 박스/강의글 등록할 때만 뜨도록 수정====================== -->
                                          <div class="content-box">
                                             <div class="content-header">
@@ -212,7 +197,7 @@ def lect_view(request, type_no):  # 게시판 페이지로 이동
                                                         <label>과제 제목</label>
                                                         <!--과제 제목 입력하는 곳-->
                                                         <input type="text" name="lect_title"
-                                                       class="form-control" required="required" placeholder="제목을 적어주세요."
+                                                       class="form-control"  placeholder="제목을 적어주세요."
                                                        style="font-size: 25px; height: 70px;"/>
                                                        <hr/>
                                                         <div class="form-group">
@@ -260,7 +245,7 @@ def lect_view(request, type_no):  # 게시판 페이지로 이동
                                                         <!--과제 마감일-->
                                                         <label>과제 마감일</label>
                                                         <!--과제 마감일 입력하는 곳-->
-                                                        <input type="date" class="form-control" name="lect_board_deadline" required="required"/>
+                                                        <input type="date" class="form-control" name="lect_board_deadline" />
                                                       </div>
                                                 </div>
                                             </div>
@@ -268,7 +253,11 @@ def lect_view(request, type_no):  # 게시판 페이지로 이동
                                         <!--등록버튼, 수정할 때는 수정하기로 뜨도록 수정필요-->
                                         <div style="display: grid; justify-items: center">
                                             <button class="site-button btn-block button-md" type="submit" style="width: 30%">
-                                                등록하기
+                                                {% if board_no %}
+                                                    수정하기
+                                                {% else %}
+                                                    등록하기
+                                                {% endif %}
                                             </button>
                                         </div>
                                 </form>
