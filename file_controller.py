@@ -1,5 +1,5 @@
 import shutil
-from DB.models import Board, BoardFile, ContestBoard, ContestFile, Lect, Bank, BankFile
+from DB.models import Board, BoardFile, ContestBoard, ContestFile, Lect, Bank, BankFile, LectBoard, LectBoardFile
 import os
 from IBAS.settings import MEDIA_ROOT
 from django.conf import settings
@@ -152,6 +152,13 @@ class FileController:
             for file in files_to_upload:
                 BankFile.objects.create(
                     bank_no=Bank.objects.get(pk=instance.bank_no),
+                    file_path=file,
+                    file_name=file.name.replace(' ', '_')
+                )
+        elif isinstance(instance, LectBoard):
+            for file in files_to_upload:
+                LectBoardFile.objects.create(
+                    lect_board_no=Bank.objects.get(pk=instance.lect_board_no),
                     file_path=file,
                     file_name=file.name.replace(' ', '_')
                 )

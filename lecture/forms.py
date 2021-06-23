@@ -1,6 +1,7 @@
 from django import forms
 from DB.models import Lect, MethodInfo, LectBoard
 from django.utils.translation import gettext_lazy as _
+from IBAS.forms import FileFormBase
 from user_controller import get_logined_user
 
 
@@ -129,3 +130,7 @@ class LectBoardForm(forms.ModelForm):
             lect_board.save()
 
         return lect_board
+
+
+class LectBoardFileForm(FileFormBase):
+    pass

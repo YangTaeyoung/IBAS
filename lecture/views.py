@@ -1,9 +1,9 @@
 from django.db import transaction
 from django.shortcuts import render, redirect, reverse, get_object_or_404
-from DB.models import LectType, Lect, LectDay, LectUser, StateInfo, MethodInfo, LectBoard
+from DB.models import LectType, Lect, LectDay, LectUser, StateInfo, MethodInfo, LectBoard, LectBoardFile
 from django.db.models import Q
 from pagination_handler import get_paginator_list, get_page_object
-from lecture.forms import LectForm, LectRejectForm, LectPicForm, LectBoardForm
+from lecture.forms import LectForm, LectRejectForm, LectPicForm, LectBoardForm, LectBoardFileForm
 from user_controller import get_logined_user, login_required, superuser_only, writer_only, auth_check, is_superuser, \
     is_logined
 from file_controller import FileController
@@ -190,18 +190,22 @@ def lect_board_register(request, room_no):  # 강의룸 등록 페이지로 이�
     if request.method == "GET":
         context = {
             'lect_board_form': LectBoardForm(initial={'lect_board_type_no': 2}),
+            'file_form': LectBoardFileForm(),
             'lect': Lect.objects.get(pk=room_no),
         }
         return render(request, 'lecture_room_board_register.html', context)
 
     elif request.method == "POST":
         lect_board_form = LectBoardForm(request.POST)
+        file_form = LectBoardFileForm(request.POST, request.FILES)
 
-        if lect_board_form.is_valid():
-            lect_board_form.save(
-                lect_board_writer=get_logined_user(request),
-                lect_no=Lect.objects.get(pk=room_no),
-            )
+        if lect_board_form.is_valid() and file_form:
+            with transaction.atomic():
+                lecture = lect_board_form.save(
+                    lect_board_writer=get_logined_user(request),
+                    lect_no=Lect.objects.get(pk=room_no),
+                )
+                file_form.save(instance=lecture)
 
         return redirect('lect_room_main', room_no=room_no)
 
@@ -210,7 +214,8 @@ def lect_board_detail(request, room_no, board_no):
 
     context = {
         'lect': get_object_or_404(Lect, pk=room_no),
-        'board': get_object_or_404(LectBoard, pk=board_no)
+        'board': get_object_or_404(LectBoard, pk=board_no),
+        'file_list': LectBoardFile.objects.filter(lect_board_no__lect_board_no=room_no)
     }
     return render(request, 'lecture_room_board_detail.html', context)
 
