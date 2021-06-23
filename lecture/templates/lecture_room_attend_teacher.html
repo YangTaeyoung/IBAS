@@ -9,6 +9,7 @@
     <script src="{% static 'js/comment.js' %}"></script>
 
 
+
     <div class="page-wraper">
         <!-- 상단 제목부분 -->
         <div class="page-content bg-white">
@@ -47,21 +48,12 @@
 
                                 <!--=======================수강생 관리=========================-->
                                 <div class="col-lg-11 col-xl-8 p-b30">
-
-                                    <!-- 신입부원 관리 콘텐츠 시작 -->
                                     <form>
                                         <div class="width-870">
-                                            <!-- 신입부원 관리 테이블 시작 -->
-
+                                            <!-- 강의 주차 소개 탭 -->
                                             <div class="listing-filter m-b40">
-                                                <!-- bank-flex는 bank_yejin.css에 정의되어 있음.  -->
                                                 <div class="bank-flex">
-                                                    <div class="mr-auto">
-                                                        <div>
-                                                            <h3 id="bank-year" class="title m-b0"
-                                                                style="font-size: 22px">애거서 크리스티의 추리문학 베스트</h3>
-                                                        </div>
-                                                    </div>
+                                                    <!-- 회차. -->
                                                     <div>
                                                         <ul class="filter m-b0">
                                                             <li>
@@ -69,128 +61,118 @@
                                                                     <option>1회차</option>
                                                                 </select>
                                                             </li>
-                                                            <li>
-                                                                <select>
-                                                                    <option disabled selected>출결관리</option>
-                                                                    <option>출석</option>
-                                                                    <option>결석</option>
-                                                                </select>
-                                                            </li>
-                                                            <li>
-                                                                <select>
-                                                                    <option disabled selected>과제관리</option>
-                                                                    <option>제출</option>
-                                                                    <option>미제출</option>
-                                                                </select>
-                                                            </li>
                                                         </ul>
+                                                    </div>
+                                                    <!-- 강의 제목. 회차에 따라 강의 제목 바뀌어야 함.  -->
+                                                    <div class="mr-auto">
+                                                        <div class="m-l15">
+                                                            <h3 id="bank-year" class="title m-b0"
+                                                                style="font-size: 22px">애거서 크리스티의 추리문학 베스트</h3>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
 
+                                            <!-- 회원관리 테이블 -->
                                             <table class="table">
-                                                <thead>
+                                                <thead id="lectRoom_mhead">
                                                 <!-- 테이블 1행: 제목 -->
                                                 <tr id="lectRoom_head">
-                                                    <th class="border-top-0 width-30 text-center align-middle"
+                                                    <th class="border-top-0 width-65 min-width-65 text-center align-middle"
                                                         scope="col"></th>
-                                                    <th class="border-top-0 width-100 text-center align-middle"
+                                                    <th class="border-top-0 width-100 min-width-100 text-center align-middle"
                                                         scope="col">이름
                                                     </th>
-                                                    <th class="border-top-0 width-70 text-center align-middle"
+                                                    <th class="border-top-0 width-90 min-width-90 text-center align-middle"
                                                         scope="col">학번
                                                     </th>
-                                                    <th class="border-top-0 width-70 text-center align-middle"
+                                                    <!-- 출결 필터 -->
+                                                    <th class="border-top-0 width-70 min-width-70 text-center align-middle"
                                                         scope="col">
-                                                        <select>
-                                                            <option disabled selected>출결관리</option>
+                                                        <select id="lectRoom_select_attend" class="lectRoom_select" onchange="lectRoom_manage()">
+                                                            <option selected>출결</option>
                                                             <option>출석</option>
                                                             <option>결석</option>
                                                         </select>
                                                     </th>
-                                                    <th class="border-top-0 width-70 text-center" scope="col"><select>
-                                                        <option disabled selected>과제관리</option>
-                                                        <option>제출</option>
+                                                    <!-- 과제 필터 -->
+                                                    <th class="border-top-0 width-70 min-width-70 text-center" scope="col">
+                                                        <select id="lectRoom_select_hw" class="lectRoom_select" onchange="lectRoom_manage()">
+                                                        <option selected>과제</option>
+                                                        <option>승인</option>
+                                                        <option>기각</option>
                                                         <option>미제출</option>
                                                     </select></th>
-                                                    <th class="border-top-0 width-120 text-center align-middle"
+                                                    <th class="border-top-0 width-120 min-width-120 text-center align-middle"
                                                         scope="col">제출 시간
                                                     </th>
-                                                    <th class="border-top-0 align-middle" scope="col">제출된 과제</th>
-
+                                                    <th class="border-top-0 align-middle width-310 min-width-310" scope="col">제출된 과제</th>
                                                 </tr>
                                                 </thead>
 
                                                 <!-- 테이블 2행: 수강생 관리 테이블 내용 시작 -->
                                                 <tbody>
 
-                                                {#                                                <!-- 수강생이 없을 때 나오는 열 -->#}
-                                                {#                                                <tr>#}
-                                                {#                                                    <td colspan="9" style="text-align: center"> 강의를 수강하고 있는 회원이 없습니다.#}
-                                                {#                                                    </td>#}
-                                                {#                                                </tr>#}
+                                                <!-- 수강생이 없을 때 나오는 열 -->
+                                                <tr>
+                                                    <td colspan="9" style="text-align: center"> 강의를 수강하고 있는 회원이 없습니다.
+                                                    </td>
+                                                </tr>
 
                                                 <!-- 수강생이 있을 때 나오는 열 -->
                                                 <!--========================여기부터 복붙==========================-->
-                                                <tr class="lectRoom_tr align-middle">
-
+                                                <tr class="lectRoom_mtr align-middle">
+                                                    <!-- 체크박스 -->
                                                     <td scope="row">
-
                                                         {% csrf_token %}
                                                         <div>
-                                                            <input id="check_{{ new_user.user_stu }}"
-                                                                   type="checkbox"
-                                                                   onclick="decideChk(this,'{{ new_user.user_stu }}')">
-                                                            <!-- staff_label_margin는 staff_cr.css에 정의되어 있음.  -->
-                                                            <label for="check_{{ new_user.user_stu }}"
+                                                            <input id="check_1"
+                                                                   type="checkbox">
+
+                                                            <label for="check_1"
                                                                    class="staff_label_margin m-l20"></label>
                                                         </div>
-
                                                     </td>
                                                     <!-- 회원 이름 -->
                                                     <td class="align-middle text-center">윤예진</td>
                                                     <!-- 회원 학번 -->
                                                     <td class="text-center">12192355</td>
                                                     <!-- 출결 -->
-                                                    <td class="text-center">출석</td>
+                                                    <td class="text-center lectRoom_attend">출석</td>
                                                     <!--과제 -->
-                                                    <td class="text-center">미제출</td>
+                                                    <td class="text-center lectRoom_hw">미제출</td>
                                                     <!--제출시간 -->
                                                     <td class="text-center">2020-01-31</td>
                                                     <!-- 과제 파일 -->
-                                                    <td class="align-middle">ibasLecture.py</td>
+                                                    <td class="align-middle"><a href="#">ibasLecture.py</a></td>
 
 
                                                 </tr>
                                                 <!--========================여기까지 복붙==========================-->
                                                 <!--========================여기부터 복붙==========================-->
-                                                <tr class="lectRoom_tr align-middle">
-
+                                                <tr class="lectRoom_mtr align-middle">
                                                     <td scope="row">
-
                                                         {% csrf_token %}
                                                         <div>
-                                                            <input id="check_{{ new_user.user_stu }}"
-                                                                   type="checkbox"
-                                                                   onclick="decideChk(this,'{{ new_user.user_stu }}')">
-                                                            <!-- staff_label_margin는 staff_cr.css에 정의되어 있음.  -->
-                                                            <label for="check_{{ new_user.user_stu }}"
+                                                            <input id="check_2"
+                                                                   type="checkbox">
+
+                                                            <label for="check_2"
                                                                    class="staff_label_margin m-l20"></label>
                                                         </div>
-
                                                     </td>
                                                     <!-- 회원 이름 -->
                                                     <td class="align-middle text-center">윤예진</td>
                                                     <!-- 회원 학번 -->
                                                     <td class="text-center">12192355</td>
                                                     <!-- 출결 -->
-                                                    <td class="text-center">출석</td>
+                                                    <td class="text-center lectRoom_attend">결석</td>
                                                     <!--과제 -->
-                                                    <td class="text-center">미제출</td>
+                                                    <td class="text-center lectRoom_hw">승인</td>
                                                     <!--제출시간 -->
                                                     <td class="text-center">2020-01-31</td>
                                                     <!-- 과제 파일 -->
-                                                    <td class="align-middle">ibasLecture.py</td>
+                                                    <td class="align-middle"><a href="#">제출된 과제가 없습니다.</a></td>
 
 
                                                 </tr>
@@ -199,14 +181,41 @@
                                                 </tbody>
                                             </table>
 
-                                            <div class="staff_mem_btn m-b20 listing-info-right float-right">
-                                                <!-- &nbsp;는 띄어쓰기 -->
-                                                <button class="site-button" type="submit"><i
-                                                        class="la la-check m-r5"
-                                                        style="font-weight: bold"></i>&nbsp;적용
-                                                </button>
+                                            <!-- 관리 select 부분 시작 -->
+                                            <div class="listing-filter-sidebar border-0" >
+                                                <div class="row float-right width-430">
+                                                    <!-- 출결관리 -->
+                                                    <div class="col-md-4 pr-0">
+                                                        <div class="form-group width-130 float-right" style="border: #ecebf5; color: black;">
+                                                            <select>
+                                                                <option disabled selected>출결관리</option>
+                                                                <option>출석</option>
+                                                                <option>결석</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <!-- 과제관리 -->
+                                                    <div class="col-md-4 pr-0">
+                                                        <div class="form-group width-130 float-right">
+                                                            <select>
+                                                                <option disabled selected>과제관리</option>
+                                                                <option>승인</option>
+                                                                <option>기각</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <!-- 적용 버튼  -->
+                                                    <div class="col-md-4 pl-0">
+                                                        <div class="form-group float-right mb-0 mt-7">
+                                                            <button class="site-button" type="submit"><i
+                                                                    class="la la-check m-r5"
+                                                                    style="font-weight: bold"></i>&nbsp;적용
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-
+                                            <!-- 관리 select 부분 끝 -->
 
                                             <!--========== 페이지네이션 시작 ===========-->
                                             <!-- 1페이지에 수강생 끌고오고, 수강생이 그보다 적으면, 페이지네이션 안보이게 처리 -->

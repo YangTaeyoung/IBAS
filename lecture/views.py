@@ -2,6 +2,8 @@ from django.db import transaction
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from DB.models import LectType, Lect, LectDay, LectUser, StateInfo, MethodInfo, LectBoard, LectBoardFile
 from django.db.models import Q
+
+from IBAS.forms import FileFormBase
 from pagination_handler import get_paginator_list, get_page_object
 from lecture.forms import LectForm, LectRejectForm, LectPicForm, LectBoardForm, LectBoardFileForm
 from user_controller import get_logined_user, login_required, superuser_only, writer_only, auth_check, is_superuser, \
@@ -212,11 +214,16 @@ def lect_board_register(request, room_no):  # 강의룸 등록 페이지로 이�
 
 
 def lect_board_detail(request, room_no, board_no):
+    board = get_object_or_404(LectBoard, pk=board_no)
+    print(board.get_file_path)
+    file_list, img_list, doc_list = FileController.get_images_and_files_of_(board)
 
     context = {
         'lect': get_object_or_404(Lect, pk=room_no),
-        'board': get_object_or_404(LectBoard, pk=board_no),
-        'file_list': LectBoardFile.objects.filter(lect_board_no__lect_board_no=room_no)
+        'board': board,
+        'file_list': file_list,
+        'img_list': img_list,
+        'doc_list': doc_list
     }
     return render(request, 'lecture_room_board_detail.html', context)
 
@@ -237,20 +244,21 @@ def lect_board_update(request, room_no, board_no):
         context = {
             'lect': Lect.objects.get(pk=room_no),
             'lect_board_form': LectBoardForm(instance=board),
-            'board_no': board_no
+            'file_form': LectBoardFileForm(),
+            'board_no': board_no,
+            'file_list': LectBoardFile.objects.filter(lect_board_no__lect_board_no=board_no)
         }
-        print(context['board_no'])
         return render(request, 'lecture_room_board_register.html', context)
 
     elif request.method == "POST":
         lect_board_form = LectBoardForm(request.POST)
-        # file_form = FileForm(request.POST, request.FILES)
+        file_form = LectBoardFileForm(request.POST, request.FILES)
 
-        if lect_board_form.is_valid():
+        if lect_board_form.is_valid() and file_form.is_valid():
             with transaction.atomic():
                 lect_board_form.update(instance=board)
-                # FileController.remove_files_by_user(request, LectBoardFile.objects.filter(lect_board_no=board))
-                # file_form.save(instance=board)
+                FileController.remove_files_by_user(request, LectBoardFile.objects.filter(lect_board_no=board))
+                file_form.save(instance=board)
 
         return redirect('lect_board_detail', room_no=room_no, board_no=board_no)
 

@@ -95,10 +95,6 @@ class CommentBase(models.Model):
         abstract = True
 
 
-def bank_file_upload_to(instance, filename):
-    return f'bank/{instance.bank_no.bank_no}/{filename}'
-
-
 class BankFile(File):
     def file_upload_to(self, filename):
         return f'bank/{self.bank_no.bank_no}/{filename}'
@@ -323,7 +319,7 @@ class LectBoard(models.Model):
 
     @property
     def get_file_path(self):
-        return os.path.join(MEDIA_ROOT, 'lect', 'board', str(self.lect_board_no))
+        return os.path.join(MEDIA_ROOT, 'lecture', 'board', str(self.lect_board_no))
 
 
 class LectBoardType(models.Model):
@@ -405,9 +401,9 @@ class LectBoardExFile(models.Model):
         db_table = 'LECT_BOARD_EX_FILE'
 
 
-class LectBoardFile(models.Model):
+class LectBoardFile(File):
     def file_upload_to(self, filename):
-        return f'lecture/{self.lect_board_no.lect_no}/{self.lect_board_no.lect_board_no}/{filename}'
+        return f'lecture/board/{self.lect_board_no.lect_board_no}/{filename}'
     lect_board_no = models.ForeignKey(LectBoard, on_delete=models.CASCADE,db_column='LECT_BOARD_NO')
     file_path = models.FileField(db_column='FILE_PATH', max_length=1000, upload_to=file_upload_to, blank=True)
 

@@ -67,8 +67,11 @@ class FileController:
             # ContestBoard 객체
             elif isinstance(object, ContestBoard):
                 files = ContestFile.objects.filter(contest_no=object.contest_no)
+            # UserDelete 객체
             elif isinstance(object, UserDelete):
                 files = UserDeleteFile.objects.filter(user_delete_no=object.user_delete_no)
+            elif isinstance(object, LectBoard):
+                files = LectBoardFile.objects.filter(lect_board_no=object.lect_board_no)
             else:  # 객체가 잘못 전달된 경우
                 raise Exception
 
@@ -159,15 +162,12 @@ class FileController:
         elif isinstance(instance, LectBoard):
             for file in files_to_upload:
                 LectBoardFile.objects.create(
-                    lect_board_no=Bank.objects.get(pk=instance.lect_board_no),
+                    lect_board_no=LectBoard.objects.get(pk=instance.lect_board_no),
                     file_path=file,
                     file_name=file.name.replace(' ', '_')
                 )
-
         elif isinstance(instance, UserDelete):
             for file in files_to_upload:
-                print(instance.user_delete_no)
-                print(UserDelete.objects.get(pk=instance.user_delete_no))
                 UserDeleteFile.objects.create(
                     user_delete_no=UserDelete.objects.get(pk=instance.user_delete_no),
                     file_path=file,

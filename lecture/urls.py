@@ -20,4 +20,5 @@ urlpatterns = [
     path('room/<int:room_no>/attend/teacher', views.lect_room_attend_teacher, name="lect_room_attend_teacher"),
 
 
+
 ]
