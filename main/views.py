@@ -16,6 +16,7 @@ from user_controller import login_required, writer_only, auth_check, superuser_o
 def index(request):
     # 임시 로그인
     session.save_session(request, User.objects.get(pk=12162359))
+    #session.save_session(request, User.objects.get(pk=12171652))
 
     return render(request, "index.html", {})
 

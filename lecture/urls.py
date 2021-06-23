@@ -15,9 +15,9 @@ urlpatterns = [
     path('room/<int:room_no>/detail/<int:board_no>', views.lect_board_detail, name="lect_board_detail"),
     path('room/<int:room_no>/delete/<int:board_no>', views.lect_board_delete, name="lect_board_delete"),
     path('room/<int:room_no>/update/<int:board_no>', views.lect_board_update, name="lect_board_update"),
-    path('room/mem/manage', views.lect_room_mem_manage, name="lect_room_mem_manage"),
-    path('room/attend/std', views.lect_room_attend_std, name="lect_room_attend_std"),
-    path('room/attend/teacher', views.lect_room_attend_teacher, name="lect_room_attend_teacher"),
+    path('room/<int:room_no>/member_manage', views.lect_room_mem_manage, name="lect_room_mem_manage"),
+    path('room/<int:room_no>/attend/', views.lect_room_attend_std, name="lect_room_attend_std"),
+    path('room/<int:room_no>/attend/teacher', views.lect_room_attend_teacher, name="lect_room_attend_teacher"),
 
 
 ]

@@ -174,29 +174,6 @@ def lect_search(request, type_no):
     return render(request, 'lecture_list.html', context)  # 정상 처리
 
 
-
-def lect_room_mem_manage(request):
-
-    context = {
-
-    }
-    return render(request, 'lectRoom-mem_manage.html', context)
-
-def lect_room_attend_std(request):
-
-    context = {
-
-    }
-    return render(request, 'lectRoom-attend_std.html', context)
-
-def lect_room_attend_teacher(request):
-
-    context = {
-
-    }
-    return render(request, 'lectRoom-attend_teacher.html', context)
-
-
 def lect_room_main(request, room_no):  # 강의룸 페이지로 이동
     # navigation_bar_info = get()
     context = {
@@ -215,7 +192,7 @@ def lect_board_register(request, room_no):  # 강의룸 등록 페이지로 이�
             'lect_board_form': LectBoardForm(initial={'lect_board_type_no': 2}),
             'lect': Lect.objects.get(pk=room_no),
         }
-        return render(request, 'lecture_board_register.html', context)
+        return render(request, 'lecture_room_board_register.html', context)
 
     elif request.method == "POST":
         lect_board_form = LectBoardForm(request.POST)
@@ -235,7 +212,7 @@ def lect_board_detail(request, room_no, board_no):
         'lect': get_object_or_404(Lect, pk=room_no),
         'board': get_object_or_404(LectBoard, pk=board_no)
     }
-    return render(request, 'lecture_board_detail.html', context)
+    return render(request, 'lecture_room_board_detail.html', context)
 
 
 def lect_board_delete(request, room_no, board_no):
@@ -257,7 +234,7 @@ def lect_board_update(request, room_no, board_no):
             'board_no': board_no
         }
         print(context['board_no'])
-        return render(request, 'lecture_board_register.html', context)
+        return render(request, 'lecture_room_board_register.html', context)
 
     elif request.method == "POST":
         lect_board_form = LectBoardForm(request.POST)
@@ -270,3 +247,28 @@ def lect_board_update(request, room_no, board_no):
                 # file_form.save(instance=board)
 
         return redirect('lect_board_detail', room_no=room_no, board_no=board_no)
+
+
+def lect_room_mem_manage(request, room_no):
+
+    context = {
+        'users': LectUser.objects.filter(lect_no__lect_no=room_no),
+        'lect': Lect.objects.get(pk=room_no)
+    }
+    return render(request, 'lecture_room_mem_manage.html', context)
+
+
+def lect_room_attend_std(request, room_no):
+
+    context = {
+        'lect': Lect.objects.get(pk=room_no)
+    }
+    return render(request, 'lecture_room_attend_std.html', context)
+
+
+def lect_room_attend_teacher(request, room_no):
+
+    context = {
+        'lect': Lect.objects.get(pk=room_no)
+    }
+    return render(request, 'lecture_room_attend_teacher.html', context)

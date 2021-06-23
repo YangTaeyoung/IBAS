@@ -63,29 +63,7 @@
                                 <!--========== 왼쪽 검색창 및 강의룸 네비게이션바 시작 ==========-->
                                 <div class="col-lg-3 col-xl-3">
                                     <div class="sticky-top">
-                                        <!-- 강의룸 내 페이지 리스트 -->
-                                        <!-- 클릭한 게시글을 끌고옴 -->
-                                        <div class="listing-filter-sidebar">
-                                            <h4 class="title">강의실</h4>
-                                            <div class="widget_tag">
-                                                <ul class="m-b0">
-                                                    <!-- [메뉴바 > 강의실 > 강의] 게시판 내 강의소개 페이지로 이동 -->
-                                                    <li><a href="javascript:void(0);">강의소개</a>&nbsp;</li>
-                                                    <!-- 공지사항, 강의, 과제, 제출된 과제 페이지들은 모두 동일한 레이아웃임 -->
-                                                    <!-- 다만 과제 페이지의 경우 강의자, 수강생 별 보이는 게 다르게끔 세션처리 필요 (해당 게시판 주석 참조) -->
-                                                    <!-- 강의자, 수강생 모두 모이는 메뉴: 공지사항, 강의, 과제 -->
-                                                    <li><a href="javascript:void(0);">공지사항</a>&nbsp;</li>
-                                                    <li><a href="javascript:void(0);">강의</a>&nbsp;</li>
-                                                    <li><a href="javascript:void(0);">과제</a>&nbsp;</li>
-                                                    <!-- 수강생만 보이는 메뉴: 출석 및 과제 현황 -->
-                                                    <li><a href="javascript:void(0);">출석 및 과제 현황</a>&nbsp;</li>
-                                                    <!-- 강의자만 보이는 메뉴: 출석 및 과제 관리, 수강생 관리, 제출된 과제 리스트 -->
-                                                    <li><a href="javascript:void(0);">출석 및 과제 관리</a>&nbsp;</li>
-                                                    <li><a href="javascript:void(0);">수강생 관리</a>&nbsp;</li>
-                                                    <li><a href="javascript:void(0);">제출된 과제 리스트</a>&nbsp;</li>
-                                                </ul>
-                                            </div>
-                                        </div>
+                                        {% include "navigation_bar.html" %}
                                     </div>
                                 </div>
                                 <!--========== 왼쪽 검색창 및 강의룸 네비게이션바 끝 ==========-->
@@ -163,86 +141,53 @@
                                                 <tbody>
 
                                                 <!-- 수강생이 없을 때 나오는 열 -->
+                                                {% if not users %}
                                                 <tr>
                                                     <td colspan="9" style="text-align: center"> 강의를 수강하고 있는 회원이 없습니다.
                                                     </td>
                                                 </tr>
+                                                {% endif %}
 
                                                 <!-- 수강생이 있을 때 나오는 열 -->
-                                                <!--========================여기부터 복붙==========================-->
-                                                <tr class="lectRoom_tr">
-                                                    <td scope="row">
+                                                {% for user in users %}
+                                                    <tr class="lectRoom_tr">
+                                                        <td scope="row">
 
-                                                        {% csrf_token %}
-                                                        <!-- 체크박스 -->
-                                                        <div class="input-block">
-                                                            <input id="check_"
-                                                                   type="checkbox"
-                                                                   onclick="decideChk(this,'')">
-                                                            <!-- label이 html에 보이는 것. 역할은 input에 체크하기 위함.   -->
-                                                            <label for="check_{{ new_user.user_stu }}"
-                                                                   class="staff_label_margin"></label>
-                                                        </div>
+                                                            {% csrf_token %}
+                                                            <!-- 체크박스 -->
+                                                            <div class="input-block">
+                                                                <input id="check_"
+                                                                       type="checkbox"
+                                                                       onclick="decideChk(this,'')">
+                                                                <!-- label이 html에 보이는 것. 역할은 input에 체크하기 위함.   -->
+                                                                <label for="check_{{ user.lect_user.user_std }}"
+                                                                       class="staff_label_margin"></label>
+                                                            </div>
 
-                                                    </td>
-                                                    <!--수강생 번호-->
-                                                    <th>55</th>
-                                                    <!-- 회원 이름 -->
-                                                    <td>윤예진</td>
-                                                    <!-- 회원 학번 -->
-                                                    <td>12192355</td>
-                                                    <!--전화번호 -->
-                                                    <td>010-3398-8604</td>
-                                                    <!--이메일 -->
-                                                    <td>abcdefghijklmnop@gmail.com</td>
+                                                        </td>
+                                                        <!--수강생 번호-->
+                                                        <th>{{ user.lect_user_stu }}</th>
+                                                        <!-- 회원 이름 -->
+                                                        <td>{{ user.lect_user.user_name }}</td>
+                                                        <!-- 회원 학번 -->
+                                                        <td>{{ user.lect_user.user_stu }}</td>
+                                                        <!--전화번호 -->
+                                                        <td>{{ user.lect_user.user_phone }}</td>
+                                                        <!--이메일 -->
+                                                        <td>{{ user.lect_user.user_email }}</td>
 
-                                                    <!-- 과제 미제출 수 -->
-                                                    <td style="text-align: center">10 번</td>
-                                                    <!-- 결석 수 -->
-                                                    <td>5 번</td>
-                                                    <!--상태 -->
-                                                    <td class="lectRoom_state lectRoom_state_ing_font">수강중</td>
-                                                    {#<td class="lectRoom_state lectRoom_state_stop_font">수강정지</td>#}
-                                                </tr>
+                                                        <!-- 과제 미제출 수 -->
+                                                        <td style="text-align: center">not yet..</td>
+                                                        <!-- 결석 수 -->
+                                                        <td>not yet..</td>
+                                                        <!--상태 -->
+                                                        <td class="lectRoom_state lectRoom_state_ing_font">not yet..</td>
+                                                        {#<td class="lectRoom_state lectRoom_state_stop_font">수강정지</td>#}
+                                                    </tr>
+                                                {% endfor %}
 
                                                 <!--========================여기까지 복붙==========================-->
 
-                                                <!--========================여기부터 삭제==========================-->
-                                                <tr class="lectRoom_tr">
-                                                    <td scope="row">
-
-                                                        {% csrf_token %}
-                                                        <div class="input-block">
-                                                            <input id="1"
-                                                                   type="checkbox"
-                                                                   onclick="decideChk(this,'{{ new_user.user_stu }}')">
-                                                            <!-- staff_label_margin는 staff_cr.css에 정의되어 있음.  -->
-                                                            <label for="1"
-                                                                   class="staff_label_margin"></label>
-                                                        </div>
-
-                                                    </td>
-
-                                                    <th>33</th>
-                                                    <!-- 회원 이름 -->
-                                                    <td>임꺽정</td>
-                                                    <!-- 회원 학번 -->
-                                                    <td>12339876</td>
-                                                    <!--전화번호 -->
-                                                    <td>010-0987-6543</td>
-                                                    <!--이메일 -->
-                                                    <td>iLovePineapple@gmail.com</td>
-                                                    <!-- 과제 미제출 수 -->
-                                                    <td style="text-align: center">1 번</td>
-                                                    <!-- 결석 수 -->
-                                                    <td>0 번</td>
-                                                    <!--상태 -->
-                                                    {#                                                            <td class="lectRoom_state lectRoom_state_ing_font">수강중</td>#}
-                                                    <td class="lectRoom_state lectRoom_state_stop_font">수강정지</td>
-
-
-                                                </tr>
-                                                <!--========================여기까지 삭제==========================-->
                                                 </tbody>
                                             </table>
 

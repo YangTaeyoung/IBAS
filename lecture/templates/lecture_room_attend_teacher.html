@@ -40,29 +40,7 @@
                                 <!--========== 왼쪽 강의룸 네비게이션바 시작 ==========-->
                                 <div class="col-lg-3 col-xl-3">
                                     <div class="sticky-top">
-                                        <!-- 강의룸 내 페이지 리스트 -->
-                                        <!-- 클릭한 게시글을 끌고옴 -->
-                                        <div class="listing-filter-sidebar">
-                                            <h4 class="title">강의실</h4>
-                                            <div class="widget_tag">
-                                                <ul class="m-b0">
-                                                    <!-- [메뉴바 > 강의실 > 강의] 게시판 내 강의소개 페이지로 이동 -->
-                                                    <li><a href="javascript:void(0);">강의소개</a>&nbsp;</li>
-                                                    <!-- 공지사항, 강의, 과제, 제출된 과제 페이지들은 모두 동일한 레이아웃임 -->
-                                                    <!-- 다만 과제 페이지의 경우 강의자, 수강생 별 보이는 게 다르게끔 세션처리 필요 (해당 게시판 주석 참조) -->
-                                                    <!-- 강의자, 수강생 모두 모이는 메뉴: 공지사항, 강의, 과제 -->
-                                                    <li><a href="javascript:void(0);">공지사항</a>&nbsp;</li>
-                                                    <li><a href="javascript:void(0);">강의</a>&nbsp;</li>
-                                                    <li><a href="javascript:void(0);">과제</a>&nbsp;</li>
-                                                    <!-- 수강생만 보이는 메뉴: 출석 및 과제 현황 -->
-                                                    <li><a href="javascript:void(0);">출석 및 과제 현황</a>&nbsp;</li>
-                                                    <!-- 강의자만 보이는 메뉴: 출석 및 과제 관리, 수강생 관리, 제출된 과제 리스트 -->
-                                                    <li><a href="javascript:void(0);">출석 및 과제 관리</a>&nbsp;</li>
-                                                    <li><a href="javascript:void(0);">수강생 관리</a>&nbsp;</li>
-                                                    <li><a href="javascript:void(0);">제출된 과제 리스트</a>&nbsp;</li>
-                                                </ul>
-                                            </div>
-                                        </div>
+                                        {% include "navigation_bar.html" %}
                                     </div>
                                 </div>
                                 <!--========== 왼쪽 강의룸 네비게이션바 끝 ==========-->
