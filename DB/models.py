@@ -5,6 +5,7 @@
 #   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
+from abc import abstractmethod
 from datetime import date
 import os
 from django.db import models
@@ -69,20 +70,24 @@ class Bank(models.Model):
 
 # 추상클래스 File
 class File(models.Model):
+    #@abstractmethod
+    def file_upload_to(self, filename):
+        pass
+
     file_id = models.AutoField(db_column='FILE_ID', primary_key=True)  # Field name made lowercase.
     file_name = models.CharField(db_column='FILE_NAME', max_length=300)
+    file_path = models.FileField(db_column='FILE_PATH', max_length=1000, upload_to=file_upload_to, blank=True)
 
     class Meta:
         abstract = True
 
 
-def bank_file_upload_to(instance, filename):
-    return f'bank/{instance.bank_no.bank_no}/{filename}'
-
-
 class BankFile(File):
+    def file_upload_to(self, filename):
+        return f'bank/{self.bank_no.bank_no}/{filename}'
+
     bank_no = models.ForeignKey(Bank, on_delete=models.CASCADE, db_column='BANK_NO')  # Field name made lowercase.
-    file_path = models.FileField(db_column='FILE_PATH', max_length=1000, upload_to=bank_file_upload_to)
+    file_path = models.FileField(db_column='FILE_PATH', max_length=1000, upload_to=file_upload_to, blank=True)
 
     class Meta:
         managed = False
@@ -116,16 +121,12 @@ class Board(models.Model):
         return os.path.join(MEDIA_ROOT, 'board', str(self.board_no))
 
 
-# 제발... 제발.... 되라...
-# 게시판 번호에 맞게 경로를 정하고 지정된 경로에 파일을 업로드 하는 함수.
-def board_file_upload_to(instance, filename):
-    return f'board/{instance.board_no.board_no}/{filename}'
-
-
 class BoardFile(File):
+    def file_upload_to(self, filename):
+        return f'board/{self.board_no.board_no}/{filename}'
+
     board_no = models.ForeignKey(Board, on_delete=models.CASCADE, db_column='BOARD_NO', null=True)
-    # upload_to에 대한 인자를 위에 정의한 함수로 대체해야 경로를 커스터마이징 할 수 있음.
-    file_path = models.ImageField(db_column='FILE_PATH', upload_to=board_file_upload_to, blank=True, null=True)
+    file_path = models.FileField(db_column='FILE_PATH', max_length=1000, upload_to=file_upload_to, blank=True)
 
     class Meta:
         managed = False
@@ -211,13 +212,12 @@ class ContestComment(models.Model):
         db_table = 'CONTEST_COMMENT'
 
 
-def contest_file_upload_to(instance, filename):
-        return f'board/contest/{instance.contest_no.contest_no}/{filename}'
-
-
 class ContestFile(File):
+    def file_upload_to(self, filename):
+        return f'board/contest/{self.contest_no.contest_no}/{filename}'
+
     contest_no = models.ForeignKey(ContestBoard, on_delete=models.CASCADE, db_column='CONTEST_NO')
-    file_path = models.ImageField(db_column='FILE_PATH', upload_to=contest_file_upload_to)
+    file_path = models.FileField(db_column='FILE_PATH', max_length=1000, upload_to=file_upload_to, blank=True)
 
     class Meta:
         managed = False
@@ -389,12 +389,10 @@ class LectBoardExFile(models.Model):
 
 
 class LectBoardFile(models.Model):
-    lect_board_file_id = models.AutoField(db_column='LECT_BOARD_FILE_ID',
-                                          primary_key=True)  # Field name made lowercase.
-    lect_board_no = models.ForeignKey(LectBoard, on_delete=models.CASCADE,
-                                      db_column='LECT_BOARD_NO')  # Field name made lowercase.
-    lect_board_file_path = models.CharField(db_column='LECT_BOARD_FILE_PATH',
-                                            max_length=1000)  # Field name made lowercase.
+    def file_upload_to(self, filename):
+        return f'lecture/{self.lect_board_no.lect_no}/{self.lect_board_no.lect_board_no}/{filename}'
+    lect_board_no = models.ForeignKey(LectBoard, on_delete=models.CASCADE,db_column='LECT_BOARD_NO')
+    file_path = models.FileField(db_column='FILE_PATH', max_length=1000, upload_to=file_upload_to, blank=True)
 
     class Meta:
         managed = False
