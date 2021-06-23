@@ -181,7 +181,7 @@ def lect_room_main(request, room_no):  # 강의룸 페이지로 이동
     # navigation_bar_info = get()
     context = {
         'lect': Lect.objects.get(pk=room_no),
-        # 'notice_list': ,
+        'notice_list': LectBoard.objects.filter(lect_board_type_no__lect_board_type_no=1).order_by('-lect_board_created'),
         'lect_board_list': LectBoard.objects.filter(lect_board_type_no__lect_board_type_no=2).order_by('-lect_board_created'),
         # 'assignment_list:
         #
@@ -189,12 +189,25 @@ def lect_room_main(request, room_no):  # 강의룸 페이지로 이동
     return render(request, 'lecture_room_main.html', context)
 
 
-def lect_board_register(request, room_no):  # 강의룸 등록 페이지로 이동
+def lect_room_list(request, room_no, board_type):
+    board_list = LectBoard.objects.filter(lect_board_type_no__lect_board_type_no=board_type).order_by('-lect_board_created')
+    page_obj = get_page_object(request, board_list, 15)
+    context = {
+        'lect': Lect.objects.get(pk=room_no),
+        'board_list': board_list,
+        'board_type': board_type,
+        'item_list': page_obj
+    }
+    return render(request, 'lecture_room_list.html', context)
+
+
+def lect_board_register(request, room_no, board_type):  # 강의룸 등록 페이지로 이동
     if request.method == "GET":
         context = {
-            'lect_board_form': LectBoardForm(initial={'lect_board_type_no': 2}),
+            'lect_board_form': LectBoardForm(initial={'lect_board_type_no': board_type}),
             'file_form': LectBoardFileForm(),
             'lect': Lect.objects.get(pk=room_no),
+            'board_type': board_type
         }
         return render(request, 'lecture_room_board_register.html', context)
 
