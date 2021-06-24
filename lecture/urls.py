@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import path, include, re_path
 from . import views
 
 urlpatterns = [
@@ -12,7 +12,7 @@ urlpatterns = [
 
     path('room/<int:room_no>/main/', views.lect_room_main, name="lect_room_main"), # 강의룸 메인 게시판으로 이동
     path('room/<int:room_no>/list/<int:board_type>', views.lect_room_list, name="lect_room_list"),  # 강의룸 메인 게시판으로 이동
-    path('room/<int:room_no>/register/<int:board_type>', views.lect_board_register, name="lect_board_register"), # 강의룸 게시글 등록페이지로 이동
+    path('room/<int:room_no>/register/<int:board_type>', views.lect_board_register, name="lect_board_register"),
     path('room/<int:room_no>/detail/<int:board_no>', views.lect_board_detail, name="lect_board_detail"),
     path('room/<int:room_no>/delete/<int:board_no>', views.lect_board_delete, name="lect_board_delete"),
     path('room/<int:room_no>/update/<int:board_no>', views.lect_board_update, name="lect_board_update"),

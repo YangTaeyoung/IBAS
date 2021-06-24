@@ -146,33 +146,9 @@ def lect_view(request, type_no):  # 게시판 페이지로 이동
                                                             <label>과제 관련 파일</label>
                                                             <input type="file" accept=".xlsx,.xls,image/*,.doc,audio/*,.docx,video/*,.ppt,.pptx,.txt,.pdf" multiple/>
                                                         </div>
+
                                                         <!-- 이미 존재하고 있던 파일: 삭제 가능 (수정모드)/과제관련 파일 정의되어있지 않아서 일단 뒤에_homework붙였음 -->
-                                                        {% if lect_board_homework is not None %}
-                                                            <div class="form-group">
-                                                                <div id="image-cont" class="image-cont">
-                                                                    {% for lect_board_homework_file in lect_board_homework_file_list %}
-                                                                        <div id="image-card-{{ lect_board_homework_file.lect_board_homework_file_id }}"
-                                                                             class="image-card">
-                                                                            <!-- 취소 버튼, 취소를 누를 시 image-card 컨테이너가 통채로 사라짐. -->
-                                                                            <button type="button"
-                                                                                    class="btn btn-danger fa fa-times btn-cancel"
-                                                                                    onclick="delImg(document.getElementById('image-card-{{ lect_board_homework_file.lect_board_homework_file_id }}'))"></button>
-                                                                            <!-- 이미지 컨테이너 이미지 파일일 경우 img태그가, 이미지 파일이 아닐 경우 파일 모양의 아이콘이 붙음. -->
-                                                                            <div id="image-{{ lect_board_homework_file.lect_board_homework_file_id }}"
-                                                                                 class="image-container"></div>
-                                                                            <!--기존 파일링크를 이동시키기 위한 히든 링크 -->
-                                                                            <input type="hidden"
-                                                                                   name="exist_file_path_{{ lect_board_homework_file.lect_board_homework_file_id }}"
-                                                                                   value="{{ lect_board_homework_file.lect_board_homework_file_path }}"/>
-                                                                        </div>
-                                                                        <script>
-                                                                            // 페이지가 로딩 될 때 해당 함수도 자동으로 실행되도록 설정함. (아이콘 or img 결정)
-                                                                            onload = decisionIcon(document.getElementById("image-{{ lect_board_homework_file.lect_board_homework_file_id }}"), '{{ lect_board_homework_file.lect_board_homework_file_path }}');
-                                                                        </script>
-                                                                    {% endfor %}
-                                                                </div>
-                                                            </div>
-                                                        {% endif %}
+                                                        {% include "file_update_box.html" with assignment_file_list=file_list %}
 
                                                         <hr/>
                                                         <!--과제 내용-->

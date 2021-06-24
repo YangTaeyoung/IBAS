@@ -168,3 +168,7 @@ def make_lect_board_form(board_type, *args):
 # 이거 지우면 큰일 남
 class LectBoardFileForm(FileFormBase):
     pass
+
+
+class LectAssignmentFileForm(FileFormBase):
+    pass

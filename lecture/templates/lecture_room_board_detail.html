@@ -134,6 +134,8 @@
                                             <form method="get" id="form-update"
                                                   action="{% url "lect_board_update" room_no=lect.lect_no board_no=board.lect_board_no %}">
                                                 {% csrf_token %}
+                                                <input type="hidden" value="{{ board.lect_board_type_no.lect_board_type_no }}" name="board_type">
+
                                             </form>
                                             <button class="site-button radius-xl m-l10" onclick="document.getElementById('form-update').submit()">
                                                     <i class="fa fa-pencil m-r5"></i>게시글 수정

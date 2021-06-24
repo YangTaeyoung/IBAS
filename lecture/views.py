@@ -215,7 +215,7 @@ def lect_board_register(request, room_no, board_type):  # 강의룸 등록 페�
         lect_board_form = make_lect_board_form(board_type, request.POST)
         file_form = LectBoardFileForm(request.POST, request.FILES)
 
-        if lect_board_form.is_valid() and file_form:
+        if lect_board_form.is_valid() and file_form.is_valid():
             with transaction.atomic():
                 lecture = lect_board_form.save(
                     lect_board_writer=get_logined_user(request),
@@ -228,7 +228,6 @@ def lect_board_register(request, room_no, board_type):  # 강의룸 등록 페�
 
 def lect_board_detail(request, room_no, board_no):
     board = get_object_or_404(LectBoard, pk=board_no)
-    print(board.get_file_path)
     file_list, img_list, doc_list = FileController.get_images_and_files_of_(board)
 
     context = {
@@ -259,6 +258,7 @@ def lect_board_update(request, room_no, board_no):
             'lect_board_form': LectBoardForm(instance=board),
             'file_form': LectBoardFileForm(),
             'board_no': board_no,
+            'board_type': int(request.GET.get('board_type')),
             'file_list': LectBoardFile.objects.filter(lect_board_no__lect_board_no=board_no)
         }
         return render(request, 'lecture_room_board_register.html', context)
