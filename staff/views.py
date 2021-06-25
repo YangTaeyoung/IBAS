@@ -248,7 +248,10 @@ def member_delete_detail(request, user_delete_no):
     user_delete_aor_reject = UserDeleteAor.objects.filter(Q(user_delete_no=user_delete) & Q(aor=0))
     total_chief_num = len(User.objects.filter(Q(user_role__role_no__lte=4) & Q(user_auth__auth_no=1)))
     file_list, img_list, doc_list = FileController.get_images_and_files_of_(user_delete)
+    user_delete_comment_list = UserDeleteComment.objects.filter(user_delete_no=user_delete).order_by('-comment_created')
+
     context = {
+        "user_delete_comment_list": user_delete_comment_list,
         "is_writer": get_logined_user(request) == user_delete.suggest_user,
         "is_voted": is_voted(request, user_delete),
         "doc_list": doc_list,
@@ -340,3 +343,7 @@ def member_delete_decide(request, user_delete_no):
         return redirect("member_delete_detail", user_delete_no=user_delete_no)
     else:  # 비정상적인 접근.
         return redirect(reverse("index"))
+
+def member_delete_comment_register(request):
+    if request.method == "POST":
+        UserDeleteComment.objects.create()

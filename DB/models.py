@@ -82,7 +82,7 @@ class CommentBase(models.Model):
     comment_writer = models.ForeignKey('User', models.DO_NOTHING, db_column='COMMENT_WRITER', null=True)
     comment_cont = models.CharField(db_column='COMMENT_CONT', max_length=5000)
     comment_cont_ref = models.ForeignKey('self', on_delete=models.CASCADE, db_column='COMMENT_CONT_REF', blank=True,
-                                         null=True)  # Field name made lowercase.
+                                         null=True, related_name="comment_ref")  # Field name made lowercase.
     comment_created = models.DateTimeField(db_column='COMMENT_CREATED', auto_now_add=True)  # Field name made lowercase.
 
     class Meta:
@@ -551,7 +551,8 @@ class UserDeleteState(models.Model):
 
 
 class UserDeleteComment(CommentBase):
-    user_delete_no = models.ForeignKey(UserDelete, on_delete=models.CASCADE, db_column="USER_DELETE_NO")
+    user_delete_no = models.ForeignKey(UserDelete, on_delete=models.CASCADE, db_column="USER_DELETE_NO",
+                                       related_name="board_ref")
 
     class Meta:
         managed = False
