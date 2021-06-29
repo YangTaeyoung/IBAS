@@ -155,7 +155,7 @@
                                         <!-- 회장단 전화번호 -->
                                         <h5>{{ chief_crew.user_phone }}</h5>
                                         <!-- 회장단 이메일 -->
-                                        <h5>{{ chief_crew.user_email }}</h5>
+                                        <h5>{{ chief_crew.useremail_set.first.user_email }}</h5>
                                         {% for chief_crew_carrier in chief_crew.chiefcarrier_set.all %}
                                             <p>{{ chief_crew_carrier.carrier_content }}</p>
                                         {% endfor %}
@@ -334,7 +334,7 @@
                     <!-- introduce-margin-bottom_5 introduce-font-size_15는 yejin.css에 정의되어 있음. -->
                     <p class="m-b5 introduce-font-size_15">
                         <i class="ti-email"></i>
-                        {{ chief.user_email }}
+                        {{ chief.useremail_set.first.user_email }}
                     </p>
                     <p class="introduce-font-size_15"><i class="ti-mobile"></i> {{ chief.user_phone }}</p>
                 </div>

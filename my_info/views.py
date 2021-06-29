@@ -1,13 +1,10 @@
 import os
 from django.shortcuts import render, redirect, reverse
-from DB.models import Board, User, Comment, Lect, LectBoard, BoardType, UserRole, Bank, UserAuth, UserUpdateRequest, \
-    UserEmail, \
-    StateInfo, MajorInfo, AuthUser
-from allauth.socialaccount.models import SocialAccount, SocialToken
+from DB.models import Board, User, Comment, Bank, UserUpdateRequest, UserEmail, StateInfo, MajorInfo
 from django.db.models import Q
-from user_controller import get_logined_user, get_user, is_logined, login_required, get_social_login_info
+from user_controller import get_logined_user, login_required, get_social_login_info
 from django.conf import settings
-from django.http import HttpResponse
+
 from member.session import save_session
 
 
@@ -124,6 +121,7 @@ def user_phone_update(request):
         return redirect(reverse("index"))
 
 
+# 연동시 파라미터를 남기기 위한 코드 (GET 방식이기 때문에 보안에 매우 취약함.)
 def go_social_login_before_setting(request):
     if request.method == "POST":
         context = {

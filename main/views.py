@@ -25,7 +25,7 @@ def introduce(request):
     # 히스토리 내역을 가져옴
     context = {'history_list': History.objects.all().order_by("history_date")}
     chief_crews = User.objects.filter(Q(user_role__role_no__lte=4) & Q(user_auth__auth_no=1)).prefetch_related(
-        'chiefcarrier_set').all()
+        'chiefcarrier_set').prefetch_related('useremail_set').all()
     if len(chief_crews) != 0:
         # 회장단인 사람의 객체를 가져오고 등록, Chief_carrier에서 이력 정보도 함께 가져옴
         context['chief_crews'] = chief_crews
