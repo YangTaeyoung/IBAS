@@ -1,17 +1,17 @@
 import os
-
 from django.shortcuts import render, redirect, reverse
 from DB.models import Board, User, Comment, Lect, LectBoard, BoardType, UserRole, Bank, UserAuth, UserUpdateRequest, \
     UserEmail, \
     StateInfo, MajorInfo, AuthUser
 from allauth.socialaccount.models import SocialAccount, SocialToken
 from django.db.models import Q
-from user_controller import get_logined_user, get_user, is_logined, login_required
+from user_controller import get_logined_user, get_user, is_logined, login_required, get_social_login_info
 from django.conf import settings
+from django.http import HttpResponse
+from member.session import save_session
 
 
 # Create your views here.
-
 @login_required
 def my_info(request):  # 내 정보 출력
     context = {
@@ -124,7 +124,24 @@ def user_phone_update(request):
         return redirect(reverse("index"))
 
 
-# @login_required
-# def connect_social_login(request):
-#     if request.method == "POST":
+def go_social_login_before_setting(request):
+    if request.method == "POST":
+        context = {
+            "provider": request.POST.get("provider"),
+            "next_url": "/user/pass?user_stu=" + str(get_logined_user(request).user_stu)
+        }
+        return render(request, "go_social_login.html", context)
+    return redirect(reverse("index"))
 
+
+# login_required를 설정하지 말 것. 연동시 로그인이 잠시 풀리기 때문.
+def connect_social_account(request):
+    if request.method == "POST":
+        social_dict = get_social_login_info(request.POST.get("password"))
+        current_user = User.objects.get(pk=request.POST.get("user_stu"))
+        UserEmail.objects.create(user_stu=current_user, user_email=social_dict.get("email"),
+                                 provider=social_dict.get("provider"))
+        save_session(request, user_model=current_user, logined_email=social_dict.get("email"),
+                     provider=social_dict.get("provider"))
+        return redirect(reverse("my_info"))
+    return redirect(reverse("index"))

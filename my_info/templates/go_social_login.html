@@ -1,0 +1,5 @@
+{% load socialaccount %}
+{% load static %}
+<script>
+    location.href = "{% provider_login_url provider next=next_url%}";
+</script>

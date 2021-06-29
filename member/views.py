@@ -21,7 +21,8 @@ def choose_std_or_pro(request):  # 학생인지, 교수인지 고르게 하는 �
             user_token = request.POST.get("password")  # 토큰 정보를 받음
             social_dict = get_social_login_info(user_token)
             # ------------------------------소셜 로그인으로 받은 정보 처리 끝---------------------------------------#
-            if len(UserEmail.objects.filter(user_email=social_dict.get("email"))) == 0:  # 토큰 정보로 USER DB를 검색 했을 때 나오는 유저 정보가 없을 경우, 즉 입부 신청하지 않은 유저의 경우
+            if len(UserEmail.objects.filter(user_email=social_dict.get(
+                    "email"))) == 0:  # 토큰 정보로 USER DB를 검색 했을 때 나오는 유저 정보가 없을 경우, 즉 입부 신청하지 않은 유저의 경우
                 # 컨텍스트에 자동완성 정보를 등록
                 stu_list = list()
                 for user in User.objects.all():
@@ -39,10 +40,11 @@ def choose_std_or_pro(request):  # 학생인지, 교수인지 고르게 하는 �
                 return render(request, 'std_or_pro.html', context)
             else:  # 이미 입부신청 되어있는 유저의 경우
                 # tar_member에 유저 정보를 저장
-                user_email = UserEmail.objects.get(pk=email)
+                user_email = UserEmail.objects.get(pk=social_dict.get("email"))
                 tar_member = user_email.user_stu
                 # 로그인 및 정보 출력에 필요한 정보를 세션에 저장
-                session.save_session(request, user_model=tar_member, logined_email=email, provider=provider)
+                session.save_session(request, user_model=tar_member, logined_email=user_email.user_email,
+                                     provider=social_dict.get("provider"))
                 return redirect(reverse('index'))
     else:  # 파라미터가 제대로 넘어오지 않은 경우, 즉 비정상적인 경로를 통해 로그인 된 경우
         return render(request, "index.html", {'lgn_is_failed': 1})  # 자바 스크립트 경고를 띄우기 위한 변수 지정 후 index로 보냄.
