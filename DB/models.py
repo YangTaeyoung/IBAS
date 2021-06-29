@@ -488,7 +488,7 @@ class User(models.Model):
 class UserKeys(models.Model):
     key_no = models.AutoField(db_column="KEY_NO", primary_key=True)
     user_key = models.CharField(db_column="USER_KEY", max_length=512)
-    user_stu = models.CharField("User", on_delete=models.CASCADE, db_column="USER_STU")
+    user_stu = models.ForeignKey("User", on_delete=models.CASCADE, db_column="USER_STU")
 
     class Meta:
         managed = False

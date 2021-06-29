@@ -1,5 +1,5 @@
 from cryptography.fernet import Fernet
-from DB.models import User, UserKeys
+from DB.models import UserKeys
 from user_controller import get_logined_user
 
 
