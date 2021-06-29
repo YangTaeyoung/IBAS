@@ -4,6 +4,17 @@ from DB.models import User, ContestBoard, Board, Bank, Lect, UserDelete, AuthUse
 from allauth.socialaccount.models import SocialAccount, SocialToken
 
 
+# 학교 아이디의 경우 이름/학과/학교 등으로 이름이 구성된 경우가 많음.
+# 그 경우 앞부분을 잘라주는 함수임.
+def get_real_name(name_str: str):
+    real_name = name_str
+    idx_slash = name_str.find("/")
+    if idx_slash != -1:
+        real_name = name_str.split("/")[0]
+    return real_name
+
+
+# 소셜로그인으로부터 정보를 얻어오는 함수임
 def get_social_login_info(password):
     auth_user = AuthUser.objects.filter(password=password).first()
     # 있다면 social account에서 앞서서 Auth의 primary key를 통해 가입한 친구의 pk를 넣어서 조회
@@ -13,7 +24,7 @@ def get_social_login_info(password):
 
     # extra_data: 사용자의 동의를 통해 로그인 출처로 부터 얻은 사용자의 개인정보
     social_login_info_dict["email"] = tar_member.extra_data.get('email')  # 자동 완성을 위해 인스턴스 변수 설정
-    social_login_info_dict["name"] = tar_member.extra_data.get('name')  # 자동 완성을 위한 이름 설정
+    social_login_info_dict["name"] = get_real_name(tar_member.extra_data.get('name'))  # 자동 완성을 위한 이름 설정
     social_login_info_dict["provider"] = tar_member.provider
     if social_login_info_dict["provider"] == "google":  # 사용자가 구글을 통해 로그인 한 경우
         social_login_info_dict["pic"] = tar_member.extra_data.get('picture')  # extra_data 테이블에서 꺼내는 변수를 picture로 설정
