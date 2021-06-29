@@ -86,6 +86,7 @@ def lect_detail(request, lect_no):
     context = {
         'lect': lect,
         'lect_day_list': lect_day_list,
+
         'lect_user_num': len(LectUser.objects.filter(lect_no=lect_no)),
         'is_in': len(LectUser.objects.filter(lect_user=get_logined_user(request))) >= 1,
         'lect_reject_form': LectRejectForm(instance=lect),

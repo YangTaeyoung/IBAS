@@ -9,24 +9,23 @@ from django.conf import settings
 
 
 # Create your views here.
+
+@login_required
 def my_info(request):  # 내 정보 출력
-    if is_logined(request):
-        context = {
-            "my_board_list": Board.objects.filter(board_writer=get_logined_user(request)).order_by(
-                "board_type_no").order_by(
-                "-board_created"),
-            "my_comment_list": Comment.objects.filter(comment_writer=get_logined_user(request)).order_by(
-                "comment_board_no__board_type_no").order_by("-comment_created"),
-            "my_wait_request": UserUpdateRequest.objects.filter(
-                Q(updated_user=get_logined_user(request)) & Q(updated_state__state_no=1)),
-            "my_update_request_list": UserUpdateRequest.objects.filter(updated_user=get_logined_user(request)),
-            "my_bank_list": Bank.objects.filter(bank_used_user=get_logined_user(request)).order_by("-bank_used"),
-            "user_list": User.objects.all(),
-            "major_list": MajorInfo.objects.all()
-        }
-        return render(request, 'my_info.html', context)
-    else:
-        return redirect(reverse("index"))
+    context = {
+        "my_board_list": Board.objects.filter(board_writer=get_logined_user(request)).order_by(
+            "board_type_no").order_by(
+            "-board_created"),
+        "my_comment_list": Comment.objects.filter(comment_writer=get_logined_user(request)).order_by(
+            "comment_board_no__board_type_no").order_by("-comment_created"),
+        "my_wait_request": UserUpdateRequest.objects.filter(
+            Q(updated_user=get_logined_user(request)) & Q(updated_state__state_no=1)),
+        "my_update_request_list": UserUpdateRequest.objects.filter(updated_user=get_logined_user(request)),
+        "my_bank_list": Bank.objects.filter(bank_used_user=get_logined_user(request)).order_by("-bank_used"),
+        "user_list": User.objects.all(),
+        "major_list": MajorInfo.objects.all()
+    }
+    return render(request, 'my_info.html', context)
 
 
 def user_update_request_register(request):  # 이름 변경 신청

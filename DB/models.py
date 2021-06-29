@@ -464,7 +464,6 @@ def user_pic_upload_to(instance, filename):
 
 
 class User(models.Model):
-    user_email = models.CharField(db_column='USER_EMAIL', max_length=100)  # Field name made lowercase.
     user_stu = models.IntegerField(db_column='USER_STU', primary_key=True)  # Field name made lowercase.
     user_name = models.CharField(db_column='USER_NAME', max_length=50)  # Field name made lowercase.
     user_major = models.ForeignKey(MajorInfo, models.DO_NOTHING, db_column='USER_MAJOR')  # Field name made lowercase.
@@ -560,7 +559,7 @@ class UserDeleteComment(CommentBase):
 
 class UserEmail(models.Model):
     user_email = models.CharField(max_length=100, db_column="USER_EMAIL", primary_key=True)
-    provider = models.CharField(max_length=20, db_column="PROVIDER", primary_key=True)
+    provider = models.CharField(max_length=20, db_column="PROVIDER")
     user_stu = models.ForeignKey(User, on_delete=models.CASCADE, db_column='user_stu')
 
     class Meta:
