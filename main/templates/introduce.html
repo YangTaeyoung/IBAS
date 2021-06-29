@@ -3,6 +3,7 @@
 {% block content %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/ibas_contents.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/nav.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/size.css' %}">
     <script src="{% static 'js/ibas_centents.js' %}"></script>
     <script src="{% static 'js/nav.js' %}"></script>
     <link rel="stylesheet" type="text/css" href="{% static 'css/star-rating-svg.css' %}"/>
@@ -142,7 +143,7 @@
                                         <div class="client-img">
                                             <!-- 회장단 프로필사진 -->
                                             <img src="/media/{{ chief_crew.user_pic }}" width="100"
-                                                 height="100" alt="">
+                                                 height="100" alt="현재 브라우저에서 지원하지 않는 형식입니다." class = "max-min-width-height-100">
                                         </div>
                                         <div class="client-info">
                                             <!-- 회장단 이름 -->
