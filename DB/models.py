@@ -559,8 +559,8 @@ class UserDeleteComment(CommentBase):
 
 
 class UserEmail(models.Model):
-    email_no = models.AutoField(primary_key=True)
-    user_email = models.CharField(max_length=100)
+    user_email = models.CharField(max_length=100, db_column="USER_EMAIL", primary_key=True)
+    provider = models.CharField(max_length=20, db_column="PROVIDER", primary_key=True)
     user_stu = models.ForeignKey(User, on_delete=models.CASCADE, db_column='user_stu')
 
     class Meta:
