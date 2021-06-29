@@ -191,4 +191,4 @@ EMAIL_HOST_USER = 'ibasmail20@gmail.com'
 EMAIL_HOST_PASSWORD = 'weloveyoukhk'
 
 # 브라우져 종료시 세션 만료
-# SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
