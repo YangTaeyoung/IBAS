@@ -2,7 +2,9 @@ import os
 
 from django.shortcuts import render, redirect, reverse
 from DB.models import Board, User, Comment, Lect, LectBoard, BoardType, UserRole, Bank, UserAuth, UserUpdateRequest, \
-    StateInfo, MajorInfo
+    UserEmail, \
+    StateInfo, MajorInfo, AuthUser
+from allauth.socialaccount.models import SocialAccount, SocialToken
 from django.db.models import Q
 from user_controller import get_logined_user, get_user, is_logined, login_required
 from django.conf import settings
@@ -23,7 +25,11 @@ def my_info(request):  # 내 정보 출력
         "my_update_request_list": UserUpdateRequest.objects.filter(updated_user=get_logined_user(request)),
         "my_bank_list": Bank.objects.filter(bank_used_user=get_logined_user(request)).order_by("-bank_used"),
         "user_list": User.objects.all(),
-        "major_list": MajorInfo.objects.all()
+        "major_list": MajorInfo.objects.all(),
+        "is_naver_existed": len(
+            UserEmail.objects.filter(Q(user_stu=get_logined_user(request)) & Q(provider="naver"))) != 0,
+        "is_google_existed": len(
+            UserEmail.objects.filter(Q(user_stu=get_logined_user(request)) & Q(provider="google"))) != 0,
     }
     return render(request, 'my_info.html', context)
 
@@ -116,3 +122,9 @@ def user_phone_update(request):
         return redirect(reverse("my_info"))
     else:
         return redirect(reverse("index"))
+
+
+# @login_required
+# def connect_social_login(request):
+#     if request.method == "POST":
+

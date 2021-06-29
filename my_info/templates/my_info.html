@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load socialaccount %} {% providers_media_js %}
 {% block content %}
     <link rel="stylesheet" href="{% static 'css/login-join.css' %}"/>
     <link rel="stylesheet" href="{% static 'css/ibas_contents.css' %}"/>
@@ -442,39 +443,45 @@
                                         <!--네이버 계정 연동 안했을 때-->
                                         <form class="dlab-form m-t10">
                                             <div class="text-center m-b10">
-                                                {% if request.session.provider == "google" %}
+                                                {% if request.session.provider == "google" and is_google_existed %}
                                                     <div href="#" class="site-button bg-secondary" style="width: 45%">
                                                         <i class="fa fa-google m-r10"></i>
                                                         구글 계정으로 로그인하였습니다.
                                                     </div>
+
+                                                    <!--Back : 누르면 구글계정 연동하는 창으로 이동하도록 수정-->
+                                                {% elif request.session.provider != "google" and is_google_existed %}
+                                                    <div href="#" class="site-button bg-secondary" style="width: 45%">
+                                                        <i class="fa fa-google m-r10"></i>
+                                                        구글 계정이 연동되어 있습니다.
+                                                    </div>
+                                                {% else %}
+                                                    <a href="{% provider_login_url 'google' %}" class="site-button google-plus btn-block"
+                                                       style="width: 45%">
+                                                        <i class="fa fa-google m-r10"></i>
+                                                        구글 계정 연동하기
+                                                    </a>
                                                 {% endif %}
-                                                <!--Back : 누르면 구글계정 연동하는 창으로 이동하도록 수정-->
-                                                <a href="#" class="site-button google-plus btn-block"
-                                                   style="width: 45%">
-                                                    <i class="fa fa-google m-r10"></i>
-                                                    구글 계정 연동하기
-                                                </a>
-                                                <div href="#" class="site-button bg-secondary" style="width: 45%">
-                                                    <i class="fa fa-google m-r10"></i>
-                                                    구글 계정이 연동되어 있습니다.
-                                                </div>
                                                 <!--Back : 누르면 네이버 계정 연동하는 창으로 이동하도록 수정-->
-                                                <a href="#" class="site-button whatsapp btn-block"
-                                                   style="width: 45%; margin-left: 20px">
-                                                    <span class="naver-logo m-r10">N</span>
-                                                    네이버 계정 연동하기</a>
-                                                <div href="#" class="site-button bg-secondary"
-                                                     style="width: 45%; margin-left: 20px">
-                                                    <span class="naver-logo m-r10">N</span>
-                                                    네이버 계정이 연동되어 있습니다.
-                                                </div>
-                                                {% if request.session.provider == "naver" %}
+                                                {% if request.session.provider == "naver" and is_naver_existed %}
                                                     <div href="#" class="site-button bg-secondary"
                                                          style="width: 45%; margin-left: 20px">
                                                         <span class="naver-logo m-r10">N</span>
                                                         네이버 계정으로 로그인하였습니다.
                                                     </div>
+                                                {% elif request.session.provider != "naver" and is_naver_existed %}
+                                                    <div href="#" class="site-button bg-secondary"
+                                                         style="width: 45%; margin-left: 20px">
+                                                        <span class="naver-logo m-r10">N</span>
+                                                        네이버 계정이 연동되어 있습니다.
+                                                    </div>
+                                                {% else %}
+                                                    <a href="{% provider_login_url 'naver' %}" class="site-button whatsapp btn-block"
+                                                       style="width: 45%; margin-left: 20px">
+                                                        <span class="naver-logo m-r10">N</span>
+                                                        네이버 계정 연동하기</a>
                                                 {% endif %}
+
                                             </div>
                                         </form>
                                     </div>

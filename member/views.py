@@ -10,6 +10,7 @@ from . import session
 from urllib.request import urlretrieve  # 인터넷에 있는 파일 다운로드
 import os
 from django.conf import settings
+from user_controller import get_social_login_info
 
 
 # Create your views here.
@@ -18,29 +19,9 @@ def choose_std_or_pro(request):  # 학생인지, 교수인지 고르게 하는 �
     if request.method == "POST":  # POST로 온 요청의 경우, 즉 정상적인 요청인 경우
         if request.POST.get("password") is not None:  # pass페이지에서 password가 파라미터로 넘어왔을 경우, 즉 정상적으로 구글 로그인을 마친 경우
             user_token = request.POST.get("password")  # 토큰 정보를 받음
-            if len(AuthUser.objects.filter(password=user_token)) == 0:  # 토큰 정보로 AuthUser정보를 조회 만약 없다면 비정상 적인 접근.
-                return redirect(reverse("index"))  # 비정상적인 접근의 경우 강제로 홈으로 이동
-            auth_user = AuthUser.objects.filter(password=user_token)[0]  # auth테이블에서 해당 패스워드가 있는지 조회.
-
-            # 있다면 social account에서 앞서서 Auth의 primary key를 통해 가입한 친구의 pk를 넣어서 조회
-            tar_member = SocialAccount.objects.filter(user_id=auth_user.id)[0]  # quesyset의 첫번째 자료. 즉 로그인한 인원의 인스턴스 변수
-            tar_token = SocialToken.objects.filter(account_id=tar_member.id)[0]
-
-            # extra_data: 사용자의 동의를 통해 로그인 출처로 부터 얻은 사용자의 개인정보
-            email = tar_member.extra_data.get('email')  # 자동 완성을 위해 인스턴스 변수 설정
-            name = tar_member.extra_data.get('name')  # 자동 완성을 위한 이름 설정
-            provider = tar_member.provider
-            if provider == "google":  # 사용자가 구글을 통해 로그인 한 경우
-                pic = tar_member.extra_data.get('picture')  # extra_data 테이블에서 꺼내는 변수를 picture로 설정
-            elif provider == "naver":  # 사용자가 네이버를 통해 로그인 한 경우
-                pic = tar_member.extra_data.get('profile_image')  # extra_data 테이블에서 꺼내는 변수를 profile_image로 설정
-
-            # 소셜 로그인으로 부터 받은 정보는 저장하지 않기 위해 해당 정보 삭제
-            tar_token.delete()
-            tar_member.delete()
-            auth_user.delete()
+            social_dict = get_social_login_info(user_token)
             # ------------------------------소셜 로그인으로 받은 정보 처리 끝---------------------------------------#
-            if len(UserEmail.objects.filter(user_email=email)) == 0:  # 토큰 정보로 USER DB를 검색 했을 때 나오는 유저 정보가 없을 경우, 즉 입부 신청하지 않은 유저의 경우
+            if len(UserEmail.objects.filter(user_email=social_dict.get("email"))) == 0:  # 토큰 정보로 USER DB를 검색 했을 때 나오는 유저 정보가 없을 경우, 즉 입부 신청하지 않은 유저의 경우
                 # 컨텍스트에 자동완성 정보를 등록
                 stu_list = list()
                 for user in User.objects.all():
@@ -53,12 +34,7 @@ def choose_std_or_pro(request):  # 학생인지, 교수인지 고르게 하는 �
                 #     for user in User.objects.all():
                 #         stu_list.append(user.user_stu)
 
-                context = {
-                    "email": email,
-                    "name": name,
-                    "pic": pic,
-                    "provider": provider,
-                }
+                context = social_dict
 
                 return render(request, 'std_or_pro.html', context)
             else:  # 이미 입부신청 되어있는 유저의 경우
