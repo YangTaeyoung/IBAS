@@ -4,7 +4,7 @@ from DB.models import Board, User, Comment, Bank, UserUpdateRequest, UserEmail, 
 from django.db.models import Q
 from user_controller import get_logined_user, login_required, get_social_login_info
 from django.conf import settings
-
+from utils.CodeEnDecrypt import SimpleEnDecrypt
 from member.session import save_session
 
 
@@ -122,6 +122,7 @@ def user_phone_update(request):
 
 
 # 연동시 파라미터를 남기기 위한 코드 (GET 방식이기 때문에 보안에 매우 취약함.)
+# 암호화 추가 예정
 def go_social_login_before_setting(request):
     if request.method == "POST":
         context = {
