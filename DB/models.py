@@ -485,6 +485,16 @@ class User(models.Model):
         return os.path.join(MEDIA_ROOT, "member", str(self.user_stu))
 
 
+class UserKeys(models.Model):
+    key_no = models.AutoField(db_column="KEY_NO", primary_key=True)
+    user_key = models.CharField(db_column="USER_KEY", max_length=512)
+    user_stu = models.CharField("User", on_delete=models.CASCADE, db_column="USER_STU")
+
+    class Meta:
+        managed = False
+        db_table = "USER_KEYS"
+
+
 class UserAuth(models.Model):
     auth_no = models.AutoField(db_column='AUTH_NO', primary_key=True)  # Field name made lowercase.
     auth_name = models.CharField(db_column='AUTH_NAME', max_length=50)  # Field name made lowercase.
