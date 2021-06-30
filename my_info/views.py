@@ -4,8 +4,12 @@ from DB.models import Board, User, Comment, Bank, UserUpdateRequest, UserEmail, 
 from django.db.models import Q
 from user_controller import get_logined_user, login_required, get_social_login_info
 from django.conf import settings
-
 from member.session import save_session
+import hashlib
+
+
+def get_ecrypt_value(value: str):
+    return hashlib.md5(value.encode()).hexdigest()
 
 
 # Create your views here.
@@ -124,9 +128,10 @@ def user_phone_update(request):
 # 연동시 파라미터를 남기기 위한 코드 (GET 방식이기 때문에 보안에 매우 취약함.)
 def go_social_login_before_setting(request):
     if request.method == "POST":
+        encoded_user_stu = get_ecrypt_value(str(get_logined_user(request).user_stu))
         context = {
             "provider": request.POST.get("provider"),
-            "next_url": "/user/pass?user_stu=" + str(get_logined_user(request).user_stu)
+            "next_url": "/user/pass?user_stu=" + encoded_user_stu,
         }
         return render(request, "go_social_login.html", context)
     return redirect(reverse("index"))
@@ -136,10 +141,17 @@ def go_social_login_before_setting(request):
 def connect_social_account(request):
     if request.method == "POST":
         social_dict = get_social_login_info(request.POST.get("password"))
-        current_user = User.objects.get(pk=request.POST.get("user_stu"))
-        UserEmail.objects.create(user_stu=current_user, user_email=social_dict.get("email"),
-                                 provider=social_dict.get("provider"))
-        save_session(request, user_model=current_user, logined_email=social_dict.get("email"),
-                     provider=social_dict.get("provider"))
-        return redirect(reverse("my_info"))
+        target_user_stu = request.POST.get("user_stu")
+        current_user = None
+        for user in User.objects.all():
+            if target_user_stu == get_ecrypt_value(str(user.user_stu)):
+                current_user = user
+                break
+
+        if current_user is not None:
+            UserEmail.objects.create(user_stu=current_user, user_email=social_dict.get("email"),
+                                     provider=social_dict.get("provider"))
+            save_session(request, user_model=current_user, logined_email=social_dict.get("email"),
+                         provider=social_dict.get("provider"))
+            return redirect(reverse("my_info"))
     return redirect(reverse("index"))

@@ -485,14 +485,14 @@ class User(models.Model):
         return os.path.join(MEDIA_ROOT, "member", str(self.user_stu))
 
 
-class UserKeys(models.Model):
+class UserKey(models.Model):
     key_no = models.AutoField(db_column="KEY_NO", primary_key=True)
-    user_key = models.CharField(db_column="USER_KEY", max_length=512)
-    user_stu = models.ForeignKey("User", on_delete=models.CASCADE, db_column="USER_STU")
+    user_key = models.BinaryField(db_column="USER_KEY", max_length=512)
+    created = models.DateTimeField(db_column="CREATED", auto_now=True)
 
     class Meta:
         managed = False
-        db_table = "USER_KEYS"
+        db_table = "USER_KEY"
 
 
 class UserAuth(models.Model):

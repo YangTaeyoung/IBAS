@@ -10,3 +10,7 @@ function getParam(sname) {
     }
     return sval;
 }
+function getFirstParam()
+{
+    return location.search.substr(location.search.indexOf("=") + 1);
+}
