@@ -12,6 +12,7 @@ class UserDeleteForm(forms.ModelForm):
             "user_delete_title": forms.TextInput(attrs={"placeholder": "제목을 입력하세요"}),
             "user_delete_content": forms.Textarea(),
             "deleted_user": forms.HiddenInput(),
+            "user_delete_state": forms.HiddenInput()
         }
 
     def save(self, **kwargs):
