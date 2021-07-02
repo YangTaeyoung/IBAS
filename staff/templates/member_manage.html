@@ -359,21 +359,11 @@
                                                         </td>
                                                         <!-- 제명건의 -->
                                                         <td class="text-center">
-                                                            <a href="#"
-                                                               style="font-size: 12px; font-weight: bold"
-                                                               onclick="goSubmit('id-form-user-delete')"
-                                                            >제명건의</a>
+                                                            <a href="{% url "member_delete_register" deleted_user=exist_user.user_stu %}"
+                                                                           style="font-size: 12px; font-weight: bold">제명건의</a>
+
                                                             <a href="#"
                                                                style="font-size: 12px; font-weight: bold">&nbsp;&nbsp;논의중</a>
-                                                            <form id="id-form-user-delete"
-                                                                  action="{% url "member_delete_register" %}"
-                                                                  method="post">
-                                                                {% csrf_token %}
-                                                                <input type="hidden" name="is_register"
-                                                                       value="1"/>
-                                                                <input type="hidden" name="deleted_user"
-                                                                       value="{{ exist_user.user_stu }}"/>
-                                                            </form>
                                                         </td>
                                                     </tr>
                                                 {% endfor %}
@@ -477,18 +467,19 @@
                             </div>
                         {% endif %}
 
-                        {% if logined_user.user_role.role_no == 1 %}
-                            <!-- 요청사항 콘텐츠 시작 -->
-                            <div class="content-box">
-                                <div class="content-header">
-                                    <h3 class="title"><i class="la la-check-square m-r5"></i>요청사항</h3>
-                                </div>
-                                <!-- 요청사항 실질 콘텐츠 시작 -->
-                                <!-- form 태그 수정 해야함 -->
-                                <form action="#" method="post">
-                                    {% csrf_token %}
-                                    <div class="content-body">
-                                        <div class="myinfo-table-padding">
+                                    <!------------------------------여기서부터 백엔드 작업 시작---------------------------------->
+                                    {% if logined_user.user_role.role_no == 1 %}
+                                        <!-- 요청사항 콘텐츠 시작 -->
+                                        <div class="content-box">
+                                            <div class="content-header">
+                                                <h3 class="title"><i class="la la-check-square m-r5"></i>요청사항</h3>
+                                            </div>
+                                            <!-- 요청사항 실질 콘텐츠 시작 -->
+                                            <!-- form 태그 수정 해야함 -->
+                                            <form action="#" method="post">
+                                                {% csrf_token %}
+                                                <div class="content-body">
+                                                    <div class="myinfo-table-padding">
 
                                             <!-- staff_mem_select는 staff_cr.css에 정의되어 있음.  -->
                                             <div class="staff_mem_select m-b20">

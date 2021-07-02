@@ -230,26 +230,26 @@ def member_delete_list(request):
 
 
 @superuser_only(cfo_included=True)
-def member_delete_register(request):
-    if request.method == "POST":
-        is_register = bool(int(request.POST.get("is_register")))
-        deleted_user = request.POST.get("deleted_user")
-        if is_register:
-            context = {
-                "is_update": False,
-                "user_delete_form": UserDeleteForm(initial={"deleted_user": deleted_user}),
-                "user_delete_file_form": FileFormBase()
-            }
-            return render(request, "member_delete_register.html", context)
-        else:
+def member_delete_register(request, deleted_user):
+    if deleted_user != 0:
+        context = {
+            "is_update": False,
+            "user_delete_form": UserDeleteForm(
+                initial={"deleted_user": User.objects.get(pk=deleted_user), "user_delete_state": 1}),
+            "user_delete_file_form": FileFormBase()
+        }
+        return render(request, "member_delete_register.html", context)
+    else:
+        if request.method == "POST":
             user_delete_form = UserDeleteForm(request.POST)
             user_delete_file_form = FileFormBase(request.POST, request.FILES)
             if user_delete_file_form.is_valid() and user_delete_form.is_valid():
                 user_delete = user_delete_form.save(suggest_user=get_logined_user(request))
                 user_delete_file_form.save(instance=user_delete)
-            return redirect("member_delete_list")
-    else:
-        return redirect(reverse("index"))
+                return redirect("member_delete_detail", user_delete_no=user_delete.user_delete_no)
+            return redirect(reverse("staff_member_list"))
+        else:
+            return redirect(reverse("index"))
 
 
 def member_delete_detail(request, user_delete_no):
