@@ -138,7 +138,7 @@ class BoardFile(File):
     def file_upload_to(self, filename):
         return f'board/{self.board_no.board_no}/{filename}'
 
-    board_no = models.ForeignKey(Board, on_delete=models.CASCADE, db_column='BOARD_NO', null=True)
+    board_no = models.ForeignKey(Board, on_delete=models.CASCADE, db_column='BOARD_NO')
     file_path = models.FileField(db_column='FILE_PATH', max_length=1000, upload_to=file_upload_to, blank=True)
 
     class Meta:
@@ -328,8 +328,8 @@ class LectAssignment(models.Model):
     lect_assignment_cont = models.TextField(db_column='LECT_ASSIGNMENT_CONT', blank=True)
     lect_assignment_writer = models.ForeignKey('User', models.DO_NOTHING, db_column='LECT_ASSIGNMENT_WRITER')
     lect_assignment_deadline = models.DateTimeField(db_column='LECT_ASSIGNMENT_DEADLINE', null=True, blank=True)
-    lect_board_no = models.ForeignKey('LectBoard', on_delete=models.CASCADE, null=True,
-                                            db_column="LECT_BOARD_NO", related_name='assignment')
+    lect_board_no = models.ForeignKey('LectBoard', on_delete=models.CASCADE,
+                                            db_column="LECT_BOARD_NO", related_name='assignments')
 
     class Meta:
         managed = False
@@ -342,8 +342,6 @@ class LectAssignment(models.Model):
 
 class LectAssignmentFile(File):
     def file_upload_to(self, filename):
-        print(self.lect_assignment_no)
-        print(self.lect_assignment_no.lect_assignment_title)
         return f'lecture/assignment/{self.lect_assignment_no.pk}/{filename}'
 
     lect_assignment_no = models.ForeignKey('LectAssignment', db_column='LECT_ASSIGNMENT_NO', on_delete=models.CASCADE,
@@ -353,6 +351,26 @@ class LectAssignmentFile(File):
     class Meta:
         managed = False
         db_table = 'LECT_ASSIGNMENT_FILE'
+
+
+class LectAttendance(models.Model):
+    lect_board_no = models.ForeignKey('LectBoard', on_delete=models.CASCADE, db_column="LECT_BOARD_NO",
+                                      related_name='attendance_info')
+    student = models.ForeignKey('User', on_delete=models.DO_NOTHING, db_column='STUDENT')
+    lect_attend_date = models.DateTimeField(db_column='LECT_ATTEND_DATE', auto_now_add=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'LECT_ATTENDANCE'
+
+
+class LectEnrollment(models.Model):
+    lect_no = models.ForeignKey('Lect', on_delete=models.CASCADE, db_column='LECT_NO', related_name='enrolled_students')
+    student = models.ForeignKey('User', on_delete=models.DO_NOTHING, db_column='STUDENT')
+
+    class Meta:
+        managed = False
+        db_table = 'LECT_ATTENDANCE'
 
 
 class LectBoardType(models.Model):

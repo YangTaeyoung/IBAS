@@ -140,7 +140,7 @@ class FileController:
         if isinstance(instance, ContestBoard):
             for file in files_to_upload:  # 각각의 파일을 InMemoryUploadedFile 객체로 받아옴
                 ContestFile.objects.create(
-                    contest_no=ContestBoard.objects.get(pk=instance.contest_no),
+                    contest_no=instance,
                     file_path=file,  # uploadedFile 객체를 imageField 객체 할당
                     file_name=file.name.replace(' ', '_')  # imageField 객체에 의해 파일 이름 공백이 '_'로 치환되어 서버 저장
                     # 따라서 db 에도 이름 공백을 '_'로 치환하여 저장
@@ -148,7 +148,7 @@ class FileController:
         elif isinstance(instance, Board):
             for file in files_to_upload:
                 BoardFile.objects.create(
-                    board_no=Board.objects.get(pk=instance.board_no),
+                    board_no=instance,
                     file_path=file,  # uploadedFile 객체를 imageField 객체 할당
                     file_name=file.name.replace(' ', '_')  # imageField 객체에 의해 파일 이름 공백이 '_'로 치환되어 서버 저장
                     # 따라서 db 에도 이름 공백을 '_'로 치환하여 저장
@@ -156,28 +156,28 @@ class FileController:
         elif isinstance(instance, Bank):
             for file in files_to_upload:
                 BankFile.objects.create(
-                    bank_no=Bank.objects.get(pk=instance.bank_no),
+                    bank_no=instance,
                     file_path=file,
                     file_name=file.name.replace(' ', '_')
                 )
         elif isinstance(instance, LectBoard):
             for file in files_to_upload:
                 LectBoardFile.objects.create(
-                    lect_board_no=LectBoard.objects.get(pk=instance.lect_board_no),
+                    lect_board_no=instance,
                     file_path=file,
                     file_name=file.name.replace(' ', '_')
                 )
         elif isinstance(instance, LectAssignment):
             for file in files_to_upload:
                 LectAssignmentFile.objects.create(
-                    lect_assignment_no=LectAssignment.objects.get(pk=instance.lect_assignment_no),
+                    lect_assignment_no=instance,
                     file_path=file,
                     file_name=file.name.replace(' ', '_')
                 )
         elif isinstance(instance, UserDelete):
             for file in files_to_upload:
                 UserDeleteFile.objects.create(
-                    user_delete_no=UserDelete.objects.get(pk=instance.user_delete_no),
+                    user_delete_no=instance,
                     file_path=file,
                     file_name=file.name.replace(' ', '_')
                 )
