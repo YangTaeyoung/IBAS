@@ -9,6 +9,7 @@ urlpatterns = [
     path('update/<int:lect_no>', views.lect_update, name="lect_update"),
     path('delete/<int:lect_no>', views.lect_delete, name="lect_delete"),
     path('<int:type_no>/search/', views.lect_search, name="lect_search"),
+    path('enroll/<int:lect_no>', views.lect_enroll, name="lect_enroll"),  # 신정한 수강생을 강의 명부에 등록하고 lect_room_main 으로 이동
 
     path('room/<int:room_no>/main/', views.lect_room_main, name="lect_room_main"), # 강의룸 메인 게시판으로 이동
     path('room/<int:room_no>/list/<int:board_type>', views.lect_room_list, name="lect_room_list"),  # 강의룸 메인 게시판으로 이동

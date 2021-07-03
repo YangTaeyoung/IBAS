@@ -1,6 +1,7 @@
 from django.db import transaction
 from django.shortcuts import render, redirect, reverse, get_object_or_404
-from DB.models import LectType, Lect, LectDay, LectUser, StateInfo, MethodInfo, LectBoard, LectBoardFile, LectAssignment
+from DB.models import LectType, Lect, LectDay, StateInfo, MethodInfo, LectBoard, LectBoardFile, \
+    LectAssignment, LectEnrollment
 from django.db.models import Q
 
 from IBAS.forms import FileFormBase
@@ -29,7 +30,7 @@ def get_lect_list(request, type_no):
     if type_no != 4:  # 강의 개설 신청 게시판이 아닌 일반 게시판(강의, 스터디, 취미모임)의 경우
         lect_type = LectType.objects.get(pk=type_no)
         lect_list = Lect.objects.filter(Q(lect_type=lect_type) & Q(lect_state__state_no=3)).prefetch_related(
-            "lectday_set").prefetch_related("lectuser_set")
+            "lectday_set", "enrolled_students")
     else:
         lect_list = Lect.objects.filter(Q(lect_type=LectType.objects.get(pk=1)) & Q(lect_state__state_no=1) | Q(
             lect_state__state_no=2)).prefetch_related("lectday_set").prefetch_related("lectuser_set")
@@ -90,8 +91,8 @@ def lect_detail(request, lect_no):
     context = {
         'lect': lect,
         'lect_day_list': lect_day_list,
-        'lect_user_num': len(LectUser.objects.filter(lect_no=lect_no)),
-        'is_in': len(LectUser.objects.filter(lect_user=get_logined_user(request))) >= 1,
+        'lect_user_num': LectEnrollment.objects.filter(lect_no=lect_no).count(),
+        'is_in': LectEnrollment.objects.get(student=get_logined_user(request), lect_no__lect_no=lect_no) is not None,
         'lect_reject_form': LectRejectForm(instance=lect),
     }
     # 취미 모임의 경우 강의 방식이 없음 따라서 해당 부분에 대한 예외처리
@@ -176,6 +177,17 @@ def lect_search(request, type_no):
         "item_list": lect_list
     }
     return render(request, 'lecture_list.html', context)  # 정상 처리
+
+
+# 유저 강의 명단 등록 함수
+def lect_enroll(request, lect_no):
+    LectEnrollment.objects.create(
+        lect_no=Lect.objects.get(pk=lect_no),
+        student=get_logined_user(request),
+        )
+
+    # 강의실 메인 페이지로 리다이렉트
+    return redirect('lect_room_main', room_no=lect_no)
 
 
 # 강의룸 메인 페이지
@@ -348,3 +360,5 @@ def lect_room_attend_teacher(request, room_no):
         'lect': Lect.objects.get(pk=room_no)
     }
     return render(request, 'lecture_room_attend_teacher.html', context)
+
+

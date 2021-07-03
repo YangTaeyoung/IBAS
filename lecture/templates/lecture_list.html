@@ -141,7 +141,7 @@
                                                     <span class="text-primary m-l40 mr-3"><i
                                                             class="fa fa-user"></i></span>
                                                     <!-- 강의 신청자 및 총 정원을 DB에서 가져와야 함. -->
-                                                    <span>{{ lect.lectuser_set.all|length }} / {{ lect.lect_limit_num }} 명</span>
+                                                    <span>{{ lect.enrolled_students.count }} / {{ lect.lect_limit_num }} 명</span>
                                                 </li>
                                             </ul>
                                         </div>

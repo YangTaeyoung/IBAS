@@ -365,12 +365,13 @@ class LectAttendance(models.Model):
 
 
 class LectEnrollment(models.Model):
+    id = models.AutoField(db_column='ID', primary_key=True)
     lect_no = models.ForeignKey('Lect', on_delete=models.CASCADE, db_column='LECT_NO', related_name='enrolled_students')
     student = models.ForeignKey('User', on_delete=models.DO_NOTHING, db_column='STUDENT')
 
     class Meta:
         managed = False
-        db_table = 'LECT_ATTENDANCE'
+        db_table = 'LECT_ENROLLMENT'
 
 
 class LectBoardType(models.Model):
@@ -482,16 +483,6 @@ class LectType(models.Model):
     class Meta:
         managed = False
         db_table = 'LECT_TYPE'
-
-
-class LectUser(models.Model):
-    lect_user_stu = models.AutoField(db_column='LECT_USER_STU', primary_key=True)  # Field name made lowercase.
-    lect_no = models.ForeignKey(Lect, on_delete=models.CASCADE, db_column='LECT_NO')  # Field name made lowercase.
-    lect_user = models.ForeignKey('User', on_delete=models.CASCADE, db_column='LECT_USER')  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'LECT_USER'
 
 
 class MajorInfo(models.Model):
