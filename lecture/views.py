@@ -92,7 +92,7 @@ def lect_detail(request, lect_no):
         'lect': lect,
         'lect_day_list': lect_day_list,
         'lect_user_num': LectEnrollment.objects.filter(lect_no=lect_no).count(),
-        'is_in': LectEnrollment.objects.get(student=get_logined_user(request), lect_no__lect_no=lect_no) is not None,
+        'is_in': LectEnrollment.objects.filter(student=get_logined_user(request), lect_no__lect_no=lect_no) is not None,
         'lect_reject_form': LectRejectForm(instance=lect),
     }
     # 취미 모임의 경우 강의 방식이 없음 따라서 해당 부분에 대한 예외처리
@@ -340,7 +340,7 @@ def lect_board_update(request, room_no, board_no):
 def lect_room_mem_manage(request, room_no):
 
     context = {
-        'users': LectUser.objects.filter(lect_no__lect_no=room_no),
+        'students': LectEnrollment.objects.filter(lect_no__lect_no=room_no),
         'lect': Lect.objects.get(pk=room_no)
     }
     return render(request, 'lecture_room_mem_manage.html', context)

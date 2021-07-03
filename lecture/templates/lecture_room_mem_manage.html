@@ -141,7 +141,7 @@
                                                 <tbody>
 
                                                 <!-- 수강생이 없을 때 나오는 열 -->
-                                                {% if not users %}
+                                                {% if not students %}
                                                 <tr>
                                                     <td colspan="9" style="text-align: center"> 강의를 수강하고 있는 회원이 없습니다.
                                                     </td>
@@ -149,7 +149,7 @@
                                                 {% endif %}
 
                                                 <!-- 수강생이 있을 때 나오는 열 -->
-                                                {% for user in users %}
+                                                {% for student in students %}
                                                     <tr class="lectRoom_tr">
                                                         <td scope="row">
 
@@ -160,21 +160,21 @@
                                                                        type="checkbox"
                                                                        onclick="decideChk(this,'')">
                                                                 <!-- label이 html에 보이는 것. 역할은 input에 체크하기 위함.   -->
-                                                                <label for="check_{{ user.lect_user.user_std }}"
+                                                                <label for="check_{{ student.student.user_stu }}"
                                                                        class="staff_label_margin"></label>
                                                             </div>
 
                                                         </td>
                                                         <!--수강생 번호-->
-                                                        <th>{{ user.lect_user_stu }}</th>
+                                                        <th>{{ forloop.counter }}</th>
                                                         <!-- 회원 이름 -->
-                                                        <td>{{ user.lect_user.user_name }}</td>
+                                                        <td>{{ student.student.user_name }}</td>
                                                         <!-- 회원 학번 -->
-                                                        <td>{{ user.lect_user.user_stu }}</td>
+                                                        <td>{{ student.student.user_stu }}</td>
                                                         <!--전화번호 -->
-                                                        <td>{{ user.lect_user.user_phone }}</td>
+                                                        <td>{{ student.student.user_phone }}</td>
                                                         <!--이메일 -->
-                                                        <td>{{ user.lect_user.user_email }}</td>
+                                                        <td>{{ student.student.user_email }}</td>
 
                                                         <!-- 과제 미제출 수 -->
                                                         <td style="text-align: center">not yet..</td>
