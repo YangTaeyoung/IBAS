@@ -3,6 +3,24 @@
 {% block content %}
     <!--코드 뷰어 스크립트-->
     <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?skin=desert"></script>
+    <script>
+    $(document).ready(function (){
+        if($('#id_lect_assignment_title').val()){
+            $('#has_assignment').prop('checked', true);
+            $('#assignment-box').attr("aria-expanded", true);
+            $('#homework').attr("class", 'form-group collapse show');
+        }
+        $('#has_assignment').change(function(event){
+            if($('#has_assignment').is(":checked")){
+                event.target.value=1;
+            }
+            else{
+                event.target.value=0;
+            }
+        });
+    });
+
+    </script>
     <div class="page-wraper">
         <!-- 상단 제목부분 -->
         <div class="page-content bg-white">
@@ -118,51 +136,48 @@ def lect_view(request, type_no):  # 게시판 페이지로 이동
                                         <div class="content-box">
                                             <div class="content-header">
                                                 <!--내용-->
-                                                <h3 class="title">과제</h3>
+                                                <h3 class="title"></h3>
                                             </div>
                                             <div class="content-body editor">
                                                 <div class="form-group">
                                                     <!--과제 유무를 확인하는 체크박스-->
                                                     <div
+                                                      id="assignment-box"
                                                       data-toggle="collapse"
                                                       data-target="#homework"
                                                       role="button"
                                                       aria-expanded="false"
                                                       aria-controls="tagline">
-                                                        <input id="homework_have" type="checkbox" />
-                                                        <label for="homework_have">과제가 있습니다.</label>
+                                                        <input id="has_assignment" name="has_assignment" type="checkbox" />
+                                                        <label for="has_assignment">과제가 있습니다.</label>
                                                     </div>
                                                     <!--과제가 있다고 체크하면 나오는 창, 과제 등록하는 곳-->
                                                     <div class="form-group collapse" id="homework">
                                                         <hr/>
-                                                        <label>과제 제목</label>
+                                                        <label>{{ assignment_form.lect_assignment_title.label }}</label>
                                                         <!--과제 제목 입력하는 곳-->
-                                                        <input type="text" name="lect_title"
-                                                       class="form-control"  placeholder="제목을 적어주세요."
-                                                       style="font-size: 25px; height: 70px;"/>
+                                                        {% render_field assignment_form.lect_assignment_title class="form-control" %}
                                                        <hr/>
                                                         <div class="form-group">
                                                             <!--과제 관련 파일 첨부하는 곳-->
                                                             <label>과제 관련 파일</label>
-                                                            <input type="file" accept=".xlsx,.xls,image/*,.doc,audio/*,.docx,video/*,.ppt,.pptx,.txt,.pdf" multiple/>
+                                                            {{ assignment_file_form.assignment_file }}
                                                         </div>
 
                                                         <!-- 이미 존재하고 있던 파일: 삭제 가능 (수정모드)/과제관련 파일 정의되어있지 않아서 일단 뒤에_homework붙였음 -->
-                                                        {% include "file_update_box.html" with assignment_file_list=file_list %}
+                                                        {% include "file_update_box.html" with file_list=assignment_file_list %}
 
                                                         <hr/>
                                                         <!--과제 내용-->
-                                                        <label>과제 내용</label>
+                                                        <label>{{ assignment_form.lect_assignment_cont.label }}</label>
                                                         <!--과제 내용 입력하는 곳-->
-                                                        <input
-                                                        type="text"
-                                                        class="jqte-test"/>
+                                                        {% render_field assignment_form.lect_assignment_cont class="jqte-test" %}
 
                                                         <hr/>
                                                         <!--과제 마감일-->
-                                                        <label>과제 마감일</label>
+                                                        <label>{{ assignment_form.lect_assignment_deadline.label }}</label>
                                                         <!--과제 마감일 입력하는 곳-->
-                                                        <input type="date" class="form-control" name="lect_board_deadline" />
+                                                        {% render_field assignment_form.lect_assignment_deadline class="form-control" %}
                                                       </div>
                                                 </div>
                                             </div>

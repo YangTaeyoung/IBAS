@@ -31,7 +31,8 @@
             <div class="widget_tag">
                 <ul class="m-b0">
                     <!-- 강의자만 보이는 메뉴: 출석 및 과제 관리, 수강생 관리, 제출된 과제 리스트 -->
-                    <li><a href="{% url "lect_room_attend_teacher" lect.lect_no %}">출석 및 과제 관리</a>&nbsp;</li>
+                    <li><a href="{% url "lect_room_attend_teacher" lect.lect_no %}">출석 관리</a>&nbsp;</li>
+                    <li><a href="{% url "lect_room_attend_teacher" lect.lect_no %}">과제 관리</a>&nbsp;</li>
                     <li><a href="{% url "lect_room_mem_manage" lect.lect_no %}">수강생 관리</a>&nbsp;</li>
                 </ul>
             </div>

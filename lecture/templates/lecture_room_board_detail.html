@@ -63,12 +63,14 @@
                                     </div>
 
                                     <!--=======================강의 링크============================-->
-                                    <div class="alert alert-light m-b0" role="alert">
-                                        <div class="m-l10">
-                                            강의 링크:
-                                            <a href="https://www.youtube.com/watch?v=cbuZfY2S2UQ" class="alert-link">{{ board.lect_board_link }}</a>
+                                    {% if board.lect_board_type_no.lect_board_type_no == 2 %}
+                                        <div class="alert alert-light m-b0" role="alert">
+                                            <div class="m-l10">
+                                                강의 링크:
+                                                <a href="https://www.youtube.com/watch?v=cbuZfY2S2UQ" class="alert-link">{{ board.lect_board_link }}</a>
+                                            </div>
                                         </div>
-                                    </div>
+                                    {% endif %}
 
                                     <!--============================== 게시글 본문 시작 ==============================-->
                                     <div class="dlab-post-text">
@@ -78,50 +80,52 @@
 
                                     {% include "file_detail.html" %}
 
-                                    <!--=======================과제가 없을 때 나오는 알람============================-->
-                                    <div class="alert alert-light d-flex align-items-center" role="alert">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                             fill="currentColor"
-                                             class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2"
-                                             viewBox="0 0 16 16" role="img" aria-label="Warning:">
-                                            <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
-                                        </svg>
-                                        <div class="m-l10">
-                                            이번 강의는 과제가 존재하지 않습니다.
+                                    {% if board.lect_board_type_no.lect_board_type_no == 2 %}
+                                        <!--=======================과제가 없을 때 나오는 알람============================-->
+                                        <div class="alert alert-light d-flex align-items-center" role="alert">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                 fill="currentColor"
+                                                 class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2"
+                                                 viewBox="0 0 16 16" role="img" aria-label="Warning:">
+                                                <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+                                            </svg>
+                                            <div class="m-l10">
+                                                이번 강의는 과제가 존재하지 않습니다.
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <!--=======================<<수강생>> 승인 , 기각 여부에 따라 다르게 보임============================-->
-                                    <div class="alert alert-success text-center" role="alert">
-                                        <i>승인</i>
-                                    </div>
+                                        <!--=======================<<수강생>> 승인 , 기각 여부에 따라 다르게 보임============================-->
+                                        <div class="alert alert-success text-center" role="alert">
+                                            <i>승인</i>
+                                        </div>
 
-                                    <div class="alert alert-danger text-center" role="alert">
-                                        <i>기각 ( 기각사유 : 요구사항을 충족하지 못함. )</i>
-                                    </div>
-
-
-                                    <div class="alert alert-light text-center" role="alert">
-                                        <a href=""><p style="text-decoration: underline">예시답안 보러가기</p></a>
-                                    </div>
-
-                                    <!--===<<강의자>> 수강생의 과제 제출을 보고 승인, 기각을 결졍할 수 있음.===-->
-                                    <div class="d-flex justify-content-center m-b40">
-                                        <button type="button" class="btn btn-outline-success btn-lg"
-                                                style="width: 200px; font-weight: bold"
-                                                onclick="goApply()">
-                                            승인
-                                        </button>
+                                        <div class="alert alert-danger text-center" role="alert">
+                                            <i>기각 ( 기각사유 : 요구사항을 충족하지 못함. )</i>
+                                        </div>
 
 
-                                        <button type="button" class="btn btn-outline-danger btn-lg"
-                                                style="width: 200px; margin-left: 10px; font-weight: bold"
-                                                onclick="return confirm('과제제출을 기각하시겠습니까?')"
-                                                href="javascript:void(0);" data-toggle="modal" data-target="#favorite"
-                                                class="site-button gray">
-                                            기각
-                                        </button>
-                                    </div>
+                                        <div class="alert alert-light text-center" role="alert">
+                                            <a href=""><p style="text-decoration: underline">예시답안 보러가기</p></a>
+                                        </div>
+
+                                        <!--===<<강의자>> 수강생의 과제 제출을 보고 승인, 기각을 결졍할 수 있음.===-->
+                                        <div class="d-flex justify-content-center m-b40">
+                                            <button type="button" class="btn btn-outline-success btn-lg"
+                                                    style="width: 200px; font-weight: bold"
+                                                    onclick="goApply()">
+                                                승인
+                                            </button>
+
+
+                                            <button type="button" class="btn btn-outline-danger btn-lg"
+                                                    style="width: 200px; margin-left: 10px; font-weight: bold"
+                                                    onclick="return confirm('과제제출을 기각하시겠습니까?')"
+                                                    href="javascript:void(0);" data-toggle="modal" data-target="#favorite"
+                                                    class="site-button gray">
+                                                기각
+                                            </button>
+                                        </div>
+                                    {% endif %}
 
 
                                     <!-- 게시글 삭제 및 수정 div -->
@@ -134,8 +138,6 @@
                                             <form method="get" id="form-update"
                                                   action="{% url "lect_board_update" room_no=lect.lect_no board_no=board.lect_board_no %}">
                                                 {% csrf_token %}
-                                                <input type="hidden" value="{{ board.lect_board_type_no.lect_board_type_no }}" name="board_type">
-
                                             </form>
                                             <button class="site-button radius-xl m-l10" onclick="document.getElementById('form-update').submit()">
                                                     <i class="fa fa-pencil m-r5"></i>게시글 수정

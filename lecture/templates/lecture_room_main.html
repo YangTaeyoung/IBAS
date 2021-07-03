@@ -167,7 +167,7 @@
                                                 <!-- 더보기 a태크 클릭 시, 강의룸 내 과제 페이지로 이동 -->
                                                 {% if assignment_list %}
                                                     <!-- 더보기 a태크 클릭 시, 강의룸 내 강의리스트 페이지로 이동 -->
-                                                    <a href="#">더보기</a>
+                                                    <a href={% url 'lect_room_list' lect.lect_no 3 %}>더보기</a>
                                                 {% endif %}
                                             </div>
                                             <div class="content-body">
@@ -189,15 +189,15 @@
                                                     {% for assignment in assignment_list %}
                                                         <tr>
                                                             <!-- 게시글 번호 (고정됨) -->
-                                                            <td>{{ forloop.counter }}</td>
+                                                            <td>{{ assignment_list|length |subtract:forloop.counter0 }}</td>
                                                             <!-- 게시글 제목: a태그 클릭하면, 해당 게시글로 이동 -->
-                                                            <td><a href="#">assignment.title</a></td>
+                                                            <td><a href="#">{{ assignment.lect_assignment_title }}</a></td>
                                                             <!-- 과제 마감일 -->
-                                                            <td>assignment.deadline</td>
+                                                            <td>{{ assignment.lect_assignment_deadline | date:"Y-m-d" }}</td>
                                                             <!-- 수강생: 과제 제출 여부 (제출/미제출) 보임 -->
                                                             <!-- 과제 제출 전이라면, 과제 안내 페이지로 넘어갈 수 있도록 처리필요 -->
                                                             <!-- 강의자: 과제를 제출한 사람수 보임 -->
-                                                            <td class="text-xl-center text-red">미제출</td>
+                                                            <td class="text-xl-center text-red">not yet..</td>
                                                         </tr>
                                                     {% endfor %}
                                                     </tbody>

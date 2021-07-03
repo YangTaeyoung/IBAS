@@ -308,7 +308,6 @@ class LectBoard(models.Model):
     lect_board_cont = models.TextField(db_column='LECT_BOARD_CONT')
     lect_board_writer = models.ForeignKey('User', models.DO_NOTHING, db_column='LECT_BOARD_WRITER')
     lect_no = models.ForeignKey(Lect, models.DO_NOTHING, db_column='LECT_NO')
-    lect_board_deadline = models.DateTimeField(db_column='LECT_BOARD_DEADLINE', null=True, blank=True)
     lect_board_type_no = models.ForeignKey('LectBoardType', models.DO_NOTHING, db_column='LECT_BOARD_TYPE_NO')
     lect_board_link = models.CharField(db_column='LECT_BOARD_LINK', max_length=500, null=True, blank=True)
 
@@ -320,6 +319,40 @@ class LectBoard(models.Model):
     @property
     def get_file_path(self):
         return os.path.join(MEDIA_ROOT, 'lecture', 'board', str(self.lect_board_no))
+
+
+class LectAssignment(models.Model):
+    lect_assignment_no = models.AutoField(db_column='LECT_ASSIGNMENT_NO', primary_key=True)
+    lect_assignment_title = models.CharField(db_column='LECT_ASSIGNMENT_TITLE', max_length=100, blank=True)
+    lect_assignment_created = models.DateTimeField(db_column='LECT_ASSIGNMENT_CREATED', auto_now_add=True)
+    lect_assignment_cont = models.TextField(db_column='LECT_ASSIGNMENT_CONT', blank=True)
+    lect_assignment_writer = models.ForeignKey('User', models.DO_NOTHING, db_column='LECT_ASSIGNMENT_WRITER')
+    lect_assignment_deadline = models.DateTimeField(db_column='LECT_ASSIGNMENT_DEADLINE', null=True, blank=True)
+    lect_board_no = models.ForeignKey('LectBoard', on_delete=models.CASCADE, null=True,
+                                            db_column="LECT_BOARD_NO", related_name='assignment')
+
+    class Meta:
+        managed = False
+        db_table = 'LECT_ASSIGNMENT'
+
+    @property
+    def get_file_path(self):
+        return os.path.join(MEDIA_ROOT, 'lecture', 'assignment', str(self.lect_assignment_no))
+
+
+class LectAssignmentFile(File):
+    def file_upload_to(self, filename):
+        print(self.lect_assignment_no)
+        print(self.lect_assignment_no.lect_assignment_title)
+        return f'lecture/assignment/{self.lect_assignment_no.pk}/{filename}'
+
+    lect_assignment_no = models.ForeignKey('LectAssignment', db_column='LECT_ASSIGNMENT_NO', on_delete=models.CASCADE,
+                                           related_name='file')
+    file_path = models.FileField(db_column='FILE_PATH', max_length=1000, upload_to=file_upload_to, blank=True)
+
+    class Meta:
+        managed = False
+        db_table = 'LECT_ASSIGNMENT_FILE'
 
 
 class LectBoardType(models.Model):
@@ -404,7 +437,7 @@ class LectBoardExFile(models.Model):
 class LectBoardFile(File):
     def file_upload_to(self, filename):
         return f'lecture/board/{self.lect_board_no.lect_board_no}/{filename}'
-    lect_board_no = models.ForeignKey(LectBoard, on_delete=models.CASCADE,db_column='LECT_BOARD_NO')
+    lect_board_no = models.ForeignKey('LectBoard', on_delete=models.CASCADE, db_column='LECT_BOARD_NO', related_name='file')
     file_path = models.FileField(db_column='FILE_PATH', max_length=1000, upload_to=file_upload_to, blank=True)
 
     class Meta:
