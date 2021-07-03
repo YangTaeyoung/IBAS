@@ -360,7 +360,7 @@
                                                         <!-- 제명건의 -->
                                                         <td class="text-center">
                                                             <a href="{% url "member_delete_register" deleted_user=exist_user.user_stu %}"
-                                                                           style="font-size: 12px; font-weight: bold">제명건의</a>
+                                                               style="font-size: 12px; font-weight: bold">제명건의</a>
 
                                                             <a href="#"
                                                                style="font-size: 12px; font-weight: bold">&nbsp;&nbsp;논의중</a>
@@ -467,19 +467,19 @@
                             </div>
                         {% endif %}
 
-                                    <!------------------------------여기서부터 백엔드 작업 시작---------------------------------->
-                                    {% if logined_user.user_role.role_no == 1 %}
-                                        <!-- 요청사항 콘텐츠 시작 -->
-                                        <div class="content-box">
-                                            <div class="content-header">
-                                                <h3 class="title"><i class="la la-check-square m-r5"></i>요청사항</h3>
-                                            </div>
-                                            <!-- 요청사항 실질 콘텐츠 시작 -->
-                                            <!-- form 태그 수정 해야함 -->
-                                            <form action="#" method="post">
-                                                {% csrf_token %}
-                                                <div class="content-body">
-                                                    <div class="myinfo-table-padding">
+                        <!------------------------------여기서부터 백엔드 작업 시작---------------------------------->
+                        {% if logined_user.user_role.role_no == 1 %}
+                            <!-- 요청사항 콘텐츠 시작 -->
+                            <div class="content-box">
+                                <div class="content-header">
+                                    <h3 class="title"><i class="la la-check-square m-r5"></i>요청사항</h3>
+                                </div>
+                                <!-- 요청사항 실질 콘텐츠 시작 -->
+                                <!-- form 태그 수정 해야함 -->
+                                <form action="#" method="post">
+                                    {% csrf_token %}
+                                    <div class="content-body">
+                                        <div class="myinfo-table-padding">
 
                                             <!-- staff_mem_select는 staff_cr.css에 정의되어 있음.  -->
                                             <div class="staff_mem_select m-b20">
@@ -622,9 +622,11 @@
 
                         <!-- 제명 콘텐츠 시작 -->
                         <div class="content-box">
-                            <div class="content-header">
-                                <h3 class="title"><i class="la la-sign-out m-r5"></i>제명회원 관리</h3>
+                            <div class="content-header d-flex justify-content-between">
+                                <h3 class="title"><i class="la la-sign-out m-r5"></i>제명안건 관리</h3>
+                                <a href="#">더보기</a>
                             </div>
+
                             <!-- 요청사항 실질 콘텐츠 시작 -->
 
                             {% csrf_token %}
@@ -639,23 +641,23 @@
                                             <th class="border-top-0 width-50 min-width-50"></th>
                                             <th class="border-top-0 width-50 min-width-50"
                                                 scope="col"></th>
-                                            <th class="border-top-0 width-100 min-width-100 text-center"
+                                            <th class="border-top-0 text-center"
                                                 scope="col">
-                                                이름
+                                                제목
                                             </th>
                                             <th class="border-top-0 width-150 min-width-150 text-center"
                                                 scope="col">
-                                                학번
+                                                제명 대상자
                                             </th>
-                                            <th class="border-top-0 width-310 min-width-310"
+                                            <th class="border-top-0 width-150 min-width-150 text-center"
                                                 scope="col">
-                                                학과
+                                                안건 발안자
                                             </th>
-                                            <th class="border-top-0 text-center" scope="col">찬성 수
+                                            <th class="border-top-0 width-150 min-width-150 text-center"
+                                                scope="col">
+                                                안건 발안일
                                             </th>
-                                            <th class="border-top-0 text-center" scope="col">반대 수
-                                            </th>
-                                            <th class="border-top-0 text-center width-200 min-width-200" scope="col">
+                                            <th class="border-top-0 width-150 min-width-150 text-center" scope="col">
                                             </th>
                                         </tr>
                                         </thead>
@@ -664,7 +666,7 @@
                                         <!-- ===========================여기부터 복붙============================== -->
 
                                         <tr>
-                                            <td colspan="9" style="text-align: center">
+                                            <td colspan="8" style="text-align: center">
                                                 제명 논의 중인 회원이 없습니다.
                                             </td>
                                         </tr>
@@ -683,23 +685,17 @@
                                                 </div>
                                             </td>
                                             <th>01</th>
-                                            <!-- 회원 이름 -->
-                                            <td class="text-center">원효대사</td>
-                                            <!-- 회원 학번 -->
-                                            <td class="text-center">12008888</td>
-                                            <!-- 회원 학과 -->
-                                            <td>문화콘텐츠문화경영학과</td>
-                                            <!-- 찬성 수 -->
-                                            <th class="text-center" style="color: #0d6efd">
-                                                3
-                                            </th>
-                                            <!-- 반대 수 -->
-                                            <th class="text-center" style="color: #dc3545">
-                                                5
-                                            </th>
-                                            <!-- 제명사유 보러가기 -->
+                                            <!-- 회원 제목 -->
+                                            <td class="text-center">양태영 회원 제명에 관한 건</td>
+                                            <!-- 제명대상 -->
+                                            <td class="text-center">양태영</td>
+                                            <!-- 안건발안자 -->
+                                            <td class="text-center">윤예진</td>
+                                            <!-- 안건발안일 -->
+                                            <td class="text-center">2021-07-02</td>
+                                            <!-- 제명안건 바로가기 -->
                                             <td class="text-center">
-                                                <a href="#">제명사유 보러가기</a>
+                                                <a href="#">제명안건 바로가기</a>
                                             </td>
 
                                         </tr>
