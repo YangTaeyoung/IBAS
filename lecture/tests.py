@@ -11,8 +11,8 @@ class LectBoardTest(TestCase):
                 강의자 메뉴 中 : 출석 및 과제 페이지에서 상단 회차별 강의 제목
 
         """
-        lect_room = Lect.objects.first()
-        lect_board_title_list = [lecture.lect_title for lecture in lect_room.lectures]
+        lect_room = Lect.objects.prefetch_related("lectures").first()
+        lect_board_title_list = [lecture.lect_board_title for lecture in lect_room.lectures.filter(lect_board_type_no=2)]
 
         request = HttpRequest()
         response = lect_room_attend_teacher(request, lect_room.lect_no)

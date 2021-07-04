@@ -3,8 +3,6 @@ from django.shortcuts import render, redirect, reverse, get_object_or_404
 from DB.models import LectType, Lect, LectDay, StateInfo, MethodInfo, LectBoard, LectBoardFile, \
     LectAssignment, LectEnrollment
 from django.db.models import Q
-
-from IBAS.forms import FileFormBase
 from pagination_handler import get_paginator_list, get_page_object
 from lecture.forms import LectForm, LectRejectForm, LectPicForm, LectBoardForm, make_lect_board_form, \
     LectAssignmentForm, FileForm, AssignmentFileForm
@@ -347,18 +345,23 @@ def lect_room_mem_manage(request, room_no):
 
 
 def lect_room_attend_std(request, room_no):
+    lect_room = Lect.objects.prefetch_related("lectures").get(pk=room_no)
 
     context = {
-        'lect': Lect.objects.get(pk=room_no)
+        'lect': lect_room,
+        'lect_board_list': lect_room.lectures
     }
     return render(request, 'lecture_room_attend_std.html', context)
 
 
 def lect_room_attend_teacher(request, room_no):
+    lect_room = Lect.objects.prefetch_related("lectures").get(pk=room_no)
 
     context = {
-        'lect': Lect.objects.get(pk=room_no)
+        'lect': lect_room,
+        'lect_board_list': lect_room.lectures.filter(lect_board_type_no=2)  # 강의 게시글만 가져옴
     }
+    print(context['lect_board_list'])
     return render(request, 'lecture_room_attend_teacher.html', context)
 
 

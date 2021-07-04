@@ -58,7 +58,9 @@
                                                         <ul class="filter m-b0">
                                                             <li>
                                                                 <select>
-                                                                    <option>1회차</option>
+                                                                    {% for lecture in lect_board_list %}
+                                                                        <option>{{ lecture.lect_board_title }}</option>
+                                                                    {% endfor %}
                                                                 </select>
                                                             </li>
                                                         </ul>
