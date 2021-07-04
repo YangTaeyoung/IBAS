@@ -42,11 +42,12 @@ class LectBoardTest(TestCase):
         """
 
         lect_room = Lect.objects.prefetch_related("enrolled_students").first()
-        students_list = [(row.student.user_name, row.student.user_stu) for row in lect_room.enrolled_students.all()]
+        students_list = [row.student.user_name for row in lect_room.enrolled_students.all()]
 
         request = get_session_request()
         response = lect_room_attend_teacher(request, lect_room.lect_no)
-        expected_html = render_to_string('_table_attendence_check.html', {'students_list': lect_room.enrolled_students.all()})
 
-        self.assertIn(expected_html, response.content.decode(),
-                      msg="강의자 출석&과제 관리 메뉴: 학생 정보 불러오기 실패")
+        for name in students_list:
+            self.assertIn(name, response.content.decode(),
+                          msg="수강생 정보 불러오기 실패")
+

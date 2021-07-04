@@ -28,7 +28,7 @@
 
         {% if students_list %}
             <!-- 수강생이 있을 때 나오는 열 -->
-            {% for student in student_list %}
+            {% for student in students_list %}
 
                 <tr class="lectRoom_mtr align-middle">
                     <!-- 체크박스 -->
@@ -60,3 +60,29 @@
         {% endif %}
         </tbody>
     </table>
+
+    <div class="listing-filter-sidebar border-0" >
+        <div class="row float-right width-430">
+            <!-- 출결관리 -->
+            <div class="col-md-8 pr-0">
+                <div class="form-group width-130 float-right" style="border: #ecebf5; color: black;">
+                    <select>
+                        <option disabled selected>출결관리</option>
+                        <option>출석</option>
+                        <option>결석</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- 적용 버튼  -->
+            <div class="col-md-4 pl-0">
+                <div class="form-group float-right mb-0 mt-7">
+                    <button class="site-button" type="submit"><i
+                            class="la la-check m-r5"
+                            style="font-weight: bold"></i>&nbsp;적용
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 관리 select 부분 끝 -->

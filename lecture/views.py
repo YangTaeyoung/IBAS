@@ -355,13 +355,16 @@ def lect_room_attend_std(request, room_no):
 
 
 def lect_room_attend_teacher(request, room_no):
-    lect_room = Lect.objects.prefetch_related("lectures").get(pk=room_no)
+    lect_room = Lect.objects.prefetch_related("lectures", "enrolled_students__student").get(pk=room_no)
 
     context = {
         'lect': lect_room,
         'lect_board_list': lect_room.lectures.filter(lect_board_type_no=2),  # 강의 게시글만 가져옴
-        'students_list': lect_room.enrolled_students.all()
+        'students_list': lect_room.enrolled_students.all().order_by('student__user_name')
     }
+
     return render(request, 'lecture_room_attend_teacher.html', context)
+
+
 
 
