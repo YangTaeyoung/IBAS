@@ -10,15 +10,18 @@
     <script>
     $(function () {
         const selectBox = $("#selectbox")
+        const formElement = $("#attendance-form")
+        const lect_no = $("#lect_no").val()
 
         selectBox.val({{ cur_lect_board.lect_board_no }}).prop('selected',true);
 
         selectBox.change(function () {
-            const formElement = $("#attendance-form")
-            const lect_no = $("#lect_no").val()
-            //formElement.attr("action", "lect/room/"+lect_no+"/attend/teacher")
             formElement.attr("method", "GET")
-            //formElement.serialize()
+            formElement.submit()
+        });
+
+        $("submit").click(function (){
+            formElement.attr("method", "POST")
             formElement.submit()
         });
     });

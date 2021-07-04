@@ -354,39 +354,45 @@ def lect_room_attend_std(request, room_no):
     return render(request, 'lecture_room_attend_std.html', context)
 
 
+# 출석 현황 확인 및 변경
 def lect_room_attend_teacher(request, room_no):
     lect_room = Lect.objects.prefetch_related("lectures", "enrolled_students__student").get(pk=room_no)
     lect_board_list = lect_room.lectures.filter(lect_board_type_no=2).order_by('-lect_board_no')  # 강의 게시글만 가져옴
     # 강의 게시글 번호. select option 값 / default 는 마지막 강의 게시글, 게시글이 하나도 없으면 0.
-    lect_board_no = request.GET.get('lect_board_no',
-                                    0 if lect_board_list[0] is None else lect_board_list[0].lect_board_no)
 
-    # 장고 ORM 으로 쿼리 수행 불가하여, raw query 작성.
-    # connection : default db에 연결되어 있는 built in 객체
-    query = """SELECT u.USER_NAME, u.USER_STU, if(isnull(attend.ATTEND_DATE),false,true) as attendance
-            FROM LECT_ENROLLMENT AS enrollment
+    if request.method == "GET":
+        lect_board_no = request.GET.get('lect_board_no',
+                                        0 if lect_board_list[0] is None else lect_board_list[0].lect_board_no)
+        # 장고 ORM 으로 쿼리 수행 불가하여, raw query 작성.
+        # connection : default db에 연결되어 있는 built in 객체
+        query = """SELECT u.USER_NAME, u.USER_STU, if(isnull(attend.ATTEND_DATE),false,true) as attendance
+                FROM LECT_ENROLLMENT AS enrollment
+    
+                LEFT OUTER JOIN LECT_ATTENDANCE AS attend
+                on (enrollment.STUDENT = attend.STUDENT AND attend.LECT_BOARD_NO = %s)
+    
+                INNER JOIN USER as u
+                ON (enrollment.STUDENT = u.USER_STU)
+    
+                WHERE enrollment.LECT_NO = %s
+    
+                ORDER BY u.USER_NAME ASC;""" % (lect_board_no, room_no)
+        cursor = connection.cursor()
+        cursor.execute(query)  # 쿼리 수행
+        students_list = [{'name': name, 'stu': stu, 'attendance': '출석' if attendance == 1 else '결석'}
+                         for name, stu, attendance in cursor.fetchall()]  # 쿼리 반환 값을 템플릿에서 사용할 수 있게, dict 로 변환
 
-            LEFT OUTER JOIN LECT_ATTENDANCE AS attend
-            on (enrollment.STUDENT = attend.STUDENT AND attend.LECT_BOARD_NO = %s)
+        context = {
+            'lect': lect_room,
+            'lect_board_list': lect_board_list,
+            'students_list': students_list,
+            'cur_lect_board': LectBoard.objects.get(pk=lect_board_no) if lect_board_no else None
+        }
+        return render(request, 'lecture_room_attend_teacher.html', context)
 
-            INNER JOIN USER as u
-            ON (enrollment.STUDENT = u.USER_STU)
+    else:
+        lect_board_no = request.POST.get('lect_board_no')
 
-            WHERE enrollment.LECT_NO = %s
-
-            ORDER BY u.USER_NAME ASC;""" % (lect_board_no, room_no)
-    cursor = connection.cursor()
-    cursor.execute(query)  # 쿼리 수행
-    students_list = [{'name': name, 'stu': stu, 'attendance': '출석' if attendance == '1' else '결석'}
-                     for name, stu, attendance in cursor.fetchall()]  # 쿼리 반환 값을 템플릿에서 사용할 수 있게, dict 로 변환
-
-    context = {
-        'lect': lect_room,
-        'lect_board_list': lect_board_list,
-        'students_list': students_list,
-        'cur_lect_board': LectBoard.objects.get(pk=lect_board_no) if lect_board_no else None
-    }
-    return render(request, 'lecture_room_attend_teacher.html', context)
 
 
 
