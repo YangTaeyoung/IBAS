@@ -356,10 +356,10 @@ def lect_room_attend_std(request, room_no):
 
 def lect_room_attend_teacher(request, room_no):
     lect_room = Lect.objects.prefetch_related("lectures", "enrolled_students__student").get(pk=room_no)
-    lect_board_list = lect_room.lectures.filter(lect_board_type_no=2)  # 강의 게시글만 가져옴
+    lect_board_list = lect_room.lectures.filter(lect_board_type_no=2).order_by('-lect_board_no')  # 강의 게시글만 가져옴
     # 강의 게시글 번호. select option 값 / default 는 마지막 강의 게시글, 게시글이 하나도 없으면 0.
     lect_board_no = request.GET.get('lect_board_no',
-                                    lect_board_list[0].lect_board_no if lect_board_list[0] is not None else 0)
+                                    0 if lect_board_list[0] is None else lect_board_list[0].lect_board_no)
 
     # 장고 ORM 으로 쿼리 수행 불가하여, raw query 작성.
     # connection : default db에 연결되어 있는 built in 객체
@@ -383,7 +383,8 @@ def lect_room_attend_teacher(request, room_no):
     context = {
         'lect': lect_room,
         'lect_board_list': lect_board_list,
-        'students_list': students_list
+        'students_list': students_list,
+        'cur_lect_board': LectBoard.objects.get(pk=lect_board_no) if lect_board_no else None
     }
     return render(request, 'lecture_room_attend_teacher.html', context)
 

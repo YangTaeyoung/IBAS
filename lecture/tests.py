@@ -1,3 +1,5 @@
+from unittest import skip
+
 from django.http import HttpRequest
 from django.template.loader import render_to_string
 from django.test import TestCase
@@ -51,12 +53,14 @@ class LectBoardTest(TestCase):
             self.assertIn(name, response.content.decode(),
                           msg="수강생 정보 불러오기 실패")
 
+    @skip
     def test_check_attendance_of_every_student(self):
         """
                 강의자 메뉴 中 : 출석 페이지, 출석여부 띄우기
         """
+        pass
 
-        lect_room = Lect.objects.prefetch_related("enrolled_students").first()
+
 
 
 

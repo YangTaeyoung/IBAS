@@ -7,7 +7,22 @@
     <script src="{% static 'js/ibas_centents.js' %}"></script>
     <script src="{% static 'js/jquery.min.js' %}"></script><!-- JQUERY.MIN JS -->
     <script src="{% static 'js/comment.js' %}"></script>
+    <script>
+    $(function () {
+        const selectBox = $("#selectbox")
 
+        selectBox.val({{ cur_lect_board.lect_board_no }}).prop('selected',true);
+
+        selectBox.change(function () {
+            const formElement = $("#attendance-form")
+            const lect_no = $("#lect_no").val()
+            //formElement.attr("action", "lect/room/"+lect_no+"/attend/teacher")
+            formElement.attr("method", "GET")
+            //formElement.serialize()
+            formElement.submit()
+        });
+    });
+    </script>
 
 
     <div class="page-wraper">
@@ -46,9 +61,13 @@
                                 </div>
                                 <!--========== 왼쪽 강의룸 네비게이션바 끝 ==========-->
 
+
+                            {% if cur_lect_board %}
                                 <!--=======================수강생 관리=========================-->
                                 <div class="col-lg-11 col-xl-8 p-b30">
-                                    <form>
+                                    <form enctype="multipart/form-data" id="attendance-form">
+                                        <input type="hidden" name="lect_no" id="lect_no" value="{{ lect.lect_no }}">
+
                                         <div class="width-870">
                                             <!-- 강의 주차 소개 탭 -->
                                             <div class="listing-filter m-b40">
@@ -57,10 +76,14 @@
                                                     <div>
                                                         <ul class="filter m-b0">
                                                             <li>
-                                                                <select>
+                                                                <label for="selectbox"></label><select id="selectbox" name="lect_board_no" form="attendance-form">
+
                                                                     {% for lecture in lect_board_list %}
-                                                                        <option value="{{ lecture.lect_board_no }}">{{ lecture.lect_board_title }}</option>
+                                                                        <option value="{{ lecture.lect_board_no }}">
+                                                                            {{ lecture.lect_board_title }}
+                                                                        </option>
                                                                     {% endfor %}
+
                                                                 </select>
                                                             </li>
                                                         </ul>
@@ -69,7 +92,7 @@
                                                     <div class="mr-auto">
                                                         <div class="m-l15">
                                                             <h3 id="lect_board_title" class="title m-b0"
-                                                                style="font-size: 22px">애거서 크리스티의 추리문학 베스트</h3>
+                                                                style="font-size: 22px">{{ cur_lect_board.lect_board_title }}</h3>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -99,6 +122,9 @@
 
                                 </div>
                             </div>
+                        {% else %}
+                            <p class="text-center align-content-center">강의 없어서 출석부가 아직 생성되지 않았습니다.</p>
+                        {% endif %}
                         </div>
                     </div>
                     <!-- 상단으로 한번에 올라가는 버튼 -->
