@@ -1,0 +1,62 @@
+<!-- 회원관리 테이블 -->
+    <table class="table">
+        <thead id="lectRoom_mhead">
+        <!-- 테이블 1행: 제목 -->
+        <tr id="lectRoom_head">
+            <th class="border-top-0 width-65 min-width-65 text-center align-middle"
+                scope="col"></th>
+            <th class="border-top-0 width-100 min-width-100 text-center align-middle"
+                scope="col">이름
+            </th>
+            <th class="border-top-0 width-90 min-width-90 text-center align-middle"
+                scope="col">학번
+            </th>
+            <!-- 출결 필터 -->
+            <th class="border-top-0 width-70 min-width-70 text-center align-middle"
+                scope="col">
+                <select id="lectRoom_select_attend" class="lectRoom_select" onchange="lectRoom_manage()">
+                    <option selected>출결</option>
+                    <option>출석</option>
+                    <option>결석</option>
+                </select>
+            </th>
+        </tr>
+        </thead>
+
+        <!-- 테이블 2행: 수강생 관리 테이블 내용 시작 -->
+        <tbody>
+
+        {% if students_list %}
+            <!-- 수강생이 있을 때 나오는 열 -->
+            {% for student in student_list %}
+
+                <tr class="lectRoom_mtr align-middle">
+                    <!-- 체크박스 -->
+                    <td scope="row">
+                        <div>
+                            <input id="check_{{ forloop.counter }}"
+                                   type="checkbox">
+
+                            <label for="check_{{ forloop.counter }}"
+                                   class="staff_label_margin m-l20"></label>
+                        </div>
+                    </td>
+                    <!-- 회원 이름 -->
+                    <td class="align-middle text-center">{{ student.student.user_name }}</td>
+                    <!-- 회원 학번 -->
+                    <td class="text-center">{{ student.student.user_stu }}</td>
+                    <!-- 출결 -->
+                    <td class="text-center lectRoom_attend">출석</td>
+
+                </tr>
+            {% endfor %}
+
+        {% else %}
+            <!-- 수강생이 없을 때 나오는 열 -->
+            <tr>
+                <td colspan="9" style="text-align: center"> 강의를 수강하고 있는 회원이 없습니다.
+                </td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>

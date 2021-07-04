@@ -359,9 +359,9 @@ def lect_room_attend_teacher(request, room_no):
 
     context = {
         'lect': lect_room,
-        'lect_board_list': lect_room.lectures.filter(lect_board_type_no=2)  # 강의 게시글만 가져옴
+        'lect_board_list': lect_room.lectures.filter(lect_board_type_no=2),  # 강의 게시글만 가져옴
+        'students_list': lect_room.enrolled_students.all()
     }
-    print(context['lect_board_list'])
     return render(request, 'lecture_room_attend_teacher.html', context)
 
 
