@@ -356,7 +356,8 @@ class LectAssignmentFile(File):
 class LectAttendance(models.Model):
     lect_board_no = models.ForeignKey('LectBoard', on_delete=models.CASCADE, db_column="LECT_BOARD_NO",
                                       related_name='attendance_info')
-    student = models.ForeignKey('User', on_delete=models.DO_NOTHING, db_column='STUDENT')
+    student = models.ForeignKey('LectEnrollment', on_delete=models.DO_NOTHING, db_column='STUDENT',
+                                related_name='attendance')
     lect_attend_date = models.DateTimeField(db_column='LECT_ATTEND_DATE', auto_now_add=True, null=True)
 
     class Meta:

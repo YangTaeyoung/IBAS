@@ -23,7 +23,7 @@ def get_session_request():
 class LectBoardTest(TestCase):
     def test_for_getting_all_lectBoards_of_a_lecture(self):
         """
-                강의자 메뉴 中 : 출석 및 과제 페이지에서 상단 회차별 강의 제목
+                강의자 메뉴 中 : 출석 페이지, 상단 회차별 강의 제목
         """
 
         lect_room = Lect.objects.prefetch_related("lectures").first()
@@ -34,11 +34,11 @@ class LectBoardTest(TestCase):
 
         for lect_title in lect_board_title_list:
             self.assertIn(lect_title, response.content.decode(),
-                          msg="강의자 출석&과제 관리 메뉴: 강의 게시글 불러오기 실패")
+                          msg="강의자 출석 관리 메뉴: 강의 게시글 불러오기 실패")
 
     def test_for_getting_all_student_of_a_lecture(self):
         """
-               강의자 메뉴 中 : 출석 및 과제 페이지에서 수강생 이름 및 학번 리스트 띄우기
+               강의자 메뉴 中 : 출석 페이지, 수강생 이름 및 학번 리스트 띄우기
         """
 
         lect_room = Lect.objects.prefetch_related("enrolled_students").first()
@@ -50,4 +50,13 @@ class LectBoardTest(TestCase):
         for name in students_list:
             self.assertIn(name, response.content.decode(),
                           msg="수강생 정보 불러오기 실패")
+
+    def test_check_attendance_of_every_student(self):
+        """
+                강의자 메뉴 中 : 출석 페이지, 출석여부 띄우기
+        """
+
+        lect_room = Lect.objects.prefetch_related("enrolled_students").first()
+
+
 

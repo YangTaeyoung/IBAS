@@ -5,6 +5,8 @@
         <tr id="lectRoom_head">
             <th class="border-top-0 width-65 min-width-65 text-center align-middle"
                 scope="col"></th>
+            <th class="border-top-0 width-30 min-width-30 text-center align-middle"
+                scope="col"></th>
             <th class="border-top-0 width-100 min-width-100 text-center align-middle"
                 scope="col">이름
             </th>
@@ -12,11 +14,11 @@
                 scope="col">학번
             </th>
             <!-- 출결 필터 -->
-            <th class="border-top-0 width-70 min-width-70 text-center align-middle"
+            <th class="border-top-0 width-30 min-width-30 text-center align-middle"
                 scope="col">
                 <select id="lectRoom_select_attend" class="lectRoom_select" onchange="lectRoom_manage()">
                     <option selected>출결</option>
-                    <option>출석</option>
+                    <option >출석</option>
                     <option>결석</option>
                 </select>
             </th>
@@ -26,7 +28,7 @@
         <!-- 테이블 2행: 수강생 관리 테이블 내용 시작 -->
         <tbody>
 
-        {% if students_list %}
+        {% if students_list|length > 0 %}
             <!-- 수강생이 있을 때 나오는 열 -->
             {% for student in students_list %}
 
@@ -41,12 +43,13 @@
                                    class="staff_label_margin m-l20"></label>
                         </div>
                     </td>
+                    <td class="text-center">{{ forloop.counter }}</td>
                     <!-- 회원 이름 -->
-                    <td class="align-middle text-center">{{ student.student.user_name }}</td>
+                    <td class="align-middle text-center">{{ student.name }}</td>
                     <!-- 회원 학번 -->
-                    <td class="text-center">{{ student.student.user_stu }}</td>
+                    <td class="text-center">{{ student.stu }}</td>
                     <!-- 출결 -->
-                    <td class="text-center lectRoom_attend">출석</td>
+                    <td class="text-center lectRoom_attend">{{ student.attendance }}</td>
 
                 </tr>
             {% endfor %}
