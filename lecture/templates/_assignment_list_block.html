@@ -1,0 +1,72 @@
+                                        <!-- 내가 제출한 과제를 보여주는 박스 -->
+                                        <!-- 좌측 네비게이션바 제출된 과제 리스트를 클릭하면 보이는 박스임 -->
+                                        <!-- 피드백 유무 때문에 따로 박스를 팠으나, 윗쪽 박스에서 작성자 컬럼을 피드백 컬럼으로 대체할 수 있다면, 윗쪽 것을 사용해도 무방 -->
+                                        <div class="content-box">
+                                            <!-- 박스 제목 div -->
+                                            <div class="content-header d-flex justify-content-between">
+                                                <h3 class="title">
+
+                                                    {% if board_type == 3 %}
+                                                        <i class="fa fa-check-square-o m-r5"></i>과제 목록
+                                                    {% else %}
+                                                        <i class="fa fa-telegram m-r5"></i>제출한 과제
+                                                    {% endif %}
+
+                                                </h3>
+                                            </div>
+                                            <div class="content-body">
+                                                <!-- 내가 제출한 과제 테이블 -->
+                                                <table class="table">
+                                                    <!-- 테이블 1행: 제목 -->
+                                                    <thead>
+                                                    <tr>
+                                                        <th class="border-top-0" scope="col">번호</th>
+                                                        <th class="border-top-0" style="width: 400px" scope="col">과제</th>
+
+                                                        {% if board_type == 3 %}
+                                                            <th class="border-top-0" scope="col">마감일</th>
+                                                        {% else %}
+                                                            <th class="border-top-0" scope="col">피드백</th>
+                                                            <!-- 강의자일 때만 보이는 컬럼임 -->
+                                                            <th class="border-top-0 text-xl-center" scope="col">작성자</th>
+                                                            <th class="border-top-0 text-xl-center" scope="col">제출일</th>
+                                                        {% endif %}
+
+                                                    </tr>
+                                                    </thead>
+
+
+                                                    <!-- 테이블 2행 ~: 과제 페이지 내 최근 3개 게시글 불러옴 -->
+                                                    <tbody>
+                                                    {% for assignment in board_list %}
+                                                        <tr>
+                                                            <!-- 게시글 번호 (고정됨) -->
+                                                            <td>{{ forloop.revcounter }}</td>
+                                                            <!-- 게시글 제목: a태그 클릭하면, 해당 게시글로 이동 -->
+                                                            <td><a href="#">{{ assignment.lect_assignment_title }}</a></td>
+                                                            <!-- 과제 마감일 -->
+                                                            <td class="text-red">{{ assignment.lect_assignment_deadline | date:"Y-m-d" }}</td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    <!--
+                                                    <tr>
+                                                         //게시글 번호 (고정됨)
+                                                        <td>2</td>
+                                                         //게시글 제목: a태그 클릭하면, 해당 게시글로 이동
+                                                        <td><a href="#">파이썬 설치</a></td>
+                                                         //과제 마감일
+                                                        <td>진행중</td>
+                                                         //강의자만 보이는 컬럼
+                                                        <td>김석보</td>
+                                                         //수강생: 과제 제출 여부 (제출/미제출) 보임
+                                                         //만약 과제를 제출했다면, 제출한 과제물을 볼 수 있는 페이지로 넘어가게끔 처리필요
+                                                         //강의자: 과제를 제출한 사람수 보임
+                                                        <td class="text-xl-center">2021-04-30</td>
+                                                    </tr>-->
+
+                                                    </tbody>
+                                                </table>
+                                                <!-- 페이지네이션 -->
+                                                {% include "pagination.html" %}
+                                            </div>
+                                        </div>

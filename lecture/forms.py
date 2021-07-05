@@ -1,5 +1,8 @@
 from django import forms
-from DB.models import Lect, MethodInfo
+from DB.models import Lect, MethodInfo, LectBoard, LectBoardType, LectAssignment
+from django.utils.translation import gettext_lazy as _
+from IBAS.forms import FileFormBase
+from user_controller import get_logined_user
 
 
 class LectForm(forms.ModelForm):
@@ -88,3 +91,151 @@ class LectRejectForm(forms.ModelForm):
         if self.has_changed():
             lect.save()
         return lect
+
+
+class LectBoardFormBase(forms.ModelForm):
+    class Meta:
+        model = LectBoard
+
+        fields = ('lect_board_title', 'lect_board_link', 'lect_board_cont', 'lect_board_type')
+
+        widgets = {
+            'lect_board_title': forms.TextInput(attrs={"placeholder": _("제목을 입력하세요."),
+                                                       "style": "font-size: 25px; height: 70px;"}),
+            'lect_board_link': forms.TextInput(attrs={"placeholder": _("강의 링크를 적어주세요.")}),
+            'lect_board_type': forms.HiddenInput(),
+            'lect_board_cont': forms.TextInput(),
+        }
+        labels = {
+            'lect_board_title': _("강의 제목"),
+            'lect_board_link': _("강의 링크"),
+            'lect_board_cont': _("내용"),
+        }
+
+    def save(self, **kwargs):
+        lect_board = super().save(commit=False)
+        lect_board.lect_board_writer = kwargs.get('lect_board_writer')
+        lect_board.lect_no = kwargs.get('lect_no')
+
+        if self.has_changed():
+            lect_board.save()
+
+        return lect_board
+
+    def update(self, instance):
+        lect_board = instance
+        lect_board.lect_board_title = self.cleaned_data['lect_board_title']
+        lect_board.lect_board_cont = self.cleaned_data['lect_board_cont']
+
+        return lect_board
+
+
+class LectBoardForm(LectBoardFormBase):
+    class Meta(LectBoardFormBase.Meta):
+        pass
+
+    def update(self, instance):
+        lect_board = super().update(instance)
+        lect_board.lect_board_link = self.cleaned_data['lect_board_link']
+
+        if self.has_changed():
+            lect_board.save()
+
+        return lect_board
+
+
+class LectNoticeForm(LectBoardFormBase):
+    class Meta(LectBoardFormBase.Meta):
+        exclude = ('lect_board_link', )
+
+        labels = {
+            'lect_board_title': _("공지사항"),
+            'lect_board_cont': _("공지 내용")
+        }
+
+    def update(self, instance):
+        notice = super().update(instance)
+        notice.save()
+
+
+def make_lect_board_form(board_type, *args, **kwargs):
+    if args or kwargs:
+        if board_type == 1:
+            return LectNoticeForm(*args, **kwargs)
+        elif board_type == 2:
+            return LectBoardForm(*args, **kwargs)
+    else:
+        if board_type == 1:
+            return LectNoticeForm(initial={'lect_board_type_no': 1})
+        elif board_type == 2:
+            return LectBoardForm(initial={'lect_board_type_no': 2})
+
+
+class LectAssignmentForm(forms.ModelForm):
+    class Meta:
+        model = LectAssignment
+
+        fields = ('lect_assignment_title', 'lect_assignment_cont', 'lect_assignment_deadline')
+
+        widgets = {
+            'lect_assignment_title': forms.TextInput(attrs={"placeholder": _("과제 제목을 입력하세요."),
+                                                       "style": "font-size: 25px; height: 70px;"}),
+            'lect_assignment_cont': forms.TextInput(),
+            'lect_assignment_deadline': forms.DateInput(attrs={'type': 'date'}),
+        }
+
+        labels = {
+            'lect_assignment_title': _("과제 제목"),
+            'lect_assignment_cont': _("과제 내용"),
+            'lect_assignment_deadline': _("마감일")
+        }
+
+    def save(self, **kwargs):
+        lect_assignment = super().save(commit=False)
+        lect_assignment.lect_assignment_writer = kwargs.get('lect_assignment_writer')
+        lect_assignment.lect_board_no = kwargs.get('lect_board_no')
+        lect_assignment.save()
+
+        return lect_assignment
+
+    def update(self, instance):
+        assignment = instance
+        assignment.lect_assignment_title = self.cleaned_data['lect_assignment_title']
+        assignment.lect_assignment_cont = self.cleaned_data['lect_assignment_cont']
+        assignment.lect_assignment_deadline = self.cleaned_data['lect_assignment_deadline']
+
+        if self.has_changed():
+            assignment.save()
+
+        return assignment
+
+
+# 이거 지우면 큰일 남
+class FileForm(FileFormBase):
+    pass
+
+
+class AssignmentFileForm(forms.Form):
+    assignment_file = forms.FileField(
+        required=False,
+        widget=forms.FileInput(
+            attrs={'multiple': True,
+                   'accept': ".xlsx,.xls,image/*,.doc,.docx,video/*,.ppt,.pptx,.txt,.pdf,.py,.java"})
+    )
+
+    def save(self, instance):
+        from file_controller import FileController
+        FileController.upload_new_files(
+            files_to_upload=self.cleaned_data.get('assignment_file'),
+            instance=instance
+        )
+
+    # overriding
+    # is_valid 호출 시 내부에서 자동적으로 clean 호출
+    def clean(self):
+        super().clean()
+        self.cleaned_data['assignment_file'] = self.files.getlist('assignment_file')
+
+
+
+

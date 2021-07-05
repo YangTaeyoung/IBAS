@@ -271,7 +271,7 @@
                                 <!--=======신청하기 버튼, 한번 신청하기 버튼을 누르면 없어지도록 수정======-->
                                 <div style="display: flex; justify-content: center; ">
                                     <button type="button" class="btn btn-outline-success btn-lg"
-                                            style="width: 200px; font-weight: bold" onclick="alert('신청이 완료되었습니다.')">
+                                            style="width: 200px; font-weight: bold" onclick="alert('신청이 완료되었습니다.'); location.href='{% url "lect_enroll" lect.lect_no %}'">
                                         신청하기
                                     </button>
                                 </div>
@@ -281,7 +281,7 @@
                             {% if is_in %}
                                 <div style="display: flex; justify-content: center; ">
                                     <button type="button" class="btn btn-outline-primary btn-lg"
-                                            style="font-weight: bold">
+                                            style="font-weight: bold" onclick="location.href='{% url "lect_room_main" lect.lect_no %}'">
                                         강의실로 이동하기
                                     </button>
                                 </div>

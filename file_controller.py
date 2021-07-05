@@ -1,5 +1,6 @@
 import shutil
-from DB.models import Board, BoardFile, ContestBoard, ContestFile, Lect, Bank, BankFile,UserDelete,UserDeleteFile
+from DB.models import Board, BoardFile, ContestBoard, ContestFile, Lect, Bank, BankFile, UserDelete, UserDeleteFile, \
+    LectBoard, LectBoardFile, LectAssignment, LectAssignmentFile
 import os
 from IBAS.settings import MEDIA_ROOT
 from django.conf import settings
@@ -67,8 +68,11 @@ class FileController:
             # ContestBoard 객체
             elif isinstance(object, ContestBoard):
                 files = ContestFile.objects.filter(contest_no=object.contest_no)
+            # UserDelete 객체
             elif isinstance(object, UserDelete):
                 files = UserDeleteFile.objects.filter(user_delete_no=object.user_delete_no)
+            elif isinstance(object, LectBoard):
+                files = LectBoardFile.objects.filter(lect_board_no=object.lect_board_no)
             else:  # 객체가 잘못 전달된 경우
                 raise Exception
 
@@ -136,7 +140,7 @@ class FileController:
         if isinstance(instance, ContestBoard):
             for file in files_to_upload:  # 각각의 파일을 InMemoryUploadedFile 객체로 받아옴
                 ContestFile.objects.create(
-                    contest_no=ContestBoard.objects.get(pk=instance.contest_no),
+                    contest_no=instance,
                     file_path=file,  # uploadedFile 객체를 imageField 객체 할당
                     file_name=file.name.replace(' ', '_')  # imageField 객체에 의해 파일 이름 공백이 '_'로 치환되어 서버 저장
                     # 따라서 db 에도 이름 공백을 '_'로 치환하여 저장
@@ -144,7 +148,7 @@ class FileController:
         elif isinstance(instance, Board):
             for file in files_to_upload:
                 BoardFile.objects.create(
-                    board_no=Board.objects.get(pk=instance.board_no),
+                    board_no=instance,
                     file_path=file,  # uploadedFile 객체를 imageField 객체 할당
                     file_name=file.name.replace(' ', '_')  # imageField 객체에 의해 파일 이름 공백이 '_'로 치환되어 서버 저장
                     # 따라서 db 에도 이름 공백을 '_'로 치환하여 저장
@@ -152,17 +156,28 @@ class FileController:
         elif isinstance(instance, Bank):
             for file in files_to_upload:
                 BankFile.objects.create(
-                    bank_no=Bank.objects.get(pk=instance.bank_no),
+                    bank_no=instance,
                     file_path=file,
                     file_name=file.name.replace(' ', '_')
                 )
-
+        elif isinstance(instance, LectBoard):
+            for file in files_to_upload:
+                LectBoardFile.objects.create(
+                    lect_board_no=instance,
+                    file_path=file,
+                    file_name=file.name.replace(' ', '_')
+                )
+        elif isinstance(instance, LectAssignment):
+            for file in files_to_upload:
+                LectAssignmentFile.objects.create(
+                    lect_assignment_no=instance,
+                    file_path=file,
+                    file_name=file.name.replace(' ', '_')
+                )
         elif isinstance(instance, UserDelete):
             for file in files_to_upload:
-                print(instance.user_delete_no)
-                print(UserDelete.objects.get(pk=instance.user_delete_no))
                 UserDeleteFile.objects.create(
-                    user_delete_no=UserDelete.objects.get(pk=instance.user_delete_no),
+                    user_delete_no=instance,
                     file_path=file,
                     file_name=file.name.replace(' ', '_')
                 )
