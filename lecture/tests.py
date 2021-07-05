@@ -86,18 +86,18 @@ class LectBoardTest(TestCase):
         """
         lect_room = Lect.objects.prefetch_related("enrolled_students", "lectures").first()
         lect_board = lect_room.lectures.first()
-        query = """SELECT u.USER_NAME, u.USER_STU, if(isnull(attend.LECT_ATTEND_DATE),false,true) as attendance
+        query = f"""SELECT u.USER_NAME, u.USER_STU, if(isnull(attend.LECT_ATTEND_DATE),false,true) as attendance
                     FROM LECT_ENROLLMENT AS enrollment
 
                     LEFT OUTER JOIN LECT_ATTENDANCE AS attend
-                    on (enrollment.STUDENT = attend.STUDENT AND attend.LECT_BOARD_NO = %s)
+                    on (enrollment.STUDENT = attend.STUDENT AND attend.LECT_BOARD_NO = {lect_board.lect_board_no})
 
                     INNER JOIN USER as u
                     ON (enrollment.STUDENT = u.USER_STU)
 
-                    WHERE enrollment.LECT_NO = %s
+                    WHERE enrollment.LECT_NO = {lect_room.lect_no}
 
-                    ORDER BY u.USER_NAME ASC;""" % (lect_board.lect_board_no, lect_room.lect_no)
+                    ORDER BY u.USER_NAME ASC;"""
         cursor = connection.cursor()
         cursor.execute(query)  # 쿼리 수행
         students_list = [{'name': name, 'stu': stu, 'attendance': '출석' if attendance == '1' else '결석'}

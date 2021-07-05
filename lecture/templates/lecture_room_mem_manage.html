@@ -194,18 +194,9 @@
 
                                             <!--========== 페이지네이션 시작 ===========-->
                                             <!-- 1페이지에 수강생 끌고오고, 수강생이 그보다 적으면, 페이지네이션 안보이게 처리 -->
-                                            <div class="pagination-bx clearfix text-center">
-                                                <ul class="pagination">
-                                                    <li class="previous"><a href="javascript:void(0)"><i
-                                                            class="fa fa-arrow-left"></i></a></li>
-                                                    <li><a href="javascript:void(0)">1</a></li>
-                                                    <li><a href="javascript:void(0)">2</a></li>
-                                                    <li><a href="javascript:void(0)">...</a></li>
-                                                    <li class="active"><a href="javascript:void(0)">7</a></li>
-                                                    <li class="next"><a href="javascript:void(0)"><i
-                                                            class="fa fa-arrow-right"></i></a></li>
-                                                </ul>
-                                            </div>
+                                            {% if item_list %}
+                                                {% include "pagination.html" %}
+                                            {% endif %}
                                             <!--========== 페이지네이션 끝 ===========-->
                                         </div>
                                     </form>

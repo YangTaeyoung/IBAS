@@ -336,11 +336,14 @@ def lect_board_update(request, room_no, board_no):
 
 
 def lect_room_mem_manage(request, room_no):
+    students = LectEnrollment.objects.filter(lect_no__lect_no=room_no)
 
     context = {
-        'students': LectEnrollment.objects.filter(lect_no__lect_no=room_no),
-        'lect': Lect.objects.get(pk=room_no)
+        'students': students,
+        'lect': Lect.objects.get(pk=room_no),
+        'item_list': get_page_object(request, students, 15)  # 15 명씩 보이게 출력
     }
+
     return render(request, 'lecture_room_mem_manage.html', context)
 
 
@@ -351,6 +354,7 @@ def lect_room_attend_std(request, room_no):
         'lect': lect_room,
         'lect_board_list': lect_room.lectures
     }
+
     return render(request, 'lecture_room_attend_std.html', context)
 
 
@@ -358,26 +362,28 @@ def lect_room_attend_std(request, room_no):
 def lect_room_attend_teacher(request, room_no):
     lect_room = Lect.objects.prefetch_related("lectures", "enrolled_students__student").get(pk=room_no)
     lect_board_list = lect_room.lectures.filter(lect_board_type_no=2).order_by('-lect_board_no')  # 강의 게시글만 가져옴
+
     # 강의 게시글 번호. select option 값 / default 는 마지막 강의 게시글, 게시글이 하나도 없으면 0.
 
     if request.method == "GET":
         # 처음 이 페이지를 렌더링 할 때는 get 파라미터가 존재하지 않음. 이 강의 첫 게시글이 존재하지 않으면, 게시글 번호 존재 X
         lect_board_no = request.GET.get('lect_board_no',
                                         None if lect_board_list[0] is None else lect_board_list[0].lect_board_no)
+
         # 장고 ORM 으로 쿼리 수행 불가하여, raw query 작성.
         # connection : default db에 연결되어 있는 built in 객체
-        query = """SELECT u.USER_NAME, u.USER_STU, if(isnull(attend.LECT_ATTEND_DATE),false,true) as attendance
+        query = f"""SELECT u.USER_NAME, u.USER_STU, if(isnull(attend.LECT_ATTEND_DATE),false,true) as attendance
                 FROM LECT_ENROLLMENT AS enrollment
     
                 LEFT OUTER JOIN LECT_ATTENDANCE AS attend
-                on (enrollment.STUDENT = attend.STUDENT AND attend.LECT_BOARD_NO = %s)
+                on (enrollment.STUDENT = attend.STUDENT AND attend.LECT_BOARD_NO = {lect_board_no})
     
                 INNER JOIN USER as u
                 ON (enrollment.STUDENT = u.USER_STU)
     
-                WHERE enrollment.LECT_NO = %s
+                WHERE enrollment.LECT_NO = {room_no}
     
-                ORDER BY u.USER_NAME ASC;""" % (lect_board_no, room_no)
+                ORDER BY u.USER_NAME ASC;"""
         cursor = connection.cursor()
         cursor.execute(query)  # 쿼리 수행
         students_list = [{'name': name, 'stu': stu, 'attendance': '출석' if attendance == 1 else '결석'}
@@ -387,7 +393,8 @@ def lect_room_attend_teacher(request, room_no):
             'lect': lect_room,
             'lect_board_list': lect_board_list,
             'students_list': students_list,  # 이름/학번/출석결석
-            'cur_lect_board': None if lect_board_no is None else LectBoard.objects.get(pk=lect_board_no)  # 현재 게시글
+            'cur_lect_board': None if lect_board_no is None else LectBoard.objects.get(pk=lect_board_no),  # 현재 게시글
+            'item_list': get_page_object(request, students_list, 15) # 15 명씩 보이게 출력
         }
         return render(request, 'lecture_room_attend_teacher.html', context)
 
