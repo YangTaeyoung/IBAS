@@ -211,4 +211,76 @@ function staff_grade() {
 
 }
 
+// ================================== lectRoom 관련 js ========================================= //
+function lectRoom_state() {
 
+    var tr_head = document.getElementById("lectRoom_head"); // table head부분 가져옴
+    var tr_list = document.getElementsByClassName("lectRoom_tr"); // table body에 있는 tr부분 다 가져옴.
+    var selectString = String(document.getElementById("lectRoom_select_state").value); // 선택된 select를 string형으로 형변환
+
+    //tr_list 수(tr 수)만큼 for문 돌린다.
+    for (i = 0; i < tr_list.length; i++) {
+        var state = String(document.getElementsByClassName("lectRoom_state")[i].innerHTML); // 테이블 안 학년을 다 가져와야 함.
+
+        // 상태라는 옵션과 선택된 select가 같으면
+        if ("상태" === selectString) {
+            tr_head.style.display = "table-row"; // 이거 해야 테이블 형태 안무너짐 // 테이블 헤드 부분
+            tr_list[i].style.display = "table-row"; // 테이블 내용 부분
+
+        // option 안 학년과 선택된 select가 같으면
+        } else if (state === selectString) {
+            tr_head.style.display = "table-row"; // 이거 해야 테이블 형태 안무너짐 // 테이블 헤드 부분
+            tr_list[i].style.display = "table-row"; // 테이블 내용 부분
+
+        }
+        // option 안 학년과 선택된 select가 같지 않으면
+        else {
+            tr_list[i].style.display = "none"; // 테이블 내용 부분
+            tr_head.style.display = "table-row"; // 이거 해야 테이블 형태 안무너짐 // 테이블 헤드 부분
+
+        }
+
+    }
+
+}
+
+// 강의자 관점 출결관리 페이지에 필터
+function lectRoom_manage() {
+    let tr_head = document.getElementById("lectRoom_mhead"); // table head부분 가져옴
+    let tr_list = document.getElementsByClassName("lectRoom_mtr"); // table body에 있는 tr부분 다 가져옴.
+    let selectAttend = String(document.getElementById("lectRoom_select_attend").value); // 선택된 출결 select를 string형으로 형변환
+    let selectHw = String(document.getElementById("lectRoom_select_hw").value); // 선택된 과제 select를 string형으로 형변환
+
+    //tr_list 수(tr 수)만큼 for문 돌린다.
+    for (i = 0; i < tr_list.length; i++) {
+        var attend = String(document.getElementsByClassName("lectRoom_attend")[i].innerHTML); // 테이블 안 출결을 다 가져와야 함.
+        var hw = String(document.getElementsByClassName("lectRoom_hw")[i].innerHTML); // 테이블 안 과제를 다 가져와야 함.
+
+        // 출결과 과제라는 옵션과 선택된 select가 같으면
+        if (("출결" === selectAttend) && ("과제" === selectHw)) {
+            tr_head.style.display = "table-header-group"; // 이거 해야 테이블 형태 안무너짐 // 테이블 헤드 부분
+            tr_list[i].style.display = "table-row"; // 테이블 내용 부분
+
+        }
+        else if((attend === selectAttend) && ("과제" === selectHw)) {
+            tr_head.style.display = "table-header-group"; // 이거 해야 테이블 형태 안무너짐 // 테이블 헤드 부분
+            tr_list[i].style.display = "table-row"; // 테이블 내용 부분
+        }
+        else if(("출결" === selectAttend) && (hw === selectHw)) {
+            tr_head.style.display = "table-header-group"; // 이거 해야 테이블 형태 안무너짐 // 테이블 헤드 부분
+            tr_list[i].style.display = "table-row"; // 테이블 내용 부분
+        }
+        else if ((hw === selectHw) && (attend === selectAttend)) {
+            tr_head.style.display = "table-header-group"; // 이거 해야 테이블 형태 안무너짐 // 테이블 헤드 부분
+            tr_list[i].style.display = "table-row"; // 테이블 내용 부분
+
+        }
+        else {
+            tr_list[i].style.display = "none"; // 테이블 내용 부분
+            tr_head.style.display = "table-header-group"; // 이거 해야 테이블 형태 안무너짐 // 테이블 헤드 부분
+
+        }
+
+    }
+
+}
