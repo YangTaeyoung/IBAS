@@ -348,20 +348,10 @@
                                                                     </td>
                                                                     <!-- 제명건의 -->
                                                                     <td>
-                                                                        <a href="#"
-                                                                           style="font-size: 12px; font-weight: bold"
-                                                                           onclick="goSubmit('id-form-user-delete')"
-                                                                        >제명건의</a>
+                                                                        <a href="{% url "member_delete_register" deleted_user=exist_user.user_stu %}"
+                                                                           style="font-size: 12px; font-weight: bold">제명건의</a>
                                                                         {#                                                        <a href="#" style="font-size: 12px; font-weight: bold">&nbsp;&nbsp;논의중</a>#}
-                                                                        <form id="id-form-user-delete"
-                                                                              action="{% url "member_delete_register" %}"
-                                                                              method="post">
-                                                                            {% csrf_token %}
-                                                                            <input type="hidden" name="is_register"
-                                                                                   value="1"/>
-                                                                            <input type="hidden" name="deleted_user"
-                                                                                   value="{{ exist_user.user_stu }}"/>
-                                                                        </form>
+
                                                                     </td>
                                                                 </tr>
                                                             {% endfor %}
@@ -561,10 +551,10 @@
                                                 </div>
                                             </form>
                                         </div>
-                                        </div>
-                                        </div>
-                                        </div>
                                     {% endif %}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
