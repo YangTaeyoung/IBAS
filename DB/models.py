@@ -363,6 +363,7 @@ class LectAttendance(models.Model):
     class Meta:
         managed = False
         db_table = 'LECT_ATTENDANCE'
+        unique_together = (('student', 'lect_board_no'),)
 
 
 class LectEnrollment(models.Model):
@@ -373,6 +374,7 @@ class LectEnrollment(models.Model):
     class Meta:
         managed = False
         db_table = 'LECT_ENROLLMENT'
+        unique_together = (('student', 'lect_no'),)
 
 
 class LectBoardType(models.Model):

@@ -5,6 +5,8 @@ from django.http import HttpRequest
 from django.template.loader import render_to_string
 from django.test import TestCase
 from django.urls import reverse
+from django.utils.datetime_safe import date, datetime
+from pytz import timezone
 
 from DB.models import Lect, User, LectBoard, LectBoardType, LectEnrollment
 from lecture.views import lect_room_attend_teacher
@@ -31,8 +33,9 @@ class LectBoardTest(TestCase):
         try:
             # 새로운 강의를 등록한다.
             lecture = Lect.objects.create(lect_title="빠르게 시작하는 파이썬", lect_type_id=1, lect_chief_id=12162359,
-                                          lect_place_or_link='link', lect_method_id=1, lect_deadline="2021-07-29",
-                                          lect_intro='파이썬은 재밌어요', lect_state_id=3, lect_limit_num=60)
+                                          lect_place_or_link='link', lect_method_id=1, lect_limit_num=60,
+                                          lect_deadline=datetime(2021, 7, 29).astimezone(timezone('Asia/Seoul')),
+                                          lect_intro='파이썬은 재밌어요', lect_state_id=3)
 
             # 강의에 게시글이 3개 생긴다.
             LectBoard.objects.create(lect_no=lecture, lect_board_title='첫번째 강의: 파이썬 조건문',
@@ -43,26 +46,27 @@ class LectBoardTest(TestCase):
                                      lect_board_writer_id=12162359, lect_board_cont="1234", lect_board_type_no_id=2)
 
             # 수강생이 들어왔다.
-            LectEnrollment.objects.create(lect_no=Lect.objects.first(), student_id=12171652)
-            LectEnrollment.objects.create(lect_no=Lect.objects.first(), student_id=12111223)
-            LectEnrollment.objects.create(lect_no=Lect.objects.first(), student_id=12151251)
-            LectEnrollment.objects.create(lect_no=Lect.objects.first(), student_id=12172285)
-            LectEnrollment.objects.create(lect_no=Lect.objects.first(), student_id=12172434)
-            LectEnrollment.objects.create(lect_no=Lect.objects.first(), student_id=12192199)
-            LectEnrollment.objects.create(lect_no=Lect.objects.first(), student_id=12192355)
-            LectEnrollment.objects.create(lect_no=Lect.objects.first(), student_id=15156126)
+            LectEnrollment.objects.create(lect_no=lecture, student_id=12171652)
+            LectEnrollment.objects.create(lect_no=lecture, student_id=12111223)
+            LectEnrollment.objects.create(lect_no=lecture, student_id=12151251)
+            LectEnrollment.objects.create(lect_no=lecture, student_id=12172285)
+            LectEnrollment.objects.create(lect_no=lecture, student_id=12172434)
+            LectEnrollment.objects.create(lect_no=lecture, student_id=12192199)
+            LectEnrollment.objects.create(lect_no=lecture, student_id=12192355)
+            LectEnrollment.objects.create(lect_no=lecture, student_id=15156126)
 
         except Exception as e:
             raise e
 
     def test_response_200_for_attendance_page(self):
         """
-                강의자 메뉴 中 : 출석 페이지, 수강자 출석 정보 조회 시도
+                강의자 메뉴 中 : 출석 페이지, 수강자 출석 정보 조회 시도 (GET)
         """
         lect_room = Lect.objects.first()
 
         response = self.client.get(reverse('lect_room_attend_teacher', kwargs={'room_no': lect_room.lect_no}))
-        self.assertEqual(response.status_code, 200, msg='lect/room/%s/attend/teacher' % lect_room.lect_no)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'lecture_room_attend_teacher.html')
 
     def test_for_getting_all_lectBoards_of_a_lecture(self):
         """
@@ -70,34 +74,18 @@ class LectBoardTest(TestCase):
         """
 
         lect_room = Lect.objects.prefetch_related("lectures").first()
-        lect_board_title_list = [lecture.lect_board_title for lecture in lect_room.lectures.filter(lect_board_type_no=2)]
+        lect_board_list = lect_room.lectures.filter(lect_board_type_no=2).order_by('-lect_board_no')
 
         response = self.client.get(reverse('lect_room_attend_teacher', kwargs={'room_no': lect_room.lect_no}))
 
-        for lect_title in lect_board_title_list:
-            self.assertIn(lect_title, response.content.decode(),
-                          msg="강의자 출석 관리 메뉴: 강의 게시글 불러오기 실패")
+        self.assertQuerysetEqual(lect_board_list, response.context['lect_board_list'], transform=lambda x: x)
 
-    def test_for_getting_all_student_of_a_lecture(self):
+    def test_check_attendance_info_of_all_students(self):
         """
-               강의자 메뉴 中 : 출석 페이지, 수강생 이름 및 학번 리스트 띄우기
-        """
-
-        lect_room = Lect.objects.prefetch_related("enrolled_students").first()
-        students_list = [row.student.user_name for row in lect_room.enrolled_students.all()]
-
-        response = self.client.get(reverse('lect_room_attend_teacher', kwargs={'room_no': lect_room.lect_no}))
-
-        for name in students_list:
-            self.assertIn(name, response.content.decode(),
-                          msg="수강생 정보 불러오기 실패")
-
-    def test_check_attendance_of_every_student(self):
-        """
-                강의자 메뉴 中 : 출석 페이지, 출석여부 띄우기
+                강의자 메뉴 中 : 출석 페이지, 수강생 이름 + 학번 + 출석여부 띄우기
         """
         lect_room = Lect.objects.prefetch_related("enrolled_students", "lectures").first()
-        lect_board_list = lect_room.lectures.all().order_by('-lect_board_no')
+        lect_board = lect_room.lectures.first()
         query = """SELECT u.USER_NAME, u.USER_STU, if(isnull(attend.ATTEND_DATE),false,true) as attendance
                     FROM LECT_ENROLLMENT AS enrollment
 
@@ -109,18 +97,24 @@ class LectBoardTest(TestCase):
 
                     WHERE enrollment.LECT_NO = %s
 
-                    ORDER BY u.USER_NAME ASC;""" % (lect_board_list[0].lect_board_no, lect_room.lect_no)
+                    ORDER BY u.USER_NAME ASC;""" % (lect_board.lect_board_no, lect_room.lect_no)
         cursor = connection.cursor()
         cursor.execute(query)  # 쿼리 수행
         students_list = [{'name': name, 'stu': stu, 'attendance': '출석' if attendance == '1' else '결석'}
                          for name, stu, attendance in cursor.fetchall()]
 
         response = self.client.get(reverse('lect_room_attend_teacher', kwargs={'room_no': lect_room.lect_no}))
-        expected_html = render_to_string('_table_attendence_check.html', {'students_list': students_list})
 
-        self.assertIn(expected_html, response.content.decode())
+        self.assertListEqual(students_list, response.context['students_list'])
 
-    @skip
-    def test_post_request_for_update_attendance_info(self):
-        pass
+    def test_response_200_for_update_attendance_info(self):
+        """
+                강의자 메뉴 中 : 출석 페이지, 출석 & 결석 정보 변경 요청 시도 (POST)
+        """
+        lect_room = Lect.objects.first()
+
+        # 아무것도 넘기지 않았을 때,
+        response = self.client.post(reverse('lect_room_attend_teacher', kwargs={'room_no': lect_room.lect_no}))
+
+        self.assertEqual(response.status_code, 200)
 
