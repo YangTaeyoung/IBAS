@@ -393,6 +393,8 @@ def lect_room_attend_teacher(request, room_no):
     else:
         lect_board_no = request.POST.get('lect_board_no')
 
+        return redirect(reverse('lect_room_attend_teacher', kwargs={'room_no': room_no}))
+
 
 
 

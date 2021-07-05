@@ -16,14 +16,15 @@
         selectBox.val({{ cur_lect_board.lect_board_no }}).prop('selected',true);
 
         selectBox.change(function () {
+            alert('GET!!')
             formElement.attr("method", "GET")
             formElement.submit()
         });
 
-        $("submit").click(function (){
+        $("button").click(function (){
             formElement.attr("method", "POST")
             formElement.submit()
-        });
+         });
     });
     </script>
 
@@ -69,6 +70,7 @@
                                 <!--=======================수강생 관리=========================-->
                                 <div class="col-lg-11 col-xl-8 p-b30">
                                     <form enctype="multipart/form-data" id="attendance-form">
+                                        {% csrf_token %}
                                         <input type="hidden" name="lect_no" id="lect_no" value="{{ lect.lect_no }}">
 
                                         <div class="width-870">

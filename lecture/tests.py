@@ -107,7 +107,7 @@ class LectBoardTest(TestCase):
 
         self.assertListEqual(students_list, response.context['students_list'])
 
-    def test_response_200_for_update_attendance_info(self):
+    def test_response_302_for_update_attendance_info(self):
         """
                 강의자 메뉴 中 : 출석 페이지, 출석 & 결석 정보 변경 요청 시도 (POST)
         """
@@ -116,5 +116,5 @@ class LectBoardTest(TestCase):
         # 아무것도 넘기지 않았을 때,
         response = self.client.post(reverse('lect_room_attend_teacher', kwargs={'room_no': lect_room.lect_no}))
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
 
