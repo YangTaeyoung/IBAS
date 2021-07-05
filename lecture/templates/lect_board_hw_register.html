@@ -81,6 +81,14 @@
                             <!--========== 오른쪽 강의룸 메인 콘텐츠 시작 ===========-->
                             <div class="col-xl-8 col-lg-7 col-md-12 m-b30">
                                 <form class="add-listing-form">
+                                    <div class="content-box">
+											<select>
+												<option>강의 선택</option>
+												<option>[1회차] 파이썬 설치하기</option>
+												<option>[2회차] 파이썬 둘러보기</option>
+												<option>[3회차] 기본 연산자</option>
+											</select>
+                                    </div>
                                         <!-- ======================제목 박스====================== -->
                                          <div class="content-box">
                                             <div class="content-header">
@@ -107,45 +115,32 @@
                                                     <input type="file" accept=".xlsx,.xls,image/*,.doc,audio/*,.docx,video/*,.ppt,.pptx,.txt,.pdf" multiple/>
                                                 </div>
                                                 <!-- 이미 존재하고 있던 파일: 삭제 가능 (수정모드)-->
-                                                {% if lect_board is not None %}
+                                                {% if lect_board_hw is not None %}
                                                     <div class="form-group">
                                                         <div id="image-cont" class="image-cont">
-                                                            {% for lect_board_file in lect_board_file_list %}
-                                                                <div id="image-card-{{ lect_board_file.lect_board_file_id }}"
+                                                            {% for lect_board_hw_file in lect_board_hw_file_list %}
+                                                                <div id="image-card-{{ lect_board_hw_file.lect_board_hw_file_id }}"
                                                                      class="image-card">
                                                                     <!-- 취소 버튼, 취소를 누를 시 image-card 컨테이너가 통채로 사라짐. -->
                                                                     <button type="button"
                                                                             class="btn btn-danger fa fa-times btn-cancel"
-                                                                            onclick="delImg(document.getElementById('image-card-{{ lect_board_file.lect_board_file_id }}'))"></button>
+                                                                            onclick="delImg(document.getElementById('image-card-{{ lect_board_hw_file.lect_board_hw_file_id }}'))"></button>
                                                                     <!-- 이미지 컨테이너 이미지 파일일 경우 img태그가, 이미지 파일이 아닐 경우 파일 모양의 아이콘이 붙음. -->
-                                                                    <div id="image-{{ lect_board_file.lect_board_file_id }}"
+                                                                    <div id="image-{{ lect_board_hw_file.lect_board_hw_file_id }}"
                                                                          class="image-container"></div>
                                                                     <!--기존 파일링크를 이동시키기 위한 히든 링크 -->
                                                                     <input type="hidden"
-                                                                           name="exist_file_path_{{ lect_board_file.lect_board_file_id }}"
-                                                                           value="{{ lect_board_file.lect_board_file_path }}"/>
+                                                                           name="exist_file_path_{{ lect_board_hw_file.lect_board_hw_file_id }}"
+                                                                           value="{{ lect_board_hw_file.lect_board_hw_file_path }}"/>
                                                                 </div>
                                                                 <script>
                                                                     // 페이지가 로딩 될 때 해당 함수도 자동으로 실행되도록 설정함. (아이콘 or img 결정)
-                                                                    onload = decisionIcon(document.getElementById("image-{{ lect_board_file.lect_board_file_id }}"), '{{ lect_board_file.lect_board_file_path }}');
+                                                                    onload = decisionIcon(document.getElementById("image-{{ lect_board_hw_file.lect_board_hw_file_id }}"), '{{ lect_board_hw_file.lect_board_hw_file_path }}');
                                                                 </script>
                                                             {% endfor %}
                                                         </div>
                                                     </div>
                                                 {% endif %}
-                                            </div>
-                                        </div>
-                                        <!--=====================강의링크 입력 박스=======================-->
-                                        <div class="content-box">
-                                            <div class="content-header">
-                                                <h3 class="title">강의링크</h3>
-                                            </div>
-                                            <div class="content-body">
-                                                <div class="form-group">
-                                                    <!--입력하는 곳-->
-                                                    <input type="text" class="form-control"
-                                                           placeholder="강의 링크를 적어주세요."/>
-                                                </div>
                                             </div>
                                         </div>
                                         <!-- ======================내용 입력 박스====================== -->
@@ -163,6 +158,18 @@
                                                 </div>
                                             </div>
                                          </div>
+                                        <!--=====================과제 마감일=======================-->
+                                        <div class="content-box">
+                                            <div class="content-header">
+                                                <h3 class="title">과제 마감일</h3>
+                                            </div>
+                                            <div class="content-body">
+                                                <div class="form-group">
+                                                    <!--입력하는 곳-->
+                                                    <input type="date" class="form-control" name="lect_board_deadline" required="required"/>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <!--등록버튼, 수정할 때는 수정하기로 뜨도록 수정필요-->
                                         <div style="display: grid; justify-items: center">
                                             <button class="site-button btn-block button-md" type="submit" style="width: 30%">
