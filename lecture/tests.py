@@ -86,7 +86,7 @@ class LectBoardTest(TestCase):
         """
         lect_room = Lect.objects.prefetch_related("enrolled_students", "lectures").first()
         lect_board = lect_room.lectures.first()
-        query = """SELECT u.USER_NAME, u.USER_STU, if(isnull(attend.ATTEND_DATE),false,true) as attendance
+        query = """SELECT u.USER_NAME, u.USER_STU, if(isnull(attend.LECT_ATTEND_DATE),false,true) as attendance
                     FROM LECT_ENROLLMENT AS enrollment
 
                     LEFT OUTER JOIN LECT_ATTENDANCE AS attend
@@ -111,10 +111,13 @@ class LectBoardTest(TestCase):
         """
                 강의자 메뉴 中 : 출석 페이지, 출석 & 결석 정보 변경 요청 시도 (POST)
         """
-        lect_room = Lect.objects.first()
+        lect_room = Lect.objects.filter(lect_chief_id=12162359).last()
+        context = {
+            'lect_board_no_': lect_room.lectures.first().lect_board_no
+        }
 
-        # 아무것도 넘기지 않았을 때,
-        response = self.client.post(reverse('lect_room_attend_teacher', kwargs={'room_no': lect_room.lect_no}))
+        # 어떤 수강생도 체크하지 않았을 때,
+        response = self.client.post(reverse('lect_room_attend_teacher', kwargs={'room_no': lect_room.lect_no}),context)
 
         self.assertEqual(response.status_code, 302)
 

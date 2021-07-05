@@ -1,7 +1,7 @@
 from django.db import transaction, connection
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from DB.models import LectType, Lect, LectDay, StateInfo, MethodInfo, LectBoard, LectBoardFile, \
-    LectAssignment, LectEnrollment
+    LectAssignment, LectEnrollment, LectAttendance
 from django.db.models import Q
 from pagination_handler import get_paginator_list, get_page_object
 from lecture.forms import LectForm, LectRejectForm, LectPicForm, LectBoardForm, make_lect_board_form, \
@@ -361,11 +361,12 @@ def lect_room_attend_teacher(request, room_no):
     # 강의 게시글 번호. select option 값 / default 는 마지막 강의 게시글, 게시글이 하나도 없으면 0.
 
     if request.method == "GET":
+        # 처음 이 페이지를 렌더링 할 때는 get 파라미터가 존재하지 않음. 이 강의 첫 게시글이 존재하지 않으면, 게시글 번호 존재 X
         lect_board_no = request.GET.get('lect_board_no',
-                                        0 if lect_board_list[0] is None else lect_board_list[0].lect_board_no)
+                                        None if lect_board_list[0] is None else lect_board_list[0].lect_board_no)
         # 장고 ORM 으로 쿼리 수행 불가하여, raw query 작성.
         # connection : default db에 연결되어 있는 built in 객체
-        query = """SELECT u.USER_NAME, u.USER_STU, if(isnull(attend.ATTEND_DATE),false,true) as attendance
+        query = """SELECT u.USER_NAME, u.USER_STU, if(isnull(attend.LECT_ATTEND_DATE),false,true) as attendance
                 FROM LECT_ENROLLMENT AS enrollment
     
                 LEFT OUTER JOIN LECT_ATTENDANCE AS attend
@@ -386,19 +387,27 @@ def lect_room_attend_teacher(request, room_no):
             'lect': lect_room,
             'lect_board_list': lect_board_list,
             'students_list': students_list,  # 이름/학번/출석결석
-            'cur_lect_board': LectBoard.objects.get(pk=lect_board_no) if lect_board_no else None  # 현재 게시글(select box)
+            'cur_lect_board': None if lect_board_no is None else LectBoard.objects.get(pk=lect_board_no)  # 현재 게시글
         }
         return render(request, 'lecture_room_attend_teacher.html', context)
 
-    else:
-        lect_board_no = request.POST.get('lect_board_no')
-        manage_mode = {'출석': True, '결석': False} if request.POST.get('manage-mode') == 1 else {'결석': True, '출석': False}
+    elif request.method == "POST":
+        lect_board = LectBoard.objects.get(pk=request.POST.get('lect_board_no_'))
+        manage_mode = {'출석': True, '결석': False} if request.POST.get('manage-mode') == '1' else {'결석': True, '출석': False}
         checked_list = [request.POST[key] for key in request.POST if 'is_checked_' in key]
 
-        if manage_mode['출석']:
-            pass  # input checkbox 로 넘어온 모든 학번에 대해, 출석처리
-        elif manage_mode['결석']:
-            pass  # input checkbox 로 넘어온 모든 학번에 대해, 결석처리
+        if lect_board is not None:
+            if manage_mode['출석']:
+                # input checkbox 로 넘어온 모든 학번에 대해, 출석처리
+                # db 에서 (게시글 번호, 학번) 묶어서 unique key 설정했음.
+                for stu in checked_list:
+                    LectAttendance.objects.create(lect_board_no=lect_board, student_id=stu)
+            elif manage_mode['결석']:
+                # input checkbox 로 넘어온 모든 학번에 대해, 결석처리
+                # db에 수강생의 레코드가 존재하지 않는 경우 결석이라고 해석하고 있기 때문에 filter 로 쿼리 불러야함.
+                # 이미 결석인 수강생에 대해 중복 결석 처리했을 때, get 을 사용하면 에러발생.
+                for stu in checked_list:
+                    LectAttendance.objects.filter(lect_board_no=lect_board, student_id=stu).delete()
 
         return redirect(reverse('lect_room_attend_teacher', kwargs={'room_no': room_no}))
 

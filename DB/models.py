@@ -354,6 +354,7 @@ class LectAssignmentFile(File):
 
 
 class LectAttendance(models.Model):
+    id = models.AutoField(db_column='ID', primary_key=True)
     lect_board_no = models.ForeignKey('LectBoard', on_delete=models.CASCADE, db_column="LECT_BOARD_NO",
                                       related_name='attendance_info')
     student = models.ForeignKey('LectEnrollment', on_delete=models.DO_NOTHING, db_column='STUDENT',
