@@ -14,19 +14,6 @@ from django.conf import settings
 from importlib import import_module
 
 
-def get_session_request():
-    """
-        django test 시에는 middleware 가 작동하지 않는듯함.
-        수동으로 세션을 설정하지 않으면, 테스트 불가!
-        딕셔너리 객체로 할당해도 되지만, 세션엔진을 임포트해서 저장했음.
-    """
-    request = HttpRequest()
-    engine = import_module(settings.SESSION_ENGINE)
-    session_key = None
-    request.session = engine.SessionStore(session_key)
-    return request
-
-
 class LectBoardTest(TestCase):
     @classmethod
     def setUpTestData(cls):
@@ -39,21 +26,15 @@ class LectBoardTest(TestCase):
 
             # 강의에 게시글이 3개 생긴다.
             LectBoard.objects.create(lect_no=lecture, lect_board_title='첫번째 강의: 파이썬 조건문',
-                                     lect_board_writer_id=12162359, lect_board_cont="1234", lect_board_type_no_id=2)
+                                     lect_board_writer_id=12162359, lect_board_cont="1234", lect_board_type_id=2)
             LectBoard.objects.create(lect_no=lecture, lect_board_title='두번째 강의: 파이썬 반복문을 알아보자',
-                                     lect_board_writer_id=12162359, lect_board_cont="1234", lect_board_type_no_id=2)
+                                     lect_board_writer_id=12162359, lect_board_cont="1234", lect_board_type_id=2)
             LectBoard.objects.create(lect_no=lecture, lect_board_title='세번째 강의: 파이썬 객체를 배우자',
-                                     lect_board_writer_id=12162359, lect_board_cont="1234", lect_board_type_no_id=2)
+                                     lect_board_writer_id=12162359, lect_board_cont="1234", lect_board_type_id=2)
 
             # 수강생이 들어왔다.
-            LectEnrollment.objects.create(lect_no=lecture, student_id=12171652)
-            LectEnrollment.objects.create(lect_no=lecture, student_id=12111223)
-            LectEnrollment.objects.create(lect_no=lecture, student_id=12151251)
-            LectEnrollment.objects.create(lect_no=lecture, student_id=12172285)
-            LectEnrollment.objects.create(lect_no=lecture, student_id=12172434)
-            LectEnrollment.objects.create(lect_no=lecture, student_id=12192199)
-            LectEnrollment.objects.create(lect_no=lecture, student_id=12192355)
-            LectEnrollment.objects.create(lect_no=lecture, student_id=15156126)
+            for std in User.objects.all():
+                LectEnrollment.objects.create(lect_no=lecture, student=std)
 
         except Exception as e:
             raise e
@@ -74,7 +55,7 @@ class LectBoardTest(TestCase):
         """
 
         lect_room = Lect.objects.prefetch_related("lectures").first()
-        lect_board_list = lect_room.lectures.filter(lect_board_type_no=2).order_by('-lect_board_no')
+        lect_board_list = lect_room.lectures.filter(lect_board_type_id=2).order_by('-lect_board_no')
 
         response = self.client.get(reverse('lect_room_attend_teacher', kwargs={'room_no': lect_room.lect_no}))
 

@@ -97,13 +97,13 @@ class LectBoardFormBase(forms.ModelForm):
     class Meta:
         model = LectBoard
 
-        fields = ('lect_board_title', 'lect_board_link', 'lect_board_cont', 'lect_board_type_no')
+        fields = ('lect_board_title', 'lect_board_link', 'lect_board_cont', 'lect_board_type')
 
         widgets = {
             'lect_board_title': forms.TextInput(attrs={"placeholder": _("제목을 입력하세요."),
                                                        "style": "font-size: 25px; height: 70px;"}),
             'lect_board_link': forms.TextInput(attrs={"placeholder": _("강의 링크를 적어주세요.")}),
-            'lect_board_type_no': forms.HiddenInput(),
+            'lect_board_type': forms.HiddenInput(),
             'lect_board_cont': forms.TextInput(),
         }
         labels = {

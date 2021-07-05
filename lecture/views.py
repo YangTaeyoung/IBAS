@@ -192,9 +192,9 @@ def lect_enroll(request, lect_no):
 def lect_room_main(request, room_no):
     context = {
         'lect': Lect.objects.get(pk=room_no),
-        'notice_list': LectBoard.objects.filter(lect_board_type_no__lect_board_type_no=1  # 강의 공지글 불러오기
+        'notice_list': LectBoard.objects.filter(lect_board_type__lect_board_type_no=1  # 강의 공지글 불러오기
                                                 ).order_by('-lect_board_created'),
-        'lect_board_list': LectBoard.objects.filter(lect_board_type_no__lect_board_type_no=2  # 강의 게시글 불러오기
+        'lect_board_list': LectBoard.objects.filter(lect_board_type__lect_board_type_no=2  # 강의 게시글 불러오기
                                                     ).order_by('-lect_board_created'),
         'assignment_list': LectAssignment.objects.filter(lect_board_no__lect_no__lect_no=room_no  # 이 강의에 속한 과제 불러오기
                                                          ).order_by('-lect_assignment_created'),
@@ -207,7 +207,7 @@ def lect_room_list(request, room_no, board_type):
     if board_type == 3:
         board_list = LectAssignment.objects.filter(lect_board_no__lect_no__lect_no=room_no).order_by('-lect_assignment_created')
     else:
-        board_list = LectBoard.objects.filter(lect_board_type_no__lect_board_type_no=board_type).order_by('-lect_board_created')
+        board_list = LectBoard.objects.filter(lect_board_type__lect_board_type_no=board_type).order_by('-lect_board_created')
 
     page_obj = get_page_object(request, board_list, 15)  # 페이지네이션 15개 글이 한 페이지
 
@@ -361,7 +361,7 @@ def lect_room_attend_std(request, room_no):
 # 출석 현황 확인 및 변경
 def lect_room_attend_teacher(request, room_no):
     lect_room = Lect.objects.prefetch_related("lectures", "enrolled_students__student").get(pk=room_no)
-    lect_board_list = lect_room.lectures.filter(lect_board_type_no=2).order_by('-lect_board_no')  # 강의 게시글만 가져옴
+    lect_board_list = lect_room.lectures.filter(lect_board_type_id=2).order_by('-lect_board_no')  # 강의 게시글만 가져옴
 
     # 강의 게시글 번호. select option 값 / default 는 마지막 강의 게시글, 게시글이 하나도 없으면 0.
 
