@@ -37,10 +37,10 @@
                     <!-- 체크박스 -->
                     <td scope="row">
                         <div>
-                            <input id="check_{{ forloop.counter }}"
-                                   type="checkbox">
+                            <input id="is_checked_{{ student.stu }}" name="is_checked_{{ student.stu }}"
+                                   type="checkbox" value="{{ student.stu }}">
 
-                            <label for="check_{{ forloop.counter }}"
+                            <label for="is_checked_{{ student.stu }}"
                                    class="staff_label_margin m-l20"></label>
                         </div>
                     </td>
@@ -70,10 +70,10 @@
             <!-- 출결관리 -->
             <div class="col-md-8 pr-0">
                 <div class="form-group width-130 float-right" style="border: #ecebf5; color: black;">
-                    <select>
+                    <select id="manage-mode" name="manage-mode">
                         <option disabled selected>출결관리</option>
-                        <option>출석</option>
-                        <option>결석</option>
+                        <option value="1">출석</option>
+                        <option value="0">결석</option>
                     </select>
                 </div>
             </div>

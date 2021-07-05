@@ -385,13 +385,20 @@ def lect_room_attend_teacher(request, room_no):
         context = {
             'lect': lect_room,
             'lect_board_list': lect_board_list,
-            'students_list': students_list,
-            'cur_lect_board': LectBoard.objects.get(pk=lect_board_no) if lect_board_no else None
+            'students_list': students_list,  # 이름/학번/출석결석
+            'cur_lect_board': LectBoard.objects.get(pk=lect_board_no) if lect_board_no else None  # 현재 게시글(select box)
         }
         return render(request, 'lecture_room_attend_teacher.html', context)
 
     else:
         lect_board_no = request.POST.get('lect_board_no')
+        manage_mode = {'출석': True, '결석': False} if request.POST.get('manage-mode') == 1 else {'결석': True, '출석': False}
+        checked_list = [request.POST[key] for key in request.POST if 'is_checked_' in key]
+
+        if manage_mode['출석']:
+            pass  # input checkbox 로 넘어온 모든 학번에 대해, 출석처리
+        elif manage_mode['결석']:
+            pass  # input checkbox 로 넘어온 모든 학번에 대해, 결석처리
 
         return redirect(reverse('lect_room_attend_teacher', kwargs={'room_no': room_no}))
 

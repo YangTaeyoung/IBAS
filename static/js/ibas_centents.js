@@ -284,3 +284,36 @@ function lectRoom_manage() {
     }
 
 }
+function FilterFormSubmit() {
+    const formElement = $("#filter-form")
+    formElement.attr("method", "GET")
+    formElement.submit()
+ }
+
+function AttendanceFormSubmit () {
+    const manage_mode = $("#manage-mode").val();
+
+    if (manage_mode == null) {
+        alert('적용할 출결 상태를 선택하세요!');
+    } else {
+        let manage_mode_str = '';
+        if (manage_mode === '1') manage_mode_str = '출석';
+        else manage_mode_str = '결석';
+
+        var checked_list = [];
+        $("input:checkbox[name^=is_checked]:checked").each(function () {
+            checked_list.push(this.value);
+        });
+
+        if (checked_list.length === 0) {
+            alert('수강생을 선택하세요!');
+        } else {
+            if (window.confirm("총 " + checked_list.length + "명의 수강생을 " + manage_mode_str + " 처리 하시겠습니까?")) {
+                const formElement = $("#attendance-form");
+                formElement.attr("method", "POST");
+                return true;
+            }
+        }
+    }
+    return false
+}

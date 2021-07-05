@@ -8,23 +8,12 @@
     <script src="{% static 'js/jquery.min.js' %}"></script><!-- JQUERY.MIN JS -->
     <script src="{% static 'js/comment.js' %}"></script>
     <script>
+
+
     $(function () {
         const selectBox = $("#selectbox")
-        const formElement = $("#attendance-form")
-        const lect_no = $("#lect_no").val()
 
         selectBox.val({{ cur_lect_board.lect_board_no }}).prop('selected',true);
-
-        selectBox.change(function () {
-            alert('GET!!')
-            formElement.attr("method", "GET")
-            formElement.submit()
-        });
-
-        $("button").click(function (){
-            formElement.attr("method", "POST")
-            formElement.submit()
-         });
     });
     </script>
 
@@ -69,43 +58,44 @@
                             {% if cur_lect_board %}
                                 <!--=======================수강생 관리=========================-->
                                 <div class="col-lg-11 col-xl-8 p-b30">
-                                    <form enctype="multipart/form-data" id="attendance-form">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="lect_no" id="lect_no" value="{{ lect.lect_no }}">
+                                    <div class="width-870">
+                                            <form id="filter-form" >
+                                                {% csrf_token %}
+                                                <!-- 강의 주차 소개 탭 -->
+                                                <div class="listing-filter m-b40">
+                                                    <div class="bank-flex">
+                                                        <!-- 회차. -->
+                                                        <div>
+                                                            <ul class="filter m-b0">
+                                                                <li>
+                                                                    <label for="selectbox"></label><select id="selectbox" name="lect_board_no" onchange="FilterFormSubmit()">
 
-                                        <div class="width-870">
-                                            <!-- 강의 주차 소개 탭 -->
-                                            <div class="listing-filter m-b40">
-                                                <div class="bank-flex">
-                                                    <!-- 회차. -->
-                                                    <div>
-                                                        <ul class="filter m-b0">
-                                                            <li>
-                                                                <label for="selectbox"></label><select id="selectbox" name="lect_board_no" form="attendance-form">
+                                                                        {% for lecture in lect_board_list %}
+                                                                            <option value="{{ lecture.lect_board_no }}">
+                                                                                {{ lecture.lect_board_title }}
+                                                                            </option>
+                                                                        {% endfor %}
 
-                                                                    {% for lecture in lect_board_list %}
-                                                                        <option value="{{ lecture.lect_board_no }}">
-                                                                            {{ lecture.lect_board_title }}
-                                                                        </option>
-                                                                    {% endfor %}
-
-                                                                </select>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                    <!-- 강의 제목. 회차에 따라 강의 제목 바뀌어야 함.  -->
-                                                    <div class="mr-auto">
-                                                        <div class="m-l15">
-                                                            <h3 id="lect_board_title" class="title m-b0"
-                                                                style="font-size: 22px">{{ cur_lect_board.lect_board_title }}</h3>
+                                                                    </select>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                        <!-- 강의 제목. 회차에 따라 강의 제목 바뀌어야 함.  -->
+                                                        <div class="mr-auto">
+                                                            <div class="m-l15">
+                                                                <h3 id="lect_board_title" class="title m-b0"
+                                                                    style="font-size: 22px">{{ cur_lect_board.lect_board_title }}</h3>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </form>
 
-                                            <!-- 수강생 테이블 -->
-                                            {% include "_table_attendence_check.html" %}
-
+                                            <form id="attendance-form" onsubmit="return AttendanceFormSubmit()">
+                                                <!-- 수강생 테이블 -->
+                                                {% include "_table_attendence_check.html" %}
+                                                {% csrf_token %}
+                                            </form>
 
                                             <!--========== 페이지네이션 시작 ===========-->
                                             <!-- 1페이지에 수강생 끌고오고, 수강생이 그보다 적으면, 페이지네이션 안보이게 처리 -->
@@ -123,7 +113,7 @@
                                             </div>
                                             <!--========== 페이지네이션 끝 ===========-->
                                         </div>
-                                    </form>
+
 
                                 </div>
                             </div>
