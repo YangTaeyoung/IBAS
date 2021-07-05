@@ -1,6 +1,7 @@
 from django.shortcuts import render, reverse, redirect, get_object_or_404
 from DB.models import User, UserRole, UserAuth, Answer, UserUpdateRequest, \
-    UserDelete, UserDeleteAor, UserDeleteFile, UserDeleteComment, UserDeleteState  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
+    UserDelete, UserDeleteAor, UserDeleteFile, UserDeleteComment, UserDeleteState, \
+    UserEmail  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
 from staff.forms import UserDeleteForm
 from pagination_handler import get_page_object
 from IBAS.forms import FileFormBase, CommentBaseForm
@@ -14,7 +15,13 @@ from alarm.alarm_controller import create_user_auth_update_alarm, create_user_ro
 from file_controller import FileController
 
 
-# Create your views here.
+# 모델에 따른 이메일 리스트를 불러오는 함수
+def get_email_list(user_model):
+    user_email_list = list()
+    for user_email in UserEmail.objects.filter(user_stu=user_model):
+        user_email_list.append(user_email.user_email)
+    return user_email_list
+
 
 def staff_member_list(request):
     user = get_logined_user(request)
@@ -98,6 +105,7 @@ def staff_member_update(request):
         return redirect(reverse("index"))
 
 
+# 각 멤버 질문에 대한 답변 조회하기.
 def member_applications(request):
     user = User.objects.get(pk=request.POST.get('user_stu'))
 
@@ -128,17 +136,19 @@ def get_message(is_passed, user_name):  # 합/불 메시지 딕셔너리 반환
     return mail_dict
 
 
+# 개인 합/불 여부 수정 및 이메일 전송
 def member_aor(request):
     if request.method == "POST":
         user = User.objects.get(pk=request.POST.get("user_stu"))
         apply = int(request.POST.get("apply"))
+        user_email_list = get_email_list(user)
         if apply == 1:
             # 합격 통보 이메일 메시지 딕셔너리 생성
             mail_dict = get_message(True, user.user_name)
             user.user_auth = UserAuth.objects.get(pk=2)
             # 메일 전송
             send_mail(subject=mail_dict["mail_title"], message=mail_dict["mail_message"],
-                      from_email=settings.EMAIL_HOST_USER, recipient_list=[user.user_email])
+                      from_email=settings.EMAIL_HOST_USER, recipient_list=user_email_list)
             user.save()
             create_user_auth_update_alarm(user, True)
         else:
@@ -151,7 +161,7 @@ def member_aor(request):
                 pass
             send_mail(subject=mail_dict["mail_title"], message=mail_dict["mail_message"],  # 메일 전송
                       from_email=settings.EMAIL_HOST_USER,
-                      recipient_list=[user.user_email])
+                      recipient_list=user_email_list)
             user.delete()
         return redirect(reverse("my_info"))
     return redirect(reverse("index"))
@@ -170,7 +180,7 @@ def members_aor(request):  # 여러명 일괄 처리시.
                         mail_dict = get_message(True, user.user_name)
                         user.user_auth = UserAuth.objects.get(pk=2)  # 비활동 회원으로 변경
                         send_mail(subject=mail_dict["mail_title"], message=mail_dict["mail_message"],  # 합격 메일 전송
-                                  from_email=settings.EMAIL_HOST_USER, recipient_list=[user.user_email])
+                                  from_email=settings.EMAIL_HOST_USER, recipient_list=get_email_list(user))
                         user.save()
                         create_user_auth_update_alarm(user, True)
                     else:  # 불합격
@@ -182,7 +192,7 @@ def members_aor(request):  # 여러명 일괄 처리시.
                         except FileNotFoundError:  # 파일이 존재하지 않은 경우
                             pass  # 넘어감.
                         send_mail(subject=mail_dict["mail_title"], message=mail_dict["mail_message"],  # 불합격 메일 전송
-                                  from_email=settings.EMAIL_HOST_USER, recipient_list=[user.user_email])
+                                  from_email=settings.EMAIL_HOST_USER, recipient_list=get_email_list(user))
                         user.delete()
         return redirect(reverse("staff_member_list"))  # 처리 완료 후.
     return redirect(reverse("index"))  # 비정상적인 요청의 경우.
@@ -220,26 +230,26 @@ def member_delete_list(request):
 
 
 @superuser_only(cfo_included=True)
-def member_delete_register(request):
-    if request.method == "POST":
-        is_register = bool(int(request.POST.get("is_register")))
-        deleted_user = request.POST.get("deleted_user")
-        if is_register:
-            context = {
-                "is_update": False,
-                "user_delete_form": UserDeleteForm(initial={"deleted_user": deleted_user}),
-                "user_delete_file_form": FileFormBase()
-            }
-            return render(request, "member_delete_register.html", context)
-        else:
+def member_delete_register(request, deleted_user):
+    if deleted_user != 0:
+        context = {
+            "is_update": False,
+            "user_delete_form": UserDeleteForm(
+                initial={"deleted_user": User.objects.get(pk=deleted_user), "user_delete_state": 1}),
+            "user_delete_file_form": FileFormBase()
+        }
+        return render(request, "member_delete_register.html", context)
+    else:
+        if request.method == "POST":
             user_delete_form = UserDeleteForm(request.POST)
             user_delete_file_form = FileFormBase(request.POST, request.FILES)
             if user_delete_file_form.is_valid() and user_delete_form.is_valid():
                 user_delete = user_delete_form.save(suggest_user=get_logined_user(request))
                 user_delete_file_form.save(instance=user_delete)
-            return redirect("member_delete_list")
-    else:
-        return redirect(reverse("index"))
+                return redirect("member_delete_detail", user_delete_no=user_delete.user_delete_no)
+            return redirect(reverse("staff_member_list"))
+        else:
+            return redirect(reverse("index"))
 
 
 def member_delete_detail(request, user_delete_no):

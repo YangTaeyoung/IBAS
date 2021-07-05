@@ -15,8 +15,7 @@ from user_controller import login_required, writer_only, auth_check, superuser_o
 # 메인페이지 이동 함수
 def index(request):
     # 임시 로그인
-    session.save_session(request, User.objects.get(pk=12162359))
-    #session.save_session(request, User.objects.get(pk=12171652))
+    session.save_session(request, user_model=User.objects.get(pk=12162359), logined_email="0130yang@gmail.com", provider="google")
 
     return render(request, "index.html", {})
 
@@ -26,7 +25,7 @@ def introduce(request):
     # 히스토리 내역을 가져옴
     context = {'history_list': History.objects.all().order_by("history_date")}
     chief_crews = User.objects.filter(Q(user_role__role_no__lte=4) & Q(user_auth__auth_no=1)).prefetch_related(
-        'chiefcarrier_set').all()
+        'chiefcarrier_set').prefetch_related('useremail_set').all()
     if len(chief_crews) != 0:
         # 회장단인 사람의 객체를 가져오고 등록, Chief_carrier에서 이력 정보도 함께 가져옴
         context['chief_crews'] = chief_crews
@@ -109,7 +108,7 @@ def activity_register(request):
 # 작성자 : 양태영
 # 마지막 수정 일시 : 2021.05.04 (유동현)
 # 수정내용 : 폼 처리
-@writer_only()
+@writer_only(superuser=False)
 def activity_update(request, board_no):
     board = get_object_or_404(Board, pk=board_no)
 
@@ -160,7 +159,7 @@ def activity_delete(request, board_no):
 
 
 # 댓글 달기 코드
-@auth_check()
+@auth_check(active=False)
 def activity_comment_register(request):
     user_stu = User.objects.get(pk=request.session.get('user_stu'))  # 유저 학번 들고오는 것임
     if request.method == "POST":
@@ -203,7 +202,7 @@ def activity_comment_delete(request):
 
 
 # 댓글 수정 코드
-@writer_only()
+@writer_only(superuser=False)
 def activity_comment_update(request):
     if request.method == "POST":  # 정상적으로 파라미터가 넘어왔을 경우
         comment = get_object_or_404(Comment, pk=request.POST.get('comment_id'))  # 가져온 comment_id를 토대로 수정 내역을 적용
@@ -218,7 +217,7 @@ def activity_comment_update(request):
 # 마지막 수정 일시 : 2021.04.15 (유동현)
 # 수정내용
 #   - 단순 코드 정리 history.save 없애도 되서 없앴음.
-@superuser_only
+@superuser_only(cfo_included=False)
 def history_register(request):  # 연혁 등록
     if request.method == "POST":  # 정상적으로 값이 넘어왔을 경우
         History.objects.create(  # history 객체 생성 후 받은 값을 집어넣음.
@@ -237,7 +236,7 @@ def history_register(request):  # 연혁 등록
 # : 연혁 수정하는 코드
 # 작성자 : 양태영
 # 마지막 수정 일시 :
-@superuser_only
+@superuser_only(cfo_included=False)
 def history_update(request):  # 연혁 수정
     if request.method == "POST":  # 정상적으로 파라미터가 넘어왔을 경우
         history = History.objects.get(pk=request.POST.get("history_no"))  # 가져온 history_no를 토대로 수정 내역을 적용
@@ -254,7 +253,7 @@ def history_update(request):  # 연혁 수정
 # : 연혁 삭제하는 코드
 # 작성자 : 양태영
 # 마지막 수정 일시 :
-@superuser_only
+@superuser_only(cfo_included=False)
 def history_delete(request):  # 연혁 삭제
     if request.method == "POST":  # 정상적으로 파라미터가 넘어왔을 경우
         history = History.objects.get(pk=request.POST.get("history_no"))  # 가져온 history_no를 토대로 삭제할 대상을 가져옴
@@ -264,6 +263,7 @@ def history_delete(request):  # 연혁 삭제
         return render(request, "index.html", {'lgn_is_failed': 1})  # 메인페이지로 보내버림
 
 
+@login_required
 def alarm_check(request, alarm_no):
     alarm = Alarm.objects.get(pk=alarm_no)
     alarm.alarm_ischecked = 1

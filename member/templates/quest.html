@@ -93,16 +93,17 @@
                             <!--POST전송을 위한 CSRF 토큰-->
                             {% csrf_token %}
                             <!--이전 페이지에서 받았던 회원 정보를 다시 보냄-->
-                            <input type="hidden" name="user_name" value="{{ user_name }}">
-                            <input type="hidden" name="user_auth" value="{{ user_auth }}">
-                            <input type="hidden" name="user_email" value="{{ user_email }}">
-                            <input type="hidden" name="user_gen" value="{{ user_gen }}">
-                            <input type="hidden" name="user_grade" value="{{ user_grade }}">
-                            <input type="hidden" name="user_major" value="{{ user_major }}">
-                            <input type="hidden" name="user_phone" value="{{ user_phone }}">
-                            <input type="hidden" name="user_role" value="{{ user_role }}">
-                            <input type="hidden" name="user_stu" value="{{ user_stu }}">
-                            <input type="hidden" name="user_pic" value="{{ user_pic }}">
+                            <input type="hidden" name="user_name" value="{{ user_name }}"/>
+                            <input type="hidden" name="user_auth" value="{{ user_auth }}"/>
+                            <input type="hidden" name="user_email" value="{{ user_email }}"/>
+                            <input type="hidden" name="user_gen" value="{{ user_gen }}"/>
+                            <input type="hidden" name="user_grade" value="{{ user_grade }}"/>
+                            <input type="hidden" name="user_major" value="{{ user_major }}"/>
+                            <input type="hidden" name="user_phone" value="{{ user_phone }}"/>
+                            <input type="hidden" name="user_role" value="{{ user_role }}"/>
+                            <input type="hidden" name="user_stu" value="{{ user_stu }}"/>
+                            <input type="hidden" name="user_pic" value="{{ user_pic }}"/>
+                            <input type="hidden" name="provider" value="{{ provider }}"/>
 
 
                             <!-- 입부신청 작성란 시작 -->

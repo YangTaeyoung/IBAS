@@ -6,3 +6,5 @@ mysqlclient==2.0.3
 pytz==2020.5
 sqlparse==0.4.1
 django-allauth~=0.44.0
+requests~=2.25.1
+beautifulsoup4~=4.9.3
