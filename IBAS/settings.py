@@ -105,6 +105,7 @@ TEMPLATES = [
                 'utils.context_processors.login',  # 로그인을 위한 context_processor
                 'utils.context_processors.login_check',  # 로그인 확인을 위한 context_processor
                 'utils.context_processors.superuser_check',  # 슈퍼유저 확인을 위한 context_processor
+                'utils.context_processors.is_active',
             ],
         },
     },
@@ -194,8 +195,8 @@ EMAIL_HOST_PASSWORD = 'weloveyoukhk'
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # HTTPS
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-SECURE_SSL_REDIRECT = True
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# SESSION_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True
+# SECURE_SSL_REDIRECT = True
 
