@@ -38,3 +38,19 @@ def login(request):
 # 로그인 확인 정보를 컨텍스트에 등록하는 함수.
 def login_check(request):
     return {"is_logined": is_logined(request)}
+
+
+# 활동 회원인지 확인하는 함수.
+def is_active(request):
+    if is_logined(request):
+        return {"is_active": get_logined_user(request).user_auth.auth_no == 1}
+    else:
+        return {}
+
+
+# 로그인한 유저가 관리자인지 확인하는 함수
+def superuser_check(request):
+    if is_logined(request):
+        return {"is_superuser": get_logined_user(request).user_role.role_no <= 3}
+    else:
+        return {"is_superuser": False}

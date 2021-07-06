@@ -1,22 +1,23 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-        <link rel="stylesheet" type="text/css" href="{% static 'css/posting_detail.css' %}">
-        <link rel="stylesheet" type="text/css" href="{% static 'css/comment.css' %}">
-        <link rel="stylesheet" type="text/css" href="{% static 'css/star-rating-svg.css' %}"/>
-        <link
-                rel="stylesheet"
-                type="text/css"
-                href="{% static 'plugins/editor/jquery-te-1.4.0.css' %}"
-        />
+    {% load widget_tweaks %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/posting_detail.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/comment.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/star-rating-svg.css' %}"/>
+    <link
+            rel="stylesheet"
+            type="text/css"
+            href="{% static 'plugins/editor/jquery-te-1.4.0.css' %}"
+    />
 
-        <link
-                rel="stylesheet"
-                type="text/css"
-                href="{% static 'plugins/drop/imageuploadify.min.css' %}"
-        />
-        <link rel="stylesheet" href="{% static 'plugins/tag-editor/jquery.tag-editor.css' %}"/>
-
+    <link
+            rel="stylesheet"
+            type="text/css"
+            href="{% static 'plugins/drop/imageuploadify.min.css' %}"
+    />
+    <link rel="stylesheet" href="{% static 'plugins/tag-editor/jquery.tag-editor.css' %}"/>
+    <script src="{% static '/js/form.js' %}"></script>
     <body>
     <div class="page-wraper">
         <div class="page-content bg-white">
@@ -30,7 +31,9 @@
                         <div class="dlab-bnr-inr-entry">
                             <!--제목-->
                             <!--강의게시판, 스터디게시판, 취미모임게시판 종류에 따라 바뀌도록 변경-->
-                            <h1 class="text-white introduce-letter-spacing_5">{{ lect.lect_type.type_name }}</h1>
+                            <a href="{% url 'lect_view' type_no=lect.lect_type.type_no %}"><h1
+                                    class="text-white introduce-letter-spacing_5">{{ lect.lect_type.type_name }}</h1>
+                            </a>
                             <!--부제목-->
                             <!--강의게시판, 스터디게시판, 취미모임게시판 종류에 따라 바뀌도록 변경-->
                             <p class="m-t20">{{ lect.lect_type.type_exp }}</p>
@@ -43,17 +46,23 @@
             <div class="content-block">
                 <div class="section-full content-inner bg-white">
                     <div class="container">
-                            <div class="alert alert-secondary" role="alert" style="text-align: center">
-                                <i>승인대기중</i>
-                            </div>
-                            <!--승인 완료 시 뜨는 알람-->
-                            <div class="alert alert-success" role="alert" style="text-align: center">
-                                <i>승인완료</i>
-                            </div>
-                            <!--승인 거절 시 뜨는 알람, 거절 사유 입력하면 같이 뜨게 만들기-->
-                            <div class="alert alert-danger" role="alert" style="text-align: center">
-                                <i>승인거절 ( 거절사유 : 마음에 안들어서 )</i>
-                            </div>
+                        {% if lect.lect_type.type_no == 1 %}
+                            {% if lect.lect_state.state_no == 1 %}
+                                <div class="alert alert-secondary" role="alert" style="text-align: center">
+                                    <i>승인대기중</i>
+                                </div>
+                            {% elif lect.lect_state.state_no == 3 %}
+                                <!--승인 완료 시 뜨는 알람-->
+                                <div class="alert alert-success" role="alert" style="text-align: center">
+                                    <i>승인완료</i>
+                                </div>
+                            {% elif lect.lect_state.state_no == 2 %}
+                                <!--승인 거절 시 뜨는 알람, 거절 사유 입력하면 같이 뜨게 만들기-->
+                                <div class="alert alert-danger" role="alert" style="text-align: center">
+                                    <i>승인거절 ( 거절사유 : {{ lect.lect_reject_reason }} )</i>
+                                </div>
+                            {% endif %}
+                        {% endif %}
                         <!--====================================내용 시작==============================================-->
                         <div class="content-box">
                             <!--게시글 작성자, 작성시간 나옴(게시글 정보)-->
@@ -84,7 +93,7 @@
                         <!--====================================소개 시작==============================================-->
                         <div class="content-box">
                             <div class="content-header">
-                                <h3 class="title">소개</h3>
+                                <h3 class="title">{{ lect.lect_type.type_name }} 소개</h3>
                             </div>
                             <div class="content-body">
                                 <div class="form-group">
@@ -135,36 +144,32 @@
                         </div>
                         <!--====================================신청인원/제한인원 끝=============================================-->
                         <!--====================================방식 시작==============================================-->
-                        <div class="content-box">
-                            <div class="content-header">
-                                <h3 class="title">방식</h3>
-                            </div>
-                            <div class="content-body">
-                                <div class="form-group">
-                                    <!--방식에 입력한 내용 이곳에 뜨도록 수정-->
-                                    <a>{{ lect.lect_method.method_name }}</a>
+                        {% if lect.lect_type.type_no != 3 %}
+                            <div class="content-box">
+                                <div class="content-header">
+                                    <h3 class="title">{{ lect.lect_type.type_name }} 방식</h3>
+                                </div>
+                                <div class="content-body">
+                                    <div class="form-group">
+                                        <!--방식에 입력한 내용 이곳에 뜨도록 수정-->
+                                        <a>{{ lect.lect_method.method_name }}</a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <!--====================================방식 끝=============================================-->
-                        <!--====================================장소 시작==============================================-->
-                        <div class="content-box">
-                            <div class="content-header">
-                                <h3 class="title">
-                                    {% if lect.lect_method.method_no == 1 %}
-                                        장소
-                                    {% else %}
-                                        링크
-                                    {% endif %}
-                                </h3>
-                            </div>
-                            <div class="content-body">
-                                <div class="form-group">
-                                    <!--장소에 입력한 내용 이곳에 뜨도록 수정-->
-                                    <a>{{ lect.lect_place_or_link }}</a>
+                            <!--====================================방식 끝=============================================-->
+                            <!--====================================장소 시작==============================================-->
+                            <div class="content-box">
+                                <div class="content-header">
+                                    <h3 class="title">{{ pol_name }}</h3>
+                                </div>
+                                <div class="content-body">
+                                    <div class="form-group">
+                                        <!--장소에 입력한 내용 이곳에 뜨도록 수정-->
+                                        <a>{{ lect.lect_place_or_link }}</a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        {% endif %}
                         <!--====================================장소 끝=============================================-->
                         <!--====================================대표자 전화번호 시작==============================================-->
                         <div class="content-box">
@@ -196,7 +201,7 @@
                         <!--=======강의, 스터디 게시판에서만 사용하기 때문에 취미모임 게시판일 경우에는 뜨지 않도록 수정======-->
                         <div class="content-box">
                             <div class="content-header">
-                                <h3 class="title">신청마감일</h3>
+                                <h3 class="title">{{ lect.lect_type.type_name }} 신청마감일</h3>
                             </div>
                             <div class="content-body">
                                 <div class="form-group">
@@ -238,18 +243,27 @@
                         <!-- 게시글 삭제 및 수정 div -->
                         {% if logined_user.user_stu == lect.lect_chief.user_stu %}
                             <div class="extra-cell text-right">
+                            <form id="id-form-lect-update" action="{% url 'lect_update' lect_no=lect.lect_no %}"
+                                  style="display: none" method="get">
+                            </form>
                             <!-- 게시글 수정 버튼 -->
                             <a href="#"
-                               class="site-button radius-xl m-l10"><i
+                               class="site-button radius-xl m-l10"
+                               onclick="document.getElementById('id-form-lect-update').submit()"><i
                                     class="fa fa-pencil m-r5"></i>
-                                게시글 수정</a>
+                                {{ lect.lect_type.type_name }} 수정</a>
                         {% endif %}
                         {% if logined_user.user_stu == lect.lect_chief.user_stu or logined_user.user_role.role_no <= 3 %}
                             <!-- 게시글 삭제 버튼 -->
-                            <a href="#"
-                               class="site-button red radius-xl m-l10"><i
-                                    class="fa fa-trash m-r5"></i>
-                                게시글 삭제</a>
+                            <form id="id-form-lect-delete" action="{% url 'lect_delete' lect_no=lect.lect_no %}"
+                                  method="post" style="display: none">
+                                {% csrf_token %}
+                            </form>
+                            <a href="#" class="site-button red radius-xl m-l10"
+                               onclick="goSubmit('id-form-lect-delete', true, '정말 {{ lect.lect_title }} 강의를 삭제하시겠습니까?')">
+                                <i class="fa fa-trash m-r5"></i>
+                                {{ lect.lect_type.type_name }} 삭제
+                            </a>
                             </div>
                         {% endif %}
                         {% if lect.lect_state.state_no == 3 %}
@@ -257,7 +271,7 @@
                                 <!--=======신청하기 버튼, 한번 신청하기 버튼을 누르면 없어지도록 수정======-->
                                 <div style="display: flex; justify-content: center; ">
                                     <button type="button" class="btn btn-outline-success btn-lg"
-                                            style="width: 200px; font-weight: bold" onclick="alert('신청이 완료되었습니다.')">
+                                            style="width: 200px; font-weight: bold" onclick="alert('신청이 완료되었습니다.'); location.href='{% url "lect_enroll" lect.lect_no %}'">
                                         신청하기
                                     </button>
                                 </div>
@@ -267,66 +281,74 @@
                             {% if is_in %}
                                 <div style="display: flex; justify-content: center; ">
                                     <button type="button" class="btn btn-outline-primary btn-lg"
-                                            style="font-weight: bold">
+                                            style="font-weight: bold" onclick="location.href='{% url "lect_room_main" lect.lect_no %}'">
                                         강의실로 이동하기
                                     </button>
                                 </div>
                             {% endif %}
                             <!--=======강의개설신청 게시판에 들어가면 보이는 버튼들, 강의/스터디/취미모임 게시판에서는 안보이도록 수정, 강의 개설 신청 승인/거절 버튼======-->
-                        {% elif lect.lect_state.state_no == 1 %}
+                        {% elif lect.lect_state.state_no == 1 and is_superuser %}
                             <div style="display: flex; justify-content: center; ">
                                 <!--승인-->
-                                <button type="button" class="btn btn-outline-success btn-lg"
-                                        style="width: 200px; font-weight: bold" onclick="goApply()">
-                                    개설승인
-                                </button>
+                                <form action="{% url 'lect_aor' lect_no=lect.lect_no %}" method="post">
+                                    {% csrf_token %}
+                                    <input id="id_lect_state" type="hidden" name="lect_state" value="3"/>
+                                    <button type="submit" class="btn btn-outline-success btn-lg"
+                                            style="width: 200px; font-weight: bold" onclick="alert('강의 개설을 승인하셨습니다.')">
+                                        개설승인
+                                    </button>
+                                </form>
                                 <!--거절-->
-                                <button type="button" class="btn btn-outline-danger btn-lg"
+                                <button type="button" class="btn btn-outline-danger btn-lg "
                                         style="width: 200px; margin-left: 10px; font-weight: bold"
-                                        onclick="return confirm('승인을 거절하시겠습니까?')"
-                                        href="javascript:void(0);" data-toggle="modal" data-target="#lect_refuse"
-                                        class="site-button gray">
+                                        href="javascript:void(0);" data-toggle="modal" data-target="#lect_refuse">
                                     개설거절
                                 </button>
                             </div>
                         {% else %}
-                            개설 거절됨: {{ lect.lect_reject_reason }}
                         {% endif %}
                         <!---->
                         <!-- 거절 버튼 누르면 나오는 창 -->
-                        <div class="modal fade modal-bx-info" id="lect_refuse" tabindex="-1" role="dialog"
-                             aria-labelledby="FavoriteModalLongTitle" aria-hidden="true">
-                            <div class="modal-dialog " role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="FavoriteModalLongTitle">승인거절 사유</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true"><i class="la la-close"></i></span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="tab-content nav">
-                                            <div id="login" class="tab-pane active"
-                                                 style="margin-bottom: -25px; margin-top: 10px">
-                                                <!--승인 거절 사유 입력창-->
-                                                <div class="form-group">
-                                                    <input class="form-control"
-                                                           name="lect_reject_reason"
-                                                           placeholder="승인거절 사유를 입력해주세요"
-                                                           type="text" maxlength="50"/>
-                                                </div>
-                                                <!--거절버튼-->
-                                                <div class="form-group">
-                                                    <button type="submit" class="site-button btn-block button-md"
-                                                            onclick="alert('승인이 거절되었습니다')">입력
-                                                    </button>
+                        {% if lect.lect_state.state_no == 1 and is_superuser %}
+                            <div class="modal fade modal-bx-info" id="lect_refuse" tabindex="-1" role="dialog"
+                                 aria-labelledby="FavoriteModalLongTitle" aria-hidden="true">
+                                <div class="modal-dialog " role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="FavoriteModalLongTitle">승인거절 사유</h5>
+                                            <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                <span aria-hidden="true"><i class="la la-close"></i></span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="tab-content nav">
+                                                <div id="login" class="tab-pane active"
+                                                     style="margin-bottom: -25px; margin-top: 10px">
+                                                    <!--승인 거절 사유 입력창-->
+                                                    <form action="{% url 'lect_aor' lect_no=lect.lect_no %}"
+                                                          method="post">
+                                                        {% csrf_token %}
+                                                        <input id="id_lect_state" type="hidden" name="lect_state"
+                                                               value="2"/>
+                                                        <div class="form-group">
+                                                            {% render_field lect_reject_form.lect_reject_reason class="form-control" %}
+                                                        </div>
+                                                        <!--거절버튼-->
+                                                        <div class="form-group">
+                                                            <button type="submit"
+                                                                    class="site-button btn-block button-md"
+                                                                    onclick="alert('승인이 거절되었습니다')">입력
+                                                            </button>
+                                                        </div>
+                                                    </form>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        {% endif %}
                         <!-- 거절 버튼 누르면 나오는 창 끝 -->
                     </div>
                 </div>

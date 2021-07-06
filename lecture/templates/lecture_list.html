@@ -35,7 +35,7 @@
                         <!-- 검색창 및 진행중/마감 필터바 -->
                         <div class="listing-filter m-b40">
                             <!-- 검색창용 form 태그 -->
-                            <form role="search" action="/board/search/" method="get">
+                            <form action="{% url 'lect_search' type_no=type.type_no %}" method="get">
                                 <div class="input-group">
                                     <!-- 필터바(해당 게시글만 보이게하는 것 구현 진행중 - 커밍쑨) -->
                                     <div class="m-r15">
@@ -55,6 +55,7 @@
                                     <!-- 검색창 div -->
                                     <div class="lect-search-bar">
                                         <!-- 검색창 input 태그 -->
+
                                         <input name="keyword" type="text" class="form-control"
                                                placeholder="검색어를 입력하세요.">
                                         <span class="input-group-btn ">
@@ -63,23 +64,29 @@
                                                 <i class="fa fa-search"></i>
                                             </button>
                                         </span>
+
                                     </div>
                                 </div>
                             </form>
                         </div>
                         <div class="row">
                             <!--================= 여기부터 게시글 반복시작 =================-->
-                            {% if lect_list|length == 0 %}
-                                등록된 강의가 없습니다.
+                            {% if item_list|length == 0 %}
+                                {% if type.type_no != 4 %}
+                                    등록된 {{ type.type_name }}{% if type.type_no == 3 %}이{% else %}가{% endif %}
+                                    없습니다.
+                                {% else %}
+                                    개설 처리 대기 중인 강의가 없습니다.
+                                {% endif %}
                             {% endif %}
-                            {% for lect in lect_list %}
+                            {% for lect in item_list %}
                                 <!-- 게시글 1 -->
                                 <div class="col-lg-4 col-md-6 col-sm-6 m-b30">
                                     <div class="listing-bx event-listing m-b10">
                                         <!-- 게시글 대표 이미지 -->
                                         <!-- 이미지를 클릭하면, 해당 게시글로 이동함 -->
                                         <a href="{% url 'lect_detail' lect_no=lect.lect_no %}">
-                                            <img class="lect-thumbnail" src="{{ lect.lect_pic }}"
+                                            <img class="lect-thumbnail" src="/media/{{ lect.lect_pic }}"
                                                  alt="">
                                         </a>
                                         <!-- 강의, 스터디, 취미 내용 간단소개 div -->
@@ -97,11 +104,16 @@
                                                     <!-- 마감 월 (영어로 표기됨 - 월 끌고 오면 처리 예정) -->
                                                     <span class="text-primary">{{ lect.lect_deadline|date:'M' }}</span>
                                                     <!-- 마감일 -->
-                                                    <strong>{{ lect.lect_dateline|date:'d' }}</strong>
+                                                    <strong>{{ lect.lect_deadline|date:'d' }}</strong>
                                                     <!-- 모집 및 마감 상태 -->
                                                     <!-- 강의, 스터디, 취미 기간 중에 있으면 모집 span 태그가 보이고, 모집 기간이 자나면, 자동으로 마감으로 뜨게 처리 -->
-                                                    <span class="recruiting">모 집</span>
-                                                    {#                                                        <span class="recruiting-end">마 감</span>#}
+
+                                                    {% if lect.is_expired %}
+                                                        <span class="recruiting">모 집</span>
+                                                    {% else %}
+                                                        <span class="recruiting-end">마 감</span>
+                                                    {% endif %}
+
                                                 </li>
                                                 <!-- 강의, 스터디, 취미에 대한 간단소개 -->
                                                 <li class="text-cut">{{ lect.lect_intro }}
@@ -114,6 +126,7 @@
                                                 <li class="event-hosted">
                                                     <!-- 강의를 정기적으로 진행하는 요일 -->
                                                     <span class="text-primary mr-3">요일</span>
+
                                                     <!-- 강의에 해당하는 요일을 DB에서 가져와야 함 -->
                                                     <span>
                                                         {% for lect_day in lect.lectday_set.all %}
@@ -133,7 +146,7 @@
                                                     <span class="text-primary m-l40 mr-3"><i
                                                             class="fa fa-user"></i></span>
                                                     <!-- 강의 신청자 및 총 정원을 DB에서 가져와야 함. -->
-                                                    <span>{{ lect.lectuser_set.all|length }} / {{ lect.lect_limit_num }} 명</span>
+                                                    <span>{{ lect.enrolled_students.count }} / {{ lect.lect_limit_num }} 명</span>
                                                 </li>
                                             </ul>
                                         </div>
@@ -143,36 +156,30 @@
                             <!--================= 여기부터 게시글 반복 끝 =================-->
                         </div>
                         <!-- 강의: 강의개설 신청, 스터디 및 취미: 등록 -->
-                        <div class="extra-cell text-right  m-t20">
-                            <!-- 강의, 스터디, 취미 게시판들의 게시글 등록 버튼 (관련자 및 관련 게시판만 보이게 처리) -->
-                            <form action="{% url 'lect_register' %}" method="get">
-                                <input type="hidden" name="lect_type" value="{{ type.type_no }}">
-                                {% if type.type_no == 1 %}
-                                    <!-- 강의 게시판에만 보이는 버튼임 -->
-                                    <button class="site-button radius-xl m-l10"><i class="fa fa-plus m-r5"></i>강의개설 신청
-                                    </button>
-                                {% else %}
-                                    <!-- 스터디, 취미 게시판에만 보이는 버튼임 -->
-                                    <button type="submit" class="site-button radius-xl m-l10"><i
-                                            class="fa fa-plus m-r5"></i>등록
-                                    </button>
-                                {% endif %}
-                            </form>
-                        </div>
+                        {% if is_active and type.type_no != 4 %}
+                            <div class="extra-cell text-right  m-t20">
+                                <!-- 강의, 스터디, 취미 게시판들의 게시글 등록 버튼 (관련자 및 관련 게시판만 보이게 처리) -->
+                                <form action="{% url 'lect_register' %}" method="get">
+                                    <input type="hidden" name="lect_type" value="{{ type.type_no }}">
+                                    {% if type.type_no == 1 %}
+                                        <!-- 강의 게시판에만 보이는 버튼임 -->
+                                        <button class="site-button radius-xl m-l10"><i class="fa fa-plus m-r5"></i>강의 개설
+                                            신청
+                                        </button>
+                                    {% else %}
+                                        <!-- 스터디, 취미 게시판에만 보이는 버튼임 -->
+                                        <button type="submit" class="site-button radius-xl m-l10"><i
+                                                class="fa fa-plus m-r5"></i> {{ type.type_name }} 등록
+                                        </button>
+                                    {% endif %}
+                                </form>
+                            </div>
+                        {% endif %}
                         <!--========== 페이지네이션 시작 ===========-->
                         <!-- 1페이지에 6~8개 게시글 끌고오고, 게시글이 그보다 적으면, 페이지네이션 안보이게 처리해야 함 -->
-                        <div class="pagination-bx clearfix text-center">
-                            <ul class="pagination">
-                                <li class="previous"><a href="javascript:void(0)"><i
-                                        class="fa fa-arrow-left"></i></a></li>
-                                <li><a href="javascript:void(0)">1</a></li>
-                                <li><a href="javascript:void(0)">2</a></li>
-                                <li><a href="javascript:void(0)">...</a></li>
-                                <li class="active"><a href="javascript:void(0)">7</a></li>
-                                <li class="next"><a href="javascript:void(0)"><i class="fa fa-arrow-right"></i></a>
-                                </li>
-                            </ul>
-                        </div>
+                        {% if item_list|length != 0 %}
+                            {% include "pagination.html" %}
+                        {% endif %}
                         <!--========== 페이지네이션 끝 ===========-->
                     </div>
                 </div>

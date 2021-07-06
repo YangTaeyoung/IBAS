@@ -1,7 +1,9 @@
 import shutil
-from DB.models import Board, BoardFile, ContestBoard, ContestFile, Lect, Bank, BankFile
+from DB.models import Board, BoardFile, ContestBoard, ContestFile, Lect, Bank, BankFile, UserDelete, UserDeleteFile, \
+    LectBoard, LectBoardFile, LectAssignment, LectAssignmentFile
 import os
 from IBAS.settings import MEDIA_ROOT
+from django.conf import settings
 
 
 # 1. 파일 폼이 여기 있기 때문에, 파일 컨트롤러도 여기 있는게 좋지 않을까요..?
@@ -22,8 +24,29 @@ class FileController:
 
     # 파일인지 확인 하는 함수 파라미터(파일 경로).
     @staticmethod
+    def is_code_file(file_path):
+        path, ext = os.path.splitext(str(file_path))
+        if ext in ['.py', '.java', '.css', 'js', '.html', '.r', '.ipynb', 'txt']:
+            return True
+        else:
+            return False
+
+    @staticmethod
     def is_file(file_path):
         return not FileController.is_image(file_path)
+
+    # ------ get_code_in_file ------- #
+    # INPUT : 해석할 파일 경로(미디어 루트 제외)
+    # OUTPUT : 없음
+    # RETURN : 파일에 있던 코드가 STR형으로 반환
+    # 최종 수정일시 : 21.05.28
+    # 설명: JS code view API에 코드 파일을 str형으로 넣기 위해서 코드를 해석하기 위한 함수
+    # 작성자: 양태영
+    @staticmethod
+    def get_code_in_file(file_path):
+        with open(os.path.join(settings.MEDIA_ROOT, file_path), mode="r") as file:
+            lines = file.read()
+            return lines
 
     # ---- get_images_and_files_of_ ---- #
     # INPUT : Board 객체 or ContestBoard 객체
@@ -45,7 +68,11 @@ class FileController:
             # ContestBoard 객체
             elif isinstance(object, ContestBoard):
                 files = ContestFile.objects.filter(contest_no=object.contest_no)
-
+            # UserDelete 객체
+            elif isinstance(object, UserDelete):
+                files = UserDeleteFile.objects.filter(user_delete_no=object.user_delete_no)
+            elif isinstance(object, LectBoard):
+                files = LectBoardFile.objects.filter(lect_board_no=object.lect_board_no)
             else:  # 객체가 잘못 전달된 경우
                 raise Exception
 
@@ -86,19 +113,11 @@ class FileController:
     # OUTPUT : 없음
     # RETURN : 없음
     # : 해당 게시글의 모든 파일을 삭제한다.
-    # 마지막 수정 일시 : 2021.04.13
+    # 마지막 수정 일시 : 2021.05.18
     # 작성자 : 유동현
     @staticmethod
     def delete_all_files_of_(obj):
-        location = ''
-
-        # Board 객체인 경우
-        if isinstance(obj, Board):
-            location = os.path.join(MEDIA_ROOT, 'board', str(obj.board_no))
-
-        # ContestBoard 객체인 경우
-        elif isinstance(obj, ContestBoard):
-            location = os.path.join(MEDIA_ROOT, 'board', 'contest', str(obj.contest_no))
+        location = obj.get_file_path  # get_file_path : DB model 별 멤버변수로 선언해줘야함.
 
         try:
             if os.path.exists(location):  # 해당 경로가 존재하지 않는 경우에는 db 에서만 지워주면 된다.
@@ -121,7 +140,7 @@ class FileController:
         if isinstance(instance, ContestBoard):
             for file in files_to_upload:  # 각각의 파일을 InMemoryUploadedFile 객체로 받아옴
                 ContestFile.objects.create(
-                    contest_no=ContestBoard.objects.get(pk=instance.contest_no),
+                    contest_no=instance,
                     file_path=file,  # uploadedFile 객체를 imageField 객체 할당
                     file_name=file.name.replace(' ', '_')  # imageField 객체에 의해 파일 이름 공백이 '_'로 치환되어 서버 저장
                     # 따라서 db 에도 이름 공백을 '_'로 치환하여 저장
@@ -129,8 +148,36 @@ class FileController:
         elif isinstance(instance, Board):
             for file in files_to_upload:
                 BoardFile.objects.create(
-                    board_no=Board.objects.get(pk=instance.board_no),
+                    board_no=instance,
                     file_path=file,  # uploadedFile 객체를 imageField 객체 할당
                     file_name=file.name.replace(' ', '_')  # imageField 객체에 의해 파일 이름 공백이 '_'로 치환되어 서버 저장
                     # 따라서 db 에도 이름 공백을 '_'로 치환하여 저장
+                )
+        elif isinstance(instance, Bank):
+            for file in files_to_upload:
+                BankFile.objects.create(
+                    bank_no=instance,
+                    file_path=file,
+                    file_name=file.name.replace(' ', '_')
+                )
+        elif isinstance(instance, LectBoard):
+            for file in files_to_upload:
+                LectBoardFile.objects.create(
+                    lect_board_no=instance,
+                    file_path=file,
+                    file_name=file.name.replace(' ', '_')
+                )
+        elif isinstance(instance, LectAssignment):
+            for file in files_to_upload:
+                LectAssignmentFile.objects.create(
+                    lect_assignment_no=instance,
+                    file_path=file,
+                    file_name=file.name.replace(' ', '_')
+                )
+        elif isinstance(instance, UserDelete):
+            for file in files_to_upload:
+                UserDeleteFile.objects.create(
+                    user_delete_no=instance,
+                    file_path=file,
+                    file_name=file.name.replace(' ', '_')
                 )

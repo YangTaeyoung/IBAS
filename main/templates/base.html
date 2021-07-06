@@ -28,6 +28,9 @@
 	<script src="{% static 'js/respond.min.js' %}"></script>
 	<![endif]-->
 
+    <!-- JQuery -->
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+
     <!-- STYLESHEETS -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/plugins.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/style_1.css' %}">
@@ -98,33 +101,37 @@
                                 </ul>
                             </li>
                             <!--====================강의실을 상위메뉴로 가지고 있는 메뉴====================-->
-                            <li class="down active" style="padding-top: 7px"><a href="{% url 'lect_view' type_no=1 %}">강의실 <i
-                                    class="fa fa-chevron-down"></i></a>
+                            <li class="down active" style="padding-top: 7px"><a href="{% url 'lect_view' type_no=1 %}">강의실
+                                <i
+                                        class="fa fa-chevron-down"></i></a>
                                 <ul class="sub-menu">
                                     <li><a href="{% url 'lect_view' type_no=1 %}">강의</a></li>
                                     <li><a href="{% url 'lect_view' type_no=2 %}">스터디</a></li>
-                                    <li><a href="{% url 'lect_register' %}">강의개설신청</a></li>
+                                    {% if is_superuser %}
+                                        <li><a href="{% url 'lect_view' type_no=4 %}">강의개설신청</a></li>
+                                    {% endif %}
                                 </ul>
                             </li>
                             <!--====================취미모임 메뉴====================-->
-                            <li class="active" style="padding-top: 7px"><a href="#">취미모임</a></li>
+                            <li class="active" style="padding-top: 7px"><a
+                                    href="{% url 'lect_view' type_no=3 %}">취미모임</a></li>
 
                             <!--====================로그인 여부에 따라 다르게 보이는 곳====================-->
                             <!--====================로그인했을 때====================-->
                             {% if is_logined %}
                                 <!--회원관리 버튼, 혹시몰라서 삭제안하고 주석처리함-->
-{#                                {% if logined_user.user_role.role_no <= 4 %}#}
-{#                                    <li class="active" style="padding-top: 7px; padding-right: 5px; padding-left: 5px"#}
-{#                                        onclick="document.getElementById('hd-form-member-list').submit()">#}
-{##}
-{#                                        <a href="#" style="padding: 19px 0px 0px 3px">회원관리</a>#}
-{#                                        <i class="fa fa-user-plus"></i>#}
-{#                                    </li>#}
-{#                                    <form id="hd-form-member-list" action="{% url 'staff_member_list' %}" method="post"#}
-{#                                          style="display: none">#}
-{#                                        {% csrf_token %}#}
-{#                                    </form>#}
-{#                                {% endif %}#}
+                                {#                                {% if logined_user.user_role.role_no <= 4 %}#}
+                                {#                                    <li class="active" style="padding-top: 7px; padding-right: 5px; padding-left: 5px"#}
+                                {#                                        onclick="document.getElementById('hd-form-member-list').submit()">#}
+                                {##}
+                                {#                                        <a href="#" style="padding: 19px 0px 0px 3px">회원관리</a>#}
+                                {#                                        <i class="fa fa-user-plus"></i>#}
+                                {#                                    </li>#}
+                                {#                                    <form id="hd-form-member-list" action="{% url 'staff_member_list' %}" method="post"#}
+                                {#                                          style="display: none">#}
+                                {#                                        {% csrf_token %}#}
+                                {#                                    </form>#}
+                                {#                                {% endif %}#}
                                 <!--======로그아웃 버튼======-->
                                 <li class="active" onclick="printConfirm('정말 로그아웃 하시겠습니까?', '{% url "logout" %}')"
                                     style="padding-top: 7px; padding-right: 10px">
@@ -180,14 +187,15 @@
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton"
                                          style="right: 20%; width: auto; border-radius: 0px;">
                                         {% if alarm_list|length == 0 %}
-                                            <a class="dropdown-item site-button-link" href="#" style="text-align: center">
+                                            <a class="dropdown-item site-button-link" href="#"
+                                               style="text-align: center">
                                                 <span>표시할 알람이 없습니다</span></a>
                                         {% endif %}
                                         {% for alarm in alarm_list %}
                                             <a class="dropdown-item site-button-link"
                                                href="{% url 'alarm_check' alarm_no=alarm.alarm_no %}">
                                                 <span {% if alarm.alarm_ischecked == 1 %}
-                                                style="color: #848484; text-align: center" {% endif %}>{{ alarm.alarm_cont }}</span></a>
+                                                    style="color: #848484; text-align: center" {% endif %}>{{ alarm.alarm_cont }}</span></a>
                                         {% endfor %}
                                     </div>
                                 </li>
@@ -256,7 +264,7 @@
                     </tr>
                     <tr>
                         <td class="td-size_small"><i class="ti-email"></i></td>
-                        <td class="td-size_big">{{ chief.user_email }}</td>
+                        <td class="td-size_big">{{ chief.useremail_set.first.user_email }}</td>
                     </tr>
                 </table>
             </div>
@@ -287,7 +295,7 @@
 <button class="scroltop fa fa-chevron-up"></button>
 </div>
 <!-- 직접 만든 js-->
-<script src="{% static 'js/login.js' %}"></script>
+<script src="{% static 'js/login-join.js' %}"></script>
 <!-- JAVASCRIPT FILES ========================================= -->
 <script src="{% static 'js/jquery.min.js' %}"></script><!-- JQUERY.MIN JS -->
 <script src="{% static 'plugins/bootstrap/js/popper.min.js' %}"></script><!-- BOOTSTRAP.MIN JS -->

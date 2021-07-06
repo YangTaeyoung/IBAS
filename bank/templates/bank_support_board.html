@@ -63,7 +63,7 @@
                                 <!-- 끌고오는 게시글 파트 -->
                                 <tbody>
                                 <!-- 게시글 1 -->
-                                {% if bank_len == 0 %}
+                                {% if not bank_list %}
                                     <td colspan="5" style="text-align: center"> 예산 지원 신청 게시글이 없습니다.</td>
                                 {% endif %}
                                 {% for bank in bank_list %}
@@ -97,25 +97,9 @@
 
                         <!--========== 페이지네이션 시작 ===========-->
                         <!-- 1페이지에 15개 게시글 끌고오고, 게시글이 그보다 적으면, 페이지네이션 안보이게 처리 -->
-                        <div class="pagination-bx clearfix text-center">
-                            <ul class="pagination">
-                                {% if bank_list.has_previous %}
-                                    <li class="previous"><a href="?page=1"><i class="fa fa-arrow-left"></i></a>
-                                    </li>
-                                    <li>
-                                        <a href="?page={{ bank_list.previous_page_number }}"> {{ bank_list.previous_page_number }}</a>
-                                    </li>
-                                {% endif %}
-                                <li><a href="javascript:void(0)">{{ bank_list.number }}</a></li>
-                                {% if bank_list.has_next %}
-                                    <li>
-                                        <a href="?page={{ bank_list.next_page_number }}"> {{ bank_list.next_page_number }}</a>
-                                    </li>
-                                    <li class="next"><a href="?page={{ bank_list.paginator.num_pages }}"><i
-                                            class="fa fa-arrow-right"></i></a></li>
-                                {% endif %}
-                            </ul>
-                        </div>
+                        {% if bank_list|length != 0 %}
+                            {% include 'pagination.html' with item_list=bank_list %}
+                        {% endif %}
                         <!--========== 페이지네이션 끝 ===========-->
 
 

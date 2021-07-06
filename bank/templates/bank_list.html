@@ -151,12 +151,10 @@
                                                 <i id="bank-update" class="fa fa-pencil " style="color: #606269"></i>
                                             </a>
                                         </td>
-                                    {% endif %}
-                                {% if logined.user_role.role_no == 4 %}
-                                    <form id="form-bank-delete-{{ bank.bank_no }}" action="{% url 'bank_delete' %}"
+
+                                    <form id="form-bank-delete-{{ bank.bank_no }}" action="{% url 'bank_delete' bank.bank_no %}"
                                           method="post">
                                         {% csrf_token %}
-                                        <input type="hidden" name="bank_no" value="{{ bank.bank_no }}"/>
                                         <!-- 삭제 -->
                                         <!-- bank_del는 bank_yejin.js에 정의됨. -->
                                         <td onclick="bank_del({{ bank.bank_no }})" style="padding: 10px 0;">
@@ -212,7 +210,7 @@
                                         <!-- 영수증 이미지 출력부 -->
                                             {% for bank_file in bank.bankfile_set.all %}
                                                 <div class="bank-image-flex">
-                                                    <img src="/media/{{ bank_file.bank_file_path }}"
+                                                    <img src="/media/{{ bank_file.file_path }}"
                                                          alt="현재 브라우저에서 지원하지 않는 형식입니다.">
                                                 </div>
                                             {% endfor %}
@@ -238,12 +236,10 @@
 
                                         <div class="content-body">
                                             <form id="form-bank-update-{{ bank.bank_no }}" class="dlab-form"
-                                                  action="{% url 'bank_update' %}" method="post"
+                                                  action="{% url 'bank_update' bank.bank_no %}" method="post"
                                                   enctype="multipart/form-data">
                                                 {% csrf_token %}
-                                                <input type="hidden" name="bank_no" value="{{ bank.bank_no }}"/>
                                                 <input type="hidden" name="bank_cfo" value="{{ logined_user.user_stu }}"/>
-                                                <input type="hidden" name="bank_apply" value="4"/>
                                                 <!-- 날짜 -->
                                                 <div class="form-group">
                                                     <input required="" name="bank_used" class="form-control" type="date" value="{{ bank.bank_used|date:"Y-m-d" }}"/>
@@ -293,35 +289,24 @@
 
                                         <!-- 첨부된 파일 불러오기 -->
                                         <!-- 파일 리스트 길이가 0이 아닐 경우에만 파일 리스트를 출력하게 함. -->
-{#                                        {% if file_len != 0 %}#}
-                                            <div id="bank-update-file-parent" class="download-box" style="font-size: 13px">
-{#                                                {% for bank_file in bank_file_list %}#}
-                                                    <!-- 첨부파일 1 -->
-                                                    <div id="bank-update-file-1">
-                                                         <i class="fa fa-download m-r15"></i><a class="line2" href="#">{{ bank.bank_file_name}}</a>
-                                                        <input type="hidden" name="exist-bank-file-{{ bank_file.bank_file_id }}" value="{{ bank_file.bank_file_path }}"/>
-                                                        <!-- 첨부파일 지우기 버튼 -->
-                                                        <button onclick="bank_update_del({{ bank_file.bank_file_id }})" id="bank-update-x-1" type="button" class="close">
-                                                            <span aria-hidden="true"><i class="la la-close"></i></span>
-                                                        </button>
-                                                    </div>
-                                                <!-- 첨부된 파일 불러오기 -->
+
+                                                 <!-- 첨부된 파일 불러오기 -->
                                                 <!-- 파일 리스트 길이가 0이 아닐 경우에만 파일 리스트를 출력하게 함. -->
-                                                {% if bank.bankfile_set.all|length > 0 %}
+                                                {% if bank.bankfile_set.all %}
                                                     <div id="bank-update-file-parent" class="download-box mb-3"
                                                          style="font-size: 13px">
                                                         {% for bank_file in bank.bankfile_set.all %}
                                                             <!-- 첨부파일 1 -->
-                                                            <div id="bank-update-file-{{ bank_file.bank_file_id }}">
+                                                            <div id="bank-update-file-{{ bank_file.file_id }}">
                                                                  <i class="fa fa-download m-r15"></i>
                                                                 <a class="line2" href="#">
-                                                                    {{ bank_file.bank_file_name }}
+                                                                    {{ bank_file.file_name }}
                                                                 </a>
                                                                 <input type="hidden"
-                                                                       name="exist_bank_file_{{ bank_file.bank_file_id }}"
-                                                                       value="/media/{{ bank_file.bank_file_path }}"/>
+                                                                       name="exist_file_path_{{ bank_file.file_id }}"
+                                                                       value="/media/{{ bank_file.file_path }}"/>
                                                                 <!-- 첨부파일 지우기 버튼 -->
-                                                                <button onclick="bank_update_del({{ bank_file.bank_file_id }})"
+                                                                <button onclick="bank_update_del({{ bank_file.file_id }})"
                                                                         type="button" class="close">
                                                                     <span aria-hidden="true"><i class="la la-close"></i></span>
                                                                 </button>
@@ -335,15 +320,12 @@
                                                     </div>
                                                 {% endif %}
 
+
                                                 <!-- 첨부버튼 -->
                                                 <div class="form-group">
                                                     <div class="form-group">
                                                         <label style="font-size: 13px; font-weight: 100"><b>증빙자료 첨부</b></label>
-                                                        <input type="file"
-                                                               accept="image/*,.doc,.pdf,.hwp,.docx"
-                                                               name="bank_file"
-                                                               multiple
-                                                        >
+                                                        {{ file_form.upload_file }}
                                                     </div>
                                                 </div>
                                                 <!-- 수정버튼 -->
@@ -381,7 +363,7 @@
                         <p class="bank-total">잔액: ₩ {{ balance|intcomma }}</p>
                     </div>
 
-
+                    {% load widget_tweaks %}
                     <!--=========================회계내역 추가 모달==========================-->
                     <!-- bank-add-modal는 회계내역 추가 버튼과 연결 하기 위함임  -->
                     <div class="modal fade modal-bx-info" id="bank-add-modal" tabindex="-1" role="dialog"
@@ -400,57 +382,21 @@
                                     <form class="dlab-form" action="{% url 'bank_register' %}" method="post"
                                           enctype="multipart/form-data">
                                         {% csrf_token %}
-                                        <input type="hidden" name="bank_cfo" value="{{ logined_user.user_stu }}"/>
-                                        <input type="hidden" name="bank_apply" value="4"/>
-                                        <!-- 날짜 -->
-                                        <div class="form-group">
-                                            <input required="" name="bank_used" class="form-control" type="date"/>
-                                            <div class="form-text font-10">영수증에 명시된 사용일을 적어주세요.</div>
-                                        </div>
-
-                                        <!-- 제목 -->
-                                        <div class="form-group">
-                                            <input required="" class="form-control" name="bank_title"
-                                                   placeholder="제목을 입력하세요"
-                                                   type="text"/>
-                                        </div>
-                                        <!-- 이용 사유 -->
-                                        <div class="form-group">
-                                            <textarea class="form-control" name="bank_reason"
-                                                      placeholder="내용을 입력하세요."></textarea>
-                                            <div class="form-text font-10">해당란을 입력하지 않을 시 제목과 내용이 같도록 처리합니다.</div>
-                                        </div>
-                                        <!-- 사용한 유저의 학번 -->
-                                        <div class="form-group">
-                                            <input required="" class="form-control" name="bank_used_user"
-                                                   placeholder="회비를 사용한 부원의 학번을 입력하세요"
-                                                   type="number"/>
-                                            <div class="form-text font-10">해당란을 입력하지 않을 시, 로그인 한 유저로 입력됩니다.</div>
-                                        </div>
-
-                                        <!-- 수입액 -->
-                                        <div class="form-group">
-                                            <input class="form-control" name="bank_plus"
-                                                   placeholder="수입액을 입력하세요"
-                                                   type="number"/>
-                                        </div>
-
-                                        <!-- 지출액 -->
-                                        <div class="form-group">
-                                            <input class="form-control" name="bank_minus"
-                                                   placeholder="지출액을 입력하세요"
-                                                   type="number"/>
-                                        </div>
+                                        <input type="hidden" value="{{ logined_user.user_stu }}" name="bank_cto"/>
+                                        {% for field in bank_form.visible_fields %}
+                                            <div class="form-group">
+                                                {% render_field field class="form-control" %}
+                                                {% if field.help_text %}
+                                                    <div class="form-text font-10">{{ field.help_text }}</div>
+                                                {% endif %}
+                                            </div>
+                                        {% endfor %}
 
                                         <!-- 첨부버튼 -->
                                         <div class="form-group">
                                             <div class="form-group">
                                                 <label style="font-size: 13px; font-weight: 100"><b>증빙자료 첨부</b></label>
-                                                <input type="file"
-                                                       accept="image/*,.doc,.pdf,.hwp,.docx"
-                                                       name="bank_file"
-                                                       multiple
-                                                >
+                                                {{ file_form.upload_file }}
                                             </div>
                                         </div>
 
@@ -466,25 +412,9 @@
 
                     <!--========== 페이지네이션 시작 ===========-->
                     <!-- 1페이지에 15개 게시글 끌고오고, 게시글이 그보다 적으면, 페이지네이션 안보이게 처리 -->
-                    <div class="pagination-bx clearfix text-center">
-                        <ul class="pagination">
-                            {% if bank_list.has_previous %}
-                                <li class="previous"><a href="?page=1"><i class="fa fa-arrow-left"></i></a>
-                                </li>
-                                <li>
-                                    <a href="?page={{ bank_list.previous_page_number }}"> {{ bank_list.previous_page_number }}</a>
-                                </li>
-                            {% endif %}
-                            <li><a href="javascript:void(0)">{{ bank_list.number }}</a></li>
-                            {% if bank_list.has_next %}
-                                <li>
-                                    <a href="?page={{ bank_list.next_page_number }}"> {{ bank_list.next_page_number }}</a>
-                                </li>
-                                <li class="next"><a href="?page={{ bank_list.paginator.num_pages }}"><i
-                                        class="fa fa-arrow-right"></i></a></li>
-                            {% endif %}
-                        </ul>
-                    </div>
+                {% if bank_list|length != 0 %}
+                    {% include 'pagination.html' with item_list=bank_list %}
+                {% endif %}
                     <!--========== 페이지네이션 끝 ===========-->
                 </div>
             </div>

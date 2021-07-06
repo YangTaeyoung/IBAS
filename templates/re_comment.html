@@ -1,0 +1,77 @@
+{# 답글 자리인데 어떻게 해야 할지 감이 잘 안옴. #}
+<!-- for 문 들어갈 자리 (대댓글)-->
+{% for comment_ref in comment_ref_list %}
+    <div class="dlab-divider bg-gray-dark"></div>
+    <div style="margin-left: 20px;">
+        <!-- 댓글 작성자 프로필자신 및 이름을 담는 div -->
+        <div class="comment-author vcard"><cite
+                class="fn"><img
+                src="/media/{{ comment_ref.comment_writer.user_pic }}"
+                width="35"
+                height="35" class="comment-profile-size"
+                alt="현재 브라우저에서 지원하지 않는 형식입니다.">{{ comment_ref.comment_writer.user_name }}
+        </cite>
+        </div>
+        <div class="dlab-post-meta m-l10">
+            <ul class="d-flex">
+                <!-- 댓글 작성자 학과 및 학번 -->
+                <li class="post-author"><a
+                        href="javascript:void(0);">{{ comment_ref.comment_writer.user_major.major_name }}
+                    {{ comment_ref.comment_writer.user_stu|stringformat:"s"|slice:"2:4" }}학번</a>
+                </li>
+                <!-- 댓글 작성 시간 -->
+                <li class="post-comment"><i
+                        class="ti ti-alarm-clock"></i>
+                    <a href="javascript:void(0);">{{ comment_ref.comment_created }}</a>
+                </li>
+            </ul>
+        </div>
+        <!-- DB에서 가져온 댓글정보 -->
+        <form id="form-comment-update-{{ comment_ref.comment_id }}"
+              action="#"
+              method="post">
+            {% csrf_token %}
+            <input type="hidden" name="comment_id"
+                   value="{{ comment_ref.comment_id }}">
+            <input type="hidden" name="board_no"
+                   value="{{ board.board_no }}"/>
+            <input type="text" disabled="disabled"
+                   style="width: 706px"
+                   class="comments-area"
+                   name="comment_cont"
+                   id="correcting-no-{{ comment_ref.comment_id }}"
+                   value="{{ comment_ref.comment_cont }}">
+        </form>
+        <div id="comment_no_{{ comment_ref.comment_id }}"
+             class="reply-btn-div">
+            <form id="form-comment-delete-{{ comment_ref.comment_id }}"
+                  action="#"
+                  method="post">
+                {% csrf_token %}
+                <input type="hidden" name="comment_id"
+                       value="{{ comment_ref.comment_id }}"/>
+                <input type="hidden" name="board_no"
+                       value="{{ board.board_no }}"/>
+                {% if request.session.user_role <= 3 or request.session.user_stu == comment_ref.comment_writer.user_stu %}
+                    <button type="button"
+                            onclick="comment_del({{ comment_ref.comment_id }})"
+                            id="btn-del-{{ comment_ref.comment_id }}"
+                            class="comment-btn m-r10"><i
+                            class="fa fa-trash m-r5"></i>
+                        댓글 삭제
+                    </button>
+                {% endif %}
+                {% if request.session.user_stu == comment_ref.comment_writer.user_stu %}
+                    <button type="button"
+                            id="correctingBtn-{{ comment_ref.comment_id }}"
+                            class="comment-btn m-r10"
+                            onclick="comment_update({{ comment_ref.comment_id }})">
+                        <i class="fa fa-pencil m-r5"></i>댓글
+                        수정
+                    </button>
+                {% endif %}
+            </form>
+
+        </div>
+    </div>
+{% endfor %}

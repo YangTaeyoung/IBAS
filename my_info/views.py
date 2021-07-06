@@ -1,34 +1,38 @@
 import os
-
 from django.shortcuts import render, redirect, reverse
-from DB.models import Board, User, Comment, Lect, LectBoard, BoardType, UserRole, Bank, UserAuth, UserUpdateRequest, \
-    StateInfo
+from DB.models import Board, User, Comment, Bank, UserUpdateRequest, UserEmail, StateInfo, MajorInfo
 from django.db.models import Q
-from user_controller import get_logined_user, get_user, is_logined
+from user_controller import get_logined_user, login_required, get_social_login_info
 from django.conf import settings
+from member.session import save_session
+import hashlib
+
+
+def get_ecrypt_value(value: str):
+    return hashlib.md5(value.encode()).hexdigest()
 
 
 # Create your views here.
+@login_required
 def my_info(request):  # 내 정보 출력
-    if is_logined(request):
-        my_board_list = Board.objects.filter(board_writer=get_logined_user(request)).order_by("board_type_no").order_by("-board_created")
-        my_comment_list = Comment.objects.filter(comment_writer=get_logined_user(request)).order_by(
-            "comment_board_no__board_type_no").order_by("-comment_created")
-        my_bank_list = Bank.objects.filter(bank_used_user=get_logined_user(request)).order_by("-bank_used")
-        my_wait_request = UserUpdateRequest.objects.filter(  # 이름 변경 신청한 것.
-            Q(updated_user=get_logined_user(request)) & Q(updated_state__state_no=1))
-        my_update_request_list = UserUpdateRequest.objects.filter(updated_user=get_logined_user(request))
-
-        context = {
-            "my_board_list": my_board_list,
-            "my_comment_list": my_comment_list,
-            "my_wait_request": my_wait_request,
-            "my_update_request_list ": my_update_request_list,
-            "my_bank_list": my_bank_list
-        }
-        return render(request, 'my_info.html', context)
-    else:
-        return redirect(reverse("index"))
+    context = {
+        "my_board_list": Board.objects.filter(board_writer=get_logined_user(request)).order_by(
+            "board_type_no").order_by(
+            "-board_created"),
+        "my_comment_list": Comment.objects.filter(comment_writer=get_logined_user(request)).order_by(
+            "comment_board_no__board_type_no").order_by("-comment_created"),
+        "my_wait_request": UserUpdateRequest.objects.filter(
+            Q(updated_user=get_logined_user(request)) & Q(updated_state__state_no=1)),
+        "my_update_request_list": UserUpdateRequest.objects.filter(updated_user=get_logined_user(request)),
+        "my_bank_list": Bank.objects.filter(bank_used_user=get_logined_user(request)).order_by("-bank_used"),
+        "user_list": User.objects.all(),
+        "major_list": MajorInfo.objects.all(),
+        "is_naver_existed": len(
+            UserEmail.objects.filter(Q(user_stu=get_logined_user(request)) & Q(provider="naver"))) != 0,
+        "is_google_existed": len(
+            UserEmail.objects.filter(Q(user_stu=get_logined_user(request)) & Q(provider="google"))) != 0,
+    }
+    return render(request, 'my_info.html', context)
 
 
 def user_update_request_register(request):  # 이름 변경 신청
@@ -88,6 +92,7 @@ def user_pic_update(request):
     return redirect(reverse("my_info"))
 
 
+@login_required
 def user_pic_delete(request):
     user = get_logined_user(request)
     if not is_default_pic(user.user_pic):  # 기존에 있던 사진이 디폴트 사진이 아닌 경우.
@@ -98,3 +103,55 @@ def user_pic_delete(request):
     user.user_pic = get_default_pic_path()
     user.save()
     return redirect(reverse("my_info"))
+
+
+@login_required
+def user_major_update(request):
+    current_user = get_logined_user(request)
+    if len(MajorInfo.objects.filter(major_name=request.POST.get("user_major"))) != 0:
+        current_user.user_major = MajorInfo.objects.filter(major_name=request.POST.get("user_major")).first()
+        current_user.save()
+    return redirect(reverse("my_info"))
+
+
+@login_required
+def user_phone_update(request):
+    if request.method == "POST":
+        current_user = get_logined_user(request)
+        current_user.user_phone = request.POST.get("user_phone")
+        current_user.save()
+        return redirect(reverse("my_info"))
+    else:
+        return redirect(reverse("index"))
+
+
+# 연동시 파라미터를 남기기 위한 코드 (GET 방식이기 때문에 보안에 매우 취약함.)
+def go_social_login_before_setting(request):
+    if request.method == "POST":
+        encoded_user_stu = get_ecrypt_value(str(get_logined_user(request).user_stu))
+        context = {
+            "provider": request.POST.get("provider"),
+            "next_url": "/user/pass?user_stu=" + encoded_user_stu,
+        }
+        return render(request, "go_social_login.html", context)
+    return redirect(reverse("index"))
+
+
+# login_required를 설정하지 말 것. 연동시 로그인이 잠시 풀리기 때문.
+def connect_social_account(request):
+    if request.method == "POST":
+        social_dict = get_social_login_info(request.POST.get("password"))
+        target_user_stu = request.POST.get("user_stu")
+        current_user = None
+        for user in User.objects.all():
+            if target_user_stu == get_ecrypt_value(str(user.user_stu)):
+                current_user = user
+                break
+
+        if current_user is not None:
+            UserEmail.objects.create(user_stu=current_user, user_email=social_dict.get("email"),
+                                     provider=social_dict.get("provider"))
+            save_session(request, user_model=current_user, logined_email=social_dict.get("email"),
+                         provider=social_dict.get("provider"))
+            return redirect(reverse("my_info"))
+    return redirect(reverse("index"))

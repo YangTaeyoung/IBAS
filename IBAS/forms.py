@@ -1,4 +1,6 @@
 from django import forms
+from DB.models import UserDeleteComment
+from user_controller import get_logined_user
 
 
 class FileFormBase(forms.Form):
@@ -29,6 +31,32 @@ class FileFormBase(forms.Form):
     """
 
     def save(self, instance):
-        pass
+        # 이 폼은 여러개의 파일을 갖고 있을 것이다.
+        # upload_new_files 이용해서 저장하기
+        # 파일 폼 객체는 files 라는 Query dict 객체 존재  {'upload_file' : InMemoryUploadedFile 리스트}
+        from file_controller import FileController
+        FileController.upload_new_files(
+            files_to_upload=self.cleaned_data.get('upload_file'),
+            instance=instance
+        )
 
-# class CommentForm(forms.Form):
+    # overriding
+    # is_valid 호출 시 내부에서 자동적으로 clean 호출
+    def clean(self):
+        super().clean()
+        self.cleaned_data['upload_file'] = self.files.getlist('upload_file')
+
+
+
+
+class CommentBaseForm(forms.Form):
+    comment_cont = forms.CharField(required=True, widget=forms.Textarea(attrs={"placeholder": "덧글을 입력하세요"}))
+    comment_cont_ref = forms.IntegerField(required=False, widget=forms.HiddenInput())
+
+    def save(self, instance, writer):
+        if isinstance(instance, UserDeleteComment):
+            UserDeleteComment.objects.create(
+                comment_cont=self.cleaned_data.get('comment_cont'),
+                comment_cont_ref=self.cleaned_data.get('comment_cont_ref'),
+                comment_writer=writer
+            )

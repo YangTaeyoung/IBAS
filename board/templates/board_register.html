@@ -33,6 +33,12 @@
 
                 {% csrf_token %}
 
+                <!-- 히든태그!! 몽땅!!-->
+                {% for field in board_form.hidden_fields %}
+                    {{ field }}
+                {% endfor %}
+                <!-- 히든태그!! 몽땅!!-->
+
                 <div class="content-block">
                     <div class="section-full content-inner bg-white">
                         <div class="container">
@@ -55,7 +61,6 @@
                                            {{ file_form.upload_file }}
                                         </div>
                                     </div>
-
                                     <!-- 이미 존재하고 있던 이미지: 삭제 가능 (수정모드)-->
                                     {% if board_no is not None %}
                                         <div class="form-group">

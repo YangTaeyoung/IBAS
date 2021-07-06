@@ -9,8 +9,8 @@ from django.core.paginator import Paginator
 # 작성자 : 유동현
 # 마지막 수정일 : 2021.04.13
 # 수정내용 :
-def get_page_object(request, board_list, num_of_boards_in_one_page=10):
-    paginator = Paginator(board_list, num_of_boards_in_one_page)  # 페이지네이터로 10개씩 보이게끔
+def get_page_object(request, model_list, num_of_boards_in_one_page=10):
+    paginator = Paginator(model_list, num_of_boards_in_one_page)  # 페이지네이터로 10개씩 보이게끔
     page = request.GET.get('page')  # GET 파라미터 페이지 이름
     item = paginator.get_page(page)
 

@@ -5,8 +5,13 @@
 #   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
+from abc import abstractmethod
 from datetime import date
+import os
 from django.db import models
+from datetime import datetime
+from IBAS.settings import MEDIA_ROOT
+import pytz
 
 
 class Answer(models.Model):
@@ -37,46 +42,65 @@ class Alarm(models.Model):
 
 
 class Bank(models.Model):
-    bank_no = models.AutoField(db_column='BANK_NO', primary_key=True)  # Field name made lowercase.
-    bank_plus = models.IntegerField(db_column='BANK_PLUS', blank=True, default=0)  # Field name made lowercase.
-    bank_minus = models.IntegerField(db_column='BANK_MINUS', blank=True, default=0)  # Field name made lowercase.
-    bank_title = models.CharField(db_column='BANK_TITLE', max_length=100, blank=True,
-                                  null=True)  # Field name made lowercase.
-    bank_used = models.DateTimeField(db_column='BANK_USED', blank=True)  # Field name made lowercase.
-    bank_created = models.DateTimeField(db_column='BANK_CREATED', auto_now_add=True)  # Field name made lowercase.
-    bank_updated = models.DateTimeField(db_column='BANK_UPDATED', auto_now=True, blank=True,
-                                        null=True)  # Field name made lowercase.
+    bank_no = models.AutoField(db_column='BANK_NO', primary_key=True)
+    bank_plus = models.IntegerField(db_column='BANK_PLUS', blank=True)
+    bank_minus = models.IntegerField(db_column='BANK_MINUS', blank=True)
+    bank_title = models.CharField(db_column='BANK_TITLE', max_length=100)
+    bank_used = models.DateTimeField(db_column='BANK_USED')
+    bank_created = models.DateTimeField(db_column='BANK_CREATED', auto_now_add=True)
+    bank_updated = models.DateTimeField(db_column='BANK_UPDATED', auto_now=True, blank=True, null=True)
     bank_checked = models.DateTimeField(db_column='BANK_CHECKED', null=True)
     bank_allowed = models.DateTimeField(db_column='BANK_ALLOWED', null=True)
-
-    bank_cfo = models.ForeignKey('User', models.DO_NOTHING, db_column='BANK_CFO', null=True,
-                                 related_name="cfo")  # Field name made lowercase.
-    bank_used_user = models.ForeignKey('User', models.DO_NOTHING, db_column='BANK_USED_USER',
-                                       related_name="used_user")  # Field name made lowercase.
-    bank_apply = models.ForeignKey('BankApplyInfo', models.DO_NOTHING,
-                                   db_column='BANK_APPLY')  # Field name made lowercase.
-    bank_reason = models.CharField(db_column='BANK_REASON', max_length=300, blank=True,
-                                   null=True)  # Field name made lowercase.
-    bank_reject_reason = models.CharField(db_column='BANK_REJECT_REASON', max_length=200, blank=True,
-                                          null=True)  # Field name made lowercase.
-    bank_account = models.CharField(db_column='BANK_ACCOUNT', max_length=100, blank=True,
-                                    null=True)  # Field name made lowercase.
+    bank_cfo = models.ForeignKey('User', models.DO_NOTHING, db_column='BANK_CFO', null=True, related_name="cfo")
+    bank_used_user = models.ForeignKey('User', models.DO_NOTHING, blank=True, db_column='BANK_USED_USER',
+                                       related_name="used_user", null=True)
+    bank_apply = models.ForeignKey('BankApplyInfo', models.DO_NOTHING, db_column='BANK_APPLY')
+    bank_reason = models.CharField(db_column='BANK_REASON', max_length=300, blank=True, null=True)
+    bank_reject_reason = models.CharField(db_column='BANK_REJECT_REASON', max_length=200, blank=True, null=True)
+    bank_account = models.CharField(db_column='BANK_ACCOUNT', max_length=100, null=True)
 
     class Meta:
         managed = False
         db_table = 'BANK'
 
+    @property
+    def get_file_path(self):
+        return os.path.join(MEDIA_ROOT, 'bank', str(self.bank_no))
 
-def bank_file_upload_to(instance, filename):
-    return f'bank/{instance.bank_no.bank_no}/{filename}'
+
+# 추상클래스 File
+class File(models.Model):
+    @abstractmethod
+    def file_upload_to(self, filename):
+        pass
+
+    file_id = models.AutoField(db_column='FILE_ID', primary_key=True)  # Field name made lowercase.
+    file_name = models.CharField(db_column='FILE_NAME', max_length=300)
+    file_path = models.FileField(db_column='FILE_PATH', max_length=1000, upload_to=file_upload_to, blank=True)
+
+    class Meta:
+        abstract = True
 
 
-class BankFile(models.Model):
+# 추상클래스 Comment
+class CommentBase(models.Model):
+    comment_id = models.AutoField(db_column='COMMENT_ID', primary_key=True)
+    comment_writer = models.ForeignKey('User', models.DO_NOTHING, db_column='COMMENT_WRITER', null=True)
+    comment_cont = models.CharField(db_column='COMMENT_CONT', max_length=5000)
+    comment_cont_ref = models.ForeignKey('self', on_delete=models.CASCADE, db_column='COMMENT_CONT_REF', blank=True,
+                                         null=True)  # Field name made lowercase.
+    comment_created = models.DateTimeField(db_column='COMMENT_CREATED', auto_now_add=True)  # Field name made lowercase.
+
+    class Meta:
+        abstract = True
+
+
+class BankFile(File):
+    def file_upload_to(self, filename):
+        return f'bank/{self.bank_no.bank_no}/{filename}'
+
     bank_no = models.ForeignKey(Bank, on_delete=models.CASCADE, db_column='BANK_NO')  # Field name made lowercase.
-    bank_file_id = models.AutoField(db_column='BANK_FILE_ID', primary_key=True)  # Field name made lowercase.
-    bank_file_path = models.FileField(db_column='BANK_FILE_PATH', max_length=1000,
-                                      upload_to=bank_file_upload_to)  # Field name made lowercase.
-    bank_file_name = models.CharField(db_column='BANK_FILE_NAME', max_length=500)
+    file_path = models.FileField(db_column='FILE_PATH', max_length=1000, upload_to=file_upload_to, blank=True)
 
     class Meta:
         managed = False
@@ -105,29 +129,17 @@ class Board(models.Model):
         managed = False
         db_table = 'BOARD'
 
-    def get_board_pk(self):
-        return self.board_no
-
-
-# 제발... 제발.... 되라...
-# 게시판 번호에 맞게 경로를 정하고 지정된 경로에 파일을 업로드 하는 함수.
-def board_file_upload_to(instance, filename):
-    return f'board/{instance.board_no.board_no}/{filename}'
-
-
-# 추상클래스 File
-class File(models.Model):
-    file_id = models.AutoField(db_column='FILE_ID', primary_key=True)  # Field name made lowercase.
-    file_name = models.CharField(db_column='FILE_NAME', max_length=300)
-
-    class Meta:
-        abstract = True
+    @property
+    def get_file_path(self):
+        return os.path.join(MEDIA_ROOT, 'board', str(self.board_no))
 
 
 class BoardFile(File):
-    board_no = models.ForeignKey(Board, on_delete=models.CASCADE, db_column='BOARD_NO', null=True)
-    # upload_to에 대한 인자를 위에 정의한 함수로 대체해야 경로를 커스터마이징 할 수 있음.
-    file_path = models.ImageField(db_column='FILE_PATH', upload_to=board_file_upload_to, blank=True, null=True)
+    def file_upload_to(self, filename):
+        return f'board/{self.board_no.board_no}/{filename}'
+
+    board_no = models.ForeignKey(Board, on_delete=models.CASCADE, db_column='BOARD_NO')
+    file_path = models.FileField(db_column='FILE_PATH', max_length=1000, upload_to=file_upload_to, blank=True)
 
     class Meta:
         managed = False
@@ -181,7 +193,6 @@ class ContestBoard(models.Model):
     contest_start = models.DateTimeField(db_column='CONTEST_START')
     contest_deadline = models.DateTimeField(db_column='CONTEST_DEADLINE')
 
-
     class Meta:
         managed = False
         db_table = 'CONTEST_BOARD'
@@ -194,6 +205,10 @@ class ContestBoard(models.Model):
             return True
         else:
             return False
+
+    @property
+    def get_file_path(self):
+        return os.path.join(MEDIA_ROOT, 'contest', str(self.contest_no))
 
 
 class ContestComment(models.Model):
@@ -210,22 +225,33 @@ class ContestComment(models.Model):
         db_table = 'CONTEST_COMMENT'
 
 
-def contest_file_upload_to(instance, filename):
-    from file_controller import is_image
-    if is_image(filename):
-        return f'board/contest/{instance.contest_no.contest_no}/image/{filename}'
-    else:
-        return f'board/contest/{instance.contest_no.contest_no}/doc/{filename}'
-
-
 class ContestFile(File):
+    def file_upload_to(self, filename):
+        return f'board/contest/{self.contest_no.contest_no}/{filename}'
+
     contest_no = models.ForeignKey(ContestBoard, on_delete=models.CASCADE, db_column='CONTEST_NO')
-    file_path = models.ImageField(db_column='FILE_PATH', upload_to=contest_file_upload_to)
+    file_path = models.FileField(db_column='FILE_PATH', max_length=1000, upload_to=file_upload_to, blank=True)
 
     class Meta:
         managed = False
         db_table = 'CONTEST_FILE'
         ordering = ['-file_path']  # 항상 게시글의 이미지를 먼저 가져오기 위함.(썸네일 관련)
+
+
+class MethodInfo(models.Model):
+    method_no = models.AutoField(db_column='METHOD_NO', primary_key=True)  # Field name made lowercase.
+    method_name = models.CharField(db_column='METHOD_NAME', max_length=100)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'METHOD_INFO'
+
+
+# 메소드 선택지를 위한 튜플  변수 생성
+METHOD_CHOICES = []
+for method in MethodInfo.objects.all():
+    METHOD_CHOICES.append((method.method_no, method.method_name))
+METHOD_CHOICES = tuple(METHOD_CHOICES)
 
 
 # 강의 썸네일 사진 업로드 경로
@@ -238,22 +264,31 @@ class Lect(models.Model):
     lect_title = models.CharField(db_column='LECT_TITLE', max_length=100)  # Field name made lowercase.
     lect_chief = models.ForeignKey('User', models.DO_NOTHING, db_column='LECT_CHIEF')  # Field name made lowercase.
     lect_pic = models.ImageField(db_column='LECT_PIC', max_length=1000,
-                                 upload_to=lect_pic_upload_to)  # Field name made lowercase.
+                                 upload_to=lect_pic_upload_to, null=True)  # Field name made lowercase.
     lect_type = models.ForeignKey('LectType', models.DO_NOTHING, db_column='LECT_TYPE')  # Field name made lowercase.
     lect_created = models.DateTimeField(db_column='LECT_CREATED', auto_now_add=True)  # Field name made lowercase.
     lect_intro = models.CharField(db_column='LECT_INTRO', max_length=300)  # Field name made lowercase.
-    lect_state = models.ForeignKey('StateInfo', models.DO_NOTHING, db_column='LECT_STATE')  # Field name made lowercase.
+    lect_state = models.ForeignKey('StateInfo', models.DO_NOTHING, db_column='LECT_STATE',
+                                   default=1, null=True, blank=True)  # Field name made lowercase.
     lect_curri = models.TextField(db_column='LECT_CURRI')  # Field name made lowercase.
     lect_limit_num = models.IntegerField(db_column='LECT_LIMIT_NUM')  # Field name made lowercase.
-    lect_place_or_link = models.CharField(db_column='LECT_PLACE_OR_LINK', max_length=1000)  # Field name made lowercase.
-    lect_method = models.ForeignKey('MethodInfo', models.DO_NOTHING,
-                                    db_column='LECT_METHOD')  # Field name made lowercase.
+    lect_place_or_link = models.CharField(db_column='LECT_PLACE_OR_LINK', max_length=1000, null=True, blank=True)  # Field name made lowercase.
+    lect_method = models.ForeignKey('MethodInfo', models.DO_NOTHING, db_column='LECT_METHOD',
+                                    choices=METHOD_CHOICES, null=True, blank=True)  # Field name made lowercase.
     lect_deadline = models.DateTimeField(db_column='LECT_DEADLINE')  # Field name made lowercase.
-    lect_reject_reason = models.CharField(db_column='LECT_REJECT_REASON', null=True, max_length=200)
+    lect_reject_reason = models.CharField(db_column='LECT_REJECT_REASON', null=True, blank=True, max_length=200)
 
     class Meta:
         managed = False
         db_table = 'LECT'
+
+    @property
+    def get_file_path(self):
+        return os.path.join(MEDIA_ROOT, 'lect', "pic", str(self.lect_no))
+
+    @property
+    def is_expired(self):
+        return pytz.UTC.localize(datetime.now()) < self.lect_deadline
 
 
 class LectDay(models.Model):
@@ -267,19 +302,90 @@ class LectDay(models.Model):
 
 
 class LectBoard(models.Model):
-    lect_board_no = models.AutoField(db_column='LECT_BOARD_NO', primary_key=True)  # Field name made lowercase.
-    lect_board_title = models.CharField(db_column='LECT_BOARD_TITLE', max_length=100)  # Field name made lowercase.
-    lect_board_created = models.DateTimeField(db_column='LECT_BOARD_CREATED',
-                                              auto_now_add=True)  # Field name made lowercase.
-    lect_board_cont = models.TextField(db_column='LECT_BOARD_CONT')  # Field name made lowercase.
-    lect_board_writer = models.ForeignKey('User', models.DO_NOTHING,
-                                          db_column='LECT_BOARD_WRITER')  # Field name made lowercase.
-    lect_no = models.ForeignKey(Lect, models.DO_NOTHING, db_column='LECT_NO')  # Field name made lowercase.
-    lect_board_deadline = models.DateTimeField(db_column='LECT_BOARD_DEADLINE')  # Field name made lowercase.
+    lect_board_no = models.AutoField(db_column='LECT_BOARD_NO', primary_key=True)
+    lect_board_title = models.CharField(db_column='LECT_BOARD_TITLE', max_length=100)
+    lect_board_created = models.DateTimeField(db_column='LECT_BOARD_CREATED', auto_now_add=True)
+    lect_board_cont = models.TextField(db_column='LECT_BOARD_CONT')
+    lect_board_writer = models.ForeignKey('User', models.DO_NOTHING, db_column='LECT_BOARD_WRITER')
+    lect_no = models.ForeignKey(Lect, models.DO_NOTHING, db_column='LECT_NO', related_name='lectures')
+    lect_board_type = models.ForeignKey('LectBoardType', models.DO_NOTHING, db_column='LECT_BOARD_TYPE')
+    lect_board_link = models.CharField(db_column='LECT_BOARD_LINK', max_length=500, null=True, blank=True)
 
     class Meta:
         managed = False
         db_table = 'LECT_BOARD'
+        ordering = ['-lect_board_created']
+
+    @property
+    def get_file_path(self):
+        return os.path.join(MEDIA_ROOT, 'lecture', 'board', str(self.lect_board_no))
+
+
+class LectAssignment(models.Model):
+    lect_assignment_no = models.AutoField(db_column='LECT_ASSIGNMENT_NO', primary_key=True)
+    lect_assignment_title = models.CharField(db_column='LECT_ASSIGNMENT_TITLE', max_length=100, blank=True)
+    lect_assignment_created = models.DateTimeField(db_column='LECT_ASSIGNMENT_CREATED', auto_now_add=True)
+    lect_assignment_cont = models.TextField(db_column='LECT_ASSIGNMENT_CONT', blank=True)
+    lect_assignment_writer = models.ForeignKey('User', models.DO_NOTHING, db_column='LECT_ASSIGNMENT_WRITER')
+    lect_assignment_deadline = models.DateTimeField(db_column='LECT_ASSIGNMENT_DEADLINE', null=True, blank=True)
+    lect_board_no = models.ForeignKey('LectBoard', on_delete=models.CASCADE,
+                                            db_column="LECT_BOARD_NO", related_name='assignments')
+
+    class Meta:
+        managed = False
+        db_table = 'LECT_ASSIGNMENT'
+
+    @property
+    def get_file_path(self):
+        return os.path.join(MEDIA_ROOT, 'lecture', 'assignment', str(self.lect_assignment_no))
+
+
+class LectAssignmentFile(File):
+    def file_upload_to(self, filename):
+        return f'lecture/assignment/{self.lect_assignment_no.pk}/{filename}'
+
+    lect_assignment_no = models.ForeignKey('LectAssignment', db_column='LECT_ASSIGNMENT_NO', on_delete=models.CASCADE,
+                                           related_name='file')
+    file_path = models.FileField(db_column='FILE_PATH', max_length=1000, upload_to=file_upload_to, blank=True)
+
+    class Meta:
+        managed = False
+        db_table = 'LECT_ASSIGNMENT_FILE'
+
+
+class LectAttendance(models.Model):
+    id = models.AutoField(db_column='ID', primary_key=True)
+    lect_board_no = models.ForeignKey('LectBoard', on_delete=models.CASCADE, db_column="LECT_BOARD_NO",
+                                      related_name='attendance_info')
+    student = models.ForeignKey('LectEnrollment', on_delete=models.DO_NOTHING, db_column='STUDENT',
+                                related_name='attendance')
+    lect_attend_date = models.DateTimeField(db_column='LECT_ATTEND_DATE', auto_now_add=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'LECT_ATTENDANCE'
+        unique_together = (('student', 'lect_board_no'),)
+
+
+class LectEnrollment(models.Model):
+    id = models.AutoField(db_column='ID', primary_key=True)
+    lect_no = models.ForeignKey('Lect', on_delete=models.CASCADE, db_column='LECT_NO', related_name='enrolled_students')
+    student = models.ForeignKey('User', on_delete=models.DO_NOTHING, db_column='STUDENT')
+
+    class Meta:
+        managed = False
+        db_table = 'LECT_ENROLLMENT'
+        unique_together = (('student', 'lect_no'),)
+
+
+class LectBoardType(models.Model):
+    lect_board_type_no = models.AutoField(db_column='LECT_BOARD_TYPE_NO', primary_key=True)
+    lect_board_type_name = models.CharField(db_column='LECT_BOARD_TYPE_NAME', max_length=20)
+    lect_board_type_exp = models.CharField(db_column='LECT_BOARD_TYPE_EXP', max_length=20)
+
+    class Meta:
+        managed = False
+        db_table = 'LECT_BOARD_TYPE'
 
 
 class LectBoardAnswer(models.Model):
@@ -351,13 +457,11 @@ class LectBoardExFile(models.Model):
         db_table = 'LECT_BOARD_EX_FILE'
 
 
-class LectBoardFile(models.Model):
-    lect_board_file_id = models.AutoField(db_column='LECT_BOARD_FILE_ID',
-                                          primary_key=True)  # Field name made lowercase.
-    lect_board_no = models.ForeignKey(LectBoard, on_delete=models.CASCADE,
-                                      db_column='LECT_BOARD_NO')  # Field name made lowercase.
-    lect_board_file_path = models.CharField(db_column='LECT_BOARD_FILE_PATH',
-                                            max_length=1000)  # Field name made lowercase.
+class LectBoardFile(File):
+    def file_upload_to(self, filename):
+        return f'lecture/board/{self.lect_board_no.lect_board_no}/{filename}'
+    lect_board_no = models.ForeignKey('LectBoard', on_delete=models.CASCADE, db_column='LECT_BOARD_NO', related_name='file')
+    file_path = models.FileField(db_column='FILE_PATH', max_length=1000, upload_to=file_upload_to, blank=True)
 
     class Meta:
         managed = False
@@ -377,22 +481,12 @@ class LectCheck(models.Model):
 
 class LectType(models.Model):
     type_no = models.AutoField(db_column='TYPE_NO', primary_key=True)  # Field name made lowercase.
-    type_name = models.IntegerField(db_column='TYPE_NAME', unique=True)  # Field name made lowercase.
+    type_name = models.CharField(db_column='TYPE_NAME', unique=True, max_length=20)  # Field name made lowercase.
     type_exp = models.CharField(db_column='TYPE_EXP', max_length=100)
 
     class Meta:
         managed = False
         db_table = 'LECT_TYPE'
-
-
-class LectUser(models.Model):
-    lect_user_stu = models.AutoField(db_column='LECT_USER_STU', primary_key=True)  # Field name made lowercase.
-    lect_no = models.ForeignKey(Lect, models.DO_NOTHING, db_column='LECT_NO')  # Field name made lowercase.
-    lect_user = models.ForeignKey('User', models.DO_NOTHING, db_column='LECT_USER')  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'LECT_USER'
 
 
 class MajorInfo(models.Model):
@@ -403,15 +497,6 @@ class MajorInfo(models.Model):
     class Meta:
         managed = False
         db_table = 'MAJOR_INFO'
-
-
-class MethodInfo(models.Model):
-    method_no = models.AutoField(db_column='METHOD_NO', primary_key=True)  # Field name made lowercase.
-    method_name = models.CharField(db_column='METHOD_NAME', max_length=100)  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'METHOD_INFO'
 
 
 class QuestForm(models.Model):
@@ -437,7 +522,6 @@ def user_pic_upload_to(instance, filename):
 
 
 class User(models.Model):
-    user_email = models.CharField(db_column='USER_EMAIL', max_length=100)  # Field name made lowercase.
     user_stu = models.IntegerField(db_column='USER_STU', primary_key=True)  # Field name made lowercase.
     user_name = models.CharField(db_column='USER_NAME', max_length=50)  # Field name made lowercase.
     user_major = models.ForeignKey(MajorInfo, models.DO_NOTHING, db_column='USER_MAJOR')  # Field name made lowercase.
@@ -454,6 +538,10 @@ class User(models.Model):
         managed = False
         db_table = 'USER'
 
+    @property
+    def get_file_path(self):
+        return os.path.join(MEDIA_ROOT, "member", str(self.user_stu))
+
 
 class UserAuth(models.Model):
     auth_no = models.AutoField(db_column='AUTH_NO', primary_key=True)  # Field name made lowercase.
@@ -464,20 +552,72 @@ class UserAuth(models.Model):
         db_table = 'USER_AUTH'
 
 
-class UserDeleteFile(models.Model):
-    user_delete_id = models.AutoField(db_column='USER_DELETE_ID', primary_key=True)  # Field name made lowercase.
-    user_stu = models.ForeignKey(User, on_delete=models.CASCADE, db_column='USER_STU')  # Field name made lowercase.
-    user_delete_file_path = models.CharField(db_column='USER_DELETE_FILE_PATH',
-                                             max_length=1000)  # Field name made lowercase.
+class UserDelete(models.Model):
+    user_delete_no = models.AutoField(db_column="USER_DELETE_NO", primary_key=True)
+    user_delete_title = models.CharField(db_column="USER_DELETE_TITLE", max_length=100)
+    user_delete_content = models.CharField(db_column="USER_DELETE_CONTENT", max_length=5000)
+    user_delete_created = models.DateTimeField(db_column="USER_DELETE_CREATED", auto_now_add=True)
+    deleted_user = models.ForeignKey(User, on_delete=models.CASCADE, db_column='DELETED_USER',
+                                     related_name="DELETED_USER")
+    suggest_user = models.ForeignKey(User, models.DO_NOTHING, db_column='SUGGEST_USER', related_name="SUGGEST_USER")
+    user_delete_state = models.ForeignKey("UserDeleteState", on_delete=models.CASCADE, db_column="USER_DELETE_STATE")
+
+    class Meta:
+        managed = False
+        db_table = 'USER_DELETE'
+
+    @property
+    def get_file_path(self):
+        return os.path.join(MEDIA_ROOT, 'member', 'delete', str(self.user_delete_no))
+
+
+# 제명 증거자료 올라가는 경로
+def user_delete_upload_to(instance, filename):
+    return f'staff/user/delete/{instance.user_delete_no.user_delete_no}/{filename}'
+
+
+class UserDeleteFile(File):
+    user_delete_no = models.ForeignKey(UserDelete, db_column="USER_DELETE_NO", on_delete=models.CASCADE)
+    file_path = models.FileField(db_column='FILE_PATH', max_length=100,
+                                 upload_to=user_delete_upload_to)  # Field name made lowercase.
 
     class Meta:
         managed = False
         db_table = 'USER_DELETE_FILE'
 
 
+class UserDeleteAor(models.Model):
+    aor_no = models.AutoField(db_column="AOR_NO", primary_key=True)
+    aor_user = models.ForeignKey(User, db_column="AOR_USER", on_delete=models.CASCADE)
+    user_delete_no = models.ForeignKey(UserDelete, db_column="USER_DELETE_NO", on_delete=models.CASCADE)
+    aor_created = models.DateTimeField(db_column="AOR_CREATED", auto_now=True)
+    aor = models.IntegerField(db_column="AOR")
+
+    class Meta:
+        managed = False
+        db_table = "USER_DELETE_AOR"
+
+
+class UserDeleteState(models.Model):
+    state_no = models.AutoField(db_column="STATE_NO", primary_key=True)
+    state_name = models.CharField(db_column="STATE_NAME", unique=True, max_length=20)
+
+    class Meta:
+        managed = False
+        db_table = "USER_DELETE_STATE"
+
+
+class UserDeleteComment(CommentBase):
+    user_delete_no = models.ForeignKey(UserDelete, on_delete=models.CASCADE, db_column="USER_DELETE_NO")
+
+    class Meta:
+        managed = False
+        db_table = "USER_DELETE_COMMENT"
+
+
 class UserEmail(models.Model):
-    email_no = models.AutoField(primary_key=True)
-    user_email = models.CharField(max_length=100)
+    user_email = models.CharField(max_length=100, db_column="USER_EMAIL", primary_key=True)
+    provider = models.CharField(max_length=20, db_column="PROVIDER")
     user_stu = models.ForeignKey(User, on_delete=models.CASCADE, db_column='user_stu')
 
     class Meta:

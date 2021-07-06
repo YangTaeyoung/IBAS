@@ -142,10 +142,9 @@
                                     </tr>
                                 {% endif %}
                                 </div>
-                                {% if logined_user.user_role.role_no < 3 %}
+                                {% if is_logined and logined_user.user_auth.auth_no < 3 %}
                                 <div class="extra-cell text-right  m-t20">
                                     <!-- 게시글 등록 버튼 -->
-                                    <!-- 관련자만 보이게 처리 -->
                                     <button class="site-button radius-xl m-l10" onclick="location.href='{% url 'contest_register'%}'">
                                         <i class="fa fa-plus m-r5"></i>게시글 등록
                                     </button>
@@ -153,25 +152,9 @@
                                 {% endif %}
                                 <!--========== 페이지네이션 시작 ===========-->
                                 <!-- 1페이지에 6~8개 게시글 끌고오고, 게시글이 그보다 적으면, 페이지네이션 안보이게 처리 -->
-                                <div class="pagination-bx clearfix text-center">
-                                    <ul class="pagination">
-                                        {% if contest_list.has_previous %}
-                                            <li class="previous"><a href="?page=1"><i class="fa fa-arrow-left"></i></a>
-                                            </li>
-                                            <li>
-                                                <a href="?page={{ contest_list.previous_page_number }}"> {{ contest_list.previous_page_number }}</a>
-                                            </li>
-                                        {% endif %}
-                                        <li><a href="javascript:void(0)">{{ contest_list.number }}</a></li>
-                                        {% if contest_list.has_next %}
-                                            <li>
-                                                <a href="?page={{ contest_list.next_page_number }}"> {{ contest_list.next_page_number }}</a>
-                                            </li>
-                                            <li class="next"><a href="?page={{ contest_list.paginator.num_pages }}"><i
-                                                    class="fa fa-arrow-right"></i></a></li>
-                                        {% endif %}
-                                    </ul>
-                                </div>
+                            {% if contest_list|length != 0 %}
+                                {% include 'pagination.html' with item_list=contest_list %}
+                            {% endif %}
                                 <!--========== 페이지네이션 끝 ===========-->
                             </div>
                         </div>

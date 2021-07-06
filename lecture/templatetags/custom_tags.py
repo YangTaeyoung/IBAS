@@ -1,0 +1,15 @@
+from django import template
+
+register = template.Library()
+
+
+# 템플릿에서 빼기 사용하려고 만듦.
+@register.filter
+def subtract(value, arg):
+    return value - arg
+
+
+# 템플릿에서 스트링끼리 더하려고 만듦.
+@register.filter
+def addstr(value, arg):
+    return str(value) + str(arg)

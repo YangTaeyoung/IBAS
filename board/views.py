@@ -6,7 +6,7 @@ from board.forms import BoardForm, ContestForm, FileForm
 from file_controller import FileController
 from pagination_handler import get_page_object
 from alarm.alarm_controller import create_comment_alarm, create_comment_ref_alarm
-from user_controller import login_required, writer_only
+from user_controller import login_required, writer_only, auth_check
 
 
 # ---- get_sidebar_information ---- #
@@ -88,6 +88,7 @@ def get_context_of_contest_(contest_no):
 # : 게시글 목록 페이지
 # 작성자 : 양태영
 # 마지막 수정 일시 :
+@login_required
 def board_view(request, board_type_no):  # 게시판 페이지로 이동
     if board_type_no == 5:
         board_list = Board.objects.all().select_related("board_writer").order_by(
@@ -96,9 +97,9 @@ def board_view(request, board_type_no):  # 게시판 페이지로 이동
         board_list = Board.objects.filter(board_type_no=BoardType.objects.get(pk=board_type_no)).select_related(
             "board_writer").order_by("-board_created")
 
-    item = get_page_object(request, board_list)
+    board_list = get_page_object(request, board_list)
     context = {
-        "board_list": item,
+        "board_list": board_list,
         "board_name": BoardType.objects.get(pk=board_type_no).board_type_name,
         "board_exp": BoardType.objects.get(pk=board_type_no).board_type_exp,
         "board_type_no": board_type_no,
@@ -141,6 +142,7 @@ def board_search(request):
 # 마지막 수정 일시 : 2021.04.13 (유동현)
 # 수정내용 : 코드 최적화
 #   - context 변수 가져오는 함수 생성
+@auth_check(active=True)
 def board_detail(request, board_no):  # 게시글 상세 보기
     context = get_context_of_board_(board_no)
 
@@ -152,7 +154,7 @@ def board_detail(request, board_no):  # 게시글 상세 보기
 # 작성자 : 양태영
 # 마지막 수정 일시 : 2021.04.30 (유동현)
 # 수정내용 : 모델 폼 적용에 따른 코드 수정
-@login_required
+@auth_check()
 def board_register(request):
     # 글쓰기 들어와서 등록 버튼을 누르면 실행이 되는 부분
     if request.method == "POST":
@@ -164,7 +166,6 @@ def board_register(request):
                 board = board_form.save(
                     board_writer=User.objects.get(pk=request.session.get('user_stu')))
                 file_form.save(instance=board)
-
             return redirect("board_detail", board_no=board.board_no)
         else:
             return redirect("board_view", board_type_no=5)
@@ -186,8 +187,7 @@ def board_register(request):
 # 작성자 : 양태영
 # 마지막 수정 일시 : 2021.04.30 (유동현)
 # 수정내용 : 모델 폼 적용에 따른 코드 수정
-@login_required
-@writer_only
+@writer_only()
 def board_update(request, board_no):
     board = get_object_or_404(Board, pk=board_no)
 
@@ -223,7 +223,7 @@ def board_update(request, board_no):
 # 작성자 : 양태영
 # 마지막 수정 일시 : 2021.04.30 (유동현)
 # 수정내용 : 모델폼 사용 => urls.py 변경에 따른 코드 수정
-@login_required
+@writer_only(superuser=True)
 def board_delete(request, board_no):
     board = Board.objects.get(pk=board_no)
 
@@ -235,7 +235,7 @@ def board_delete(request, board_no):
 
 
 # 댓글 달기 코드
-@login_required
+@auth_check()
 def board_comment_register(request):
     if request.method == "POST":
         board = Board.objects.get(pk=request.POST.get('board_no'))  # 게시글 번호 들고오는 것임
@@ -263,7 +263,7 @@ def board_comment_register(request):
 
 
 # 댓글 삭제 코드
-@login_required
+@writer_only(superuser=True)
 def board_comment_delete(request):
     if request.method == "POST":  # 댓글 삭제를 누를 경우
         board_no = request.POST.get('board_no')
@@ -275,7 +275,7 @@ def board_comment_delete(request):
 
 
 # 댓글 수정 코드
-@login_required
+@writer_only()
 def board_comment_update(request):
     if request.method == "POST":  # 정상적으로 파라미터가 넘어왔을 경우
         board_no = request.POST.get('board_no')
@@ -292,15 +292,16 @@ def board_comment_update(request):
 # 작성자 : 유동현
 # 마지막 수정 일시 : 2021.04.13
 # 수정내용 :
+@login_required
 def contest_list(request):
     # 공모전 게시물 전부를 해당 파일과 함께 Queryset 으로 가져오기
     contest_board_list = ContestBoard.objects.all().order_by('-contest_deadline').prefetch_related("contestfile_set")
 
     # pagination 을 위한 page 객체 (page 객체 안에는 한 페이지에 보여줄만큼의 게시물이 들어있다.)
-    item = get_page_object(request, contest_board_list, num_of_boards_in_one_page=6)
+    contest__list = get_page_object(request, contest_board_list, num_of_boards_in_one_page=6)
 
     context = {
-        "contest_list": item,
+        "contest_list": contest__list,
         "board_name": "공모전 게시판",
         "board_exp": "공모전 정보를 알려주는 게시판",
     }
@@ -317,7 +318,7 @@ def contest_list(request):
 # 수정내용 : 모델 폼으로 처리하는 걸로 코드 수정
 # 버그 처리해야할 사항 :: 등록 버튼 누르고 가끔 로딩되면서 화면전환이 늦어질 때가 있는데,
 #                      그 때 등록버튼 연타하면 클릭한수만큼 동일한 게시글 작성됨.
-@login_required
+@auth_check()
 def contest_register(request):  # 공모전 등록
     if request.method == 'POST':
         contest_form = ContestForm(request.POST)
@@ -331,7 +332,7 @@ def contest_register(request):  # 공모전 등록
                     contest_writer=User.objects.get(pk=request.session.get('user_stu')))
                 file_form.save(instance=contest)
         else:
-            pass
+            pass  # 오류처리 필요
 
         # form의 유효성과 관계없이 게시글 목록으로 이동
         return redirect(reverse('contest_list'))
@@ -350,6 +351,7 @@ def contest_register(request):  # 공모전 등록
 # 작성자 : 유동현
 # 마지막 수정 일시 : 2021.04.13
 # 수정내용 :
+@auth_check()
 def contest_detail(request, contest_no):  # 게시판 상세 페이지로 이동
     if request.method == 'GET':
         context = get_context_of_contest_(contest_no)
@@ -365,8 +367,7 @@ def contest_detail(request, contest_no):  # 게시판 상세 페이지로 이동
 # 작성자 : 유동현
 # 마지막 수정 일시 : 2021.04.30
 # 수정내용 : 모델 폼 사용 => urls.py 변경에 따른 코드 수정
-@login_required
-@writer_only
+@writer_only(superuser=True)
 def contest_delete(request, contest_no):
     contest = ContestBoard.objects.get(pk=contest_no)
 
@@ -384,8 +385,7 @@ def contest_delete(request, contest_no):
 # 수정내용 : 모델 폼 사용 => urls.py 변경에 따른 코드 수정
 # 버그 처리해야할 사항 :: 수정 버튼 누르고 가끔 로딩되면서 화면전환이 늦어질 때가 있는데,
 #                      그 때 수정버튼 연타하면 클릭한수만큼 동일한 게시글 작성됨.
-@login_required
-@writer_only
+@writer_only()
 def contest_update(request, contest_no):
     contest = get_object_or_404(ContestBoard, pk=contest_no)
 
@@ -422,7 +422,7 @@ def contest_update(request, contest_no):
 # 작성자 : 유동현
 # 마지막 수정 일시 : 2021.04.15
 # 수정내용 :
-@login_required
+@writer_only()
 def contest_comment_update(request):
     if request.method == "POST":
         contest_no = request.POST.get("contest_no")
@@ -438,7 +438,7 @@ def contest_comment_update(request):
 # 작성자 : 유동현
 # 마지막 수정 일시 : 2021.04.15
 # 수정내용 :
-@login_required
+@writer_only(superuser=True)
 def contest_comment_delete(request):
     if request.method == "POST":
         contest_no = request.POST.get('contest_no')
@@ -454,7 +454,7 @@ def contest_comment_delete(request):
 # 작성자 : 유동현
 # 마지막 수정 일시 : 2021.04.15
 # 수정내용 :
-@login_required
+@auth_check()
 def contest_comment_register(request):
     contest = None
 

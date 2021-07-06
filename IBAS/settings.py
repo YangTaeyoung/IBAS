@@ -12,11 +12,13 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
+from my_root import *
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+
 ROOT_DIR = os.path.dirname(BASE_DIR)
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -56,6 +58,10 @@ INSTALLED_APPS = [
     'staff',
     # 강의 관련 앱
     'lecture',
+    # widget_tweaks
+    'widget_tweaks',
+    # 템플릿에서 산술연산을 하기 위한 앱
+    'mathfilters',
     # 소셜 로그인 패키지: allauth 관련
     'allauth',
     'allauth.account',
@@ -84,7 +90,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             BASE_DIR / 'templates',
-            'C:/WebProject/Django/IBAS/templates',
+            MY_TEMPLATE_ROOT,
         ]
         ,
         'APP_DIRS': True,
@@ -98,6 +104,8 @@ TEMPLATES = [
                 'utils.context_processors.chief',  # 하단바 회장 정보를 불러오기 위한 context_processor
                 'utils.context_processors.login',  # 로그인을 위한 context_processor
                 'utils.context_processors.login_check',  # 로그인 확인을 위한 context_processor
+                'utils.context_processors.superuser_check',  # 슈퍼유저 확인을 위한 context_processor
+                'utils.context_processors.is_active',
             ],
         },
     },
@@ -109,16 +117,7 @@ WSGI_APPLICATION = 'IBAS.wsgi.application'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 
-DATABASES = {
-     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'ibas_local',
-        'USER': 'root',
-        'PASSWORD': '1234',
-        'HOST': 'localhost',
-        'PORT': '3306',
-    }
-}
+DATABASES = MY_DATABASE
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -163,7 +162,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(ROOT_DIR, '.static_root')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
-    'C:/WebProject/Django/IBAS/static',
+    MY_STATIC_ROOT
 ]
 # social 로그인 패키지 설정
 AUTHENTICATION_BACKENDS = (
@@ -191,3 +190,13 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'ibasmail20@gmail.com'
 EMAIL_HOST_PASSWORD = 'weloveyoukhk'
+
+# 브라우져 종료시 세션 만료
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+# HTTPS
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_SSL_REDIRECT = True
+

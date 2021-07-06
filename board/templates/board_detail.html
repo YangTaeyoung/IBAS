@@ -5,6 +5,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/comment.css' %}">
     <script src="{% static 'js/jquery.min.js' %}"></script><!-- JQUERY.MIN JS -->
     <script src="{% static 'js/comment.js' %}"></script>
+    <script src="{% static 'js/form.js' %}"></script>
 
     <div class="page-wraper">
 
@@ -65,7 +66,7 @@
                                         <!-- 파일 리스트 길이가 0이 아닐 경우에만 파일 리스트를 출력하게 함. -->
                                         {% if file_list %}
                                             <div class="download-box">
-                                            {% for board_file in file_list %}
+                                                {% for board_file in file_list %}
                                                     <!-- 첨부파일 1 -->
                                                      <i class="fa fa-download m-r15 "></i><a class="line2" download
                                                                                              href="/media/{{ board_file.file_path }}">{{ board_file.file_name }}</a>
@@ -73,7 +74,7 @@
                                                     {% if forloop.revcounter0 != 0 %}
                                                         <div class="dlab-divider tb10 bg-gray-dark"></div>
                                                     {% endif %}
-                                            {% endfor %}
+                                                {% endfor %}
                                             </div>
                                         {% endif %}
                                         <!-- 게시글 속 사진 모음 -->
@@ -153,10 +154,9 @@
                                         <!-- 게시글 삭제 버튼 -->
                                         <!-- 관련자만 보이게 처리 -->
 
-                                        {% if logined_user.user_stu == board.board_writer.user_stu or logiend_user.user_role.role_no <= 3 %}
-
+                                        {% if logined_user.user_stu == board.board_writer.user_stu or logined_user.user_role.role_no <= 3 %}
                                             <button class="site-button red radius-xl m-l10"
-                                                    onclick="location.href='{% url 'board_delete' board_no=board.board_no %}'">
+                                                    onclick="goPage('{% url 'board_delete' board_no=board.board_no %}', true, '게시글은 삭제되면 복구가 불가능합니다.\n정말 삭제하시겠습니까?')">
                                                 <i class="fa fa-trash m-r5"></i>게시글 삭제
                                             </button>
 
@@ -231,7 +231,7 @@
                                                                       action="{% url 'board_comment_delete' %}"
                                                                       method="post">
 
-                                                                    {% if logined_user.user_stu is not None and logined_user.user_auth.auth_no < 3  %}
+                                                                    {% if logined_user.user_stu is not None and logined_user.user_auth.auth_no < 3 %}
                                                                         <button type="button"
                                                                                 id="btnAdd-{{ comment.comment_id }}"
                                                                                 onclick="addReply({{ comment.comment_id }},'{% url "board_comment_register" %}', {{ board.board_no }})"
