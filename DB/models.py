@@ -211,8 +211,8 @@ class ContestComment(models.Model):
         db_table = 'CONTEST_COMMENT'
 
 
-def contest_file_upload_to(instance, filename):
-        return f'board/contest/{instance.contest_no.contest_no}/{filename}'
+def contest_file_upload_to(self, filename):
+    return f'board/contest/{self.contest_no.contest_no}/{filename}'
 
 
 class ContestFile(File):
