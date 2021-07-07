@@ -104,95 +104,18 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <!--======================파일 첨부 박스======================-->
 
-                                    {% if board_type > 1 %}
-                                        <!--=====================코드 테스트 박스=======================-->
-                                        <div class="content-box">
-                                            <div class="content-header">
-                                                <h3 class="title">코드</h3>
-                                            </div>
-                                            <div class="content-body">
-                                                <div class="form-group">
-                                                    <pre class="prettyprint" style="overflow-x: auto; border-radius: 10px">
-def lect_view(request, type_no):  # 게시판 페이지로 이동
-    lect_type = LectType.objects.get(pk=type_no)
-
-    # 회장단에 의해 승인된 강의만 등록, 스터디는 등록 시 이미 승인.
-    lect_list = get_page_object(request, Lect.objects.filter(
-        Q(lect_type=lect_type) & Q(lect_state__state_no=3)).prefetch_related(
-        "lectday_set").prefetch_related("lectuser_set"))
-    context = {
-        "type": lect_type,
-        "lecture": LectType.objects.get(pk=1),
-        "lect_list": lect_list
-    }
-    return render(request, 'lecture_list.html', context)
-                                                    </pre>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- ======================과제 입력 박스/강의글 등록할 때만 뜨도록 수정====================== -->
-                                        <div class="content-box">
-                                            <div class="content-header">
-                                                <!--내용-->
-                                                <h3 class="title"></h3>
-                                            </div>
-                                            <div class="content-body editor">
-                                                <div class="form-group">
-                                                    <!--과제 유무를 확인하는 체크박스-->
-                                                    <div
-                                                      id="assignment-box"
-                                                      data-toggle="collapse"
-                                                      data-target="#homework"
-                                                      role="button"
-                                                      aria-expanded="false"
-                                                      aria-controls="tagline">
-                                                        <input id="has_assignment" name="has_assignment" type="checkbox" />
-                                                        <label for="has_assignment">과제가 있습니다.</label>
-                                                    </div>
-                                                    <!--과제가 있다고 체크하면 나오는 창, 과제 등록하는 곳-->
-                                                    <div class="form-group collapse" id="homework">
-                                                        <hr/>
-                                                        <label>{{ assignment_form.lect_assignment_title.label }}</label>
-                                                        <!--과제 제목 입력하는 곳-->
-                                                        {% render_field assignment_form.lect_assignment_title class="form-control" %}
-                                                       <hr/>
-                                                        <div class="form-group">
-                                                            <!--과제 관련 파일 첨부하는 곳-->
-                                                            <label>과제 관련 파일</label>
-                                                            {{ assignment_file_form.assignment_file }}
-                                                        </div>
-
-                                                        <!-- 이미 존재하고 있던 파일: 삭제 가능 (수정모드)/과제관련 파일 정의되어있지 않아서 일단 뒤에_homework붙였음 -->
-                                                        {% include "file_update_box.html" with file_list=assignment_file_list %}
-
-                                                        <hr/>
-                                                        <!--과제 내용-->
-                                                        <label>{{ assignment_form.lect_assignment_cont.label }}</label>
-                                                        <!--과제 내용 입력하는 곳-->
-                                                        {% render_field assignment_form.lect_assignment_cont class="jqte-test" %}
-
-                                                        <hr/>
-                                                        <!--과제 마감일-->
-                                                        <label>{{ assignment_form.lect_assignment_deadline.label }}</label>
-                                                        <!--과제 마감일 입력하는 곳-->
-                                                        {% render_field assignment_form.lect_assignment_deadline class="form-control" %}
-                                                      </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    {% endif %}
-                                        <!--등록버튼, 수정할 때는 수정하기로 뜨도록 수정필요-->
-                                        <div style="display: grid; justify-items: center">
-                                            <button class="site-button btn-block button-md" type="submit" style="width: 30%">
-                                                {% if board_no %}
-                                                    수정하기
-                                                {% else %}
-                                                    등록하기
-                                                {% endif %}
-                                            </button>
-                                        </div>
+                                    <!--등록버튼, 수정할 때는 수정하기로 뜨도록 수정필요-->
+                                    <div style="display: grid; justify-items: center">
+                                        <button class="site-button btn-block button-md" type="submit" style="width: 30%">
+                                            {% if board_no %}
+                                                수정하기
+                                            {% else %}
+                                                등록하기
+                                            {% endif %}
+                                        </button>
+                                    </div>
                                 </form>
                             </div>
                             <!--========================= 강의룸 등록 부분 끝 =========================-->
