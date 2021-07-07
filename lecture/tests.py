@@ -65,7 +65,8 @@ class LectAttendanceTest(TestCase):
         """
                 강의자 메뉴 中 : 출석 페이지, 수강생 이름 + 학번 + 출석여부 띄우기
         """
-        lect_room = Lect.objects.prefetch_related("enrolled_students", "lectures").first()
+        lect_room = Lect.objects.prefetch_related("enrolled_students", "lectures"
+                                                  ).filter(lect_title="빠르게 시작하는 파이썬").first()
         lect_board = lect_room.lectures.first()
         query = f"""SELECT u.USER_NAME, u.USER_STU, if(isnull(attend.LECT_ATTEND_DATE),false,true) as attendance
                     FROM LECT_ENROLLMENT AS enrollment
@@ -92,7 +93,7 @@ class LectAttendanceTest(TestCase):
         """
                 강의자 메뉴 中 : 출석 페이지, 출석 & 결석 정보 변경 요청 시도 (POST)
         """
-        lect_room = Lect.objects.filter(lect_chief_id=12162359).last()
+        lect_room = Lect.objects.filter(lect_title="빠르게 시작하는 파이썬").first()
         context = {
             'lect_board_no_': lect_room.lectures.first().lect_board_no
         }

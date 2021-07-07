@@ -333,9 +333,10 @@ def lect_room_attend_teacher(request, room_no):
         # 강의 게시글 번호. select option 값 / default 는 마지막 강의 게시글, 게시글이 하나도 없으면 0.
         # 처음 이 페이지를 렌더링 할 때는 get 파라미터가 존재하지 않음. 이 강의 첫 게시글이 존재하지 않으면, 게시글 번호 존재 X
         lect_board_no = request.GET.get('lect_board_no',
-                                        None if not lect_board_list.exists() else lect_board_list[0].lect_board_no)
+                                        None if not lect_board_list else lect_board_list[0].lect_board_no)
 
-        if lect_board_list.exists() and lect_board_list[0].enrolled_students.exists():  # 이거 맞나?
+        # 강의 게시물이 있고, 수강생이 있는 두 경우를 모두 충족시켜야 출석페이지 출력가능
+        if lect_board_list and lect_room.enrolled_students:
             # 장고 ORM 으로 쿼리 수행 불가하여, raw query 작성.
             # connection : default db에 연결되어 있는 built in 객체
             # (on 부분) enrollment.STUDENT 가 없으면 mariadb 오류!
@@ -376,14 +377,17 @@ def lect_room_attend_teacher(request, room_no):
             if manage_mode['출석']:
                 # input checkbox 로 넘어온 모든 학번에 대해, 출석처리
                 # db 에서 (게시글 번호, 학번) 묶어서 unique key 설정했음.
-                for stu in checked_list:
-                    LectAttendance.objects.create(lect_board_no=lect_board, student_id=stu)
+                LectAttendance.objects.bulk_create([
+                    LectAttendance(lect_board_no=lect_board, student_id=stu)
+                    for stu in checked_list
+                ])
             elif manage_mode['결석']:
                 # input checkbox 로 넘어온 모든 학번에 대해, 결석처리
                 # db에 수강생의 레코드가 존재하지 않는 경우 결석이라고 해석하고 있기 때문에 filter 로 쿼리 불러야함.
                 # 이미 결석인 수강생에 대해 중복 결석 처리했을 때, get 을 사용하면 에러발생.
+                students = LectAttendance.objects.filter(lect_board_no=lect_board)
                 for stu in checked_list:
-                    LectAttendance.objects.filter(lect_board_no=lect_board, student_id=stu).delete()
+                    students.filter(student_id=stu).delete()
 
         return redirect(reverse('lect_room_attend_teacher', kwargs={'room_no': room_no}))
 
