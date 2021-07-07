@@ -14,7 +14,7 @@ from django.conf import settings
 from importlib import import_module
 
 
-class LectBoardTest(TestCase):
+class LectAttendanceTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         try:
