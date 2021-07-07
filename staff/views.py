@@ -11,7 +11,8 @@ from django.db.models import Q, Count, Aggregate
 from django.core.mail import send_mail
 from django.conf import settings
 from pagination_handler import get_paginator_list
-from alarm.alarm_controller import create_user_auth_update_alarm, create_user_role_update_alarm
+from alarm.alarm_controller import create_user_auth_update_alarm, create_user_role_update_alarm, create_user_delete_alarm, \
+    create_finish_user_delete_alarm
 from file_controller import FileController
 
 
@@ -261,6 +262,7 @@ def member_delete_register(request, deleted_user):
             if user_delete_file_form.is_valid() and user_delete_form.is_valid():
                 user_delete = user_delete_form.save(suggest_user=get_logined_user(request))
                 user_delete_file_form.save(instance=user_delete)
+                create_user_delete_alarm(user_delete)
                 return redirect("member_delete_detail", user_delete_no=user_delete.user_delete_no)
             return redirect(reverse("staff_member_list"))
         else:
@@ -343,10 +345,12 @@ def member_delete_aor(request, user_delete_no):
                 aor_user=get_logined_user(request),
                 aor=int(request.POST.get('aor')),
             )
+
         # 회장단 전체가 투표한 경우, 완료로 상태 변경.
         if is_finished(user_delete):
             user_delete.user_delete_state = UserDeleteState.objects.get(pk=2)
             user_delete.save()
+            create_finish_user_delete_alarm(user_delete)
         return redirect("member_delete_detail", user_delete_no=user_delete_no)
     return redirect("member_delete_list")
 

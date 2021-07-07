@@ -7,7 +7,7 @@ from file_controller import FileController
 from pagination_handler import get_page_object
 from alarm.alarm_controller import create_comment_alarm, create_comment_ref_alarm
 from user_controller import login_required, writer_only, auth_check
-
+from alarm.alarm_controller import create_board_notice_alarm
 
 # ---- get_sidebar_information ---- #
 # INPUT : Board 객체 or ContestBoard 객체
@@ -166,6 +166,7 @@ def board_register(request):
                 board = board_form.save(
                     board_writer=User.objects.get(pk=request.session.get('user_stu')))
                 file_form.save(instance=board)
+                create_board_notice_alarm(board)
             return redirect("board_detail", board_no=board.board_no)
         else:
             return redirect("board_view", board_type_no=5)

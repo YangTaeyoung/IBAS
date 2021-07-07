@@ -10,6 +10,7 @@ from user_controller import get_logined_user, login_required, superuser_only, wr
     is_logined
 from file_controller import FileController
 from django.utils.dateformat import DateFormat
+from alarm.alarm_controller import create_lect_full_alarm, create_lect_enroll_alarm
 
 
 def get_pol_name(method_no):
@@ -179,11 +180,12 @@ def lect_search(request, type_no):
 
 # 유저 강의 명단 등록 함수
 def lect_enroll(request, lect_no):
-    LectEnrollment.objects.create(
+    lect_enrollment = LectEnrollment.objects.create(
         lect_no=Lect.objects.get(pk=lect_no),
         student=get_logined_user(request),
-        )
-
+    )
+    create_lect_enroll_alarm(lect_enrollment)
+    create_lect_full_alarm(Lect.objects.get(pk=lect_no))
     # 강의실 메인 페이지로 리다이렉트
     return redirect('lect_room_main', room_no=lect_no)
 
@@ -205,9 +207,11 @@ def lect_room_main(request, room_no):
 # 더보기 눌렀을 때 나오는 게시판 (공지게시판(1)/강의게시판(2)/과제게시판(3))
 def lect_room_list(request, room_no, board_type):
     if board_type == 3:
-        board_list = LectAssignment.objects.filter(lect_board_no__lect_no__lect_no=room_no).order_by('-lect_assignment_created')
+        board_list = LectAssignment.objects.filter(lect_board_no__lect_no__lect_no=room_no).order_by(
+            '-lect_assignment_created')
     else:
-        board_list = LectBoard.objects.filter(lect_board_type__lect_board_type_no=board_type).order_by('-lect_board_created')
+        board_list = LectBoard.objects.filter(lect_board_type__lect_board_type_no=board_type).order_by(
+            '-lect_board_created')
 
     page_obj = get_page_object(request, board_list, 15)  # 페이지네이션 15개 글이 한 페이지
 
@@ -394,7 +398,7 @@ def lect_room_attend_teacher(request, room_no):
             'lect_board_list': lect_board_list,
             'students_list': students_list,  # 이름/학번/출석결석
             'cur_lect_board': None if lect_board_no is None else LectBoard.objects.get(pk=lect_board_no),  # 현재 게시글
-            'item_list': get_page_object(request, students_list, 15) # 15 명씩 보이게 출력
+            'item_list': get_page_object(request, students_list, 15)  # 15 명씩 보이게 출력
         }
         return render(request, 'lecture_room_attend_teacher.html', context)
 
@@ -417,8 +421,3 @@ def lect_room_attend_teacher(request, room_no):
                     LectAttendance.objects.filter(lect_board_no=lect_board, student_id=stu).delete()
 
         return redirect(reverse('lect_room_attend_teacher', kwargs={'room_no': room_no}))
-
-
-
-
-

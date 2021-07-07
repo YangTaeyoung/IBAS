@@ -8,6 +8,7 @@ from date_controller import today
 from file_controller import FileController
 from pagination_handler import get_page_object
 from user_controller import login_required, get_logined_user, writer_only, cfo_only, auth_check
+from alarm.alarm_controller import create_bank_alarm
 
 
 @auth_check()
@@ -121,13 +122,13 @@ def bank_support_register(request):
             with transaction.atomic():
                 bank = bank_support_form.save(user=get_logined_user(request))
                 file_form.save(instance=bank)
-
+                create_bank_alarm(bank)
         return redirect("bank_support_detail", bank_no=bank.bank_no)
 
     elif request.method == 'GET':
         context = {
             'bank_support_form': BankSupportForm(),
-            'file_form':  FileForm()
+            'file_form': FileForm()
         }
         return render(request, 'bank_support_register.html', context)
 
@@ -140,7 +141,6 @@ def bank_support_detail(request, bank_no):
         "bank": bank,
         "bank_file_list": bank_file_list
     }
-
     return render(request, 'bank_support_detail.html', context)  # 상세보기
 
 
@@ -207,7 +207,3 @@ def bank_support_delete(request, bank_no):  # 예산지원 삭제
 
     # 삭제 성공 유무와 상관없이 이동.
     return redirect(reverse('bank_support_board'))  # 예산 지원 신청 게시판으로 이동
-
-
-
-
