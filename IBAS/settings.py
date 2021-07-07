@@ -189,7 +189,7 @@ EMAIL_HOST = 'smtp.googlemail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'ibasmail20@gmail.com'
-EMAIL_HOST_PASSWORD = 'weloveyoukhk'
+EMAIL_HOST_PASSWORD = 'ibasforever'
 
 # 브라우져 종료시 세션 만료
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
