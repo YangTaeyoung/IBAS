@@ -93,7 +93,7 @@
 
                                             <form id="attendance-form" onsubmit="return AttendanceFormSubmit()">
                                                 <!-- 수강생 테이블 -->
-                                                {% include "_table_attendence_check.html" %}
+                                                {% include "_table_attendance_check.html" %}
                                                 {% csrf_token %}
                                                 <input type="hidden" value="{{ cur_lect_board.lect_board_no}}" name="lect_board_no_">
                                             </form>
