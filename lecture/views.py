@@ -268,9 +268,9 @@ def lect_board_delete(request, room_no, board_no):
 
 # 강의/공지 게시글 수정
 def lect_board_update(request, room_no, board_no):
-    board = LectBoard.objects.prefetch_related('file', 'assignment', 'assignment__file').get(pk=board_no)
-    assignment = board.assignment.first()  # 공지 => None, 강의 => 해당 과제
-    board_type = board.lect_board_type_no.lect_board_type_no
+    board = LectBoard.objects.prefetch_related('files', 'assignments', 'assignments__files').get(pk=board_no)
+    assignments = board.assignments.first()  # 공지 => None, 강의 => 해당 과제
+    board_type = board.lect_board_type_id
 
     if request.method == "GET":
         context = {
@@ -279,8 +279,8 @@ def lect_board_update(request, room_no, board_no):
             'file_form': FileForm(),  # 강의 파일 폼
             'board_no': board_no,
             'board_type': board_type,
-            'file_list': board.file.all(),  # 게시글 기존 파일 리스트
-            'assignment_file_list': assignment.file.all() if assignment is not None else None  # 과제 기존 파일 리스트
+            'file_list': board.files.all(),  # 게시글 기존 파일 리스트
+            'assignment_file_list': assignments.files.all() if assignments is not None else None  # 과제 기존 파일 리스트
         }
         return render(request, 'lecture_room_board_register.html', context)
 

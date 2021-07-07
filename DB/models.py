@@ -428,7 +428,7 @@ class LectBoardExFile(models.Model):
 
 
 class LectBoardFile(File):
-    lect_board_no = models.ForeignKey('LectBoard', on_delete=models.CASCADE, db_column='LECT_BOARD_NO', related_name='file')
+    lect_board_no = models.ForeignKey('LectBoard', on_delete=models.CASCADE, db_column='LECT_BOARD_NO', related_name='files')
 
     def __init__(self, filename, *args, **kwargs):
         super().__init__(*args, **kwargs)
