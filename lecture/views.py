@@ -1,6 +1,5 @@
 from django.db import transaction, connection
-from django.sh
-ortcuts import render, redirect, reverse, get_object_or_404
+from django.shortcuts import render, redirect, reverse, get_object_or_404
 from DB.models import LectType, Lect, LectDay, StateInfo, MethodInfo, LectBoard, LectBoardFile, \
     LectAssignment, LectEnrollment, LectAttendance
 from django.db.models import Q
