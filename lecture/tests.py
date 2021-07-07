@@ -98,7 +98,7 @@ class LectBoardTest(TestCase):
         }
 
         # 어떤 수강생도 체크하지 않았을 때,
-        response = self.client.post(reverse('lect_room_attend_teacher', kwargs={'room_no': lect_room.lect_no}),context)
+        response = self.client.post(reverse('lect_room_attend_teacher', kwargs={'room_no': lect_room.lect_no}), context)
 
         self.assertEqual(response.status_code, 302)
 
