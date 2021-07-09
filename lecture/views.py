@@ -349,7 +349,7 @@ def lect_room_attend_teacher(request, room_no):
                     INNER JOIN USER as u
                     ON (enrollment.STUDENT = u.USER_STU)
         
-                    WHERE enrollment.LECT_NO = {room_no}
+                    WHERE enrollment.LECT_NO = {lect_room.lect_no}
         
                     ORDER BY u.USER_NAME ASC;"""
             cursor = connection.cursor()

@@ -1,23 +1,22 @@
 from unittest import skip
 from unittest.mock import patch
 
+from django.core.handlers.wsgi import WSGIRequest
 from django.db import connection
+from django.db.models import Q
 from django.http import HttpRequest
 from django.template.loader import render_to_string
 from django.test import TestCase
 from django.urls import reverse
 from django.utils.datetime_safe import date, datetime
 from pytz import timezone
-
 from DB.models import Lect, User, LectBoard, LectBoardType, LectEnrollment
-from lecture.views import lect_room_attend_teacher
-from django.conf import settings
-from importlib import import_module
-
 from member.session import save_session
+from faker import Faker
 
 _TEST_TITLE = '빠르게 시작하는 파이썬*$%^'
 _TEST_LECTURE_CHIEF = User.objects.get(pk=12162359)
+
 
 def _test_data():
     try:
@@ -82,7 +81,7 @@ class LectBoardTest(TestCase):
     def test_response_200_for_LectBoard_register(self):
         lect_room = Lect.objects.get(lect_title=_TEST_TITLE)
 
-        for board_type in range(1,4):
+        for board_type in range(1, 4):
             response = self.client.get(
                 reverse('lect_board_register', kwargs={'room_no': lect_room.lect_no, 'board_type': board_type})
             )
@@ -102,17 +101,42 @@ class LectBoardTest(TestCase):
             self.assertEqual(200, response.status_code)
             self.assertTemplateUsed(response, 'lecture_room_board_register.html')
 
-    @skip
-    @patch('requests.post')
     def test_response_302_for_LectBoard_register(self):
-        request = HttpRequest()
-        save_session(request, user_model=_TEST_LECTURE_CHIEF)
+        fake = Faker()
+        session = self.client.session
+        session["user_stu"] = _TEST_LECTURE_CHIEF.user_stu
+        for i in range(1, 4):
+            board = {
+                'lect_board_type_id': i,
+                'lect_board_writer': _TEST_LECTURE_CHIEF,
+                'lect_board_title': fake.word(),
+                'lect_board_cont': fake.text(),
+            }
+            response = self.client.post(
+                reverse('lect_board_register', kwargs={'room_no': Lect.objects.get(lect_title=_TEST_TITLE).lect_no, 'board_type': i}),
+                data=board
+            )
+            self.assertEqual(302, response.status_code)
 
-        lect_room = Lect.objects.get(lect_title=_TEST_TITLE)
-
-    @skip
     def test_response_302_for_LectBoard_update(self):
-        pass
+        fake = Faker()
+        session = self.client.session
+        session["user_stu"] = _TEST_LECTURE_CHIEF.user_stu
+        lecture = Lect.objects.get(lect_title=_TEST_TITLE)
+        for i in range(1, 4):
+            board = LectBoard.objects.filter(lect_no=lecture, lect_board_type_id=i).first()
+            data = {
+                'lect_board_type_id': i,
+                'lect_board_writer': _TEST_LECTURE_CHIEF,
+                'lect_board_title': fake.word(),
+                'lect_board_cont': fake.text(),
+            }
+            response = self.client.post(
+                reverse('lect_board_update',
+                        kwargs={'room_no': lecture.lect_no, 'board_no': board.lect_board_no}),
+                data=data
+            )
+            self.assertEqual(302, response.status_code)
 
     def test_response_302_for_LectBoard_delete(self):
         lect_room = Lect.objects.prefetch_related('lectures').get(lect_title=_TEST_TITLE)

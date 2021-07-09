@@ -93,6 +93,7 @@ class LectRejectForm(forms.ModelForm):
         return lect
 
 
+# 강의 게시판 관련 기본 폼 (상속받아서 사용)
 class LectBoardFormBase(forms.ModelForm):
     class Meta:
         model = LectBoard
@@ -130,6 +131,7 @@ class LectBoardFormBase(forms.ModelForm):
         return lect_board
 
 
+# 강의 게시글 폼
 class LectBoardForm(LectBoardFormBase):
     class Meta(LectBoardFormBase.Meta):
         pass
@@ -144,6 +146,7 @@ class LectBoardForm(LectBoardFormBase):
         return lect_board
 
 
+# 공지사항 폼
 class LectNoticeForm(LectBoardFormBase):
     class Meta(LectBoardFormBase.Meta):
         exclude = ('lect_board_link', )
@@ -158,6 +161,7 @@ class LectNoticeForm(LectBoardFormBase):
         notice.save()
 
 
+# ㅁㄴㄹㅇ
 def make_lect_board_form(board_type, *args, **kwargs):
     if args or kwargs:
         if board_type == 1:
