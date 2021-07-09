@@ -70,9 +70,6 @@ class Bank(models.Model):
 
 # 추상클래스 File
 class File(models.Model):
-    def file_upload_to(self, filename):
-        pass
-
     file_id = models.AutoField(db_column='FILE_ID', primary_key=True)  # Field name made lowercase.
     file_name = models.CharField(db_column='FILE_NAME', max_length=300)
     file_path = models.FileField(db_column='FILE_PATH', max_length=1000, blank=True)
@@ -95,11 +92,12 @@ class CommentBase(models.Model):
 
 
 class BankFile(File):
-    def file_upload_to(self, filename):
-        return f'bank/{self.bank_no.bank_no}/{filename}'
+    bank_no = models.ForeignKey(Bank, on_delete=models.CASCADE, db_column='BANK_NO')
 
-    bank_no = models.ForeignKey(Bank, on_delete=models.CASCADE, db_column='BANK_NO')  # Field name made lowercase.
-    file_path = models.FileField(db_column='FILE_PATH', max_length=1000, upload_to=file_upload_to, blank=True)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.file_path.upload_to = os.path.join(
+            'bank', str(self.bank_no_id), str(kwargs.get("file_path")))
 
     class Meta:
         managed = False
@@ -134,11 +132,11 @@ class Board(models.Model):
 
 
 class BoardFile(File):
-    def file_upload_to(self, filename):
-        return f'board/{self.board_no.board_no}/{filename}'
-
     board_no = models.ForeignKey(Board, on_delete=models.CASCADE, db_column='BOARD_NO')
-    file_path = models.FileField(db_column='FILE_PATH', max_length=1000, upload_to=file_upload_to, blank=True)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.file_path.upload_to = os.path.join('board', str(self.board_no_id), str(kwargs.get("file_path")))
 
     class Meta:
         managed = False
@@ -225,11 +223,11 @@ class ContestComment(models.Model):
 
 
 class ContestFile(File):
-    def file_upload_to(self, filename):
-        return f'board/contest/{self.contest_no.contest_no}/{filename}'
-
     contest_no = models.ForeignKey(ContestBoard, on_delete=models.CASCADE, db_column='CONTEST_NO')
-    file_path = models.FileField(db_column='FILE_PATH', max_length=1000, upload_to=file_upload_to, blank=True)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.file_path.upload_to = os.path.join('board', 'contest', str(self.contest_no_id), str(kwargs.get("file_path")))
 
     class Meta:
         managed = False
@@ -255,7 +253,7 @@ METHOD_CHOICES = tuple(METHOD_CHOICES)
 
 # 강의 썸네일 사진 업로드 경로
 def lect_pic_upload_to(instance, filename):
-    return f'lect/pic/{instance.lect_no}/{filename}'
+    return f'lecture/pic/{instance.lect_no}/{filename}'
 
 
 class Lect(models.Model):
@@ -283,7 +281,7 @@ class Lect(models.Model):
 
     @property
     def get_file_path(self):
-        return os.path.join(MEDIA_ROOT, 'lect', "pic", str(self.lect_no))
+        return os.path.join(MEDIA_ROOT, 'lecture', "pic", str(self.lect_no))
 
     @property
     def is_expired(self):
@@ -428,11 +426,13 @@ class LectBoardExFile(models.Model):
 
 
 class LectBoardFile(File):
-    lect_board_no = models.ForeignKey('LectBoard', on_delete=models.CASCADE, db_column='LECT_BOARD_NO', related_name='files')
+    lect_board_no = models.ForeignKey(
+        'LectBoard', on_delete=models.CASCADE, db_column='LECT_BOARD_NO', related_name='files')
 
-    def __init__(self, filename, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.file_path.upload_to = f'lecture/board/{self.lect_board_no.lect_board_no}/{filename}'
+        self.file_path.upload_to = os.path.join(
+            'lecture', 'board', str(self.lect_board_no_id), str(kwargs.get("file_path")))
 
     class Meta:
         managed = False
@@ -542,15 +542,13 @@ class UserDelete(models.Model):
         return os.path.join(MEDIA_ROOT, 'member', 'delete', str(self.user_delete_no))
 
 
-# 제명 증거자료 올라가는 경로
-def user_delete_upload_to(instance, filename):
-    return f'staff/user/delete/{instance.user_delete_no.user_delete_no}/{filename}'
-
-
 class UserDeleteFile(File):
     user_delete_no = models.ForeignKey(UserDelete, db_column="USER_DELETE_NO", on_delete=models.CASCADE)
-    file_path = models.FileField(db_column='FILE_PATH', max_length=100,
-                                 upload_to=user_delete_upload_to)  # Field name made lowercase.
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.file_path.upload_to = os.path.join('staff', 'user', 'delete',  # 제명 증거자료 올라가는 경로
+                                                str(self.user_delete_no_id), str(kwargs.get("file_path")))
 
     class Meta:
         managed = False

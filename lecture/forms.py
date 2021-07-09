@@ -166,9 +166,9 @@ def make_lect_board_form(board_type, *args, **kwargs):
             return LectBoardForm(*args, **kwargs)
     else:
         if board_type == 1:
-            return LectNoticeForm(initial={'lect_board_type_no': 1})
+            return LectNoticeForm(initial={'lect_board_type': 1})
         elif board_type == 2:
-            return LectBoardForm(initial={'lect_board_type_no': 2})
+            return LectBoardForm(initial={'lect_board_type': 2})
 
 
 # 이거 지우면 큰일 남
