@@ -393,7 +393,7 @@ def lect_room_attend_teacher(request, room_no):
 
 
 def lect_board_hw_register(request):  # 강의룸 등록 페이지로 이동
-    return render(request, 'lect_board_hw_register.html', {})
+    return render(request, 'lecture_room_assignment_register.html', {})
 
 
 

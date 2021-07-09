@@ -98,7 +98,8 @@ class LectBoardFormBase(forms.ModelForm):
     class Meta:
         model = LectBoard
 
-        fields = ('lect_board_title', 'lect_board_link', 'lect_board_cont', 'lect_board_type')
+        fields = ('lect_board_title', 'lect_board_link', 'lect_board_cont', 'lect_board_type',
+                  'assignment_deadline')
 
         widgets = {
             'lect_board_title': forms.TextInput(attrs={"placeholder": _("제목을 입력하세요."),
@@ -106,11 +107,13 @@ class LectBoardFormBase(forms.ModelForm):
             'lect_board_link': forms.TextInput(attrs={"placeholder": _("강의 링크를 적어주세요.")}),
             'lect_board_type': forms.HiddenInput(),
             'lect_board_cont': forms.TextInput(),
+            'assignment_deadline': forms.DateInput(attrs={"type": 'date'}),
         }
         labels = {
-            'lect_board_title': _("강의 제목"),
+            'lect_board_title': _("제목"),
             'lect_board_link': _("강의 링크"),
             'lect_board_cont': _("내용"),
+            'assignment_deadline': _("과제 마감일"),
         }
 
     def save(self, **kwargs):
@@ -134,7 +137,7 @@ class LectBoardFormBase(forms.ModelForm):
 # 강의 게시글 폼
 class LectBoardForm(LectBoardFormBase):
     class Meta(LectBoardFormBase.Meta):
-        pass
+        exclude = ("assignment_deadline", )
 
     def update(self, instance):
         lect_board = super().update(instance)
@@ -149,7 +152,7 @@ class LectBoardForm(LectBoardFormBase):
 # 공지사항 폼
 class LectNoticeForm(LectBoardFormBase):
     class Meta(LectBoardFormBase.Meta):
-        exclude = ('lect_board_link', )
+        exclude = ('lect_board_link', 'assignment_deadline')
 
         labels = {
             'lect_board_title': _("공지사항"),
@@ -159,6 +162,15 @@ class LectNoticeForm(LectBoardFormBase):
     def update(self, instance):
         notice = super().update(instance)
         notice.save()
+
+
+class LectAssignmentForm(LectBoardFormBase):
+    class Meta(LectBoardFormBase.Meta):
+        exclude = ('lect_board_link', )
+
+    def update(self, instance):
+        assignment = super().update(instance)
+        assignment.assignment_deadline = self.cleaned_data['assignment_deadline']
 
 
 # ㅁㄴㄹㅇ

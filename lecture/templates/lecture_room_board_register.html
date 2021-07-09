@@ -68,11 +68,23 @@
                                       action="{% if board_no %}{% url "lect_board_update" lect.lect_no board_no%}{% else %}{% url "lect_board_register" lect.lect_no board_type%}{% endif %}">
                                     {% csrf_token %}
 
+                                    {% if board_type == 3 %}
+                                        <div class="content-box">
+                                                <select name="lect_board_ref">
+                                                <option>강의 선택</option>
+                                                    {% for lecture in lect_board_list %}
+                                                        <option value="i">[{{ forloop.counter }}회차] {{ lecture.lect_board_title }} </option>
+                                                    {% endfor %}
+                                                </select>
+                                        </div>
+                                    {% endif %}
+
                                     {% for hidden_field in lect_board_form.hidden_fields %}
                                         {{ hidden_field }}
                                     {% endfor %}
+
                                     {% for field in lect_board_form.visible_fields %}
-                                        <!-- ======================제목 박스====================== -->
+                                        <!-- ======================제목 박스 & 링크 & 내용====================== -->
                                          <div class="content-box">
                                             <div class="content-header">
                                                 <!--제목-->
@@ -89,22 +101,26 @@
                                                 </div>
                                             </div>
                                          </div>
-                                    {% endfor %}
-                                        <!--======================파일 첨부 박스======================-->
-                                    <div class="content-box">
-                                        <div class="content-header">
-                                            <h3 class="title">파일첨부</h3>
-                                        </div>
-                                        <div class="content-body">
-                                            <div class="form-group">
-                                                <div class="form-group">
-                                                   {{ file_form.upload_file }}
+
+                                        {% if field == lect_board_form.lect_board_title %}
+                                            <!--======================파일 첨부 박스======================-->
+                                            <div class="content-box">
+                                                <div class="content-header">
+                                                    <h3 class="title">파일첨부</h3>
                                                 </div>
-                                                {% include "file_update_box.html" %}
+                                                <div class="content-body">
+                                                    <div class="form-group">
+                                                        <div class="form-group">
+                                                           {{ file_form.upload_file }}
+                                                        </div>
+                                                        {% include "file_update_box.html" %}
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <!--======================파일 첨부 박스======================-->
+                                        {% endif %}
+
+                                    {% endfor %}
+
 
                                     <!--등록버튼, 수정할 때는 수정하기로 뜨도록 수정필요-->
                                     <div style="display: grid; justify-items: center">
