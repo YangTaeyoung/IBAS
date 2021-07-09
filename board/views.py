@@ -1,4 +1,5 @@
 from django.db import transaction
+from django.http import QueryDict
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from DB.models import Board, BoardFile, BoardType, Comment, ContestBoard, ContestFile, ContestComment, User
 from django.db.models import Q
@@ -8,8 +9,7 @@ from pagination_handler import get_page_object
 from alarm.alarm_controller import create_comment_alarm, create_comment_ref_alarm
 from user_controller import login_required, writer_only, auth_check
 from alarm.alarm_controller import create_board_notice_alarm
-from message_controller import alert
-
+from django.contrib import messages
 
 # ---- get_sidebar_information ---- #
 # INPUT : Board 객체 or ContestBoard 객체
@@ -334,18 +334,13 @@ def contest_register(request):  # 공모전 등록
                     contest_writer=User.objects.get(pk=request.session.get('user_stu')))
                 file_form.save(instance=contest)
                 return redirect("contest_detail", contest_no=contest.contest_no)
-        else:
-            return redirect(reverse("contest_register"))
-
-
+        messages.add_message(request, messages.ERROR, '꼭 이미지 파일은 한 개 이상 첨부되어야 합니다.') # 이미지가 없을 시 에러가 뜨도록 하는 것. (작동하지 않음. 랜더 함수가 두번호출 돼서 초기화되는데 원인을 모르겠음.)
     # 목록에서 신규 등록 버튼 눌렀을때
-    if request.method == 'GET':
-
-        form_context = {
-            'contest_form': ContestForm(),
-            'file_form': FileForm(),
-        }
-        return render(request, 'contest_register.html', form_context)
+    form_context = {
+        'contest_form': ContestForm(),
+        'file_form': FileForm(),
+    }
+    return render(request, 'contest_register.html', form_context)
 
 
 # ---- contest_detail ---- #

@@ -10,12 +10,12 @@ from member import session
 from alarm.alarm_controller import create_comment_alarm, create_comment_ref_alarm
 from django.http import HttpResponseRedirect
 from user_controller import login_required, writer_only, auth_check, superuser_only
-from message_controller import alert
+
 
 # 메인페이지 이동 함수
 def index(request):
     # 임시 로그인
-    # session.save_session(request, user_model=User.objects.get(pk=12162359), logined_email="0130yang@gmail.com", provider="google")
+    session.save_session(request, user_model=User.objects.get(pk=12162359), logined_email="0130yang@gmail.com", provider="google")
     return render(request, "index.html", {})
 
 

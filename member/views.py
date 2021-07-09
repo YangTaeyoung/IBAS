@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from allauth.socialaccount.models import SocialAccount, \
     SocialToken  # 소셜 계정 DB, socialaccount_socialaccount 테이블을 사용하기 위함.
 from django.urls import reverse
-from DB.models import AuthUser, User, UserAuth, UserRole, QuestForm, Answer, UserEmail, \
+from DB.models import User, UserAuth, UserRole, QuestForm, Answer, UserEmail, \
     MajorInfo  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
 from django.http import HttpResponseRedirect
 # 내가 만든 세션 모듈 불러오기
