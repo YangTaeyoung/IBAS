@@ -288,7 +288,7 @@ class Lect(models.Model):
 
     @property
     def is_expired(self):
-        return pytz.UTC.localize(datetime.now()) < self.lect_deadline
+        return pytz.UTC.localize(datetime.now()) < pytz.UTC.localize(self.lect_deadline)
 
 
 class LectDay(models.Model):

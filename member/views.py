@@ -11,6 +11,7 @@ from urllib.request import urlretrieve  # 인터넷에 있는 파일 다운로�
 import os
 from django.conf import settings
 from user_controller import get_social_login_info
+from django.db import transaction
 
 
 # Create your views here.
@@ -122,39 +123,35 @@ def quest_chk(request):
                 pass
         # 받은 정보로 user 모델 인스턴스 변수 생성
         # 사용자 정보를 DB에 저장
-        user = User.objects.create(
-            user_name=user_name,  # 이름
-            user_stu=user_stu,  # 학번
-            user_grade=user_grade,  # 학년
-            user_auth=get_object_or_404(UserAuth, pk=user_auth),  # 권한 번호
-            user_gen=user_gen,  # 기수
-            user_major=user_major,  # 전공
-            user_role=get_object_or_404(UserRole, pk=user_role),  # 역할 정보
-            user_phone=user_phone,  # 핸드폰 번호
-            user_pic=user_pic  # 프로필 사진
-        )
-
-        UserEmail.objects.create(
-            user_email=user_email,
-            provider=provider,
-            user_stu=user
-        )
-
-        if user_role == "6":  # 오직 일반 학생으로 가입했을 때만
-            # 모든 질문 리스트를 뽑아옴: 질문이 몇번까지 있는지 알아야 답변을 몇번까지 했는지 알기 때문
-            quest_list = QuestForm.objects.all()
-
-            # 질문에 대한 답변을 저장하는 곳
-
-            for quest in quest_list:
-                answer = Answer.objects.create(
-                    answer_quest=quest,
-                    answer_cont=request.POST.get("answer_" + str(quest.quest_no)),
-                    answer_user=user,
-                )
-
-                answer.save()
-        session.save_session(request, user_model=user, logined_email=user_email, provider=provider)  # 자동 로그인을 위해 세션 등록
+        with transaction.atomic():
+            user = User.objects.create(
+                user_name=user_name,  # 이름
+                user_stu=user_stu,  # 학번
+                user_grade=user_grade,  # 학년
+                user_auth=get_object_or_404(UserAuth, pk=user_auth),  # 권한 번호
+                user_gen=user_gen,  # 기수
+                user_major=user_major,  # 전공
+                user_role=get_object_or_404(UserRole, pk=user_role),  # 역할 정보
+                user_phone=user_phone,  # 핸드폰 번호
+                user_pic=user_pic  # 프로필 사진
+            )
+            UserEmail.objects.create(
+                user_email=user_email,
+                provider=provider,
+                user_stu=user
+            )
+            if user_role == "6":  # 오직 일반 학생으로 가입했을 때만
+                # 모든 질문 리스트를 뽑아옴: 질문이 몇번까지 있는지 알아야 답변을 몇번까지 했는지 알기 때문
+                quest_list = QuestForm.objects.all()
+                # 질문에 대한 답변을 저장하는 곳
+                for quest in quest_list:
+                    Answer.objects.create(
+                        answer_quest=quest,
+                        answer_cont=request.POST.get("answer_" + str(quest.quest_no)),
+                        answer_user=user,
+                    )
+            session.save_session(request, user_model=user, logined_email=user_email,
+                                 provider=provider)  # 자동 로그인을 위해 세션 등록
         return redirect(reverse("welcome"))  # 정상 회원가입 완료시 회원 가입 완료 페이지로 이동.
     return render(request, "index.html", {'lgn_is_failed': 1})  # 비정상 적인 접근 시 로그인 실패 메시지 출력과 함께 메인페이지 이동.
 

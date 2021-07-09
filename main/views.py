@@ -16,7 +16,6 @@ from message_controller import alert
 def index(request):
     # 임시 로그인
     # session.save_session(request, user_model=User.objects.get(pk=12162359), logined_email="0130yang@gmail.com", provider="google")
-
     return render(request, "index.html", {})
 
 
@@ -27,7 +26,7 @@ def introduce(request):
     chief_crews = User.objects.filter(Q(user_role__role_no__lte=4) & Q(user_auth__auth_no=1)).prefetch_related(
         'chiefcarrier_set').prefetch_related('useremail_set').all()
     if len(chief_crews) != 0:
-        # 회장단인 사람의 객체를 가져오고 등록, Chief_carrier에서 이력 정보도 함께 가져옴
+        # 회장단인 사람의 객체를 가져오고 등록, chief_carrier에서 이력 정보도 함께 가져옴
         context['chief_crews'] = chief_crews
     return render(request, 'introduce.html', context)  # introduce 에 실어서 보내분다.
 

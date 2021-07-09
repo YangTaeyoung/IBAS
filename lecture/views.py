@@ -89,7 +89,7 @@ def lect_detail(request, lect_no):
     context = {
         'lect': lect,
         'lect_day_list': lect_day_list,
-        'lect_user_num': LectEnrollment.objects.filter(lect_no=lect_no).count(),
+        'lect_user_num': len(LectEnrollment.objects.filter(lect_no=lect_no)),
         'is_in': LectEnrollment.objects.filter(student=get_logined_user(request), lect_no__lect_no=lect_no) is not None,
         'lect_reject_form': LectRejectForm(instance=lect),
     }
@@ -119,10 +119,11 @@ def lect_update(request, lect_no):
         lect_form = LectForm(request.POST)
         lect_pic_form = LectPicForm(request.POST, request.FILES)
         if lect_form.is_valid() and lect_pic_form.is_valid():
-            lect_form.update(instance=lect)
-            if lect_pic_form.has_changed():
-                FileController.delete_all_files_of_(lect)
-                lect_pic_form.save(instance=lect)
+            with transaction.atomic():
+                lect_form.update(instance=lect)
+                if lect_pic_form.has_changed():
+                    FileController.delete_all_files_of_(lect)
+                    lect_pic_form.save(instance=lect)
         return redirect("lect_detail", lect_no=lect.lect_no)
     else:  # 상세 페이지에서 수정 버튼을 눌렀을 때
         context = {
