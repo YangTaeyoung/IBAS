@@ -20,6 +20,4 @@ urlpatterns = [
     path('room/<int:room_no>/member_manage', views.lect_room_mem_manage, name="lect_room_mem_manage"),
     path('room/<int:room_no>/attend/', views.lect_room_attend_std, name="lect_room_attend_std"),
     path('room/<int:room_no>/attend/teacher', views.lect_room_attend_teacher, name="lect_room_attend_teacher"),
-    path('board/hw_register/', views.lect_board_hw_register, name="lect_board_hw_register"),  # 강의룸 과제 게시글 등록페이지로 이동
-
 ]

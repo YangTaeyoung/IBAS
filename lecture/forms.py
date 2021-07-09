@@ -120,6 +120,7 @@ class LectBoardFormBase(forms.ModelForm):
         lect_board = super().save(commit=False)
         lect_board.lect_board_writer = kwargs.get('lect_board_writer')
         lect_board.lect_no = kwargs.get('lect_no')
+        lect_board.lect_board_ref_id = kwargs.get('lect_board_ref_id', None)
 
         if self.has_changed():
             lect_board.save()
@@ -171,6 +172,7 @@ class LectAssignmentForm(LectBoardFormBase):
     def update(self, instance):
         assignment = super().update(instance)
         assignment.assignment_deadline = self.cleaned_data['assignment_deadline']
+        assignment.save()
 
 
 # ㅁㄴㄹㅇ
@@ -180,11 +182,15 @@ def make_lect_board_form(board_type, *args, **kwargs):
             return LectNoticeForm(*args, **kwargs)
         elif board_type == 2:
             return LectBoardForm(*args, **kwargs)
+        elif board_type == 3:
+            return LectAssignmentForm(*args, **kwargs)
     else:
         if board_type == 1:
             return LectNoticeForm(initial={'lect_board_type': 1})
         elif board_type == 2:
             return LectBoardForm(initial={'lect_board_type': 2})
+        elif board_type == 3:
+            return LectAssignmentForm(initial={'lect_board_type': 3})
 
 
 # 이거 지우면 큰일 남

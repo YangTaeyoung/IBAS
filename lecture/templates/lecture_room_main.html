@@ -186,18 +186,18 @@
                                                     </thead>
                                                     <!-- 테이블 2행 ~: 과제 페이지 내 최근 3개 게시글 불러옴 -->
                                                     <tbody>
-                                                    {% for assignment in assignment_list %}
+                                                    {% for assignment in assignment_list|slice:":3" %}
                                                         <tr>
                                                             <!-- 게시글 번호 (고정됨) -->
                                                             <td>{{ assignment_list|length |subtract:forloop.counter0 }}</td>
                                                             <!-- 게시글 제목: a태그 클릭하면, 해당 게시글로 이동 -->
-                                                            <td><a href="#">{{ assignment.lect_assignment_title }}</a></td>
+                                                            <td><a href="{% url "lect_board_detail" lect.lect_no assignment.lect_board_no %}">{{ assignment.lect_board_title }}</a></td>
                                                             <!-- 과제 마감일 -->
-                                                            <td>{{ assignment.lect_assignment_deadline | date:"Y-m-d" }}</td>
+                                                            <td>{{ assignment.assignment_deadline | date:"Y-m-d" }}</td>
                                                             <!-- 수강생: 과제 제출 여부 (제출/미제출) 보임 -->
                                                             <!-- 과제 제출 전이라면, 과제 안내 페이지로 넘어갈 수 있도록 처리필요 -->
                                                             <!-- 강의자: 과제를 제출한 사람수 보임 -->
-                                                            <td class="text-xl-center text-red">not yet..</td>
+                                                            <td class="text-xl-center text-red">?/{{ lect.enrolled_students.all|length }}</td>
                                                         </tr>
                                                     {% endfor %}
                                                     </tbody>

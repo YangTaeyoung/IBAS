@@ -4,20 +4,8 @@
     <!--코드 뷰어 스크립트-->
     <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?skin=desert"></script>
     <script>
-    $(document).ready(function (){
-        if($('#id_lect_assignment_title').val()){
-            $('#has_assignment').prop('checked', true);
-            $('#assignment-box').attr("aria-expanded", true);
-            $('#homework').attr("class", 'form-group collapse show');
-        }
-        $('#has_assignment').change(function(event){
-            if($('#has_assignment').is(":checked")){
-                event.target.value=1;
-            }
-            else{
-                event.target.value=0;
-            }
-        });
+    $(function (){
+        $("#select-box").val({{ lect_board_ref }}).prop('selected', true);
     });
 
     </script>
@@ -70,10 +58,10 @@
 
                                     {% if board_type == 3 %}
                                         <div class="content-box">
-                                                <select name="lect_board_ref">
+                                                <select id="select-box" name="lect_board_ref">
                                                 <option>강의 선택</option>
                                                     {% for lecture in lect_board_list %}
-                                                        <option value="i">[{{ forloop.counter }}회차] {{ lecture.lect_board_title }} </option>
+                                                        <option value="{{ lecture.lect_board_no }}">[{{ forloop.revcounter }}회차] {{ lecture.lect_board_title }} </option>
                                                     {% endfor %}
                                                 </select>
                                         </div>

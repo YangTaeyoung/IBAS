@@ -49,7 +49,7 @@
                                                                     <td>{{ board.lect_board_writer.user_name }}</td>
                                                                     <!-- 게시글 작성일 -->
                                                                     <td>
-                                                                        {% if board_type == 3 %}{{ board.lect_assignment_deadline | date:"Y-m-d" }}
+                                                                        {% if board_type == 3 %}{{ board.assignment_deadline | date:"Y-m-d" }}
                                                                         {% else %}{{ board.lect_board_created | date:"Y-m-d" }}
                                                                         {% endif %}
                                                                     </td>
@@ -82,12 +82,15 @@
                                         </div>
 
                                         {% if logined_user == lect.lect_chief %}
-                                            <div class="extra-cell text-right  m-t20">
-                                                <!-- 게시글 등록 버튼 -->
-                                                <!-- 관련자만 보이게 처리 -->
-                                                <button type="submit" class="site-button radius-xl m-l10">
-                                                    <i class="fa fa-plus m-r5"></i>
-                                                    게시글 등록
-                                                </button>
-                                            </div>
+                                            <form action="{% url 'lect_board_register' lect.lect_no board_type %}" method="get">
+                                                {% csrf_token %}
+                                                <div class="extra-cell text-right  m-t20">
+                                                    <!-- 게시글 등록 버튼 -->
+                                                    <!-- 관련자만 보이게 처리 -->
+                                                    <button type="submit" class="site-button radius-xl m-l10">
+                                                        <i class="fa fa-plus m-r5"></i>
+                                                        게시글 등록
+                                                    </button>
+                                                </div>
+                                            </form>
                                         {% endif %}

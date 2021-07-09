@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load custom_tags %}
 {% load static %}
 {% block content %}
     <!--커스텀 css-->
@@ -11,9 +12,7 @@
 
 
     $(function () {
-        const selectBox = $("#selectbox")
-
-        selectBox.val({{ cur_lect_board.lect_board_no }}).prop('selected',true);
+        $("#selectbox").val({{ cur_lect_board.lect_board_no }}).prop('selected',true);
     });
     </script>
 
@@ -72,7 +71,7 @@
 
                                                                         {% for lecture in lect_board_list %}
                                                                             <option value="{{ lecture.lect_board_no }}">
-                                                                                {{ lecture.lect_board_title }}
+                                                                               [{{ forloop.revcounter }}회차] {{ lecture.lect_board_title|truncate:9}}
                                                                             </option>
                                                                         {% endfor %}
 

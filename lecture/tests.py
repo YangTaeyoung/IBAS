@@ -64,7 +64,7 @@ class LectBoardTest(TestCase):
             )
 
             self.assertEqual(200, response.status_code)
-            self.assertTemplateUsed(response, 'lecture_room_list.html')
+            self.assertTemplateUsed(response, 'lecture_room_board_list.html')
 
     def test_response_200_for_LectBoard_detail_view(self):
         lect_room = Lect.objects.prefetch_related('lectures').get(lect_title=_TEST_TITLE)

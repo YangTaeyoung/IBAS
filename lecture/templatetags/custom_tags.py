@@ -13,3 +13,11 @@ def subtract(value, arg):
 @register.filter
 def addstr(value, arg):
     return str(value) + str(arg)
+
+
+@register.filter
+def truncate(string, length):
+    if len(string) < length:
+        return string + ''.join([' '] * (10 - len(string)))
+    else:
+        return string[:length] + '...'
