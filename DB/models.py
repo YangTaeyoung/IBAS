@@ -96,9 +96,9 @@ class CommentBase(models.Model):
 
 class BankFile(File):
     def file_upload_to(self, filename):
-        return f'bank/{self.bank_no.bank_no}/{filename}'
+        return os.path.join('bank', str(self.file_fk_id), filename)
 
-    bank_no = models.ForeignKey(Bank, on_delete=models.CASCADE, db_column='BANK_NO')  # Field name made lowercase.
+    file_fk = models.ForeignKey(Bank, on_delete=models.CASCADE, db_column='BANK_NO', related_name='files')
     file_path = models.FileField(db_column='FILE_PATH', max_length=1000, upload_to=file_upload_to, blank=True)
 
     class Meta:
@@ -135,9 +135,9 @@ class Board(models.Model):
 
 class BoardFile(File):
     def file_upload_to(self, filename):
-        return f'board/{self.board_no.board_no}/{filename}'
+        return os.path.join('board', str(self.file_fk_id), filename)
 
-    board_no = models.ForeignKey(Board, on_delete=models.CASCADE, db_column='BOARD_NO')
+    file_fk = models.ForeignKey(Board, on_delete=models.CASCADE, db_column='BOARD_NO', related_name='files')
     file_path = models.FileField(db_column='FILE_PATH', max_length=1000, upload_to=file_upload_to, blank=True)
 
     class Meta:
@@ -226,9 +226,9 @@ class ContestComment(models.Model):
 
 class ContestFile(File):
     def file_upload_to(self, filename):
-        return f'board/contest/{self.contest_no.contest_no}/{filename}'
+        return os.path.join('board', 'contest', str(self.file_fk_id), filename)
 
-    contest_no = models.ForeignKey(ContestBoard, on_delete=models.CASCADE, db_column='CONTEST_NO')
+    file_fk = models.ForeignKey(ContestBoard, on_delete=models.CASCADE, db_column='CONTEST_NO', related_name='files')
     file_path = models.FileField(db_column='FILE_PATH', max_length=1000, upload_to=file_upload_to, blank=True)
 
     class Meta:
@@ -428,11 +428,11 @@ class LectBoardExFile(models.Model):
 
 
 class LectBoardFile(File):
-    lect_board_no = models.ForeignKey('LectBoard', on_delete=models.CASCADE, db_column='LECT_BOARD_NO', related_name='files')
+    def file_upload_to(self, filename):
+        return os.path.join('lecture', 'board', str(self.file_fk_id), filename)
 
-    def __init__(self, filename, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.file_path.upload_to = f'lecture/board/{self.lect_board_no.lect_board_no}/{filename}'
+    file_fk = models.ForeignKey('LectBoard', on_delete=models.CASCADE, db_column='LECT_BOARD_NO', related_name='files')
+    file_path = models.FileField(db_column='FILE_PATH', upload_to=file_upload_to, max_length=1000, blank=True)
 
     class Meta:
         managed = False
@@ -548,7 +548,7 @@ def user_delete_upload_to(instance, filename):
 
 
 class UserDeleteFile(File):
-    user_delete_no = models.ForeignKey(UserDelete, db_column="USER_DELETE_NO", on_delete=models.CASCADE)
+    file_fk = models.ForeignKey(UserDelete, db_column="USER_DELETE_NO", on_delete=models.CASCADE, related_name='files')
     file_path = models.FileField(db_column='FILE_PATH', max_length=100,
                                  upload_to=user_delete_upload_to)  # Field name made lowercase.
 
