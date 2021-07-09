@@ -26,3 +26,24 @@
     margin-left: 22px;
     font-size: 9pt;
 }
+
+/*회의 바로 가기 박스*/
+.lectRoom_meeting {
+    filter: grayscale(100);
+    width: 500px;
+}
+
+/*회의 바로 가기 박스*/
+.lectRoom_meeting:hover {
+    filter: grayscale(0);
+    /*border: 2px #4611a7 !important;*/
+    border-width: 2px !important;
+    border-color: #4611a7 !important;
+    transform: scale(1.01);
+}
+/*회의 바로 가기 박스 중 다른 앱 사용 부분의 사진*/
+.lectRoom_center {
+    display: flex;
+    justify-content: center;
+    align-items: center
+}

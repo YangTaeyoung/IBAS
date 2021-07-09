@@ -31,6 +31,14 @@ def staff_member_list(request):
             exist_user_list = User.objects.filter(~Q(user_auth__auth_no=3) & Q(user_role__role_no=6))
         else:
             exist_user_list = User.objects.filter(~Q(user_auth__auth_no=3) & ~Q(user_role__role_no=1))  # 기존 회원 리스트
+            for exist_user in exist_user_list:
+                if len(UserDelete.objects.filter(Q(deleted_user=exist_user) & Q(user_delete_state__state_no=1))) != 0:
+                    exist_user.is_going_to_delete = True
+                    exist_user.delete_no = UserDelete.objects.filter(
+                        Q(deleted_user=exist_user) & Q(user_delete_state__state_no=1)).first().user_delete_no
+                else:
+                    exist_user.is_going_to_delete = False
+                    exist_user.delete_no = 1
         user_update_request_list = UserUpdateRequest.objects.filter(updated_state__state_no=1)  # 이름 변경 신청을 받는 리스트
         new_user_items = get_paginator_list(request, "new_user", new_user_list, 10)
         exist_user_items = get_paginator_list(request, "exist_user", exist_user_list, 10)
@@ -42,6 +50,7 @@ def staff_member_list(request):
         grade_list.sort()
         auth_list = UserAuth.objects.filter(auth_no__lte=2)  # 기존 회원은 미승인 회원으로 넘길 수 없으므로, role_no 가 2 이하인 튜플만 가져옴.
         role_list = UserRole.objects.filter(~Q(role_no=5))
+        user_delete_list = UserDelete.objects.all().order_by("-user_delete_created")[:5]
         context = {  # 컨텍스트에 등록
             "exist_user_list": exist_user_items,
             "exist_user_len": len(exist_user_list),
@@ -50,7 +59,8 @@ def staff_member_list(request):
             "grade_list": grade_list,
             "auth_list": auth_list,
             "role_list": role_list,
-            "user_update_request_list": user_update_request_items
+            "user_update_request_list": user_update_request_items,
+            "user_delete_list": user_delete_list
         }
 
         return render(request, "member_manage.html", context)  # 유저 리스트 페이지를 랜더링
@@ -61,9 +71,7 @@ def staff_member_list(request):
 def staff_member_update(request):
     if request.method == "POST":  # 파라미터가 POST로 넘어왔는가? (정상적인 접근)
         user_auth = request.POST.get("user_auth")
-        print("user_auth:", user_auth)
         user_role = request.POST.get("user_role")
-        print("user_role:", user_role)
         user_stu_list = request.POST.getlist("user_stu_list[]")
         print(user_stu_list)
         if user_role is None:
@@ -203,19 +211,26 @@ def is_voted(request, user_delete):
     return len(UserDeleteAor.objects.filter(Q(user_delete_no=user_delete) & Q(aor_user=get_logined_user(request)))) != 0
 
 
+# 제명 대상인 회장 제외한 회장 전체 수 구하기
+def get_valid_chief_num():
+    return len(User.objects.filter(Q(user_role__role_no__lte=4) & Q(user_auth__auth_no=1))) - len(
+        UserDelete.objects.filter(deleted_user__user_role__role_no__lte=4))
+
+
+# 제명 안건에 참가한 리스트 구하기
+def get_aor_list(user_delete):
+    return UserDeleteAor.objects.filter(user_delete_no=user_delete)
+
+
 # 회장단 전체가 투표했는지 확인
 def is_finished(user_delete):
-    total_chief_num = len(User.objects.filter(Q(user_role__role_no__lte=4) & Q(user_auth__auth_no=1)))
-    user_delete_aor_list = UserDeleteAor.objects.filter(user_delete_no=user_delete)
-    return total_chief_num == len(user_delete_aor_list)
+    return get_valid_chief_num() == len(get_aor_list(user_delete))
 
 
 # 찬성이 과반이며 회장단 모두가 투표했는지 확인
 def is_decided(user_delete):
-    total_chief_num = len(User.objects.filter(Q(user_role__role_no__lte=4) & Q(user_auth__auth_no=1)))
     user_delete_aor_list = UserDeleteAor.objects.filter(user_delete_no=user_delete)
-    return is_finished(user_delete) and len(user_delete_aor_list.filter(aor=1)) > (
-            total_chief_num / 2)
+    return is_finished(user_delete) and len(user_delete_aor_list.filter(aor=1)) > (get_valid_chief_num() / 2)
 
 
 @superuser_only(cfo_included=True)

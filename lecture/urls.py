@@ -11,7 +11,7 @@ urlpatterns = [
     path('<int:type_no>/search/', views.lect_search, name="lect_search"),
     path('enroll/<int:lect_no>', views.lect_enroll, name="lect_enroll"),  # 신정한 수강생을 강의 명부에 등록하고 lect_room_main 으로 이동
 
-    path('room/<int:room_no>/main/', views.lect_room_main, name="lect_room_main"), # 강의룸 메인 게시판으로 이동
+    path('room/<int:room_no>/main/', views.lect_room_main, name="lect_room_main"),  # 강의룸 메인 게시판으로 이동
     path('room/<int:room_no>/list/<int:board_type>', views.lect_room_list, name="lect_room_list"),  # 강의룸 메인 게시판으로 이동
     path('room/<int:room_no>/register/<int:board_type>', views.lect_board_register, name="lect_board_register"),
     path('room/<int:room_no>/detail/<int:board_no>', views.lect_board_detail, name="lect_board_detail"),
@@ -20,7 +20,6 @@ urlpatterns = [
     path('room/<int:room_no>/member_manage', views.lect_room_mem_manage, name="lect_room_mem_manage"),
     path('room/<int:room_no>/attend/', views.lect_room_attend_std, name="lect_room_attend_std"),
     path('room/<int:room_no>/attend/teacher', views.lect_room_attend_teacher, name="lect_room_attend_teacher"),
-
-
+    path('board/hw_register/', views.lect_board_hw_register, name="lect_board_hw_register"),  # 강의룸 과제 게시글 등록페이지로 이동
 
 ]

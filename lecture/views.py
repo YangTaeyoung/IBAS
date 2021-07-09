@@ -392,6 +392,8 @@ def lect_room_attend_teacher(request, room_no):
         return redirect(reverse('lect_room_attend_teacher', kwargs={'room_no': room_no}))
 
 
+def lect_board_hw_register(request):  # 강의룸 등록 페이지로 이동
+    return render(request, 'lect_board_hw_register.html', {})
 
 
 

@@ -72,7 +72,12 @@
                         <div class="row">
                             <!--================= 여기부터 게시글 반복시작 =================-->
                             {% if item_list|length == 0 %}
-                                등록된 강의가 없습니다.
+                                {% if type.type_no != 4 %}
+                                    등록된 {{ type.type_name }}{% if type.type_no == 3 %}이{% else %}가{% endif %}
+                                    없습니다.
+                                {% else %}
+                                    개설 처리 대기 중인 강의가 없습니다.
+                                {% endif %}
                             {% endif %}
                             {% for lect in item_list %}
                                 <!-- 게시글 1 -->
@@ -151,22 +156,25 @@
                             <!--================= 여기부터 게시글 반복 끝 =================-->
                         </div>
                         <!-- 강의: 강의개설 신청, 스터디 및 취미: 등록 -->
-                        <div class="extra-cell text-right  m-t20">
-                            <!-- 강의, 스터디, 취미 게시판들의 게시글 등록 버튼 (관련자 및 관련 게시판만 보이게 처리) -->
-                            <form action="{% url 'lect_register' %}" method="get">
-                                <input type="hidden" name="lect_type" value="{{ type.type_no }}">
-                                {% if type.type_no == 1 %}
-                                    <!-- 강의 게시판에만 보이는 버튼임 -->
-                                    <button class="site-button radius-xl m-l10"><i class="fa fa-plus m-r5"></i>강의개설 신청
-                                    </button>
-                                {% else %}
-                                    <!-- 스터디, 취미 게시판에만 보이는 버튼임 -->
-                                    <button type="submit" class="site-button radius-xl m-l10"><i
-                                            class="fa fa-plus m-r5"></i>등록
-                                    </button>
-                                {% endif %}
-                            </form>
-                        </div>
+                        {% if is_active and type.type_no != 4 %}
+                            <div class="extra-cell text-right  m-t20">
+                                <!-- 강의, 스터디, 취미 게시판들의 게시글 등록 버튼 (관련자 및 관련 게시판만 보이게 처리) -->
+                                <form action="{% url 'lect_register' %}" method="get">
+                                    <input type="hidden" name="lect_type" value="{{ type.type_no }}">
+                                    {% if type.type_no == 1 %}
+                                        <!-- 강의 게시판에만 보이는 버튼임 -->
+                                        <button class="site-button radius-xl m-l10"><i class="fa fa-plus m-r5"></i>강의 개설
+                                            신청
+                                        </button>
+                                    {% else %}
+                                        <!-- 스터디, 취미 게시판에만 보이는 버튼임 -->
+                                        <button type="submit" class="site-button radius-xl m-l10"><i
+                                                class="fa fa-plus m-r5"></i> {{ type.type_name }} 등록
+                                        </button>
+                                    {% endif %}
+                                </form>
+                            </div>
+                        {% endif %}
                         <!--========== 페이지네이션 시작 ===========-->
                         <!-- 1페이지에 6~8개 게시글 끌고오고, 게시글이 그보다 적으면, 페이지네이션 안보이게 처리해야 함 -->
                         {% if item_list|length != 0 %}

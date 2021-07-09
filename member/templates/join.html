@@ -323,23 +323,21 @@
 </div>
 <div id="gray_shadow" class="gray_shadow" onclick="popDown()"></div>
 <!-- 전공 검색 팝업창 -->
-<div id="major-search-popup" class="card major-search-popup ">
+<div id="major-search-popup" class="card major-search-popup" style="width: 450px; height: 380px">
     <div class="card-header" style="display: flex; align-items: center; justify-content: space-between">
         <h4 class="m-b0"> 전공 검색 </h4>
         <!-- 닫기 버튼 -->
         <i class="fa fa-close fa-2x btn-exit" onclick="popDown()"></i>
     </div>
-    <div class="card-body">
-
+    <div class="card-body" style="display: flex; height: auto">
 
         <!-- 검색 영역 -->
-        <div class="searchBox">
+        <div class="searchBox" style="width: 100%; margin-top: 20px; margin-left: 20px">
             <input class="form-control" type="text" id="search" onkeyup="filter()" placeholder="전공을 입력하세요"/>
         </div>
         <!-- 전공 리스트 영역 -->
 
-        <hr/>
-        <div class="listBox">
+        <div class="listBox" style="width: 100%; margin-left: 20px">
             <table class="table table-hover">
                 <thead>
                 <tr>
