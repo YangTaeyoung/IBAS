@@ -333,8 +333,9 @@ def contest_register(request):  # 공모전 등록
                 contest = contest_form.save(
                     contest_writer=User.objects.get(pk=request.session.get('user_stu')))
                 file_form.save(instance=contest)
+                messages.success(request, '게시글을 성공적으로 등록하셨습니다.')
                 return redirect("contest_detail", contest_no=contest.contest_no)
-        messages.add_message(request, messages.ERROR, '꼭 이미지 파일은 한 개 이상 첨부되어야 합니다.') # 이미지가 없을 시 에러가 뜨도록 하는 것. (작동하지 않음. 랜더 함수가 두번호출 돼서 초기화되는데 원인을 모르겠음.)
+        messages.error(request, '꼭 이미지 파일은 한 개 이상 첨부되어야 합니다.') # 이미지가 없을 시 에러가 뜨도록 하는 것. (작동하지 않음. 랜더 함수가 두번호출 돼서 초기화되는데 원인을 모르겠음.)
     # 목록에서 신규 등록 버튼 눌렀을때
     form_context = {
         'contest_form': ContestForm(),
