@@ -32,7 +32,7 @@ def get_lect_list(request, type_no):
             "lectday_set", "enrolled_students")
     else:
         lect_list = Lect.objects.filter(Q(lect_type=LectType.objects.get(pk=1)) & Q(lect_state__state_no=1) | Q(
-            lect_state__state_no=2)).prefetch_related("lectday_set").prefetch_related("lectuser_set")
+            lect_state__state_no=2)).prefetch_related("lectday_set").prefetch_related("enrolled_students")
     return lect_list
 
 
