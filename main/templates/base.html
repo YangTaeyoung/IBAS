@@ -1,4 +1,12 @@
 {% load static %}
+{% if messages %}
+    {% for message in messages %}
+        {% autoescape off %}
+        {{ message.tag }}
+        {{ message.message }}
+        {% endautoescape %}
+    {% endfor %}
+{% endif %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,8 +22,8 @@
     <meta name="format-detection" content="telephone=no">
 
     <!-- FAVICONS ICON -->
-{#    <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon"/>#}
-{#    <link rel="shortcut icon" type="image/x-icon" href="{% static 'images/favicon.png' %}"/>#}
+    {#    <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon"/>#}
+    {#    <link rel="shortcut icon" type="image/x-icon" href="{% static 'images/favicon.png' %}"/>#}
 
     <!-- PAGE TITLE HERE -->
     <title>IBAS</title>

@@ -271,7 +271,8 @@ class Lect(models.Model):
                                    default=1, null=True, blank=True)  # Field name made lowercase.
     lect_curri = models.TextField(db_column='LECT_CURRI')  # Field name made lowercase.
     lect_limit_num = models.IntegerField(db_column='LECT_LIMIT_NUM')  # Field name made lowercase.
-    lect_place_or_link = models.CharField(db_column='LECT_PLACE_OR_LINK', max_length=1000, null=True, blank=True)  # Field name made lowercase.
+    lect_place_or_link = models.CharField(db_column='LECT_PLACE_OR_LINK', max_length=1000, null=True,
+                                          blank=True)  # Field name made lowercase.
     lect_method = models.ForeignKey('MethodInfo', models.DO_NOTHING, db_column='LECT_METHOD',
                                     choices=METHOD_CHOICES, null=True, blank=True)  # Field name made lowercase.
     lect_deadline = models.DateTimeField(db_column='LECT_DEADLINE')  # Field name made lowercase.
@@ -542,15 +543,13 @@ class UserDelete(models.Model):
         return os.path.join(MEDIA_ROOT, 'member', 'delete', str(self.user_delete_no))
 
 
-# 제명 증거자료 올라가는 경로
-def user_delete_upload_to(instance, filename):
-    return f'staff/user/delete/{instance.user_delete_no.user_delete_no}/{filename}'
-
-
 class UserDeleteFile(File):
+    def file_upload_to(self, filename):
+        return os.path.join('member', 'delete', str(self.file_fk_id), filename)
+
     file_fk = models.ForeignKey(UserDelete, db_column="USER_DELETE_NO", on_delete=models.CASCADE, related_name='files')
     file_path = models.FileField(db_column='FILE_PATH', max_length=100,
-                                 upload_to=user_delete_upload_to)  # Field name made lowercase.
+                                 upload_to=file_upload_to)  # Field name made lowercase.
 
     class Meta:
         managed = False

@@ -8,6 +8,8 @@ from pagination_handler import get_page_object
 from alarm.alarm_controller import create_comment_alarm, create_comment_ref_alarm
 from user_controller import login_required, writer_only, auth_check
 from alarm.alarm_controller import create_board_notice_alarm
+from message_controller import alert
+
 
 # ---- get_sidebar_information ---- #
 # INPUT : Board 객체 or ContestBoard 객체
@@ -199,7 +201,7 @@ def board_update(request, board_no):
             'board_type_no': board.board_type_no.board_type_no,
             'board_form': BoardForm(instance=board),
             'file_form': FileForm(),
-            'file_list': BoardFile.objects.filter(board_no=board)
+            'file_list': BoardFile.objects.filter(file_fk=board)
         }
         return render(request, "board_register.html", context)
 
@@ -211,7 +213,7 @@ def board_update(request, board_no):
         if board_form.is_valid() and file_form.is_valid():
             with transaction.atomic():
                 board_form.update(instance=board)
-                board_files = BoardFile.objects.filter(board_no=board)  # 파일들을 갖고 옴
+                board_files = BoardFile.objects.filter(file_fk=board)  # 파일들을 갖고 옴
                 FileController.remove_files_by_user(request, board_files)  # 사용자가 제거한 파일 삭제
                 file_form.save(instance=board)  # 파일 업로드
 
@@ -296,7 +298,7 @@ def board_comment_update(request):
 @login_required
 def contest_list(request):
     # 공모전 게시물 전부를 해당 파일과 함께 Queryset 으로 가져오기
-    contest_board_list = ContestBoard.objects.all().order_by('-contest_deadline').prefetch_related("contestfile_set")
+    contest_board_list = ContestBoard.objects.all().order_by('-contest_deadline').prefetch_related("files")
 
     # pagination 을 위한 page 객체 (page 객체 안에는 한 페이지에 보여줄만큼의 게시물이 들어있다.)
     contest__list = get_page_object(request, contest_board_list, num_of_boards_in_one_page=6)
@@ -324,7 +326,6 @@ def contest_register(request):  # 공모전 등록
     if request.method == 'POST':
         contest_form = ContestForm(request.POST)
         file_form = FileForm(request.POST, request.FILES)
-
         if contest_form.is_valid() and file_form.is_valid():
             with transaction.atomic():
                 # 학번 오류 처리 필요
@@ -332,14 +333,14 @@ def contest_register(request):  # 공모전 등록
                 contest = contest_form.save(
                     contest_writer=User.objects.get(pk=request.session.get('user_stu')))
                 file_form.save(instance=contest)
+                return redirect("contest_detail", contest_no=contest.contest_no)
         else:
-            pass  # 오류처리 필요
+            return redirect(reverse("contest_register"))
 
-        # form의 유효성과 관계없이 게시글 목록으로 이동
-        return redirect(reverse('contest_list'))
 
     # 목록에서 신규 등록 버튼 눌렀을때
-    elif request.method == 'GET':
+    if request.method == 'GET':
+
         form_context = {
             'contest_form': ContestForm(),
             'file_form': FileForm(),
@@ -396,7 +397,7 @@ def contest_update(request, contest_no):
             'contest_no': contest_no,
             'contest_form': ContestForm(instance=contest),
             'file_form': FileForm(),
-            'file_list': ContestFile.objects.filter(contest_no=contest)
+            'file_list': ContestFile.objects.filter(file_fk=contest)
         }
         return render(request, 'contest_register.html', context)
 
@@ -408,7 +409,7 @@ def contest_update(request, contest_no):
         if contest_form.is_valid() and file_form.is_valid():
             with transaction.atomic():
                 contest_form.update(instance=contest)
-                contest_files = ContestFile.objects.filter(contest_no=contest)  # 게시글 파일을 불러옴
+                contest_files = ContestFile.objects.filter(file_fk=contest)  # 게시글 파일을 불러옴
                 FileController.remove_files_by_user(request, contest_files)  # 사용자가 삭제한 파일을 제거
                 file_form.save(contest)  # 유효성 검사 문제. 썸네일이 보장되는가..?
 
@@ -479,4 +480,3 @@ def contest_comment_register(request):
         )
 
     return redirect("contest_detail", contest_no=contest.contest_no)
-

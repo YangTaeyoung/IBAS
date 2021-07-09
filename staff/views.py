@@ -315,7 +315,7 @@ def member_delete_update(request, user_delete_no):
             "user_delete_form": UserDeleteForm(instance=user_delete),
             "user_delete_file_form": FileFormBase(),
             "user_delete_file_list": UserDeleteFile.objects.filter(
-                user_delete_no=UserDelete.objects.get(pk=user_delete_no)),
+                file_fk=UserDelete.objects.get(pk=user_delete_no)),
             "is_update": True,
             "user_delete_no": user_delete_no
         }
@@ -323,7 +323,7 @@ def member_delete_update(request, user_delete_no):
     else:
         user_delete_form = UserDeleteForm(request.POST)
         user_delete_file_form = FileFormBase(request.POST, request.FILES)
-        user_delete_file_list = UserDeleteFile.objects.filter(user_delete_no=user_delete)
+        user_delete_file_list = UserDeleteFile.objects.filter(file_fk=user_delete)
         if user_delete_file_form.is_valid() and user_delete_form.is_valid():
             user_delete_form.update(instance=user_delete)
             FileController.remove_files_by_user(request, user_delete_file_list)

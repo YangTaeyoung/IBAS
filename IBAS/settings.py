@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
+from django.contrib.messages import constants as messages_constants
 from pathlib import Path
 import os
 from my_root import *
@@ -194,9 +195,13 @@ EMAIL_HOST_PASSWORD = 'ibasforever'
 # 브라우져 종료시 세션 만료
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
+
 # HTTPS
 if IS_SERVER:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     SECURE_SSL_REDIRECT = True
+
+
+MESSAGE_LEVEL = messages_constants.DEBUG
