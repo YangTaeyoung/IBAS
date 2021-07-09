@@ -31,7 +31,9 @@
                                                                     담당자
                                                                 {% endif %}
                                                             </th>
-                                                            <th class="border-top-0" scope="col">작성일</th>
+                                                            <th class="border-top-0" scope="col">
+                                                                {% if board_type == 3 %}마감일{% else %}작성일{% endif %}
+                                                            </th>
                                                         </tr>
                                                         </thead>
 
@@ -46,26 +48,46 @@
                                                                     <!-- 게시글 작성자: 복수 강의자일 경우, 해당 게시글을 올린 강의자 이름을 불러올 것 -->
                                                                     <td>{{ board.lect_board_writer.user_name }}</td>
                                                                     <!-- 게시글 작성일 -->
-                                                                    <td>{{ board.lect_board_created | date:"Y-m-d" }}</td>
+                                                                    <td>
+                                                                        {% if board_type == 3 %}{{ board.lect_assignment_deadline | date:"Y-m-d" }}
+                                                                        {% else %}{{ board.lect_board_created | date:"Y-m-d" }}
+                                                                        {% endif %}
+                                                                    </td>
                                                                 </tr>
                                                             {% endfor %}
 
                                                         </tbody>
+                                                    </table>
 
-                                                    {% else %}
-                                                        <p class="text-center">
-                                                            {% if board_type == 1 %}
-                                                                공지사항이 없습니다.
-                                                            {% elif board_type == 2 %}
-                                                                아직 강의가 없습니다.
-                                                            {% elif board_type == 3 %}
-                                                                아직은 과제가 없습니다...
-                                                            {% endif %}
-                                                        </p>
-                                                    {% endif %}
-                                                </table>
+                                                    <!-- 페이지네이션 -->
+                                                    {% include "pagination.html" %}
 
-                                                <!-- 페이지네이션 -->
-                                                {% include "pagination.html" %}
+                                                {% else %}
+
+                                                    <p class="text-center">
+                                                        {% if board_type == 1 %}
+                                                            공지사항이 없습니다.
+                                                        {% elif board_type == 2 %}
+                                                            아직 강의가 없습니다.
+                                                        {% elif board_type == 3 %}
+                                                            아직은 과제가 없습니다...
+                                                        {% endif %}
+                                                    </p>
+
+                                                {% endif %}
+
+
+
                                             </div>
                                         </div>
+
+                                        {% if logined_user == lect.lect_chief %}
+                                            <div class="extra-cell text-right  m-t20">
+                                                <!-- 게시글 등록 버튼 -->
+                                                <!-- 관련자만 보이게 처리 -->
+                                                <button type="submit" class="site-button radius-xl m-l10">
+                                                    <i class="fa fa-plus m-r5"></i>
+                                                    게시글 등록
+                                                </button>
+                                            </div>
+                                        {% endif %}

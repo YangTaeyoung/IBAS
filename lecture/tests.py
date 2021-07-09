@@ -1,49 +1,165 @@
 from unittest import skip
+from unittest.mock import patch
 
+from django.core.handlers.wsgi import WSGIRequest
 from django.db import connection
+from django.db.models import Q
 from django.http import HttpRequest
 from django.template.loader import render_to_string
 from django.test import TestCase
 from django.urls import reverse
 from django.utils.datetime_safe import date, datetime
 from pytz import timezone
-
 from DB.models import Lect, User, LectBoard, LectBoardType, LectEnrollment
-from lecture.views import lect_room_attend_teacher
-from django.conf import settings
-from importlib import import_module
+from member.session import save_session
+from faker import Faker
+
+_TEST_TITLE = '빠르게 시작하는 파이썬*$%^'
+_TEST_LECTURE_CHIEF = User.objects.get(pk=12162359)
+
+
+def _test_data():
+    try:
+        # 새로운 강의를 등록한다.
+        lecture = Lect.objects.create(lect_title=_TEST_TITLE, lect_type_id=1, lect_chief=_TEST_LECTURE_CHIEF,
+                                      lect_place_or_link='link', lect_method_id=1, lect_limit_num=60,
+                                      lect_deadline=datetime(2021, 7, 29).astimezone(timezone('Asia/Seoul')),
+                                      lect_intro='파이썬은 재밌어요', lect_state_id=3)
+
+        # 게시글이 3개 생긴다.
+        ref = LectBoard.objects.create(lect_no=lecture, lect_board_title='첫번째 강의: 파이썬 조건문',
+                                    lect_board_writer=_TEST_LECTURE_CHIEF, lect_board_cont="1234", lect_board_type_id=2)
+        LectBoard.objects.create(lect_no=lecture, lect_board_title='공지사항',
+                                 lect_board_writer=_TEST_LECTURE_CHIEF, lect_board_cont="1234", lect_board_type_id=1)
+        LectBoard.objects.create(lect_no=lecture, lect_board_title='과제: 배그를 만들어 오시오',
+                                 lect_board_writer=_TEST_LECTURE_CHIEF, lect_board_cont="1234", lect_board_type_id=3,
+                                 lect_board_ref=ref)
+
+        # 수강생이 들어왔다.
+        for std in User.objects.all():
+            LectEnrollment.objects.create(lect_no=lecture, student=std)
+
+    except Exception as e:
+        raise e
 
 
 class LectBoardTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        try:
-            # 새로운 강의를 등록한다.
-            lecture = Lect.objects.create(lect_title="빠르게 시작하는 파이썬", lect_type_id=1, lect_chief_id=12162359,
-                                          lect_place_or_link='link', lect_method_id=1, lect_limit_num=60,
-                                          lect_deadline=datetime(2021, 7, 29).astimezone(timezone('Asia/Seoul')),
-                                          lect_intro='파이썬은 재밌어요', lect_state_id=3)
+        _test_data()
 
-            # 강의에 게시글이 3개 생긴다.
-            LectBoard.objects.create(lect_no=lecture, lect_board_title='첫번째 강의: 파이썬 조건문',
-                                     lect_board_writer_id=12162359, lect_board_cont="1234", lect_board_type_id=2)
-            LectBoard.objects.create(lect_no=lecture, lect_board_title='두번째 강의: 파이썬 반복문을 알아보자',
-                                     lect_board_writer_id=12162359, lect_board_cont="1234", lect_board_type_id=2)
-            LectBoard.objects.create(lect_no=lecture, lect_board_title='세번째 강의: 파이썬 객체를 배우자',
-                                     lect_board_writer_id=12162359, lect_board_cont="1234", lect_board_type_id=2)
+    def test_response_200_for_main_view(self):
+        lect_room = Lect.objects.get(lect_title=_TEST_TITLE)
+        response = self.client.get(reverse('lect_room_main', kwargs={'room_no': lect_room.lect_no}))
 
-            # 수강생이 들어왔다.
-            for std in User.objects.all():
-                LectEnrollment.objects.create(lect_no=lecture, student=std)
+        self.assertEqual(200, response.status_code)
+        self.assertTemplateUsed(response, 'lecture_room_main.html')
 
-        except Exception as e:
-            raise e
+    def test_response_200_for_LectBoard_list_view(self):
+        lect_room = Lect.objects.get(lect_title=_TEST_TITLE)
+
+        for lect_board_type in range(1,4):
+            response = self.client.get(
+                reverse('lect_room_list', kwargs={'room_no': lect_room.lect_no, 'board_type': lect_board_type})
+            )
+
+            self.assertEqual(200, response.status_code)
+            self.assertTemplateUsed(response, 'lecture_room_list.html')
+
+    def test_response_200_for_LectBoard_detail_view(self):
+        lect_room = Lect.objects.prefetch_related('lectures').get(lect_title=_TEST_TITLE)
+        lect_board_list = lect_room.lectures.all()
+
+        for i in lect_board_list:
+            response = self.client.get(
+                reverse('lect_board_detail', kwargs={'room_no': lect_room.lect_no, 'board_no': i.lect_board_no})
+            )
+
+            self.assertEqual(200, response.status_code)
+            self.assertTemplateUsed(response, 'lecture_room_board_detail.html')
+
+    def test_response_200_for_LectBoard_register(self):
+        lect_room = Lect.objects.get(lect_title=_TEST_TITLE)
+
+        for board_type in range(1, 4):
+            response = self.client.get(
+                reverse('lect_board_register', kwargs={'room_no': lect_room.lect_no, 'board_type': board_type})
+            )
+
+            self.assertEqual(200, response.status_code)
+            self.assertTemplateUsed(response, 'lecture_room_board_register.html')
+
+    def test_response_200_for_LectBoard_update(self):
+        lect_room = Lect.objects.prefetch_related('lectures').get(lect_title=_TEST_TITLE)
+        lect_board_list = lect_room.lectures.all()
+
+        for i in lect_board_list:
+            response = self.client.get(
+                reverse('lect_board_update', kwargs={'room_no': lect_room.lect_no, 'board_no': i.lect_board_no})
+            )
+
+            self.assertEqual(200, response.status_code)
+            self.assertTemplateUsed(response, 'lecture_room_board_register.html')
+
+    def test_response_302_for_LectBoard_register(self):
+        fake = Faker()
+        session = self.client.session
+        session["user_stu"] = _TEST_LECTURE_CHIEF.user_stu
+        for i in range(1, 4):
+            board = {
+                'lect_board_type_id': i,
+                'lect_board_writer': _TEST_LECTURE_CHIEF,
+                'lect_board_title': fake.word(),
+                'lect_board_cont': fake.text(),
+            }
+            response = self.client.post(
+                reverse('lect_board_register', kwargs={'room_no': Lect.objects.get(lect_title=_TEST_TITLE).lect_no, 'board_type': i}),
+                data=board
+            )
+            self.assertEqual(302, response.status_code)
+
+    def test_response_302_for_LectBoard_update(self):
+        fake = Faker()
+        session = self.client.session
+        session["user_stu"] = _TEST_LECTURE_CHIEF.user_stu
+        lecture = Lect.objects.get(lect_title=_TEST_TITLE)
+        for i in range(1, 4):
+            board = LectBoard.objects.filter(lect_no=lecture, lect_board_type_id=i).first()
+            data = {
+                'lect_board_type_id': i,
+                'lect_board_writer': _TEST_LECTURE_CHIEF,
+                'lect_board_title': fake.word(),
+                'lect_board_cont': fake.text(),
+            }
+            response = self.client.post(
+                reverse('lect_board_update',
+                        kwargs={'room_no': lecture.lect_no, 'board_no': board.lect_board_no}),
+                data=data
+            )
+            self.assertEqual(302, response.status_code)
+
+    def test_response_302_for_LectBoard_delete(self):
+        lect_room = Lect.objects.prefetch_related('lectures').get(lect_title=_TEST_TITLE)
+        lect_board_list = lect_room.lectures.exclude(lect_board_type_id=3)
+
+        for i in lect_board_list:
+            response = self.client.get(
+                reverse('lect_board_delete', kwargs={'room_no': lect_room.lect_no, 'board_no': i.lect_board_no})
+            )
+
+            self.assertEqual(302, response.status_code)
+
+
+class LectAttendanceTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        _test_data()
 
     def test_response_200_for_attendance_page(self):
         """
                 강의자 메뉴 中 : 출석 페이지, 수강자 출석 정보 조회 시도 (GET)
         """
-        lect_room = Lect.objects.first()
+        lect_room = Lect.objects.get(lect_title=_TEST_TITLE)
 
         response = self.client.get(reverse('lect_room_attend_teacher', kwargs={'room_no': lect_room.lect_no}))
         self.assertEqual(response.status_code, 200)
@@ -54,7 +170,7 @@ class LectBoardTest(TestCase):
                 강의자 메뉴 中 : 출석 페이지, 상단 회차별 강의 제목
         """
 
-        lect_room = Lect.objects.prefetch_related("lectures").first()
+        lect_room = Lect.objects.prefetch_related("lectures").get(lect_title=_TEST_TITLE)
         lect_board_list = lect_room.lectures.filter(lect_board_type_id=2).order_by('-lect_board_no')
 
         response = self.client.get(reverse('lect_room_attend_teacher', kwargs={'room_no': lect_room.lect_no}))
@@ -65,7 +181,8 @@ class LectBoardTest(TestCase):
         """
                 강의자 메뉴 中 : 출석 페이지, 수강생 이름 + 학번 + 출석여부 띄우기
         """
-        lect_room = Lect.objects.prefetch_related("enrolled_students", "lectures").first()
+        lect_room = Lect.objects.prefetch_related("enrolled_students", "lectures"
+                                                  ).filter(lect_title=_TEST_TITLE).first()
         lect_board = lect_room.lectures.first()
         query = f"""SELECT u.USER_NAME, u.USER_STU, if(isnull(attend.LECT_ATTEND_DATE),false,true) as attendance
                     FROM LECT_ENROLLMENT AS enrollment
@@ -92,13 +209,13 @@ class LectBoardTest(TestCase):
         """
                 강의자 메뉴 中 : 출석 페이지, 출석 & 결석 정보 변경 요청 시도 (POST)
         """
-        lect_room = Lect.objects.filter(lect_chief_id=12162359).last()
+        lect_room = Lect.objects.filter(lect_title=_TEST_TITLE).first()
         context = {
             'lect_board_no_': lect_room.lectures.first().lect_board_no
         }
 
         # 어떤 수강생도 체크하지 않았을 때,
-        response = self.client.post(reverse('lect_room_attend_teacher', kwargs={'room_no': lect_room.lect_no}),context)
+        response = self.client.post(reverse('lect_room_attend_teacher', kwargs={'room_no': lect_room.lect_no}), context)
 
         self.assertEqual(response.status_code, 302)
 
