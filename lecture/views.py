@@ -2,7 +2,7 @@ from django.db import transaction, connection
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from DB.models import LectType, Lect, LectDay, StateInfo, MethodInfo, LectBoard, LectBoardFile, \
     LectEnrollment, LectAttendance
-from django.db.models import Q
+from django.db.models import Q, Count, F, Case, When
 from pagination_handler import get_paginator_list, get_page_object
 from lecture.forms import LectForm, LectRejectForm, LectPicForm, LectBoardForm, make_lect_board_form, \
     FileForm
@@ -306,12 +306,20 @@ def lect_board_update(request, room_no, board_no):
 
 
 def lect_room_mem_manage(request, room_no):
-    students = LectEnrollment.objects.filter(lect_no__lect_no=room_no)
+    lect_room = Lect.objects.prefetch_related('lectures', 'attendance').get(pk=room_no)
+    lectures = lect_room.lectures.filter(lect_board_type_id=2)
+
+    # 출석 정보 알아내기
+    lect_attend_info = lect_room.attendance.filter(lect_no_id=room_no)  # 해당 강의에 속한 모든 수강생의 출석 정보
+    students = list(LectEnrollment.objects.prefetch_related('student__useremail_set',).filter(lect_no_id=room_no))  # 수강생 명단
+    total_attend_info = [len(lect_attend_info.filter(student=stu.student)) for stu in students]  # 개인별 출석 횟수
+    attend_info_list = [{'enrolled': stu, 'attend': attend} for stu, attend in zip(students, total_attend_info)]  # 하나의 딕셔너리로 묶기
 
     context = {
-        'students': students,
+        'attend_info_list': attend_info_list,  # 출석 정보 알아내기
         'lect': Lect.objects.get(pk=room_no),
-        'item_list': get_page_object(request, students, 15)  # 15 명씩 보이게 출력
+        'item_list': get_page_object(request, students, 15),  # 15 명씩 보이게 출력
+        'total_check': len(lectures)
     }
 
     return render(request, 'lecture_room_mem_manage.html', context)
@@ -384,8 +392,8 @@ def lect_room_attend_teacher(request, room_no):
                 # input checkbox 로 넘어온 모든 학번에 대해, 출석처리
                 # db 에서 (게시글 번호, 학번) 묶어서 unique key 설정했음.
                 LectAttendance.objects.bulk_create([
-                    LectAttendance(lect_board_no=lect_board, student_id=stu) for stu in checked_list
-                    if not LectAttendance.objects.get(lect_board_no=lect_board, student_id=stu)  # 이미 출석된 상태가 아니면,
+                    LectAttendance(lect_no_id=room_no, lect_board_no=lect_board, student_id=stu) for stu in checked_list
+                    if not LectAttendance.objects.filter(lect_board_no=lect_board, student_id=stu)  # 이미 출석된 상태가 아니면,
                 ])
             elif manage_mode['결석']:
                 # input checkbox 로 넘어온 모든 학번에 대해, 결석처리

@@ -325,10 +325,10 @@ class LectBoard(models.Model):
 
 class LectAttendance(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)
+    lect_no = models.ForeignKey('Lect', on_delete=models.CASCADE, db_column="LECT_NO", related_name='attendance')
     lect_board_no = models.ForeignKey('LectBoard', on_delete=models.CASCADE, db_column="LECT_BOARD_NO",
-                                      related_name='attendance_info')
-    student = models.ForeignKey('LectEnrollment', on_delete=models.DO_NOTHING, db_column='STUDENT',
-                                related_name='attendance')
+                                      related_name='attendance_info')  # 한 강의에 출석한 수강생들 목록
+    student = models.ForeignKey('User', on_delete=models.DO_NOTHING, db_column='STUDENT')
     lect_attend_date = models.DateTimeField(db_column='LECT_ATTEND_DATE', auto_now_add=True, null=True)
 
     class Meta:
@@ -341,6 +341,7 @@ class LectEnrollment(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)
     lect_no = models.ForeignKey('Lect', on_delete=models.CASCADE, db_column='LECT_NO', related_name='enrolled_students')
     student = models.ForeignKey('User', on_delete=models.DO_NOTHING, db_column='STUDENT')
+    status = models.IntegerField(db_column='STATUS', default=1, null=False)
 
     class Meta:
         managed = False
