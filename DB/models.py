@@ -121,7 +121,7 @@ class Board(models.Model):
                                       db_column='BOARD_TYPE_NO')  # Field name made lowercase.
     board_title = models.CharField(db_column='BOARD_TITLE', max_length=100)  # Field name made lowercase.
     board_cont = models.CharField(db_column='BOARD_CONT', max_length=5000)  # Field name made lowercase.
-    board_writer = models.ForeignKey('User', ondelete=models.CASCADE, db_column='BOARD_WRITER')  # Field name made lowercase.
+    board_writer = models.ForeignKey('User', on_delete=models.CASCADE, db_column='BOARD_WRITER')  # Field name made lowercase.
     board_created = models.DateTimeField(db_column='BOARD_CREATED', auto_now_add=True)  # Field name made lowercase.
 
     class Meta:
