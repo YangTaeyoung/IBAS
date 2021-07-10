@@ -309,20 +309,36 @@ def lect_room_mem_manage(request, room_no):
     lect_room = Lect.objects.prefetch_related('lectures', 'attendance').get(pk=room_no)
     lectures = lect_room.lectures.filter(lect_board_type_id=2)
 
-    # 출석 정보 알아내기
-    lect_attend_info = lect_room.attendance.filter(lect_no_id=room_no)  # 해당 강의에 속한 모든 수강생의 출석 정보
-    students = list(LectEnrollment.objects.prefetch_related('student__useremail_set',).filter(lect_no_id=room_no))  # 수강생 명단
-    total_attend_info = [len(lect_attend_info.filter(student=stu.student)) for stu in students]  # 개인별 출석 횟수
-    attend_info_list = [{'enrolled': stu, 'attend': attend} for stu, attend in zip(students, total_attend_info)]  # 하나의 딕셔너리로 묶기
+    if request.method == "GET":
+        # 출석 정보 알아내기
+        lect_attend_info = lect_room.attendance.filter(lect_no_id=room_no)  # 해당 강의에 속한 모든 수강생의 출석 정보
+        students = list(LectEnrollment.objects.prefetch_related('student__useremail_set',).filter(lect_no_id=room_no))  # 수강생 명단
+        total_attend_info = [len(lect_attend_info.filter(student=stu.student)) for stu in students]  # 개인별 출석 횟수
+        attend_info_list = [{'enrolled': stu, 'attend': attend} for stu, attend in zip(students, total_attend_info)]  # 하나의 딕셔너리로 묶기
 
-    context = {
-        'attend_info_list': attend_info_list,  # 출석 정보 알아내기
-        'lect': Lect.objects.get(pk=room_no),
-        'item_list': get_page_object(request, students, 15),  # 15 명씩 보이게 출력
-        'total_check': len(lectures)
-    }
+        context = {
+            'attend_info_list': attend_info_list,  # 출석 정보 알아내기
+            'lect': Lect.objects.get(pk=room_no),
+            'item_list': get_page_object(request, students, 15),  # 15 명씩 보이게 출력
+            'total_check': len(lectures)
+        }
 
-    return render(request, 'lecture_room_mem_manage.html', context)
+        return render(request, 'lecture_room_mem_manage.html', context)
+
+    elif request.method == "POST":
+        if request.POST.get('status_mode') in ['0', '1']:
+            status_mode = int(request.POST.get('status_mode'))
+            checked_list = [request.POST[key] for key in request.POST if 'is_checked_' in key]  # 체크된 수강생들 pk 값 받아오기
+            students = LectEnrollment.objects.filter(pk__in=checked_list)  # 체크된 수강생들 쿼리 ORM
+
+            for std in students:
+                std.status = status_mode
+
+            LectEnrollment.objects.bulk_update(
+                objs=students, fields=['status', ]
+            )
+
+        return redirect(reverse('lect_room_mem_manage', args=[room_no]))
 
 
 def lect_room_attend_std(request, room_no):

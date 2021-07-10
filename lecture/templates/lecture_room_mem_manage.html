@@ -9,29 +9,6 @@
     <script src="{% static 'js/comment.js' %}"></script>
 
 
-    <!--이 js 는 백엔드가 작업해야 함. 수정하기!!!!!-->
-    <script>
-        function selectAoR() {
-            itemidSelect = document.getElementById('select-aor');
-            document.getElementById("input-aor").value = itemidSelect.options[itemidSelect.selectedIndex].value;
-        }
-
-        function decideChk(obj, user_stu) {
-            if (obj.checked === true) {
-                document.getElementById('new-user-check-' + user_stu).checked = true;
-            } else {
-                document.getElementById('new-user-check-' + user_stu).checked = false;
-            }
-        }
-
-        function submitForm(id) {
-            const loadingObj = document.createElement("div");
-            loadingObj.id = "loading-area"
-            document.body.appendChild(loadingObj)
-            document.getElementById(id).submit();
-        }
-    </script>
-
     <div class="page-wraper">
         <!-- 상단 제목부분 -->
         <div class="page-content bg-white">
@@ -72,16 +49,14 @@
                                 <div class="col-lg-11 col-xl-8 p-b30">
 
                                     <!-- 신입부원 관리 콘텐츠 시작 -->
-                                    <form>
+                                    <form id="status-form" onsubmit="return StatusFormSubmit()">
                                         <div class="width-870">
                                             <!-- 신입부원 관리 테이블 시작 -->
                                             <!-- 필터부분 시작-->
                                             <div class="staff_mem_select m-b20">
                                                 <!-- onchange 는 필터임. -->
-                                                <select id="lectRoom_select_state" name=""
-                                                        onchange="lectRoom_state()">
-                                                    <option selected="selected">상태
-                                                    </option>
+                                                <select id="lectRoom_select_state" onchange="lectRoom_state()">
+                                                    <option selected="selected">상태</option>
                                                     <option>수강중</option>
                                                     <option>수강정지</option>
                                                 </select>
@@ -90,11 +65,10 @@
 
                                             <!-- 권한부여부분 시작-->
                                             <div class="staff_mem_select m-b20">
-                                                <select id="select-aor" onchange="selectAoR()">
-                                                    <option selected="selected" disabled="disabled">관리
-                                                    </option>
+                                                <select id="status-mode" name="status_mode">
+                                                    <option selected="selected">관리</option>
                                                     <option value="1">수강중</option>
-                                                    <option value="2">수강정지</option>
+                                                    <option value="0">수강정지</option>
                                                 </select>
                                             </div>
                                             <!-- 권한부여부분 종료-->
@@ -102,25 +76,11 @@
 
                                             <div class="staff_mem_btn m-b20 listing-info-right">
                                                 <!-- &nbsp;는 띄어쓰기 -->
-                                                <button class="site-button" type="button"
-                                                        onclick="submitForm('hd-form-members-aor')">
-                                                    <i
-                                                            class="la la-check m-r5"
-                                                            style="font-weight: bold"
-                                                    ></i>&nbsp;적용
+                                                <button class="site-button" type="submit">
+                                                    <i class="la la-check m-r5" style="font-weight: bold"></i>&nbsp;적용
                                                 </button>
                                             </div>
-                                            <form id="hd-form-members-aor" action="{% url 'members_aor' %}"
-                                                  method="post" style="display: none">
-                                                {% csrf_token %}
-                                                {% for new_user in new_user_list %}
-                                                    <input id="new-user-check-{{ new_user.user_stu }}"
-                                                           type="checkbox" name="user_stu_list[]"
-                                                           value="{{ new_user.user_stu }}"
-                                                           style="display: none"/>
-                                                {% endfor %}
-                                                <input id="input-aor" type="hidden" name="aor" value="0"/>
-                                            </form>
+
                                             <table class="table border-top">
                                                 <thead>
                                                 <!-- 테이블 1행: 제목 -->
@@ -142,10 +102,10 @@
 
                                                 <!-- 수강생이 없을 때 나오는 열 -->
                                                 {% if not attend_info_list %}
-                                                <tr>
-                                                    <td colspan="9" style="text-align: center"> 강의를 수강하고 있는 회원이 없습니다.
-                                                    </td>
-                                                </tr>
+                                                    <tr>
+                                                        <td colspan="9" style="text-align: center"> 강의를 수강하고 있는 회원이 없습니다.
+                                                        </td>
+                                                    </tr>
                                                 {% endif %}
 
                                                 <!-- 수강생이 있을 때 나오는 열 -->
@@ -156,9 +116,9 @@
                                                             {% csrf_token %}
                                                             <!-- 체크박스 -->
                                                             <div class="input-block">
-                                                                <input id="check_"
-                                                                       type="checkbox"
-                                                                       onclick="decideChk(this,'')">
+                                                                <input id="check_{{ info.enrolled.student.user_stu }}"
+                                                                       type="checkbox" name="is_checked_{{ info.enrolled.student.user_stu }}"
+                                                                       value="{{ info.enrolled.id }}">
                                                                 <!-- label이 html에 보이는 것. 역할은 input에 체크하기 위함.   -->
                                                                 <label for="check_{{ info.enrolled.student.user_stu }}"
                                                                        class="staff_label_margin"></label>

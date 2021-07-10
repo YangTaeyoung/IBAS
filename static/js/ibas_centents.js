@@ -308,7 +308,7 @@ function AttendanceFormSubmit () {
         if (checked_list.length === 0) {
             alert('수강생을 선택하세요!');
         } else {
-            if (window.confirm("총 " + checked_list.length + "명의 수강생을 " + manage_mode_str + " 처리 하시겠습니까?")) {
+            if (confirm("총 " + checked_list.length + "명의 수강생을 " + manage_mode_str + " 처리 하시겠습니까?")) {
                 const formElement = $("#attendance-form");
                 formElement.attr("method", "POST");
                 return true;
@@ -316,4 +316,33 @@ function AttendanceFormSubmit () {
         }
     }
     return false
+}
+
+function StatusFormSubmit() {
+    const status_mode = $("#status-mode").val();
+
+    if (status_mode === '관리') {
+        alert('적용할 수강 상태를 선택하세요!');
+    } else {
+        let status_mode_str = '';
+        if (status_mode === '1') status_mode_str = '수강중';
+        else status_mode_str = '수강정지';
+
+        let checked_list = [];
+        $("input:checkbox[name^=is_checked]:checked").each(function () {
+            checked_list.push(this.value)
+        })
+
+        if (checked_list.length === 0) {
+            alert('적용할 수강생을 선택하세요!');
+        } else {
+            if (confirm("총 " + checked_list.length + "명의 수강생을 " + status_mode_str + " 처리 하시겠습니까?")) {
+                const status_form = $("#status-form")
+                status_form.attr("method", "post");
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
