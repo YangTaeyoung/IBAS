@@ -219,7 +219,7 @@
                                                         <li class="post-author ml-4"
                                                             style="list-style: none">
                                                             {{ user_delete_aor.aor_user.user_major.major_name }}
-                                                            {{ user_delete_aor.aor_user.user_stu|slice:"2:4" }}학번
+                                                            {{ user_delete_aor.aor_user.user_stu|stringformat:"s"|slice:"2:4" }}학번
                                                         </li>
                                                     </ul>
                                                 </td>
