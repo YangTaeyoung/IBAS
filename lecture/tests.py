@@ -16,6 +16,7 @@ from faker import Faker
 
 _TEST_TITLE = '빠르게 시작하는 파이썬*$%^'
 _TEST_LECTURE_CHIEF = User.objects.get(pk=12162359)
+_TEST_ASSIGNMENT_TITLE = '과제: 배그를 만들어 오시오#$%^&'
 
 
 def _test_data():
@@ -31,7 +32,7 @@ def _test_data():
                                     lect_board_writer=_TEST_LECTURE_CHIEF, lect_board_cont="1234", lect_board_type_id=2)
         LectBoard.objects.create(lect_no=lecture, lect_board_title='공지사항',
                                  lect_board_writer=_TEST_LECTURE_CHIEF, lect_board_cont="1234", lect_board_type_id=1)
-        LectBoard.objects.create(lect_no=lecture, lect_board_title='과제: 배그를 만들어 오시오',
+        LectBoard.objects.create(lect_no=lecture, lect_board_title=_TEST_ASSIGNMENT_TITLE,
                                  lect_board_writer=_TEST_LECTURE_CHIEF, lect_board_cont="1234", lect_board_type_id=3,
                                  lect_board_ref=ref)
 
@@ -288,3 +289,24 @@ class ManageMemberTest(TestCase):
         response = self.client.get(reverse('lect_room_student_status', args=[lect_room.lect_no]))
 
         self.assertEqual(200, response.status_code)
+
+
+class AssignmentSubmitTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        _test_data()
+
+    def test_response_200_for_submit_html(self):
+        """
+                수강생 과제 제출 페이지 접근
+        """
+        lect_room = Lect.objects.get(lect_title=_TEST_TITLE)
+        assignment = LectBoard.objects.get(lect_board_title=_TEST_ASSIGNMENT_TITLE)
+
+        response = self.client.get(
+            reverse('lect_assignment_submit', args=[lect_room.lect_no]),
+            data={'lect_board_no': assignment.lect_board_no}
+        )
+
+        self.assertEqual(200, response.status_code)
+        self.assertTemplateUsed(response, 'lecture_assignment_submit.html')

@@ -5,7 +5,7 @@ from DB.models import LectType, Lect, LectDay, StateInfo, MethodInfo, LectBoard,
 from django.db.models import Q, Count, F, Case, When
 from pagination_handler import get_paginator_list, get_page_object
 from lecture.forms import LectForm, LectRejectForm, LectPicForm, LectBoardForm, make_lect_board_form, \
-    FileForm
+    FileForm, LectAssignmentForm
 from user_controller import get_logined_user, login_required, superuser_only, writer_only, auth_check, is_superuser, \
     is_logined
 from file_controller import FileController
@@ -452,3 +452,33 @@ def lect_room_manage_attendance(request, room_no):
 
 
 
+
+
+
+def sample(request):
+    return render(request, 'sample.html')
+
+
+def lect_assignment_submit(request, room_no):
+    lect_room = get_object_or_404(Lect, pk=room_no)
+    if request.method == "GET":
+        assignment = LectBoard.objects.get(pk=request.GET.get('lect_board_no'))
+        context = {
+            'lect': lect_room,
+            'assignment_form': LectAssignmentForm(initial={'assignment_title': assignment.lect_board_title}),
+            'file_form': FileForm(),
+            'assignment': assignment
+        }
+        return render(request, 'lecture_assignment_submit.html', context)
+
+
+def lect_assignment_update(request, lect_board_no):
+    pass
+
+
+def lect_assignment_delete(request, assignment_submit_no):
+    pass
+
+
+def lect_assignment_detail(request, assignment_submit_no):
+    pass

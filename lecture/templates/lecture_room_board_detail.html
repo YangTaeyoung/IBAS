@@ -133,29 +133,43 @@
 
                                         <!-- 게시글 수정 버튼 -->
                                         <!-- 관련자만 보이게 처리 -->
-                                        {% if logined_user.user_stu == board.lect_board_writer.user_stu %}
+                                        {% if logined_user == board.lect_board_writer or logined_user == lect.lect_chief %}
 
-                                            <form method="get" id="form-update"
+                                            <form method="get"
                                                   action="{% url "lect_board_update" room_no=lect.lect_no board_no=board.lect_board_no %}">
                                                 {% csrf_token %}
+                                                <button class="site-button radius-xl m-l10" type="submit">
+                                                        <i class="fa fa-pencil m-r5"></i>게시글 수정
+                                                </button>
                                             </form>
-                                            <button class="site-button radius-xl m-l10" onclick="document.getElementById('form-update').submit()">
-                                                    <i class="fa fa-pencil m-r5"></i>게시글 수정
-                                            </button>
 
                                         {% endif %}
 
                                         <!-- 게시글 삭제 버튼 -->
                                         <!-- 관련자만 보이게 처리 -->
 
-                                        {% if logined_user.user_stu == board.lect_board_writer.user_stu or logiend_user.user_role.role_no <= 3 %}
+                                        {% if logined_user == board.lect_board_writer or logined_user.user_role_id <= 3 %}
 
-                                            <button class="site-button red radius-xl m-l10" onclick="document.getElementById('form-delete').submit()">
-                                                    <i class="fa fa-trash m-r5"></i>게시글 삭제
-                                            </button>
-                                            <form method="get" id="form-delete"
+
+                                            <form method="get"
                                                   action="{% url "lect_board_delete" room_no=lect.lect_no board_no=board.lect_board_no %}">
                                                 {% csrf_token %}
+                                                <button class="site-button red radius-xl m-l10" type="submit">
+                                                        <i class="fa fa-trash m-r5"></i>게시글 삭제
+                                                </button>
+                                            </form>
+
+                                        {% endif %}
+
+                                        <!-- 과제 제출 버튼 -->
+                                        {% if logined_user != board.lect_board_writer  %}
+
+                                            <form method="get" action="{% url "lect_assignment_submit" lect.lect_no %}">
+                                                {% csrf_token %}
+                                                <button class="site-button radius-xl m-l10" type="submit">
+                                                      <i class="fa fa-pencil m-r5"></i>과제 제출
+                                                </button>
+                                                <input type="hidden" name="lect_board_no" value="{{ board.lect_board_no }}">
                                             </form>
 
                                         {% endif %}

@@ -20,9 +20,12 @@ urlpatterns = [
     path('room/<int:room_no>/delete/<int:board_no>', views.lect_board_delete, name="lect_board_delete"),
     path('room/<int:room_no>/update/<int:board_no>', views.lect_board_update, name="lect_board_update"),
 
+    # 과제 제출 CRUD
+    path('room/<int:room_no>/assignment/submit', views.lect_assignment_submit, name="lect_assignment_submit"),
+
     # 수강생 전용 url
     path('room/<int:room_no>/attend/', views.lect_room_student_status, name="lect_room_student_status"),  # 출석 확인
-
+    path('room/sample', views.sample, name="sample"),
     # 강의자 전용 url
     path('room/<int:room_no>/manage/attendance', views.lect_room_manage_attendance, name="lect_room_manage_attendance"),
     path('room/<int:room_no>/manage/assignment', views.lect_room_manage_assignment, name="lect_room_manage_assignment"),

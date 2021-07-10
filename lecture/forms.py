@@ -1,5 +1,5 @@
 from django import forms
-from DB.models import Lect, MethodInfo, LectBoard, LectBoardType
+from DB.models import Lect, MethodInfo, LectBoard, LectBoardType, LectAssignmentSubmit
 from django.utils.translation import gettext_lazy as _
 from IBAS.forms import FileFormBase
 from user_controller import get_logined_user
@@ -175,7 +175,7 @@ class LectAssignmentForm(LectBoardFormBase):
         assignment.save()
 
 
-# ㅁㄴㄹㅇ
+# 타입에 맞는 강의 게시글 폼
 def make_lect_board_form(board_type, *args, **kwargs):
     if args or kwargs:
         if board_type == 1:
@@ -191,6 +191,25 @@ def make_lect_board_form(board_type, *args, **kwargs):
             return LectBoardForm(initial={'lect_board_type': 2})
         elif board_type == 3:
             return LectAssignmentForm(initial={'lect_board_type': 3})
+
+
+class AssignmentSubmitForm(forms.ModelForm):
+    class Meta:
+        model = LectAssignmentSubmit
+        fields = ('assignment_title', 'assignment_cont')
+
+        widgets = {
+            'assignment_title': forms.TextInput(attrs={"placeholder": _("제목을 입력하세요."),
+                                                       "style": "font-size: 25px; height: 70px;",
+                                                       "disabled": "disabled",
+                                                       "class": "form-control"}),
+            'assignment_cont': forms.TextInput(attrs={"class": "jqte-test"}),
+        }
+
+        labels = {
+            'assignment_title': _('과제 제목'),
+            'assignment_cont': _('과제 내용')
+        }
 
 
 # 이거 지우면 큰일 남
