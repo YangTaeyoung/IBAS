@@ -126,6 +126,7 @@ class LectBoardTest(TestCase):
         fake = Faker()
         session = self.client.session
         session["user_stu"] = _TEST_LECTURE_CHIEF.user_stu
+        session.save()
         lecture = Lect.objects.get(lect_title=_TEST_TITLE)
         for i in range(1, 4):
             board = LectBoard.objects.filter(lect_no=lecture, lect_board_type_id=i).first()
@@ -225,6 +226,7 @@ class LectAttendanceTest(TestCase):
         self.assertEqual(response.status_code, 302)
 
 
+#
 class LectAssignmentManageTest(TestCase):
     @classmethod
     def setUpTestData(cls):
@@ -232,7 +234,7 @@ class LectAssignmentManageTest(TestCase):
 
     def test_response_200_for_assignment_manage_html(self):
         """
-                강의자 메뉴 中 : 수강생 과제 페이지 접속
+                강의자 메뉴 中 : 수강생 과제 관리 페이지 접속
         """
         lect_room = Lect.objects.get(lect_title=_TEST_TITLE)
 
@@ -273,3 +275,16 @@ class ManageMemberTest(TestCase):
             response = self.client.post(reverse('lect_room_manage_member', args=[lect_room.lect_no]), context)
 
             self.assertEqual(302, response.status_code)
+
+    def test_response_200_for_student_status(self):
+        """
+                수강생 메뉴 中 : 수강생 출석 및 과제 제출 현황 조회
+        """
+        lect_room = Lect.objects.get(lect_title=_TEST_TITLE)
+        session = self.client.session
+        session['user_stu'] = lect_room.attendance.first().student.user_stu
+        session.save()
+
+        response = self.client.get(reverse('lect_room_student_status', args=[lect_room.lect_no]))
+
+        self.assertEqual(200, response.status_code)

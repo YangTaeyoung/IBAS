@@ -13,11 +13,15 @@ urlpatterns = [
 
     path('room/<int:room_no>/main/', views.lect_room_main, name="lect_room_main"),  # 강의룸 메인 게시판으로 이동
     path('room/<int:room_no>/list/<int:board_type>', views.lect_room_list, name="lect_room_list"),  # 강의룸 메인 게시판으로 이동
+
+    # 강의 게시글 CRUD
     path('room/<int:room_no>/register/<int:board_type>', views.lect_board_register, name="lect_board_register"),
     path('room/<int:room_no>/detail/<int:board_no>', views.lect_board_detail, name="lect_board_detail"),
     path('room/<int:room_no>/delete/<int:board_no>', views.lect_board_delete, name="lect_board_delete"),
     path('room/<int:room_no>/update/<int:board_no>', views.lect_board_update, name="lect_board_update"),
-    path('room/<int:room_no>/attend/', views.lect_room_attend_std, name="lect_room_attend_std"),
+
+    # 수강생 전용 url
+    path('room/<int:room_no>/attend/', views.lect_room_student_status, name="lect_room_student_status"),  # 출석 확인
 
     # 강의자 전용 url
     path('room/<int:room_no>/manage/attendance', views.lect_room_manage_attendance, name="lect_room_manage_attendance"),

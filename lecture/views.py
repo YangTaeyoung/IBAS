@@ -341,15 +341,22 @@ def lect_room_manage_member(request, room_no):
         return redirect(reverse('lect_room_manage_member', args=[room_no]))
 
 
-def lect_room_attend_std(request, room_no):
-    lect_room = Lect.objects.prefetch_related("lectures").get(pk=room_no)
+def lect_room_student_status(request, room_no):
+    lect_room = Lect.objects.prefetch_related("lectures", "attendance").get(pk=room_no)
+    lect_board_list = lect_room.lectures.filter(lect_board_type_id=2)
+    cur_user = get_logined_user(request)
+    attend_info = LectAttendance.objects.filter(lect_no=lect_room, student=cur_user)
+    lect_board_list = [
+        {'lecture':lect_board, 'attend': '출석' if attend_info.filter(lect_board_no=lect_board).exists() else '결석'}
+        for lect_board in lect_board_list]
 
     context = {
         'lect': lect_room,
-        'lect_board_list': lect_room.lectures
+        'lect_board_list': lect_board_list,
+        'item_list': get_page_object(request, lect_board_list, 10)
     }
 
-    return render(request, 'lecture_room_attend_std.html', context)
+    return render(request, 'lecture_room_student_status.html', context)
 
 
 def lect_room_manage_assignment(request, room_no):
