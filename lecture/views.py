@@ -305,7 +305,7 @@ def lect_board_update(request, room_no, board_no):
         return redirect('lect_board_detail', room_no=room_no, board_no=board_no)
 
 
-def lect_room_mem_manage(request, room_no):
+def lect_room_manage_member(request, room_no):
     lect_room = Lect.objects.prefetch_related('lectures', 'attendance').get(pk=room_no)
     lectures = lect_room.lectures.filter(lect_board_type_id=2)
 
@@ -323,7 +323,7 @@ def lect_room_mem_manage(request, room_no):
             'total_check': len(lectures)
         }
 
-        return render(request, 'lecture_room_mem_manage.html', context)
+        return render(request, 'lecture_room_manage_students.html', context)
 
     elif request.method == "POST":
         if request.POST.get('status_mode') in ['0', '1']:
@@ -338,7 +338,7 @@ def lect_room_mem_manage(request, room_no):
                 objs=students, fields=['status', ]
             )
 
-        return redirect(reverse('lect_room_mem_manage', args=[room_no]))
+        return redirect(reverse('lect_room_manage_member', args=[room_no]))
 
 
 def lect_room_attend_std(request, room_no):
@@ -352,10 +352,16 @@ def lect_room_attend_std(request, room_no):
     return render(request, 'lecture_room_attend_std.html', context)
 
 
+
+
+def lect_room_manage_assignment(request, room_no):
+    pass
+
+
 # 출석 현황 확인 및 변경
 # 강의 게시글이 존재하지 않으면 => 출석부 ('_table_attendance_check.html') 렌더하지 않음.
 # 강의 게시글은 존재하지만, 학생이 없으면 => 출석부 렌더하지만, 학생이 아무도 없음.
-def lect_room_attend_teacher(request, room_no):
+def lect_room_manage_attendance(request, room_no):
     lect_room = Lect.objects.prefetch_related("lectures", "enrolled_students__student").get(pk=room_no)
     lect_board_list = lect_room.lectures.filter(lect_board_type_id=2).order_by('-lect_board_no')  # 강의 게시글만 가져옴
 
@@ -394,9 +400,9 @@ def lect_room_attend_teacher(request, room_no):
             'lect_board_list': lect_board_list,
             'students_list': students_list,  # 이름/학번/출석결석
             'cur_lect_board': None if lect_board_no is None else LectBoard.objects.get(pk=lect_board_no),  # 현재 게시글
-            'item_list': get_page_object(request, students_list, 15)  # 15 명씩 보이게 출력
+            'item_list': get_page_object(request, students_list, 15),  # 15 명씩 보이게 출력
         }
-        return render(request, 'lecture_room_attend_teacher.html', context)
+        return render(request, 'lecture_room_manage_attendance.html', context)
 
     elif request.method == "POST":
         lect_board = LectBoard.objects.get(pk=request.POST.get('lect_board_no_'))
@@ -418,7 +424,7 @@ def lect_room_attend_teacher(request, room_no):
                 students = LectAttendance.objects.filter(lect_board_no=lect_board)
                 students.filter(student_id__in=checked_list).delete()
 
-        return redirect(reverse('lect_room_attend_teacher', kwargs={'room_no': room_no}),)
+        return redirect(reverse('lect_room_manage_attendance', kwargs={'room_no': room_no}),)
 
 
 

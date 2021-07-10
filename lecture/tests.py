@@ -166,9 +166,9 @@ class LectAttendanceTest(TestCase):
         """
         lect_room = Lect.objects.get(lect_title=_TEST_TITLE)
 
-        response = self.client.get(reverse('lect_room_attend_teacher', kwargs={'room_no': lect_room.lect_no}))
+        response = self.client.get(reverse('lect_room_manage_attendance', kwargs={'room_no': lect_room.lect_no}))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'lecture_room_attend_teacher.html')
+        self.assertTemplateUsed(response, 'lecture_room_manage_attendance.html')
 
     def test_for_getting_all_lectBoards_of_a_lecture(self):
         """
@@ -178,7 +178,7 @@ class LectAttendanceTest(TestCase):
         lect_room = Lect.objects.prefetch_related("lectures").get(lect_title=_TEST_TITLE)
         lect_board_list = lect_room.lectures.filter(lect_board_type_id=2).order_by('-lect_board_no')
 
-        response = self.client.get(reverse('lect_room_attend_teacher', kwargs={'room_no': lect_room.lect_no}))
+        response = self.client.get(reverse('lect_room_manage_attendance', kwargs={'room_no': lect_room.lect_no}))
 
         self.assertQuerysetEqual(lect_board_list, response.context['lect_board_list'], transform=lambda x: x)
 
@@ -206,7 +206,7 @@ class LectAttendanceTest(TestCase):
         students_list = [{'name': name, 'stu': stu, 'attendance': '출석' if attendance == 1 else '결석'}
                          for name, stu, attendance in cursor.fetchall()]
 
-        response = self.client.get(reverse('lect_room_attend_teacher', kwargs={'room_no': lect_room.lect_no}))
+        response = self.client.get(reverse('lect_room_manage_attendance', kwargs={'room_no': lect_room.lect_no}))
 
         self.assertListEqual(students_list, response.context['students_list'])
 
@@ -220,9 +220,26 @@ class LectAttendanceTest(TestCase):
         }
 
         # 어떤 수강생도 체크하지 않았을 때,
-        response = self.client.post(reverse('lect_room_attend_teacher', kwargs={'room_no': lect_room.lect_no}), context)
+        response = self.client.post(reverse('lect_room_manage_attendance', kwargs={'room_no': lect_room.lect_no}), context)
 
         self.assertEqual(response.status_code, 302)
+
+
+class LectAssignmentManageTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        _test_data()
+
+    def test_response_200_for_assignment_manage_html(self):
+        """
+                강의자 메뉴 中 : 수강생 과제 페이지 접속
+        """
+        lect_room = Lect.objects.get(lect_title=_TEST_TITLE)
+
+        response = self.client.get(reverse('lect_room_manage_assignment', args=[lect_room.lect_no]))
+
+        self.assertEqual(200, response.status_code)
+        self.assertTemplateUsed(response, 'lecture_room_manage_assignment.html')
 
 
 # 수강생 관리
@@ -237,7 +254,7 @@ class ManageMemberTest(TestCase):
         """
         lect_room = Lect.objects.get(lect_title=_TEST_TITLE)
 
-        response = self.client.get(reverse('lect_room_mem_manage', args=[lect_room.lect_no]))
+        response = self.client.get(reverse('lect_room_manage_member', args=[lect_room.lect_no]))
 
         self.assertEqual(200, response.status_code)
 
@@ -253,6 +270,6 @@ class ManageMemberTest(TestCase):
                 'status_mode': status_mode
             }
 
-            response = self.client.post(reverse('lect_room_mem_manage', args=[lect_room.lect_no]), context)
+            response = self.client.post(reverse('lect_room_manage_member', args=[lect_room.lect_no]), context)
 
             self.assertEqual(302, response.status_code)
