@@ -1,15 +1,16 @@
 from django.db import transaction, connection
+from django.db.models import Q
 from django.shortcuts import render, redirect, reverse, get_object_or_404
-from DB.models import LectType, Lect, LectDay, StateInfo, MethodInfo, LectBoard, LectBoardFile, \
-    LectEnrollment, LectAttendance
-from django.db.models import Q, Count, F, Case, When
-from pagination_handler import get_paginator_list, get_page_object
-from lecture.forms import LectForm, LectRejectForm, LectPicForm, LectBoardForm, make_lect_board_form, \
-    FileForm, LectAssignmentForm
-from user_controller import get_logined_user, login_required, superuser_only, writer_only, auth_check, is_superuser, \
-    is_logined
-from file_controller import FileController
 from django.utils.dateformat import DateFormat
+
+from DB.models import LectType, Lect, LectDay, MethodInfo, LectBoard, LectEnrollment, LectAttendance, \
+    LectAssignmentSubmit
+from file_controller import FileController
+from lecture.forms import LectForm, LectRejectForm, LectPicForm, make_lect_board_form, \
+    FileForm, AssignmentSubmitForm
+from pagination_handler import get_page_object
+from user_controller import get_logined_user, superuser_only, writer_only, auth_check, is_superuser, \
+    is_logined
 
 
 def get_pol_name(method_no):
@@ -237,7 +238,7 @@ def lect_board_register(request, room_no, board_type):
                 lecture = lect_board_form.save(  # 공지 또는 강의 게시물 저장
                     lect_board_writer=get_logined_user(request),
                     lect_no=Lect.objects.get(pk=room_no),
-                    lect_board_ref_id=request.POST.get('lect_board_ref')
+                    lect_board_ref_id=request.POST.get('lect_board_ref')  # 과제글에 대한 셀프조인
                 )
                 file_form.save(instance=lecture)  # 공지 또는 강의 파일 저장
 
@@ -283,8 +284,8 @@ def lect_board_update(request, room_no, board_no):
             'board_type': board_type,
             'file_list': board.files.all(),  # 게시글 기존 파일 리스트
             'lect_board_list': LectBoard.objects.filter(lect_no_id=room_no, lect_board_type_id=2
-                                                        ) if board_type == 3 else None,
-            'lect_board_ref': board.lect_board_ref_id if board_type == 3 else None
+                                                        ) if board_type == 3 else None,  # 과제글의 경우 상단 select 박스
+            'lect_board_ref': board.lect_board_ref_id if board_type == 3 else None  # 과제글의 경우 부모 게시글
 
         }
         return render(request, 'lecture_room_board_register.html', context)
@@ -296,7 +297,7 @@ def lect_board_update(request, room_no, board_no):
         if lect_board_form.is_valid() and file_form.is_valid():
             # 트랜젝션 꼭 있어야 함!
             with transaction.atomic():
-                if board_type == 3:
+                if board_type == 3:  # 과제글의 경우
                     board.lect_board_ref = get_object_or_404(LectBoard, pk=request.POST.get("lect_board_ref"))
                 lect_board_form.update(instance=board)
                 FileController.remove_files_by_user(request, board.files.all())
@@ -343,11 +344,10 @@ def lect_room_manage_member(request, room_no):
 
 def lect_room_student_status(request, room_no):
     lect_room = Lect.objects.prefetch_related("lectures", "attendance").get(pk=room_no)
-    lect_board_list = lect_room.lectures.filter(lect_board_type_id=2)
-    cur_user = get_logined_user(request)
-    attend_info = LectAttendance.objects.filter(lect_no=lect_room, student=cur_user)
+    lect_board_list = lect_room.lectures.filter(lect_board_type_id=2)  # 강의 게시글들
+    attend_info = LectAttendance.objects.filter(lect_no=lect_room, student=get_logined_user(request))  # 현재 유저의 출석
     lect_board_list = [
-        {'lecture':lect_board, 'attend': '출석' if attend_info.filter(lect_board_no=lect_board).exists() else '결석'}
+        {'lecture' :lect_board, 'attend': '출석' if attend_info.filter(lect_board_no=lect_board).exists() else '결석'}
         for lect_board in lect_board_list]
 
     context = {
@@ -411,7 +411,7 @@ def lect_room_manage_attendance(request, room_no):
         
                     WHERE enrollment.LECT_NO = {lect_room.lect_no}
         
-                    ORDER BY u.USER_NAME ASC;"""
+                    ORDER BY u.USER_NAME ;"""
             cursor = connection.cursor()
             cursor.execute(query)  # 쿼리 수행
             students_list = [{'name': name, 'stu': stu, 'attendance': '출석' if attendance == 1 else '결석'}
@@ -459,26 +459,103 @@ def sample(request):
     return render(request, 'sample.html')
 
 
+# 수강생 과제 제출
 def lect_assignment_submit(request, room_no):
-    lect_room = get_object_or_404(Lect, pk=room_no)
+    lect_room = get_object_or_404(Lect, lect_no=room_no)
+
     if request.method == "GET":
         assignment = LectBoard.objects.get(pk=request.GET.get('lect_board_no'))
         context = {
             'lect': lect_room,
-            'assignment_form': LectAssignmentForm(initial={'assignment_title': assignment.lect_board_title}),
+            'assignment_form': AssignmentSubmitForm(initial={'assignment_title': assignment.lect_board_title}),
             'file_form': FileForm(),
             'assignment': assignment
         }
         return render(request, 'lecture_assignment_submit.html', context)
 
+    elif request.method == "POST":
+        submit_form = AssignmentSubmitForm(request.POST)
+        file_form = FileForm(request.POST, request.FILES)
 
-def lect_assignment_update(request, lect_board_no):
-    pass
+        if submit_form.is_valid() and file_form.is_valid():
+            with transaction.atomic():
+                submission = submit_form.save(
+                    lect_board_no=request.POST.get('lect_board_no'),
+                    assignment_submitter=get_logined_user(request)
+                )
+                file_form.save(instance=submission)
+
+        return redirect(reverse('lect_assignment_detail', args=[room_no, submission.pk]))
 
 
-def lect_assignment_delete(request, assignment_submit_no):
-    pass
+def lect_assignment_list(request, room_no):
+    lect_room = Lect.objects.prefetch_related('submitted_assignments').get(pk=room_no)
+    assignments_list = lect_room.submitted_assignments.filter(assignment_submitter=get_logined_user(request))
+    page_obj = get_page_object(request, assignments_list, 15)
+
+    context = {
+        'lect': lect_room,
+        'assignments_list': assignments_list.all(),
+        'item_list': page_obj
+    }
+
+    return render(request, 'lecture_room_board_list.html', context)
 
 
-def lect_assignment_detail(request, assignment_submit_no):
-    pass
+# 제출한 과제 보기
+def lect_assignment_detail(request, room_no, submit_no):
+    lect_room = get_object_or_404(Lect, pk=room_no)
+    submitted_assignment = LectAssignmentSubmit.objects.prefetch_related('files').get(pk=submit_no)
+    file_list, img_list, doc_list = FileController.get_images_and_files_of_(submitted_assignment)
+
+    if request.method == "GET":
+
+        context = {
+            'lect': lect_room,
+            'submitted_assignment': submitted_assignment,
+            'file_list': file_list,
+            'img_list': img_list,
+            'doc_list': doc_list,
+        }
+
+        return render(request, "lecture_assignment_detail.html", context)
+
+
+# 수강생이, 제출한 과제 수정
+def lect_assignment_update(request, room_no, submit_no):
+    lect_room = get_object_or_404(Lect, pk=room_no)
+    submitted_assignment = LectAssignmentSubmit.objects.prefetch_related('files').get(pk=submit_no)
+
+    if request.method == "GET":
+        context = {
+            'lect': lect_room,
+            'assignment_form': AssignmentSubmitForm(instance=submitted_assignment),
+            'submitted_assignment': submitted_assignment,
+            'assignment': submitted_assignment.assignment_no,
+            'file_form': FileForm(),
+            'file_list': submitted_assignment.files.all()
+        }
+        return render(request, 'lecture_assignment_submit.html', context)
+
+    elif request.method == "POST":
+        assignment_form = AssignmentSubmitForm(request.POST)
+        file_form = FileForm(request.POST, request.FILES)
+
+        if assignment_form.is_valid() and file_form.is_valid():
+            assignment_form.update(submitted_assignment)
+            FileController.remove_files_by_user(request, submitted_assignment.files.all())
+            file_form.save(instance=submitted_assignment)
+
+        return redirect(reverse('lect_assignment_detail', args=[room_no, submit_no]))
+
+
+# 수강생이, 제출했던 과제 삭제하는 경우
+def lect_assignment_delete(request, room_no, assignment_submit_no):
+    if request.method == "POST":
+        assignment = get_object_or_404(LectAssignmentSubmit, pk=assignment_submit_no)
+        FileController.delete_all_files_of_(assignment)
+        assignment.delete()
+
+    return redirect(reverse('lect_assignment_list', args=[room_no]))
+
+

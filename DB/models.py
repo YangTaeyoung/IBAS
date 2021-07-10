@@ -315,16 +315,31 @@ class LectAttendance(models.Model):
 
 
 class LectAssignmentSubmit(models.Model):
-    assignment_submit_no = models.AutoField(db_column="SUBMIT_NO", primary_key=True)
+    assignment_submit_no = models.AutoField(db_column="ASSIGNMENT_SUBMIT_NO", primary_key=True)
     assignment_title = models.CharField(db_column='ASSIGNMENT_TITLE', max_length=100)
     assignment_submit_created = models.DateTimeField(db_column='ASSIGNMENT_SUBMIT_CREATED', auto_now_add=True)
     assignment_cont = models.TextField(db_column='ASSIGNMENT_CONT')
     assignment_submitter = models.ForeignKey('User', on_delete=models.DO_NOTHING, db_column='ASSIGNMENT_SUBMITTER')
     assignment_no = models.ForeignKey('LectBoard', on_delete=models.CASCADE, db_column='ASSIGNMENT_NO')
+    lect_no = models.ForeignKey('Lect', on_delete=models.CASCADE, db_column='LECT_NO',
+                                related_name='submitted_assignments')
 
     class Meta:
         managed = False
         db_table = 'LECT_ASSIGNMENT_SUBMIT'
+
+
+class LectAssignmentSubmittedFile(File):
+    def file_upload_to(self, filename):
+        return os.path.join('lecture', 'submitted', str(self.file_fk_id), filename)
+
+    file_fk = models.ForeignKey('LectAssignmentSubmit', on_delete=models.CASCADE,
+                                db_column='ASSIGNMENT_SUBMIT_NO', related_name='files')
+    file_path = models.FileField(db_column='FILE_PATH', upload_to=file_upload_to, max_length=1000, blank=True)
+
+    class Meta:
+        managed = False
+        db_table = 'LECT_ASSIGNMENT_SUBMITTED_FILE'
 
 
 class LectBoard(models.Model):

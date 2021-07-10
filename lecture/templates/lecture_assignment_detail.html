@@ -1,0 +1,208 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/posting_detail.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/comment.css' %}">
+    <script src="{% static 'js/jquery.min.js' %}"></script><!-- JQUERY.MIN JS -->
+    <script src="{% static 'js/comment.js' %}"></script>
+
+    <div class="page-wraper">
+
+        <div class="page-content bg-white">
+            <div class="page-content bg-white">
+                <!----------============= 상단 제목 시작 ================----------->
+                <!--제목을 감싸는 배경-->
+                <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"
+                     style=" background-image: url('{% static 'images/board_name_img.jpg' %}'); height: 350px">
+                    <!-- 상단 제목을 클릭하면, 상위 게시판으로 이동 -->
+                    <!-- (ex.자유게시판의 '용식이의 학식일기'글의 상세 페이지에서 상위 제목을 클릭하면, 자유게시판으로 이동) -->
+                    <a href="{% url "lect_room_main" lect.lect_no %}">
+                        <div class="container clearfix">
+                            <div class="dlab-bnr-inr-entry">
+                                <!--제목-->
+                                <!-- DB에서 제목 꺼내와야 함 -->
+                                <h1 class="text-white introduce-letter-spacing_5">{{ lect.lect_title }}</h1>
+                                <!--부제목-->
+                                <!-- DB에서 제목 꺼내와야 함 -->
+                                <p class="m-t20">{{ lect.lect_intro }}</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <!----------============= 본문 시작 ================----------->
+                <div class="section-full content-inner">
+                    <div class="container">
+                        <div class="row" style="justify-content: center">
+                            <!--========== 왼쪽 강의룸 네비게이션바 시작 ==========-->
+                            <div class="col-lg-3 col-xl-3">
+                                <div class="sticky-top">
+                                    {% include "_navigation_bar.html" %}
+                                </div>
+                            </div>
+                            <!--========== 왼쪽 강의룸 네비게이션바 끝 ==========-->
+                            <div class="col-lg-8 col-xl-8 p-b30">
+                                <div class="blog-post blog-single">
+
+                                    <!-- 게시글 작성자 및 작성시간을 담는 div -->
+                                    <div class="dlab-post-meta m-b20">
+                                        <ul class="d-flex align-items-center">
+                                            <!-- 게시글 작성자 -->
+                                            <li class="post-author"><i class="ti ti-user"></i>By <a
+                                                    href="javascript:void(0);">{{ submitted_assignment.assignment_submitter.user_name }}</a>
+                                            </li>
+                                            <!-- 게시글 작성시간 -->
+                                            <li class="post-comment"><i class="ti ti-alarm-clock"></i> <a
+                                                    href="javascript:void(0);">{{ submitted_assignment.assignment_submit_created | date:"Y-m-d" }}</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <!-- 게시글 제목 -->
+                                    <div class="dlab-post-title ">
+                                        <h2 class="post-title m-t0">
+                                            <a href="javascript:void(0);">[제출]&nbsp;{{ submitted_assignment.assignment_title }}</a>
+                                        </h2>
+                                    </div>
+
+                                    <!--============================== 게시글 본문 시작 ==============================-->
+                                    <div class="dlab-post-text">
+                                        {% autoescape off %}
+                                            {{ submitted_assignment.assignment_cont }}
+                                        {% endautoescape %}
+
+                                        {% include "file_detail.html" %}
+
+
+
+                                        {% if board.not_yet == 2 %}
+
+                                            <!--=======================<<수강생>> 승인 , 기각 여부에 따라 다르게 보임============================-->
+                                            <div class="alert alert-success text-center" role="alert">
+                                                <i>승인</i>
+                                            </div>
+
+                                            <div class="alert alert-danger text-center" role="alert">
+                                                <i>기각 ( 기각사유 : 요구사항을 충족하지 못함. )</i>
+                                            </div>
+
+
+                                            <div class="alert alert-light text-center" role="alert">
+                                                <a href=""><p style="text-decoration: underline">예시답안 보러가기</p></a>
+                                            </div>
+
+                                        {% endif %}
+
+                                        {% if logined_user == lect.lect_chief %}
+                                            <!--===<<강의자>> 수강생의 과제 제출을 보고 승인, 기각을 결졍할 수 있음.===-->
+                                            <div class="d-flex justify-content-center m-b40">
+                                                <button type="button" class="btn btn-outline-success btn-lg"
+                                                        style="width: 200px; font-weight: bold"
+                                                        onclick="goApply()">
+                                                    승인
+                                                </button>
+
+
+                                                <button type="button" class="btn btn-outline-danger btn-lg"
+                                                        style="width: 200px; margin-left: 10px; font-weight: bold"
+                                                        onclick="return confirm('과제제출을 기각하시겠습니까?')"
+                                                        href="javascript:void(0);" data-toggle="modal" data-target="#favorite"
+                                                        class="site-button gray">
+                                                    기각
+                                                </button>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+
+                                    <!-- 게시글 삭제 및 수정 div -->
+                                    <div class="extra-cell text-right">
+
+                                        <!-- 관련자만 보이게 처리 -->
+                                        {% if logined_user == submitted_assignment.assignment_submitter  %}
+
+                                            <!-- 게시글 수정 버튼 -->
+                                            <form method="get"
+                                                  action="{% url "lect_assignment_update" lect.pk submitted_assignment.pk %}">
+                                                {% csrf_token %}
+                                                <button class="site-button radius-xl m-l10" type="submit">
+                                                        <i class="fa fa-pencil m-r5"></i>과제 수정
+                                                </button>
+                                            </form>
+
+                                        {% endif %}
+
+
+
+                                        {% if logined_user == submitted_assignment.assignment_submitter  %}
+
+                                            <!-- 게시글 삭제 버튼 -->
+                                            <form action="{% url "lect_assignment_delete" lect.pk submitted_assignment.pk %}">
+                                                {% csrf_token %}
+                                                <button class="site-button red radius-xl m-l10" type="submit">
+                                                        <i class="fa fa-trash m-r5"></i>과제 삭제
+                                                </button>
+                                            </form>
+
+                                        {% endif %}
+                                    </div>
+
+
+
+
+                                    <!-- 거절 버튼 누르면 나오는 창 -->
+                                    <div class="modal fade modal-bx-info" id="favorite" tabindex="-1"
+                                         role="dialog"
+                                         aria-labelledby="FavoriteModalLongTitle" aria-hidden="true">
+                                        <div class="modal-dialog " role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="FavoriteModalLongTitle">과제제출 기각
+                                                        사유</h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                        <span aria-hidden="true"><i
+                                                                class="la la-close"></i></span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="tab-content nav">
+                                                        <div id="login" class="tab-pane active"
+                                                             style="margin-bottom: -25px; margin-top: 10px">
+
+                                                                <!--기각 사유 입력창-->
+
+                                                                <div class="form-group">
+                                                                    <input class="form-control"
+                                                                           name="bank_reject_reason"
+                                                                           placeholder="과제제출 기각 사유를 입력해주세요"
+                                                                           type="text"/>
+                                                                </div>
+                                                                <!--거절버튼-->
+                                                                <div class="form-group">
+                                                                    <button type="submit"
+                                                                            class="site-button btn-block button-md"
+                                                                            onclick="alert('과제제출이 기각되었습니다')">입력
+                                                                    </button>
+                                                                </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- 거절 버튼 누르면 나오는 창 끝 -->
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- 상단으로 올라가는 버튼 -->
+        <button class="scroltop fa fa-chevron-up"></button>
+    </div>
+
+{% endblock %}

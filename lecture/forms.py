@@ -211,6 +211,18 @@ class AssignmentSubmitForm(forms.ModelForm):
             'assignment_cont': _('과제 내용')
         }
 
+    def save(self, **kwargs):
+        submission = super().save(commit=False)
+        submission.assignment_submitter = kwargs.get('assignment_submitter')
+        submission.assignment_no_id = kwargs.get('lect_board_no')
+        submission.save()
+
+        return submission
+
+    def update(self, instance):
+        instance.assignment_cont = self.cleaned_data['assignment_cont']
+        instance.save()
+
 
 # 이거 지우면 큰일 남
 class FileForm(FileFormBase):

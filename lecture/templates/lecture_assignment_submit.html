@@ -46,10 +46,12 @@
                             <!--========== 오른쪽 강의룸 메인 콘텐츠 시작 ===========-->
                             <div class="col-xl-8 col-lg-7 col-md-12 m-b30">
                                 <form class="add-listing-form" method="post" enctype="multipart/form-data"
-                                      action="{% if assignment_submit_no %}{% else %}{% url "lect_assignment_submit" assignment.lect_board_no %}{% endif %}">
+                                      action="{% if submitted_assignment %}{% url "lect_assignment_update" lect.pk submitted_assignment.pk %}{% else %}{% url "lect_assignment_submit" lect.pk %}{% endif %}">
                                     {% csrf_token %}
 
-                                    {% for field in lect_board_form.visible_fields %}
+                                    <input type="hidden" name="lect_board_no" value="{{ assignment.lect_board_no }}">
+
+                                    {% for field in assignment_form.visible_fields %}
                                         <!-- ======================제목 박스 & 링크 & 내용====================== -->
                                          <div class="content-box">
                                             <div class="content-header">
@@ -63,24 +65,22 @@
                                             </div>
                                          </div>
 
-                                        {% if field == lect_board_form.lect_board_title %}
-                                            <!--======================파일 첨부 박스======================-->
-                                            <div class="content-box">
-                                                <div class="content-header">
-                                                    <h3 class="title">파일첨부</h3>
-                                                </div>
-                                                <div class="content-body">
-                                                    <div class="form-group">
-                                                        <div class="form-group">
-                                                           {{ file_form.upload_file }}
-                                                        </div>
-                                                        {% include "file_update_box.html" %}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        {% endif %}
-
                                     {% endfor %}
+
+                                    <!--======================파일 첨부 박스======================-->
+                                    <div class="content-box">
+                                        <div class="content-header">
+                                            <h3 class="title">파일첨부</h3>
+                                        </div>
+                                        <div class="content-body">
+                                            <div class="form-group">
+                                                <div class="form-group">
+                                                   {{ file_form.upload_file }}
+                                                </div>
+                                                {% include "file_update_box.html" %}
+                                            </div>
+                                        </div>
+                                    </div>
 
 
                                     <!--등록버튼, 수정할 때는 수정하기로 뜨도록 수정필요-->

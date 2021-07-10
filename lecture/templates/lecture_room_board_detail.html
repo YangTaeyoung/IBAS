@@ -80,7 +80,7 @@
 
                                     {% include "file_detail.html" %}
 
-                                    {% if board.lect_board_type_no.lect_board_type_no == 2 %}
+                                    {% if board.lect_board_type_id == 2 and board.assignments.all|length == 0 %}
                                         <!--=======================과제가 없을 때 나오는 알람============================-->
                                         <div class="alert alert-light d-flex align-items-center" role="alert">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -93,40 +93,7 @@
                                                 이번 강의는 과제가 존재하지 않습니다.
                                             </div>
                                         </div>
-
-                                        <!--=======================<<수강생>> 승인 , 기각 여부에 따라 다르게 보임============================-->
-                                        <div class="alert alert-success text-center" role="alert">
-                                            <i>승인</i>
-                                        </div>
-
-                                        <div class="alert alert-danger text-center" role="alert">
-                                            <i>기각 ( 기각사유 : 요구사항을 충족하지 못함. )</i>
-                                        </div>
-
-
-                                        <div class="alert alert-light text-center" role="alert">
-                                            <a href=""><p style="text-decoration: underline">예시답안 보러가기</p></a>
-                                        </div>
-
-                                        <!--===<<강의자>> 수강생의 과제 제출을 보고 승인, 기각을 결졍할 수 있음.===-->
-                                        <div class="d-flex justify-content-center m-b40">
-                                            <button type="button" class="btn btn-outline-success btn-lg"
-                                                    style="width: 200px; font-weight: bold"
-                                                    onclick="goApply()">
-                                                승인
-                                            </button>
-
-
-                                            <button type="button" class="btn btn-outline-danger btn-lg"
-                                                    style="width: 200px; margin-left: 10px; font-weight: bold"
-                                                    onclick="return confirm('과제제출을 기각하시겠습니까?')"
-                                                    href="javascript:void(0);" data-toggle="modal" data-target="#favorite"
-                                                    class="site-button gray">
-                                                기각
-                                            </button>
-                                        </div>
                                     {% endif %}
-
 
                                     <!-- 게시글 삭제 및 수정 div -->
                                     <div class="extra-cell text-right">

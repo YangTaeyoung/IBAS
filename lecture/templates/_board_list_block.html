@@ -9,11 +9,13 @@
                                                         <i class="fa fa-book m-r5"></i>강의목록
                                                     {% elif board_type == 3 %}
                                                         <i class="fa fa-check-square-o m-r5"></i>과제
+                                                    {% elif assignments_list %}
+                                                        <i class="fa fa-check-square-o m-r5"></i>과제 제출 현황
                                                     {% endif %}
                                                 </h3>
                                             </div>
                                             <div class="content-body">
-                                                {% if board_list %}
+                                                {% if board_list or assignments_list   %}
                                                     <!-- 공지사항 게시글 테이블 -->
                                                     <table class="table">
                                                         <!-- 테이블 1행: 제목 -->
@@ -27,13 +29,16 @@
                                                                     작성자
                                                                 {% elif board_type == 2 %}
                                                                     강의자
-                                                                {% elif board_type == 3 %}
+                                                                {% elif board_type == 3%}
                                                                     담당자
                                                                 {% endif %}
                                                             </th>
                                                             <th class="border-top-0" scope="col">
                                                                 {% if board_type == 3 %}마감일{% else %}작성일{% endif %}
                                                             </th>
+                                                            {% if assignments_list %}
+                                                                <th class="border-top-0" scope="col">상태</th>
+                                                            {% endif %}
                                                         </tr>
                                                         </thead>
 
@@ -56,6 +61,19 @@
                                                                 </tr>
                                                             {% endfor %}
 
+                                                            {% for assignment in assignments_list %}
+                                                                <tr>
+                                                                    <!-- 게시글 번호 (고정됨) -->
+                                                                    <td>{{ forloop.revcounter }}</td>
+                                                                    <!-- 게시글 제목: a태그 클릭하면, 해당 게시글로 이동 -->
+                                                                    <td><a href={% url "lect_assignment_detail" lect.pk assignment.pk %}>[제출]&nbsp;{{ assignment.assignment_title }}</a></td>
+                                                                    <!-- 작성자 -->
+                                                                    <td></td>
+                                                                    <!-- 게시글 작성일 -->
+                                                                    <td>{{ assignment.assignment_submit_created | date:"Y-m-d" }}</td>
+                                                                </tr>
+                                                            {% endfor %}
+
                                                         </tbody>
                                                     </table>
 
@@ -69,7 +87,7 @@
                                                             공지사항이 없습니다.
                                                         {% elif board_type == 2 %}
                                                             아직 강의가 없습니다.
-                                                        {% elif board_type == 3 %}
+                                                        {% else %}
                                                             아직은 과제가 없습니다...
                                                         {% endif %}
                                                     </p>
@@ -94,3 +112,4 @@
                                                 </div>
                                             </form>
                                         {% endif %}
+

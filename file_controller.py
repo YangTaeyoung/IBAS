@@ -1,6 +1,6 @@
 import shutil
 from DB.models import Board, BoardFile, ContestBoard, ContestFile, Lect, Bank, BankFile, UserDelete, UserDeleteFile, \
-    LectBoard, LectBoardFile
+    LectBoard, LectBoardFile, LectAssignmentSubmit, LectAssignmentSubmittedFile
 import os
 from IBAS.settings import MEDIA_ROOT
 from django.conf import settings
@@ -13,7 +13,8 @@ File_of_ = {
     Board: BoardFile,
     ContestBoard: ContestFile,
     LectBoard: LectBoardFile,
-    UserDelete: UserDeleteFile
+    UserDelete: UserDeleteFile,
+    LectAssignmentSubmit: LectAssignmentSubmittedFile,
 }
 
 
