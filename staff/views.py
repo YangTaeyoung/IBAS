@@ -11,9 +11,12 @@ from django.db.models import Q, Count, Aggregate
 from django.core.mail import send_mail
 from django.conf import settings
 from pagination_handler import get_paginator_list
-from alarm.alarm_controller import create_user_auth_update_alarm, create_user_role_update_alarm, create_user_delete_alarm, \
+from alarm.alarm_controller import create_user_auth_update_alarm, create_user_role_update_alarm, \
+    create_user_delete_alarm, \
     create_finish_user_delete_alarm
 from file_controller import FileController
+from django.db import transaction
+from django.contrib import messages
 
 
 # 모델에 따른 이메일 리스트를 불러오는 함수
@@ -81,21 +84,23 @@ def staff_member_update(request):
             user_auth = -1
         if (int(user_role) == 1 and len(user_stu_list) > 1) or (
                 int(user_role) == 2 and len(user_stu_list) > 1):  # 회장이나 부회장으로 바꾸려고 하면서 다수의 인원을 선택했을 경우.
+            messages.error(request, "꼭 한명만 선택하실 수 있습니다.")
             return redirect(reverse("my_info"))  # 무효로 함. 내 정보 페이지로 이동.
         elif int(user_role) == 1 and len(user_stu_list) == 1 or (
                 int(user_role) == 2 and len(user_stu_list) == 1):  # 회장 위임의 조건을 충족한 경우. (한명만 골랐을 때)
             # 기존 회장, 부회장 권한 수정 -> 일반회원
-            user = User.objects.filter(user_role__role_no=user_role).first()
-            user.user_role = UserRole.objects.get(pk=6)  # 바꾸고자 하는 사람은 일반 회원으로 역할 변경됨.
-            user.save()
-            create_user_role_update_alarm(user)
-            # 새로운 회장 부회장.
-            new_user = User.objects.get(pk=user_stu_list[0])  # 새로운 회장 부회장의 객체를 얻어옴.
-            new_user.user_role = UserRole.objects.get(pk=user_role)  # 권한 수정
-            new_user.user_auth = UserAuth.objects.get(pk=1)  # 회비는 납부한 것으로 가정.
-            new_user.save()
-            create_user_role_update_alarm(new_user)
-            create_user_auth_update_alarm(new_user, False)
+            with transaction.atomic():
+                user = User.objects.filter(user_role__role_no=user_role).first()
+                user.user_role = UserRole.objects.get(pk=6)  # 바꾸고자 하는 사람은 일반 회원으로 역할 변경됨.
+                user.save()
+                create_user_role_update_alarm(user)
+                # 새로운 회장 부회장.
+                new_user = User.objects.get(pk=user_stu_list[0])  # 새로운 회장 부회장의 객체를 얻어옴.
+                new_user.user_role = UserRole.objects.get(pk=user_role)  # 권한 수정
+                new_user.user_auth = UserAuth.objects.get(pk=1)  # 회비는 납부한 것으로 가정.
+                new_user.save()
+                create_user_role_update_alarm(new_user)
+                create_user_auth_update_alarm(new_user, False)
         else:
             for user in User.objects.all():  # 모든 유저 순회
                 for user_stu in user_stu_list:  # 사용자가 권한을 바꾸기로 한 학번 리스트를 순회
@@ -153,25 +158,23 @@ def member_aor(request):
         user_email_list = get_email_list(user)
         if apply == 1:
             # 합격 통보 이메일 메시지 딕셔너리 생성
-            mail_dict = get_message(True, user.user_name)
-            user.user_auth = UserAuth.objects.get(pk=2)
-            # 메일 전송
-            send_mail(subject=mail_dict["mail_title"], message=mail_dict["mail_message"],
-                      from_email=settings.EMAIL_HOST_USER, recipient_list=user_email_list)
-            user.save()
-            create_user_auth_update_alarm(user, True)
+            with transaction.atomic():
+                mail_dict = get_message(True, user.user_name)
+                user.user_auth = UserAuth.objects.get(pk=2)
+                # 메일 전송
+                send_mail(subject=mail_dict["mail_title"], message=mail_dict["mail_message"],
+                          from_email=settings.EMAIL_HOST_USER, recipient_list=user_email_list)
+                user.save()
+                create_user_auth_update_alarm(user, True)
         else:
             # 불합격 이메일 통보 메시지 딕셔너리 생성
-            mail_dict = get_message(False, user.user_name)
-            try:
-                os.remove(settings.MEDIA_ROOT + "/" + str(user.user_pic))
-                os.rmdir(settings.MEDIA_ROOT + "/member/" + str(user.user_stu))
-            except FileNotFoundError:
-                pass
-            send_mail(subject=mail_dict["mail_title"], message=mail_dict["mail_message"],  # 메일 전송
-                      from_email=settings.EMAIL_HOST_USER,
-                      recipient_list=user_email_list)
-            user.delete()
+            with transaction.atomic():
+                mail_dict = get_message(False, user.user_name)
+                FileController.delete_all_files_of_(user)
+                send_mail(subject=mail_dict["mail_title"], message=mail_dict["mail_message"],  # 메일 전송
+                          from_email=settings.EMAIL_HOST_USER,
+                          recipient_list=user_email_list)
+                user.delete()
         return redirect(reverse("my_info"))
     return redirect(reverse("index"))
 
@@ -260,9 +263,10 @@ def member_delete_register(request, deleted_user):
             user_delete_form = UserDeleteForm(request.POST)
             user_delete_file_form = FileFormBase(request.POST, request.FILES)
             if user_delete_file_form.is_valid() and user_delete_form.is_valid():
-                user_delete = user_delete_form.save(suggest_user=get_logined_user(request))
-                user_delete_file_form.save(instance=user_delete)
-                create_user_delete_alarm(user_delete)
+                with transaction.atomic():
+                    user_delete = user_delete_form.save(suggest_user=get_logined_user(request))
+                    user_delete_file_form.save(instance=user_delete)
+                    create_user_delete_alarm(user_delete)
                 return redirect("member_delete_detail", user_delete_no=user_delete.user_delete_no)
             return redirect(reverse("staff_member_list"))
         else:
@@ -321,13 +325,15 @@ def member_delete_update(request, user_delete_no):
         }
         return render(request, "member_delete_register.html", context)
     else:
+
         user_delete_form = UserDeleteForm(request.POST)
         user_delete_file_form = FileFormBase(request.POST, request.FILES)
         user_delete_file_list = UserDeleteFile.objects.filter(file_fk=user_delete)
         if user_delete_file_form.is_valid() and user_delete_form.is_valid():
-            user_delete_form.update(instance=user_delete)
-            FileController.remove_files_by_user(request, user_delete_file_list)
-            user_delete_file_form.save(instance=user_delete)
+            with transaction.atomic():
+                user_delete_form.update(instance=user_delete)
+                FileController.remove_files_by_user(request, user_delete_file_list)
+                user_delete_file_form.save(instance=user_delete)
             return redirect("member_delete_detail", user_delete_no=user_delete_no)
         else:
             redirect("member_delete_detail", user_delete_no=user_delete_no)
@@ -348,9 +354,10 @@ def member_delete_aor(request, user_delete_no):
 
         # 회장단 전체가 투표한 경우, 완료로 상태 변경.
         if is_finished(user_delete):
-            user_delete.user_delete_state = UserDeleteState.objects.get(pk=2)
-            user_delete.save()
-            create_finish_user_delete_alarm(user_delete)
+            with transaction.atomic():
+                user_delete.user_delete_state = UserDeleteState.objects.get(pk=2)
+                user_delete.save()
+                create_finish_user_delete_alarm(user_delete)
         return redirect("member_delete_detail", user_delete_no=user_delete_no)
     return redirect("member_delete_list")
 
@@ -362,9 +369,10 @@ def member_delete_decide(request, user_delete_no):
         user_delete = UserDelete.objects.get(pk=user_delete_no)
         # 회장단 수와 해당 안건에 투표한 수가 동률이며 찬성이 과반수 이상인지 확인
         if is_decided(user_delete):
-            deleted_user = user_delete.deleted_user
-            FileController.delete_all_files_of_(deleted_user)
-            deleted_user.delete()
+            with transaction.atomic():
+                deleted_user = user_delete.deleted_user
+                FileController.delete_all_files_of_(deleted_user)
+                deleted_user.delete()
             return redirect(reverse("member_delete_list"))
         return redirect("member_delete_detail", user_delete_no=user_delete_no)
     else:  # 비정상적인 접근.
