@@ -354,16 +354,22 @@ def lect_room_attend_std(request, room_no):
 
 def lect_room_manage_assignment(request, room_no):
     if request.method == "GET":
-        lect_room = Lect.objects.prefetch_related("lectures").get(pk=room_no)
+        lect_room = Lect.objects.prefetch_related("lectures", "enrolled_students").get(pk=room_no)
         assignment_list = lect_room.lectures.filter(lect_board_type_id=3)
         # 과제 게시글 번호. select option 값 / default 는 마지막 강의 게시글
         # 처음 이 페이지를 렌더링 할 때는 get 파라미터가 존재하지 않음. 이 강의 첫 게시글이 존재하지 않으면, 게시글 번호 존재 X
         assignment_no = request.GET.get('assignment_no',
                                         None if not assignment_list else assignment_list[0].lect_board_no)
+
+        students_list = lect_room.enrolled_students.all()
+        if assignment_list and students_list:
+            pass
+
         context = {
             'lect': lect_room,
             'assignment_list': assignment_list,
             'cur_assignment': None if assignment_no is None else LectBoard.objects.get(pk=assignment_no),
+            'students_list': students_list,
         }
 
         return render(request, 'lecture_room_manage_assignment.html', context)
@@ -383,7 +389,7 @@ def lect_room_manage_attendance(request, room_no):
                                         None if not lect_board_list else lect_board_list[0].lect_board_no)
 
         # 강의 게시물이 있고, 수강생이 있는 두 경우를 모두 충족시켜야 출석페이지 출력가능
-        if lect_board_list and lect_room.enrolled_students:
+        if lect_board_list and lect_room.enrolled_students.all():
             # 장고 ORM 으로 쿼리 수행 불가하여, raw query 작성.
             # connection : default db에 연결되어 있는 built in 객체
             # (on 부분) enrollment.STUDENT 가 없으면 mariadb 오류!
