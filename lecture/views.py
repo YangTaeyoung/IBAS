@@ -352,10 +352,21 @@ def lect_room_attend_std(request, room_no):
     return render(request, 'lecture_room_attend_std.html', context)
 
 
-
-
 def lect_room_manage_assignment(request, room_no):
-    pass
+    if request.method == "GET":
+        lect_room = Lect.objects.prefetch_related("lectures").get(pk=room_no)
+        assignment_list = lect_room.lectures.filter(lect_board_type_id=3)
+        # 과제 게시글 번호. select option 값 / default 는 마지막 강의 게시글
+        # 처음 이 페이지를 렌더링 할 때는 get 파라미터가 존재하지 않음. 이 강의 첫 게시글이 존재하지 않으면, 게시글 번호 존재 X
+        assignment_no = request.GET.get('assignment_no',
+                                        None if not assignment_list else assignment_list[0].lect_board_no)
+        context = {
+            'lect': lect_room,
+            'assignment_list': assignment_list,
+            'cur_assignment': None if assignment_no is None else LectBoard.objects.get(pk=assignment_no),
+        }
+
+        return render(request, 'lecture_room_manage_assignment.html', context)
 
 
 # 출석 현황 확인 및 변경
@@ -366,7 +377,7 @@ def lect_room_manage_attendance(request, room_no):
     lect_board_list = lect_room.lectures.filter(lect_board_type_id=2).order_by('-lect_board_no')  # 강의 게시글만 가져옴
 
     if request.method == "GET":
-        # 강의 게시글 번호. select option 값 / default 는 마지막 강의 게시글, 게시글이 하나도 없으면 0.
+        # 강의 게시글 번호. select option 값 / default 는 마지막 강의 게시글
         # 처음 이 페이지를 렌더링 할 때는 get 파라미터가 존재하지 않음. 이 강의 첫 게시글이 존재하지 않으면, 게시글 번호 존재 X
         lect_board_no = request.GET.get('lect_board_no',
                                         None if not lect_board_list else lect_board_list[0].lect_board_no)

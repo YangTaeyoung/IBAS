@@ -12,7 +12,7 @@
 
 
     $(function () {
-        $("#selectbox").val({{ cur_lect_board.lect_board_no }}).prop('selected',true);
+        $("#selectbox").val({{ cur_assignment.lect_board_no }}).prop('selected',true);
     });
     </script>
 
@@ -52,7 +52,7 @@
                                 <!--========== 왼쪽 강의룸 네비게이션바 끝 ==========-->
 
 
-                            {% if cur_lect_board %}
+                            {% if cur_assignment %}
                                 <!--=======================수강생 관리=========================-->
                                 <div class="col-lg-11 col-xl-8 p-b30">
                                     <div class="width-870">
@@ -65,11 +65,11 @@
                                                         <div>
                                                             <ul class="filter m-b0">
                                                                 <li>
-                                                                    <label for="selectbox"></label><select id="selectbox" name="lect_board_no" onchange="FilterFormSubmit()">
+                                                                    <label for="selectbox"></label><select id="selectbox" name="assignment_no" onchange="FilterFormSubmit()">
 
-                                                                        {% for lecture in lect_board_list %}
-                                                                            <option value="{{ lecture.lect_board_no }}">
-                                                                               [{{ forloop.revcounter }}회차] {{ lecture.lect_board_title|truncate:9}}
+                                                                        {% for assignment in assignment_list %}
+                                                                            <option value="{{ assignment.lect_board_no }}">
+                                                                               [{{ forloop.revcounter }}회차] {{ assignment.lect_board_title|truncate:9}}
                                                                             </option>
                                                                         {% endfor %}
 
@@ -81,7 +81,7 @@
                                                         <div class="mr-auto">
                                                             <div class="m-l15">
                                                                 <h3 id="lect_board_title" class="title m-b0"
-                                                                    style="font-size: 22px">{{ cur_lect_board.lect_board_title }}</h3>
+                                                                    style="font-size: 22px">{{ cur_assignment.lect_board_title }}</h3>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -92,7 +92,7 @@
                                                 <!-- 수강생 테이블 -->
                                                 {% include "_table_assignment_check.html" %}
                                                 {% csrf_token %}
-                                                <input type="hidden" value="{{ cur_lect_board.lect_board_no}}" name="lect_board_no_">
+                                                <input type="hidden" value="{{ cur_assignment.lect_board_no}}" name="lect_board_no_">
                                             </form>
 
 
