@@ -23,8 +23,3 @@ def truncate(string, length):
     else:
         return string[:length] + '...'
 
-
-# 템플릿에서 배열 사용
-@register.filter
-def element(array, idx):
-    return array[idx]
