@@ -28,10 +28,11 @@ urlpatterns = [
     path('room/<int:room_no>/assignment/', views.lect_assignment_list, name="lect_assignment_list"),
 
     # 수강생 전용 url
-    path('room/<int:room_no>/attend/', views.lect_room_student_status, name="lect_room_student_status"),  # 출석 확인
+    path('room/<int:room_no>/attend/', views.lect_room_student_status, name="lect_room_student_status"),  # 출석 및 과제 확인
     path('room/sample', views.sample, name="sample"),
 
     # 강의자 전용 url
+    path('room/<int:room_no>/assignment/<int:submit_no>/aor', views.lect_assignment_aor, name="lect_assignment_aor"),
     path('room/<int:room_no>/manage/attendance', views.lect_room_manage_attendance, name="lect_room_manage_attendance"),
     path('room/<int:room_no>/manage/assignment', views.lect_room_manage_assignment, name="lect_room_manage_assignment"),
     path('room/<int:room_no>/manage/member', views.lect_room_manage_member, name="lect_room_manage_member"),

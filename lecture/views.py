@@ -188,6 +188,7 @@ def lect_enroll(request, lect_no):
     return redirect('lect_room_main', room_no=lect_no)
 
 
+# 과제 정보 가져오기 ( 과제게시글 더보기 / 내가 제출한 과제보기 / 강의실 메인 홈 )
 def get_assignment_list(cur_user, lect_room, name_in_html):
     assignment_list = []
 
@@ -223,6 +224,9 @@ def lect_room_main(request, room_no):
         'assignment_list': get_assignment_list(cur_user, lect_room, name_in_html='assignment')  # 강의 과제 불러오기
     }
     return render(request, 'lecture_room_main.html', context)
+
+
+                                                # 강의 게시글 CRUD #
 
 
 # 더보기 눌렀을 때 나오는 게시판 (공지게시판(1)/강의게시판(2)/과제게시판(3))
@@ -331,179 +335,11 @@ def lect_board_update(request, room_no, board_no):
         return redirect('lect_board_detail', room_no=room_no, board_no=board_no)
 
 
-# 강의자가 수강생 수강정지 시킬 수 있는 곳.
-def lect_room_manage_member(request, room_no):
-    lect_room = Lect.objects.prefetch_related('lectures', 'attendance', 'submitted_assignments', 'lectures__assignments').get(pk=room_no)
-    lectures = lect_room.lectures.filter(lect_board_type_id=2)
-
-    if request.method == "GET":
-        # 출석 정보 알아내기
-        lect_attend_info = lect_room.attendance.filter(lect_no_id=room_no)  # 해당 강의에 속한 모든 수강생의 출석 정보
-        assignment_info = lect_room.submitted_assignments  # 제출된 모든 수강생의 과제
-        students = list(LectEnrollment.objects.prefetch_related('student__useremail_set',).filter(lect_no_id=room_no))  # 수강생 명단
-        total_attend_info = [len(lect_attend_info.filter(student=stu.student)) for stu in students]  # 개인별 출석 횟수
-        attend_info_list = [{
-            'enrolled': stu,
-            'attend': attend,
-            'assignment_info': str(len(assignment_info.filter(assignment_submitter=stu.student)))  # 수강생 별 과제 제출 수
-                               + '/' + str(len(lect_room.lectures.filter(lect_board_type_id=3)))  # 총 과제
-        } for stu, attend in zip(students, total_attend_info)]  # 하나의 딕셔너리로 묶기
-
-        context = {
-            'attend_info_list': attend_info_list,  # 출석 정보 알아내기
-            'lect': Lect.objects.get(pk=room_no),
-            'item_list': get_page_object(request, students, 15),  # 15 명씩 보이게 출력
-            'total_check': len(lectures)
-        }
-
-        return render(request, 'lecture_room_manage_students.html', context)
-
-    elif request.method == "POST":
-        if request.POST.get('status_mode') in ['0', '1']:
-            status_mode = int(request.POST.get('status_mode'))
-            checked_list = [request.POST[key] for key in request.POST if 'is_checked_' in key]  # 체크된 수강생들 pk 값 받아오기
-            students = LectEnrollment.objects.filter(pk__in=checked_list)  # 체크된 수강생들 쿼리 ORM
-
-            for std in students:
-                std.status = status_mode
-
-            LectEnrollment.objects.bulk_update(
-                objs=students, fields=['status', ]
-            )
-
-        return redirect(reverse('lect_room_manage_member', args=[room_no]))
-
-
-# 수강생이 자신의 출결과 과제제출 현황 보는 곳
-def lect_room_student_status(request, room_no):
-    lect_room = Lect.objects.prefetch_related("lectures", "attendance").get(pk=room_no)
-    lect_board_list = lect_room.lectures.prefetch_related('assignments').filter(lect_board_type_id=2  # 강의 게시글들
-                                                                                ).order_by('lect_board_created')
-    cur_user = get_logined_user(request)
-    attend_info = LectAttendance.objects.filter(lect_no=lect_room, student=cur_user)  # 현재 유저의 출석
-    lect_board_list = [{
-        'idx': idx+1,  # 회차
-        'lecture': lect_board,
-        'attend': '출석' if attend_info.filter(lect_board_no=lect_board).exists() else '결석',
-        'assignments': [{
-                'assignment': assignment,
-                'submission': LectAssignmentSubmit.objects.filter(assignment_submitter=cur_user, assignment_no=assignment).first()
-            } for assignment in lect_board.assignments.all()]
-        } for idx, lect_board in enumerate(lect_board_list)
-    ]
-
-    context = {
-        'lect': lect_room,
-        'lect_board_list': lect_board_list,
-        'item_list': get_page_object(request, lect_board_list, 10),
-    }
-
-    return render(request, 'lecture_room_student_status.html', context)
-
-
-def lect_room_manage_assignment(request, room_no):
-    if request.method == "GET":
-        lect_room = Lect.objects.prefetch_related(
-            "lectures", "enrolled_students", "submitted_assignments", "submitted_assignments__files").get(pk=room_no)
-        assignment_list = lect_room.lectures.filter(lect_board_type_id=3)
-        # 과제 게시글 번호. select option 값 / default 는 마지막 강의 게시글
-        # 처음 이 페이지를 렌더링 할 때는 get 파라미터가 존재하지 않음. 이 강의 첫 게시글이 존재하지 않으면, 게시글 번호 존재 X
-        assignment_no = request.GET.get('assignment_no',
-                                        None if not assignment_list else assignment_list[0].lect_board_no)
-
-        students_list = lect_room.enrolled_students.all()
-        if assignment_list and students_list:
-            students_list = [{
-                'student': std.student,
-                'submission': lect_room.submitted_assignments.filter(
-                    assignment_submitter=std.student, assignment_no=assignment_no).first()
-            } for std in students_list]
-
-        context = {
-            'lect': lect_room,
-            'assignment_list': assignment_list,
-            'cur_assignment': None if assignment_no is None else LectBoard.objects.get(pk=assignment_no),
-            'students_list': students_list,
-        }
-
-        return render(request, 'lecture_room_manage_assignment.html', context)
-
-
-# 출석 현황 확인 및 변경
-# 강의 게시글이 존재하지 않으면 => 출석부 ('_table_attendance_check.html') 렌더하지 않음.
-# 강의 게시글은 존재하지만, 학생이 없으면 => 출석부 렌더하지만, 학생이 아무도 없음.
-def lect_room_manage_attendance(request, room_no):
-    lect_room = Lect.objects.prefetch_related("lectures", "enrolled_students__student").get(pk=room_no)
-    lect_board_list = lect_room.lectures.filter(lect_board_type_id=2).order_by('-lect_board_no')  # 강의 게시글만 가져옴
-
-    if request.method == "GET":
-        # 강의 게시글 번호. select option 값 / default 는 마지막 강의 게시글
-        # 처음 이 페이지를 렌더링 할 때는 get 파라미터가 존재하지 않음. 이 강의 첫 게시글이 존재하지 않으면, 게시글 번호 존재 X
-        lect_board_no = request.GET.get('lect_board_no',
-                                        None if not lect_board_list else lect_board_list[0].lect_board_no)
-
-        # 강의 게시물이 있고, 수강생이 있는 두 경우를 모두 충족시켜야 출석페이지 출력가능
-        if lect_board_list and lect_room.enrolled_students.all():
-            # 장고 ORM 으로 쿼리 수행 불가하여, raw query 작성.
-            # connection : default db에 연결되어 있는 built in 객체
-            # (on 부분) enrollment.STUDENT 가 없으면 mariadb 오류!
-            query = f"""SELECT u.USER_NAME, u.USER_STU, if(isnull(attend.LECT_ATTEND_DATE),false,true) as attendance
-                    FROM LECT_ENROLLMENT AS enrollment
-        
-                    LEFT OUTER JOIN LECT_ATTENDANCE AS attend
-                    on (enrollment.STUDENT = attend.STUDENT AND attend.LECT_BOARD_NO = {lect_board_no})
-        
-                    INNER JOIN USER as u
-                    ON (enrollment.STUDENT = u.USER_STU)
-        
-                    WHERE enrollment.LECT_NO = {lect_room.lect_no}
-        
-                    ORDER BY u.USER_NAME ;"""
-            cursor = connection.cursor()
-            cursor.execute(query)  # 쿼리 수행
-            students_list = [{'name': name, 'stu': stu, 'attendance': '출석' if attendance == 1 else '결석'}
-                             for name, stu, attendance in cursor.fetchall()]  # 쿼리 반환 값을 템플릿에서 사용할 수 있게, dict 로 변환
-        else:
-            students_list = []
-
-        context = {
-            'lect': lect_room,
-            'lect_board_list': lect_board_list,
-            'students_list': students_list,  # 이름/학번/출석결석
-            'cur_lect_board': None if lect_board_no is None else LectBoard.objects.get(pk=lect_board_no),  # 현재 게시글
-            'item_list': get_page_object(request, students_list, 15),  # 15 명씩 보이게 출력
-        }
-        return render(request, 'lecture_room_manage_attendance.html', context)
-
-    elif request.method == "POST":
-        lect_board = LectBoard.objects.get(pk=request.POST.get('lect_board_no_'))
-        manage_mode = {'출석': True, '결석': False} if request.POST.get('manage-mode') == '1' else {'결석': True, '출석': False}
-        checked_list = [request.POST[key] for key in request.POST if 'is_checked_' in key]  # 체크된 수강생들
-
-        if lect_board is not None:
-            if manage_mode['출석']:
-                # input checkbox 로 넘어온 모든 학번에 대해, 출석처리
-                # db 에서 (게시글 번호, 학번) 묶어서 unique key 설정했음.
-                LectAttendance.objects.bulk_create([
-                    LectAttendance(lect_no_id=room_no, lect_board_no=lect_board, student_id=stu) for stu in checked_list
-                    if not LectAttendance.objects.filter(lect_board_no=lect_board, student_id=stu)  # 이미 출석된 상태가 아니면,
-                ])
-            elif manage_mode['결석']:
-                # input checkbox 로 넘어온 모든 학번에 대해, 결석처리
-                # db에 수강생의 레코드가 존재하지 않는 경우 결석이라고 해석하고 있기 때문에 filter 로 쿼리 불러야함.
-                # 이미 결석인 수강생에 대해 중복 결석 처리했을 때, get 을 사용하면 에러발생.
-                students = LectAttendance.objects.filter(lect_board_no=lect_board)
-                students.filter(student_id__in=checked_list).delete()
-
-        return redirect(reverse('lect_room_manage_attendance', kwargs={'room_no': room_no}),)
-
-
-
-
-
-
 def sample(request):
     return render(request, 'sample.html')
+
+
+                                            # 수강생 과제 CRUD #
 
 
 # 수강생 과제 제출
@@ -604,5 +440,193 @@ def lect_assignment_delete(request, room_no, assignment_submit_no):
         assignment.delete()
 
     return redirect(reverse('lect_assignment_list', args=[room_no]))
+
+
+                                            # 강의자 메뉴 #
+
+
+def lect_assignment_aor(request, room_no, submit_no):
+    if request.method == "POST":
+        aor = int(request.POST.get('aor'))
+        submitted_assignment = get_object_or_404(LectAssignmentSubmit, pk=submit_no)
+
+        # 과제 통과 or 거절 시키겠음!
+        if aor == 1 or aor == -1:
+            submitted_assignment.status_id = aor
+            submitted_assignment.reject_reason = request.POST.get("reject_reason")
+            submitted_assignment.save()
+
+
+        return redirect(reverse('lect_assignment_detail', args=[room_no, submit_no]))
+
+
+# 강의자가 수강생 수강정지 시킬 수 있는 곳.
+def lect_room_manage_member(request, room_no):
+    lect_room = Lect.objects.prefetch_related('lectures', 'attendance', 'submitted_assignments',
+                                              'lectures__assignments').get(pk=room_no)
+    lectures = lect_room.lectures.filter(lect_board_type_id=2)
+
+    if request.method == "GET":
+        # 출석 정보 알아내기
+        lect_attend_info = lect_room.attendance.filter(lect_no_id=room_no)  # 해당 강의에 속한 모든 수강생의 출석 정보
+        assignment_info = lect_room.submitted_assignments  # 제출된 모든 수강생의 과제
+        students = list(
+            LectEnrollment.objects.prefetch_related('student__useremail_set', ).filter(lect_no_id=room_no))  # 수강생 명단
+        total_attend_info = [len(lect_attend_info.filter(student=stu.student)) for stu in students]  # 개인별 출석 횟수
+        attend_info_list = [{
+            'enrolled': stu,
+            'attend': attend,
+            'assignment_info': str(len(assignment_info.filter(assignment_submitter=stu.student)))  # 수강생 별 과제 제출 수
+                               + '/' + str(len(lect_room.lectures.filter(lect_board_type_id=3)))  # 총 과제
+        } for stu, attend in zip(students, total_attend_info)]  # 하나의 딕셔너리로 묶기
+
+        context = {
+            'attend_info_list': attend_info_list,  # 출석 정보 알아내기
+            'lect': Lect.objects.get(pk=room_no),
+            'item_list': get_page_object(request, students, 15),  # 15 명씩 보이게 출력
+            'total_check': len(lectures)
+        }
+
+        return render(request, 'lecture_room_manage_students.html', context)
+
+    elif request.method == "POST":
+        if request.POST.get('status_mode') in ['0', '1']:
+            status_mode = int(request.POST.get('status_mode'))
+            checked_list = [request.POST[key] for key in request.POST if 'is_checked_' in key]  # 체크된 수강생들 pk 값 받아오기
+            students = LectEnrollment.objects.filter(pk__in=checked_list)  # 체크된 수강생들 쿼리 ORM
+
+            for std in students:
+                std.status = status_mode
+
+            LectEnrollment.objects.bulk_update(
+                objs=students, fields=['status', ]
+            )
+
+        return redirect(reverse('lect_room_manage_member', args=[room_no]))
+
+
+# 수강생이 자신의 출결과 과제제출 현황 보는 곳
+def lect_room_student_status(request, room_no):
+    lect_room = Lect.objects.prefetch_related("lectures", "attendance").get(pk=room_no)
+    lect_board_list = lect_room.lectures.prefetch_related('assignments').filter(lect_board_type_id=2  # 강의 게시글들
+                                                                                ).order_by('lect_board_created')
+    cur_user = get_logined_user(request)
+    attend_info = LectAttendance.objects.filter(lect_no=lect_room, student=cur_user)  # 현재 유저의 출석
+    lect_board_list = [{
+        'idx': idx + 1,  # 회차
+        'lecture': lect_board,
+        'attend': '출석' if attend_info.filter(lect_board_no=lect_board).exists() else '결석',
+        'assignments': [{
+            'assignment': assignment,
+            'submission': LectAssignmentSubmit.objects.filter(assignment_submitter=cur_user,
+                                                              assignment_no=assignment).first()
+        } for assignment in lect_board.assignments.all()]
+    } for idx, lect_board in enumerate(lect_board_list)
+    ]
+
+    context = {
+        'lect': lect_room,
+        'lect_board_list': lect_board_list,
+        'item_list': get_page_object(request, lect_board_list, 10),
+    }
+
+    return render(request, 'lecture_room_student_status.html', context)
+
+
+# 과제 현황 조회
+def lect_room_manage_assignment(request, room_no):
+    if request.method == "GET":
+        lect_room = Lect.objects.prefetch_related(
+            "lectures", "enrolled_students", "submitted_assignments", "submitted_assignments__files").get(pk=room_no)
+        assignment_list = lect_room.lectures.filter(lect_board_type_id=3)
+        # 과제 게시글 번호. select option 값 / default 는 마지막 강의 게시글
+        # 처음 이 페이지를 렌더링 할 때는 get 파라미터가 존재하지 않음. 이 강의 첫 게시글이 존재하지 않으면, 게시글 번호 존재 X
+        assignment_no = request.GET.get('assignment_no',
+                                        None if not assignment_list else assignment_list[0].lect_board_no)
+
+        students_list = lect_room.enrolled_students.all()
+        if assignment_list and students_list:
+            students_list = [{
+                'student': std.student,
+                'submission': lect_room.submitted_assignments.filter(
+                    assignment_submitter=std.student, assignment_no=assignment_no).first()
+            } for std in students_list]
+
+        context = {
+            'lect': lect_room,
+            'assignment_list': assignment_list,
+            'cur_assignment': None if assignment_no is None else LectBoard.objects.get(pk=assignment_no),
+            'students_list': students_list,
+        }
+
+        return render(request, 'lecture_room_manage_assignment.html', context)
+
+
+# 출석 현황 확인 및 변경
+# 강의 게시글이 존재하지 않으면 => 출석부 ('_table_attendance_check.html') 렌더하지 않음.
+# 강의 게시글은 존재하지만, 학생이 없으면 => 출석부 렌더하지만, 학생이 아무도 없음.
+def lect_room_manage_attendance(request, room_no):
+    lect_room = Lect.objects.prefetch_related("lectures", "enrolled_students__student").get(pk=room_no)
+    lect_board_list = lect_room.lectures.filter(lect_board_type_id=2).order_by('-lect_board_no')  # 강의 게시글만 가져옴
+
+    if request.method == "GET":
+        # 강의 게시글 번호. select option 값 / default 는 마지막 강의 게시글
+        # 처음 이 페이지를 렌더링 할 때는 get 파라미터가 존재하지 않음. 이 강의 첫 게시글이 존재하지 않으면, 게시글 번호 존재 X
+        lect_board_no = request.GET.get('lect_board_no',
+                                        None if not lect_board_list else lect_board_list[0].lect_board_no)
+
+        # 강의 게시물이 있고, 수강생이 있는 두 경우를 모두 충족시켜야 출석페이지 출력가능
+        students_list = lect_room.enrolled_students.all()
+        if lect_board_list and students_list:
+            # 장고 ORM 으로 쿼리 수행 불가하여, raw query 작성.
+            # connection : default db에 연결되어 있는 built in 객체
+            # (on 부분) enrollment.STUDENT 가 없으면 mariadb 오류!
+            query = f"""SELECT u.USER_NAME, u.USER_STU, if(isnull(attend.LECT_ATTEND_DATE),false,true) as attendance
+                    FROM LECT_ENROLLMENT AS enrollment
+
+                    LEFT OUTER JOIN LECT_ATTENDANCE AS attend
+                    on (enrollment.STUDENT = attend.STUDENT AND attend.LECT_BOARD_NO = {lect_board_no})
+
+                    INNER JOIN USER as u
+                    ON (enrollment.STUDENT = u.USER_STU)
+
+                    WHERE enrollment.LECT_NO = {lect_room.lect_no}
+
+                    ORDER BY u.USER_NAME ;"""
+            cursor = connection.cursor()
+            cursor.execute(query)  # 쿼리 수행
+            students_list = [{'name': name, 'stu': stu, 'attendance': '출석' if attendance == 1 else '결석'}
+                             for name, stu, attendance in cursor.fetchall()]  # 쿼리 반환 값을 템플릿에서 사용할 수 있게, dict 로 변환
+
+        context = {
+            'lect': lect_room,
+            'lect_board_list': lect_board_list,
+            'students_list': students_list,  # 이름/학번/출석결석
+            'cur_lect_board': None if lect_board_no is None else LectBoard.objects.get(pk=lect_board_no),  # 현재 게시글
+            'item_list': get_page_object(request, students_list, 15),  # 15 명씩 보이게 출력
+        }
+        return render(request, 'lecture_room_manage_attendance.html', context)
+
+    elif request.method == "POST":
+        lect_board = LectBoard.objects.get(pk=request.POST.get('lect_board_no_'))
+        manage_mode = {'출석': True, '결석': False} if request.POST.get('manage-mode') == '1' else {'결석': True, '출석': False}
+        checked_list = [request.POST[key] for key in request.POST if 'is_checked_' in key]  # 체크된 수강생들
+
+        if lect_board is not None:
+            if manage_mode['출석']:
+                # input checkbox 로 넘어온 모든 학번에 대해, 출석처리
+                # db 에서 (게시글 번호, 학번) 묶어서 unique key 설정했음.
+                LectAttendance.objects.bulk_create([
+                    LectAttendance(lect_no_id=room_no, lect_board_no=lect_board, student_id=stu) for stu in checked_list
+                    if not LectAttendance.objects.filter(lect_board_no=lect_board, student_id=stu)  # 이미 출석된 상태가 아니면,
+                ])
+            elif manage_mode['결석']:
+                # input checkbox 로 넘어온 모든 학번에 대해, 결석처리
+                # db에 수강생의 레코드가 존재하지 않는 경우 결석이라고 해석하고 있기 때문에 filter 로 쿼리 불러야함.
+                # 이미 결석인 수강생에 대해 중복 결석 처리했을 때, get 을 사용하면 에러발생.
+                students = LectAttendance.objects.filter(lect_board_no=lect_board)
+                students.filter(student_id__in=checked_list).delete()
+
+        return redirect(reverse('lect_room_manage_attendance', kwargs={'room_no': room_no}), )
 
 
