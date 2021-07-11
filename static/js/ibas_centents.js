@@ -290,7 +290,7 @@ function FilterFormSubmit() {
     formElement.submit()
  }
 
-function AttendanceFormSubmit () {
+function ManageFormSubmit () {
     const manage_mode = $("#manage-mode").val();
 
     if (manage_mode == null) {
@@ -309,7 +309,7 @@ function AttendanceFormSubmit () {
             alert('수강생을 선택하세요!');
         } else {
             if (confirm("총 " + checked_list.length + "명의 수강생을 " + manage_mode_str + " 처리 하시겠습니까?")) {
-                const formElement = $("#attendance-form");
+                const formElement = $("#manage-form");
                 formElement.attr("method", "POST");
                 return true;
             }
