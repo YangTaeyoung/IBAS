@@ -323,10 +323,20 @@ class LectAssignmentSubmit(models.Model):
     assignment_no = models.ForeignKey('LectBoard', on_delete=models.CASCADE, db_column='ASSIGNMENT_NO')
     lect_no = models.ForeignKey('Lect', on_delete=models.CASCADE, db_column='LECT_NO',
                                 related_name='submitted_assignments')
+    status = models.ForeignKey('LectAssignmentStatus', on_delete=models.DO_NOTHING, db_column="STATUS", default=0)
 
     class Meta:
         managed = False
         db_table = 'LECT_ASSIGNMENT_SUBMIT'
+
+
+class LectAssignmentStatus(models.Model):
+    status = models.AutoField(db_column="STATUS", primary_key=True)
+    description = models.CharField(db_column="DESCRIPTION", max_length=10)
+
+    class Meta:
+        managed = False
+        db_table = 'LECT_ASSIGNMENT_STATUS'
 
 
 class LectAssignmentSubmittedFile(File):

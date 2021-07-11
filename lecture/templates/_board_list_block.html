@@ -1,4 +1,5 @@
-                                        <!-- 강의룸 공지사항 글을 담는 박스 -->
+{% load custom_tags %}
+<!-- 강의룸 공지사항 글을 담는 박스 -->
                                         <div class="content-box">
                                             <!-- 박스 제목 div -->
                                             <div class="content-header">
@@ -22,7 +23,7 @@
                                                         <thead>
                                                         <tr>
                                                             <th class="border-top-0" scope="col"></th>
-                                                            <th class="border-top-0" style="width: 400px" scope="col">제목
+                                                            <th class="border-top-0" style="width: 350px" scope="col">제목
                                                             </th>
                                                             <th class="border-top-0" scope="col">
                                                                 {% if board_type == 1 %}
@@ -31,12 +32,14 @@
                                                                     강의자
                                                                 {% elif board_type == 3%}
                                                                     담당자
+                                                                {% elif assignments_list %}
+                                                                    작성일
                                                                 {% endif %}
                                                             </th>
                                                             <th class="border-top-0" scope="col">
-                                                                {% if board_type == 3 %}마감일{% else %}작성일{% endif %}
+                                                                {% if board_type < 3 %}작성일{% else %}마감일{% endif %}
                                                             </th>
-                                                            {% if assignments_list %}
+                                                            {% if assignments_list or board_type == 3 %}
                                                                 <th class="border-top-0" scope="col">상태</th>
                                                             {% endif %}
                                                         </tr>
@@ -58,6 +61,11 @@
                                                                         {% else %}{{ board.lect_board_created | date:"Y-m-d" }}
                                                                         {% endif %}
                                                                     </td>
+                                                                    {% if board_type == 3 %}
+
+                                                                        <td>{{ status_list|element:forloop.counter0 }}</td>
+
+                                                                    {% endif %}
                                                                 </tr>
                                                             {% endfor %}
 
@@ -67,10 +75,11 @@
                                                                     <td>{{ forloop.revcounter }}</td>
                                                                     <!-- 게시글 제목: a태그 클릭하면, 해당 게시글로 이동 -->
                                                                     <td><a href={% url "lect_assignment_detail" lect.pk assignment.pk %}>[제출]&nbsp;{{ assignment.assignment_title }}</a></td>
-                                                                    <!-- 작성자 -->
-                                                                    <td></td>
-                                                                    <!-- 게시글 작성일 -->
+                                                                    <!-- 과제 제출일 -->
                                                                     <td>{{ assignment.assignment_submit_created | date:"Y-m-d" }}</td>
+                                                                    <!-- 과제 마감일 -->
+                                                                    <td>{{ assignment.assignment_no.assignment_deadline | date:"Y-m-d"}}</td>
+                                                                    <td>{{ assignment.status.description }}</td>
                                                                 </tr>
                                                             {% endfor %}
 

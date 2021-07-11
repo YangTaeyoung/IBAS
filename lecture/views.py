@@ -190,26 +190,41 @@ def lect_enroll(request, lect_no):
 
 # 강의룸 메인 페이지
 def lect_room_main(request, room_no):
+    cur_user = get_logined_user(request)
+    submitted_assignments = LectAssignmentSubmit.objects.filter(
+        lect_no=room_no, assignment_submitter=cur_user)
+
     context = {
         'lect': Lect.objects.get(pk=room_no),
         'notice_list': LectBoard.objects.filter(lect_board_type_id=1),  # 강의 공지글 불러오기
         'lect_board_list': LectBoard.objects.filter(lect_board_type_id=2),  # 강의 게시글 불러오기
-        'assignment_list': LectBoard.objects.filter(lect_board_type_id=3),  # 강의 과제 불러오기
+        'assignment_list': [{
+            'assignment': assignment,
+            'submission': LectAssignmentSubmit.objects.filter(assignment_no=assignment, assignment_submitter=cur_user).first()
+        } for assignment in LectBoard.objects.filter(lect_board_type_id=3)],  # 강의 과제 불러오기
     }
     return render(request, 'lecture_room_main.html', context)
 
 
 # 더보기 눌렀을 때 나오는 게시판 (공지게시판(1)/강의게시판(2)/과제게시판(3))
 def lect_room_list(request, room_no, board_type):
+    lect_room = Lect.objects.prefetch_related('enrolled_students').get(pk=room_no)
     board_list = LectBoard.objects.filter(lect_board_type_id=board_type)
+    cur_user = get_logined_user(request)
 
-    page_obj = get_page_object(request, board_list, 15)  # 페이지네이션 15개 글이 한 페이지
+    # 과제 게시판 출력 시, 수강생의 과제 현황 가져오기
+    status_list = []
+    if board_type == 3 and not cur_user == lect_room.lect_chief:
+        for board in board_list:
+            submission = LectAssignmentSubmit.objects.filter(assignment_submitter=cur_user, assignment_no=board).first()
+            status_list.append(submission.status.description if submission else '미제출')
 
     context = {
-        'lect': Lect.objects.prefetch_related('enrolled_students').get(pk=room_no),
+        'lect': lect_room,
         'board_list': board_list,
         'board_type': board_type,
-        'item_list': page_obj
+        'item_list': get_page_object(request, board_list, 15),  # 페이지네이션 15개 글이 한 페이지
+        'status_list': status_list
     }
     return render(request, 'lecture_room_board_list.html', context)
 
@@ -306,6 +321,7 @@ def lect_board_update(request, room_no, board_no):
         return redirect('lect_board_detail', room_no=room_no, board_no=board_no)
 
 
+# 강의자가 수강생 수강정지 시킬 수 있는 곳.
 def lect_room_manage_member(request, room_no):
     lect_room = Lect.objects.prefetch_related('lectures', 'attendance').get(pk=room_no)
     lectures = lect_room.lectures.filter(lect_board_type_id=2)
@@ -342,18 +358,28 @@ def lect_room_manage_member(request, room_no):
         return redirect(reverse('lect_room_manage_member', args=[room_no]))
 
 
+# 수강생이 자신의 출결과 과제제출 현황 보는 곳
 def lect_room_student_status(request, room_no):
     lect_room = Lect.objects.prefetch_related("lectures", "attendance").get(pk=room_no)
-    lect_board_list = lect_room.lectures.filter(lect_board_type_id=2)  # 강의 게시글들
-    attend_info = LectAttendance.objects.filter(lect_no=lect_room, student=get_logined_user(request))  # 현재 유저의 출석
-    lect_board_list = [
-        {'lecture' :lect_board, 'attend': '출석' if attend_info.filter(lect_board_no=lect_board).exists() else '결석'}
-        for lect_board in lect_board_list]
+    lect_board_list = lect_room.lectures.prefetch_related('assignments').filter(lect_board_type_id=2  # 강의 게시글들
+                                                                                ).order_by('lect_board_created')
+    cur_user = get_logined_user(request)
+    attend_info = LectAttendance.objects.filter(lect_no=lect_room, student=cur_user)  # 현재 유저의 출석
+    lect_board_list = [{
+        'idx': idx+1,  # 회차
+        'lecture': lect_board,
+        'attend': '출석' if attend_info.filter(lect_board_no=lect_board).exists() else '결석',
+        'assignments': [{
+                'assignment': assignment,
+                'submission': LectAssignmentSubmit.objects.filter(assignment_submitter=cur_user, assignment_no=assignment).first()
+            } for assignment in lect_board.assignments.all()]
+        } for idx, lect_board in enumerate(lect_board_list)
+    ]
 
     context = {
         'lect': lect_room,
         'lect_board_list': lect_board_list,
-        'item_list': get_page_object(request, lect_board_list, 10)
+        'item_list': get_page_object(request, lect_board_list, 10),
     }
 
     return render(request, 'lecture_room_student_status.html', context)
@@ -490,7 +516,7 @@ def lect_assignment_submit(request, room_no):
 
 def lect_assignment_list(request, room_no):
     lect_room = Lect.objects.prefetch_related('submitted_assignments').get(pk=room_no)
-    assignments_list = lect_room.submitted_assignments.filter(assignment_submitter=get_logined_user(request))
+    assignments_list = lect_room.submitted_assignments.select_related('assignment_no').filter(assignment_submitter=get_logined_user(request))
     page_obj = get_page_object(request, assignments_list, 15)
 
     context = {
