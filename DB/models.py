@@ -323,6 +323,7 @@ class LectAssignmentSubmit(models.Model):
     assignment_no = models.ForeignKey('LectBoard', on_delete=models.CASCADE, db_column='ASSIGNMENT_NO', related_name='submissions')
     lect_no = models.ForeignKey('Lect', on_delete=models.CASCADE, db_column='LECT_NO', related_name='submitted_assignments')
     status = models.ForeignKey('LectAssignmentStatus', on_delete=models.DO_NOTHING, db_column="STATUS", default=0)
+    reject_reason = models.CharField(db_column="REJECT_REASON", max_length=200, null=True)
 
     class Meta:
         managed = False

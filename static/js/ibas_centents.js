@@ -346,3 +346,12 @@ function StatusFormSubmit() {
 
     return false;
 }
+
+function AssignmentAorFormSubmit() {
+    alert('해당 과제가 실패 처리 되었습니다.');
+
+    const reject_reason = $("#modal-reject-reason").val();
+    $("#reject_reason").val(reject_reason);
+    $("#aor").val(-1);
+    $("#assignment_aor").submit()
+}
