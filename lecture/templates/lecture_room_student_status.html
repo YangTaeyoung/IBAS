@@ -67,7 +67,7 @@
                                                     <tr>
                                                         <!-- 주차 -->
                                                         <th rowspan="2" class="lectRoom_week">
-                                                            {{ forloop.counter }}
+                                                            {{ row.idx }}
                                                         </th>
                                                         <!-- 강의 -->
                                                         <td class="border-right text-center">강의</td>
@@ -83,18 +83,26 @@
 
                                                     <!-- 과제 부분 -->
                                                     <tr>
-                                                    {% for assignment in row.lecture.assignments.all %}
-                                                        <!-- 강의 -->
+                                                    {% for subrow in row.assignments %}
+                                                        <!-- 과제 -->
                                                         <td class="border-right text-center">-</td>
-                                                        <!-- 강의제목 -->
-                                                        <td class="border-right">&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;{{ assignment.lect_board_title }}
-                                                        </td>
-                                                        <!-- 강의 출석 -->
-                                                        {% if row.attend == '출석' %}
-                                                            <td class="text-center lectRoom_state_ing_font">제출</td>
-                                                        {% elif row.attend == '결석' %}
-                                                            <td class="text-center lectRoom_state_stop_font">미제출</td>
+                                                        <!-- 과제제목 -->
+                                                        <td class="border-right">&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;{{ subrow.assignment.lect_board_title }}</td>
+                                                        <!-- 과제 상태 -->
+                                                        {% if subrow.submission.status.description == '통과' %}
+                                                            <td class="text-center lectRoom_state_ing_font">통과</td>
+                                                        {% elif subrow.submission.status.description == '실패'%}
+                                                            <td class="text-center lectRoom_state_stop_font">실패</td>
+                                                        {% else %}
+                                                            <td class="text-center">
+                                                            {% if subrow.submission %}
+                                                                {{ subrow.submission.status.description }}
+                                                            {% else %}
+                                                                미제출
+                                                            {% endif %}
+                                                            </td>
                                                         {% endif %}
+
                                                     {% endfor %}
                                                     </tr>
                                                 {% endfor %}

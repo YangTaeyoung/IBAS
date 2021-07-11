@@ -15,9 +15,16 @@ def addstr(value, arg):
     return str(value) + str(arg)
 
 
+# 글자수 length 초과하면 자르고 끝에 ... 붙임
 @register.filter
 def truncate(string, length):
     if len(string) < length:
         return string + ''.join([' '] * (10 - len(string)))
     else:
         return string[:length] + '...'
+
+
+# 템플릿에서 배열 사용
+@register.filter
+def element(array, idx):
+    return array[idx]
