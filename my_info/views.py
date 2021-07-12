@@ -156,7 +156,8 @@ def connect_social_account(request):
 @login_required
 def withdrawal(request):
     if request.method == "POST":
-        if User.objects.get(pk=request.POST.get("user_stu")) == get_logined_user(request):
+        if User.objects.get(pk=request.POST.get("user_stu")) == get_logined_user(request) and not get_logined_user(
+                request).user_role.role_no <= 4:
             if bool(request.POST.get("agreement")):
                 with transaction.atomic():
                     current_user = get_logined_user(request)

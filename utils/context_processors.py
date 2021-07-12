@@ -54,3 +54,11 @@ def superuser_check(request):
         return {"is_superuser": get_logined_user(request).user_role.role_no <= 3}
     else:
         return {"is_superuser": False}
+
+
+# 로그인 한 유저가 총무인지 확인하는 함수.
+def cfo_check(request):
+    if is_logined(request):
+        return {"is_cfo": get_logined_user(request).user_role.role_no == 4}
+    else:
+        return {"is_cfo": False}
