@@ -15,7 +15,7 @@ from alarm.alarm_controller import create_bank_alarm
 def bank(request):
     # 회계 내역
     bank_list = Bank.objects.filter(bank_apply__bank_apply_no=4).order_by('bank_used').prefetch_related(
-        'bankfile_set').all()
+        'files').all()
 
     # 연도를 담을 리스트
     year_list = [bank.bank_used.year for bank in bank_list]
