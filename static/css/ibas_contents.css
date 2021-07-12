@@ -614,6 +614,7 @@ input[type=checkbox] + label:after {
     color: #333;
     font-weight: bold;
 }
+
 /*테이블 헤드에 있는 필터 css 적용을 위한 것.*/
 .lectRoom_select:focus .dropdown-togglefocus:focus {
     border: none !important;
@@ -623,6 +624,7 @@ input[type=checkbox] + label:after {
     color: #333;
     font-weight: bold;
 }
+
 /*테이블 헤드에 있는 필터 css 적용을 위한 것.*/
 .lectRoom_select::before .dropdown-toggle::before {
     border: none !important;
@@ -632,6 +634,7 @@ input[type=checkbox] + label:after {
     color: #333;
     font-weight: bold;
 }
+
 /*테이블 헤드에 있는 필터 css 적용을 위한 것.*/
 .lectRoom_select::after .dropdown-toggle::after {
     border: none !important;
@@ -642,6 +645,7 @@ input[type=checkbox] + label:after {
     font-weight: bold;
 
 }
+
 /*테이블 헤드에 있는 필터 css 적용을 위한 것.*/
 .lectRoom_select:hover .dropdown-toggle:hover {
     border: none !important;
@@ -651,6 +655,7 @@ input[type=checkbox] + label:after {
     color: #333;
     font-weight: bold;
 }
+
 /*테이블 헤드에 있는 필터 css 적용을 위한 것.*/
 .lectRoom_select::selection .dropdown-toggle::selection {
     border: none !important;
@@ -661,4 +666,54 @@ input[type=checkbox] + label:after {
     font-weight: bold;
 }
 
+/* introduce.html bigdata 소개부분의 아이콘 위에 마우스 올리면 커서 모양 바뀌게 하기 위한 것*/
+.introduce-pointer{
+    cursor: pointer;
+}
 
+/* introduce.html bigdata 소개부분의 설명부분 가리기 위한 것*/
+.introduce-tab-hidden {
+    margin-top: 0 !important;
+    /*visibility: hidden;*/
+    display: none;
+    width: 1px; !important;
+    height: 1px;
+    opacity: 0;
+}
+/* introduce.html bigdata 소개부분의 설명부분 나타나게 하기 위한 것*/
+.introduce-tab-appear {
+    animation: fade-in 1s;
+    animation-fill-mode: forwards;
+    margin-top: 0 !important;
+    /*visibility: visible;*/
+    display: block;
+}
+/* introduce.html bigdata 소개부분의 설명부분 사라지게 하기 위한 것*/
+.introduce-tab-disappear {
+    animation: fade-out 0.3s;
+    animation-fill-mode: forwards;
+    margin-top: 0 !important;
+    /*width: 1px;*/
+    /*height: 1px;*/
+}
+
+/* introduce-tab-appear 부분 fade-in 설정*/
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* introduce-tab-disappear 부분 fade-out 설정*/
+@keyframes fade-out {
+  from {
+    opacity: 1;
+
+  }
+  to {
+    opacity: 0;
+  }
+}

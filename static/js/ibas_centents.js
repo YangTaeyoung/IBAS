@@ -227,7 +227,7 @@ function lectRoom_state() {
             tr_head.style.display = "table-row"; // 이거 해야 테이블 형태 안무너짐 // 테이블 헤드 부분
             tr_list[i].style.display = "table-row"; // 테이블 내용 부분
 
-        // option 안 학년과 선택된 select가 같으면
+            // option 안 학년과 선택된 select가 같으면
         } else if (state === selectString) {
             tr_head.style.display = "table-row"; // 이거 해야 테이블 형태 안무너짐 // 테이블 헤드 부분
             tr_list[i].style.display = "table-row"; // 테이블 내용 부분
@@ -261,21 +261,17 @@ function lectRoom_manage() {
             tr_head.style.display = "table-header-group"; // 이거 해야 테이블 형태 안무너짐 // 테이블 헤드 부분
             tr_list[i].style.display = "table-row"; // 테이블 내용 부분
 
-        }
-        else if((attend === selectAttend) && ("과제" === selectHw)) {
+        } else if ((attend === selectAttend) && ("과제" === selectHw)) {
             tr_head.style.display = "table-header-group"; // 이거 해야 테이블 형태 안무너짐 // 테이블 헤드 부분
             tr_list[i].style.display = "table-row"; // 테이블 내용 부분
-        }
-        else if(("출결" === selectAttend) && (hw === selectHw)) {
+        } else if (("출결" === selectAttend) && (hw === selectHw)) {
             tr_head.style.display = "table-header-group"; // 이거 해야 테이블 형태 안무너짐 // 테이블 헤드 부분
             tr_list[i].style.display = "table-row"; // 테이블 내용 부분
-        }
-        else if ((hw === selectHw) && (attend === selectAttend)) {
+        } else if ((hw === selectHw) && (attend === selectAttend)) {
             tr_head.style.display = "table-header-group"; // 이거 해야 테이블 형태 안무너짐 // 테이블 헤드 부분
             tr_list[i].style.display = "table-row"; // 테이블 내용 부분
 
-        }
-        else {
+        } else {
             tr_list[i].style.display = "none"; // 테이블 내용 부분
             tr_head.style.display = "table-header-group"; // 이거 해야 테이블 형태 안무너짐 // 테이블 헤드 부분
 
@@ -284,3 +280,81 @@ function lectRoom_manage() {
     }
 
 }
+
+// 빅데이터 소개부분 클릭 시 설명 나오게 하는 함수
+function introduce_click(num) {
+    // for 문 사용위한 변수 선언
+    var number;
+    // 클릭 했을 때 설명부분에 introduce-tab-hidden이 있으면 없애고, 없으면 추가하기
+    document.getElementById('introduce_tab_' + num).classList.toggle('introduce-tab-hidden');
+    // 클릭 했을 때 설명부분에 introduce-tab-appear가 있으면 없애고, 없으면 추가하기
+    document.getElementById('introduce_tab_' + num).classList.toggle('introduce-tab-appear');
+    // 클릭 했을 때 아이콘의 그림부분에 introduce-tab-disappear가 있으면 없애고, 없으면 추가하기
+    document.getElementById('introduce_div_' + num).classList.toggle('introduce-tab-disappear');
+
+    if (num === 1) {
+        // 1번 제외 나머지 아이콘 display 를 none으로 바꾸기
+        for (number = 2; number < 5; number++) {
+            document.getElementById('introduce_icon_' + number).classList.toggle('d-none');
+        }
+    }
+
+    else if (num === 2) {
+        // introduce_icon부분에 marginTop: 100이 적용되어 있으면 지우고 marginTop: 0을 추가하기
+        if(document.getElementById('introduce_icon_' + num).classList.contains('m-t100')) {
+            document.getElementById('introduce_icon_' + num).classList.remove('m-t100');
+            document.getElementById('introduce_icon_' + num).classList.add('mt-0');
+        }
+
+        // introduce_icon부분에 marginTop: 100이 적용되어 있지 않으면 marginTop: 0을 지우고 marginTop: 100을 추가하기
+        else {
+            document.getElementById('introduce_icon_' + num).classList.add('m-t100');
+            document.getElementById('introduce_icon_' + num).classList.remove('mt-0');
+        }
+        // 2번 제외 나머지 아이콘 display 를 none으로 바꾸기
+        for (number = 3; number < 5; number++) {
+            document.getElementById('introduce_icon_' + number).classList.toggle('d-none');
+        }
+
+        document.getElementById('introduce_icon_1').classList.toggle('d-none');
+
+    }
+
+    else if (num === 3) { // Hidden이므로, 여전히 자리를 차지함. 그래서 flex에 자리를 차지하게 됨.
+        // introduce_icon부분에 marginTop: 70이 적용되어 있으면 지우고 marginTop: 0을 추가하기
+        if(document.getElementById('introduce_icon_' + num).classList.contains('m-t70')) {
+            document.getElementById('introduce_icon_' + num).classList.remove('m-t70');
+            document.getElementById('introduce_icon_' + num).classList.add('mt-0');
+        }
+        // introduce_icon부분에 marginTop: 70이 적용되어 있지 않으면 marginTop: 0을 지우고 marginTop: 70을 추가하기
+        else {
+            document.getElementById('introduce_icon_' + num).classList.add('m-t70');
+            document.getElementById('introduce_icon_' + num).classList.remove('mt-0');
+        }
+        // 3번 제외 나머지 아이콘 display 를 none으로 바꾸기
+        for (number = 1; number < 3; number++) {
+            document.getElementById('introduce_icon_' + number).classList.toggle('d-none');
+        }
+
+        document.getElementById('introduce_icon_4').classList.toggle('d-none');
+    }
+
+    else {
+        // introduce_icon부분에 marginTop: 20이 적용되어 있으면 지우고 marginTop: 0을 추가하기
+        if(document.getElementById('introduce_icon_' + num).classList.contains('m-t20')) {
+            document.getElementById('introduce_icon_' + num).classList.remove('m-t20');
+            document.getElementById('introduce_icon_' + num).classList.add('mt-0');
+        }
+        // introduce_icon부분에 marginTop: 20이 적용되어 있지 않으면 marginTop: 0을 지우고 marginTop: 20을 추가하기
+        else {
+            document.getElementById('introduce_icon_' + num).classList.add('m-t20');
+            document.getElementById('introduce_icon_' + num).classList.remove('mt-0');
+        }
+        // 4번 제외 나머지 아이콘 display 를 none으로 바꾸기
+        for (number = 1; number < 4; number++) {
+            document.getElementById('introduce_icon_' + number).classList.toggle('d-none');
+        }
+    }
+
+}
+
