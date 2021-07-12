@@ -121,7 +121,8 @@ class Board(models.Model):
                                       db_column='BOARD_TYPE_NO')  # Field name made lowercase.
     board_title = models.CharField(db_column='BOARD_TITLE', max_length=100)  # Field name made lowercase.
     board_cont = models.CharField(db_column='BOARD_CONT', max_length=5000)  # Field name made lowercase.
-    board_writer = models.ForeignKey('User', on_delete=models.CASCADE, db_column='BOARD_WRITER')  # Field name made lowercase.
+    board_writer = models.ForeignKey('User', on_delete=models.CASCADE,
+                                     db_column='BOARD_WRITER')  # Field name made lowercase.
     board_created = models.DateTimeField(db_column='BOARD_CREATED', auto_now_add=True)  # Field name made lowercase.
 
     class Meta:
@@ -261,7 +262,8 @@ def lect_pic_upload_to(instance, filename):
 class Lect(models.Model):
     lect_no = models.AutoField(db_column='LECT_NO', primary_key=True)  # Field name made lowercase.
     lect_title = models.CharField(db_column='LECT_TITLE', max_length=100)  # Field name made lowercase.
-    lect_chief = models.ForeignKey('User', on_delete=models.CASCADE, db_column='LECT_CHIEF')  # Field name made lowercase.
+    lect_chief = models.ForeignKey('User', on_delete=models.CASCADE,
+                                   db_column='LECT_CHIEF')  # Field name made lowercase.
     lect_pic = models.ImageField(db_column='LECT_PIC', max_length=1000,
                                  upload_to=lect_pic_upload_to, null=True)  # Field name made lowercase.
     lect_type = models.ForeignKey('LectType', models.DO_NOTHING, db_column='LECT_TYPE')  # Field name made lowercase.
@@ -444,7 +446,8 @@ class LectCheck(models.Model):
     check_id = models.AutoField(db_column='CHECK_ID', primary_key=True)  # Field name made lowercase.
     check_date = models.DateTimeField(db_column='CHECK_DATE')  # Field name made lowercase.
     check_lect = models.ForeignKey(Lect, on_delete=models.CASCADE, db_column='CHECK_LECT')  # Field name made lowercase.
-    check_user = models.ForeignKey('User', on_delete=models.CASCADE, db_column='CHECK_USER')  # Field name made lowercase.
+    check_user = models.ForeignKey('User', on_delete=models.CASCADE,
+                                   db_column='CHECK_USER')  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -496,15 +499,18 @@ def user_pic_upload_to(instance, filename):
 class User(models.Model):
     user_stu = models.IntegerField(db_column='USER_STU', primary_key=True)  # Field name made lowercase.
     user_name = models.CharField(db_column='USER_NAME', max_length=50)  # Field name made lowercase.
-    user_major = models.ForeignKey(MajorInfo, models.DO_NOTHING, db_column='USER_MAJOR')  # Field name made lowercase.
-    user_pic = models.ImageField(db_column='USER_PIC', upload_to=user_pic_upload_to, blank=True,
+    user_major = models.ForeignKey(MajorInfo, models.DO_NOTHING, db_column='USER_MAJOR',
+                                   null=True)  # Field name made lowercase.
+    user_pic = models.ImageField(db_column='USER_PIC', upload_to=user_pic_upload_to,
                                  null=True)  # Field name made lowercase.
-    user_auth = models.ForeignKey('UserAuth', models.DO_NOTHING, db_column='USER_AUTH')  # Field name made lowercase.
-    user_role = models.ForeignKey('UserRole', models.DO_NOTHING, db_column='USER_ROLE')  # Field name made lowercase.
+    user_auth = models.ForeignKey('UserAuth', models.DO_NOTHING, db_column='USER_AUTH',
+                                  null=True)  # Field name made lowercase.
+    user_role = models.ForeignKey('UserRole', models.DO_NOTHING, db_column='USER_ROLE',
+                                  null=True)  # Field name made lowercase.
     user_joined = models.DateTimeField(db_column='USER_JOINED', auto_now_add=True)  # Field name made lowercase.
-    user_grade = models.IntegerField(db_column='USER_GRADE')  # Field name made lowercase.
-    user_gen = models.IntegerField(db_column='USER_GEN')  # Field name made lowercase.
-    user_phone = models.CharField(db_column='USER_PHONE', unique=True, max_length=15)  # Field name made lowercase.
+    user_grade = models.IntegerField(db_column='USER_GRADE', null=True)  # Field name made lowercase.
+    user_gen = models.IntegerField(db_column='USER_GEN', null=True)  # Field name made lowercase.
+    user_phone = models.CharField(db_column='USER_PHONE', max_length=15, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -531,7 +537,8 @@ class UserDelete(models.Model):
     user_delete_created = models.DateTimeField(db_column="USER_DELETE_CREATED", auto_now_add=True)
     deleted_user = models.ForeignKey(User, on_delete=models.CASCADE, db_column='DELETED_USER',
                                      related_name="DELETED_USER")
-    suggest_user = models.ForeignKey(User, on_delete=models.CASCADE, db_column='SUGGEST_USER', related_name="SUGGEST_USER")
+    suggest_user = models.ForeignKey(User, on_delete=models.CASCADE, db_column='SUGGEST_USER',
+                                     related_name="SUGGEST_USER")
     user_delete_state = models.ForeignKey("UserDeleteState", on_delete=models.CASCADE, db_column="USER_DELETE_STATE")
 
     class Meta:
