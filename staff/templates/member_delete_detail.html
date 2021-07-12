@@ -270,14 +270,22 @@
                                 <div class="dlab-divider bg-gray-dark"></div>
                                 <div class="d-flex justify-content-center">
                                     <!--회장에게만 보이는 제명하기 버튼-->
+
                                     {% if is_decided %}
-                                        <form action="{% url 'member_delete_decide' user_delete_no=user_delete.user_delete_no %}" method="post">
-                                        {% csrf_token %}
-                                            <button type="submit" onclick="return confirm('{{ user_delete.deleted_user.user_name }}'+'님을 정말 제명하시겠습니까?')" class="btn btn-dark btn-lg"
-                                                    style="width: 200px; font-weight: bold">
-                                                제명하기
-                                            </button>
-                                        </form>
+                                        {% if user_delete.deleted_user.user_role.role_no <= 4 %}
+                                            <p>회장단의 경우 권한 이양이 완료된 후에 제명할 수 있습니다. 권한 이양 후, 제명 버튼이 활성화됩니다.</p>
+                                        {% else %}
+                                            <form action="{% url 'member_delete_decide' user_delete_no=user_delete.user_delete_no %}"
+                                                  method="post">
+                                                {% csrf_token %}
+                                                <button type="submit"
+                                                        onclick="return confirm('{{ user_delete.deleted_user.user_name }}'+'님을 정말 제명하시겠습니까?')"
+                                                        class="btn btn-dark btn-lg"
+                                                        style="width: 200px; font-weight: bold">
+                                                    제명하기
+                                                </button>
+                                            </form>
+                                        {% endif %}
                                     {% endif %}
                                 </div>
                             </div>

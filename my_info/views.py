@@ -4,7 +4,7 @@ from DB.models import Board, User, Comment, Bank, UserUpdateRequest, UserEmail, 
     ContestBoard, ContestComment, History, Answer, Lect, LectBoard, LectEnrollment, LectAttendance
 from django.db.models import Q
 from user_controller import get_logined_user, login_required, get_social_login_info, initialize_user, \
-    get_default_pic_path, is_bank_related, is_history_related, is_default_pic, delete_all_infomation
+    get_default_pic_path, is_bank_related, is_history_related, is_default_pic, delete_all_infomation, delete_user
 from django.conf import settings
 from member.session import save_session
 from file_controller import FileController
@@ -156,19 +156,10 @@ def connect_social_account(request):
 @login_required
 def withdrawal(request):
     if request.method == "POST":
-        if User.objects.get(pk=request.POST.get("user_stu")) == get_logined_user(request) and not get_logined_user(
-                request).user_role.role_no <= 4:
-            if bool(request.POST.get("agreement")):
-                with transaction.atomic():
-                    current_user = get_logined_user(request)
-                    # 회계를 요청한 유저거나, 회계를 작성한 유저, 연혁을 작성한 유저의 경우 데이터 무결성을 위해 최소한의 개인정보 만을 남기고 초기화시킴
-                    if is_bank_related(current_user) or is_history_related(current_user):
-                        initialize_user(current_user)  # 유저 정보 초기화
-                        delete_all_infomation(current_user)  # 유저 정보 삭제
-                    # 회계나 연혁에 관련 없는 계정의 경우 DB에서 계정 완전 삭제
-                    else:
-                        FileController.delete_all_files_of_(current_user)
-                        current_user.delete()
+        if bool(request.POST.get("agreement")):
+            if User.objects.get(pk=request.POST.get("user_stu")) == get_logined_user(request):
+                current_user = get_logined_user(request)
+                if delete_user(current_user):
                     return redirect("logout")  # 최후의 로그아웃 (세션 제거용)
     # 비정상적인 접근의 경우(해킹 시도)
     return redirect(reverse("my_info"))  # 내 정보 페이지로 이동.

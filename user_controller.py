@@ -5,6 +5,7 @@ from DB.models import User, ContestBoard, Board, Bank, Lect, UserDelete, AuthUse
 from allauth.socialaccount.models import SocialAccount, SocialToken
 from file_controller import FileController
 from django.db.models import Q
+from django.db import transaction
 
 
 # 학교 아이디의 경우 이름/학과/학교 등으로 이름이 구성된 경우가 많음.
@@ -344,5 +345,22 @@ def delete_all_infomation(user: User):
     for my_answer in my_answer_list:
         my_answer.delete()
     # 본인 계정 프로필 사진 삭제
+    if not is_default_pic(str(user.user_pic)):
+        FileController.delete_all_files_of_(user)
 
-    FileController.delete_all_files_of_(user)
+
+# 삭제 로직
+def delete_user(user: User):
+    if not user.user_role.role_no <= 4:
+        with transaction.atomic():
+            # 회계를 요청한 유저거나, 회계를 작성한 유저, 연혁을 작성한 유저의 경우 데이터 무결성을 위해 최소한의 개인정보 만을 남기고 초기화시킴
+            if is_bank_related(user) or is_history_related(user):
+                initialize_user(user)  # 유저 정보 초기화
+                delete_all_infomation(user)  # 유저의 게시글 및 흔적 모두 삭제
+            # 회계나 연혁에 관련 없는 계정의 경우 DB에서 계정 완전 삭제
+            else:
+                if not is_default_pic(str(user.user_pic)):  # 프로필 사진인 디폴트 사진이 아닌 경우
+                    FileController.delete_all_files_of_(user)  # 데이터 베이스에서 삭제함
+                user.delete()
+                return True
+    return False

@@ -6,7 +6,7 @@ from staff.forms import UserDeleteForm
 from pagination_handler import get_page_object
 from IBAS.forms import FileFormBase, CommentBaseForm
 import os
-from user_controller import superuser_only, writer_only, get_logined_user, chief_only
+from user_controller import superuser_only, writer_only, get_logined_user, chief_only, delete_user
 from django.db.models import Q, Count, Aggregate
 from django.core.mail import send_mail
 from django.conf import settings
@@ -369,10 +369,7 @@ def member_delete_decide(request, user_delete_no):
         user_delete = UserDelete.objects.get(pk=user_delete_no)
         # 회장단 수와 해당 안건에 투표한 수가 동률이며 찬성이 과반수 이상인지 확인
         if is_decided(user_delete):
-            with transaction.atomic():
-                deleted_user = user_delete.deleted_user
-                FileController.delete_all_files_of_(deleted_user)
-                deleted_user.delete()
+            delete_user(user_delete.deleted_user)
             return redirect(reverse("member_delete_list"))
         return redirect("member_delete_detail", user_delete_no=user_delete_no)
     else:  # 비정상적인 접근.
