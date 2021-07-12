@@ -208,7 +208,7 @@
 
                                             </div>
                                         <!-- 영수증 이미지 출력부 -->
-                                            {% for bank_file in bank.bankfile_set.all %}
+                                            {% for bank_file in bank.files.all %}
                                                 <div class="bank-image-flex">
                                                     <img src="/media/{{ bank_file.file_path }}"
                                                          alt="현재 브라우저에서 지원하지 않는 형식입니다.">
