@@ -103,15 +103,17 @@ class LectBoardFormBase(forms.ModelForm):
 
         widgets = {
             'lect_board_title': forms.TextInput(attrs={"placeholder": _("제목을 입력하세요."),
-                                                       "style": "font-size: 25px; height: 70px;"}),
-            'lect_board_link': forms.TextInput(attrs={"placeholder": _("강의 링크를 적어주세요.")}),
+                                                       "style": "font-size: 25px; height: 70px;",
+                                                       "class": "form-control"}),
+            'lect_board_link': forms.TextInput(attrs={"placeholder": _("강의 링크를 적어주세요."),
+                                                      "class": "form-control"}),
             'lect_board_type': forms.HiddenInput(),
-            'lect_board_cont': forms.TextInput(),
+            'lect_board_cont': forms.TextInput(attrs={"class": "jqte-test"}),
             'assignment_deadline': forms.DateInput(attrs={"type": 'date'}),
         }
         labels = {
             'lect_board_title': _("제목"),
-            'lect_board_link': _("강의 링크"),
+            'lect_board_link': _("링크"),
             'lect_board_cont': _("내용"),
             'assignment_deadline': _("과제 마감일"),
         }

@@ -259,13 +259,21 @@ def lect_room_search(request, room_no):
 # 더보기 눌렀을 때 나오는 게시판 (공지게시판(1)/강의게시판(2)/과제게시판(3))
 def lect_room_list(request, room_no, board_type):
     lect_room = Lect.objects.prefetch_related('enrolled_students', 'lectures', 'submitted_assignments').get(pk=room_no)
-    cur_user = get_logined_user(request)
-    board_list = get_assignment_list(cur_user, lect_room, name_in_html='board')
+
+    # 공지사항 및 강의게시판
+    if board_type < 3:
+        board_list = lect_room.lectures.filter(lect_board_type_id=board_type)
+        board_list = [{'idx': len(board_list)-idx, 'board': board} for idx, board in enumerate(board_list)]
+    # 과제게시판
+    else:
+        cur_user = get_logined_user(request)
+        board_list = get_assignment_list(cur_user, lect_room, name_in_html='board')
 
     context = {
         'lect': lect_room,
         'board_list': get_page_object(request, board_list, 15),
         'board_type': board_type,
+        'any_lecture': True if lect_room.lectures.filter(lect_board_type_id=2).first() else False  # 강의 x => 과제 작성 x
     }
     return render(request, 'lecture_room_board_list.html', context)
 
@@ -289,7 +297,6 @@ def lect_board_register(request, room_no, board_type):
         file_form = FileForm(request.POST, request.FILES)
 
         if lect_board_form.is_valid() and file_form.is_valid():
-            # 트렌젝션 꼭 보장되어야함!
             with transaction.atomic():
                 lecture = lect_board_form.save(  # 공지 또는 강의 게시물 저장
                     lect_board_writer=get_logined_user(request),

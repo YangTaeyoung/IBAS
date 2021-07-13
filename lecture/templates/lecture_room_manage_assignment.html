@@ -31,7 +31,7 @@
 
                             <h1 class="text-white introduce-letter-spacing_5">과제 관리 게시판</h1>
 
-                            <p class="m-t20">수강생의 과제를 관리할 수 있는 게시판입니다. </p>
+                            <p class="m-t20">{{ lect.lect_type.type_name }} 과제를 관리할 수 있는 게시판입니다. </p>
                         </div>
                     </div>
                 </a>
@@ -114,7 +114,7 @@
                                 </div>
                             </div>
                         {% else %}
-                            <p class="text-center align-content-center">강의 없어서 출석부가 아직 생성되지 않았습니다.</p>
+                            <p class="text-center align-content-center">과제가 존재하지 않습니다.</p>
                         {% endif %}
                         </div>
                     </div>

@@ -7,7 +7,7 @@
                                                     {% if board_type == 1 %}
                                                         <i class="fa fa-microphone m-r5"></i>공지사항
                                                     {% elif board_type == 2 %}
-                                                        <i class="fa fa-book m-r5"></i>강의목록
+                                                        <i class="fa fa-book m-r5"></i>{{ lect.lect_type.type_name }} 목록
                                                     {% elif board_type == 3 %}
                                                         <i class="fa fa-check-square-o m-r5"></i>과제 목록
                                                     {% elif assignments_list %}
@@ -112,7 +112,7 @@
                                                         {% if board_type == 1 %}
                                                             공지사항이 없습니다.
                                                         {% elif board_type == 2 %}
-                                                            아직 강의가 없습니다.
+                                                            아직 {{ lect.lect_type.type_name }}가 없습니다.
                                                         {% else %}
                                                             아직은 과제가 없습니다...
                                                         {% endif %}
@@ -126,6 +126,7 @@
                                         </div>
                                         {% if not searching %}
                                             {% if logined_user == lect.lect_chief %}
+                                                {% if not board_type == 3 or any_lecture %}
                                                 <form action="{% url 'lect_board_register' lect.lect_no board_type %}" method="get">
                                                     {% csrf_token %}
                                                     <div class="extra-cell text-right  m-t20">
@@ -137,6 +138,7 @@
                                                         </button>
                                                     </div>
                                                 </form>
+                                                {% endif %}
                                             {% endif %}
                                         {% endif %}
 

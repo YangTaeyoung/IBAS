@@ -50,7 +50,7 @@
                             </div>
                             <!--========== 왼쪽 검색창 및 강의룸 네비게이션바 끝 ==========-->
                             <!--========== 오른쪽 강의룸 메인 콘텐츠 시작 ===========-->
-                        {% load widget_tweaks %}
+
                             <div class="col-xl-8 col-lg-7 col-md-12 m-b30">
                                 <form class="add-listing-form" method="post" enctype="multipart/form-data"
                                       action="{% if board_no %}{% url "lect_board_update" lect.lect_no board_no%}{% else %}{% url "lect_board_register" lect.lect_no board_type%}{% endif %}">
@@ -76,16 +76,12 @@
                                          <div class="content-box">
                                             <div class="content-header">
                                                 <!--제목-->
-                                                <h3 class="title">{{ field.label }}</h3>
+                                                <h3 class="title">{{ lect.lect_type.type_name }} {{ field.label }}</h3>
                                             </div>
                                             <div class="content-body editor">
                                                 <div class="form-group">
                                                     <!--제목 입력하는 곳-->
-                                                    {% if field == lect_board_form.lect_board_cont %}
-                                                        {% render_field field class="jqte-test" %}
-                                                    {% else %}
-                                                        {% render_field field class="form-control" %}
-                                                    {% endif %}
+                                                    {{ field }}
                                                 </div>
                                             </div>
                                          </div>

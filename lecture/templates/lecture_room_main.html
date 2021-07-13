@@ -95,7 +95,7 @@
                                         <div class="content-box">
                                             <!-- 박스 제목 div -->
                                             <div class="content-header d-flex justify-content-between">
-                                                <h3 class="title"><i class="fa fa-book m-r5"></i>강의목록</h3>
+                                                <h3 class="title"><i class="fa fa-book m-r5"></i>{{ lect.lect_type.type_name }} 목록</h3>
                                                 {% if lect_board_list %}
                                                     <!-- 더보기 a태크 클릭 시, 강의룸 내 강의리스트 페이지로 이동 -->
                                                     <a href={% url "lect_room_list" lect.lect_no 2 %}>더보기</a>
@@ -135,7 +135,7 @@
                                                     </tbody>
                                                 </table>
                                             {% else %}
-                                                <p class="text-center">아직 강의가 없습니다.</p>
+                                                <p class="text-center">아직 {{ lect.lect_type.type_name }}가 없습니다.</p>
                                             {% endif %}
 
                                             </div>
@@ -149,6 +149,8 @@
                                                 {% if assignment_list %}
                                                     <!-- 더보기 a태크 클릭 시, 강의룸 내 강의리스트 페이지로 이동 -->
                                                     <a href={% url 'lect_room_list' lect.lect_no 3 %}>더보기</a>
+                                                {% elif logined_user == lect.lect_chief and lect_board_list %}
+                                                    <a href={% url "lect_board_register" lect.lect_no 2 %}>등록하기</a>
                                                 {% endif %}
                                             </div>
                                             <div class="content-body">
