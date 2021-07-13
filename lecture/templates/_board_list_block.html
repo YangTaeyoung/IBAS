@@ -12,6 +12,8 @@
                                                         <i class="fa fa-check-square-o m-r5"></i>과제 목록
                                                     {% elif assignments_list %}
                                                         <i class="fa fa-check-square-o m-r5"></i>과제 제출 현황
+                                                    {% elif searching%}
+                                                        <i class="fa fa-check-square-o m-r5"></i>검색 결과
                                                     {% endif %}
                                                 </h3>
                                             </div>
@@ -26,7 +28,7 @@
                                                             <th class="border-top-0" style="width: 350px" scope="col">제목
                                                             </th>
                                                             <th class="border-top-0" scope="col">
-                                                                {% if board_type == 1 %}
+                                                                {% if board_type <= 1 %}
                                                                     작성자
                                                                 {% elif board_type == 2 %}
                                                                     강의자
@@ -98,7 +100,11 @@
                                                     </table>
 
                                                     <!-- 페이지네이션 -->
-                                                    {% include "pagination.html" %}
+                                                    {% if board_list %}
+                                                        {% include "pagination.html" with item_list=board_list %}
+                                                    {% elif assignments_list %}
+                                                        {% include "pagination.html" with item_list=board_list %}
+                                                    {% endif %}
 
                                                 {% else %}
 
@@ -118,18 +124,19 @@
 
                                             </div>
                                         </div>
-
-                                        {% if logined_user == lect.lect_chief %}
-                                            <form action="{% url 'lect_board_register' lect.lect_no board_type %}" method="get">
-                                                {% csrf_token %}
-                                                <div class="extra-cell text-right  m-t20">
-                                                    <!-- 게시글 등록 버튼 -->
-                                                    <!-- 관련자만 보이게 처리 -->
-                                                    <button type="submit" class="site-button radius-xl m-l10">
-                                                        <i class="fa fa-plus m-r5"></i>
-                                                        게시글 등록
-                                                    </button>
-                                                </div>
-                                            </form>
+                                        {% if not searching %}
+                                            {% if logined_user == lect.lect_chief %}
+                                                <form action="{% url 'lect_board_register' lect.lect_no board_type %}" method="get">
+                                                    {% csrf_token %}
+                                                    <div class="extra-cell text-right  m-t20">
+                                                        <!-- 게시글 등록 버튼 -->
+                                                        <!-- 관련자만 보이게 처리 -->
+                                                        <button type="submit" class="site-button radius-xl m-l10">
+                                                            <i class="fa fa-plus m-r5"></i>
+                                                            게시글 등록
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            {% endif %}
                                         {% endif %}
 

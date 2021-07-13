@@ -226,6 +226,33 @@ def lect_room_main(request, room_no):
     return render(request, 'lecture_room_main.html', context)
 
 
+def lect_room_search(request, room_no):
+    if request.method == "GET":
+        k = request.GET.get("keyword")
+
+        search_result = LectBoard.objects.filter((
+                Q(lect_board_title__icontains=k) | Q(lect_board_cont__icontains=k) |
+                Q(lect_board_writer__user_name__icontains=k)) & Q(lect_no_id=room_no)).order_by('-lect_board_created')
+
+        # 검색 필터 (검색 범위: 강의게시글 제목, 강의게시글 내용, 강의게시글 작성자)
+        board_list = get_page_object(
+            request,
+            model_list=[{'idx': len(search_result) - idx, 'board': board} for idx, board in enumerate(search_result)],
+            num_of_boards_in_one_page=15)
+
+        lect = Lect.objects.get(pk=room_no)
+        lect.lect_intro = "\"" + k + "\"(으)로 검색한 결과입니다."
+
+        context = {
+            "lect": lect,
+            "board_type": 0,
+            "board_list": board_list,
+            'searching': True  # lecture_room_board_list.html 를 재사용하기 때문에, url matching error 를 피하기 위함.
+        }
+
+        return render(request, 'lecture_room_board_list.html', context)  # 정상 처리
+
+
                                                 # 강의 게시글 CRUD #
 
 
@@ -237,9 +264,8 @@ def lect_room_list(request, room_no, board_type):
 
     context = {
         'lect': lect_room,
-        'board_list': board_list,
+        'board_list': get_page_object(request, board_list, 15),
         'board_type': board_type,
-        'item_list': get_page_object(request, board_list, 15),  # 페이지네이션 15개 글이 한 페이지
     }
     return render(request, 'lecture_room_board_list.html', context)
 
@@ -277,15 +303,26 @@ def lect_board_register(request, room_no, board_type):
 
 # 강의/공지 게시글 상세보기
 def lect_board_detail(request, room_no, board_no):
+    lect_room = get_object_or_404(Lect, pk=room_no)
     board = get_object_or_404(LectBoard, pk=board_no)
     file_list, img_list, doc_list = FileController.get_images_and_files_of_(board)
 
+    # 과제 글
+    submitted_assignment = None
+    if board.lect_board_type_id == 3:
+        # 수강생이면, 제출한 과제 보여주기
+        cur_user = get_logined_user(request)
+        if cur_user != lect_room.lect_chief:
+            # 과제 하나당 수강생은 어차피 하나밖에 제출 못함. get 쿼리로 검사하면 레코드 없을 시 오류 발생.
+            submitted_assignment = LectAssignmentSubmit.objects.filter(assignment_submitter=cur_user, assignment_no=board).first()
+
     context = {
-        'lect': get_object_or_404(Lect, pk=room_no),
+        'lect': lect_room,
         'board': board,
         'file_list': file_list,
         'img_list': img_list,
-        'doc_list': doc_list
+        'doc_list': doc_list,
+        'submitted_assignment': submitted_assignment,
     }
     return render(request, 'lecture_room_board_detail.html', context)
 
@@ -371,15 +408,18 @@ def lect_assignment_submit(request, room_no):
         return redirect(reverse('lect_assignment_detail', args=[room_no, submission.pk]))
 
 
+# 제출한 과제 목록
 def lect_assignment_list(request, room_no):
     lect_room = Lect.objects.prefetch_related('submitted_assignments').get(pk=room_no)
-    assignments_list = lect_room.submitted_assignments.select_related('assignment_no').filter(assignment_submitter=get_logined_user(request))
-    page_obj = get_page_object(request, assignments_list, 15)
+    cur_user = get_logined_user(request)
+    assignments_list = get_page_object(
+        request,
+        model_list=lect_room.submitted_assignments.select_related('assignment_no').filter(assignment_submitter=cur_user),
+        num_of_boards_in_one_page=15)
 
     context = {
         'lect': lect_room,
         'assignments_list': assignments_list.all(),
-        'item_list': page_obj
     }
 
     return render(request, 'lecture_room_board_list.html', context)
@@ -538,25 +578,27 @@ def lect_room_manage_assignment(request, room_no):
     if request.method == "GET":
         lect_room = Lect.objects.prefetch_related(
             "lectures", "enrolled_students", "submitted_assignments", "submitted_assignments__files").get(pk=room_no)
-        assignment_list = lect_room.lectures.filter(lect_board_type_id=3)
+
+        any_assignment = lect_room.lectures.filter(lect_board_type_id=3).first()
         # 과제 게시글 번호. select option 값 / default 는 마지막 강의 게시글
         # 처음 이 페이지를 렌더링 할 때는 get 파라미터가 존재하지 않음. 이 강의 첫 게시글이 존재하지 않으면, 게시글 번호 존재 X
         assignment_no = request.GET.get('assignment_no',
-                                        None if not assignment_list else assignment_list[0].lect_board_no)
+                                        None if not any_assignment else any_assignment.lect_board_no)
 
         students_list = lect_room.enrolled_students.all()
-        if assignment_list and students_list:
+        if any_assignment and students_list:
             students_list = [{
                 'student': std.student,
-                'submission': lect_room.submitted_assignments.filter(
+                'submission': lect_room.submitted_assignments.filter(  # 제출시간, 제출여부, 제출된 파일에 접근하기 위한 객체
                     assignment_submitter=std.student, assignment_no=assignment_no).first()
             } for std in students_list]
 
         context = {
             'lect': lect_room,
-            'assignment_list': assignment_list,
             'cur_assignment': None if assignment_no is None else LectBoard.objects.get(pk=assignment_no),
             'students_list': students_list,
+            'lect_board_list': lect_room.lectures.filter(lect_board_type_id=2),
+            'any_assignnent': True if any_assignment else False
         }
 
         return render(request, 'lecture_room_manage_assignment.html', context)

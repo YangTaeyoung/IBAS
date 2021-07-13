@@ -3,16 +3,17 @@
                                     <div class="listing-filter-sidebar" style="margin-bottom: 30px">
                                         <div style="margin-bottom: 20px">
                                             <h4 class="title">강의실 내 검색</h4>
-                                            <div class="">
-                                                <form role="search" method="post">
+
+                                                <form role="search" method="get" action="{% url 'lect_room_search' lect.pk %}">
+
                                                     <div class="input-group">
-                                                        <input name="text" type="text" class="form-control"
+                                                        <input name="keyword" type="text" class="form-control"
                                                                placeholder="검색어를 입력하세요.">
                                                         <span class="input-group-btn">
-												<button type="submit" class="site-button"><i
-                                                        class="fa fa-search"></i></button></span>
+												        <button type="submit" class="site-button">
+                                                            <i class="fa fa-search"></i></button></span>
                                                     </div>
                                                 </form>
-                                            </div>
+
                                         </div>
                                     </div>

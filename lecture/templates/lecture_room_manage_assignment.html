@@ -67,10 +67,16 @@
                                                                 <li>
                                                                     <label for="selectbox"></label><select id="selectbox" name="assignment_no" onchange="FilterFormSubmit()">
 
-                                                                        {% for assignment in assignment_list %}
-                                                                            <option value="{{ assignment.lect_board_no }}">
-                                                                               [{{ forloop.revcounter }}회차] {{ assignment.lect_board_title|truncate:9}}
-                                                                            </option>
+                                                                        {% for lect_board in lect_board_list %}
+                                                                            {% with forloop.revcounter as i%}
+                                                                            {% if lect_board.assignments.all %}
+                                                                                {% for assignment in lect_board.assignments.all %}
+                                                                                    <option value="{{ assignment.lect_board_no }}">
+                                                                                       [{{ i }}회차] {{ assignment.lect_board_title|truncate:9}}
+                                                                                    </option>
+                                                                                {% endfor %}
+                                                                            {% endif %}
+                                                                            {% endwith %}
                                                                         {% endfor %}
 
                                                                     </select>

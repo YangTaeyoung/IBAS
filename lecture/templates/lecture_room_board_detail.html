@@ -121,17 +121,34 @@
 
                                         {% endif %}
 
-                                        <!-- 과제 제출 버튼 -->
+                                        <!-- 수강생만 보임 -->
                                         {% if logined_user != board.lect_board_writer  %}
 
-                                            <form method="get" action="{% url "lect_assignment_submit" lect.lect_no %}">
-                                                {% csrf_token %}
-                                                <button class="site-button radius-xl m-l10" type="submit">
-                                                      <i class="fa fa-pencil m-r5"></i>과제 제출
-                                                </button>
-                                                <input type="hidden" name="lect_board_no" value="{{ board.lect_board_no }}">
-                                            </form>
+                                            {% if not submitted_assignment %}
+                                                <!-- 제출된 과제가 없는 경우 -->
 
+                                                {% if board.is_expired %}
+                                                    <!-- 제출된 과제가 없는데, 과제 제출 안한 경우, 얄짤없음. -->
+                                                    과제 제출 기간이 아닙니다
+
+                                                {% else %}
+                                                    <!-- 제출된 과제가 없으면, 과제 제출 버튼 -->
+                                                    <form method="get" action="{% url "lect_assignment_submit" lect.lect_no %}">
+                                                        {% csrf_token %}
+                                                        <button class="site-button radius-xl m-l10" type="submit">
+                                                              <i class="fa fa-pencil m-r5"></i>과제 제출
+                                                        </button>
+                                                        <input type="hidden" name="lect_board_no" value="{{ board.lect_board_no }}">
+                                                    </form>
+                                                {% endif %}
+
+                                            {% else %}
+
+                                                <!-- 제출된 과제가 있으면, 과제 보는 링크 -->
+                                                <a href="{% url "lect_assignment_detail" lect.pk submitted_assignment.pk %}">
+                                                    <i class="fa fa-arrow-right m-r5"></i>제출한 과제 보기</a>
+
+                                            {% endif %}
                                         {% endif %}
                                     </div>
 
