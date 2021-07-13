@@ -492,6 +492,7 @@ def lect_assignment_delete(request, room_no, assignment_submit_no):
                                             # 강의자 메뉴 #
 
 
+# 강의자가 수강생의 과제 디테일 조회 시, 수강생의 과제를 통과 또는 실패 처리 시킴
 def lect_assignment_aor(request, room_no, submit_no):
     if request.method == "POST":
         aor = int(request.POST.get('aor'))
@@ -502,7 +503,6 @@ def lect_assignment_aor(request, room_no, submit_no):
             submitted_assignment.status_id = aor
             submitted_assignment.reject_reason = request.POST.get("reject_reason")
             submitted_assignment.save()
-
 
         return redirect(reverse('lect_assignment_detail', args=[room_no, submit_no]))
 
@@ -608,6 +608,22 @@ def lect_room_manage_assignment(request, room_no):
         }
 
         return render(request, 'lecture_room_manage_assignment.html', context)
+
+    elif request.method == "POST":
+        manage_mode = int(request.POST.get('manage_mode'))
+        if manage_mode in [-1, 1]:
+            checked_list = [request.POST[key] for key in request.POST if 'is_checked_' in key and request.POST[key]]
+            assignments = LectAssignmentSubmit.objects.filter(pk__in=checked_list)
+            for s in assignments:
+                s.status_id = manage_mode
+
+            LectAssignmentSubmit.objects.bulk_update(objs=assignments, fields=['status', ])
+
+            return redirect(reverse('lect_room_manage_assignment', args=[room_no]))
+
+        else:
+            # 잘못된 경우
+            return redirect(reverse('lect_room_main', args=[room_no]))
 
 
 # 출석 현황 확인 및 변경

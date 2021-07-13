@@ -1,5 +1,5 @@
-{% load custom_tags %}
-<!-- 회원관리 테이블 -->
+                                            {% load custom_tags %}
+                                            <!-- 회원관리 테이블 -->
                                             <table class="table">
                                                 <thead id="lectRoom_mhead">
                                                 <!-- 테이블 1행: 제목 -->
@@ -54,7 +54,7 @@
 
                                                                     <div>
                                                                         <input id="check_{{ row.student.user_stu }}" name="is_checked_{{ row.student.user_stu }}"
-                                                                               type="checkbox">
+                                                                               type="checkbox" value="{{ row.submission.pk }}">
 
                                                                         <label for="check_{{ row.student.user_stu }}"
                                                                                class="staff_label_margin m-l20"></label>
@@ -106,10 +106,10 @@
                                                     <!-- 과제관리 -->
                                                     <div class="col-md-4 pr-0">
                                                         <div class="form-group width-130 float-right">
-                                                            <select>
+                                                            <select name="manage_mode" id="manage-mode">
                                                                 <option disabled selected>과제관리</option>
-                                                                <option>통과</option>
-                                                                <option>실패</option>
+                                                                <option value="1">통과</option>
+                                                                <option value="-1">실패</option>
                                                             </select>
                                                         </div>
                                                     </div>

@@ -294,11 +294,9 @@ function ManageFormSubmit () {
     const manage_mode = $("#manage-mode").val();
 
     if (manage_mode == null) {
-        alert('적용할 출결 상태를 선택하세요!');
+        alert('적용할 상태를 선택하세요!');
     } else {
-        let manage_mode_str = '';
-        if (manage_mode === '1') manage_mode_str = '출석';
-        else manage_mode_str = '결석';
+        let manage_mode_str = $("#manage-mode option:checked").text()
 
         var checked_list = [];
         $("input:checkbox[name^=is_checked]:checked").each(function () {
