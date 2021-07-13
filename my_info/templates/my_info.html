@@ -423,19 +423,29 @@
                                                 <td>{{ logined_user.user_role.role_name }}</td>
                                                 <td></td>
                                             </tr>
+                                            <!--이름-->
+                                            <tr>
+                                                <th scope="row">자기소개</th>
+                                                <!-- Back : 자기 소개 뜨도록 수정, 등록 안돼있으면 아래 내용 뜨도록 -->
+                                                <td>아직 등록된 자기소개가 없습니다.</td>
+                                                <!-- 수정하기 버튼, 누르면 모달 뜸 -->
+                                                <td>
+                                                    <a href="javascript:void(0);" data-toggle="modal" data-target="#self_intro_edit"><i class="la la-pencil"></i></a>
+                                                </td>
+                                            </tr>
                                             <!--아래 선 하나 더 보이게 추가한 곳-->
                                             <tr>
-                                                {% if is_superuser or is_cfo %}
-                                                    <td class="text-center" scope="row" colspan="3" style="color:gray;">
-                                                        회장단의 경우 권한이 이양되기 전까지 회원탈퇴를 할 수 없습니다. 회장에게 권한 이양을 요청하세요.
-                                                    </td>
-                                                {% else %}
+{#                                                {% if is_superuser or is_cfo %}#}
+{#                                                    <td class="text-center" scope="row" colspan="3" style="color:gray;">#}
+{#                                                        회장단의 경우 권한이 이양되기 전까지 회원탈퇴를 할 수 없습니다. 회장에게 권한 이양을 요청하세요.#}
+{#                                                    </td>#}
+{#                                                {% else %}#}
                                                     <th class="text-center" scope="row" colspan="3">
                                                         <a class="btn btn-danger" href="javascript:void(0);"
                                                            data-toggle="modal"
                                                            data-target="#withdrawal">회원탈퇴</a>
                                                     </th>
-                                                {% endif %}
+{#                                                {% endif %}#}
                                             </tr>
                                             </tbody>
                                         </table>
@@ -756,6 +766,48 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- Modal End -->
+                        <!-- 자기소개 수정 Modal -->
+                        <div class="modal fade modal-bx-info modal-lg" id="self_intro_edit" tabindex="-1" role="dialog"
+                             aria-labelledby="ReportReviewsModalLongTitle" aria-hidden="true">
+                            <div class="modal-dialog " role="document">
+                                <div class="modal-content">
+                                    <!--제목부분-->
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="ReportReviewsModalLongTitle">자기소개</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true"><i class="la la-close"></i></span>
+                                        </button>
+                                    </div>
+                                    <!--내용부분-->
+                                    <div class="modal-body">
+                                        <form id="form-user-update-request"
+                                              action="#" class="dlab-form"
+                                              method="post">
+                                            {% csrf_token %}
+                                            <div class="form-group">
+                                                <!--소개 공개 동의 체크박스 부분-->
+                                                <div class="input-block">
+                                                  <p class="my_info_modal_content"><i class="la la-check"></i>자기소개 공개에 동의하시면 졸업 후 졸업생 명예의 전당에 정보가 공개됩니다.</p>
+                                                  <input id="intro_open" type="checkbox" />
+                                                  <label for="intro_open">자기소개 공개에 동의합니다.</label>
+                                                </div>
+                                            <hr/>
+                                                <!--설명 내용 수정 부분-->
+                                                <textarea name="updated_user_name" required="required" class="form-control"
+                                                       placeholder="간단한 본인 소개를 적어주세요"></textarea>
+                                            </div>
+                                            <!--수정신청하기 버튼, Back : 누르면 회장에게 승인을 요구하도록 수정-->
+                                            <a href="#" class="site-button"
+                                               style="display: grid; justify-items: center;"
+                                               onclick="alert('수정하시겠습니까?')">수정</a>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Modal End -->
+
                         {% if not is_superuser and not is_cfo %}
                             <div class="modal fade modal-bx-info modal-lg" id="withdrawal" tabindex="-1" role="dialog"
                                  aria-labelledby="ReportReviewsModalLongTitle" aria-hidden="true">
@@ -800,6 +852,8 @@
                             </div>
                         {% endif %}
                         <!-- Modal End -->
+
+
 
                     </div>
                 </div>
