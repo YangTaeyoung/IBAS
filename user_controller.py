@@ -1,6 +1,6 @@
 import functools
 from django.shortcuts import redirect, reverse
-from DB.models import User, ContestBoard, Board, Bank, Lect, UserDelete, AuthUser
+from DB.models import User, ContestBoard, Board, Bank, Lect, UserDelete, AuthUser, LectAssignmentSubmit
 from allauth.socialaccount.models import SocialAccount, SocialToken
 
 
@@ -57,8 +57,9 @@ def is_writer(request, **kwargs):
     board_no = kwargs.get('board_no')
     contest_no = kwargs.get('contest_no')
     bank_no = kwargs.get('bank_no')
-    lect_no = kwargs.get('lect_no')
+    lect_no = kwargs.get('lect_no', kwargs.get('room_no'))
     user_delete_no = kwargs.get('user_delete_no')
+    assignment_submit_no = kwargs.get('assignment_submit_no')  # 수강생 과제 제출
 
     # comment_no = kwargs.get('comment_no')
 
@@ -70,6 +71,10 @@ def is_writer(request, **kwargs):
     elif contest_no is not None:
         contest = ContestBoard.objects.get(pk=contest_no)
         if current_user == contest.contest_writer:
+            return True
+    elif assignment_submit_no is not None:
+        assignment = LectAssignmentSubmit.objects.get(pk=assignment_submit_no)
+        if current_user == assignment.assignment_submitter:
             return True
     elif lect_no is not None:
         lect = Lect.objects.get(pk=lect_no)
@@ -245,3 +250,25 @@ def chief_only(vice=False):
         return wrapper
 
     return decorator
+
+
+# 데코레이터
+# 제작일: 21.7.13
+# 제작자: 유동현
+# 용도: 강의 또는 스터디 구성원인지 확인하는 용도
+def member_only(func):
+    @login_required
+    @functools.wraps(func)
+    def wrapper(request, *args, **kwargs):
+        current_user = get_logined_user(request)
+        lect_room = Lect.objects.prefetch_related(
+            'enrolled_students').get(pk=kwargs.get('room_no', kwargs.get('lect_no')))
+        if current_user == lect_room.lect_chief:
+            return func(request, *args, **kwargs)
+        elif member := lect_room.enrolled_students.filter(lect_no=lect_room, student=current_user).first():
+            if member.status_id == 1:
+                return func(request, *args, **kwargs)
+
+        return redirect(reverse("index"))
+
+    return wrapper
