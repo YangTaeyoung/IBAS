@@ -221,6 +221,8 @@ class AssignmentSubmitForm(forms.ModelForm):
 
     def update(self, instance):
         instance.assignment_cont = self.cleaned_data['assignment_cont']
+        instance.status_id = 0  # 과제 수정하면, 기존에 통과이거나 실패였어도 대기 상태가 되어 강의가 처리 받아야함.
+        instance.reject_reason = None
         instance.save()
 
 

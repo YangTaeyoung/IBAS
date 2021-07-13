@@ -414,12 +414,12 @@ def lect_assignment_list(request, room_no):
     cur_user = get_logined_user(request)
     assignments_list = get_page_object(
         request,
-        model_list=lect_room.submitted_assignments.select_related('assignment_no').filter(assignment_submitter=cur_user),
+        model_list=lect_room.submitted_assignments.select_related('assignment_no').filter(assignment_submitter=cur_user).all(),
         num_of_boards_in_one_page=15)
 
     context = {
         'lect': lect_room,
-        'assignments_list': assignments_list.all(),
+        'assignments_list': assignments_list,
     }
 
     return render(request, 'lecture_room_board_list.html', context)

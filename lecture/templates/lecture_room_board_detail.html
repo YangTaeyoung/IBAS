@@ -122,7 +122,7 @@
                                         {% endif %}
 
                                         <!-- 수강생만 보임 -->
-                                        {% if logined_user != board.lect_board_writer  %}
+                                        {% if logined_user != board.lect_board_writer and board.lect_board_type_id == 3  %}
 
                                             {% if not submitted_assignment %}
                                                 <!-- 제출된 과제가 없는 경우 -->

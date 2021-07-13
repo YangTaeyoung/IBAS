@@ -331,7 +331,7 @@ class LectAssignmentSubmit(models.Model):
 
 
 class LectAssignmentStatus(models.Model):
-    status = models.AutoField(db_column="STATUS", primary_key=True)
+    status = models.IntegerField(db_column="STATUS", primary_key=True)
     description = models.CharField(db_column="DESCRIPTION", max_length=10)
 
     class Meta:

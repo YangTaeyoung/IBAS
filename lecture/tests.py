@@ -11,12 +11,17 @@ from django.urls import reverse
 from django.utils.datetime_safe import date, datetime
 from pytz import timezone
 from DB.models import Lect, User, LectBoard, LectBoardType, LectEnrollment, LectAttendance
-from member.session import save_session
 from faker import Faker
 
 _TEST_TITLE = '빠르게 시작하는 파이썬*$%^'
 _TEST_LECTURE_CHIEF = User.objects.get(pk=12162359)
 _TEST_ASSIGNMENT_TITLE = '과제: 배그를 만들어 오시오#$%^&'
+
+
+def save_sesssion(self):
+    session = self.client.session
+    session["user_stu"] = _TEST_LECTURE_CHIEF.user_stu
+    session.save()
 
 
 def _test_data():
@@ -55,6 +60,7 @@ class LectBoardTest(TestCase):
 
     def test_response_200_for_main_view(self):
         lect_room = Lect.objects.get(lect_title=_TEST_TITLE)
+        save_sesssion(self)
         response = self.client.get(reverse('lect_room_main', kwargs={'room_no': lect_room.lect_no}))
 
         self.assertEqual(200, response.status_code)
@@ -62,6 +68,7 @@ class LectBoardTest(TestCase):
 
     def test_response_200_for_LectBoard_list_view(self):
         lect_room = Lect.objects.get(lect_title=_TEST_TITLE)
+        save_sesssion(self)
 
         for lect_board_type in range(1,4):
             response = self.client.get(
@@ -74,6 +81,7 @@ class LectBoardTest(TestCase):
     def test_response_200_for_LectBoard_detail_view(self):
         lect_room = Lect.objects.prefetch_related('lectures').get(lect_title=_TEST_TITLE)
         lect_board_list = lect_room.lectures.all()
+        save_sesssion(self)
 
         for i in lect_board_list:
             response = self.client.get(
@@ -108,6 +116,7 @@ class LectBoardTest(TestCase):
 
     def test_response_302_for_LectBoard_register(self):
         fake = Faker()
+        save_sesssion(self)
         session = self.client.session
         session["user_stu"] = _TEST_LECTURE_CHIEF.user_stu
         for i in range(1, 4):
@@ -125,9 +134,7 @@ class LectBoardTest(TestCase):
 
     def test_response_302_for_LectBoard_update(self):
         fake = Faker()
-        session = self.client.session
-        session["user_stu"] = _TEST_LECTURE_CHIEF.user_stu
-        session.save()
+        save_sesssion(self)
         lecture = Lect.objects.get(lect_title=_TEST_TITLE)
         for i in range(1, 4):
             board = LectBoard.objects.filter(lect_no=lecture, lect_board_type_id=i).first()
