@@ -88,6 +88,9 @@
                                         <li><a href="{% url 'bank_list' %}">회계내역</a></li>
                                         <li><a href="{% url 'bank_support_board' %}">예산지원신청</a></li>
                                     {% endif %}
+
+                                    <!-- 명예의 전달 누를 경우 url로 넘어간다. -->
+                                    <li><a href="#">명예의 전당</a></li>
                                 </ul>
                             </li>
                             <!--====================게시판을 상위메뉴로 가지고 있는 메뉴====================-->
@@ -111,6 +114,15 @@
                                     {% if is_superuser %}
                                         <li><a href="{% url 'lect_view' type_no=4 %}">강의개설신청</a></li>
                                     {% endif %}
+                                </ul>
+                            </li>
+                            <!--====================테스터를 상위메뉴로 가지고 있는 메뉴====================-->
+                            <li class="down active" style="padding-top: 7px"><a href="{% url 'lect_view' type_no=1 %}">테스터
+                                <i
+                                        class="fa fa-chevron-down"></i></a>
+                                <ul class="sub-menu">
+                                    <li><a href="#">알파 테스터</a></li>
+                                    <li><a href="#">베타 테스터</a></li>
                                 </ul>
                             </li>
                             <!--====================취미모임 메뉴====================-->
