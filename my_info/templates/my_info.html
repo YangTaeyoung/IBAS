@@ -389,7 +389,10 @@
                                                 <th scope="row">학년</th>
                                                 <!--Back : 자기 학년 뜨도록 수정-->
                                                 <td>{{ logined_user.user_grade }}학년</td>
-                                                <td></td>
+                                                <td>
+                                                    <a href="javascript:void(0);" data-toggle="modal"
+                                                       data-target="#grade_edit"><i class="la la-pencil"></i></a>
+                                                </td>
                                             </tr>
                                             <!--이메일-->
                                             <tr>
@@ -645,6 +648,43 @@
                             </div>
                         </div>
                         <!-- Modal End -->
+
+                        <!-- 이름 수정 Modal -->
+                        <div class="modal fade modal-bx-info modal-lg" id="grade_edit" tabindex="-1" role="dialog"
+                             aria-labelledby="ReportReviewsModalLongTitle" aria-hidden="true">
+                            <div class="modal-dialog " role="document">
+                                <div class="modal-content">
+                                    <!--제목부분-->
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="ReportReviewsModalLongTitle">학년수정</h5>
+                                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true"><i class="la la-close"></i></span>
+                                        </button>
+                                    </div>
+                                    <!--내용부분-->
+                                    <div class="modal-body">
+                                        <form id="form-user-update-request"
+                                              action="#" class="dlab-form"
+                                              method="post">
+                                            {% csrf_token %}
+                                                <select class="mb-4">
+                                                  <option>학년선택</option>
+                                                  <option>1학년</option>
+                                                  <option>2학년</option>
+                                                  <option>3학년</option>
+                                                  <option>4학년 이상</option>
+                                                  <option>졸업</option>
+                                                </select>
+                                            <a href="#" class="site-button"
+                                               style="display: grid; justify-items: center;"
+                                               onclick="alert('수정하시겠습니까?')">수정</a>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Modal End -->
+
                         <!-- 전공 검색 Modal -->
                         <div class="modal fade modal-bx-info modal-lg" id="search_major" tabindex="-2" role="dialog"
                              aria-labelledby="ReportReviewsModalLongTitle" aria-hidden="true" style="width: 100%">
