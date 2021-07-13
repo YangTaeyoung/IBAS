@@ -435,7 +435,8 @@ def lect_assignment_list(request, room_no):
 # 제출한 과제 보기
 def lect_assignment_detail(request, room_no, submit_no):
     lect_room = get_object_or_404(Lect, pk=room_no)
-    submitted_assignment = LectAssignmentSubmit.objects.prefetch_related('files').get(pk=submit_no)
+    submitted_assignment = LectAssignmentSubmit.objects.prefetch_related('files').select_related('assignment_no').get(
+        pk=submit_no)
     file_list, img_list, doc_list = FileController.get_images_and_files_of_(submitted_assignment)
 
     if request.method == "GET":
