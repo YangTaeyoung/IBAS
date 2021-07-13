@@ -74,9 +74,9 @@
                                                                     <td class="text-center">{{ row.submission.assignment_submit_created | date:"Y-m-d"}}</td>
                                                                     <!-- 과제 파일 : 1개만 보여주고, 그 이상은 (+n) 이렇게 숫자만 표현 -->
                                                                     <td class="align-middle"><a href="javascript:void(0);">
-                                                                        {% if row.submission.files|length %}
-                                                                            {{ row.submission.files.first }}&nbsp;&nbsp;
-                                                                            {% if row.submission.files|length > 2%}(+{{ row.submission.files|length |subtract:1 }}){% endif %}
+                                                                        {% if row.submission.files.all|length %}
+                                                                            {{ row.submission.files.first.file_name|truncate:25 }}&nbsp;&nbsp;
+                                                                            {% if row.submission.files.all|length > 1%}(+{{ row.submission.files.all|length |subtract:1 }}){% endif %}
                                                                         {% else %}-{% endif %}</a></td>
                                                                     <td class="font-12"><a href="{% url "lect_assignment_detail" lect.pk row.submission.pk %}">▶자세히</a></td>
 

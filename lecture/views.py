@@ -598,7 +598,6 @@ def lect_room_manage_assignment(request, room_no):
             'cur_assignment': None if assignment_no is None else LectBoard.objects.get(pk=assignment_no),
             'students_list': students_list,
             'lect_board_list': lect_room.lectures.filter(lect_board_type_id=2),
-            'any_assignnent': True if any_assignment else False
         }
 
         return render(request, 'lecture_room_manage_assignment.html', context)
