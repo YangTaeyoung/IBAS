@@ -437,20 +437,27 @@
                                             </tr>
                                             <!--아래 선 하나 더 보이게 추가한 곳-->
                                             <tr>
-{#                                                {% if is_superuser or is_cfo %}#}
-{#                                                    <td class="text-center" scope="row" colspan="3" style="color:gray;">#}
-{#                                                        회장단의 경우 권한이 이양되기 전까지 회원탈퇴를 할 수 없습니다. 회장에게 권한 이양을 요청하세요.#}
-{#                                                    </td>#}
-{#                                                {% else %}#}
-                                                    <th class="text-center" scope="row" colspan="3">
-                                                        <a class="btn btn-danger" href="javascript:void(0);"
-                                                           data-toggle="modal"
-                                                           data-target="#withdrawal">회원탈퇴</a>
-                                                    </th>
-{#                                                {% endif %}#}
+                                                <th></th>
+                                                <td></td>
+                                                <td></td>
                                             </tr>
                                             </tbody>
                                         </table>
+                                <!--회원탈퇴 버튼-->
+                                  {% if is_superuser or is_cfo %}
+                                                    <div class="clearfix text-center">
+                                                        <p class="my_info_modal_content"><i class="la la-check"></i>
+                                                        회장단의 경우 권한이 이양되기 전까지 회원탈퇴를 할 수 없습니다. 회장에게 권한 이양을 요청하세요</p>
+                                                    </div>
+                                                {% else %}
+                                                    <ol class="comment-list">
+                                                        <li class="comment">
+                                                            <div class="comment-body">
+                                                                <div class="reply"> <a href="javascript:void(0);" class="comment-reply-link" onclick="alert('정말 탈퇴하시겠습니까?')">회원탈퇴</a> </div>
+                                                            </div>
+                                                        </li>
+                                                    </ol>
+                                  {% endif %}
                                     </div>
                                 </div>
                                 <div class="content-box">
