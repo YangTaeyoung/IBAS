@@ -11,6 +11,7 @@ from lecture.forms import LectForm, LectRejectForm, LectPicForm, make_lect_board
 from pagination_handler import get_page_object
 from user_controller import get_logined_user, superuser_only, writer_only, auth_check, is_superuser, \
     is_logined
+from utils.crawler import get_og_tag
 
 
 def get_pol_name(method_no):
@@ -326,10 +327,9 @@ def lect_board_detail(request, room_no, board_no):
     context = {
         'lect': lect_room,
         'board': board,
-        'file_list': file_list,
-        'img_list': img_list,
-        'doc_list': doc_list,
+        'doc_list': file_list,
         'submitted_assignment': submitted_assignment,
+        'og': get_og_tag(board.lect_board_link) if board.lect_board_link else None
     }
     return render(request, 'lecture_room_board_detail.html', context)
 

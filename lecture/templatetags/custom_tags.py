@@ -23,3 +23,8 @@ def truncate(string, length):
     else:
         return string[:length] + '...'
 
+
+# url 표시할 때, http:// 이거 나오면 구려보여서 잘르기.
+@register.filter
+def url(url):
+    return url[url.find('w'):]

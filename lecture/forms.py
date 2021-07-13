@@ -1,8 +1,13 @@
+import re
+
 from django import forms
+from django.core.exceptions import ValidationError
+
 from DB.models import Lect, MethodInfo, LectBoard, LectBoardType, LectAssignmentSubmit
 from django.utils.translation import gettext_lazy as _
 from IBAS.forms import FileFormBase
 from user_controller import get_logined_user
+from utils.url_regex import *
 
 
 class LectForm(forms.ModelForm):
@@ -117,6 +122,17 @@ class LectBoardFormBase(forms.ModelForm):
             'lect_board_cont': _("내용"),
             'assignment_deadline': _("과제 마감일"),
         }
+
+    def clean_lect_board_link(self):
+        link = url_https(self.cleaned_data['lect_board_link'])
+        if link is not None:
+            reg = re.compile(url_regex)
+            if reg.match(link) is None:
+                raise ValidationError(
+                    code='invalid',
+                    message='잘못된 url 이 입력되었습니다! \n url=' + link
+                )
+        return link
 
     def save(self, **kwargs):
         lect_board = super().save(commit=False)
