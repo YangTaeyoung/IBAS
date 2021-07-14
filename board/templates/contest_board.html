@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load custom_tags %}
 {% block content %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/posting_list.css' %}">
     <div class="page-wraper">
@@ -93,7 +94,7 @@
                                                 <!-- 이미지를 클릭하면, 해당 게시글로 이동함 -->
                                                 <a href="{% url 'contest_detail' contest.contest_no %}">
 
-                                                    <img src="/media/{{ contest.contestfile_set.first.file_path }}"
+                                                    <img src="/media/{{ contest.files.all|get_first_img}}"
                                                          alt="이미지를 표시할 수 없습니다.">
                                                 </a>
                                             </div>

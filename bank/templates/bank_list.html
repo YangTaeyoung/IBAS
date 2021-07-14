@@ -208,7 +208,7 @@
 
                                             </div>
                                         <!-- 영수증 이미지 출력부 -->
-                                            {% for bank_file in bank.bankfile_set.all %}
+                                            {% for bank_file in bank.files.all %}
                                                 <div class="bank-image-flex">
                                                     <img src="/media/{{ bank_file.file_path }}"
                                                          alt="현재 브라우저에서 지원하지 않는 형식입니다.">
@@ -292,10 +292,10 @@
 
                                                  <!-- 첨부된 파일 불러오기 -->
                                                 <!-- 파일 리스트 길이가 0이 아닐 경우에만 파일 리스트를 출력하게 함. -->
-                                                {% if bank.bankfile_set.all %}
+                                                {% if bank.files.all %}
                                                     <div id="bank-update-file-parent" class="download-box mb-3"
                                                          style="font-size: 13px">
-                                                        {% for bank_file in bank.bankfile_set.all %}
+                                                        {% for bank_file in bank.files.all %}
                                                             <!-- 첨부파일 1 -->
                                                             <div id="bank-update-file-{{ bank_file.file_id }}">
                                                                  <i class="fa fa-download m-r15"></i>

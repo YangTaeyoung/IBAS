@@ -84,7 +84,7 @@ class BankForm(forms.ModelForm):
 
     def clean_bank_used(self):
         used_date = self.cleaned_data['bank_used']
-        if used_date > pytz.utc.localize(datetime.today()):
+        if pytz.utc.localize(used_date) > pytz.utc.localize(datetime.today()):
             raise ValidationError(
                 _('사용한 날짜를 정확히 입력해주세요!'),
                 code='invalid'

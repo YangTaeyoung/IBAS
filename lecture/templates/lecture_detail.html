@@ -192,7 +192,7 @@
                             <div class="content-body">
                                 <div class="form-group">
                                     <!--여기 뜨는 것은 작성자가 입력한 내용이 아닌, 작성자 개인정보에서 가져와서 뜨도록 수정-->
-                                    <a>{{ lect.lect_chief.user_email }}</a>
+                                    <a>{{ lect.lect_chief.useremail_set.first.user_email }}</a>
                                 </div>
                             </div>
                         </div>

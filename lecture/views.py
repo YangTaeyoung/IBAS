@@ -2,6 +2,7 @@ from django.db import transaction, connection
 from django.db.models import Q
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.utils.dateformat import DateFormat
+from alarm.alarm_controller import create_lect_full_alarm, create_lect_enroll_alarm
 
 from DB.models import LectType, Lect, LectDay, MethodInfo, LectBoard, LectEnrollment, LectAttendance, \
     LectAssignmentSubmit
@@ -33,7 +34,7 @@ def get_lect_list(request, type_no):
             "lectday_set", "enrolled_students")
     else:
         lect_list = Lect.objects.filter(Q(lect_type=LectType.objects.get(pk=1)) & Q(lect_state__state_no=1) | Q(
-            lect_state__state_no=2)).prefetch_related("lectday_set").prefetch_related("lectuser_set")
+            lect_state__state_no=2)).prefetch_related("lectday_set").prefetch_related("enrolled_students")
     return lect_list
 
 
@@ -90,7 +91,7 @@ def lect_detail(request, lect_no):
     context = {
         'lect': lect,
         'lect_day_list': lect_day_list,
-        'lect_user_num': LectEnrollment.objects.filter(lect_no=lect_no).count(),
+        'lect_user_num': len(LectEnrollment.objects.filter(lect_no=lect_no)),
         'is_in': LectEnrollment.objects.filter(student=get_logined_user(request), lect_no__lect_no=lect_no) is not None,
         'lect_reject_form': LectRejectForm(instance=lect),
     }
@@ -120,10 +121,11 @@ def lect_update(request, lect_no):
         lect_form = LectForm(request.POST)
         lect_pic_form = LectPicForm(request.POST, request.FILES)
         if lect_form.is_valid() and lect_pic_form.is_valid():
-            lect_form.update(instance=lect)
-            if lect_pic_form.has_changed():
-                FileController.delete_all_files_of_(lect)
-                lect_pic_form.save(instance=lect)
+            with transaction.atomic():
+                lect_form.update(instance=lect)
+                if lect_pic_form.has_changed():
+                    FileController.delete_all_files_of_(lect)
+                    lect_pic_form.save(instance=lect)
         return redirect("lect_detail", lect_no=lect.lect_no)
     else:  # 상세 페이지에서 수정 버튼을 눌렀을 때
         context = {
@@ -180,11 +182,12 @@ def lect_search(request, type_no):
 
 # 유저 강의 명단 등록 함수
 def lect_enroll(request, lect_no):
-    LectEnrollment.objects.create(
+    lect_enrollment = LectEnrollment.objects.create(
         lect_no=Lect.objects.get(pk=lect_no),
         student=get_logined_user(request),
-        )
-
+    )
+    create_lect_enroll_alarm(lect_enrollment)
+    create_lect_full_alarm(Lect.objects.get(pk=lect_no))
     # 강의실 메인 페이지로 리다이렉트
     return redirect('lect_room_main', room_no=lect_no)
 
@@ -291,7 +294,7 @@ def lect_board_register(request, room_no, board_type):
             'lect_board_form': make_lect_board_form(board_type),
             'file_form': FileForm(),
             'lect': lect_room,
-            'lect_board_list': lect_room.lectures.filter(lect_board_type_id=2),
+            'lect_board_list': lect_room.lectures.filter(lect_board_type_id=2) if board_type == 3 else None,
             'board_type': board_type
         }
         # 게시글 등록 페이지로 이동!
