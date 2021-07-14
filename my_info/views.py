@@ -1,11 +1,15 @@
 import os
 from django.shortcuts import render, redirect, reverse
-from DB.models import Board, User, Comment, Bank, UserUpdateRequest, UserEmail, StateInfo, MajorInfo
+from DB.models import Board, User, Comment, Bank, UserUpdateRequest, UserEmail, StateInfo, MajorInfo, UserDelete, \
+    ContestBoard, ContestComment, History, Answer, Lect, LectBoard, LectEnrollment, LectAttendance
 from django.db.models import Q
-from user_controller import get_logined_user, login_required, get_social_login_info
+from user_controller import get_logined_user, login_required, get_social_login_info, initialize_user, \
+    get_default_pic_path, is_default_pic, delete_all_infomation, delete_user
 from django.conf import settings
 from member.session import save_session
+from file_controller import FileController
 import hashlib
+from django.db import transaction
 
 
 def get_ecrypt_value(value: str):
@@ -17,8 +21,7 @@ def get_ecrypt_value(value: str):
 def my_info(request):  # 내 정보 출력
     context = {
         "my_board_list": Board.objects.filter(board_writer=get_logined_user(request)).order_by(
-            "board_type_no").order_by(
-            "-board_created"),
+            "board_type_no").order_by("-board_created"),
         "my_comment_list": Comment.objects.filter(comment_writer=get_logined_user(request)).order_by(
             "comment_board_no__board_type_no").order_by("-comment_created"),
         "my_wait_request": UserUpdateRequest.objects.filter(
@@ -66,14 +69,6 @@ def user_update_request_aor(request):
         user_update_request.save()
 
     return redirect(reverse("my_info"))
-
-
-def get_default_pic_path():
-    return "member/default/default.png"
-
-
-def is_default_pic(img_path):
-    return str(img_path) == get_default_pic_path()
 
 
 def user_pic_update(request):
@@ -155,3 +150,16 @@ def connect_social_account(request):
                          provider=social_dict.get("provider"))
             return redirect(reverse("my_info"))
     return redirect(reverse("index"))
+
+
+# 회원 탈퇴 시 실행되는 함수,.
+@login_required
+def withdrawal(request):
+    if request.method == "POST":
+        if bool(request.POST.get("agreement")):
+            if User.objects.get(pk=request.POST.get("user_stu")) == get_logined_user(request):
+                current_user = get_logined_user(request)
+                if delete_user(current_user):
+                    return redirect("logout")  # 최후의 로그아웃 (세션 제거용)
+    # 비정상적인 접근이거나(해킹 시도), 모종의 이유로 삭제되지 않은 경우
+    return redirect(reverse("my_info"))  # 내 정보 페이지로 이동.

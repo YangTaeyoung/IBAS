@@ -1,5 +1,6 @@
-from DB.models import Alarm, Comment, User
+from DB.models import Alarm, Comment, User, Lect, LectEnrollment, Board, UserDelete, Bank
 from django.shortcuts import resolve_url
+from django.db.models import Q
 
 
 # 대댓글 대상자에게 알람 보내는 함수
@@ -59,3 +60,73 @@ def create_user_auth_update_alarm(user: User, is_apply):
         alarm_link=resolve_url("my_info")
     )
     alarm.save()
+
+
+# 강의 등록이 가득 찼을 때 띄우는 알림
+def create_lect_full_alarm(lect: Lect):
+    if len(LectEnrollment.objects.filter(lect_no=lect)) == lect.lect_limit_num:
+        Alarm.objects.create(
+            alarm_user=lect.lect_chief,
+            alarm_cont="개설하신 " + lect.lect_title + lect.lect_type.type_name + "(이)가 가득 찼습니다.",
+            alarm_link=resolve_url("lect_detail", lect_no=lect.lect_no)
+        )
+
+
+# 강의 등록이 성공하였을 때 띄우는 알림(학생관점)
+def create_lect_enroll_alarm(lect_enroll: LectEnrollment):
+    Alarm.objects.create(
+        alarm_user=lect_enroll.student,
+        alarm_cont=lect_enroll.lect_no.lect_title + lect_enroll.lect_no.lect_type.type_name + "에 성공적으로 등록되었습니다.",
+        alarm_link=resolve_url("lect_detail", lect_no=lect_enroll.lect_no.lect_no)
+    )
+
+
+# 공지사항이 올라갈 시 전체 알림
+def create_board_notice_alarm(board: Board):
+    if board.board_type_no.board_type_no == 1:
+        user_list = User.objects.filter(~Q(user_stu=board.board_writer.user_stu))
+        for user in user_list:
+            Alarm.objects.create(
+                alarm_user=user,
+                alarm_cont="새로운 공지사항이 등록되었습니다.",
+                alarm_link=resolve_url("board_detail", board_no=board.board_no)
+            )
+
+
+# 제명 안건이 올라왔을 때
+def create_user_delete_alarm(user_delete: UserDelete):
+    Alarm.objects.create(
+        alarm_user=user_delete.deleted_user,
+        alarm_cont="귀하에게 제명 안건이 발안되었습니다.",
+        alarm_link=resolve_url("member_delete_detail", user_delete_no=user_delete.user_delete_no)
+    )
+
+    chief_list = User.objects.filter(Q(user_role__role_no__lte=4) & ~Q(user_stu=user_delete.deleted_user.user_stu) & ~Q(
+        user_stu=user_delete.suggest_user.user_stu))
+    for chief in chief_list:
+        Alarm.objects.create(
+            alarm_user=chief,
+            alarm_cont=user_delete.suggest_user.user_name + "님에게 제명안건이 발안되었습니다. 투표해주세요.",
+            alarm_link=resolve_url("member_delete_detail", user_delete_no=user_delete.user_delete_no)
+        )
+
+
+# 제명 안건이 가결되었을 때
+def create_finish_user_delete_alarm(user_delete: UserDelete):
+    Alarm.objects.create(
+        alarm_user=User.objects.filter(Q(user_role__role_no=1) & Q(user_auth__auth_no=1)).first(),
+        alarm_cont=user_delete.deleted_user.user_name + "님 앞으로 발안된 제명안건이 가결되었습니다. 제명 버튼이 활성화됩니다.",
+        alarm_link=resolve_url("member_delete_detail", user_delete_no=user_delete.user_delete_no)
+    )
+
+
+# 예산 지원신청을 넣었을 때
+def create_bank_alarm(bank: Bank):
+    cfo_list = User.objects.filter(user_role__role_no=4)
+    for cfo in cfo_list:
+        Alarm.objects.create(
+            alarm_user=cfo,
+            alarm_cont="새로운 예산 지원신청이 등록되었습니다.",
+            alarm_link=resolve_url("bank_support_detail", bank_no=bank.bank_no)
+        )
+

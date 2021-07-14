@@ -1,7 +1,12 @@
 import functools
-from django.shortcuts import redirect, reverse
-from DB.models import User, ContestBoard, Board, Bank, Lect, UserDelete, AuthUser
+from django.contrib import messages
+from django.shortcuts import redirect, reverse, render
+from DB.models import User, ContestBoard, Board, Bank, Lect, UserDelete, AuthUser, History, LectEnrollment, \
+    ContestComment, LectBoard, Answer, UserEmail, Comment, LectAssignmentSubmit
 from allauth.socialaccount.models import SocialAccount, SocialToken
+from file_controller import FileController
+from django.db.models import Q
+from django.db import transaction
 
 
 # 학교 아이디의 경우 이름/학과/학교 등으로 이름이 구성된 경우가 많음.
@@ -57,8 +62,9 @@ def is_writer(request, **kwargs):
     board_no = kwargs.get('board_no')
     contest_no = kwargs.get('contest_no')
     bank_no = kwargs.get('bank_no')
-    lect_no = kwargs.get('lect_no')
+    lect_no = kwargs.get('lect_no', kwargs.get('room_no'))
     user_delete_no = kwargs.get('user_delete_no')
+    assignment_submit_no = kwargs.get('assignment_submit_no')  # 수강생 과제 제출
 
     # comment_no = kwargs.get('comment_no')
 
@@ -70,6 +76,10 @@ def is_writer(request, **kwargs):
     elif contest_no is not None:
         contest = ContestBoard.objects.get(pk=contest_no)
         if current_user == contest.contest_writer:
+            return True
+    elif assignment_submit_no is not None:
+        assignment = LectAssignmentSubmit.objects.get(pk=assignment_submit_no)
+        if current_user == assignment.assignment_submitter:
             return True
     elif lect_no is not None:
         lect = Lect.objects.get(pk=lect_no)
@@ -118,6 +128,19 @@ def get_user_get(request):
     return User.objects.get(pk=request.GET.get("user_stu"))
 
 
+# 작성자: 유동현
+# 작성일시 : 2021.07.14
+# 잘못된 접근시 메인페이지로 이동시킴
+# msg 에 메세지를 적으면, 메인페이지에서 alert 창으로 경고를 띄움 (default msg = '접근 권한이 없습니다.')
+# 차라리 조용히 404 페이지를 띄워주는것도 좋을거같고..? => 해당 url 이 존재하는지 외부로부터 감출 수 있음
+def not_allowed(request, msg="접근 권한이 없습니다.", error_404=False):
+    if error_404:
+        return render(request, 'error-404.html')
+    else:
+        messages.warning(request, msg)  # 메인에서 alert 창 띄우기
+        return redirect(reverse("index"))
+
+
 # 데코레이터
 # 로그인 안한 유저가 접근시 메인페이지로 이동
 def login_required(func):
@@ -126,7 +149,7 @@ def login_required(func):
         if is_logined(request):
             return func(request, *args, **kwargs)
         else:
-            return redirect(reverse("index"))
+            return not_allowed(request, msg='로그인이 필요합니다!')
 
     return wrapper
 
@@ -151,7 +174,7 @@ def writer_only(superuser=False):
                 if is_writer(request, **kwargs):
                     return func(request, *args, **kwargs)
 
-            return redirect(reverse("index"))
+            return not_allowed(request)
 
         return wrapper
 
@@ -175,7 +198,7 @@ def superuser_only(cfo_included=False):
             if current_user.user_role.role_no <= flag:
                 return func(request, *args, **kwargs)
             else:
-                return redirect(reverse("index"))
+                return not_allowed(request)
 
         return wrapper
 
@@ -194,7 +217,7 @@ def cfo_only(func):
             return func(request, *args, **kwargs)
 
         else:
-            return redirect(reverse("index"))
+            return not_allowed(request, error_404=True)
 
     return wrapper
 
@@ -217,7 +240,7 @@ def auth_check(active=False):
             if boundary:
                 return func(request, *args, **kwargs)
             else:
-                return redirect(reverse("index"))
+                return not_allowed(request)
 
         return wrapper
 
@@ -240,8 +263,186 @@ def chief_only(vice=False):
             elif not vice and current_user.user_role.role_no == 1:
                 return func(request, *args, **kwargs)
             else:
-                return redirect(reverse("index"))
+                return not_allowed(request, error_404=True)
 
         return wrapper
 
     return decorator
+
+
+# 데코레이터
+# 제작일: 21.7.13
+# 제작자: 유동현
+# 용도: 강의 또는 스터디 구성원인지 확인하는 용도
+def member_only(func):
+    @login_required
+    @functools.wraps(func)
+    def wrapper(request, *args, **kwargs):
+        current_user = get_logined_user(request)
+        lect_room = Lect.objects.prefetch_related(
+            'enrolled_students').get(pk=kwargs.get('room_no', kwargs.get('lect_no')))
+        if current_user == lect_room.lect_chief:
+            return func(request, *args, **kwargs)
+        elif member := lect_room.enrolled_students.filter(lect_no=lect_room, student=current_user).first():
+            if member.status_id == 1:
+                return func(request, *args, **kwargs)
+
+        return not_allowed(request, msg='수강정지 되었거나, 접근할 수 없는 멤버입니다!')
+
+    return wrapper
+
+
+# 디폴트 프로필 사진의 경로를 얻어옴
+def get_default_pic_path():
+    return "member/default/default_profile.png"
+
+
+# 기존의 이미지 패스가 디폴트 패스인지 검사
+def is_default_pic(img_path):
+    return str(img_path) == get_default_pic_path()
+
+
+# # ------------ deprecated -------------
+# # 삭제 사유: 관리하기 불편함. is_related(user) 함수를 사용할 것.
+# # 활동 게시판과 유저가 관련되어 있는지 확인하는 함수
+# def is_activity_related(user: User):
+#     return len(Board.objects.filter(Q(board_writer=user) & Q(board_type_no__board_type_no=4))) != 0
+#
+#
+# # 공모전 게시판과 유저가 관련되어 있는지 확인하는 함수.
+# def is_contest_related(user: User):
+#     return len(ContestBoard.objects.filter(contest_writer=user)) != 0
+#
+#
+# # 회계와 관련되어있는지 확인하는 함수
+# def is_bank_related(user: User):
+#     return len(Bank.objects.filter(Q(bank_cfo=user) | Q(bank_used_user=user))) != 0
+#
+#
+# # 연혁과 관련되어있는지
+# def is_history_related(user: User):
+#     return len(History.objects.filter(history_writer=user)) != 0
+# ---------------------------------------
+
+
+# 초기화를 할지 삭제를 할 지 결정하는 함수
+def is_related(user: User):
+    # 활동 게시판이랑 관련이 있는가?
+    if len(Board.objects.filter(Q(board_writer=user) & Q(board_type_no__board_type_no=4))) != 0:
+        return True
+    # 공지 사항과 관련이 있는가?
+    if len(Board.objects.filter(Q(board_writer=user) & Q(board_type_no__board_type_no=1))) != 0:
+        return True
+    # 공모전 게시판이랑 관련이 있는가?
+    if len(ContestBoard.objects.filter(contest_writer=user)) != 0:
+        return True
+    # 예산 지원신청을 하였거나, 예산을 처리한 적이 있는가?
+    if len(Bank.objects.filter(Q(bank_cfo=user) | Q(bank_used_user=user))) != 0:
+        return True
+    # 연혁에 개입하였는가?
+    if len(History.objects.filter(history_writer=user)) != 0:
+        return True
+    return False
+
+
+# 최소한의 개인정보(학번, 유저 이름)만 남기고 모든 정보를 초기화시키는 함수.
+# IN: 초기화시킬 User 인스턴스
+# OUT: 초기화시킨 User 인스턴스
+def initialize_user(user: User):
+    user.user_auth = None
+    user.user_role = None
+    user.user_phone = None
+    user.user_major = None
+    user.user_gen = None
+    user.user_grade = None
+    user.user_pic = get_default_pic_path()
+    return user.save()
+
+
+# 계정 초기화를 하면 모든 게시글이 사라지지 않으므로 자신과 연관된 모든 데이터를 지우는 함수.
+def delete_all_infomation(user: User):
+    # 본인 게시글 삭제(단 활동 게시판의 게시글은 공익을 위한 게시글이므로 삭제되어선 안된다.)
+    my_board_list = Board.objects.filter(
+        Q(board_writer=user) & ~Q(board_type_no__board_type_no=4) & ~Q(board_type_no__board_type_no=1))
+    for my_board in my_board_list:
+        FileController.delete_all_files_of_(my_board)
+        my_board.delete()
+
+    # 본인 덧글 삭제
+    my_comment_list = Comment.objects.filter(
+        Q(comment_writer=user) | Q(comment_cont_ref__comment_writer=user))
+    for my_comment in my_comment_list:
+        my_comment.delete()
+
+    # ------------ deprecated -------------
+    # 삭제사유: 공모전 게시글은 공익을 위한 게시글이므로 삭제되어선 안된다.
+    # # 본인 공모전 글 삭제
+    # my_contest_list = ContestBoard.objects.filter(contest_writer=user)
+    # for my_contest in my_contest_list:
+    #     FileController.delete_all_files_of_(my_contest)
+    #     my_contest.delete()
+    # -------------------------------------
+
+    # 본인 공모전 덧글 삭제
+    my_contest_comment_list = ContestComment.objects.filter(
+        Q(comment_writer=user) | Q(comment_cont_ref__comment_writer=user))
+    for my_contest_comment in my_contest_comment_list:
+        my_contest_comment.delete()
+
+    # 본인이 제명 대상자로 있거나, 본인이 발안한 제명 안건 삭제
+    my_user_delete_list = UserDelete.objects.filter(
+        Q(suggest_user=user) | Q(deleted_user=user))
+    for my_user_delete in my_user_delete_list:
+        FileController.delete_all_files_of_(my_user_delete)
+        my_user_delete.delete()
+
+    # 본인이 작성한 강의실 게시글 삭제
+    my_lect_board_list = LectBoard.objects.filter(lect_board_writer=user)
+    for my_lect_board in my_lect_board_list:
+        FileController.delete_all_files_of_(my_lect_board)
+        my_lect_board.delete()
+
+    # 본인이 수강중인 강의 삭제
+    my_lect_enrollment_list = LectEnrollment.objects.filter(student=user)
+    for my_lect_enrollment in my_lect_enrollment_list:
+        my_lect_enrollment.delete()
+
+    # 본인이 개설한 강의/스터디/취미모임 삭제
+    my_lect_list = Lect.objects.filter(lect_chief=user)
+    for my_lect in my_lect_list:
+        FileController.delete_all_files_of_(my_lect)
+        my_lect.delete()
+
+    # 연동한 이메일 모두 삭제
+    my_email_list = User.objects.filter(user_stu=user)
+    for my_email in my_email_list:
+        my_email.delete()
+
+    # 가입 질문에 대한 답변 모두 삭제
+    my_answer_list = Answer.objects.filter(answer_user=user)
+    for my_answer in my_answer_list:
+        my_answer.delete()
+    # 본인 계정 프로필 사진 삭제
+    if not is_default_pic(str(user.user_pic)):
+        FileController.delete_all_files_of_(user)
+
+
+# 삭제 로직
+def delete_user(user: User):
+    if not user.user_role.role_no <= 4:
+        with transaction.atomic():
+            # 회계를 요청한 유저거나, 회계를 작성한 유저, 연혁을 작성한 유저, 활동 게시판 게시글을 작성한 유저,
+            # 공모전 게시판의 게시글을 작성한 유저의 경우 데이터 무결성을 위해 최소한의 개인정보 만을 남기고 초기화시킴
+            if is_related(user):
+                initialize_user(user)  # 유저 정보 초기화
+                delete_all_infomation(user)  # 유저의 게시글 및 흔적 모두 삭제
+            # 회계나 연혁에 관련 없는 계정의 경우 DB에서 계정 완전 삭제
+            else:
+                if not is_default_pic(str(user.user_pic)):  # 프로필 사진인 디폴트 사진이 아닌 경우
+                    FileController.delete_all_files_of_(user)  # 데이터 베이스에서 삭제함
+                user.delete()
+                return True
+    return False
+
+
+

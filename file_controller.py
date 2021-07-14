@@ -1,15 +1,23 @@
 import shutil
-from DB.models import Board, BoardFile, ContestBoard, ContestFile, Lect, Bank, BankFile,UserDelete,UserDeleteFile
+from DB.models import Board, BoardFile, ContestBoard, ContestFile, Lect, Bank, BankFile, UserDelete, UserDeleteFile, \
+    LectBoard, LectBoardFile, LectAssignmentSubmit, LectAssignmentSubmittedFile
 import os
 from IBAS.settings import MEDIA_ROOT
 from django.conf import settings
 
+# (21/07/09) 업데이트
+# File_of_[type(instance)] => 해당 파일 매칭!
+#  뱅크 인스턴스면 뱅크 파일, 게시판 인스턴스면 게시글 파일
+File_of_ = {
+    Bank: BankFile,
+    Board: BoardFile,
+    ContestBoard: ContestFile,
+    LectBoard: LectBoardFile,
+    UserDelete: UserDeleteFile,
+    LectAssignmentSubmit: LectAssignmentSubmittedFile,
+}
 
-# 1. 파일 폼이 여기 있기 때문에, 파일 컨트롤러도 여기 있는게 좋지 않을까요..?
-# 2. 클래스로 선언하는게 더 좋을 듯??
-#       다른 곳에서 FileBaseForm 을 상속받아 정의할 때, 파일 컨트롤러를 사용한다면,
-#       FileController.is_image() 처럼 사용할텐데,
-#       위처럼 사용하는게, 단순히 is_image() 로 사용하는 것보다 출처가 명확하게 표현되는 장점이 있을듯
+
 class FileController:
     # 이미지인지 확인하는 함수. 파라미터(파일 경로)
     @staticmethod
@@ -52,40 +60,25 @@ class FileController:
     # OUTPUT : 없음
     # RETURN : tuple type / (게시글전체파일 리스트,게시글이미지파일 리스트,게시글문서파일 리스트)
     # :
-    # 마지막 수정 일시 : 2021.04.13
+    # 마지막 수정 일시 : 2021.07.09
     # 작성자 : 유동현
     @staticmethod
     def get_images_and_files_of_(object):
-        image_list = []
-        doc_list = []
+        image_list, doc_list, files = [], [], []
 
-        files = set()  # 쿼리셋을 담기 위한 empty Set 생성
-        try:
-            # Board 객체
-            if isinstance(object, Board):
-                files = BoardFile.objects.filter(board_no=object.board_no)
-            # ContestBoard 객체
-            elif isinstance(object, ContestBoard):
-                files = ContestFile.objects.filter(contest_no=object.contest_no)
-            elif isinstance(object, UserDelete):
-                files = UserDeleteFile.objects.filter(user_delete_no=object.user_delete_no)
-            else:  # 객체가 잘못 전달된 경우
-                raise Exception
+        # (21/07/09) 업데이트
+        files = object.files.all()  # models.py 에서 file_fk = models.FileField(,,,related_name='files') 로 설정해야함!!
 
-            # 파일을 이미지 파일과 일반 문서 따로 분리
-            for file in files:
-                if FileController.is_image(file.file_path):
-                    image_list.append(file)
-                else:
-                    doc_list.append(file)
+        # 파일을 이미지 파일과 일반 문서 따로 분리
+        for file in files:
+            if FileController.is_image(file.file_path):
+                image_list.append(file)
+            else:
+                doc_list.append(file)
 
-            return files, image_list, doc_list
+        return files, image_list, doc_list
 
-        # 잘못된 객체가 전달될 경우
-        except Exception as error:
-            print(error)  # LOGGING :: 로그 파일 생성하는 코드 나중에 수정해야 함.
-
-    # ---- delete_all_files_of_ ---- #
+    # ---- remove_files_by_user ---- #
     # INPUT : HttpRequest 객체, File 객체 리스트
     # OUTPUT : 없음
     # RETURN : 없음
@@ -126,43 +119,19 @@ class FileController:
     # OUTPUT : 없음
     # RETURN : 없음
     # : 새로 입력받은 파일들을 업로드
-    # 마지막 수정 일시 : 2021.04.30
+    # 마지막 수정 일시 : 2021.07.09
     # 작성자 : 유동현
     @staticmethod
     def upload_new_files(files_to_upload, instance):
         # 새로 사용자가 파일을 첨부한 경우
         # files_to_upload : InMemoryUploadedFile 객체 리스트를 넘겨 받는다.
         #                   파일 폼에서 save() 할 때 이 함수를 호출!
-        if isinstance(instance, ContestBoard):
-            for file in files_to_upload:  # 각각의 파일을 InMemoryUploadedFile 객체로 받아옴
-                ContestFile.objects.create(
-                    contest_no=ContestBoard.objects.get(pk=instance.contest_no),
-                    file_path=file,  # uploadedFile 객체를 imageField 객체 할당
-                    file_name=file.name.replace(' ', '_')  # imageField 객체에 의해 파일 이름 공백이 '_'로 치환되어 서버 저장
-                    # 따라서 db 에도 이름 공백을 '_'로 치환하여 저장
-                )
-        elif isinstance(instance, Board):
-            for file in files_to_upload:
-                BoardFile.objects.create(
-                    board_no=Board.objects.get(pk=instance.board_no),
-                    file_path=file,  # uploadedFile 객체를 imageField 객체 할당
-                    file_name=file.name.replace(' ', '_')  # imageField 객체에 의해 파일 이름 공백이 '_'로 치환되어 서버 저장
-                    # 따라서 db 에도 이름 공백을 '_'로 치환하여 저장
-                )
-        elif isinstance(instance, Bank):
-            for file in files_to_upload:
-                BankFile.objects.create(
-                    bank_no=Bank.objects.get(pk=instance.bank_no),
-                    file_path=file,
-                    file_name=file.name.replace(' ', '_')
-                )
 
-        elif isinstance(instance, UserDelete):
-            for file in files_to_upload:
-                print(instance.user_delete_no)
-                print(UserDelete.objects.get(pk=instance.user_delete_no))
-                UserDeleteFile.objects.create(
-                    user_delete_no=UserDelete.objects.get(pk=instance.user_delete_no),
-                    file_path=file,
-                    file_name=file.name.replace(' ', '_')
-                )
+        # (21/07/09) 업데이트
+        for file in files_to_upload:
+            File_of_[type(instance)].objects.create(  # 각각의 파일을 InMemoryUploadedFile 객체로 받아옴
+                file_fk=instance,
+                file_path=file,  # uploadedFile 객체를 imageField 객체 할당
+                file_name=file.name.replace(' ', '_')  # imageField 객체에 의해 파일 이름 공백이 '_'로 치환되어 서버 저장
+                # 따라서 db 에도 이름 공백을 '_'로 치환하여 저장
+            )

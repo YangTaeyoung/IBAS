@@ -1,0 +1,50 @@
+
+    <!-- 강의룸 내 페이지 리스트 -->
+    <!-- 클릭한 게시글을 끌고옴 -->
+    <div class="listing-filter-sidebar">
+        <h4 class="title">{% if lect.lect_type_id == 1 %}강의실{% else %}스터디{% endif %}</h4>
+        <div class="widget_tag">
+            <ul class="m-b0">
+                <!-- [메뉴바 > 강의실 > 강의] 게시판 내 강의소개 페이지로 이동 -->
+                <li><a href="{% url "lect_room_main" lect.lect_no %}">{% if lect.lect_type_id == 1 %}강의실 홈{% else %}스터디 홈{% endif %}</a>&nbsp;</li>
+                <!-- 공지사항, 강의, 과제, 제출된 과제 페이지들은 모두 동일한 레이아웃임 -->
+                <!-- 다만 과제 페이지의 경우 강의자, 수강생 별 보이는 게 다르게끔 세션처리 필요 (해당 게시판 주석 참조) -->
+                <!-- 강의자, 수강생 모두 모이는 메뉴: 공지사항, 강의, 과제 -->
+                <li><a href={% url 'lect_room_list' lect.lect_no 1 %}>공지사항</a>&nbsp;</li>
+                <li><a href={% url 'lect_room_list' lect.lect_no 2 %}>{{ lect.lect_type.type_name }} 목록</a>&nbsp;</li>
+                <li><a href={% url 'lect_room_list' lect.lect_no 3 %}>과제 목록</a>&nbsp;</li>
+            </ul>
+        </div>
+    </div>
+
+
+    {% if logined_user == lect.lect_chief %}
+        <!-- 강의자 메뉴 -->
+        <div style="margin: 10px"></div>
+        <div class="listing-filter-sidebar">
+            <h4 class="title">
+                {% if lect.lect_type_id == 1 %}강의자 메뉴{% else %}스터디장 메뉴{% endif %}
+            </h4>
+            <div class="widget_tag">
+                <ul class="m-b0">
+                    <!-- 강의자만 보이는 메뉴-->
+                    <li><a href="{% url "lect_room_manage_attendance" lect.lect_no %}">출석 관리</a>&nbsp;</li>
+                    <li><a href="{% url "lect_room_manage_assignment" lect.lect_no %}">과제 관리</a>&nbsp;</li>
+                    <li><a href="{% url "lect_room_manage_member" lect.lect_no %}">{% if lect.lect_type_id == 1 %}수강생 관리{% else %}스터디원 관리{% endif %}</a>&nbsp;</li>
+                </ul>
+            </div>
+        </div>
+    {% else %}
+        <!-- 수강자 메뉴 -->
+        <div style="margin: 10px"></div>
+        <div class="listing-filter-sidebar">
+            <h4 class="title">내 정보</h4>
+            <div class="widget_tag">
+                <ul class="m-b0">
+                    <!-- 수강자만 보이는 메뉴 -->
+                    <li><a href="{% url "lect_room_student_status" lect.lect_no %}">출석 및 과제 현황</a>&nbsp;</li>
+                    <li><a href="{% url "lect_assignment_list" lect.lect_no %}">내가 제출한 과제 보기</a>&nbsp;</li>
+                </ul>
+            </div>
+        </div>
+    {% endif %}

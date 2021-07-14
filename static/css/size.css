@@ -58,6 +58,10 @@
     width: 400px;
 }
 
+.height-30{
+    height: 30px;
+}
+
 .width-430{
     width: 430px;
 }
@@ -68,10 +72,6 @@
 
 .width-870{
     width: 870px;
-}
-
-.height-30{
-    height: 30px;
 }
 
 .height-200{

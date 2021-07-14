@@ -1,10 +1,10 @@
 {% extends "base.html" %}
+{% load custom_tags %}
 {% load static %}
 {% block content %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/posting_detail.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/comment.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/size.css' %}">
-    <script src="{% static 'js/jquery.min.js' %}"></script><!-- JQUERY.MIN JS -->
     <script src="{% static 'js/comment.js' %}"></script>
     <!--코드 뷰어 스크립트-->
     <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?skin=desert"></script>
@@ -16,13 +16,6 @@
         }
 
     </script>
-
-    <!-- 썸네일 -->
-    <meta property="og:url" content="https://meet.google.com/wsk-mbxm-vgw">
-    <meta property="og:title" content="Google Meet">
-    <meta property="og:type" content="website">
-    <meta property="og:image" content=url('{% static 'images/thumbnail/google_meet.png' %}')>
-    <meta property="og:description" content="파이썬 기초 강의">
 
     <div class="page-wraper">
 
@@ -54,7 +47,7 @@
                             <!--========== 왼쪽 강의룸 네비게이션바 시작 ==========-->
                             <div class="col-lg-3 col-xl-3">
                                 <div class="sticky-top">
-                                    {% include "navigation_bar.html" %}
+                                    {% include "_navigation_bar.html" %}
                                 </div>
                             </div>
                             <!--========== 왼쪽 강의룸 네비게이션바 끝 ==========-->
@@ -84,32 +77,13 @@
 
 
                                     <!--=======================강의 링크============================-->
-                                    <div class="alert alert-light m-b0" role="alert">
-                                        <div class="m-l10">
-                                            강의 링크:
-                                            <a href="https://www.youtube.com/watch?v=cbuZfY2S2UQ" class="alert-link">{{ board.lect_board_link }}</a>
-                                        </div>
-                                    </div>
-
-                                    <!--============================== 게시글 본문 시작 ==============================-->
-                                    <div class="dlab-post-text">
+                                    {% if youtube %}
                                         {% autoescape off %}
-                                            {{ board.lect_board_cont }}
+                                            {{ youtube }}
                                         {% endautoescape %}
-
-                                    <!--============================== 게시글 본문 시작 ==============================-->
-                                    <div class="dlab-post-text">
-                                        <!-- 본문 입력 내용 -->
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                                        nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                                        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                                        fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                                        culpa qui officia deserunt mollit anim id est laborum.
-
-                                        <!-- 강의가 구글미트로 실시될 때  -->
+                                    {% elif og %}
                                         <div class="clear m-t50 category-bx" id="comment-list">
-                                            <a href="#" class="comments-area" id="comments">
+                                            <a href="{{ og.url }}" class="comments-area" id="comments" target="_blank">
                                                 <div class="clearfix">
                                                     <ol class="comment-list">
                                                         <li class="comment">
@@ -120,16 +94,16 @@
                                                                     <div style="display: inline-block;" class="m-r20">
                                                                         <img
                                                                                 class="photo width-100"
-                                                                                src="{% static 'images/thumbnail/google_meet.png' %}"
+                                                                                src="{{ og.image }}"
                                                                                 alt="">
                                                                     </div>
                                                                     <!-- 강의 내용 -->
                                                                     <div style="display:inline-block;">
-                                                                        <cite class="fn m-l10">파이썬 기초 강의
+                                                                        <cite class="fn m-l10">{{ board.lect_board_title }}
                                                                             <div class="comment-meta">
-                                                                                <p>Google Meet</p>
+                                                                                <p>{{ og.title }}</p>
                                                                             </div>
-                                                                            <p>https://meet.google.com/wsk-mbxm-vgw</p>
+                                                                            <p>{{ og.url }}</p>
                                                                         </cite>
                                                                     </div>
                                                                 </div>
@@ -138,92 +112,10 @@
                                                     </ol>
                                                 </div>
                                             </a>
-
-                                            <!-- 강의가 줌으로 시행될 때 -->
-                                            <a href="#" class="clear m-t50" id="comment-list">
-                                                <div class="comments-area" id="comments">
-                                                    <div class="clearfix">
-                                                        <ol class="comment-list">
-                                                            <li class="comment">
-                                                                <div class="comment-body lectRoom_meeting">
-                                                                    <div class="comment-author vcard mb-0"
-                                                                         style="display: flex">
-                                                                        <!-- 사진 -->
-                                                                        <div style="display: inline-block;"
-                                                                             class="m-r20"><img
-                                                                                class="photo width-100"
-                                                                                src="{% static 'images/thumbnail/zoom.png' %}"
-                                                                                alt="">
-                                                                        </div>
-                                                                        <!-- 강의 내용 -->
-                                                                        <div style="display:inline-block;">
-                                                                            <cite class="fn m-l10">파이썬 기초 강의
-
-                                                                                <div class="comment-meta">
-                                                                                    <p>zoom</p>
-                                                                                </div>
-
-                                                                                <p>미팅 ID: 864-7938-8315</p>
-                                                                            </cite>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </li>
-                                                        </ol>
-                                                    </div>
-                                                </div>
-                                            </a>
-
-                                            <!-- 강의가 다른 앱으로 시행될 때 -->
-                                            <a href="#" class="clear m-t50" id="comment-list">
-                                                <div class="comments-area" id="comments">
-                                                    <div class="clearfix">
-                                                        <ol class="comment-list">
-                                                            <li class="comment">
-                                                                <div class="comment-body lectRoom_meeting">
-                                                                    <div class="comment-author vcard mb-0"
-                                                                         style="display: flex">
-                                                                        <!-- 사진 -->
-                                                                        <div class="m-r20 lectRoom_center"><img
-                                                                                class="photo width-100"
-                                                                                src="{% static 'images/logo_puple.png' %}"
-                                                                                alt="">
-                                                                        </div>
-                                                                        <!-- 강의 내용 -->
-                                                                        <div style="display:inline-block;">
-                                                                            <cite class="fn m-l10">파이썬 기초 강의
-
-                                                                                <div class="comment-meta">
-                                                                                    <p>회의 바로가기</p>
-                                                                                </div>
-
-                                                                                <p>http://localhost:8000/lect/room/detail</p>
-                                                                            </cite>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </li>
-                                                        </ol>
-                                                    </div>
-                                                </div>
-                                            </a>
-
-                                            <!-- 유튜브 영상은 바로 나오게 -->
-                                            <iframe class="m-t50" width="560" height="315"
-                                                    src="https://www.youtube.com/embed/4TWR90KJl84"
-                                                    title="YouTube video player" frameborder="0"
-                                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                                    allowfullscreen></iframe>
                                         </div>
-
-
-                                    <!--=======================강의 링크============================-->
-                                    <div class="alert alert-light m-b0" role="alert">
-                                        <div class="m-l10">
-                                            강의 링크:
-                                            <a href="https://www.youtube.com/watch?v=cbuZfY2S2UQ" class="alert-link">{{ board.lect_board_link }}</a>
-                                        </div>
-                                    </div>
+                                    {% elif board.lect_board_link %}
+                                        강의링크 : <a href="{{ board.lect_board_link }}" target="_blank">{{ board.lect_board_link|url }}</a>
+                                    {% endif %}
 
                                     <!--============================== 게시글 본문 시작 ==============================-->
                                     <div class="dlab-post-text">
@@ -231,303 +123,69 @@
                                             {{ board.lect_board_cont }}
                                         {% endautoescape %}
 
+                                    <!-- 코드 뷰 -->
+                                    {% for code_file in code_files %}
+                                        <pre class="prettyprint" style="overflow-x: auto; border-radius: 10px">"{{ code_file.file_name }}"<br><br>{{ code_file.code }}</pre>
+                                    {% endfor %}
 
-                                        <!-- 첨부된 파일 불러오는 곳 -->
-                                        <!-- download 쪽에 파일 경로 설정 -->
-                                        <!-- 파일 리스트 길이가 0이 아닐 경우에만 파일 리스트를 출력하게 함. -->
-                                        <div class="download-box">
-                                            <!-- 첨부파일 1 -->
-                                             <i class="fa fa-download m-r15 "></i><a class="line2" download
-                                                                                     href="/"></a>
-                                            <!-- 파일 간 구분선 마지막 파일은 구분선을 출력하지 않도록 설정.-->
-                                        </div>
-                                        <!-- 게시글 속 사진 모음 -->
-                                        <div class="widget widget_gallery gallery-grid-4 lightgallery">
-                                            <ul>
-                                                {#                                                {% for  in  %}#}
-                                                {% if forloop.counter < 4 %}
-                                                    <li>
-                                                            <span data-exthumbimage="/media/"
-                                                                  data-src="/media/"
-                                                                  class="check-km "
-                                                                  title="">
-                                                                <a href="javascript:void(0);">
-                                                                    <div class="dlab-post-thum act-detail-img-size">
-                                                                        <img style="height: 190px"
-                                                                             src="/media/"
-                                                                             alt=""/>
-                                                                    </div>
-                                                                </a>
-                                                            </span>
-                                                    </li>
-                                                {% elif forloop.counter == 4 %}
-                                                    <li>
-                                                            <span data-exthumbimage="/media/"
-                                                                  data-src="/media/"
-                                                                  class="check-km act-detail-img-siz"
-                                                                  title="">
-                                                                <a href="javascript:void(0);">
-                                                                    <div class="dlab-post-thum "><img
-                                                                            style="height: 190px"
-                                                                            src="/media/"
-                                                                            alt=""></div>
-                                                                    {% if forloop.revcounter0 > 0 %}
-                                                                        <!-- 사용자가 업로드한 사진이 딱 4개인 경우 남은 이미지 개수를 출력하지 않음.-->
-                                                                        <div class="more-images">
-                                                                            <div>
-                                                                                <strong></strong>
-                                                                                <span>More Images</span>
-                                                                            </div>
-                                                                        </div>
-                                                                    {% endif %}
-                                                                </a>
-                                                            </span>
-                                                    </li>
+
+
+                                    {% include "file_detail.html" %}
+
+                                    <!-- 게시글 삭제 및 수정 div -->
+                                    <div class="extra-cell text-right">
+
+                                        <!-- 관련자만 보이게 처리 -->
+                                        {% if logined_user == board.lect_board_writer or logined_user == lect.lect_chief %}
+
+                                                <!-- 게시글 수정 버튼 -->
+                                                <form method="get"
+                                                      action="{% url "lect_board_update" lect.pk board.pk %}">
+                                                    {% csrf_token %}
+                                                    <button class="site-button radius-xl m-l10" type="submit">
+                                                            <i class="fa fa-pencil m-r5"></i>게시글 수정
+                                                    </button>
+                                                </form>
+
+                                                <!-- 게시글 삭제 버튼 -->
+                                                <form method="get"
+                                                      action="{% url "lect_board_delete" lect.pk board.pk %}">
+                                                    {% csrf_token %}
+                                                    <button class="site-button red radius-xl m-l10" type="submit">
+                                                            <i class="fa fa-trash m-r5"></i>게시글 삭제
+                                                    </button>
+                                                </form>
+
+                                        {% endif %}
+
+                                        <!-- 수강생만 보임 -->
+                                        {% if logined_user != board.lect_board_writer and board.lect_board_type_id == 3  %}
+
+                                            {% if not submitted_assignment %}
+                                                <!-- 제출된 과제가 없는 경우 -->
+
+                                                {% if board.is_expired %}
+                                                    <!-- 제출된 과제가 없는데, 과제 제출 안한 경우, 얄짤없음. -->
+                                                    과제 제출 기간이 아닙니다
+
                                                 {% else %}
-                                                    <li style="display: none;">
-                                                            <span data-exthumbimage="/media/"
-                                                                  data-src="/media/"
-                                                                  class="check-km "
-                                                                  title="">
-                                                                <a href="javascript:void(0);">
-                                                                    <div class="dlab-post-thum act-detail-img-size">
-                                                                        <img style="height: 190px"
-                                                                             src="/media/"
-                                                                             alt=""/>
-                                                                    </div>
-                                                                </a>
-                                                            </span>
-                                                    </li>
+                                                    <!-- 제출된 과제가 없으면, 과제 제출 버튼 -->
+                                                    <form method="get" action="{% url "lect_assignment_submit" lect.lect_no %}">
+                                                        {% csrf_token %}
+                                                        <button class="site-button radius-xl m-l10" type="submit">
+                                                              <i class="fa fa-pencil m-r5"></i>과제 제출
+                                                        </button>
+                                                        <input type="hidden" name="lect_board_no" value="{{ board.lect_board_no }}">
+                                                    </form>
                                                 {% endif %}
-                                                {#                                                {% endfor %}#}
-                                            </ul>
-                                        </div>
-                                    </div>
 
-                                    <!--=======================과제가 없을 때 나오는 알람============================-->
-                                    <div class="alert alert-light d-flex align-items-center" role="alert">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                             fill="currentColor"
-                                             class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2"
-                                             viewBox="0 0 16 16" role="img" aria-label="Warning:">
-                                            <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
-                                        </svg>
-                                        <div class="m-l10">
-                                            이번 강의는 과제가 존재하지 않습니다.
-                                        </div>
-                                    </div>
+                                            {% else %}
 
-                                    <!--=======================과제가 있을 때 보이는 박스============================-->
-                                    <div class="content-box">
-                                        <!-- 박스 윗 부분 -->
+                                                <!-- 제출된 과제가 있으면, 과제 보는 링크 -->
+                                                <a href="{% url "lect_assignment_detail" lect.pk submitted_assignment.pk %}">
+                                                    <i class="fa fa-arrow-right m-r5"></i>제출한 과제 보기</a>
 
-                                        <div class="content-header">
-                                            <!-- 강의자가 게시글 썼을 경우 보임. -->
-                                            <h3 class="title">
-                                                <i data-toggle="tooltip" data-placement="top"
-                                                   class="tooltip-bx fa fa-tasks mr-3"></i>
-                                                과제
-                                            </h3>
-
-                                            <!-- 학생이 게시글 썼을 경우 보임. -->
-                                            <h3 class="title">
-                                                <i data-toggle="tooltip" data-placement="top"
-                                                   class="tooltip-bx fa fa-code mr-3"></i>
-                                                제출된 과제물
-                                            </h3>
-                                        </div>
-
-                                        <!--=====================박스 내용 부분=======================-->
-                                        <div class="content-body">
-                                            <div class="form-group">
-                                                <!--=====================코드 테스트 박스=======================-->
-                                                <div class="dlab-post-text">Lorem ipsum dolor sit amet,
-                                                    consectetur adipiscing elit, sed do eiusmod tempor
-                                                    incididunt ut labore et dolore magna aliqua. Ut enim ad
-                                                    minim veniam, quis
-                                                    nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                                                    commodo consequat.
-                                                    Duis aute irure dolor in reprehenderit in voluptate velit
-                                                    esse cillum dolore eu
-                                                    fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                                    proident, sunt in
-                                                    culpa qui officia deserunt mollit anim id est laborum.
-                                                </div>
-                                                <pre class="prettyprint"
-                                                     style="overflow-x: auto; border-radius: 10px">
-def lect_view(request, type_no):  # 게시판 페이지로 이동
-    lect_type = LectType.objects.get(pk=type_no)
-
-
-                                    <!--===<<강의자>> 수강생의 과제 제출을 보고 승인, 기각을 결졍할 수 있음.===-->
-                                    <div class="d-flex justify-content-center m-b40">
-                                        <button type="button" class="btn btn-outline-success btn-lg"
-                                                style="width: 200px; font-weight: bold"
-                                                onclick="goApply()">
-                                            승인
-                                        </button>
-
-
-                                        <button type="button" class="btn btn-outline-danger btn-lg"
-                                                style="width: 200px; margin-left: 10px; font-weight: bold"
-                                                onclick="return confirm('과제제출을 기각하시겠습니까?')"
-                                                href="javascript:void(0);" data-toggle="modal" data-target="#favorite"
-                                                class="site-button gray">
-                                            기각
-                                        </button>
-    # 회장단에 의해 승인된 강의만 등록, 스터디는 등록 시 이미 승인.
-    lect_list = get_page_object(request, Lect.objects.filter(
-        Q(lect_type=lect_type) & Q(lect_state__state_no=3)).prefetch_related(
-        "lectday_set").prefetch_related("lectuser_set"))
-    context = {
-        "type": lect_type,
-        "lecture": LectType.objects.get(pk=1),
-        "lect_list": lect_list
-    }
-    return render(request, 'lecture_list.html', context)
-                                                    </pre>
-
-                                                <!-- 첨부된 파일 불러오는 곳 -->
-                                                <!-- download 쪽에 파일 경로 설정 -->
-                                                <!-- 파일 리스트 길이가 0이 아닐 경우에만 파일 리스트를 출력하게 함. -->
-                                                {#                                        {% if file_list %}#}
-                                                <div class="download-box">
-                                                    {#                                                {% for board_file in file_list %}#}
-                                                    <!-- 첨부파일 1 -->
-                                                     <i class="fa fa-download m-r15 "></i><a class="line2" download
-                                                                                             href="/"></a>
-                                                    <!-- 파일 간 구분선 마지막 파일은 구분선을 출력하지 않도록 설정.-->
-                                                    {% if forloop.revcounter0 != 0 %}
-                                                        <div class="dlab-divider tb10 bg-gray-dark"></div>
-                                                    {% endif %}
-                                                    {#                                                {% endfor %}#}
-                                                </div>
-                                                {#                                        {% endif %}#}
-                                                <!-- 게시글 속 사진 모음 -->
-                                                <div class="widget widget_gallery gallery-grid-4 lightgallery">
-                                                    <ul>
-                                                        {#                                                        {% for  in  %}#}
-                                                        {% if forloop.counter < 4 %}
-                                                            <li>
-                                                            <span data-exthumbimage="/media/"
-                                                                  data-src="/media/"
-                                                                  class="check-km "
-                                                                  title="">
-                                                                <a href="javascript:void(0);">
-                                                                    <div class="dlab-post-thum act-detail-img-size">
-                                                                        <img style="height: 190px"
-                                                                             src="/media/"
-                                                                             alt=""/>
-                                                                    </div>
-                                                                </a>
-                                                            </span>
-                                                            </li>
-                                                        {% elif forloop.counter == 4 %}
-                                                            <li>
-                                                            <span data-exthumbimage="/media/"
-                                                                  data-src="/media/"
-                                                                  class="check-km act-detail-img-siz"
-                                                                  title="">
-                                                                <a href="javascript:void(0);">
-                                                                    <div class="dlab-post-thum "><img
-                                                                            style="height: 190px"
-                                                                            src="/media/"
-                                                                            alt=""></div>
-                                                                    {% if forloop.revcounter0 > 0 %}
-                                                                        <!-- 사용자가 업로드한 사진이 딱 4개인 경우 남은 이미지 개수를 출력하지 않음.-->
-                                                                        <div class="more-images">
-                                                                            <div>
-                                                                                <strong>{{ forloop.revcounter0 }}</strong>
-                                                                                <span>More Images</span>
-                                                                            </div>
-                                                                        </div>
-                                                                    {% endif %}
-                                                                </a>
-                                                            </span>
-                                                            </li>
-                                                        {% else %}
-                                                            <li style="display: none;">
-                                                            <span data-exthumbimage="/media/"
-                                                                  data-src="/media/"
-                                                                  class="check-km "
-                                                                  title="">
-                                                                <a href="javascript:void(0);">
-                                                                    <div class="dlab-post-thum act-detail-img-size">
-                                                                        <img style="height: 190px"
-                                                                             src="/media/"
-                                                                             alt=""/>
-                                                                    </div>
-                                                                </a>
-                                                            </span>
-                                                            </li>
-                                                        {% endif %}
-                                                        {#                                                        {% endfor %}#}
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    <!--===<<강의자>> 수강생의 과제 제출을 보고 승인, 기각을 결졍할 수 있음.===-->
-                                    <div class="d-flex justify-content-center m-b40">
-                                        <button type="button" class="btn btn-outline-success btn-lg"
-                                                style="width: 200px; font-weight: bold"
-                                                onclick="goApply()">
-                                            승인
-                                        </button>
-
-
-                                        <button type="button" class="btn btn-outline-danger btn-lg"
-                                                style="width: 200px; margin-left: 10px; font-weight: bold"
-                                                onclick="return confirm('과제제출을 기각하시겠습니까?')"
-                                                href="javascript:void(0);" data-toggle="modal" data-target="#favorite"
-                                                class="site-button gray">
-                                            기각
-                                        </button>
-                                    </div>
-                                </div>
-
-
-                                <!--=======================<<수강생>> 승인 , 기각 여부에 따라 다르게 보임============================-->
-                                <div class="alert alert-success text-center" role="alert">
-                                    <i>승인</i>
-                                </div>
-
-                                <div class="alert alert-danger text-center" role="alert">
-                                    <i>기각 ( 기각사유 : 요구사항을 충족하지 못함. )</i>
-                                </div>
-
-                                <!--강의자가 예시답안을 등록한 경우, 수강생 입장에서만 보임. 예시답안 보러가기를 누르면, 과제와 관련된 강의자가 올린 강의 detail부분으로 넘어감.-->
-                                <div class="alert alert-light text-center" role="alert">
-                                    <a href=""><p style="text-decoration: underline">예시답안 보러가기</p></a>
-                                </div>
-
-                                        <!-- 게시글 수정 버튼 -->
-                                        <!-- 관련자만 보이게 처리 -->
-                                        {% if logined_user.user_stu == board.lect_board_writer.user_stu %}
-
-                                            <form method="get" id="form-update"
-                                                  action="{% url "lect_board_update" room_no=lect.lect_no board_no=board.lect_board_no %}">
-                                                {% csrf_token %}
-                                            </form>
-                                            <button class="site-button radius-xl m-l10" onclick="document.getElementById('form-update').submit()">
-                                                    <i class="fa fa-pencil m-r5"></i>게시글 수정
-                                            </button>
-
-                                        {% endif %}
-
-                                        <!-- 게시글 삭제 버튼 -->
-                                        <!-- 관련자만 보이게 처리 -->
-
-                                        {% if logined_user.user_stu == board.lect_board_writer.user_stu or logiend_user.user_role.role_no <= 3 %}
-
-                                            <button class="site-button red radius-xl m-l10" onclick="document.getElementById('form-delete').submit()">
-                                                    <i class="fa fa-trash m-r5"></i>게시글 삭제
-                                            </button>
-                                            <form method="get" id="form-delete"
-                                                  action="{% url "lect_board_delete" room_no=lect.lect_no board_no=board.lect_board_no %}">
-                                                {% csrf_token %}
-                                            </form>
-
+                                            {% endif %}
                                         {% endif %}
                                     </div>
 
@@ -535,63 +193,7 @@ def lect_view(request, type_no):  # 게시판 페이지로 이동
 
                                     <!-- 게시글과 댓글을 구분짓는 구분선 -->
                                     <div class="dlab-divider bg-gray-dark"></div>
-                                <!--===<<강의자>> 수강생의 과제 제출을 보고 승인, 기각을 결졍할 수 있음.===-->
-                                <div class="d-flex justify-content-center m-b40">
-                                    <button type="button" class="btn btn-outline-success btn-lg"
-                                            style="width: 200px; font-weight: bold"
-                                            onclick="lectApprove()">
-                                        승인
-                                    </button>
-                                    <form id="form-lectRoom-approve" action=""
-                                          method="post" style="display: none">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="" value=""/>
-                                    </form>
-
-                                    <button type="button" class="btn btn-outline-danger btn-lg"
-                                            style="width: 200px; margin-left: 10px; font-weight: bold"
-                                            onclick="return confirm('과제제출을 기각하시겠습니까?')"
-                                            href="javascript:void(0);" data-toggle="modal" data-target="#favorite"
-                                            class="site-button gray">
-                                        기각
-                                    </button>
                                 </div>
-
-
-                                <!-- 게시글 삭제 및 수정 div -->
-                                <div class="extra-cell text-right">
-
-                                    {#                                    {% if %}#}
-                                    <!-- 게시글 수정 버튼 -->
-                                    <!-- 관련자만 보이게 처리 -->
-                                    <button class="site-button radius-xl m-l10"
-                                            onclick="location.href=''">
-                                        <i class="fa fa-pencil m-r5"></i>게시글 수정
-                                    </button>
-
-                                    {#                                        {% endif %}#}
-                                    <!-- 게시글 삭제 버튼 -->
-                                    <!-- 관련자만 보이게 처리 -->
-
-                                    {#                                        {% if logined_user.user_stu == board.board_writer.user_stu or logiend_user.user_role.role_no <= 3 %}#}
-                                    <button class="site-button red radius-xl m-l10"
-                                            onclick="location.href=''">
-                                        <i class="fa fa-trash m-r5"></i>게시글 삭제
-                                    </button>
-
-                                    {#                                    {% endif %}#}
-
-
-                                    </div>
-
-
-
-                                    <!-- 게시글과 댓글을 구분짓는 구분선 -->
-                                    <div class="dlab-divider bg-gray-dark"></div>
-
-                                </div>
-                                <!-- 게시글과 댓글을 구분짓는 구분선 -->
-                                <div class="dlab-divider bg-gray-dark"></div>
                                 <!--==================== 댓글부분 시작 ====================-->
                                 <div class="clear" id="comment-list">
                                     <div class="comments-area" id="comments">
@@ -845,6 +447,7 @@ def lect_view(request, type_no):  # 게시판 페이지로 이동
                                                     </div>
                                                 </div>
                                             </div>
+                                            <!-- 거절 버튼 누르면 나오는 창 끝 -->
                                         </div>
                                     </div>
                                 </div>

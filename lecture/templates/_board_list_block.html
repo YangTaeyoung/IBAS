@@ -1,0 +1,144 @@
+{% load custom_tags %}
+<!-- 강의룸 공지사항 글을 담는 박스 -->
+                                        <div class="content-box">
+                                            <!-- 박스 제목 div -->
+                                            <div class="content-header">
+                                                <h3 class="title">
+                                                    {% if board_type == 1 %}
+                                                        <i class="fa fa-microphone m-r5"></i>공지사항
+                                                    {% elif board_type == 2 %}
+                                                        <i class="fa fa-book m-r5"></i>{{ lect.lect_type.type_name }} 목록
+                                                    {% elif board_type == 3 %}
+                                                        <i class="fa fa-check-square-o m-r5"></i>과제 목록
+                                                    {% elif assignments_list %}
+                                                        <i class="fa fa-check-square-o m-r5"></i>과제 제출 현황
+                                                    {% elif searching%}
+                                                        <i class="fa fa-check-square-o m-r5"></i>검색 결과
+                                                    {% endif %}
+                                                </h3>
+                                            </div>
+                                            <div class="content-body">
+                                                {% if board_list or assignments_list %}
+                                                    <!-- 공지사항 게시글 테이블 -->
+                                                    <table class="table">
+                                                        <!-- 테이블 1행: 제목 -->
+                                                        <thead>
+                                                        <tr>
+                                                            <th class="border-top-0" scope="col"></th>
+                                                            <th class="border-top-0" style="width: 350px" scope="col">제목
+                                                            </th>
+                                                            <th class="border-top-0" scope="col">
+                                                                {% if board_type <= 1 %}
+                                                                    작성자
+                                                                {% elif board_type == 2 %}
+                                                                    강의자
+                                                                {% elif board_type == 3%}
+                                                                    담당자
+                                                                {% elif assignments_list %}
+                                                                    작성일
+                                                                {% endif %}
+                                                            </th>
+                                                            <th class="border-top-0" scope="col">
+                                                                {% if board_type < 3 %}작성일{% else %}마감일{% endif %}
+                                                            </th>
+                                                            {% if assignments_list or board_type == 3 %}
+                                                                {% if logined_user != lect.lect_chief %}
+                                                                    <!-- 수강생 : 과제제출 상태 -->
+                                                                    <th class="border-top-0" scope="col">상태</th>
+                                                                {% else %}
+                                                                    <!-- 강의자 : 과제제출 현황 -->
+                                                                    <th class="border-top-0" scope="col">제출 현황</th>
+                                                                {% endif %}
+                                                            {% endif %}
+                                                        </tr>
+                                                        </thead>
+
+                                                        <tbody>
+
+                                                            <!-- 공지사항/강의/과제 -->
+                                                            {% for row in board_list %}
+                                                                <tr>
+                                                                    <!-- 게시글 번호 (고정됨) -->
+                                                                    <td>{{ row.idx }}</td>
+                                                                    <!-- 게시글 제목: a태그 클릭하면, 해당 게시글로 이동 -->
+                                                                    <td><a href={% url "lect_board_detail" lect.lect_no row.board.lect_board_no %}>{{ row.board.lect_board_title }}</a></td>
+                                                                    <!-- 게시글 작성자: 복수 강의자일 경우, 해당 게시글을 올린 강의자 이름을 불러올 것 -->
+                                                                    <td>{{ row.board.lect_board_writer.user_name }}</td>
+                                                                    <!-- 게시글 작성일 -->
+                                                                    <td>
+                                                                        {% if board_type == 3 %}{{ row.board.assignment_deadline | date:"Y-m-d" }}
+                                                                        {% else %}{{ row.board.lect_board_created | date:"Y-m-d" }}
+                                                                        {% endif %}
+                                                                    </td>
+
+                                                                    <!-- 수강생 : 미제출 / 대기 / 통과 / 실패 -->
+                                                                    <!-- 강의자 : (총 제출인원)/(총 인원)-->
+                                                                    {% if board_type == 3 %}
+                                                                        <td>{{ row.status }}</td>
+                                                                    {% endif %}
+
+                                                                </tr>
+                                                            {% endfor %}
+
+                                                            <!-- 수강생 과제 제출 현황 -->
+                                                            {% for assignment in assignments_list %}
+                                                                <tr>
+                                                                    <!-- 게시글 번호 (고정됨) -->
+                                                                    <td>{{ forloop.revcounter }}</td>
+                                                                    <!-- 게시글 제목: a태그 클릭하면, 해당 게시글로 이동 -->
+                                                                    <td><a href={% url "lect_assignment_detail" lect.pk assignment.pk %}>[제출]&nbsp;{{ assignment.assignment_title }}</a></td>
+                                                                    <!-- 과제 제출일 -->
+                                                                    <td>{{ assignment.assignment_submit_created | date:"Y-m-d" }}</td>
+                                                                    <!-- 과제 마감일 -->
+                                                                    <td>{{ assignment.assignment_no.assignment_deadline | date:"Y-m-d"}}</td>
+                                                                    <!-- 수강생 : 과제제출 현황 -->
+                                                                    <td>{{ assignment.status.description }}</td>
+                                                                </tr>
+                                                            {% endfor %}
+
+                                                        </tbody>
+                                                    </table>
+
+                                                    <!-- 페이지네이션 -->
+                                                    {% if board_list %}
+                                                        {% include "pagination.html" with item_list=board_list %}
+                                                    {% elif assignments_list %}
+                                                        {% include "pagination.html" with item_list=board_list %}
+                                                    {% endif %}
+
+                                                {% else %}
+
+                                                    <p class="text-center">
+                                                        {% if board_type == 1 %}
+                                                            공지사항이 없습니다.
+                                                        {% elif board_type == 2 %}
+                                                            아직 {{ lect.lect_type.type_name }}가 없습니다.
+                                                        {% else %}
+                                                            아직은 과제가 없습니다...
+                                                        {% endif %}
+                                                    </p>
+
+                                                {% endif %}
+
+
+
+                                            </div>
+                                        </div>
+                                        {% if not searching %}
+                                            {% if logined_user == lect.lect_chief %}
+                                                {% if not board_type == 3 or any_lecture %}
+                                                <form action="{% url 'lect_board_register' lect.lect_no board_type %}" method="get">
+                                                    {% csrf_token %}
+                                                    <div class="extra-cell text-right  m-t20">
+                                                        <!-- 게시글 등록 버튼 -->
+                                                        <!-- 관련자만 보이게 처리 -->
+                                                        <button type="submit" class="site-button radius-xl m-l10">
+                                                            <i class="fa fa-plus m-r5"></i>
+                                                            게시글 등록
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endif %}
+

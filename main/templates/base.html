@@ -1,4 +1,5 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,8 +15,8 @@
     <meta name="format-detection" content="telephone=no">
 
     <!-- FAVICONS ICON -->
-    <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon"/>
-    <link rel="shortcut icon" type="image/x-icon" href="{% static 'images/favicon.png' %}"/>
+    <link rel="icon" href="{% static 'images/IBAS_favicon.png' %}" type="image/x-icon"/>
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'images/IBAS_favicon.png' %}"/>
 
     <!-- PAGE TITLE HERE -->
     <title>IBAS</title>
@@ -27,6 +28,9 @@
 	<script src="{% static 'js/html5shiv.min.js' %}"></script>
 	<script src="{% static 'js/respond.min.js' %}"></script>
 	<![endif]-->
+
+    <!-- JQuery -->
+    <script src="{% static 'js/jquery.min.js' %}"></script><!-- JQUERY.MIN JS -->
 
     <!-- STYLESHEETS -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/plugins.css' %}">
@@ -43,6 +47,11 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/ibas_contents.css' %}">
     <link class="skin" rel="stylesheet" type="text/css" href="{% static 'css/top-bottom.css' %}">
 
+    {% if messages %}
+        {% for message in messages %}
+            <script>alert("{{ message }}")</script>
+        {% endfor %}
+    {% endif %}
 
 </head>
 <body id="bg">
@@ -310,7 +319,6 @@
 <script src="{% static 'js/custom.js' %}"></script><!-- CUSTOM FUCTIONS  -->
 <script src="{% static 'js/dz.carousel.js' %}"></script><!-- SORTCODE FUCTIONS  -->
 <script src="{% static 'js/dz.ajax.js' %}"></script><!-- CONTACT JS  -->
-<script src="{% static 'js/jqueƒry.star-rating-svg.js' %}"></script><!-- STAR RATING SVG -->
 <script src="https://maps.google.com/maps/api/js?key=AIzaSyBjirg3UoMD5oUiFuZt3P9sErZD-2Rxc68&sensor=false"></script>
 <!-- GOOGLE MAP -->
 <script src='https://www.google.com/recaptcha/api.js'></script> <!-- Google API For Recaptcha  -->

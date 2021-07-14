@@ -1,7 +1,13 @@
+import re
+
 from django import forms
-from DB.models import Lect, MethodInfo, LectBoard
+from django.core.exceptions import ValidationError
+
+from DB.models import Lect, MethodInfo, LectBoard, LectBoardType, LectAssignmentSubmit
 from django.utils.translation import gettext_lazy as _
+from IBAS.forms import FileFormBase
 from user_controller import get_logined_user
+from utils.url_regex import *
 
 
 class LectForm(forms.ModelForm):
@@ -92,30 +98,50 @@ class LectRejectForm(forms.ModelForm):
         return lect
 
 
-class LectBoardForm(forms.ModelForm):
+# 강의 게시판 관련 기본 폼 (상속받아서 사용)
+class LectBoardFormBase(forms.ModelForm):
     class Meta:
         model = LectBoard
 
-        fields = ('lect_board_title', 'lect_board_link', 'lect_board_cont', 'lect_board_type_no')
+        fields = ('lect_board_title', 'lect_board_link', 'lect_board_cont', 'lect_board_type',
+                  'assignment_deadline')
 
         widgets = {
             'lect_board_title': forms.TextInput(attrs={"placeholder": _("제목을 입력하세요."),
-                                                       "style": "font-size: 25px; height: 70px;"}),
-            'lect_board_link': forms.TextInput(attrs={"placeholder": _("강의 링크를 적어주세요.")}),
-            'lect_board_type_no': forms.HiddenInput(),
-            'lect_board_cont': forms.Textarea()
+                                                       "style": "font-size: 25px; height: 70px;",
+                                                       "class": "form-control"}),
+            'lect_board_link': forms.TextInput(attrs={"placeholder": _("강의 링크를 적어주세요."),
+                                                      "class": "form-control"}),
+            'lect_board_type': forms.HiddenInput(),
+            'lect_board_cont': forms.TextInput(attrs={"class": "jqte-test"}),
+            'assignment_deadline': forms.DateInput(attrs={"type": 'date'}),
         }
         labels = {
             'lect_board_title': _("제목"),
-            'lect_board_link': _("강의 링크"),
-            'lect_board_cont': _("내용")
+            'lect_board_link': _("링크"),
+            'lect_board_cont': _("내용"),
+            'assignment_deadline': _("과제 마감일"),
         }
+
+    def clean_lect_board_link(self):
+        link = url_https(self.cleaned_data['lect_board_link'])
+        if link is not None:
+            reg = re.compile(url_regex)
+            if reg.match(link) is None:
+                raise ValidationError(
+                    code='invalid',
+                    message='잘못된 url 이 입력되었습니다! \n url=' + link
+                )
+        return link
 
     def save(self, **kwargs):
         lect_board = super().save(commit=False)
         lect_board.lect_board_writer = kwargs.get('lect_board_writer')
         lect_board.lect_no = kwargs.get('lect_no')
-        lect_board.save()
+        lect_board.lect_board_ref_id = kwargs.get('lect_board_ref_id', None)
+
+        if self.has_changed():
+            lect_board.save()
 
         return lect_board
 
@@ -123,9 +149,104 @@ class LectBoardForm(forms.ModelForm):
         lect_board = instance
         lect_board.lect_board_title = self.cleaned_data['lect_board_title']
         lect_board.lect_board_cont = self.cleaned_data['lect_board_cont']
+
+        return lect_board
+
+
+# 강의 게시글 폼
+class LectBoardForm(LectBoardFormBase):
+    class Meta(LectBoardFormBase.Meta):
+        exclude = ("assignment_deadline", )
+
+    def update(self, instance):
+        lect_board = super().update(instance)
         lect_board.lect_board_link = self.cleaned_data['lect_board_link']
 
         if self.has_changed():
             lect_board.save()
 
         return lect_board
+
+
+# 공지사항 폼
+class LectNoticeForm(LectBoardFormBase):
+    class Meta(LectBoardFormBase.Meta):
+        exclude = ('lect_board_link', 'assignment_deadline')
+
+        labels = {
+            'lect_board_title': _("공지사항"),
+            'lect_board_cont': _("공지 내용")
+        }
+
+    def update(self, instance):
+        notice = super().update(instance)
+        notice.save()
+
+
+class LectAssignmentForm(LectBoardFormBase):
+    class Meta(LectBoardFormBase.Meta):
+        exclude = ('lect_board_link', )
+
+    def update(self, instance):
+        assignment = super().update(instance)
+        assignment.assignment_deadline = self.cleaned_data['assignment_deadline']
+        assignment.save()
+
+
+# 타입에 맞는 강의 게시글 폼
+def make_lect_board_form(board_type, *args, **kwargs):
+    if args or kwargs:
+        if board_type == 1:
+            return LectNoticeForm(*args, **kwargs)
+        elif board_type == 2:
+            return LectBoardForm(*args, **kwargs)
+        elif board_type == 3:
+            return LectAssignmentForm(*args, **kwargs)
+    else:
+        if board_type == 1:
+            return LectNoticeForm(initial={'lect_board_type': 1})
+        elif board_type == 2:
+            return LectBoardForm(initial={'lect_board_type': 2})
+        elif board_type == 3:
+            return LectAssignmentForm(initial={'lect_board_type': 3})
+
+
+class AssignmentSubmitForm(forms.ModelForm):
+    class Meta:
+        model = LectAssignmentSubmit
+        fields = ('assignment_title', 'assignment_cont')
+
+        widgets = {
+            'assignment_title': forms.TextInput(attrs={"placeholder": _("제목을 입력하세요."),
+                                                       "style": "font-size: 25px; height: 70px;",
+                                                       "disabled": "disabled",
+                                                       "class": "form-control"}),
+            'assignment_cont': forms.TextInput(attrs={"class": "jqte-test"}),
+        }
+
+        labels = {
+            'assignment_title': _('과제 제목'),
+            'assignment_cont': _('과제 내용')
+        }
+
+    def save(self, **kwargs):
+        submission = super().save(commit=False)
+        submission.assignment_submitter = kwargs.get('assignment_submitter')
+        submission.assignment_no_id = kwargs.get('lect_board_no')
+        submission.save()
+
+        return submission
+
+    def update(self, instance):
+        instance.assignment_cont = self.cleaned_data['assignment_cont']
+        instance.status_id = 0  # 과제 수정하면, 기존에 통과이거나 실패였어도 대기 상태가 되어 강의가 처리 받아야함.
+        instance.reject_reason = None
+        instance.save()
+
+
+# 이거 지우면 큰일 남
+class FileForm(FileFormBase):
+    pass
+
+
+

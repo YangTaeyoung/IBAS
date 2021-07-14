@@ -196,9 +196,9 @@
                                                 required=""
                                         />
                                     </div>
-                                    <p class="mb-1 mt-0" style="font-size: 8pt;color:grey">
+                                    <p class="mb-1 mt-1" style="font-size: 8pt;color:red;line-height: 120%">
                                         <i class="la la-check"></i>
-                                        &nbsp;실명이 학생 DB와 대조 후 일치하지 않을 시, 가입을 승인하지 않습니다.<br/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;실명이 맞는지 다시 한 번 확인해주세요.
+                                        &nbsp;학번이 학생 DB와 대조 후 일치하지 않을 시, 가입을 승인하지 않습니다.<br/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;실명과 학번이 맞는지 다시 한 번 확인해주세요.
                                     </p>
 
                                     <!--이메일은 수정하지 못하도록 고정 / 구글이나 네이버로부터 정보 받아옴-->
@@ -306,16 +306,7 @@
 
             <!-- 오른쪽 이미지를 넣을 장소 시작 -->
             <div class="item_flex_bg">
-                <div class="content-info">
-                    <ul class="list-info">
-                        <li>
-                            <div class="dlab-box">
-                                <i class="fa fa-check"></i>
-                                <p>깔삼한 유료 이미지를 넣을 것</p>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
+                <img style="height: 100%; width: 100%" src="{% static 'images/blue-purple-technology-circuit.jpg' %}">
             </div>
             <!--오른쪽 이미지 넣을 장소 끝-->
         </div>
@@ -323,23 +314,21 @@
 </div>
 <div id="gray_shadow" class="gray_shadow" onclick="popDown()"></div>
 <!-- 전공 검색 팝업창 -->
-<div id="major-search-popup" class="card major-search-popup ">
+<div id="major-search-popup" class="card major-search-popup" style="width: 450px; height: 380px">
     <div class="card-header" style="display: flex; align-items: center; justify-content: space-between">
         <h4 class="m-b0"> 전공 검색 </h4>
         <!-- 닫기 버튼 -->
         <i class="fa fa-close fa-2x btn-exit" onclick="popDown()"></i>
     </div>
-    <div class="card-body">
-
+    <div class="card-body" style="display: flex; height: auto">
 
         <!-- 검색 영역 -->
-        <div class="searchBox">
+        <div class="searchBox" style="width: 100%; margin-top: 20px; margin-left: 20px">
             <input class="form-control" type="text" id="search" onkeyup="filter()" placeholder="전공을 입력하세요"/>
         </div>
         <!-- 전공 리스트 영역 -->
 
-        <hr/>
-        <div class="listBox">
+        <div class="listBox" style="width: 100%; margin-left: 20px">
             <table class="table table-hover">
                 <thead>
                 <tr>

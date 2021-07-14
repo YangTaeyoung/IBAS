@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
+from django.contrib.messages import constants as messages_constants
 from pathlib import Path
 import os
 from my_root import *
@@ -105,6 +106,8 @@ TEMPLATES = [
                 'utils.context_processors.login',  # 로그인을 위한 context_processor
                 'utils.context_processors.login_check',  # 로그인 확인을 위한 context_processor
                 'utils.context_processors.superuser_check',  # 슈퍼유저 확인을 위한 context_processor
+                'utils.context_processors.is_active',
+                'utils.context_processors.cfo_check',
             ],
         },
     },
@@ -147,7 +150,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
@@ -177,7 +180,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 # 소셜 로그인 관련 설정
-SITE_ID = 1
+SITE_ID = 2
 LOGIN_REDIRECT_URL = '/user/pass'  # 로그인 성공시 리다이렉션 되는 URL 바꿀 필요가 있을 듯..
 ACCOUNT_EMAIL_REQUIRED = True  # 이메일은 꼭 받게 만들기.
 ACCOUNT_LOGOUT_ON_GET = True  # 로그 아웃 시 example.com사이트로 자동이동 하는 것 제거
@@ -188,7 +191,16 @@ EMAIL_HOST = 'smtp.googlemail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'ibasmail20@gmail.com'
-EMAIL_HOST_PASSWORD = 'weloveyoukhk'
+EMAIL_HOST_PASSWORD = 'ibasforever'
 
 # 브라우져 종료시 세션 만료
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+MESSAGE_TAGS = {messages_constants.ERROR: 'danger'}
+
+# HTTPS
+if IS_SERVER:
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_SSL_REDIRECT = True

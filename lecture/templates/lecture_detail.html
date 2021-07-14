@@ -192,7 +192,7 @@
                             <div class="content-body">
                                 <div class="form-group">
                                     <!--여기 뜨는 것은 작성자가 입력한 내용이 아닌, 작성자 개인정보에서 가져와서 뜨도록 수정-->
-                                    <a>{{ lect.lect_chief.user_email }}</a>
+                                    <a>{{ lect.lect_chief.useremail_set.first.user_email }}</a>
                                 </div>
                             </div>
                         </div>
@@ -271,7 +271,7 @@
                                 <!--=======신청하기 버튼, 한번 신청하기 버튼을 누르면 없어지도록 수정======-->
                                 <div style="display: flex; justify-content: center; ">
                                     <button type="button" class="btn btn-outline-success btn-lg"
-                                            style="width: 200px; font-weight: bold" onclick="alert('신청이 완료되었습니다.')">
+                                            style="width: 200px; font-weight: bold" onclick="alert('신청이 완료되었습니다.'); location.href='{% url "lect_enroll" lect.lect_no %}'">
                                         신청하기
                                     </button>
                                 </div>

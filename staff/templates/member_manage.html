@@ -359,65 +359,19 @@
                                                         </td>
                                                         <!-- 제명건의 -->
                                                         <td class="text-center">
-                                                            <a href="{% url "member_delete_register" deleted_user=exist_user.user_stu %}"
-                                                               style="font-size: 12px; font-weight: bold">제명건의</a>
 
-                                                            <a href="#"
-                                                               style="font-size: 12px; font-weight: bold">&nbsp;&nbsp;논의중</a>
+                                                            {% if exist_user.is_going_to_delete %}
+                                                                <a class="m-0"
+                                                                   href="{% url "member_delete_detail" user_delete_no=exist_user.delete_no %}"
+                                                                   style="font-size: 12px; font-weight: bold; color: #dc3545 "
+                                                                >제명진행중</a>
+                                                            {% else %}
+                                                                <a href="{% url "member_delete_register" deleted_user=exist_user.user_stu %}"
+                                                                   style="font-size: 12px; font-weight: bold">제명건의</a>
+                                                            {% endif %}
                                                         </td>
                                                     </tr>
                                                 {% endfor %}
-                                                <!-------------------------여기부터 삭제(예시임)----------------------------->
-                                                <tr>
-                                                    <td>
-                                                        <div class="input-block">
-                                                            <input id="check_{{ exist_user.user_stu }}"
-                                                                   type="checkbox"
-                                                                   name="user_stu_list[]"
-                                                                   value="{{ exist_user.user_stu }}">
-                                                            <!-- staff_label_margin는 staff_cr.css에 정의되어 있음.  -->
-                                                            <label for="check_{{ exist_user.user_stu }}"
-                                                                   class="staff_label_margin"></label>
-                                                        </div>
-                                                    </td>
-                                                    <th>99</th>
-                                                    <td class="text-center">제갈공명</td>
-                                                    <td class="text-center">12880000</td>
-                                                    <td>문화콘텐츠문화경영학과</td>
-                                                    <td class="text-center">활동회원</td>
-                                                    <td class="text-center">부회장</td>
-                                                    <td class="text-center">
-                                                        <a href="#"
-                                                           style="font-size: 12px; font-weight: bold"
-                                                           onclick="goSubmit('id-form-user-delete')"
-                                                        >제명건의</a>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div class="input-block">
-                                                            <input id="check_{{ exist_user.user_stu }}"
-                                                                   type="checkbox"
-                                                                   name="user_stu_list[]"
-                                                                   value="{{ exist_user.user_stu }}">
-                                                            <!-- staff_label_margin는 staff_cr.css에 정의되어 있음.  -->
-                                                            <label for="check_{{ exist_user.user_stu }}"
-                                                                   class="staff_label_margin"></label>
-                                                        </div>
-                                                    </td>
-                                                    <th>99</th>
-                                                    <td class="text-center">윤예진</td>
-                                                    <td class="text-center">12192355</td>
-                                                    <td>글로벌금융학과</td>
-                                                    <td class="text-center">비활동회원</td>
-                                                    <td class="text-center">회장단</td>
-                                                    <td class="text-center">
-                                                        <p class="m-0"
-                                                           style="font-size: 12px; font-weight: bold; color: #dc3545 "
-                                                        >제명진행중</p>
-                                                    </td>
-                                                </tr>
-                                                <!-------------------------여기까지 삭제(예시임)----------------------------->
                                                 </tbody>
                                             </table>
                                             <!--페이지네이션-->
@@ -624,7 +578,7 @@
                         <div class="content-box">
                             <div class="content-header d-flex justify-content-between">
                                 <h3 class="title"><i class="la la-sign-out m-r5"></i>제명안건 관리</h3>
-                                <a href="#">더보기</a>
+                                <a href="{% url 'member_delete_list' %}">더보기</a>
                             </div>
 
                             <!-- 요청사항 실질 콘텐츠 시작 -->
@@ -638,7 +592,6 @@
                                         <thead>
                                         <tr>
                                             <!-- staff_width는 staff_yejin.css에 정의되어 있음.  -->
-                                            <th class="border-top-0 width-50 min-width-50"></th>
                                             <th class="border-top-0 width-50 min-width-50"
                                                 scope="col"></th>
                                             <th class="border-top-0 text-center"
@@ -664,85 +617,33 @@
                                         <!-- 내용 테이블 -->
                                         <tbody>
                                         <!-- ===========================여기부터 복붙============================== -->
-
-                                        <tr>
-                                            <td colspan="8" style="text-align: center">
-                                                제명 논의 중인 회원이 없습니다.
-                                            </td>
-                                        </tr>
-
-
-                                        <tr>
-                                            <td scope="row">
-                                                <div class="input-block">
-                                                    <input id="check_1"
-                                                           type="checkbox"
-                                                           name=""
-                                                           value="">
-                                                    <!-- staff_label_margin는 staff_cr.css에 정의되어 있음.  -->
-                                                    <label for="check_1"
-                                                           class="staff_label_margin"></label>
-                                                </div>
-                                            </td>
-                                            <th>01</th>
-                                            <!-- 회원 제목 -->
-                                            <td class="text-center">양태영 회원 제명에 관한 건</td>
-                                            <!-- 제명대상 -->
-                                            <td class="text-center">양태영</td>
-                                            <!-- 안건발안자 -->
-                                            <td class="text-center">윤예진</td>
-                                            <!-- 안건발안일 -->
-                                            <td class="text-center">2021-07-02</td>
-                                            <!-- 제명안건 바로가기 -->
-                                            <td class="text-center">
-                                                <a href="#">제명안건 바로가기</a>
-                                            </td>
-
-                                        </tr>
-
+                                        {% if user_delete_list|length == 0 %}
+                                            <tr>
+                                                <td colspan="8" style="text-align: center">
+                                                    제명 논의 중인 회원이 없습니다.
+                                                </td>
+                                            </tr>
+                                        {% else %}
+                                            {% for user_delete in user_delete_list %}
+                                                <tr>
+                                                    <th>{{ forloop.counter }}</th>
+                                                    <!-- 회원 제목 -->
+                                                    <td class="text-center">{{ user_delete.user_delete_title }}</td>
+                                                    <!-- 제명대상 -->
+                                                    <td class="text-center">{{ user_delete.deleted_user.user_name }}</td>
+                                                    <!-- 안건발안자 -->
+                                                    <td class="text-center">{{ user_delete.suggest_user.user_name }}</td>
+                                                    <!-- 안건발안일 -->
+                                                    <td class="text-center">{{ user_delete.user_delete_created|date:"Y-m-d"}}</td>
+                                                    <!-- 제명안건 바로가기 -->
+                                                    <td class="text-center">
+                                                        <a href="{% url 'member_delete_detail' user_delete_no=user_delete.user_delete_no %}">제명안건 바로가기</a>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        {% endif %}
                                         </tbody>
                                     </table>
-                                    <!--페이지네이션-->
-                                    <div style="display: flex; justify-content: center; align-items: center">
-                                        <nav aria-label="Page navigation example">
-                                            <!-- staff_margin_bottom_0는 staff_cr.css에 정의되어 있음.  -->
-                                            <ul class="pagination m-b0">
-                                                {% if exist_user_list.has_previous %}
-                                                    <li class="page-item">
-                                                        <a class="page-link"
-                                                           href="?request_page=1"
-                                                           aria-label="Previous">
-                                                            <span aria-hidden="true">&laquo;</span>
-                                                        </a>
-                                                    </li>
-                                                    <li class="page-item">
-                                                        <a class="page-link"
-                                                           href="?request_page={{ user_update_request_list.previous_page_number }}">
-                                                            {{ exist_user_list.previous_page_number }}
-                                                        </a>
-                                                    </li>
-                                                {% endif %}
-                                                <li class="page-item"><a class="page-link"
-                                                                         href="#">{{ user_update_request_list.number }}</a>
-                                                </li>
-                                                {% if exist_user_list.has_next %}
-                                                    <li class="page-item"><a class="page-link"
-                                                                             href="?request_page={{ user_update_request_list.next_page_number }}">
-                                                        {{ user_update_request_list.next_page_number }}
-                                                    </a>
-                                                    </li>
-                                                    <li class="page-item">
-                                                        <a class="page-link"
-                                                           href="?request_page={{ user_update_request_list.paginator.num_pages }}"
-                                                           aria-label="Next">
-                                                            <span aria-hidden="true">&raquo;</span>
-                                                        </a>
-                                                    </li>
-                                                {% endif %}
-                                            </ul>
-                                        </nav>
-                                    </div>
-                                    <!--페이지네이션 끝-->
                                 </div>
                             </div>
 
