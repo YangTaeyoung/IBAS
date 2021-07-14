@@ -411,7 +411,7 @@ def delete_all_infomation(user: User):
         my_lect.delete()
 
     # 연동한 이메일 모두 삭제
-    my_email_list = User.objects.filter(user_stu=user)
+    my_email_list = UserEmail.objects.filter(user_stu=user)
     for my_email in my_email_list:
         my_email.delete()
 
