@@ -64,12 +64,13 @@
                                                 {% for row in lect_board_list %}
                                                     <!-- 강의 부분 -->
                                                     <tr>
+
                                                         <!-- 주차 -->
-                                                        <th rowspan="2" class="lectRoom_week">
+                                                        <th rowspan="{{ row.lecture.assignments.all|length |add:1 }}" class="lectRoom_week">
                                                             {{ row.idx }}
                                                         </th>
                                                         <!-- 강의 -->
-                                                        <td class="border-right text-center">강의</td>
+                                                        <td class="border-right text-center">{{ lect.lect_type.type_name }}</td>
                                                         <!-- 강의제목 -->
                                                         <td class="border-right"><{{ forloop.counter }} 회차> {{ row.lecture.lect_board_title }}</td>
                                                         <!-- 강의 출석 -->
@@ -81,10 +82,12 @@
                                                     </tr>
 
                                                     <!-- 과제 부분 -->
-                                                    <tr>
                                                     {% for subrow in row.assignments %}
-                                                        <!-- 과제 -->
-                                                        <td class="border-right text-center">-</td>
+                                                    <tr>
+                                                        {% if forloop.counter == 1 %}
+                                                            <!-- 과제 -->
+                                                            <td class="border-right text-center" rowspan="{{ row.lecture.assignments.all|length }}">-</td>
+                                                        {% endif %}
                                                         <!-- 과제제목 -->
                                                         <td class="border-right">&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;{{ subrow.assignment.lect_board_title }}</td>
                                                         <!-- 과제 상태 -->
@@ -102,8 +105,8 @@
                                                             </td>
                                                         {% endif %}
 
+                                                        </tr>
                                                     {% endfor %}
-                                                    </tr>
                                                 {% endfor %}
                                             </tbody>
                                         </table>

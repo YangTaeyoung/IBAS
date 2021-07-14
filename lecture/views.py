@@ -13,6 +13,8 @@ from pagination_handler import get_page_object
 from user_controller import get_logined_user, superuser_only, writer_only, auth_check, is_superuser, \
     is_logined, is_writer, member_only
 from utils.crawler import get_og_tag
+from utils.url_regex import is_youtube
+from utils.youtube import get_youtube
 
 
 def get_pol_name(method_no):
@@ -92,7 +94,7 @@ def lect_detail(request, lect_no):
         'lect': lect,
         'lect_day_list': lect_day_list,
         'lect_user_num': len(LectEnrollment.objects.filter(lect_no=lect_no)),
-        'is_in': LectEnrollment.objects.filter(student=get_logined_user(request), lect_no__lect_no=lect_no) is not None,
+        'is_in': LectEnrollment.objects.filter(student=get_logined_user(request), lect_no_id=lect_no).first() is not None,
         'lect_reject_form': LectRejectForm(instance=lect),
     }
     # 취미 모임의 경우 강의 방식이 없음 따라서 해당 부분에 대한 예외처리
@@ -199,7 +201,7 @@ def get_assignment_list(cur_user, lect_room, name_in_html):
     # 강의자 : 글번호 / 과제글 / 제출된 수강생들의 과제 집계(총제출/총인원)
     if cur_user == lect_room.lect_chief:
         assignment_list = [{
-            'idx': len(lect_room.enrolled_students.all()) - idx,
+            'idx': len(lect_room.lectures.filter(lect_board_type_id=3)) - idx,
             name_in_html: assignment,
             'status': str(len(assignment.submissions.all())) + '/' + str(len(lect_room.enrolled_students.all()))
         } for idx, assignment in enumerate(lect_room.lectures.filter(lect_board_type_id=3))]
@@ -209,7 +211,7 @@ def get_assignment_list(cur_user, lect_room, name_in_html):
             status = LectAssignmentSubmit.objects.filter(assignment_no=assignment,
                                                          assignment_submitter=cur_user).first()
             assignment_list.append({
-                'idx': len(lect_room.enrolled_students.all()) - idx,
+                'idx': len(lect_room.lectures.filter(lect_board_type_id=3)) - idx,
                 name_in_html: assignment,
                 'status': status.status.description if status else '미제출'})
 
@@ -280,7 +282,7 @@ def lect_room_list(request, room_no, board_type):
         'lect': lect_room,
         'board_list': get_page_object(request, board_list, 15),
         'board_type': board_type,
-        'any_lecture': True if lect_room.lectures.filter(lect_board_type_id=2).first() else False  # 강의 x => 과제 작성 x
+        'any_lecture': True if lect_room.lectures.filter(lect_board_type_id=2) else False  # 강의 x => 과제 작성 x
     }
     return render(request, 'lecture_room_board_list.html', context)
 
@@ -318,9 +320,11 @@ def lect_board_register(request, room_no, board_type):
 
 # 강의/공지 게시글 상세보기
 @member_only
-def lect_board_detail(request, room_no, board_no):
+def lect_board_detail(request, room_no, lect_board_no):
     lect_room = get_object_or_404(Lect, pk=room_no)
-    board = get_object_or_404(LectBoard, pk=board_no)
+    board = LectBoard.objects.prefetch_related('files').get(pk=lect_board_no)
+    files = board.files.all()
+    link = board.lect_board_link
     file_list, img_list, doc_list = FileController.get_images_and_files_of_(board)
 
     # 과제 글
@@ -332,20 +336,34 @@ def lect_board_detail(request, room_no, board_no):
             # 과제 하나당 수강생은 어차피 하나밖에 제출 못함. get 쿼리로 검사하면 레코드 없을 시 오류 발생.
             submitted_assignment = LectAssignmentSubmit.objects.filter(assignment_submitter=cur_user, assignment_no=board).first()
 
+    # 강의 링크가 있으면 임베딩 시도
+    link_embedding = {}
+    if board.lect_board_type_id == 2 and link:
+        if is_youtube(link):
+            link_embedding['youtube'] = get_youtube(link)
+        else:
+            link_embedding['og'] = get_og_tag(link)
+
+    code = {'code_files': []}
+    for file in files:
+        if FileController.is_code_file(file.file_name):
+            code['code_files'].append({'file_name': file.file_name,
+                                       'code': FileController.get_code_in_file(file.file_path.path)})
+
     context = {
         'lect': lect_room,
         'board': board,
         'doc_list': file_list,
         'submitted_assignment': submitted_assignment,
-        'og': get_og_tag(board.lect_board_link) if board.lect_board_link else None
     }
-    return render(request, 'lecture_room_board_detail.html', context)
+
+    return render(request, 'lecture_room_board_detail.html', context | link_embedding | code)
 
 
 # 강의/공지 게시글 삭제
 @writer_only()
-def lect_board_delete(request, room_no, board_no):
-    lect_board = get_object_or_404(LectBoard, pk=board_no)
+def lect_board_delete(request, room_no, lect_board_no):
+    lect_board = get_object_or_404(LectBoard, pk=lect_board_no)
 
     FileController.delete_all_files_of_(lect_board)
     lect_board.delete()
@@ -355,8 +373,8 @@ def lect_board_delete(request, room_no, board_no):
 
 # 강의/공지 게시글 수정
 @writer_only()
-def lect_board_update(request, room_no, board_no):
-    board = LectBoard.objects.prefetch_related('files').get(pk=board_no)
+def lect_board_update(request, room_no, lect_board_no):
+    board = LectBoard.objects.prefetch_related('files').get(pk=lect_board_no)
     board_type = board.lect_board_type_id
 
     if request.method == "GET":
@@ -364,7 +382,7 @@ def lect_board_update(request, room_no, board_no):
             'lect': Lect.objects.get(pk=room_no),
             'lect_board_form': make_lect_board_form(board_type, instance=board),  # 강의/공지 폼
             'file_form': FileForm(),  # 강의 파일 폼
-            'board_no': board_no,
+            'board_no': lect_board_no,
             'board_type': board_type,
             'file_list': board.files.all(),  # 게시글 기존 파일 리스트
             'lect_board_list': LectBoard.objects.filter(lect_no_id=room_no, lect_board_type_id=2
@@ -386,7 +404,7 @@ def lect_board_update(request, room_no, board_no):
                 FileController.remove_files_by_user(request, board.files.all())
                 file_form.save(instance=board)
 
-        return redirect('lect_board_detail', room_no=room_no, board_no=board_no)
+        return redirect('lect_board_detail', room_no=room_no, lect_board_no=lect_board_no)
 
 
 def sample(request):
@@ -419,7 +437,8 @@ def lect_assignment_submit(request, room_no):
             with transaction.atomic():
                 submission = submit_form.save(
                     lect_board_no=request.POST.get('lect_board_no'),
-                    assignment_submitter=get_logined_user(request)
+                    assignment_submitter=get_logined_user(request),
+                    lect_no=room_no
                 )
                 file_form.save(instance=submission)
 
@@ -519,7 +538,7 @@ def lect_room_student_status(request, room_no):
     lect_board_list = [{
         'idx': idx + 1,  # 회차
         'lecture': lect_board,
-        'attend': '출석' if attend_info.filter(lect_board_no=lect_board).exists() else '결석',
+        'attend': '출석' if attend_info.filter(lect_board_no=lect_board) else '결석',
         'assignments': [{
             'assignment': assignment,
             'submission': LectAssignmentSubmit.objects.filter(assignment_submitter=cur_user,

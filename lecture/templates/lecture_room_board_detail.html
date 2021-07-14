@@ -5,6 +5,8 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/posting_detail.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/comment.css' %}">
     <script src="{% static 'js/comment.js' %}"></script>
+    <!--코드 뷰어 스크립트-->
+    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?skin=desert"></script>
 
     <div class="page-wraper">
 
@@ -63,7 +65,11 @@
                                     </div>
 
                                     <!--=======================강의 링크============================-->
-                                    {% if og %}
+                                    {% if youtube %}
+                                        {% autoescape off %}
+                                            {{ youtube }}
+                                        {% endautoescape %}
+                                    {% elif og %}
                                         <div class="clear m-t50 category-bx" id="comment-list">
                                             <a href="{{ og.url }}" class="comments-area" id="comments" target="_blank">
                                                 <div class="clearfix">
@@ -105,6 +111,13 @@
                                             {{ board.lect_board_cont }}
                                         {% endautoescape %}
 
+                                    <!-- 코드 뷰 -->
+                                    {% for code_file in code_files %}
+                                        <pre class="prettyprint" style="overflow-x: auto; border-radius: 10px">"{{ code_file.file_name }}"<br><br>{{ code_file.code }}</pre>
+                                    {% endfor %}
+
+
+
                                     {% include "file_detail.html" %}
 
                                     <!-- 게시글 삭제 및 수정 div -->
@@ -115,7 +128,7 @@
 
                                                 <!-- 게시글 수정 버튼 -->
                                                 <form method="get"
-                                                      action="{% url "lect_board_update" room_no=lect.lect_no board_no=board.lect_board_no %}">
+                                                      action="{% url "lect_board_update" lect.pk board.pk %}">
                                                     {% csrf_token %}
                                                     <button class="site-button radius-xl m-l10" type="submit">
                                                             <i class="fa fa-pencil m-r5"></i>게시글 수정
@@ -124,7 +137,7 @@
 
                                                 <!-- 게시글 삭제 버튼 -->
                                                 <form method="get"
-                                                      action="{% url "lect_board_delete" room_no=lect.lect_no board_no=board.lect_board_no %}">
+                                                      action="{% url "lect_board_delete" lect.pk board.pk %}">
                                                     {% csrf_token %}
                                                     <button class="site-button red radius-xl m-l10" type="submit">
                                                             <i class="fa fa-trash m-r5"></i>게시글 삭제

@@ -50,9 +50,9 @@
                                                 <h3 class="title"><i class="fa fa-microphone m-r5"></i>공지사항</h3>
                                                 {% if notice_list %}
                                                     <!-- 더보기 a태크 클릭 시, 강의룸 내 공지사항 페이지로 이동 -->
-                                                    <a href={% url "lect_room_list" room_no=lect.lect_no board_type=1  %}>더보기</a>
+                                                    <a href={% url "lect_room_list" room_no=lect.pk board_type=1  %}>더보기</a>
                                                 {% elif logined_user == lect.lect_chief %}
-                                                    <a href={% url "lect_board_register" lect.lect_no 1 %}>등록하기</a>
+                                                    <a href={% url "lect_board_register" lect.pk 1 %}>등록하기</a>
                                                 {% endif %}
 
                                             </div>
@@ -75,9 +75,9 @@
                                                     {% for notice in notice_list|slice:":3" %}
                                                         <tr>
                                                             <!-- 공지사항 번호 (고정됨) -->
-                                                            <td>{{ notice_list|length |subtract:forloop.revcounter0 }}</td>
+                                                            <td>{{ notice_list|length |subtract:forloop.counter0 }}</td>
                                                             <!-- 공지사항 제목-->
-                                                            <td><a href={% url "lect_board_detail" lect.lect_no notice.lect_board_no %}>{{ notice.lect_board_title }}</a></td>
+                                                            <td><a href={% url "lect_board_detail" lect.pk notice.pk %}>{{ notice.lect_board_title }}</a></td>
                                                             <!-- 공지사항 작성자: 복수 강의자일 경우, 해당 게시글을 올린 강의자 이름을 불러올 것 -->
                                                             <td>{{ notice.lect_board_writer.user_name }}</td>
                                                             <!-- 게시글 작성일 -->
@@ -98,9 +98,9 @@
                                                 <h3 class="title"><i class="fa fa-book m-r5"></i>{{ lect.lect_type.type_name }} 목록</h3>
                                                 {% if lect_board_list %}
                                                     <!-- 더보기 a태크 클릭 시, 강의룸 내 강의리스트 페이지로 이동 -->
-                                                    <a href={% url "lect_room_list" lect.lect_no 2 %}>더보기</a>
+                                                    <a href={% url "lect_room_list" lect.pk 2 %}>더보기</a>
                                                 {% elif logined_user == lect.lect_chief %}
-                                                    <a href={% url "lect_board_register" lect.lect_no 2 %}>등록하기</a>
+                                                    <a href={% url "lect_board_register" lect.pk 2 %}>등록하기</a>
                                                 {% endif %}
                                             </div>
                                             <div class="content-body">
@@ -122,9 +122,9 @@
                                                     {% for board in lect_board_list|slice:':3' %}
                                                         <tr>
                                                             <!-- 공지사항 번호 (고정됨) -->
-                                                            <td>{{ lect_board_list|length |subtract:forloop.counter0}}</td>
+                                                            <td>{{ lect_board_list|length |subtract:forloop.counter0 }}</td>
                                                             <!-- 공지사항 제목-->
-                                                            <td><a href={% url 'lect_board_detail' room_no=lect.lect_no board_no=board.lect_board_no %}>{{ board.lect_board_title }}</a></td>
+                                                            <td><a href={% url 'lect_board_detail' lect.pk board.pk %}>{{ board.lect_board_title }}</a></td>
                                                             <!-- 공지사항 작성자: 복수 강의자일 경우, 해당 게시글을 올린 강의자 이름을 불러올 것 -->
                                                             <td>{{ board.lect_board_writer.user_name }}</td>
                                                             <!-- 게시글 작성일 -->
@@ -174,7 +174,7 @@
                                                             <!-- 게시글 번호 (고정됨) -->
                                                             <td>{{ row.idx }}</td>
                                                             <!-- 게시글 제목: a태그 클릭하면, 해당 게시글로 이동 -->
-                                                            <td><a href="{% url "lect_board_detail" lect.lect_no row.assignment.lect_board_no %}">{{ row.assignment.lect_board_title }}</a></td>
+                                                            <td><a href="{% url "lect_board_detail" lect.pk row.assignment.pk %}">{{ row.assignment.lect_board_title }}</a></td>
                                                             <!-- 과제 마감일 -->
                                                             <td>{{ row.assignment.assignment_deadline | date:"Y-m-d" }}</td>
                                                             <!-- 수강생: 과제 제출 여부 (제출/미제출) 보임 -->

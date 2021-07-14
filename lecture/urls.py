@@ -16,9 +16,9 @@ urlpatterns = [
 
     # 강의 게시글 CRUD
     path('room/<int:room_no>/register/<int:board_type>', views.lect_board_register, name="lect_board_register"),
-    path('room/<int:room_no>/detail/<int:board_no>', views.lect_board_detail, name="lect_board_detail"),
-    path('room/<int:room_no>/delete/<int:board_no>', views.lect_board_delete, name="lect_board_delete"),
-    path('room/<int:room_no>/update/<int:board_no>', views.lect_board_update, name="lect_board_update"),
+    path('room/<int:room_no>/detail/<int:lect_board_no>', views.lect_board_detail, name="lect_board_detail"),
+    path('room/<int:room_no>/delete/<int:lect_board_no>', views.lect_board_delete, name="lect_board_delete"),
+    path('room/<int:room_no>/update/<int:lect_board_no>', views.lect_board_update, name="lect_board_update"),
     path('room/<int:room_no>/list/<int:board_type>', views.lect_room_list, name="lect_room_list"),
 
     # 과제 제출 CRUD

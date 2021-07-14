@@ -1,6 +1,7 @@
 import functools
 from django.contrib import messages
-from django.shortcuts import redirect, reverse
+from django.http import Http404
+from django.shortcuts import redirect, reverse, render
 from DB.models import User, ContestBoard, Board, Bank, Lect, UserDelete, AuthUser, History, LectEnrollment, \
     ContestComment, LectBoard, Answer, UserEmail, Comment, LectAssignmentSubmit
 from allauth.socialaccount.models import SocialAccount, SocialToken
@@ -64,7 +65,7 @@ def is_writer(request, **kwargs):
     bank_no = kwargs.get('bank_no')
     lect_no = kwargs.get('lect_no', kwargs.get('room_no'))
     user_delete_no = kwargs.get('user_delete_no')
-    assignment_submit_no = kwargs.get('assignment_submit_no')  # 수강생 과제 제출
+    assignment_submit_no = kwargs.get('submit_no')  # 수강생 과제 제출
 
     # comment_no = kwargs.get('comment_no')
 
@@ -132,10 +133,13 @@ def get_user_get(request):
 # 작성일시 : 2021.07.14
 # 잘못된 접근시 메인페이지로 이동시킴
 # msg 에 메세지를 적으면, 메인페이지에서 alert 창으로 경고를 띄움 (default msg = '접근 권한이 없습니다.')
-def not_allowed(request, msg="접근 권한이 없습니다."):
-    messages.warning(request, msg)  # 메인에서 alert 창 띄우기
-
-    return redirect(reverse("index"))
+# 차라리 조용히 404 페이지를 띄워주는것도 좋을거같고..? => 해당 url 이 존재하는지 외부로부터 감출 수 있음
+def not_allowed(request, msg="접근 권한이 없습니다.", error_404=False):
+    if error_404:
+        raise Http404
+    else:
+        messages.warning(request, msg)  # 메인에서 alert 창 띄우기
+        return redirect(reverse("index"))
 
 
 # 데코레이터
@@ -171,7 +175,7 @@ def writer_only(superuser=False):
                 if is_writer(request, **kwargs):
                     return func(request, *args, **kwargs)
 
-            return not_allowed(request)
+            return not_allowed(request, error_404=True)
 
         return wrapper
 
@@ -195,7 +199,7 @@ def superuser_only(cfo_included=False):
             if current_user.user_role.role_no <= flag:
                 return func(request, *args, **kwargs)
             else:
-                return not_allowed(request)
+                return not_allowed(request, error_404=True)
 
         return wrapper
 
@@ -214,7 +218,7 @@ def cfo_only(func):
             return func(request, *args, **kwargs)
 
         else:
-            return not_allowed(request)
+            return not_allowed(request, error_404=True)
 
     return wrapper
 
@@ -260,7 +264,7 @@ def chief_only(vice=False):
             elif not vice and current_user.user_role.role_no == 1:
                 return func(request, *args, **kwargs)
             else:
-                return not_allowed(request)
+                return not_allowed(request, error_404=True)
 
         return wrapper
 

@@ -114,7 +114,8 @@ class LectBoardFormBase(forms.ModelForm):
                                                       "class": "form-control"}),
             'lect_board_type': forms.HiddenInput(),
             'lect_board_cont': forms.TextInput(attrs={"class": "jqte-test"}),
-            'assignment_deadline': forms.DateInput(attrs={"type": 'date'}),
+            'assignment_deadline': forms.DateInput(attrs={"type": 'date',
+                                                          "class": "form-control"}),
         }
         labels = {
             'lect_board_title': _("제목"),
@@ -187,6 +188,12 @@ class LectAssignmentForm(LectBoardFormBase):
     class Meta(LectBoardFormBase.Meta):
         exclude = ('lect_board_link', )
 
+        labels = {
+            'lect_board_title': _('과제 제목'),
+            'lect_board_cont': _('과제 내용'),
+            'assignment_deadline': _('마감일')
+        }
+
     def update(self, instance):
         assignment = super().update(instance)
         assignment.assignment_deadline = self.cleaned_data['assignment_deadline']
@@ -233,6 +240,7 @@ class AssignmentSubmitForm(forms.ModelForm):
         submission = super().save(commit=False)
         submission.assignment_submitter = kwargs.get('assignment_submitter')
         submission.assignment_no_id = kwargs.get('lect_board_no')
+        submission.lect_no_id = kwargs.get('lect_no')
         submission.save()
 
         return submission
