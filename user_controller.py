@@ -261,24 +261,47 @@ def is_default_pic(img_path):
     return str(img_path) == get_default_pic_path()
 
 
-# 활동 게시판과 유저가 관련되어 있는지 확인하는 함수
-def is_activity_related(user: User):
-    return len(Board.objects.filter(Q(board_writer=user) & Q(board_type_no__board_type_no=4))) != 0
+# # ------------ deprecated -------------
+# # 삭제 사유: 관리하기 불편함. is_related(user) 함수를 사용할 것.
+# # 활동 게시판과 유저가 관련되어 있는지 확인하는 함수
+# def is_activity_related(user: User):
+#     return len(Board.objects.filter(Q(board_writer=user) & Q(board_type_no__board_type_no=4))) != 0
+#
+#
+# # 공모전 게시판과 유저가 관련되어 있는지 확인하는 함수.
+# def is_contest_related(user: User):
+#     return len(ContestBoard.objects.filter(contest_writer=user)) != 0
+#
+#
+# # 회계와 관련되어있는지 확인하는 함수
+# def is_bank_related(user: User):
+#     return len(Bank.objects.filter(Q(bank_cfo=user) | Q(bank_used_user=user))) != 0
+#
+#
+# # 연혁과 관련되어있는지
+# def is_history_related(user: User):
+#     return len(History.objects.filter(history_writer=user)) != 0
+# ---------------------------------------
 
 
-# 공모전 게시판과 유저가 관련되어 있는지 확인하는 함수.
-def is_contest_related(user: User):
-    return len(ContestBoard.objects.filter(contest_writer=user)) != 0
-
-
-# 회계와 관련되어있는지 확인하는 함수
-def is_bank_related(user: User):
-    return len(Bank.objects.filter(Q(bank_cfo=user) | Q(bank_used_user=user))) != 0
-
-
-# 연혁과 관련되어있는지
-def is_history_related(user: User):
-    return len(History.objects.filter(history_writer=user)) != 0
+# 초기화를 할지 삭제를 할 지 결정하는 함수
+def is_related(user: User):
+    # 활동 게시판이랑 관련이 있는가?
+    if len(Board.objects.filter(Q(board_writer=user) & Q(board_type_no__board_type_no=4))) != 0:
+        return True
+    # 공지 사항과 관련이 있는가?
+    if len(Board.objects.filter(Q(board_writer=user) & Q(board_type_no__board_type_no=1))) != 0:
+        return True
+    # 공모전 게시판이랑 관련이 있는가?
+    if len(ContestBoard.objects.filter(contest_writer=user)) != 0:
+        return True
+    # 예산 지원신청을 하였거나, 예산을 처리한 적이 있는가?
+    if len(Bank.objects.filter(Q(bank_cfo=user) | Q(bank_used_user=user))) != 0:
+        return True
+    # 연혁에 개입하였는가?
+    if len(History.objects.filter(history_writer=user)) != 0:
+        return True
+    return False
 
 
 # 최소한의 개인정보(학번, 유저 이름)만 남기고 모든 정보를 초기화시키는 함수.
@@ -298,7 +321,8 @@ def initialize_user(user: User):
 # 계정 초기화를 하면 모든 게시글이 사라지지 않으므로 자신과 연관된 모든 데이터를 지우는 함수.
 def delete_all_infomation(user: User):
     # 본인 게시글 삭제(단 활동 게시판의 게시글은 공익을 위한 게시글이므로 삭제되어선 안된다.)
-    my_board_list = Board.objects.filter(Q(board_writer=user) & ~Q(board_type_no__board_type_no=4))
+    my_board_list = Board.objects.filter(
+        Q(board_writer=user) & ~Q(board_type_no__board_type_no=4) & ~Q(board_type_no__board_type_no=1))
     for my_board in my_board_list:
         FileController.delete_all_files_of_(my_board)
         my_board.delete()
@@ -310,7 +334,7 @@ def delete_all_infomation(user: User):
         my_comment.delete()
 
     # ------------ deprecated -------------
-    # 공모전 게시글은 공익을 위한 게시글이므로 삭제되어선 안된다.
+    # 삭제사유: 공모전 게시글은 공익을 위한 게시글이므로 삭제되어선 안된다.
     # # 본인 공모전 글 삭제
     # my_contest_list = ContestBoard.objects.filter(contest_writer=user)
     # for my_contest in my_contest_list:
@@ -368,8 +392,7 @@ def delete_user(user: User):
         with transaction.atomic():
             # 회계를 요청한 유저거나, 회계를 작성한 유저, 연혁을 작성한 유저, 활동 게시판 게시글을 작성한 유저,
             # 공모전 게시판의 게시글을 작성한 유저의 경우 데이터 무결성을 위해 최소한의 개인정보 만을 남기고 초기화시킴
-            if is_bank_related(user) or is_history_related(user) or is_activity_related(user) or is_contest_related(
-                    user):
+            if is_related(user):
                 initialize_user(user)  # 유저 정보 초기화
                 delete_all_infomation(user)  # 유저의 게시글 및 흔적 모두 삭제
             # 회계나 연혁에 관련 없는 계정의 경우 DB에서 계정 완전 삭제
