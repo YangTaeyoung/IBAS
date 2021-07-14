@@ -4,7 +4,7 @@ from DB.models import Board, User, Comment, Bank, UserUpdateRequest, UserEmail, 
     ContestBoard, ContestComment, History, Answer, Lect, LectBoard, LectEnrollment, LectAttendance
 from django.db.models import Q
 from user_controller import get_logined_user, login_required, get_social_login_info, initialize_user, \
-    get_default_pic_path, is_bank_related, is_history_related, is_default_pic, delete_all_infomation, delete_user
+    get_default_pic_path, is_default_pic, delete_all_infomation, delete_user
 from django.conf import settings
 from member.session import save_session
 from file_controller import FileController
@@ -161,5 +161,5 @@ def withdrawal(request):
                 current_user = get_logined_user(request)
                 if delete_user(current_user):
                     return redirect("logout")  # 최후의 로그아웃 (세션 제거용)
-    # 비정상적인 접근의 경우(해킹 시도)
+    # 비정상적인 접근이거나(해킹 시도), 모종의 이유로 삭제되지 않은 경우
     return redirect(reverse("my_info"))  # 내 정보 페이지로 이동.
