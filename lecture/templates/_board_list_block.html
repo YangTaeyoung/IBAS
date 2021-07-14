@@ -84,7 +84,7 @@
                                                             {% for assignment in assignments_list %}
                                                                 <tr>
                                                                     <!-- 게시글 번호 (고정됨) -->
-                                                                    <td>{{ forloop.revcounter }}</td>
+                                                                    <td>{{ assignment.idx }}</td>
                                                                     <!-- 게시글 제목: a태그 클릭하면, 해당 게시글로 이동 -->
                                                                     <td><a href={% url "lect_assignment_detail" lect.pk assignment.pk %}>[제출]&nbsp;{{ assignment.assignment_title }}</a></td>
                                                                     <!-- 과제 제출일 -->

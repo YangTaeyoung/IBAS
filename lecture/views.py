@@ -201,7 +201,7 @@ def get_assignment_list(cur_user, lect_room, name_in_html):
     # 강의자 : 글번호 / 과제글 / 제출된 수강생들의 과제 집계(총제출/총인원)
     if cur_user == lect_room.lect_chief:
         assignment_list = [{
-            'idx': len(lect_room.enrolled_students.all()) - idx + 1,
+            'idx': len(lect_room.lectures.filter(lect_board_type_id=3)) - idx,
             name_in_html: assignment,
             'status': str(len(assignment.submissions.all())) + '/' + str(len(lect_room.enrolled_students.all()))
         } for idx, assignment in enumerate(lect_room.lectures.filter(lect_board_type_id=3))]
@@ -211,7 +211,7 @@ def get_assignment_list(cur_user, lect_room, name_in_html):
             status = LectAssignmentSubmit.objects.filter(assignment_no=assignment,
                                                          assignment_submitter=cur_user).first()
             assignment_list.append({
-                'idx': len(lect_room.enrolled_students.all()) - idx + 1,
+                'idx': len(lect_room.lectures.filter(lect_board_type_id=3)) - idx,
                 name_in_html: assignment,
                 'status': status.status.description if status else '미제출'})
 
@@ -282,7 +282,7 @@ def lect_room_list(request, room_no, board_type):
         'lect': lect_room,
         'board_list': get_page_object(request, board_list, 15),
         'board_type': board_type,
-        'any_lecture': True if lect_room.lectures.filter(lect_board_type_id=2).first() else False  # 강의 x => 과제 작성 x
+        'any_lecture': True if lect_room.lectures.filter(lect_board_type_id=2) else False  # 강의 x => 과제 작성 x
     }
     return render(request, 'lecture_room_board_list.html', context)
 
@@ -538,7 +538,7 @@ def lect_room_student_status(request, room_no):
     lect_board_list = [{
         'idx': idx + 1,  # 회차
         'lecture': lect_board,
-        'attend': '출석' if attend_info.filter(lect_board_no=lect_board).exists() else '결석',
+        'attend': '출석' if attend_info.filter(lect_board_no=lect_board) else '결석',
         'assignments': [{
             'assignment': assignment,
             'submission': LectAssignmentSubmit.objects.filter(assignment_submitter=cur_user,
