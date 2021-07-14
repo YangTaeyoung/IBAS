@@ -593,7 +593,7 @@ def lect_room_manage_member(request, room_no):
             students = LectEnrollment.objects.filter(pk__in=checked_list)  # 체크된 수강생들 쿼리 ORM
 
             for std in students:
-                std.status = status_mode
+                std.status_id = status_mode
 
             LectEnrollment.objects.bulk_update(
                 objs=students, fields=['status', ]

@@ -140,7 +140,7 @@
                                                         <!-- 결석 수 -->
                                                         <td>{{ info.attend }}/{{ total_check }}</td>
                                                         <!--상태 -->
-                                                        {% if info.enrolled.status == 1 %}
+                                                        {% if info.enrolled.status_id == 1 %}
                                                             <td class="lectRoom_state lectRoom_state_ing_font">수강중</td>
                                                         {% else %}
                                                             <td class="lectRoom_state lectRoom_state_stop_font">수강정지</td>
