@@ -6,6 +6,14 @@
     width: 40px;
 }
 
+.width-42 {
+    width: 42px;
+}
+
+.width-47 {
+    width: 47px;
+}
+
 .width-50{
     width: 50px;
 }
@@ -113,7 +121,7 @@
 
 .max-min-width-700 {
     max-width: 700px;
-    min-height: 700px;
+    min-width: 700px;
 }
 
 .min-width-30 {
@@ -128,6 +136,14 @@
     min-width: 40px;
 }
 
+.min-width-42 {
+    min-width: 42px;
+}
+
+.min-width-47 {
+    min-width: 47px;
+}
+
 .min-width-50 {
     min-width: 50px;
 }
@@ -138,6 +154,10 @@
 
 .min-width-70{
     min-width: 70px;
+}
+
+.min-width-75 {
+    min-width: 75px;
 }
 
 .min-width-80 {
@@ -170,6 +190,10 @@
 
 .min-width-200 {
     min-width: 200px;
+}
+
+.min-width-230 {
+    min-width: 230px;
 }
 
 .min-width-310{
