@@ -8,5 +8,9 @@ urlpatterns = [
     path('aor/<int:lect_no>/', views.lect_aor, name="lect_aor"),  # 강의 등록 거절 페이지
     path('update/<int:lect_no>', views.lect_update, name="lect_update"),
     path('delete/<int:lect_no>', views.lect_delete, name="lect_delete"),
-    path('<int:type_no>/search/', views.lect_search, name="lect_search")
+    path('<int:type_no>/search/', views.lect_search, name="lect_search"),
+    path('room/mem/manage', views.lect_room_mem_manage, name="lect_room_mem_manage"),
+    path('room/detail', views.lect_room_detail, name="lect_room_detail"),
+    path('room/attend/std', views.lect_room_attend_std, name="lect_room_attend_std"),
+    path('room/attend/teacher', views.lect_room_attend_teacher, name="lect_room_attend_teacher"),
 ]
