@@ -1,7 +1,8 @@
 import functools
+from django.contrib import messages
 from django.shortcuts import redirect, reverse
 from DB.models import User, ContestBoard, Board, Bank, Lect, UserDelete, AuthUser, History, LectEnrollment, \
-    ContestComment, LectBoard, Answer, UserEmail, Comment
+    ContestComment, LectBoard, Answer, UserEmail, Comment, LectAssignmentSubmit
 from allauth.socialaccount.models import SocialAccount, SocialToken
 from file_controller import FileController
 from django.db.models import Q
@@ -61,8 +62,9 @@ def is_writer(request, **kwargs):
     board_no = kwargs.get('board_no')
     contest_no = kwargs.get('contest_no')
     bank_no = kwargs.get('bank_no')
-    lect_no = kwargs.get('lect_no')
+    lect_no = kwargs.get('lect_no', kwargs.get('room_no'))
     user_delete_no = kwargs.get('user_delete_no')
+    assignment_submit_no = kwargs.get('assignment_submit_no')  # 수강생 과제 제출
 
     # comment_no = kwargs.get('comment_no')
 
@@ -74,6 +76,10 @@ def is_writer(request, **kwargs):
     elif contest_no is not None:
         contest = ContestBoard.objects.get(pk=contest_no)
         if current_user == contest.contest_writer:
+            return True
+    elif assignment_submit_no is not None:
+        assignment = LectAssignmentSubmit.objects.get(pk=assignment_submit_no)
+        if current_user == assignment.assignment_submitter:
             return True
     elif lect_no is not None:
         lect = Lect.objects.get(pk=lect_no)
@@ -122,6 +128,16 @@ def get_user_get(request):
     return User.objects.get(pk=request.GET.get("user_stu"))
 
 
+# 작성자: 유동현
+# 작성일시 : 2021.07.14
+# 잘못된 접근시 메인페이지로 이동시킴
+# msg 에 메세지를 적으면, 메인페이지에서 alert 창으로 경고를 띄움 (default msg = '접근 권한이 없습니다.')
+def not_allowed(request, msg="접근 권한이 없습니다."):
+    messages.warning(request, msg)  # 메인에서 alert 창 띄우기
+
+    return redirect(reverse("index"))
+
+
 # 데코레이터
 # 로그인 안한 유저가 접근시 메인페이지로 이동
 def login_required(func):
@@ -130,7 +146,7 @@ def login_required(func):
         if is_logined(request):
             return func(request, *args, **kwargs)
         else:
-            return redirect(reverse("index"))
+            return not_allowed(request, msg='로그인이 필요합니다!')
 
     return wrapper
 
@@ -155,7 +171,7 @@ def writer_only(superuser=False):
                 if is_writer(request, **kwargs):
                     return func(request, *args, **kwargs)
 
-            return redirect(reverse("index"))
+            return not_allowed(request)
 
         return wrapper
 
@@ -179,7 +195,7 @@ def superuser_only(cfo_included=False):
             if current_user.user_role.role_no <= flag:
                 return func(request, *args, **kwargs)
             else:
-                return redirect(reverse("index"))
+                return not_allowed(request)
 
         return wrapper
 
@@ -198,7 +214,7 @@ def cfo_only(func):
             return func(request, *args, **kwargs)
 
         else:
-            return redirect(reverse("index"))
+            return not_allowed(request)
 
     return wrapper
 
@@ -221,7 +237,7 @@ def auth_check(active=False):
             if boundary:
                 return func(request, *args, **kwargs)
             else:
-                return redirect(reverse("index"))
+                return not_allowed(request)
 
         return wrapper
 
@@ -244,11 +260,33 @@ def chief_only(vice=False):
             elif not vice and current_user.user_role.role_no == 1:
                 return func(request, *args, **kwargs)
             else:
-                return redirect(reverse("index"))
+                return not_allowed(request)
 
         return wrapper
 
     return decorator
+
+
+# 데코레이터
+# 제작일: 21.7.13
+# 제작자: 유동현
+# 용도: 강의 또는 스터디 구성원인지 확인하는 용도
+def member_only(func):
+    @login_required
+    @functools.wraps(func)
+    def wrapper(request, *args, **kwargs):
+        current_user = get_logined_user(request)
+        lect_room = Lect.objects.prefetch_related(
+            'enrolled_students').get(pk=kwargs.get('room_no', kwargs.get('lect_no')))
+        if current_user == lect_room.lect_chief:
+            return func(request, *args, **kwargs)
+        elif member := lect_room.enrolled_students.filter(lect_no=lect_room, student=current_user).first():
+            if member.status_id == 1:
+                return func(request, *args, **kwargs)
+
+        return not_allowed(request, msg='수강정지 되었거나, 접근할 수 없는 멤버입니다!')
+
+    return wrapper
 
 
 # 디폴트 프로필 사진의 경로를 얻어옴
@@ -402,3 +440,6 @@ def delete_user(user: User):
                 user.delete()
                 return True
     return False
+
+
+

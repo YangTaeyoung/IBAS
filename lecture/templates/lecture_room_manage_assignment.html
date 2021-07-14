@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% load custom_tags %}
+{% load static %}
+{% block content %}
+    <!--커스텀 css-->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/ibas_contents.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/size.css' %}">
+    <script src="{% static 'js/ibas_centents.js' %}"></script>
+    <script src="{% static 'js/comment.js' %}"></script>
+    <script>
+
+
+    $(function () {
+        $("#selectbox").val({{ cur_assignment.lect_board_no }}).prop('selected',true);
+    });
+    </script>
+
+
+    <div class="page-wraper">
+        <!-- 상단 제목부분 -->
+        <div class="page-content bg-white">
+            <!----------============= 상단 제목 시작 ================----------->
+            <!--제목을 감싸는 배경-->
+            <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"
+                 style=" background-image: url('{% static 'images/board_name_img.jpg' %}'); height: 350px">
+
+                <a>
+                    <div class="container clearfix">
+                        <div class="dlab-bnr-inr-entry">
+
+                            <h1 class="text-white introduce-letter-spacing_5">과제 관리 게시판</h1>
+
+                            <p class="m-t20">{{ lect.lect_type.type_name }} 과제를 관리할 수 있는 게시판입니다. </p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <!----------============= 본문 시작 ================----------->
+            <div class="content-block">
+                <div class="section-full content-inner bg-white">
+                    <div class="container">
+                        <!--회원관리-->
+                        <div id="listing_user_setting" class="tab-pane">
+                            <div class="row">
+                                <!--========== 왼쪽 강의룸 네비게이션바 시작 ==========-->
+                                <div class="col-lg-3 col-xl-3">
+                                    <div class="sticky-top">
+                                        {% include "_navigation_bar.html" %}
+                                    </div>
+                                </div>
+                                <!--========== 왼쪽 강의룸 네비게이션바 끝 ==========-->
+
+
+                            {% if cur_assignment %}
+                                <!--=======================수강생 관리=========================-->
+                                <div class="col-lg-11 col-xl-8 p-b30">
+                                    <div class="width-870">
+                                            <form id="filter-form" >
+                                                {% csrf_token %}
+                                                <!-- 강의 주차 소개 탭 -->
+                                                <div class="listing-filter m-b40">
+                                                    <div class="bank-flex">
+                                                        <!-- 회차. -->
+                                                        <div>
+                                                            <ul class="filter m-b0">
+                                                                <li>
+                                                                    <label for="selectbox"></label><select id="selectbox" name="assignment_no" onchange="FilterFormSubmit()">
+
+                                                                        {% for lect_board in lect_board_list %}
+                                                                            {% with forloop.revcounter as i%}
+                                                                            {% if lect_board.assignments.all %}
+                                                                                {% for assignment in lect_board.assignments.all %}
+                                                                                    <option value="{{ assignment.lect_board_no }}">
+                                                                                       [{{ i }}회차] {{ assignment.lect_board_title|truncate:9}}
+                                                                                    </option>
+                                                                                {% endfor %}
+                                                                            {% endif %}
+                                                                            {% endwith %}
+                                                                        {% endfor %}
+
+                                                                    </select>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                        <!-- 강의 제목. 회차에 따라 강의 제목 바뀌어야 함.  -->
+                                                        <div class="mr-auto">
+                                                            <div class="m-l15">
+                                                                <h3 id="lect_board_title" class="title m-b0"
+                                                                    style="font-size: 22px">{{ cur_assignment.lect_board_title }}</h3>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+
+                                            <form id="manage-form" onsubmit="return ManageFormSubmit()">
+                                                <!-- 수강생 테이블 -->
+                                                {% include "_table_assignment_check.html" %}
+                                                {% csrf_token %}
+                                            </form>
+
+
+                                            <!--========== 페이지네이션 시작 ===========-->
+                                            <!-- 1페이지에 수강생 끌고오고, 수강생이 그보다 적으면, 페이지네이션 안보이게 처리 -->
+                                            {% if item_list %}
+                                                {% include "pagination.html" %}
+                                            {% endif %}
+                                            <!--========== 페이지네이션 끝 ===========-->
+                                        </div>
+
+
+                                </div>
+                            </div>
+                        {% else %}
+                            <p class="text-center align-content-center">과제가 존재하지 않습니다.</p>
+                        {% endif %}
+                        </div>
+                    </div>
+                    <!-- 상단으로 한번에 올라가는 버튼 -->
+                    <button class="scroltop fa fa-chevron-up" style="display: none;"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

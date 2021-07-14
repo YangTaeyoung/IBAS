@@ -1,12 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-    <!--코드 뷰어 스크립트-->
-    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?skin=desert"></script>
-    <script>
-    $(function (){
-        $("#select-box").val({{ lect_board_ref }}).prop('selected', true);
-    });
 
     </script>
     <div class="page-wraper">
@@ -50,66 +44,49 @@
                             </div>
                             <!--========== 왼쪽 검색창 및 강의룸 네비게이션바 끝 ==========-->
                             <!--========== 오른쪽 강의룸 메인 콘텐츠 시작 ===========-->
-
                             <div class="col-xl-8 col-lg-7 col-md-12 m-b30">
                                 <form class="add-listing-form" method="post" enctype="multipart/form-data"
-                                      action="{% if board_no %}{% url "lect_board_update" lect.lect_no board_no%}{% else %}{% url "lect_board_register" lect.lect_no board_type%}{% endif %}">
+                                      action="{% if submitted_assignment %}{% url "lect_assignment_update" lect.pk submitted_assignment.pk %}{% else %}{% url "lect_assignment_submit" lect.pk %}{% endif %}">
                                     {% csrf_token %}
 
-                                    {% if board_type == 3 %}
-                                        <div class="content-box">
-                                                <select id="select-box" name="lect_board_ref">
-                                                <option>강의 선택</option>
-                                                    {% for lecture in lect_board_list %}
-                                                        <option value="{{ lecture.lect_board_no }}">[{{ forloop.revcounter }}회차] {{ lecture.lect_board_title }} </option>
-                                                    {% endfor %}
-                                                </select>
-                                        </div>
-                                    {% endif %}
+                                    <input type="hidden" name="lect_board_no" value="{{ assignment.lect_board_no }}">
 
-                                    {% for hidden_field in lect_board_form.hidden_fields %}
-                                        {{ hidden_field }}
-                                    {% endfor %}
-
-                                    {% for field in lect_board_form.visible_fields %}
+                                    {% for field in assignment_form.visible_fields %}
                                         <!-- ======================제목 박스 & 링크 & 내용====================== -->
                                          <div class="content-box">
                                             <div class="content-header">
                                                 <!--제목-->
-                                                <h3 class="title">{{ lect.lect_type.type_name }} {{ field.label }}</h3>
+                                                <h3 class="title">{{ field.label }}</h3>
                                             </div>
                                             <div class="content-body editor">
                                                 <div class="form-group">
-                                                    <!--제목 입력하는 곳-->
                                                     {{ field }}
                                                 </div>
                                             </div>
                                          </div>
 
-                                        {% if field == lect_board_form.lect_board_title %}
-                                            <!--======================파일 첨부 박스======================-->
-                                            <div class="content-box">
-                                                <div class="content-header">
-                                                    <h3 class="title">파일첨부</h3>
-                                                </div>
-                                                <div class="content-body">
-                                                    <div class="form-group">
-                                                        <div class="form-group">
-                                                           {{ file_form.upload_file }}
-                                                        </div>
-                                                        {% include "file_update_box.html" %}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        {% endif %}
-
                                     {% endfor %}
+
+                                    <!--======================파일 첨부 박스======================-->
+                                    <div class="content-box">
+                                        <div class="content-header">
+                                            <h3 class="title">파일첨부</h3>
+                                        </div>
+                                        <div class="content-body">
+                                            <div class="form-group">
+                                                <div class="form-group">
+                                                   {{ file_form.upload_file }}
+                                                </div>
+                                                {% include "file_update_box.html" %}
+                                            </div>
+                                        </div>
+                                    </div>
 
 
                                     <!--등록버튼, 수정할 때는 수정하기로 뜨도록 수정필요-->
                                     <div style="display: grid; justify-items: center">
                                         <button class="site-button btn-block button-md" type="submit" style="width: 30%">
-                                            {% if board_no %}
+                                            {% if submitted_assignment %}
                                                 수정하기
                                             {% else %}
                                                 등록하기

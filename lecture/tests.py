@@ -10,12 +10,18 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils.datetime_safe import date, datetime
 from pytz import timezone
-from DB.models import Lect, User, LectBoard, LectBoardType, LectEnrollment
-from member.session import save_session
+from DB.models import Lect, User, LectBoard, LectBoardType, LectEnrollment, LectAttendance
 from faker import Faker
 
 _TEST_TITLE = '빠르게 시작하는 파이썬*$%^'
 _TEST_LECTURE_CHIEF = User.objects.get(pk=12162359)
+_TEST_ASSIGNMENT_TITLE = '과제: 배그를 만들어 오시오#$%^&'
+
+
+def save_sesssion(self):
+    session = self.client.session
+    session["user_stu"] = _TEST_LECTURE_CHIEF.user_stu
+    session.save()
 
 
 def _test_data():
@@ -31,7 +37,7 @@ def _test_data():
                                     lect_board_writer=_TEST_LECTURE_CHIEF, lect_board_cont="1234", lect_board_type_id=2)
         LectBoard.objects.create(lect_no=lecture, lect_board_title='공지사항',
                                  lect_board_writer=_TEST_LECTURE_CHIEF, lect_board_cont="1234", lect_board_type_id=1)
-        LectBoard.objects.create(lect_no=lecture, lect_board_title='과제: 배그를 만들어 오시오',
+        LectBoard.objects.create(lect_no=lecture, lect_board_title=_TEST_ASSIGNMENT_TITLE,
                                  lect_board_writer=_TEST_LECTURE_CHIEF, lect_board_cont="1234", lect_board_type_id=3,
                                  lect_board_ref=ref)
 
@@ -39,10 +45,14 @@ def _test_data():
         for std in User.objects.all():
             LectEnrollment.objects.create(lect_no=lecture, student=std)
 
+        # 한 수강생이 수업을 들었다.
+        LectAttendance.objects.create(lect_no=lecture, lect_board_no=ref, student=LectEnrollment.objects.first().student)
+
     except Exception as e:
         raise e
 
 
+# 강의 게시글 CRUD
 class LectBoardTest(TestCase):
     @classmethod
     def setUpTestData(cls):
@@ -50,6 +60,7 @@ class LectBoardTest(TestCase):
 
     def test_response_200_for_main_view(self):
         lect_room = Lect.objects.get(lect_title=_TEST_TITLE)
+        save_sesssion(self)
         response = self.client.get(reverse('lect_room_main', kwargs={'room_no': lect_room.lect_no}))
 
         self.assertEqual(200, response.status_code)
@@ -57,6 +68,7 @@ class LectBoardTest(TestCase):
 
     def test_response_200_for_LectBoard_list_view(self):
         lect_room = Lect.objects.get(lect_title=_TEST_TITLE)
+        save_sesssion(self)
 
         for lect_board_type in range(1,4):
             response = self.client.get(
@@ -64,11 +76,12 @@ class LectBoardTest(TestCase):
             )
 
             self.assertEqual(200, response.status_code)
-            self.assertTemplateUsed(response, 'lecture_room_list.html')
+            self.assertTemplateUsed(response, 'lecture_room_board_list.html')
 
     def test_response_200_for_LectBoard_detail_view(self):
         lect_room = Lect.objects.prefetch_related('lectures').get(lect_title=_TEST_TITLE)
         lect_board_list = lect_room.lectures.all()
+        save_sesssion(self)
 
         for i in lect_board_list:
             response = self.client.get(
@@ -103,6 +116,7 @@ class LectBoardTest(TestCase):
 
     def test_response_302_for_LectBoard_register(self):
         fake = Faker()
+        save_sesssion(self)
         session = self.client.session
         session["user_stu"] = _TEST_LECTURE_CHIEF.user_stu
         for i in range(1, 4):
@@ -120,8 +134,7 @@ class LectBoardTest(TestCase):
 
     def test_response_302_for_LectBoard_update(self):
         fake = Faker()
-        session = self.client.session
-        session["user_stu"] = _TEST_LECTURE_CHIEF.user_stu
+        save_sesssion(self)
         lecture = Lect.objects.get(lect_title=_TEST_TITLE)
         for i in range(1, 4):
             board = LectBoard.objects.filter(lect_no=lecture, lect_board_type_id=i).first()
@@ -150,6 +163,7 @@ class LectBoardTest(TestCase):
             self.assertEqual(302, response.status_code)
 
 
+# 출석관리
 class LectAttendanceTest(TestCase):
     @classmethod
     def setUpTestData(cls):
@@ -161,9 +175,9 @@ class LectAttendanceTest(TestCase):
         """
         lect_room = Lect.objects.get(lect_title=_TEST_TITLE)
 
-        response = self.client.get(reverse('lect_room_attend_teacher', kwargs={'room_no': lect_room.lect_no}))
+        response = self.client.get(reverse('lect_room_manage_attendance', kwargs={'room_no': lect_room.lect_no}))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'lecture_room_attend_teacher.html')
+        self.assertTemplateUsed(response, 'lecture_room_manage_attendance.html')
 
     def test_for_getting_all_lectBoards_of_a_lecture(self):
         """
@@ -173,7 +187,7 @@ class LectAttendanceTest(TestCase):
         lect_room = Lect.objects.prefetch_related("lectures").get(lect_title=_TEST_TITLE)
         lect_board_list = lect_room.lectures.filter(lect_board_type_id=2).order_by('-lect_board_no')
 
-        response = self.client.get(reverse('lect_room_attend_teacher', kwargs={'room_no': lect_room.lect_no}))
+        response = self.client.get(reverse('lect_room_manage_attendance', kwargs={'room_no': lect_room.lect_no}))
 
         self.assertQuerysetEqual(lect_board_list, response.context['lect_board_list'], transform=lambda x: x)
 
@@ -198,10 +212,10 @@ class LectAttendanceTest(TestCase):
                     ORDER BY u.USER_NAME ASC;"""
         cursor = connection.cursor()
         cursor.execute(query)  # 쿼리 수행
-        students_list = [{'name': name, 'stu': stu, 'attendance': '출석' if attendance == '1' else '결석'}
+        students_list = [{'name': name, 'stu': stu, 'attendance': '출석' if attendance == 1 else '결석'}
                          for name, stu, attendance in cursor.fetchall()]
 
-        response = self.client.get(reverse('lect_room_attend_teacher', kwargs={'room_no': lect_room.lect_no}))
+        response = self.client.get(reverse('lect_room_manage_attendance', kwargs={'room_no': lect_room.lect_no}))
 
         self.assertListEqual(students_list, response.context['students_list'])
 
@@ -215,7 +229,91 @@ class LectAttendanceTest(TestCase):
         }
 
         # 어떤 수강생도 체크하지 않았을 때,
-        response = self.client.post(reverse('lect_room_attend_teacher', kwargs={'room_no': lect_room.lect_no}), context)
+        response = self.client.post(reverse('lect_room_manage_attendance', kwargs={'room_no': lect_room.lect_no}), context)
 
         self.assertEqual(response.status_code, 302)
 
+
+#
+class LectAssignmentManageTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        _test_data()
+
+    def test_response_200_for_assignment_manage_html(self):
+        """
+                강의자 메뉴 中 : 수강생 과제 관리 페이지 접속
+        """
+        lect_room = Lect.objects.get(lect_title=_TEST_TITLE)
+
+        response = self.client.get(reverse('lect_room_manage_assignment', args=[lect_room.lect_no]))
+
+        self.assertEqual(200, response.status_code)
+        self.assertTemplateUsed(response, 'lecture_room_manage_assignment.html')
+
+
+# 수강생 관리
+class ManageMemberTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        _test_data()
+
+    def test_response_200_for_member_manage_html(self):
+        """
+                강의자 메뉴 中 : 수강생 관리 페이지 접속
+        """
+        lect_room = Lect.objects.get(lect_title=_TEST_TITLE)
+
+        response = self.client.get(reverse('lect_room_manage_member', args=[lect_room.lect_no]))
+
+        self.assertEqual(200, response.status_code)
+
+    def test_response_302_for_member_manage(self):
+        """
+                강의자 메뉴 中 : 수강생 관리 페이지, 수강생 정보 변경
+        """
+        lect_room = Lect.objects.get(lect_title=_TEST_TITLE)
+        std = lect_room.attendance.first().student.user_stu  # 임의의 한 강의를 들었던 사람의 학번
+        for status_mode in range(2):
+            context = {
+                'is_checked_' + str(std): LectEnrollment.objects.get(lect_no=lect_room.lect_no, student_id=std).pk,
+                'status_mode': status_mode
+            }
+
+            response = self.client.post(reverse('lect_room_manage_member', args=[lect_room.lect_no]), context)
+
+            self.assertEqual(302, response.status_code)
+
+    def test_response_200_for_student_status(self):
+        """
+                수강생 메뉴 中 : 수강생 출석 및 과제 제출 현황 조회
+        """
+        lect_room = Lect.objects.get(lect_title=_TEST_TITLE)
+        session = self.client.session
+        session['user_stu'] = lect_room.attendance.first().student.user_stu
+        session.save()
+
+        response = self.client.get(reverse('lect_room_student_status', args=[lect_room.lect_no]))
+
+        self.assertEqual(200, response.status_code)
+
+
+class AssignmentSubmitTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        _test_data()
+
+    def test_response_200_for_submit_html(self):
+        """
+                수강생 과제 제출 페이지 접근
+        """
+        lect_room = Lect.objects.get(lect_title=_TEST_TITLE)
+        assignment = LectBoard.objects.get(lect_board_title=_TEST_ASSIGNMENT_TITLE)
+
+        response = self.client.get(
+            reverse('lect_assignment_submit', args=[lect_room.lect_no]),
+            data={'lect_board_no': assignment.lect_board_no}
+        )
+
+        self.assertEqual(200, response.status_code)
+        self.assertTemplateUsed(response, 'lecture_assignment_submit.html')

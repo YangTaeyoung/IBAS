@@ -1,0 +1,127 @@
+                                            {% load custom_tags %}
+                                            <!-- 회원관리 테이블 -->
+                                            <table class="table">
+                                                <thead id="lectRoom_mhead">
+                                                <!-- 테이블 1행: 제목 -->
+                                                <tr id="lectRoom_head">
+                                                    <th class="border-top-0 width-65 min-width-65 text-center align-middle"
+                                                        scope="col"></th>
+                                                    <th class="border-top-0 width-100 min-width-100 text-center align-middle"
+                                                        scope="col">이름
+                                                    </th>
+                                                    <th class="border-top-0 width-90 min-width-90 text-center align-middle"
+                                                        scope="col">학번
+                                                    </th>
+
+                                                    <!-- 과제 필터 -->
+                                                    <th class="border-top-0 width-70 min-width-70 text-center" scope="col">
+                                                        <select id="lectRoom_select_hw" class="lectRoom_select" onchange="lectRoom_manage()">
+                                                        <option selected>과제</option>
+                                                        <option>통과</option>
+                                                        <option>대기</option>
+                                                        <option>실패</option>
+                                                        <option>미제출</option>
+                                                    </select></th>
+                                                    <th class="border-top-0 width-120 min-width-120 text-center align-middle"
+                                                        scope="col">제출 시간
+                                                    </th>
+                                                    <th class="border-top-0 align-middle width-310 min-width-310" scope="col">제출된 과제</th>
+                                                    <!-- 보러가기 링크란 -->
+                                                    <th class="border-top-0 width-80 min-width-80 text-center"></th>
+                                                </tr>
+                                                </thead>
+
+                                                <!-- 테이블 2행: 수강생 관리 테이블 내용 시작 -->
+                                                <tbody>
+
+
+                                                {% if not students_list %}
+
+                                                    <!-- 수강생이 없을 때 나오는 열 -->
+                                                    <tr>
+                                                        <td colspan="9" style="text-align: center"> 강의를 수강하고 있는 회원이 없습니다.
+                                                        </td>
+                                                    </tr>
+
+                                                {% else %}
+                                                    <form>
+                                                        <!-- 수강생이 있을 때 나오는 열 -->
+                                                        <!--========================여기부터 복붙==========================-->
+                                                        {% for row in students_list %}
+                                                            <tr class="lectRoom_mtr align-middle">
+                                                                <!-- 체크박스 -->
+                                                                <td scope="row">
+
+                                                                    <div>
+                                                                        <input id="check_{{ row.student.user_stu }}" name="is_checked_{{ row.student.user_stu }}"
+                                                                               type="checkbox" value="{{ row.submission.pk }}">
+
+                                                                        <label for="check_{{ row.student.user_stu }}"
+                                                                               class="staff_label_margin m-l20"></label>
+                                                                    </div>
+                                                                </td>
+                                                                <!-- 회원 이름 -->
+                                                                <td class="align-middle text-center">{{ row.student.user_name }}</td>
+                                                                <!-- 회원 학번 -->
+                                                                <td class="text-center">{{ row.student.user_stu }}</td>
+
+                                                                {% if row.submission %}
+                                                                    <!-- 과제제출 했을 때-->
+
+                                                                    <!-- 상태 -->
+                                                                    <td class="text-center lectRoom_hw">{{ row.submission.status.description }}</td>
+                                                                    <!--제출시간 -->
+                                                                    <td class="text-center">{{ row.submission.assignment_submit_created | date:"Y-m-d"}}</td>
+                                                                    <!-- 과제 파일 : 1개만 보여주고, 그 이상은 (+n) 이렇게 숫자만 표현 -->
+                                                                    <td class="align-middle"><a href="javascript:void(0);">
+                                                                        {% if row.submission.files.all|length %}
+                                                                            {{ row.submission.files.first.file_name|truncate:25 }}&nbsp;&nbsp;
+                                                                            {% if row.submission.files.all|length > 1%}(+{{ row.submission.files.all|length |subtract:1 }}){% endif %}
+                                                                        {% else %}-{% endif %}</a></td>
+                                                                    <td class="font-12"><a href="{% url "lect_assignment_detail" lect.pk row.submission.pk %}">▶자세히</a></td>
+
+                                                                {% else %}
+                                                                    <!-- 과제제출 안했을 때-->
+
+                                                                    <!-- 상태 -->
+                                                                    <td class="text-center lectRoom_hw">미제출</td>
+                                                                    <!--제출시간 -->
+                                                                    <td class="text-center">-</td>
+                                                                    <!-- 과제 파일 -->
+                                                                    <td class="align-middle"><a href="javascript:void(0);">-</a></td>
+                                                                    <td></td>
+                                                                {% endif %}
+
+                                                            </tr>
+                                                        {% endfor %}
+                                                        <!--========================여기까지 복붙==========================-->
+                                                    </form>
+
+                                                {% endif %}
+                                                    </tbody>
+                                                </table>
+
+                                            <div class="listing-filter-sidebar border-0" >
+                                                <div class="row float-right width-430">
+                                                    <!-- 과제관리 -->
+                                                    <div class="col-md-4 pr-0">
+                                                        <div class="form-group width-130 float-right">
+                                                            <select name="manage_mode" id="manage-mode">
+                                                                <option disabled selected>과제관리</option>
+                                                                <option value="1">통과</option>
+                                                                <option value="-1">실패</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <!-- 적용 버튼  -->
+                                                    <div class="col-md-4 pl-0">
+                                                        <div class="form-group float-right mb-0 mt-7">
+                                                            <button class="site-button" type="submit"><i
+                                                                    class="la la-check m-r5"
+                                                                    style="font-weight: bold"></i>&nbsp;적용
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- 관리 select 부분 끝 -->

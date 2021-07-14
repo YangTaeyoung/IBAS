@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    <!--커스텀 css-->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/ibas_contents.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/size.css' %}">
+    <script src="{% static 'js/ibas_centents.js' %}"></script>
+    <script src="{% static 'js/comment.js' %}"></script>
+
+    <div class="page-wraper">
+        <!-- 상단 제목부분 -->
+        <div class="page-content bg-white">
+            <!----------============= 상단 제목 시작 ================----------->
+            <!--제목을 감싸는 배경-->
+            <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"
+                 style=" background-image: url('{% static 'images/board_name_img.jpg' %}'); height: 350px">
+                <!-- 상단 제목을 클릭하면, 상위 게시판으로 이동 -->
+                <a href="{% url 'lect_room_main' lect.lect_no %}">
+                    <div class="container clearfix">
+                        <div class="dlab-bnr-inr-entry">
+                            <!--강의 제목-->
+                            <!-- DB에서 제목 꺼내와야 함 -->
+                            <h1 class="text-white introduce-letter-spacing_5">{{ lect.lect_title }}</h1>
+                            <!--부제목-->
+                            <p class="m-t20">출결 및 과제 현황</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <!----------============= 본문 시작 ================----------->
+            <div class="content-block">
+                <div class="section-full content-inner bg-white">
+                    <div class="container">
+                        <!--출결관리-->
+                        <div id="listing_user_setting" class="tab-pane">
+                            <div class="row">
+                                <!--========== 왼쪽 검색창 및 강의룸 네비게이션바 시작 ==========-->
+                                <div class="col-lg-3 col-xl-3">
+                                    <div class="sticky-top">
+                                        {% include "_navigation_bar.html" %}
+                                    </div>
+                                </div>
+                                <!--========== 왼쪽 검색창 및 강의룸 네비게이션바 끝 ==========-->
+
+                                <!--=======================출결 관리=========================-->
+                                <div class="col-lg-11 col-xl-8 p-b30">
+                                    <!-- 출결 관리 콘텐츠 시작 -->
+                                    <div class="myinfo-table-padding">
+                                        <!-- 출결 관리 테이블 시작 -->
+                                        <table class="table border-top">
+                                            <thead>
+                                            <!-- 테이블 1행 -->
+                                            <tr id="lectRoom_head">
+                                                <!-- staff_width는 staff_cr.css에 정의되어 있음.  -->
+                                                <th class="border-top-0 width-70 text-center" scope="col">회차</th>
+                                                <th class="border-top-0 width-70 text-center" scope="col">구분</th>
+                                                <th class="border-top-0 text-center" scope="col">강의 내용</th>
+                                                <th class="border-top-0 width-70 text-center" scope="col">상태</th>
+                                            </tr>
+
+                                            </thead>
+                                            <!-- 출결 관리 테이블 내용 시작 -->
+                                            <tbody>
+                                                {% for row in lect_board_list %}
+                                                    <!-- 강의 부분 -->
+                                                    <tr>
+                                                        <!-- 주차 -->
+                                                        <th rowspan="2" class="lectRoom_week">
+                                                            {{ row.idx }}
+                                                        </th>
+                                                        <!-- 강의 -->
+                                                        <td class="border-right text-center">강의</td>
+                                                        <!-- 강의제목 -->
+                                                        <td class="border-right"><{{ forloop.counter }} 회차> {{ row.lecture.lect_board_title }}</td>
+                                                        <!-- 강의 출석 -->
+                                                        {% if row.attend == '출석' %}
+                                                            <td class="text-center lectRoom_state_ing_font">출석</td>
+                                                        {% elif row.attend == '결석' %}
+                                                            <td class="text-center lectRoom_state_stop_font">결석</td>
+                                                        {% endif %}
+                                                    </tr>
+
+                                                    <!-- 과제 부분 -->
+                                                    <tr>
+                                                    {% for subrow in row.assignments %}
+                                                        <!-- 과제 -->
+                                                        <td class="border-right text-center">-</td>
+                                                        <!-- 과제제목 -->
+                                                        <td class="border-right">&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;{{ subrow.assignment.lect_board_title }}</td>
+                                                        <!-- 과제 상태 -->
+                                                        {% if subrow.submission.status.description == '통과' %}
+                                                            <td class="text-center lectRoom_state_ing_font">통과</td>
+                                                        {% elif subrow.submission.status.description == '실패'%}
+                                                            <td class="text-center lectRoom_state_stop_font">실패</td>
+                                                        {% else %}
+                                                            <td class="text-center">
+                                                            {% if subrow.submission %}
+                                                                {{ subrow.submission.status.description }}
+                                                            {% else %}
+                                                                미제출
+                                                            {% endif %}
+                                                            </td>
+                                                        {% endif %}
+
+                                                    {% endfor %}
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                        <!--========== 페이지네이션 시작 ===========-->
+                                        <!-- 1페이지에 10개 강의 -->
+                                        {% if item_list %}
+                                                {% include "pagination.html" %}
+                                        {% endif %}
+                                        <!--========== 페이지네이션 끝 ===========-->
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 상단으로 한번에 올라가는 버튼 -->
+                    <button class="scroltop fa fa-chevron-up" style="display: none;"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

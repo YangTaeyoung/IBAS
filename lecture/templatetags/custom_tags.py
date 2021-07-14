@@ -22,3 +22,18 @@ def get_first_img(arg):
     for file in arg:
         if FileController.is_image(file.file_path):
             return str(file.file_path)
+
+
+# 글자수 length 초과하면 자르고 끝에 ... 붙임
+@register.filter
+def truncate(string, length):
+    if len(string) < length:
+        return string + ''.join([' '] * (10 - len(string)))
+    else:
+        return string[:length] + '...'
+
+
+# url 표시할 때, http:// 이거 나오면 구려보여서 잘르기.
+@register.filter
+def url(url):
+    return url[url.find('w'):]

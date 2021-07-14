@@ -1,16 +1,18 @@
 from django.db import transaction, connection
-from django.shortcuts import render, redirect, reverse, get_object_or_404
-from DB.models import LectType, Lect, LectDay, StateInfo, MethodInfo, LectBoard, LectBoardFile, \
-    LectEnrollment, LectAttendance
 from django.db.models import Q
-from pagination_handler import get_paginator_list, get_page_object
-from lecture.forms import LectForm, LectRejectForm, LectPicForm, LectBoardForm, make_lect_board_form, \
-    FileForm
-from user_controller import get_logined_user, login_required, superuser_only, writer_only, auth_check, is_superuser, \
-    is_logined
-from file_controller import FileController
+from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.utils.dateformat import DateFormat
 from alarm.alarm_controller import create_lect_full_alarm, create_lect_enroll_alarm
+
+from DB.models import LectType, Lect, LectDay, MethodInfo, LectBoard, LectEnrollment, LectAttendance, \
+    LectAssignmentSubmit
+from file_controller import FileController
+from lecture.forms import LectForm, LectRejectForm, LectPicForm, make_lect_board_form, \
+    FileForm, AssignmentSubmitForm
+from pagination_handler import get_page_object
+from user_controller import get_logined_user, superuser_only, writer_only, auth_check, is_superuser, \
+    is_logined, is_writer, member_only
+from utils.crawler import get_og_tag
 
 
 def get_pol_name(method_no):
@@ -190,39 +192,109 @@ def lect_enroll(request, lect_no):
     return redirect('lect_room_main', room_no=lect_no)
 
 
+# 과제 정보 가져오기 ( 과제게시글 더보기 / 내가 제출한 과제보기 / 강의실 메인 홈 )
+def get_assignment_list(cur_user, lect_room, name_in_html):
+    assignment_list = []
+
+    # 강의자 : 글번호 / 과제글 / 제출된 수강생들의 과제 집계(총제출/총인원)
+    if cur_user == lect_room.lect_chief:
+        assignment_list = [{
+            'idx': len(lect_room.enrolled_students.all()) - idx,
+            name_in_html: assignment,
+            'status': str(len(assignment.submissions.all())) + '/' + str(len(lect_room.enrolled_students.all()))
+        } for idx, assignment in enumerate(lect_room.lectures.filter(lect_board_type_id=3))]
+    # 수강생 : 글번호 / 과제글 / 제출한 과제 현황.
+    else:
+        for idx, assignment in enumerate(lect_room.lectures.filter(lect_board_type_id=3)):
+            status = LectAssignmentSubmit.objects.filter(assignment_no=assignment,
+                                                         assignment_submitter=cur_user).first()
+            assignment_list.append({
+                'idx': len(lect_room.enrolled_students.all()) - idx,
+                name_in_html: assignment,
+                'status': status.status.description if status else '미제출'})
+
+    return assignment_list
+
+
 # 강의룸 메인 페이지
+@member_only
 def lect_room_main(request, room_no):
+    lect_room = Lect.objects.prefetch_related('lectures', 'enrolled_students').get(pk=room_no)
+    cur_user = get_logined_user(request)
+
     context = {
-        'lect': Lect.objects.get(pk=room_no),
-        'notice_list': LectBoard.objects.filter(lect_board_type_id=1),  # 강의 공지글 불러오기
-        'lect_board_list': LectBoard.objects.filter(lect_board_type_id=2),  # 강의 게시글 불러오기
-        'assignment_list': LectBoard.objects.filter(lect_board_type_id=3),  # 강의 과제 불러오기
+        'lect': lect_room,
+        'notice_list': lect_room.lectures.filter(lect_board_type_id=1),  # 강의 공지글 불러오기
+        'lect_board_list': lect_room.lectures.filter(lect_board_type_id=2),  # 강의 게시글 불러오기
+        'assignment_list': get_assignment_list(cur_user, lect_room, name_in_html='assignment')  # 강의 과제 불러오기
     }
     return render(request, 'lecture_room_main.html', context)
 
 
-# 더보기 눌렀을 때 나오는 게시판 (공지게시판(1)/강의게시판(2)/과제게시판(3))
-def lect_room_list(request, room_no, board_type):
-    board_list = LectBoard.objects.filter(lect_board_type_id=board_type)
+@member_only
+def lect_room_search(request, room_no):
+    if request.method == "GET":
+        k = request.GET.get("keyword")
 
-    page_obj = get_page_object(request, board_list, 15)  # 페이지네이션 15개 글이 한 페이지
+        search_result = LectBoard.objects.filter((
+                Q(lect_board_title__icontains=k) | Q(lect_board_cont__icontains=k) |
+                Q(lect_board_writer__user_name__icontains=k)) & Q(lect_no_id=room_no)).order_by('-lect_board_created')
+
+        # 검색 필터 (검색 범위: 강의게시글 제목, 강의게시글 내용, 강의게시글 작성자)
+        board_list = get_page_object(
+            request,
+            model_list=[{'idx': len(search_result) - idx, 'board': board} for idx, board in enumerate(search_result)],
+            num_of_boards_in_one_page=15)
+
+        lect = Lect.objects.get(pk=room_no)
+        lect.lect_intro = "\"" + k + "\"(으)로 검색한 결과입니다."
+
+        context = {
+            "lect": lect,
+            "board_type": 0,
+            "board_list": board_list,
+            'searching': True  # lecture_room_board_list.html 를 재사용하기 때문에, url matching error 를 피하기 위함.
+        }
+
+        return render(request, 'lecture_room_board_list.html', context)  # 정상 처리
+
+
+                                                # 강의 게시글 CRUD #
+
+
+# 더보기 눌렀을 때 나오는 게시판 (공지게시판(1)/강의게시판(2)/과제게시판(3))
+@member_only
+def lect_room_list(request, room_no, board_type):
+    lect_room = Lect.objects.prefetch_related('enrolled_students', 'lectures', 'submitted_assignments').get(pk=room_no)
+
+    # 공지사항 및 강의게시판
+    if board_type < 3:
+        board_list = lect_room.lectures.filter(lect_board_type_id=board_type)
+        board_list = [{'idx': len(board_list)-idx, 'board': board} for idx, board in enumerate(board_list)]
+    # 과제게시판
+    else:
+        cur_user = get_logined_user(request)
+        board_list = get_assignment_list(cur_user, lect_room, name_in_html='board')
 
     context = {
-        'lect': Lect.objects.get(pk=room_no),
-        'board_list': board_list,
+        'lect': lect_room,
+        'board_list': get_page_object(request, board_list, 15),
         'board_type': board_type,
-        'item_list': page_obj
+        'any_lecture': True if lect_room.lectures.filter(lect_board_type_id=2).first() else False  # 강의 x => 과제 작성 x
     }
-    return render(request, 'lecture_room_list.html', context)
+    return render(request, 'lecture_room_board_list.html', context)
 
 
 # 강의 게시글(공지/강의) 등록
+@writer_only()
 def lect_board_register(request, room_no, board_type):
     if request.method == "GET":
+        lect_room = Lect.objects.prefetch_related('lectures').get(pk=room_no)
         context = {
             'lect_board_form': make_lect_board_form(board_type),
             'file_form': FileForm(),
-            'lect': Lect.objects.get(pk=room_no),
+            'lect': lect_room,
+            'lect_board_list': lect_room.lectures.filter(lect_board_type_id=2) if board_type == 3 else None,
             'board_type': board_type
         }
         # 게시글 등록 페이지로 이동!
@@ -233,11 +305,11 @@ def lect_board_register(request, room_no, board_type):
         file_form = FileForm(request.POST, request.FILES)
 
         if lect_board_form.is_valid() and file_form.is_valid():
-            # 트렌젝션 꼭 보장되어야함!
             with transaction.atomic():
                 lecture = lect_board_form.save(  # 공지 또는 강의 게시물 저장
                     lect_board_writer=get_logined_user(request),
                     lect_no=Lect.objects.get(pk=room_no),
+                    lect_board_ref_id=request.POST.get('lect_board_ref')  # 과제글에 대한 셀프조인
                 )
                 file_form.save(instance=lecture)  # 공지 또는 강의 파일 저장
 
@@ -245,21 +317,33 @@ def lect_board_register(request, room_no, board_type):
 
 
 # 강의/공지 게시글 상세보기
+@member_only
 def lect_board_detail(request, room_no, board_no):
+    lect_room = get_object_or_404(Lect, pk=room_no)
     board = get_object_or_404(LectBoard, pk=board_no)
     file_list, img_list, doc_list = FileController.get_images_and_files_of_(board)
 
+    # 과제 글
+    submitted_assignment = None
+    if board.lect_board_type_id == 3:
+        # 수강생이면, 제출한 과제 보여주기
+        cur_user = get_logined_user(request)
+        if cur_user != lect_room.lect_chief:
+            # 과제 하나당 수강생은 어차피 하나밖에 제출 못함. get 쿼리로 검사하면 레코드 없을 시 오류 발생.
+            submitted_assignment = LectAssignmentSubmit.objects.filter(assignment_submitter=cur_user, assignment_no=board).first()
+
     context = {
-        'lect': get_object_or_404(Lect, pk=room_no),
+        'lect': lect_room,
         'board': board,
-        'file_list': file_list,
-        'img_list': img_list,
-        'doc_list': doc_list
+        'doc_list': file_list,
+        'submitted_assignment': submitted_assignment,
+        'og': get_og_tag(board.lect_board_link) if board.lect_board_link else None
     }
     return render(request, 'lecture_room_board_detail.html', context)
 
 
 # 강의/공지 게시글 삭제
+@writer_only()
 def lect_board_delete(request, room_no, board_no):
     lect_board = get_object_or_404(LectBoard, pk=board_no)
 
@@ -270,9 +354,9 @@ def lect_board_delete(request, room_no, board_no):
 
 
 # 강의/공지 게시글 수정
+@writer_only()
 def lect_board_update(request, room_no, board_no):
-    board = LectBoard.objects.prefetch_related('files', 'assignments', 'assignments__files').get(pk=board_no)
-    assignments = board.assignments.first()  # 공지 => None, 강의 => 해당 과제
+    board = LectBoard.objects.prefetch_related('files').get(pk=board_no)
     board_type = board.lect_board_type_id
 
     if request.method == "GET":
@@ -283,120 +367,354 @@ def lect_board_update(request, room_no, board_no):
             'board_no': board_no,
             'board_type': board_type,
             'file_list': board.files.all(),  # 게시글 기존 파일 리스트
-            'assignment_file_list': assignments.files.all() if assignments is not None else None  # 과제 기존 파일 리스트
+            'lect_board_list': LectBoard.objects.filter(lect_no_id=room_no, lect_board_type_id=2
+                                                        ) if board_type == 3 else None,  # 과제글의 경우 상단 select 박스
+            'lect_board_ref': board.lect_board_ref_id if board_type == 3 else None  # 과제글의 경우 부모 게시글
+
         }
         return render(request, 'lecture_room_board_register.html', context)
 
     elif request.method == "POST":
         lect_board_form = make_lect_board_form(board_type, request.POST)  # 강의/공지 폼
         file_form = FileForm(request.POST, request.FILES)  # 강의 파일 폼
-        has_assignment = bool(request.POST.get('has_assignment'))  # '과제가 있습니다' 체크박스 value 값
 
         if lect_board_form.is_valid() and file_form.is_valid():
-            # 트랜젝션 꼭 있어야 함!
             with transaction.atomic():
+                if board_type == 3:  # 과제글의 경우
+                    board.lect_board_ref = get_object_or_404(LectBoard, pk=request.POST.get("lect_board_ref"))
                 lect_board_form.update(instance=board)
-                FileController.remove_files_by_user(request, board.file.all())
+                FileController.remove_files_by_user(request, board.files.all())
                 file_form.save(instance=board)
 
         return redirect('lect_board_detail', room_no=room_no, board_no=board_no)
 
 
-def lect_room_mem_manage(request, room_no):
-    students = LectEnrollment.objects.filter(lect_no__lect_no=room_no)
-
-    context = {
-        'students': students,
-        'lect': Lect.objects.get(pk=room_no),
-        'item_list': get_page_object(request, students, 15)  # 15 명씩 보이게 출력
-    }
-
-    return render(request, 'lecture_room_mem_manage.html', context)
+def sample(request):
+    return render(request, 'sample.html')
 
 
-def lect_room_attend_std(request, room_no):
-    lect_room = Lect.objects.prefetch_related("lectures").get(pk=room_no)
+                                            # 수강생 과제 CRUD #
+
+
+# 수강생 과제 제출
+@member_only
+def lect_assignment_submit(request, room_no):
+    lect_room = get_object_or_404(Lect, lect_no=room_no)
+
+    if request.method == "GET":
+        assignment = LectBoard.objects.get(pk=request.GET.get('lect_board_no'))
+        context = {
+            'lect': lect_room,
+            'assignment_form': AssignmentSubmitForm(initial={'assignment_title': assignment.lect_board_title}),
+            'file_form': FileForm(),
+            'assignment': assignment
+        }
+        return render(request, 'lecture_assignment_submit.html', context)
+
+    elif request.method == "POST":
+        submit_form = AssignmentSubmitForm(request.POST)
+        file_form = FileForm(request.POST, request.FILES)
+
+        if submit_form.is_valid() and file_form.is_valid():
+            with transaction.atomic():
+                submission = submit_form.save(
+                    lect_board_no=request.POST.get('lect_board_no'),
+                    assignment_submitter=get_logined_user(request)
+                )
+                file_form.save(instance=submission)
+
+        return redirect(reverse('lect_assignment_detail', args=[room_no, submission.pk]))
+
+
+# 제출한 과제 목록
+@member_only
+def lect_assignment_list(request, room_no):
+    lect_room = Lect.objects.prefetch_related('submitted_assignments').get(pk=room_no)
+    cur_user = get_logined_user(request)
+    assignments_list = get_page_object(
+        request,
+        model_list=lect_room.submitted_assignments.select_related('assignment_no').filter(assignment_submitter=cur_user).all(),
+        num_of_boards_in_one_page=15)
 
     context = {
         'lect': lect_room,
-        'lect_board_list': lect_room.lectures
+        'assignments_list': assignments_list,
     }
 
-    return render(request, 'lecture_room_attend_std.html', context)
+    return render(request, 'lecture_room_board_list.html', context)
+
+
+# 수강생이, 제출한 과제 수정
+@writer_only()
+def lect_assignment_update(request, room_no, submit_no):
+    lect_room = get_object_or_404(Lect, pk=room_no)
+    submitted_assignment = LectAssignmentSubmit.objects.prefetch_related('files').get(pk=submit_no)
+
+    if request.method == "GET":
+        context = {
+            'lect': lect_room,
+            'assignment_form': AssignmentSubmitForm(instance=submitted_assignment),
+            'submitted_assignment': submitted_assignment,
+            'assignment': submitted_assignment.assignment_no,
+            'file_form': FileForm(),
+            'file_list': submitted_assignment.files.all()
+        }
+        return render(request, 'lecture_assignment_submit.html', context)
+
+    elif request.method == "POST":
+        assignment_form = AssignmentSubmitForm(request.POST)
+        file_form = FileForm(request.POST, request.FILES)
+
+        if assignment_form.is_valid() and file_form.is_valid():
+            assignment_form.update(submitted_assignment)
+            FileController.remove_files_by_user(request, submitted_assignment.files.all())
+            file_form.save(instance=submitted_assignment)
+
+        return redirect(reverse('lect_assignment_detail', args=[room_no, submit_no]))
+
+
+# 수강생이, 제출했던 과제 삭제하는 경우
+@writer_only()
+def lect_assignment_delete(request, room_no, assignment_submit_no):
+    if request.method == "POST":
+        assignment = get_object_or_404(LectAssignmentSubmit, pk=assignment_submit_no)
+        FileController.delete_all_files_of_(assignment)
+        assignment.delete()
+
+    return redirect(reverse('lect_assignment_list', args=[room_no]))
+
+
+                                                # 수강생 메뉴 #
+
+
+# 제출한 과제 보기
+@writer_only()
+def lect_assignment_detail(request, room_no, submit_no):
+    lect_room = get_object_or_404(Lect, pk=room_no)
+    submitted_assignment = LectAssignmentSubmit.objects.prefetch_related('files').select_related('assignment_no').get(
+        pk=submit_no)
+    file_list, img_list, doc_list = FileController.get_images_and_files_of_(submitted_assignment)
+
+    if request.method == "GET":
+
+        context = {
+            'lect': lect_room,
+            'submitted_assignment': submitted_assignment,
+            'file_list': file_list,
+            'img_list': img_list,
+            'doc_list': doc_list,
+        }
+
+        return render(request, "lecture_assignment_detail.html", context)
+
+
+# 수강생이 자신의 출결과 과제제출 현황 보는 곳
+@member_only
+def lect_room_student_status(request, room_no):
+    lect_room = Lect.objects.prefetch_related("lectures", "attendance").get(pk=room_no)
+    lect_board_list = lect_room.lectures.prefetch_related('assignments').filter(lect_board_type_id=2  # 강의 게시글들
+                                                                                ).order_by('lect_board_created')
+    cur_user = get_logined_user(request)
+    attend_info = LectAttendance.objects.filter(lect_no=lect_room, student=cur_user)  # 현재 유저의 출석
+    lect_board_list = [{
+        'idx': idx + 1,  # 회차
+        'lecture': lect_board,
+        'attend': '출석' if attend_info.filter(lect_board_no=lect_board).exists() else '결석',
+        'assignments': [{
+            'assignment': assignment,
+            'submission': LectAssignmentSubmit.objects.filter(assignment_submitter=cur_user,
+                                                              assignment_no=assignment).first()
+        } for assignment in lect_board.assignments.all()]
+    } for idx, lect_board in enumerate(lect_board_list)
+    ]
+
+    context = {
+        'lect': lect_room,
+        'lect_board_list': lect_board_list,
+        'item_list': get_page_object(request, lect_board_list, 10),
+    }
+
+    return render(request, 'lecture_room_student_status.html', context)
+
+
+                                            # 강의자 메뉴 #
+
+
+# 강의자가 수강생의 과제 디테일 조회 시, 수강생의 과제를 통과 또는 실패 처리 시킴
+@writer_only()
+def lect_assignment_aor(request, room_no, submit_no):
+    if request.method == "POST":
+        aor = int(request.POST.get('aor'))
+        submitted_assignment = get_object_or_404(LectAssignmentSubmit, pk=submit_no)
+
+        # 과제 통과 or 거절 시키겠음!
+        if aor == 1 or aor == -1:
+            submitted_assignment.status_id = aor
+            submitted_assignment.reject_reason = request.POST.get("reject_reason")
+            submitted_assignment.save()
+
+        return redirect(reverse('lect_assignment_detail', args=[room_no, submit_no]))
+
+
+# 강의자가 수강생 수강정지 시킬 수 있는 곳.
+@writer_only()
+def lect_room_manage_member(request, room_no):
+    lect_room = Lect.objects.prefetch_related('lectures', 'attendance', 'submitted_assignments',
+                                              'lectures__assignments').get(pk=room_no)
+    lectures = lect_room.lectures.filter(lect_board_type_id=2)
+
+    if request.method == "GET":
+        # 출석 정보 알아내기
+        lect_attend_info = lect_room.attendance.filter(lect_no_id=room_no)  # 해당 강의에 속한 모든 수강생의 출석 정보
+        assignment_info = lect_room.submitted_assignments  # 제출된 모든 수강생의 과제
+        students = list(
+            LectEnrollment.objects.prefetch_related('student__useremail_set', ).filter(lect_no_id=room_no))  # 수강생 명단
+        total_attend_info = [len(lect_attend_info.filter(student=stu.student)) for stu in students]  # 개인별 출석 횟수
+        attend_info_list = [{
+            'enrolled': stu,
+            'attend': attend,
+            'assignment_info': str(len(assignment_info.filter(assignment_submitter=stu.student)))  # 수강생 별 과제 제출 수
+                               + '/' + str(len(lect_room.lectures.filter(lect_board_type_id=3)))  # 총 과제
+        } for stu, attend in zip(students, total_attend_info)]  # 하나의 딕셔너리로 묶기
+
+        context = {
+            'attend_info_list': attend_info_list,  # 출석 정보 알아내기
+            'lect': Lect.objects.get(pk=room_no),
+            'item_list': get_page_object(request, students, 15),  # 15 명씩 보이게 출력
+            'total_check': len(lectures)
+        }
+
+        return render(request, 'lecture_room_manage_students.html', context)
+
+    elif request.method == "POST":
+        if request.POST.get('status_mode') in ['0', '1']:
+            status_mode = int(request.POST.get('status_mode'))
+            checked_list = [request.POST[key] for key in request.POST if 'is_checked_' in key]  # 체크된 수강생들 pk 값 받아오기
+            students = LectEnrollment.objects.filter(pk__in=checked_list)  # 체크된 수강생들 쿼리 ORM
+
+            for std in students:
+                std.status_id = status_mode
+
+            LectEnrollment.objects.bulk_update(
+                objs=students, fields=['status', ]
+            )
+
+        return redirect(reverse('lect_room_manage_member', args=[room_no]))
+
+
+# 과제 현황 조회
+@writer_only()
+def lect_room_manage_assignment(request, room_no):
+    if request.method == "GET":
+        lect_room = Lect.objects.prefetch_related(
+            "lectures", "enrolled_students", "submitted_assignments", "submitted_assignments__files").get(pk=room_no)
+
+        any_assignment = lect_room.lectures.filter(lect_board_type_id=3).first()
+        # 과제 게시글 번호. select option 값 / default 는 마지막 강의 게시글
+        # 처음 이 페이지를 렌더링 할 때는 get 파라미터가 존재하지 않음. 이 강의 첫 게시글이 존재하지 않으면, 게시글 번호 존재 X
+        assignment_no = request.GET.get('assignment_no',
+                                        None if not any_assignment else any_assignment.lect_board_no)
+
+        students_list = lect_room.enrolled_students.all()
+        if any_assignment and students_list:
+            students_list = [{
+                'student': std.student,
+                'submission': lect_room.submitted_assignments.filter(  # 제출시간, 제출여부, 제출된 파일에 접근하기 위한 객체
+                    assignment_submitter=std.student, assignment_no=assignment_no).first()
+            } for std in students_list]
+
+        context = {
+            'lect': lect_room,
+            'cur_assignment': None if assignment_no is None else LectBoard.objects.get(pk=assignment_no),
+            'students_list': students_list,
+            'lect_board_list': lect_room.lectures.filter(lect_board_type_id=2),
+        }
+
+        return render(request, 'lecture_room_manage_assignment.html', context)
+
+    elif request.method == "POST":
+        manage_mode = int(request.POST.get('manage_mode'))
+        if manage_mode in [-1, 1]:
+            checked_list = [request.POST[key] for key in request.POST if 'is_checked_' in key and request.POST[key]]
+            assignments = LectAssignmentSubmit.objects.filter(pk__in=checked_list)
+            for s in assignments:
+                s.status_id = manage_mode
+
+            LectAssignmentSubmit.objects.bulk_update(objs=assignments, fields=['status', ])
+
+            return redirect(reverse('lect_room_manage_assignment', args=[room_no]))
+
+        else:
+            # 잘못된 경우
+            return redirect(reverse('lect_room_main', args=[room_no]))
 
 
 # 출석 현황 확인 및 변경
 # 강의 게시글이 존재하지 않으면 => 출석부 ('_table_attendance_check.html') 렌더하지 않음.
 # 강의 게시글은 존재하지만, 학생이 없으면 => 출석부 렌더하지만, 학생이 아무도 없음.
-def lect_room_attend_teacher(request, room_no):
+@writer_only()
+def lect_room_manage_attendance(request, room_no):
     lect_room = Lect.objects.prefetch_related("lectures", "enrolled_students__student").get(pk=room_no)
     lect_board_list = lect_room.lectures.filter(lect_board_type_id=2).order_by('-lect_board_no')  # 강의 게시글만 가져옴
 
     if request.method == "GET":
-        # 강의 게시글 번호. select option 값 / default 는 마지막 강의 게시글, 게시글이 하나도 없으면 0.
+        # 강의 게시글 번호. select option 값 / default 는 마지막 강의 게시글
         # 처음 이 페이지를 렌더링 할 때는 get 파라미터가 존재하지 않음. 이 강의 첫 게시글이 존재하지 않으면, 게시글 번호 존재 X
         lect_board_no = request.GET.get('lect_board_no',
                                         None if not lect_board_list else lect_board_list[0].lect_board_no)
 
         # 강의 게시물이 있고, 수강생이 있는 두 경우를 모두 충족시켜야 출석페이지 출력가능
-        if lect_board_list and lect_room.enrolled_students:
+        students_list = lect_room.enrolled_students.all()
+        if lect_board_list and students_list:
             # 장고 ORM 으로 쿼리 수행 불가하여, raw query 작성.
             # connection : default db에 연결되어 있는 built in 객체
             # (on 부분) enrollment.STUDENT 가 없으면 mariadb 오류!
             query = f"""SELECT u.USER_NAME, u.USER_STU, if(isnull(attend.LECT_ATTEND_DATE),false,true) as attendance
                     FROM LECT_ENROLLMENT AS enrollment
-        
+
                     LEFT OUTER JOIN LECT_ATTENDANCE AS attend
                     on (enrollment.STUDENT = attend.STUDENT AND attend.LECT_BOARD_NO = {lect_board_no})
-        
+
                     INNER JOIN USER as u
                     ON (enrollment.STUDENT = u.USER_STU)
-        
+
                     WHERE enrollment.LECT_NO = {lect_room.lect_no}
-        
-                    ORDER BY u.USER_NAME ASC;"""
+
+                    ORDER BY u.USER_NAME ;"""
             cursor = connection.cursor()
             cursor.execute(query)  # 쿼리 수행
             students_list = [{'name': name, 'stu': stu, 'attendance': '출석' if attendance == 1 else '결석'}
                              for name, stu, attendance in cursor.fetchall()]  # 쿼리 반환 값을 템플릿에서 사용할 수 있게, dict 로 변환
-        else:
-            students_list = []
 
         context = {
             'lect': lect_room,
             'lect_board_list': lect_board_list,
             'students_list': students_list,  # 이름/학번/출석결석
             'cur_lect_board': None if lect_board_no is None else LectBoard.objects.get(pk=lect_board_no),  # 현재 게시글
-            'item_list': get_page_object(request, students_list, 15)  # 15 명씩 보이게 출력
+            'item_list': get_page_object(request, students_list, 15),  # 15 명씩 보이게 출력
         }
-        return render(request, 'lecture_room_attend_teacher.html', context)
+        return render(request, 'lecture_room_manage_attendance.html', context)
 
     elif request.method == "POST":
         lect_board = LectBoard.objects.get(pk=request.POST.get('lect_board_no_'))
         manage_mode = {'출석': True, '결석': False} if request.POST.get('manage-mode') == '1' else {'결석': True, '출석': False}
-        checked_list = [request.POST[key] for key in request.POST if 'is_checked_' in key]
+        checked_list = [request.POST[key] for key in request.POST if 'is_checked_' in key]  # 체크된 수강생들
 
         if lect_board is not None:
             if manage_mode['출석']:
                 # input checkbox 로 넘어온 모든 학번에 대해, 출석처리
                 # db 에서 (게시글 번호, 학번) 묶어서 unique key 설정했음.
                 LectAttendance.objects.bulk_create([
-                    LectAttendance(lect_board_no=lect_board, student_id=stu)
-                    for stu in checked_list
+                    LectAttendance(lect_no_id=room_no, lect_board_no=lect_board, student_id=stu) for stu in checked_list
+                    if not LectAttendance.objects.filter(lect_board_no=lect_board, student_id=stu)  # 이미 출석된 상태가 아니면,
                 ])
             elif manage_mode['결석']:
                 # input checkbox 로 넘어온 모든 학번에 대해, 결석처리
                 # db에 수강생의 레코드가 존재하지 않는 경우 결석이라고 해석하고 있기 때문에 filter 로 쿼리 불러야함.
                 # 이미 결석인 수강생에 대해 중복 결석 처리했을 때, get 을 사용하면 에러발생.
                 students = LectAttendance.objects.filter(lect_board_no=lect_board)
-                for stu in checked_list:
-                    students.filter(student_id=stu).delete()
+                students.filter(student_id__in=checked_list).delete()
 
-        return redirect(reverse('lect_room_attend_teacher', kwargs={'room_no': room_no}))
-
-
-def lect_board_hw_register(request):  # 강의룸 등록 페이지로 이동
-    return render(request, 'lecture_room_assignment_register.html', {})
-
+        return redirect(reverse('lect_room_manage_attendance', kwargs={'room_no': room_no}), )
 
 
