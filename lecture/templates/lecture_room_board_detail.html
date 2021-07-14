@@ -63,7 +63,11 @@
                                     </div>
 
                                     <!--=======================강의 링크============================-->
-                                    {% if og %}
+                                    {% if youtube %}
+                                        {% autoescape off %}
+                                            {{ youtube }}
+                                        {% endautoescape %}
+                                    {% elif og %}
                                         <div class="clear m-t50 category-bx" id="comment-list">
                                             <a href="{{ og.url }}" class="comments-area" id="comments" target="_blank">
                                                 <div class="clearfix">

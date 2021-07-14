@@ -13,6 +13,8 @@ from pagination_handler import get_page_object
 from user_controller import get_logined_user, superuser_only, writer_only, auth_check, is_superuser, \
     is_logined, is_writer, member_only
 from utils.crawler import get_og_tag
+from utils.url_regex import is_youtube
+from utils.youtube import get_youtube
 
 
 def get_pol_name(method_no):
@@ -321,6 +323,7 @@ def lect_board_register(request, room_no, board_type):
 def lect_board_detail(request, room_no, board_no):
     lect_room = get_object_or_404(Lect, pk=room_no)
     board = get_object_or_404(LectBoard, pk=board_no)
+    link = board.lect_board_link
     file_list, img_list, doc_list = FileController.get_images_and_files_of_(board)
 
     # 과제 글
@@ -332,14 +335,22 @@ def lect_board_detail(request, room_no, board_no):
             # 과제 하나당 수강생은 어차피 하나밖에 제출 못함. get 쿼리로 검사하면 레코드 없을 시 오류 발생.
             submitted_assignment = LectAssignmentSubmit.objects.filter(assignment_submitter=cur_user, assignment_no=board).first()
 
+    # 강의 링크가 있으면 임베딩 시도
+    link_embedding = {}
+    if board.lect_board_type_id == 2 and link:
+        if is_youtube(link):
+            link_embedding['youtube'] = get_youtube(link)
+        else:
+            link_embedding['og'] = get_og_tag(link)
+
     context = {
         'lect': lect_room,
         'board': board,
         'doc_list': file_list,
         'submitted_assignment': submitted_assignment,
-        'og': get_og_tag(board.lect_board_link) if board.lect_board_link else None
     }
-    return render(request, 'lecture_room_board_detail.html', context)
+
+    return render(request, 'lecture_room_board_detail.html', context | link_embedding)
 
 
 # 강의/공지 게시글 삭제

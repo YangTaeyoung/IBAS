@@ -21,8 +21,8 @@ def get_youtube(url: str):
     equal_idx = url.rfind('=')
     slash_idx = url.rfind('/')
     if equal_idx != -1:
-        youtube_url = url[equal_idx:]
+        youtube_url = url[equal_idx+1:]
         return get_youtube_tag(youtube_url)
     if slash_idx != -1:
-        youtube_url = url[slash_idx:]
+        youtube_url = url[slash_idx+1:]
         return get_youtube_tag(youtube_url)
