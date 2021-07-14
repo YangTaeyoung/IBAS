@@ -18,7 +18,7 @@
                  style=" background-image: url('{% static 'images/board_name_img.jpg' %}'); height: 350px">
                 <!-- 상단 제목을 클릭하면, 강의룸 메인 페이지로 이동 -->
                 <!-- (ex. 강의룸 내 출결확인 페이지에서 상단 제목을 클릭하면, 강의룸 메인으로 돌아갈 수 있음) -->
-                <a href="{% url "lect_room_main" lect.lect_no %}">
+                <a href="{% url "lect_room_main" lect.pk %}">
                     <div class="container clearfix">
                         <div class="dlab-bnr-inr-entry">
                             <!-- 제목 -->
@@ -53,7 +53,7 @@
 
                             <div class="col-xl-8 col-lg-7 col-md-12 m-b30">
                                 <form class="add-listing-form" method="post" enctype="multipart/form-data"
-                                      action="{% if board_no %}{% url "lect_board_update" lect.lect_no board_no%}{% else %}{% url "lect_board_register" lect.lect_no board_type%}{% endif %}">
+                                      action="{% if board_no %}{% url "lect_board_update" lect.pk board_no%}{% else %}{% url "lect_board_register" lect.pk board_type%}{% endif %}">
                                     {% csrf_token %}
 
                                     {% if board_type == 3 %}

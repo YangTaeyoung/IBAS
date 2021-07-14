@@ -320,9 +320,10 @@ def lect_board_register(request, room_no, board_type):
 
 # 강의/공지 게시글 상세보기
 @member_only
-def lect_board_detail(request, room_no, board_no):
+def lect_board_detail(request, room_no, lect_board_no):
     lect_room = get_object_or_404(Lect, pk=room_no)
-    board = get_object_or_404(LectBoard, pk=board_no)
+    board = LectBoard.objects.prefetch_related('files').get(pk=lect_board_no)
+    files = board.files.all()
     link = board.lect_board_link
     file_list, img_list, doc_list = FileController.get_images_and_files_of_(board)
 
@@ -343,6 +344,12 @@ def lect_board_detail(request, room_no, board_no):
         else:
             link_embedding['og'] = get_og_tag(link)
 
+    code = {'code_files': []}
+    for file in files:
+        if FileController.is_code_file(file.file_name):
+            code['code_files'].append({'file_name': file.file_name,
+                                       'code': FileController.get_code_in_file(file.file_path.path)})
+
     context = {
         'lect': lect_room,
         'board': board,
@@ -350,13 +357,13 @@ def lect_board_detail(request, room_no, board_no):
         'submitted_assignment': submitted_assignment,
     }
 
-    return render(request, 'lecture_room_board_detail.html', context | link_embedding)
+    return render(request, 'lecture_room_board_detail.html', context | link_embedding | code)
 
 
 # 강의/공지 게시글 삭제
 @writer_only()
-def lect_board_delete(request, room_no, board_no):
-    lect_board = get_object_or_404(LectBoard, pk=board_no)
+def lect_board_delete(request, room_no, lect_board_no):
+    lect_board = get_object_or_404(LectBoard, pk=lect_board_no)
 
     FileController.delete_all_files_of_(lect_board)
     lect_board.delete()
@@ -366,8 +373,8 @@ def lect_board_delete(request, room_no, board_no):
 
 # 강의/공지 게시글 수정
 @writer_only()
-def lect_board_update(request, room_no, board_no):
-    board = LectBoard.objects.prefetch_related('files').get(pk=board_no)
+def lect_board_update(request, room_no, lect_board_no):
+    board = LectBoard.objects.prefetch_related('files').get(pk=lect_board_no)
     board_type = board.lect_board_type_id
 
     if request.method == "GET":
@@ -375,7 +382,7 @@ def lect_board_update(request, room_no, board_no):
             'lect': Lect.objects.get(pk=room_no),
             'lect_board_form': make_lect_board_form(board_type, instance=board),  # 강의/공지 폼
             'file_form': FileForm(),  # 강의 파일 폼
-            'board_no': board_no,
+            'board_no': lect_board_no,
             'board_type': board_type,
             'file_list': board.files.all(),  # 게시글 기존 파일 리스트
             'lect_board_list': LectBoard.objects.filter(lect_no_id=room_no, lect_board_type_id=2
@@ -397,7 +404,7 @@ def lect_board_update(request, room_no, board_no):
                 FileController.remove_files_by_user(request, board.files.all())
                 file_form.save(instance=board)
 
-        return redirect('lect_board_detail', room_no=room_no, board_no=board_no)
+        return redirect('lect_board_detail', room_no=room_no, lect_board_no=lect_board_no)
 
 
 def sample(request):
