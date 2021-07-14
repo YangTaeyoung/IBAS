@@ -438,11 +438,12 @@ def delete_user(user: User):
                 initialize_user(user)  # 유저 정보 초기화
                 delete_all_infomation(user)  # 유저의 게시글 및 흔적 모두 삭제
             # 회계나 연혁에 관련 없는 계정의 경우 DB에서 계정 완전 삭제
+
             else:
                 if not is_default_pic(str(user.user_pic)):  # 프로필 사진인 디폴트 사진이 아닌 경우
                     FileController.delete_all_files_of_(user)  # 데이터 베이스에서 삭제함
                 user.delete()
-                return True
+            return True
     return False
 
 
