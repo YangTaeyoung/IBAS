@@ -233,6 +233,7 @@ class AssignmentSubmitForm(forms.ModelForm):
         submission = super().save(commit=False)
         submission.assignment_submitter = kwargs.get('assignment_submitter')
         submission.assignment_no_id = kwargs.get('lect_board_no')
+        submission.lect_no_id = kwargs.get('lect_no')
         submission.save()
 
         return submission

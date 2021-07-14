@@ -437,7 +437,8 @@ def lect_assignment_submit(request, room_no):
             with transaction.atomic():
                 submission = submit_form.save(
                     lect_board_no=request.POST.get('lect_board_no'),
-                    assignment_submitter=get_logined_user(request)
+                    assignment_submitter=get_logined_user(request),
+                    lect_no=room_no
                 )
                 file_form.save(instance=submission)
 
