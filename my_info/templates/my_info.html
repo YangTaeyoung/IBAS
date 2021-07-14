@@ -150,16 +150,255 @@
                 <div class="tab-content">
                     <div id="listing_myclass" class="tab-pane active">
                         <div class="row">
+                            <!--========================= 내가수강중인 강의 박스 =========================-->
+                            <!-- 만약 현재 내가 수강중인 강의가 없을 경우, 반스 전체가 안보이게끔 처리 필요 -->
                             <div class="col-xl-12">
                                 <div class="content-box">
                                     <div class="content-header">
-                                        <h3 class="title">강의실 제목</h3>
+                                        <h3 class="title">내가 수강중인 강의</h3>
                                     </div>
                                     <div class="content-body">
-                                        <p>강의실 내용~~~~~~~~~~~~~~~~~~~~~~</p>
+                                        <div class="row">
+                                            <!--================= 여기부터 박스 내 게시글 반복시작 =================-->
+                                            <!-- 게시글 1 -->
+                                            <div class="col-lg-4 col-md-6 col-sm-6">
+                                                <div class="listing-bx event-listing m-b10">
+                                                    <!-- 게시글 대표 이미지 -->
+                                                    <!-- 이미지를 클릭하면, 해당 게시글로 이동함 -->
+                                                    <a href="/lect/detail/39/">
+                                                        <img style="height: 200px; width: 100%"
+                                                             src="/media/lect/pic/39/스크린샷_2021-03-02_오후_4.52.59.png"
+                                                             alt="">
+                                                    </a>
+                                                    <!-- 강의 제목 및 간단소개 div -->
+                                                    <div class="listing-info" style="height: 110px">
+                                                        <!-- 강의제목 -->
+                                                        <!-- 제목 클릭 시, 해당 게시글로 이동 -->
+                                                        <h3 class="title"><a href="/lect/detail/39/">AI 기초 강의</a>
+                                                        </h3>
+                                                        <!-- 강의 간단소개 -->
+                                                        <ul class="event-meta">
+                                                            <!-- 마감일 및 모집 상태 -->
+                                                            <li class="event-date">
+                                                                <!-- 강의 시작월 -->
+                                                                <!-- 강의 모집 마감월이 아니라 시작월을 가져와야 함 -->
+                                                                <span class="text-primary">8월</span>
+                                                                <!-- 강의 시작일 -->
+                                                                <!-- 강의 모집 마감일이 아니라 시작일을 가져와야 함 -->
+                                                                <strong>05</strong>
+                                                                <span class="recruiting">시 작</span>
+                                                            </li>
+                                                            <!-- 강의 내용에 대한 짧은 소개 -->
+                                                            <li class="text-cut">AI와 관련한 기본적인 개념 및 응용프로그래밍에 대한 강의입니다.</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="event-bottom">
+                                                        <ul>
+                                                            <!-- 강의 요일, 장소, 인원 li-->
+                                                            <li class="event-hosted">
+                                                                <!-- 강의를 정기적으로 진행하는 요일 -->
+                                                                <span class="text-primary mr-3">요일</span>
+                                                                <!-- 강의에 해당하는 요일을 DB에서 가져와야 함 -->
+                                                                <span>월, 수</span>
+                                                                <!-- 강의 진행방식 Zoom 혹은 강의실 호수 -->
+                                                                <span class="text-primary mr-3 m-l30"><i
+                                                                        class="ti-location-pin"></i></span>
+                                                                <!-- 강의 진행방식을 DB에서 가져와야 함 -->
+                                                                <span>Zoom 수업</span>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- 게시글 2 -->
+                                            <div class="col-lg-4 col-md-6 col-sm-6">
+                                                <div class="listing-bx event-listing m-b10">
+                                                    <!-- 게시글 대표 이미지 -->
+                                                    <!-- 이미지를 클릭하면, 해당 게시글로 이동함 -->
+                                                    <a href="/lect/detail/40/">
+                                                        <img style="height: 200px; width: 100%"
+                                                             src="/media/lect/pic/40/38D3EF1B-279A-4AF2-9687-7633B2F11BAE_1_201_a.jpeg"
+                                                             alt="">
+                                                    </a>
+                                                    <!-- 강의 제목 및 간단소개 div -->
+                                                    <div class="listing-info" style="height: 110px">
+                                                        <!-- 강의 제목 -->
+                                                        <!-- 제목 클릭 시, 해당 게시글로 이동 -->
+                                                        <h3 class="title"><a href="/lect/detail/40/">파이썬 기초강의</a>
+                                                        </h3>
+                                                        <!-- 강의 간단소개 -->
+                                                        <ul class="event-meta">
+                                                            <!-- 마감일 및 모집 상태 -->
+                                                            <li class="event-date">
+                                                                <!-- 강의 시작월 -->
+                                                                <!-- 강의 마감월이 아닌 시작월을 기져와야 함 -->
+                                                                <span class="text-primary">8월</span>
+                                                                <!-- 강의 시작일-->
+                                                                <!-- 강의 마감일이 아닌 시작일을 기져와야 함 -->
+                                                                <strong>01</strong>
+                                                                <span class="recruiting">시 작</span>
+                                                            </li>
+                                                            <!-- 강의 내용에 대한 간단소개 -->
+                                                            <li class="text-cut">파이썬으로 거북이를 소환하는 그날까지! 여러분들은 할 수 있어요
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="event-bottom">
+                                                        <ul>
+                                                            <!-- 강 요일, 장소, 인원 li-->
+                                                            <li class="event-hosted">
+                                                                <!-- 강의를 정기적으로 진행하는 요일 -->
+                                                                <span class="text-primary mr-3">요일</span>
+                                                                <!-- 강의에 해당하는 요일을 DB에서 가져와야 함 -->
+                                                                <span>금</span>
+                                                                <!-- 강의 진행방식 Zoom 혹은 강의실 호수 -->
+                                                                <span class="text-primary mr-3 m-l30"><i
+                                                                        class="ti-location-pin"></i></span>
+                                                                <!-- 강의 진행방식을 DB에서 가져와야 함 -->
+                                                                <span>6-345</span>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--================= 여기부터 게시글 반복 끝 =================-->
+
+                                        </div>
+                                        <div style="display: flex; justify-content: center; align-items: center">
+                                            <nav aria-label="Page navigation example">
+                                                <!-- staff_margin_bottom_0는 staff_cr.css에 정의되어 있음.  -->
+                                                <ul class="pagination m-b0">
+
+                                                    <li class="page-item"><a class="page-link" href="#">1</a>
+                                                    </li>
+
+                                                </ul>
+                                            </nav>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                            <!--========================= 내가수강중인 강의 박스 끝 =========================-->
+                            <!--========================= 이미 수강한 강의 박스 시작 =========================-->
+                            <div class="col-xl-12">
+                                <div class="content-box">
+                                    <div class="content-header">
+                                        <h3 class="title">수강 완료한 강의</h3>
+                                    </div>
+                                    <div class="content-body">
+                                        <div class="row">
+                                            <!--================= 여기부터 박스 내 게시글 반복시작 =================-->
+                                            <!-- 게시글 1 -->
+                                            <div class="col-lg-4 col-md-6 col-sm-6">
+                                                <div class="listing-bx event-listing m-b10">
+                                                    <!-- 게시글 대표 이미지 -->
+                                                    <!-- 이미지를 클릭하면, 해당 게시글로 이동함 -->
+                                                    <a href="/lect/detail/39/">
+                                                        <img style="height: 200px; width: 100%" src="/media/lect/pic/39/스크린샷_2021-03-02_오후_4.52.59.png" alt="">
+                                                    </a>
+                                                    <!-- 강의 제목 및 간단소개 div -->
+                                                    <div class="listing-info" style="height: 110px">
+                                                        <!-- 강의제목 -->
+                                                        <!-- 제목 클릭 시, 해당 게시글로 이동 -->
+                                                        <h3 class="title"><a href="/lect/detail/39/">AI 기초 강의</a>
+                                                        </h3>
+                                                        <!-- 강의 간단소개 -->
+                                                        <ul class="event-meta">
+                                                            <!-- 마감일 및 모집 상태 -->
+                                                            <li class="event-date">
+                                                                <!-- 강의 시작월 -->
+                                                                <!-- 강의 모집 마감월이 아니라 시작월을 가져와야 함 -->
+                                                                <span class="text-primary">8월</span>
+                                                                <!-- 강의 시작일 -->
+                                                                <!-- 강의 모집 마감일이 아니라 시작일을 가져와야 함 -->
+                                                                <strong>05</strong>
+                                                                <span class="recruiting">완 강</span>
+                                                            </li>
+                                                            <!-- 강의 내용에 대한 짧은 소개 -->
+                                                            <li class="text-cut">AI와 관련한 기본적인 개념 및 응용프로그래밍에 대한 강의입니다.</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="event-bottom">
+                                                        <ul>
+                                                            <!-- 강의 요일, 장소, 인원 li-->
+                                                            <li class="event-hosted">
+                                                                <!-- 강의를 정기적으로 진행하는 요일 -->
+                                                                <span class="text-primary mr-3">요일</span>
+                                                                <!-- 강의에 해당하는 요일을 DB에서 가져와야 함 -->
+                                                                <span>월, 수</span>
+                                                                <!-- 강의 진행방식 Zoom 혹은 강의실 호수 -->
+                                                                <span class="text-primary mr-3 m-l30"><i class="ti-location-pin"></i></span>
+                                                                <!-- 강의 진행방식을 DB에서 가져와야 함 -->
+                                                                <span>Zoom 수업</span>
+                                                        </li></ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- 게시글 2 -->
+                                            <div class="col-lg-4 col-md-6 col-sm-6">
+                                                <div class="listing-bx event-listing m-b10">
+                                                    <!-- 게시글 대표 이미지 -->
+                                                    <!-- 이미지를 클릭하면, 해당 게시글로 이동함 -->
+                                                    <a href="/lect/detail/40/">
+                                                        <img style="height: 200px; width: 100%" src="/media/lect/pic/40/38D3EF1B-279A-4AF2-9687-7633B2F11BAE_1_201_a.jpeg" alt="">
+                                                    </a>
+                                                    <!-- 강의 제목 및 간단소개 div -->
+                                                    <div class="listing-info" style="height: 110px">
+                                                        <!-- 강의 제목 -->
+                                                        <!-- 제목 클릭 시, 해당 게시글로 이동 -->
+                                                        <h3 class="title"><a href="/lect/detail/40/">파이썬 기초강의</a>
+                                                        </h3>
+                                                        <!-- 강의 간단소개 -->
+                                                        <ul class="event-meta">
+                                                            <!-- 마감일 및 모집 상태 -->
+                                                            <li class="event-date">
+                                                                <!-- 강의 시작월 -->
+                                                                <!-- 강의 마감월이 아닌 시작월을 기져와야 함 -->
+                                                                <span class="text-primary">8월</span>
+                                                                <!-- 강의 시작일-->
+                                                                <!-- 강의 마감일이 아닌 시작일을 기져와야 함 -->
+                                                                <strong>01</strong>
+                                                                <span class="recruiting">완 강</span>
+                                                            </li>
+                                                            <!-- 강의 내용에 대한 간단소개 -->
+                                                            <li class="text-cut">파이썬으로 거북이를 소환하는 그날까지! 여러분들은 할 수 있어요
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="event-bottom">
+                                                        <ul>
+                                                            <!-- 강 요일, 장소, 인원 li-->
+                                                            <li class="event-hosted">
+                                                                <!-- 강의를 정기적으로 진행하는 요일 -->
+                                                                <span class="text-primary mr-3">요일</span>
+                                                                <!-- 강의에 해당하는 요일을 DB에서 가져와야 함 -->
+                                                                <span>금</span>
+                                                                <!-- 강의 진행방식 Zoom 혹은 강의실 호수 -->
+                                                                <span class="text-primary mr-3 m-l30"><i class="ti-location-pin"></i></span>
+                                                                <!-- 강의 진행방식을 DB에서 가져와야 함 -->
+                                                                <span>6-345</span>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--================= 여기부터 게시글 반복 끝 =================-->
+
+                                        </div>
+                                        <div style="display: flex; justify-content: center; align-items: center">
+                                            <nav aria-label="Page navigation example">
+                                                <!-- staff_margin_bottom_0는 staff_cr.css에 정의되어 있음.  -->
+                                                <ul class="pagination m-b0">
+
+                                                    <li class="page-item"><a class="page-link" href="#">1</a>
+                                                    </li>
+
+                                                </ul>
+                                            </nav>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--========================= 과거 수강한 강의 박스  =========================-->
                         </div>
                     </div>
                     <!--개설강의 관리-->
