@@ -485,7 +485,6 @@ def lect_assignment_delete(request, room_no, assignment_submit_no):
 
 
 # 제출한 과제 보기
-# 과제 제출한 사람과 강의자만 볼 수 있도록 설정하기
 @writer_only()
 def lect_assignment_detail(request, room_no, submit_no):
     lect_room = get_object_or_404(Lect, pk=room_no)

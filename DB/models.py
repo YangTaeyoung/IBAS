@@ -383,12 +383,17 @@ class LectEnrollment(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)
     lect_no = models.ForeignKey('Lect', on_delete=models.CASCADE, db_column='LECT_NO', related_name='enrolled_students')
     student = models.ForeignKey('User', on_delete=models.DO_NOTHING, db_column='STUDENT')
-    status = models.IntegerField(db_column='STATUS', default=1, null=False)
+    status = models.ForeignKey('LectEnrollmentStatus', on_delete=models.DO_NOTHING, db_column='STATUS', default=1, null=False)
 
     class Meta:
         managed = False
         db_table = 'LECT_ENROLLMENT'
         unique_together = (('student', 'lect_no'),)
+
+
+class LectEnrollmentStatus(models.Model):
+    status = models.IntegerField(db_column='STATUS', primary_key=True)
+    description = models.CharField(db_column='DESCRIPTION', max_length=10)
 
 
 class LectBoardType(models.Model):

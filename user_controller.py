@@ -1,4 +1,6 @@
 import functools
+
+from django.contrib import messages
 from django.shortcuts import redirect, reverse
 from DB.models import User, ContestBoard, Board, Bank, Lect, UserDelete, AuthUser, LectAssignmentSubmit
 from allauth.socialaccount.models import SocialAccount, SocialToken
@@ -123,6 +125,16 @@ def get_user_get(request):
     return User.objects.get(pk=request.GET.get("user_stu"))
 
 
+# 작성자: 유동현
+# 작성일시 : 2021.07.14
+# 잘못된 접근시 메인페이지로 이동시킴
+# msg 에 메세지를 적으면, 메인페이지에서 alert 창으로 경고를 띄움 (default msg = '접근 권한이 없습니다.')
+def not_allowed(request, msg="접근 권한이 없습니다."):
+    messages.warning(request, msg)  # 메인에서 alert 창 띄우기
+
+    return redirect(reverse("index"))
+
+
 # 데코레이터
 # 로그인 안한 유저가 접근시 메인페이지로 이동
 def login_required(func):
@@ -131,7 +143,7 @@ def login_required(func):
         if is_logined(request):
             return func(request, *args, **kwargs)
         else:
-            return redirect(reverse("index"))
+            return not_allowed(request, msg='로그인이 필요합니다!')
 
     return wrapper
 
@@ -156,7 +168,7 @@ def writer_only(superuser=False):
                 if is_writer(request, **kwargs):
                     return func(request, *args, **kwargs)
 
-            return redirect(reverse("index"))
+            return not_allowed(request)
 
         return wrapper
 
@@ -180,7 +192,7 @@ def superuser_only(cfo_included=False):
             if current_user.user_role.role_no <= flag:
                 return func(request, *args, **kwargs)
             else:
-                return redirect(reverse("index"))
+                return not_allowed(request)
 
         return wrapper
 
@@ -199,7 +211,7 @@ def cfo_only(func):
             return func(request, *args, **kwargs)
 
         else:
-            return redirect(reverse("index"))
+            return not_allowed(request)
 
     return wrapper
 
@@ -222,7 +234,7 @@ def auth_check(active=False):
             if boundary:
                 return func(request, *args, **kwargs)
             else:
-                return redirect(reverse("index"))
+                return not_allowed(request)
 
         return wrapper
 
@@ -245,7 +257,7 @@ def chief_only(vice=False):
             elif not vice and current_user.user_role.role_no == 1:
                 return func(request, *args, **kwargs)
             else:
-                return redirect(reverse("index"))
+                return not_allowed(request)
 
         return wrapper
 
@@ -269,6 +281,6 @@ def member_only(func):
             if member.status_id == 1:
                 return func(request, *args, **kwargs)
 
-        return redirect(reverse("index"))
+        return not_allowed(request, msg='수강정지 되었거나, 접근할 수 없는 멤버입니다!')
 
     return wrapper

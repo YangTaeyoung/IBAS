@@ -29,7 +29,7 @@
 	<![endif]-->
 
     <!-- JQuery -->
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script src="{% static 'js/jquery.min.js' %}"></script><!-- JQUERY.MIN JS -->
 
     <!-- STYLESHEETS -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/plugins.css' %}">
@@ -46,6 +46,11 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/ibas_contents.css' %}">
     <link class="skin" rel="stylesheet" type="text/css" href="{% static 'css/top-bottom.css' %}">
 
+    {% if messages %}
+        {% for message in messages %}
+            <script>alert("{{ message }}")</script>
+        {% endfor %}
+    {% endif %}
 
 </head>
 <body id="bg">
