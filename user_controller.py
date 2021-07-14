@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.http import Http404
 from django.shortcuts import redirect, reverse, render
 from DB.models import User, ContestBoard, Board, Bank, Lect, UserDelete, AuthUser, History, LectEnrollment, \
-    ContestComment, LectBoard, Answer, UserEmail, Comment, LectAssignmentSubmit
+    ContestComment, LectBoard, Answer, UserEmail, Comment, LectAssignmentSubmit, Alarm
 from allauth.socialaccount.models import SocialAccount, SocialToken
 from file_controller import FileController
 from django.db.models import Q
@@ -426,6 +426,11 @@ def delete_all_infomation(user: User):
     # 본인 계정 프로필 사진 삭제
     if not is_default_pic(str(user.user_pic)):
         FileController.delete_all_files_of_(user)
+
+    my_alarm_list = Alarm.objects.filter(alarm_user=user)
+    for my_alarm in my_alarm_list:
+        my_alarm.delete()
+
 
 
 # 삭제 로직
