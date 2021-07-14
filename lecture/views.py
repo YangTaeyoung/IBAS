@@ -94,7 +94,7 @@ def lect_detail(request, lect_no):
         'lect': lect,
         'lect_day_list': lect_day_list,
         'lect_user_num': len(LectEnrollment.objects.filter(lect_no=lect_no)),
-        'is_in': LectEnrollment.objects.filter(student=get_logined_user(request), lect_no__lect_no=lect_no) is not None,
+        'is_in': LectEnrollment.objects.filter(student=get_logined_user(request), lect_no_id=lect_no).first() is not None,
         'lect_reject_form': LectRejectForm(instance=lect),
     }
     # 취미 모임의 경우 강의 방식이 없음 따라서 해당 부분에 대한 예외처리
@@ -201,7 +201,7 @@ def get_assignment_list(cur_user, lect_room, name_in_html):
     # 강의자 : 글번호 / 과제글 / 제출된 수강생들의 과제 집계(총제출/총인원)
     if cur_user == lect_room.lect_chief:
         assignment_list = [{
-            'idx': len(lect_room.enrolled_students.all()) - idx,
+            'idx': len(lect_room.enrolled_students.all()) - idx + 1,
             name_in_html: assignment,
             'status': str(len(assignment.submissions.all())) + '/' + str(len(lect_room.enrolled_students.all()))
         } for idx, assignment in enumerate(lect_room.lectures.filter(lect_board_type_id=3))]
@@ -211,7 +211,7 @@ def get_assignment_list(cur_user, lect_room, name_in_html):
             status = LectAssignmentSubmit.objects.filter(assignment_no=assignment,
                                                          assignment_submitter=cur_user).first()
             assignment_list.append({
-                'idx': len(lect_room.enrolled_students.all()) - idx,
+                'idx': len(lect_room.enrolled_students.all()) - idx + 1,
                 name_in_html: assignment,
                 'status': status.status.description if status else '미제출'})
 
@@ -437,7 +437,8 @@ def lect_assignment_submit(request, room_no):
             with transaction.atomic():
                 submission = submit_form.save(
                     lect_board_no=request.POST.get('lect_board_no'),
-                    assignment_submitter=get_logined_user(request)
+                    assignment_submitter=get_logined_user(request),
+                    lect_no=room_no
                 )
                 file_form.save(instance=submission)
 

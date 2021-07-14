@@ -267,7 +267,7 @@
                             </div>
                         {% endif %}
                         {% if lect.lect_state.state_no == 3 %}
-                            {% if is_logined and logined_user.user_stu != lect.lect_chief.user_stu and not is_in %}
+                            {% if is_logined and logined_user != lect.lect_chief and not is_in %}
                                 <!--=======신청하기 버튼, 한번 신청하기 버튼을 누르면 없어지도록 수정======-->
                                 <div style="display: flex; justify-content: center; ">
                                     <button type="button" class="btn btn-outline-success btn-lg"

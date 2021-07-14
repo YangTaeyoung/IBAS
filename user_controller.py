@@ -64,7 +64,7 @@ def is_writer(request, **kwargs):
     bank_no = kwargs.get('bank_no')
     lect_no = kwargs.get('lect_no', kwargs.get('room_no'))
     user_delete_no = kwargs.get('user_delete_no')
-    assignment_submit_no = kwargs.get('assignment_submit_no')  # 수강생 과제 제출
+    assignment_submit_no = kwargs.get('submit_no')  # 수강생 과제 제출
 
     # comment_no = kwargs.get('comment_no')
 

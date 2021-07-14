@@ -122,7 +122,7 @@
                                                     {% for board in lect_board_list|slice:':3' %}
                                                         <tr>
                                                             <!-- 공지사항 번호 (고정됨) -->
-                                                            <td>{{ lect_board_list|length |subtract:forloop.counter0}}</td>
+                                                            <td>{{ lect_board_list|length |subtract:forloop.counter0 }}</td>
                                                             <!-- 공지사항 제목-->
                                                             <td><a href={% url 'lect_board_detail' lect.pk board.pk %}>{{ board.lect_board_title }}</a></td>
                                                             <!-- 공지사항 작성자: 복수 강의자일 경우, 해당 게시글을 올린 강의자 이름을 불러올 것 -->
