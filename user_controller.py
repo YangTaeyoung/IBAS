@@ -1,5 +1,6 @@
 import functools
 from django.contrib import messages
+from django.http import Http404
 from django.shortcuts import redirect, reverse, render
 from DB.models import User, ContestBoard, Board, Bank, Lect, UserDelete, AuthUser, History, LectEnrollment, \
     ContestComment, LectBoard, Answer, UserEmail, Comment, LectAssignmentSubmit
@@ -135,7 +136,7 @@ def get_user_get(request):
 # 차라리 조용히 404 페이지를 띄워주는것도 좋을거같고..? => 해당 url 이 존재하는지 외부로부터 감출 수 있음
 def not_allowed(request, msg="접근 권한이 없습니다.", error_404=False):
     if error_404:
-        return render(request, 'error-404.html')
+        raise Http404
     else:
         messages.warning(request, msg)  # 메인에서 alert 창 띄우기
         return redirect(reverse("index"))
@@ -174,7 +175,7 @@ def writer_only(superuser=False):
                 if is_writer(request, **kwargs):
                     return func(request, *args, **kwargs)
 
-            return not_allowed(request)
+            return not_allowed(request, error_404=True)
 
         return wrapper
 
@@ -198,7 +199,7 @@ def superuser_only(cfo_included=False):
             if current_user.user_role.role_no <= flag:
                 return func(request, *args, **kwargs)
             else:
-                return not_allowed(request)
+                return not_allowed(request, error_404=True)
 
         return wrapper
 

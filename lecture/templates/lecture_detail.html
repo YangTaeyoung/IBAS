@@ -278,7 +278,7 @@
                             {% endif %}
                             <!--=======강의실로 이동하기 버튼, 신청을 하지 않으면 뜨지 않고, 신청 후 버튼이 뜨도록 수정, 누르면 강의실로 이동함======-->
                             <!--=======강의, 스터디 게시판에서만 사용하기 때문에 취미모임 게시판일 경우에는 뜨지 않도록 수정======-->
-                            {% if is_in %}
+                            {% if is_in or logined_user == lect.lect_chief %}
                                 <div style="display: flex; justify-content: center; ">
                                     <button type="button" class="btn btn-outline-primary btn-lg"
                                             style="font-weight: bold" onclick="location.href='{% url "lect_room_main" lect.lect_no %}'">
