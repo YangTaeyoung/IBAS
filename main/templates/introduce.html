@@ -6,6 +6,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/size.css' %}">
     <script src="{% static 'js/ibas_centents.js' %}"></script>
     <script src="{% static 'js/nav.js' %}"></script>
+
     <link rel="stylesheet" type="text/css" href="{% static 'css/star-rating-svg.css' %}"/>
     <link
             rel="stylesheet"
@@ -29,54 +30,119 @@
 
         <!-- ===========================bigdata 소개================================ -->
         <!-- section id는 네비게이션바를 위해 사용함. -->
-        <section id="#">
+        <section id="introduce_bd">
             <div class="section-full content-inner">
-				<div class="container m-b70">
-					<div class="section-head text-center">
-						<h2 class="box-title">Big Data</h2>
-						<div class="dlab-separator bg-primary"></div>
-						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud.</p>
-					</div>
-					<div class="row work-box-area">
-						<div class="col-lg-3 col-md-6 col-sm-6 col-6">
-							<div class="work-box" >
-								<div class="number-box bounce-in">1</div>
-								<div class="icon-box">
-									<h3 class="dlab-tilte">Lorem ipsum</h3>
-									<i class="flaticon-place"></i>
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-3 col-md-6 col-sm-6 col-6">
-							<div class="work-box">
-								<div class="number-box bounce-in">2</div>
-								<div class="icon-box">
-									<h3 class="dlab-tilte">Pick Category</h3>
-									<i class="flaticon-team"></i>
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-3 col-md-6 col-sm-6 col-6">
-							<div class="work-box">
-								<div class="number-box bounce-in">3</div>
-								<div class="icon-box">
-									<h3 class="dlab-tilte">Explore Place</h3>
-									<i class="flaticon-city-hall-1"></i>
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-3 col-md-6 col-sm-6 col-6">
-							<div class="work-box">
-								<div class="number-box bounce-in">4</div>
-								<div class="icon-box">
-									<h3 class="dlab-tilte">Enjoy Your Day</h3>
-									<i class="flaticon-city-hall"></i>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+                <div class="container m-b70">
+                    <div class="section-head text-center">
+                        <h2 class="box-title">Big Data</h2>
+                        <div class="dlab-separator bg-primary"></div>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
+                            labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud.</p>
+
+                    </div>
+                    <!-- 아이콘 hover시 바로 아래 div class에 row가 추가로 생김-->
+                    <div id="introduce_row" >
+                        <!-- 아이콘 hover시 바로 아래 div class에 col-lg-4 justify-content-center가 추가로 생김-->
+                        <div id="introduce_center" class="row work-box-area">
+                            <!-- 빅데이터 아이콘 1 -->
+                            <!-- id는 onclick시 설명을 보이게 하기 위해 사용함. -->
+                            <div id="introduce_icon_1" class="col-lg-3 col-md-6 col-sm-6 col-6 introduce-pointer" onclick="introduce_click(1)">
+                                <div id="introduce_add_1" class="work-box">
+                                    <div class="number-box bounce-in">1</div>
+                                    <div id="introduce_div_1" class="icon-box" style="background-color: rgba(0,0,0,0.1)">
+                                        <h3 class="dlab-tilte">Lorem ipsum</h3>
+                                        <i class="flaticon-place"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 빅데이터 아이콘 2 -->
+                            <!-- id는 onclick시 설명을 보이게 하기 위해 사용함. -->
+                            <div id="introduce_icon_2" class="col-lg-3 col-md-6 col-sm-6 col-6 m-t100 introduce-pointer" onclick="introduce_click(2)">
+                                <div id="introduce_add_2" class="work-box">
+                                    <div class="number-box bounce-in">2</div>
+                                    <div id="introduce_div_2" class="icon-box" style="background-color: rgba(0,0,0,0.1)">
+                                        <h3 class="dlab-tilte">Pick Category</h3>
+                                        <i class="flaticon-team"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 빅데이터 아이콘 3 -->
+                            <!-- id는 onclick시 설명을 보이게 하기 위해 사용함. -->
+                            <div id="introduce_icon_3" class="col-lg-3 col-md-6 col-sm-6 col-6 m-t70 introduce-pointer" onclick="introduce_click(3)">
+                                <div id="introduce_add_3" class="work-box">
+                                    <div class="number-box bounce-in">3</div>
+                                    <div id="introduce_div_3" class="icon-box" style="background-color: rgba(0,0,0,0.1)">
+                                        <h3 class="dlab-tilte">Explore Place</h3>
+                                        <i class="flaticon-city-hall-1"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 빅데이터 아이콘 4 -->
+                            <!-- id는 onclick시 설명을 보이게 하기 위해 사용함. -->
+                            <div id="introduce_icon_4" class="col-lg-3 col-md-6 col-sm-6 col-6 m-t20 introduce-pointer" onclick="introduce_click(4)">
+                                <div id="introduce_add_4" class="work-box">
+                                    <div class="number-box bounce-in">4</div>
+                                    <div id="introduce_div_4" class="icon-box" style="background-color: rgba(0,0,0,0.1)">
+                                        <h3 class="dlab-tilte">Enjoy Your Day</h3>
+                                        <i class="flaticon-city-hall"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 빅데이터 설명 1 -->
+                            <!-- id는 onclick시 설명을 보이게 하기 위해 사용함. -->
+                            <div id='introduce_tab_1' class="col-lg-8 introduce-pointer introduce-tab-hidden" onclick="introduce_click(1)">
+                                <img src="{% static 'images/ibas-main-background.jpg' %}"
+                                     alt="현재 브라우저에서 지원하지 않는 형식입니다." class="height-350 width-620">
+                                <h4 class="m-t40">Lorem Ipsum</h4>
+                                <p class="width-620">Phasellus convallis mauris sed elementum vulputate. Donec posuere leo sed dui
+                                    eleifend hendrerit. Sed suscipit suscipit erat, sed vehicula ligula. Aliquam ut
+                                    sem fermentum sem tincidunt lacinia gravida aliquam nunc. Morbi quis erat
+                                    imperdiet, molestie nunc ut, accumsan diam.</p>
+                            </div>
+
+                            <!-- 빅데이터 설명 2 -->
+                            <!-- id는 onclick시 설명을 보이게 하기 위해 사용함. -->
+                            <div id='introduce_tab_2' class="col-lg-8 introduce-pointer introduce-tab-hidden" onclick="introduce_click(2)">
+                                <img src="{% static 'images/ibas_poster.jpg' %}"
+                                     alt="현재 브라우저에서 지원하지 않는 형식입니다." class="height-350 width-620">
+                                <h4 class="m-t40">Lorem Ipsum</h4>
+                                <p class="width-620">Phasellus convallis mauris sed elementum vulputate. Donec posuere leo sed dui
+                                    eleifend hendrerit. Sed suscipit suscipit erat, sed vehicula ligula. Aliquam ut
+                                    sem fermentum sem tincidunt lacinia gravida aliquam nunc. Morbi quis erat
+                                    imperdiet, molestie nunc ut, accumsan diam.</p>
+                            </div>
+
+                            <!-- 빅데이터 설명 3 -->
+                            <!-- id는 onclick시 설명을 보이게 하기 위해 사용함. -->
+                            <div id='introduce_tab_3' class="col-lg-8 introduce-pointer introduce-tab-hidden" onclick="introduce_click(3)">
+                                <img src="{% static 'images/botton_bar.jpg' %}"
+                                     alt="현재 브라우저에서 지원하지 않는 형식입니다." class="height-350 width-620">
+                                <h4 class="m-t40">Lorem Ipsum</h4>
+                                <p class="width-620">Phasellus convallis mauris sed elementum vulputate. Donec posuere leo sed dui
+                                    eleifend hendrerit. Sed suscipit suscipit erat, sed vehicula ligula. Aliquam ut
+                                    sem fermentum sem tincidunt lacinia gravida aliquam nunc. Morbi quis erat
+                                    imperdiet, molestie nunc ut, accumsan diam.</p>
+                            </div>
+
+                            <!-- 빅데이터 설명 4 -->
+                            <!-- id는 onclick시 설명을 보이게 하기 위해 사용함. -->
+                            <div id='introduce_tab_4' class="col-lg-8 introduce-pointer introduce-tab-hidden" onclick="introduce_click(4)">
+                                <img src="{% static 'images/ibas_logo.png' %}"
+                                     alt="현재 브라우저에서 지원하지 않는 형식입니다." class="height-350 width-620">
+                                <h4 class="m-t40">Lorem Ipsum</h4>
+                                <p class="width-620">Phasellus convallis mauris sed elementum vulputate. Donec posuere leo sed dui
+                                    eleifend hendrerit. Sed suscipit suscipit erat, sed vehicula ligula. Aliquam ut
+                                    sem fermentum sem tincidunt lacinia gravida aliquam nunc. Morbi quis erat
+                                    imperdiet, molestie nunc ut, accumsan diam.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- ===========================동아리 소개================================ -->
@@ -108,7 +174,7 @@
                                 <!--introduce-card-pic는 yejin.css에 정의되어 있음. -->
                                 <div class="dlab-post-media introduce-card-pic">
                                     <img src="{% static 'images/introduce_card_left.png' %}"
-                                         alt="현재 브라우저에서 지원하지 않는 형식입니다."/>
+                                         alt="저"/>
                                 </div>
                                 <div class="dlab-info" style="height: 229px;">
                                     <div class="dlab-post-title ">
@@ -196,9 +262,9 @@
                                         <div class="client-detail">
                                             <div class="client-img">
                                                 <!-- 회장단 프로필사진 -->
-                                                <img src="/media/{{ chief_crew.user_pic }}" width="100"
-                                                     height="100" alt="현재 브라우저에서 지원하지 않는 형식입니다."
-                                                     class="max-min-width-height-100">
+                                                <img src="/media/{{ chief_crew.user_pic }}" width="50"
+                                                     height="50" alt="현재 브라우저에서 지원하지 않는 형식입니다."
+                                                     class="max-min-width-height-50">
                                             </div>
                                             <div class="client-info">
                                                 <!-- 회장단 이름 -->
@@ -420,20 +486,23 @@
                 <!--introduce-margin-bottom_10는 yejin.css에 정의되어 있음. -->
                 <h4 class="title m-b30 m-b10">IBAS</h4>
                 <!-- 글자 누르면 해당하는 영역으로 이동함. id를 통해 찾아가는 것임.  -->
-                <!--introduce-nav-txt는 yejin.css에 정의되어 있음. -->
-                <!--clickMenu()는 yejin.js에 정의되어 있음. 클릭했을 때 글자 색 변하는 것. -->
-                <a id="intro-a" href="#introduce" class="intro introduce-nav-txt menu-item introduce-change-nav"
+                <!--clickMenu()는 nav.js에 정의되어 있음. 클릭했을 때 글자 색 변하는 것. -->
+                <a id="intro-bd-a" href="#introduce_bd" class="bd introduce-nav-txt menu-item introduce-change-nav"
                    onclick="clickMenu(0)">
+                    <p class="m-b5">빅데이터 소개</p>
+                </a>
+                <a id="intro-a" href="#introduce" class="intro introduce-nav-txt menu-item"
+                   onclick="clickMenu(1)">
                     <p class="m-b5">동아리 소개</p>
                 </a>
                 <a id="intro-cm-a" href="#introduce_cm" class="intro_cm introduce-nav-txt menu-item"
-                   onclick="clickMenu(1)">
+                   onclick="clickMenu(2)">
                     <p class="m-b5">회장단 소개</p>
                 </a>
-                <a id="his-a" href="#history" class="his introduce-nav-txt menu-item" onclick="clickMenu(2)">
+                <a id="his-a" href="#history" class="his introduce-nav-txt menu-item" onclick="clickMenu(3)">
                     <p class="m-b5">동아리 연혁</p>
                 </a>
-                <a id="con-a" href="#contact" class="con introduce-nav-txt menu-item" onclick="clickMenu(3)">
+                <a id="con-a" href="#contact" class="con introduce-nav-txt menu-item" onclick="clickMenu(4)">
                     <p class="m-b5">Contact Us</p>
                 </a>
             </div>
@@ -443,6 +512,7 @@
     <!-- ===========================네비게이션바 JS================================ -->
     <script type="text/javascript">
         // 동아리 소개, 회장단 소개, 동아리 연혁, contact us의 section과 그 자식요소의 첫번째를 선택하는 변수 선언
+        let bd = document.getElementById("introduce_bd");
         let intro = document.getElementById("introduce");
         let intro_cm = document.getElementById("introduce_cm");
         let his = document.getElementById("history");
@@ -455,47 +525,56 @@
 
             // 회장단 소개의 위치가 window 크기 보다는 작거나 같고, 동아리 연혁의 위치가 window 크기 보다는 클 때
             // -100과 +100을 한 이유는 스크롤 위치 조정을 위해서임
-            if ((intro_cm.offsetTop - 100 <= screen) && (his.offsetTop > screen + 100)) {
-                // 콘솔에 introduce_cm을 출력하고
-                console.log("introduce_cm");
+            if ((intro.offsetTop - 100 <= screen) && (intro_cm.offsetTop > screen + 100)) {
                 // 네비게이션바에서 intro-cm-a만 introduce-change-nav 클래스를 추가하고 나머지는 지운다. 글자 커지고, 색 바뀌는 것 관련.
-                document.querySelector("#intro-cm-a").classList.add('introduce-change-nav');
+                document.querySelector("#intro-bd-a").classList.remove('introduce-change-nav');
+                document.querySelector("#intro-a").classList.add('introduce-change-nav');
+                document.querySelector("#intro-cm-a").classList.remove('introduce-change-nav');
                 document.querySelector("#his-a").classList.remove('introduce-change-nav');
                 document.querySelector("#con-a").classList.remove('introduce-change-nav');
-                document.querySelector("#intro-a").classList.remove('introduce-change-nav');
+
             }
                 // 동아리 연혁의 위치가 window 크기 보다는 작거나 같고, contact us의 위치가 window 크기 보다는 클 때
             // -200과 +200을 한 이유는 스크롤 위치 조정을 위해서임
-            else if ((his.offsetTop - 200 <= screen) && (con.offsetTop > screen + 200)) {
-                // 콘솔에 history를 출력하고
-                console.log("history");
+            else if ((intro_cm.offsetTop - 200 <= screen) && (his.offsetTop > screen + 200)) {
                 // 네비게이션바에서 his-a만 introduce-change-nav 클래스를 추가하고 나머지는 지운다. 글자 커지고, 색 바뀌는 것 관련.
-                document.querySelector("#his-a").classList.add('introduce-change-nav');
-                document.querySelector("#intro-cm-a").classList.remove('introduce-change-nav');
-                document.querySelector("#con-a").classList.remove('introduce-change-nav');
+                document.querySelector("#intro-bd-a").classList.remove('introduce-change-nav');
                 document.querySelector("#intro-a").classList.remove('introduce-change-nav');
+                document.querySelector("#intro-cm-a").classList.add('introduce-change-nav');
+                document.querySelector("#his-a").classList.remove('introduce-change-nav');
+                document.querySelector("#con-a").classList.remove('introduce-change-nav');
 
                 // contact us의 위치가 window 크기 보다는 작거나 같을 때
                 // -300과 +300을 한 이유는 스크롤 위치 조정을 위해서임
-            } else if (con.offsetTop - 300 <= screen + 300) {
-                // 콘솔에 contact을 출력하고
-                console.log("contact");
+            }
+            {#else if (con.offsetTop - 300 <= screen + 300) {#}
+            else if ((his.offsetTop - 300 <= screen) && (con.offsetTop > screen + 300)) {
+
                 // 네비게이션바에서 con-a만 introduce-change-nav 클래스를 추가하고 나머지는 지운다. 글자 커지고, 색 바뀌는 것 관련.
-                document.querySelector("#con-a").classList.add('introduce-change-nav');
-                document.querySelector("#his-a").classList.remove('introduce-change-nav');
-                document.querySelector("#intro-cm-a").classList.remove('introduce-change-nav');
+                document.querySelector("#intro-bd-a").classList.remove('introduce-change-nav');
                 document.querySelector("#intro-a").classList.remove('introduce-change-nav');
+                document.querySelector("#intro-cm-a").classList.remove('introduce-change-nav');
+                document.querySelector("#his-a").classList.add('introduce-change-nav');
+                document.querySelector("#con-a").classList.remove('introduce-change-nav');
 
             }
+            else if (con.offsetTop - 400 < screen + 400) {
+                // 네비게이션바에서 con-a만 introduce-change-nav 클래스를 추가하고 나머지는 지운다. 글자 커지고, 색 바뀌는 것 관련.
+                document.querySelector("#intro-bd-a").classList.remove('introduce-change-nav');
+                document.querySelector("#intro-a").classList.remove('introduce-change-nav');
+                document.querySelector("#intro-cm-a").classList.remove('introduce-change-nav');
+                document.querySelector("#his-a").classList.remove('introduce-change-nav');
+                document.querySelector("#con-a").classList.add('introduce-change-nav');
+
+            }
+
             // 나머지 경우, 동아리 소개의 경우
             else {
-                // 콘솔에 introduce을 출력하고
-                console.log("introduce");
-                // 네비게이션바에서 intro-a만 introduce-change-nav 클래스를 추가하고 나머지는 지운다. 글자 커지고, 색 바뀌는 것 관련.
-                document.querySelector("#intro-a").classList.add('introduce-change-nav');
+                document.querySelector("#intro-bd-a").classList.add('introduce-change-nav');
+                document.querySelector("#intro-a").classList.remove('introduce-change-nav');
+                document.querySelector("#intro-cm-a").classList.remove('introduce-change-nav');
                 document.querySelector("#his-a").classList.remove('introduce-change-nav');
                 document.querySelector("#con-a").classList.remove('introduce-change-nav');
-                document.querySelector("#intro-cm-a").classList.remove('introduce-change-nav');
 
             }
         })

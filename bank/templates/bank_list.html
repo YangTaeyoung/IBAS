@@ -293,12 +293,12 @@
                                                  <!-- 첨부된 파일 불러오기 -->
                                                 <!-- 파일 리스트 길이가 0이 아닐 경우에만 파일 리스트를 출력하게 함. -->
                                                 {% if bank.files.all %}
-                                                    <div id="bank-update-file-parent" class="download-box mb-3"
+                                                    <div id="bank-update-file-parent" class="download-box mb-5"
                                                          style="font-size: 13px">
                                                         {% for bank_file in bank.files.all %}
                                                             <!-- 첨부파일 1 -->
-                                                            <div id="bank-update-file-{{ bank_file.file_id }}">
-                                                                 <i class="fa fa-download m-r15"></i>
+                                                            <div id="bank-update-file-{{ bank_file.file_id }}" class="d-flex">
+                                                                 <i class="fa fa-download m-r15 m-t5"></i>
                                                                 <a class="line2" href="#">
                                                                     {{ bank_file.file_name }}
                                                                 </a>
