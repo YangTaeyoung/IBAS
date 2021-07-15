@@ -320,8 +320,10 @@ class LectAssignmentSubmit(models.Model):
     assignment_submit_created = models.DateTimeField(db_column='ASSIGNMENT_SUBMIT_CREATED', auto_now_add=True)
     assignment_cont = models.TextField(db_column='ASSIGNMENT_CONT')
     assignment_submitter = models.ForeignKey('User', on_delete=models.DO_NOTHING, db_column='ASSIGNMENT_SUBMITTER')
-    assignment_no = models.ForeignKey('LectBoard', on_delete=models.CASCADE, db_column='ASSIGNMENT_NO', related_name='submissions')
-    lect_no = models.ForeignKey('Lect', on_delete=models.CASCADE, db_column='LECT_NO', related_name='submitted_assignments')
+    assignment_no = models.ForeignKey('LectBoard', on_delete=models.CASCADE, db_column='ASSIGNMENT_NO',
+                                      related_name='submissions')
+    lect_no = models.ForeignKey('Lect', on_delete=models.CASCADE, db_column='LECT_NO',
+                                related_name='submitted_assignments')
     status = models.ForeignKey('LectAssignmentStatus', on_delete=models.DO_NOTHING, db_column="STATUS", default=0)
     reject_reason = models.CharField(db_column="REJECT_REASON", max_length=200, null=True)
 
@@ -383,7 +385,8 @@ class LectEnrollment(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)
     lect_no = models.ForeignKey('Lect', on_delete=models.CASCADE, db_column='LECT_NO', related_name='enrolled_students')
     student = models.ForeignKey('User', on_delete=models.CASCADE, db_column='STUDENT')
-    status = models.ForeignKey('LectEnrollmentStatus', on_delete=models.DO_NOTHING, db_column='STATUS', default=1, null=False)
+    status = models.ForeignKey('LectEnrollmentStatus', on_delete=models.DO_NOTHING, db_column='STATUS', default=1,
+                               null=False)
 
     class Meta:
         managed = False
@@ -552,6 +555,8 @@ class User(models.Model):
     user_grade = models.IntegerField(db_column='USER_GRADE', null=True)
     user_gen = models.IntegerField(db_column='USER_GEN', null=True)
     user_phone = models.CharField(db_column='USER_PHONE', unique=True, max_length=15)
+    user_intro = models.CharField(db_column="USER_INTRO", null=True, max_length=300)
+    user_apply_publish = models.IntegerField(db_column="USER_APPLY_PUBLISH", null=True, default=0)
 
     class Meta:
         managed = False
