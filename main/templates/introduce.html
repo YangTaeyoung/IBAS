@@ -294,7 +294,7 @@
                                             <h5>{{ chief_crew.user_phone }}</h5>
                                             <!-- 회장단 이메일 -->
                                             <h5>{{ chief_crew.useremail_set.first.user_email }}</h5>
-                                            <h5>{{ chief_crew.user_intro }}</h5>
+                                            <h5>{% if chief_crew.user_intro %}{{ chief_crew.user_intro }}{% endif %}</h5>
                                         </div>
                                     </div>
                                 </div>
