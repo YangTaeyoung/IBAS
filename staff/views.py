@@ -389,6 +389,8 @@ def member_delete_decide(request, user_delete_no):
 def user_name_update(request):
     if request.method == "POST":
         aor = int(request.POST.get('aor'))
+        if aor == 0:
+            return redirect(reverse('staff_member_list'))
         updated_no_list = request.POST.getlist('user_request_list[]')
         for updated_no in updated_no_list:
             user_update_request = UserUpdateRequest.objects.get(pk=updated_no)
@@ -400,4 +402,4 @@ def user_name_update(request):
                 user_update_request.updated_reject_reason = "등록된 학번과 학생 DB에 저장된 이름이 다릅니다."
             user_update_request.updated_state = StateInfo.objects.get(pk=aor)
             user_update_request.save()
-    return redirect('my_info')
+    return redirect(reverse("staff_member_list"))
