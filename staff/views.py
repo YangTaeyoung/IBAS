@@ -6,7 +6,7 @@ from staff.forms import UserDeleteForm
 from pagination_handler import get_page_object
 from IBAS.forms import FileFormBase, CommentBaseForm
 import os
-from user_controller import superuser_only, writer_only, get_logined_user, chief_only, delete_user
+from user_controller import superuser_only, writer_only, get_logined_user, chief_only, delete_user, role_check, is_default_pic
 from django.db.models import Q, Count, Aggregate
 from django.core.mail import send_mail
 from django.conf import settings
@@ -53,7 +53,12 @@ def staff_member_list(request):
         grade_list = list(set(grade_list))
         grade_list.sort()
         auth_list = UserAuth.objects.filter(auth_no__lte=2)  # 기존 회원은 미승인 회원으로 넘길 수 없으므로, role_no 가 2 이하인 튜플만 가져옴.
-        role_list = UserRole.objects.filter(~Q(role_no=5))
+        role_list = {}
+        if role_check(request, 1): # 로그인 한 유저의 권한이 회장일 경우
+            role_list = UserRole.objects.filter(~Q(role_no=5)) # 교수를 제외한 모든 유저의 권한을 조정가능.
+        elif role_check(request, 2): # 로그인 한 유저의 권한이 부회장 인 경우
+            role_list = UserRole.objects.filter(Q(role_no__gt=2) & ~Q(role_no=5)) # 회장, 부회장, 교수를 제외한 유저의 권한을 조정할 수 있음.
+        # 제명 리스트 받아오기 (최신 상위 5개만)
         user_delete_list = UserDelete.objects.all().order_by("-user_delete_created")[:5]
         context = {  # 컨텍스트에 등록
             "exist_user_list": exist_user_items,
@@ -62,10 +67,11 @@ def staff_member_list(request):
             "new_user_len": len(new_user_list),
             "grade_list": grade_list,
             "auth_list": auth_list,
-            "role_list": role_list,
             "user_update_request_list": user_update_request_items,
             "user_delete_list": user_delete_list
         }
+        if role_list:
+            context.update(role_list=role_list)
 
         return render(request, "member_manage.html", context)  # 유저 리스트 페이지를 랜더링
     else:  # 그 외의 권한을 가진 자가 접근할 경우 (해킹 시도)
@@ -85,15 +91,16 @@ def staff_member_update(request):
         if (int(user_role) == 1 and len(user_stu_list) > 1) or (
                 int(user_role) == 2 and len(user_stu_list) > 1):  # 회장이나 부회장으로 바꾸려고 하면서 다수의 인원을 선택했을 경우.
             messages.error(request, "꼭 한명만 선택하실 수 있습니다.")
-            return redirect(reverse("my_info"))  # 무효로 함. 내 정보 페이지로 이동.
+            return redirect(reverse("staff_member_list"))  # 무효로 함. 내 정보 페이지로 이동.
         elif int(user_role) == 1 and len(user_stu_list) == 1 or (
                 int(user_role) == 2 and len(user_stu_list) == 1):  # 회장 위임의 조건을 충족한 경우. (한명만 골랐을 때)
             # 기존 회장, 부회장 권한 수정 -> 일반회원
             with transaction.atomic():
                 user = User.objects.filter(user_role__role_no=user_role).first()
-                user.user_role = UserRole.objects.get(pk=6)  # 바꾸고자 하는 사람은 일반 회원으로 역할 변경됨.
-                user.save()
-                create_user_role_update_alarm(user)
+                if user_role == 1:
+                    user.user_role = UserRole.objects.get(pk=6)  # 바꾸고자 하는 사람은 일반 회원으로 역할 변경됨.
+                    user.save()
+                    create_user_role_update_alarm(user)
                 # 새로운 회장 부회장.
                 new_user = User.objects.get(pk=user_stu_list[0])  # 새로운 회장 부회장의 객체를 얻어옴.
                 new_user.user_role = UserRole.objects.get(pk=user_role)  # 권한 수정
@@ -170,7 +177,8 @@ def member_aor(request):
             # 불합격 이메일 통보 메시지 딕셔너리 생성
             with transaction.atomic():
                 mail_dict = get_message(False, user.user_name)
-                FileController.delete_all_files_of_(user)
+                if not is_default_pic(str(user.user_pic)):
+                    FileController.delete_all_files_of_(user)
                 send_mail(subject=mail_dict["mail_title"], message=mail_dict["mail_message"],  # 메일 전송
                           from_email=settings.EMAIL_HOST_USER,
                           recipient_list=user_email_list)
