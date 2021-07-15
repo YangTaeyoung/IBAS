@@ -163,3 +163,25 @@ def withdrawal(request):
                     return redirect("logout")  # 최후의 로그아웃 (세션 제거용)
     # 비정상적인 접근이거나(해킹 시도), 모종의 이유로 삭제되지 않은 경우
     return redirect(reverse("my_info"))  # 내 정보 페이지로 이동.
+
+
+@login_required
+def user_intro_update(request):
+    if request.method == "POST":
+        current_user = get_logined_user(request)
+        if request.POST.get("user_apply_publish"):
+            current_user.user_apply_publish = int(request.POST.get("user_apply_publish"))
+        else:
+            current_user.user_apply_publish = 0
+        current_user.user_intro = request.POST.get("user_intro")
+        current_user.save()
+    return redirect(reverse('my_info'))
+
+
+@login_required
+def user_grade_update(request):
+    if request.method == "POST":
+        current_user = get_logined_user(request)
+        current_user.user_grade = int(request.POST.get("user_grade"))
+        current_user.save()
+    return redirect(reverse('my_info'))
