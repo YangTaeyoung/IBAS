@@ -42,7 +42,7 @@ def introduce(request):
 def activity_list(request):
     # 최신순으로 정렬하고, 1:M 관계로 가져오기 위해 prefetch_related 함수 사용
     board_list = Board.objects.filter(board_type_no__board_type_no=4).order_by('-board_created').prefetch_related(
-        "boardfile_set")
+        "files")
     board_list = get_page_object(request, board_list, 6)
 
     return render(request, 'activity_list.html', {'board_list': board_list})
@@ -64,7 +64,7 @@ def activity_detail(request, board_no):
 
         context = {
             "board": board,
-            "board_file_list": BoardFile.objects.filter(board_no=board),
+            "board_file_list": BoardFile.objects.filter(file_fk=board),
             "comment_list": comment_list,
         }
 
@@ -118,7 +118,7 @@ def activity_update(request, board_no):
             'board_no': board_no,
             'board_form': ActivityForm(instance=board),
             'file_form': FileForm(),
-            'file_list': BoardFile.objects.filter(board_no=board)
+            'file_list': BoardFile.objects.filter(file_fk=board)
         }
 
         return render(request, 'activity_register.html', context)  # 이거로 보내줘서 작업 가능
@@ -131,7 +131,7 @@ def activity_update(request, board_no):
         if activity_form.is_valid() and file_form.is_valid():
             with transaction.atomic():
                 activity_form.update(instance=board)
-                board_files = BoardFile.objects.filter(board_no=board)  # 파일들을 갖고 옴
+                board_files = BoardFile.objects.filter(file_fk=board)  # 파일들을 갖고 옴
                 FileController.remove_files_by_user(request, board_files)  # 사용자가 제거한 파일 삭제
                 file_form.save(instance=board)  # 파일 업로드
 
