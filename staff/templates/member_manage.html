@@ -425,7 +425,7 @@
                         {% endif %}
 
                         <!------------------------------여기서부터 백엔드 작업 시작---------------------------------->
-                        {% if logined_user.user_role.role_no == 1 %}
+                        {% if logined_user.user_role.role_no <= 2 %}
                             <!-- 요청사항 콘텐츠 시작 -->
                             <div class="content-box">
                                 <div class="content-header">
@@ -433,18 +433,18 @@
                                 </div>
                                 <!-- 요청사항 실질 콘텐츠 시작 -->
                                 <!-- form 태그 수정 해야함 -->
-                                <form action="#" method="post">
-                                    {% csrf_token %}
-                                    <div class="content-body">
-                                        <div class="myinfo-table-padding">
 
+                                <div class="content-body">
+                                    <div class="myinfo-table-padding">
+                                        <form action="{% url 'member_update_name' %}" method="post">
+                                            {% csrf_token %}
                                             <!-- staff_mem_select는 staff_cr.css에 정의되어 있음.  -->
                                             <div class="staff_mem_select m-b20">
-                                                <select id="select-aor" onchange="selectAoR()">
+                                                <select id="select-aor" name="aor">
                                                     <option selected="selected" disabled="disabled">승인 여부
                                                     </option>
-                                                    <option value="1">승인</option>
-                                                    <option value="2">거절</option>
+                                                    <option name="aor" value="3">승인</option>
+                                                    <option name="aor" value="2">거절</option>
                                                 </select>
                                             </div>
                                             <!-- staff_mem_btn는 staff_cr.css에 정의되어 있음.  -->
@@ -453,7 +453,7 @@
                                                 <button class="site-button" type="submit"><i
                                                         class="la la-check m-r5"
                                                         style="font-weight: bold"
-                                                        onclick="submitForm('hd-form-members-aor')"></i>&nbsp;적용
+                                                ></i>&nbsp;적용
                                                 </button>
                                             </div>
 
@@ -500,12 +500,12 @@
                                                     <tr>
                                                         <td scope="row">
                                                             <div class="input-block">
-                                                                <input id="check_{{ user_update_request.updated_user.user_stu }}"
+                                                                <input id="check-{{ forloop.counter }}"
                                                                        type="checkbox"
-                                                                       name="user_stu_list[]"
-                                                                       value="{{ user_update_request.updated_user.user_stu }}">
+                                                                       name="user_request_list[]"
+                                                                       value="{{ user_update_request.updated_no }}">
                                                                 <!-- staff_label_margin는 staff_cr.css에 정의되어 있음.  -->
-                                                                <label for="check_{{ user_update_request.updated_user.user_stu }}"
+                                                                <label for="check-{{ forloop.counter }}"
                                                                        class="staff_label_margin"></label>
                                                             </div>
                                                         </td>
@@ -570,9 +570,10 @@
                                                 </nav>
                                             </div>
                                             <!--페이지네이션 끝-->
-                                        </div>
+                                        </form>
                                     </div>
-                                </form>
+                                </div>
+
                             </div>
                         {% endif %}
 

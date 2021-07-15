@@ -7,7 +7,8 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path("member/list/", views.staff_member_list, name="staff_member_list"),
-    path("member/update/", views.staff_member_update, name="staff_member_update"),  # 이거 뭐죠 백앤드가 작업 하지 않은 거면 삭제해야함
+    path("member/update/", views.staff_member_update, name="staff_member_update"),
+    path("member/update/name/", views.user_name_update, name="member_update_name"),
     path('member/delete/list/', views.member_delete_list, name='member_delete_list'),
     path('member/delete/detail/<int:user_delete_no>', views.member_delete_detail, name='member_delete_detail'),
     path('member/delete/update/<int:user_delete_no>', views.member_delete_update, name="member_delete_update"),

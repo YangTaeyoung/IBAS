@@ -1,12 +1,13 @@
 from django.shortcuts import render, reverse, redirect, get_object_or_404
 from DB.models import User, UserRole, UserAuth, Answer, UserUpdateRequest, \
     UserDelete, UserDeleteAor, UserDeleteFile, UserDeleteComment, UserDeleteState, \
-    UserEmail  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
+    UserEmail, StateInfo  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
 from staff.forms import UserDeleteForm
 from pagination_handler import get_page_object
 from IBAS.forms import FileFormBase, CommentBaseForm
 import os
-from user_controller import superuser_only, writer_only, get_logined_user, chief_only, delete_user, role_check, is_default_pic
+from user_controller import superuser_only, writer_only, get_logined_user, chief_only, delete_user, role_check, \
+    is_default_pic
 from django.db.models import Q, Count, Aggregate
 from django.core.mail import send_mail
 from django.conf import settings
@@ -54,10 +55,10 @@ def staff_member_list(request):
         grade_list.sort()
         auth_list = UserAuth.objects.filter(auth_no__lte=2)  # 기존 회원은 미승인 회원으로 넘길 수 없으므로, role_no 가 2 이하인 튜플만 가져옴.
         role_list = {}
-        if role_check(request, 1): # 로그인 한 유저의 권한이 회장일 경우
-            role_list = UserRole.objects.filter(~Q(role_no=5)) # 교수를 제외한 모든 유저의 권한을 조정가능.
-        elif role_check(request, 2): # 로그인 한 유저의 권한이 부회장 인 경우
-            role_list = UserRole.objects.filter(Q(role_no__gt=2) & ~Q(role_no=5)) # 회장, 부회장, 교수를 제외한 유저의 권한을 조정할 수 있음.
+        if role_check(request, 1):  # 로그인 한 유저의 권한이 회장일 경우
+            role_list = UserRole.objects.filter(~Q(role_no=5))  # 교수를 제외한 모든 유저의 권한을 조정가능.
+        elif role_check(request, 2):  # 로그인 한 유저의 권한이 부회장 인 경우
+            role_list = UserRole.objects.filter(Q(role_no__gt=2) & ~Q(role_no=5))  # 회장, 부회장, 교수를 제외한 유저의 권한을 조정할 수 있음.
         # 제명 리스트 받아오기 (최신 상위 5개만)
         user_delete_list = UserDelete.objects.all().order_by("-user_delete_created")[:5]
         context = {  # 컨텍스트에 등록
@@ -382,3 +383,21 @@ def member_delete_decide(request, user_delete_no):
         return redirect("member_delete_detail", user_delete_no=user_delete_no)
     else:  # 비정상적인 접근.
         return redirect(reverse("index"))
+
+
+@chief_only(vice=True)
+def user_name_update(request):
+    if request.method == "POST":
+        aor = int(request.POST.get('aor'))
+        updated_no_list = request.POST.getlist('user_request_list[]')
+        for updated_no in updated_no_list:
+            user_update_request = UserUpdateRequest.objects.get(pk=updated_no)
+            if aor == 3:  # 승인한 경우
+                target_user = user_update_request.updated_user
+                target_user.user_name = user_update_request.updated_user_name
+                target_user.save()
+            elif aor == 2:  # 거절한 경우
+                user_update_request.updated_reject_reason = "등록된 학번과 학생 DB에 저장된 이름이 다릅니다."
+            user_update_request.updated_state = StateInfo.objects.get(pk=aor)
+            user_update_request.save()
+    return redirect('my_info')
