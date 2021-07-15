@@ -293,10 +293,8 @@
                                             <!-- 회장단 전화번호 -->
                                             <h5>{{ chief_crew.user_phone }}</h5>
                                             <!-- 회장단 이메일 -->
-                                            <h5>{{ chief_crew.user_email }}</h5>
-                                            {% for chief_crew_carrier in chief_crew.chiefcarrier_set.all %}
-                                                <p>{{ chief_crew_carrier.carrier_content }}</p>
-                                            {% endfor %}
+                                            <h5>{{ chief_crew.useremail_set.first.user_email }}</h5>
+                                            <h5>{{ chief_crew.user_intro }}</h5>
                                         </div>
                                     </div>
                                 </div>
