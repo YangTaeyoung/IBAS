@@ -1,4 +1,3 @@
-
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
@@ -59,24 +58,33 @@
                                         <h4 class="title">게시판</h4>
                                         <div class="widget_tag">
                                             <ul class="m-b0">
-                                                <li><a href="{% url 'board_view'  board_type_no=5 %}">전체 게시글</a>
-                                                    ({{ all_num }}+)
-                                                </li>
-                                                <li><a href="{% url 'board_view'  board_type_no=1 %}">공지사항</a>
-                                                    ({{ notice_num }}+)
-                                                </li>
-                                                <li><a href="{% url 'board_view'  board_type_no=2 %}">자유게시판</a>
-                                                    ({{ free_num }}+)
-                                                </li>
-                                                <li><a href="{% url 'board_view'  board_type_no=3 %}">질문게시판</a>
-                                                    ({{ quest_num }}+)
-                                                </li>
-                                                <li><a href="{% url 'contest_list' %}">공모전게시판</a>
-                                                    ({{ contest_num }}+)
-                                                </li>
-                                                <li><a href="{% url 'activity' %}">활동게시판</a>
-                                                    ({{ activity_num }}+)
-                                                </li>
+                                                {% if board_type_no <= 5 %}
+                                                    <li><a href="{% url 'board_view'  board_type_no=5 %}">전체 게시글</a>
+                                                        ({{ all_num }}+)
+                                                    </li>
+                                                    <li><a href="{% url 'board_view'  board_type_no=1 %}">공지사항</a>
+                                                        ({{ notice_num }}+)
+                                                    </li>
+                                                    <li><a href="{% url 'board_view'  board_type_no=2 %}">자유게시판</a>
+                                                        ({{ free_num }}+)
+                                                    </li>
+                                                    <li><a href="{% url 'board_view'  board_type_no=3 %}">질문게시판</a>
+                                                        ({{ quest_num }}+)
+                                                    </li>
+                                                    <li><a href="{% url 'contest_list' %}">공모전게시판</a>
+                                                        ({{ contest_num }}+)
+                                                    </li>
+                                                    <li><a href="{% url 'activity' %}">활동게시판</a>
+                                                        ({{ activity_num }}+)
+                                                    </li>
+                                                {% elif board_type_no >= 6 and board_type_no <= 7 %}
+                                                    <li>
+                                                        <a href="{% url 'board_view' board_type_no=6 %}">알파테스터</a>({{ alpha_num }}+)
+                                                    </li>
+                                                    <li>
+                                                        <a href="{% url 'board_view' board_type_no=7 %}">베타테스터</a>({{ beta_num }}+)
+                                                    </li>
+                                                {% endif %}
                                             </ul>
                                         </div>
                                     </div>
@@ -144,9 +152,9 @@
                                 {% endif %}
                                 <!--========== 페이지네이션 시작 ===========-->
                                 <!-- 1페이지에 15개 게시글 끌고오고, 게시글이 그보다 적으면, 페이지네이션 안보이게 처리 -->
-                            {% if board_list|length != 0 %}
-                                {% include 'pagination.html' with item_list=board_list %}
-                            {% endif %}
+                                {% if board_list|length != 0 %}
+                                    {% include 'pagination.html' with item_list=board_list %}
+                                {% endif %}
                                 <!--========== 페이지네이션 끝 ===========-->
                             </div>
                         </div>
