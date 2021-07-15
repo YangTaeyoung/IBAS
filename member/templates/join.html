@@ -126,7 +126,13 @@
             }
         }
     </script>
-
+    <style>
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    </style>
 </head>
 <body id="bg">
 <div id="loading-area"></div>
@@ -198,7 +204,8 @@
                                     </div>
                                     <p class="mb-1 mt-1" style="font-size: 8pt;color:red;line-height: 120%">
                                         <i class="la la-check"></i>
-                                        &nbsp;학번이 학생 DB와 대조 후 일치하지 않을 시, 가입을 승인하지 않습니다.<br/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;실명과 학번이 맞는지 다시 한 번 확인해주세요.
+                                        &nbsp;학번이 학생 DB와 대조 후 일치하지 않을 시, 가입을 승인하지 않습니다.<br/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;실명과
+                                        학번이 맞는지 다시 한 번 확인해주세요.
                                     </p>
 
                                     <!--이메일은 수정하지 못하도록 고정 / 구글이나 네이버로부터 정보 받아옴-->
