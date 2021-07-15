@@ -25,6 +25,8 @@ def get_sidebar_information():
         "quest_num": Board.objects.filter(board_type_no__board_type_no=3).count(),
         "activity_num": Board.objects.filter(board_type_no__board_type_no=4).count(),
         "contest_num": ContestBoard.objects.all().count(),
+        "alpha_num": Board.objects.filter(board_type_no__board_type_no=6).count(),
+        "beta_num": Board.objects.filter(board_type_no__board_type_no=7).count(),
     }
 
 
@@ -93,7 +95,7 @@ def get_context_of_contest_(contest_no):
 @login_required
 def board_view(request, board_type_no):  # 게시판 페이지로 이동
     if board_type_no == 5:
-        board_list = Board.objects.all().select_related("board_writer").order_by(
+        board_list = Board.objects.filter(board_type_no__board_type_no__lte=4).select_related("board_writer").order_by(
             "board_type_no").order_by("-board_created")
     else:
         board_list = Board.objects.filter(board_type_no=BoardType.objects.get(pk=board_type_no)).select_related(
