@@ -113,7 +113,7 @@ class FileForm(FileFormBase):
         required=False,
         widget=forms.FileInput(
             attrs={'multiple': True,
-                   'accept': "image/*,.doc,.pdf,.hwp,.docx"})
+                   'accept': "image/*"})
     )
 
     # overriding
