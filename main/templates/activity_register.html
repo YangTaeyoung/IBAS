@@ -47,7 +47,7 @@
                                             <br/>
                                             <!--이미지, 파일 업로드란-->
                                             <div class="form-group">
-                                                {{ file_form.upload_file }}
+                                                {% render_field file_form.upload_file accept="image/*" %}
                                             </div>
                                         </div>
 
