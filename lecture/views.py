@@ -64,6 +64,7 @@ def lect_register(request):  # 강의/스터디/취미모임 등록 페이지로
             init_dict.update(lect_state=1)
         else:  # 강의가 아닐 때
             init_dict.update(lect_state=3)
+
         context = {
             "lect_type": lect_type,
             "method_list": MethodInfo.objects.all(),
@@ -94,7 +95,8 @@ def lect_detail(request, lect_no):
         'lect': lect,
         'lect_day_list': lect_day_list,
         'lect_user_num': len(LectEnrollment.objects.filter(lect_no=lect_no)),
-        'is_in': LectEnrollment.objects.filter(student=get_logined_user(request), lect_no_id=lect_no).first() is not None,
+        'is_in': LectEnrollment.objects.filter(student=get_logined_user(request),
+                                               lect_no_id=lect_no).first() is not None,
         'lect_reject_form': LectRejectForm(instance=lect),
     }
     # 취미 모임의 경우 강의 방식이 없음 따라서 해당 부분에 대한 예외처리
@@ -239,8 +241,10 @@ def lect_room_search(request, room_no):
         k = request.GET.get("keyword")
 
         search_result = LectBoard.objects.filter((
-                Q(lect_board_title__icontains=k) | Q(lect_board_cont__icontains=k) |
-                Q(lect_board_writer__user_name__icontains=k)) & Q(lect_no_id=room_no)).order_by('-lect_board_created')
+                                                         Q(lect_board_title__icontains=k) | Q(
+                                                     lect_board_cont__icontains=k) |
+                                                         Q(lect_board_writer__user_name__icontains=k)) & Q(
+            lect_no_id=room_no)).order_by('-lect_board_created')
 
         # 검색 필터 (검색 범위: 강의게시글 제목, 강의게시글 내용, 강의게시글 작성자)
         board_list = get_page_object(
@@ -260,8 +264,7 @@ def lect_room_search(request, room_no):
 
         return render(request, 'lecture_room_board_list.html', context)  # 정상 처리
 
-
-                                                # 강의 게시글 CRUD #
+        # 강의 게시글 CRUD #
 
 
 # 더보기 눌렀을 때 나오는 게시판 (공지게시판(1)/강의게시판(2)/과제게시판(3))
@@ -272,7 +275,7 @@ def lect_room_list(request, room_no, board_type):
     # 공지사항 및 강의게시판
     if board_type < 3:
         board_list = lect_room.lectures.filter(lect_board_type_id=board_type)
-        board_list = [{'idx': len(board_list)-idx, 'board': board} for idx, board in enumerate(board_list)]
+        board_list = [{'idx': len(board_list) - idx, 'board': board} for idx, board in enumerate(board_list)]
     # 과제게시판
     else:
         cur_user = get_logined_user(request)
@@ -334,7 +337,8 @@ def lect_board_detail(request, room_no, lect_board_no):
         cur_user = get_logined_user(request)
         if cur_user != lect_room.lect_chief:
             # 과제 하나당 수강생은 어차피 하나밖에 제출 못함. get 쿼리로 검사하면 레코드 없을 시 오류 발생.
-            submitted_assignment = LectAssignmentSubmit.objects.filter(assignment_submitter=cur_user, assignment_no=board).first()
+            submitted_assignment = LectAssignmentSubmit.objects.filter(assignment_submitter=cur_user,
+                                                                       assignment_no=board).first()
 
     # 강의 링크가 있으면 임베딩 시도
     link_embedding = {}
@@ -410,8 +414,7 @@ def lect_board_update(request, room_no, lect_board_no):
 def sample(request):
     return render(request, 'sample.html')
 
-
-                                            # 수강생 과제 CRUD #
+    # 수강생 과제 CRUD #
 
 
 # 수강생 과제 제출
@@ -452,7 +455,8 @@ def lect_assignment_list(request, room_no):
     cur_user = get_logined_user(request)
     assignments_list = get_page_object(
         request,
-        model_list=lect_room.submitted_assignments.select_related('assignment_no').filter(assignment_submitter=cur_user).all(),
+        model_list=lect_room.submitted_assignments.select_related('assignment_no').filter(
+            assignment_submitter=cur_user).all(),
         num_of_boards_in_one_page=15)
 
     context = {
@@ -502,8 +506,7 @@ def lect_assignment_delete(request, room_no, assignment_submit_no):
 
     return redirect(reverse('lect_assignment_list', args=[room_no]))
 
-
-                                                # 수강생 메뉴 #
+    # 수강생 메뉴 #
 
 
 # 제출한 과제 보기
@@ -515,7 +518,6 @@ def lect_assignment_detail(request, room_no, submit_no):
     file_list, img_list, doc_list = FileController.get_images_and_files_of_(submitted_assignment)
 
     if request.method == "GET":
-
         context = {
             'lect': lect_room,
             'submitted_assignment': submitted_assignment,
@@ -555,8 +557,7 @@ def lect_room_student_status(request, room_no):
 
     return render(request, 'lecture_room_student_status.html', context)
 
-
-                                            # 강의자 메뉴 #
+    # 강의자 메뉴 #
 
 
 # 강의자가 수강생의 과제 디테일 조회 시, 수강생의 과제를 통과 또는 실패 처리 시킴
@@ -735,5 +736,3 @@ def lect_room_manage_attendance(request, room_no):
                 students.filter(student_id__in=checked_list).delete()
 
         return redirect(reverse('lect_room_manage_attendance', kwargs={'room_no': room_no}), )
-
-

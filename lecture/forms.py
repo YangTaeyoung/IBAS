@@ -14,7 +14,7 @@ class LectForm(forms.ModelForm):
     class Meta:
         model = Lect
 
-        exclude = ("lect_chief", "lect_created", "lect_pic")
+        exclude = ("lect_chief", "lect_created", "lect_pic", "lect_day")
         widgets = {
             "lect_title": forms.TextInput(attrs={"placeholder": "강의 제목을 입력하세요"}),
             "lect_curri": forms.Textarea(attrs={"placeholder": "강의 계획을 작성해주세요"}),
@@ -60,7 +60,7 @@ class LectPicForm(forms.ModelForm):
         model = Lect
         exclude = (
             "lect_chief", "lect_created", "lect_title", "lect_curri", "lect_intro", "lect_method", "lect_place_or_link",
-            "lect_type", "lect_deadline", "lect_limit_num", "lect_state", "lect_reject_reason"
+            "lect_type", "lect_deadline", "lect_limit_num", "lect_state", "lect_reject_reason",'lect_day'
         )
         widgets = {
             "lect_pic": forms.FileInput(attrs={"multiple": "multiple"})
@@ -80,7 +80,7 @@ class LectRejectForm(forms.ModelForm):
         exclude = (
             "lect_chief", "lect_created", "lect_title", "lect_curri", "lect_intro", "lect_method", "lect_place_or_link",
             "lect_pic", "lect_type",
-            "lect_deadline", "lect_limit_num"
+            "lect_deadline", "lect_limit_num", "lect_day"
         )
         widgets = {
             "lect_state": forms.HiddenInput(),

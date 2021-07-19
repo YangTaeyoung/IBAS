@@ -7,6 +7,7 @@ from user_controller import get_logined_user, login_required, get_social_login_i
     get_default_pic_path, is_default_pic, delete_all_infomation, delete_user
 from django.conf import settings
 from member.session import save_session
+
 from file_controller import FileController
 import hashlib
 from django.db import transaction
@@ -20,6 +21,11 @@ def get_ecrypt_value(value: str):
 @login_required
 def my_info(request):  # 내 정보 출력
     context = {
+        "my_lect_ing_list": LectEnrollment.objects.filter(
+            Q(student=get_logined_user(request)) & Q(lect_no__lect_state__state_no=3)),
+        "my_lect_fin_list": LectEnrollment.objects.filter(
+            Q(student=get_logined_user(request)) & Q(lect_no__lect_state__state_no=4)),
+        "my_lect_made_list": Lect.objects.filter(Q(lect_chief=get_logined_user(request))),
         "my_board_list": Board.objects.filter(board_writer=get_logined_user(request)).order_by(
             "board_type_no").order_by("-board_created"),
         "my_comment_list": Comment.objects.filter(comment_writer=get_logined_user(request)).order_by(
