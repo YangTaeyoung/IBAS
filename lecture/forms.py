@@ -45,7 +45,8 @@ class LectForm(forms.ModelForm):
             lect.lect_method = self.cleaned_data.get("lect_method")
             lect.lect_curri = self.cleaned_data.get("lect_curri")
             lect.lect_place_or_link = self.cleaned_data.get("lect_place_or_link")
-            return lect.save()
+            lect.save()
+            return lect
         return lect
 
     def clean(self):

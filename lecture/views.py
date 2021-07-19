@@ -81,6 +81,8 @@ def lect_register(request):  # 강의/스터디/취미모임 등록 페이지로
         if lect_form.is_valid() and lect_pic_form.is_valid():  # 유효성 검사 성공 시
             lect = lect_form.save(lect_chief=get_logined_user(request))
             lect_pic_form.save(instance=lect)
+            lect.lect_day = request.POST.get("lect_day")
+            lect.save()
             return redirect("lect_detail", lect_no=lect.lect_no)
         else:  # 유효성 검사 실패 시
             return redirect("lect_view", type_no=1)
@@ -90,10 +92,10 @@ def lect_register(request):  # 강의/스터디/취미모임 등록 페이지로
 @auth_check(active=True)
 def lect_detail(request, lect_no):
     lect = Lect.objects.get(pk=lect_no)
-    lect_day_list = LectDay.objects.filter(lect_no=lect_no)
+    lect.lect_day = lect.lect_day.replace(" ", ",")
+    lect.lect_day = lect.lect_day[:len(lect.lect_day)-1]
     context = {
         'lect': lect,
-        'lect_day_list': lect_day_list,
         'lect_user_num': len(LectEnrollment.objects.filter(lect_no=lect_no)),
         'is_in': LectEnrollment.objects.filter(student=get_logined_user(request),
                                                lect_no_id=lect_no).first() is not None,
@@ -124,12 +126,16 @@ def lect_update(request, lect_no):
     if request.method == "POST":  # 폼에 수정데이터를 입력 후 수정 버튼을 눌렀을 때
         lect_form = LectForm(request.POST)
         lect_pic_form = LectPicForm(request.POST, request.FILES)
-        if lect_form.is_valid() and lect_pic_form.is_valid():
+        if lect_form.is_valid():
             with transaction.atomic():
-                lect_form.update(instance=lect)
-                if lect_pic_form.has_changed():
-                    FileController.delete_all_files_of_(lect)
-                    lect_pic_form.save(instance=lect)
+                lect = lect_form.update(instance=lect)
+                print(request.POST.get("lect_day"))
+                lect.lect_day = request.POST.get("lect_day")
+                lect.save()
+                if lect_pic_form.is_valid():
+                    if lect_pic_form.has_changed():
+                        FileController.delete_all_files_of_(lect)
+                        lect_pic_form.save(instance=lect)
         return redirect("lect_detail", lect_no=lect.lect_no)
     else:  # 상세 페이지에서 수정 버튼을 눌렀을 때
         context = {
@@ -139,6 +145,7 @@ def lect_update(request, lect_no):
             "lect_pic_form": LectPicForm(instance=lect),
             "is_update": True,
             "lect_no": lect.lect_no,
+            "lect_day": lect.lect_day
         }
         if lect.lect_method is not None:
             context.update(pol_name=get_pol_name(lect.lect_method.method_no))
