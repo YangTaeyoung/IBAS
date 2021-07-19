@@ -117,7 +117,7 @@
                                     <li><a href="{% url 'lect_view' type_no=1 %}">강의</a></li>
                                     <li><a href="{% url 'lect_view' type_no=2 %}">스터디</a></li>
                                     {% if is_superuser %}
-                                        <li><a href="{% url 'lect_view' type_no=4 %}">강의개설신청</a></li>
+                                        <li><a href="{% url 'lect_view' type_no=4 %}">대기 중인 강의 관리</a></li>
                                     {% endif %}
                                 </ul>
                             </li>

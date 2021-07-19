@@ -37,3 +37,11 @@ def truncate(string, length):
 @register.filter
 def url(url):
     return url[url.find('w'):]
+
+
+# arg 안에 tar이 포함되는지 여부를 반환하는 함수: 날짜 스트링 안에 월, 화 수 등의 키워드가 있는지 판별할 때 사용.
+@register.filter
+def is_exist(arg: str, tar: str):
+    if arg is None:
+        return False
+    return arg.find(tar) != -1

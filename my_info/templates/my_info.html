@@ -4,8 +4,8 @@
 {% block content %}
     <link rel="stylesheet" href="{% static 'css/login-join.css' %}"/>
     <link rel="stylesheet" href="{% static 'css/ibas_contents.css' %}"/>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/size.css' %}">
-
+    <link rel="stylesheet" type="text/css" href="{% static 'css/size.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/posting_list.css' %}"/>
     <script src="{% static 'js/ibas_centents.js' %}"></script>
     <script src="{% static 'js/login-join.js' %}"></script>
     <script src="{% static '/js/form.js' %}"></script>
@@ -129,16 +129,19 @@
                     <li><a data-toggle="tab" href="#listing_myclass" class="active"><i
                             class="la la-home"></i><span>강의실</span></a></li>
                     <!--개설강의 메뉴버튼,Back : 강의자만 보이게 수정-->
-                    <li><a data-toggle="tab" href="#listing_class_setting"><i class="la la-book"></i><span>개설강의관리</span></a>
+                    <li><a data-toggle="tab" href="#listing_class_setting"><i
+                            class="la la-book"></i><span>개설 강의 관리</span></a>
                     </li>
                     <!--작성들관리 메뉴버튼,Back : 모두에게 보이게 수정-->
-                    <li><a data-toggle="tab" href="#listing_mycontent"><i class="la la-list-alt"></i><span>작성글관리</span></a>
+                    <li><a data-toggle="tab" href="#listing_mycontent"><i
+                            class="la la-list-alt"></i><span>작성 글 관리</span></a>
                     </li>
                     <!--예산신청내역 메뉴버튼,Back : 모두에게 보이게 수정-->
-                    <li><a data-toggle="tab" href="#listing_mybank"><i class="la la-money"></i><span>예산신청내역</span></a>
+                    <li><a data-toggle="tab" href="#listing_mybank"><i class="la la-money"></i><span>예산 신청 내역</span></a>
                     </li>
                     <!--내정보 메뉴버튼,Back : 모두에게 보이게 수정-->
-                    <li><a data-toggle="tab" href="#listing_my_info"><i class="la la-user"></i><span>내정보</span></a></li>
+                    <li><a data-toggle="tab" href="#listing_my_info"><i class="la la-user"></i><span>내 정보</span></a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -150,16 +153,194 @@
                 <div class="tab-content">
                     <div id="listing_myclass" class="tab-pane active">
                         <div class="row">
+                            <!--========================= 내가수강중인 강의 박스 =========================-->
+                            <!-- 만약 현재 내가 수강중인 강의가 없을 경우, 반스 전체가 안보이게끔 처리 필요 -->
                             <div class="col-xl-12">
                                 <div class="content-box">
                                     <div class="content-header">
-                                        <h3 class="title">강의실 제목</h3>
+                                        <h3 class="title">내가 수강 중인 강의</h3>
                                     </div>
                                     <div class="content-body">
-                                        <p>강의실 내용~~~~~~~~~~~~~~~~~~~~~~</p>
+                                        <div class="row {% if my_lect_ing_list|length == 0 %}justify-content-center{% endif %}">
+                                            <!--================= 여기부터 박스 내 게시글 반복시작 =================-->
+                                            <!-- 게시글 1 -->
+                                            {% if my_lect_ing_list|length == 0 %}
+                                                <p class="text-center">내가 수강 중인 강의가 없습니다.</p>
+                                            {% else %}
+                                                {% for my_lect_ing in my_lect_ing_list %}
+                                                    <div class="col-lg-4 col-md-6 col-sm-6">
+                                                        <div class="listing-bx event-listing m-b10">
+                                                            <!-- 게시글 대표 이미지 -->
+                                                            <!-- 이미지를 클릭하면, 해당 게시글로 이동함 -->
+                                                            <a href="{% url 'lect_room_main' room_no=my_lect_ing.lect_no.lect_no %}">
+                                                                <img style="height: 200px; width: 100%"
+                                                                     src="/media/{{ my_lect_ing.lect_no.lect_pic }}"
+                                                                     alt="">
+                                                            </a>
+                                                            <!-- 강의 제목 및 간단소개 div -->
+                                                            <div class="listing-info" style="height: 110px">
+                                                                <!-- 강의제목 -->
+                                                                <!-- 제목 클릭 시, 해당 게시글로 이동 -->
+                                                                <h3 class="title"><a
+                                                                        href="{% url 'lect_room_main' room_no=my_lect_ing.lect_no.lect_no %}">{{ my_lect_ing.lect_no.lect_title }}</a>
+                                                                </h3>
+                                                                <!-- 강의 간단소개 -->
+                                                                <ul class="event-meta">
+                                                                    <!-- 마감일 및 모집 상태 -->
+                                                                    <li class="event-date">
+                                                                        <!-- 강의 시작월 -->
+                                                                        <!-- 강의 모집 마감월이 아니라 시작월을 가져와야 함 -->
+                                                                        <span class="text-primary">{{ my_lect_ing.lect_no.lect_deadline|date:"m" }}월</span>
+                                                                        <!-- 강의 시작일 -->
+                                                                        <!-- 강의 모집 마감일이 아니라 시작일을 가져와야 함 -->
+                                                                        <strong>{{ my_lect_ing.lect_no.lect_deadline|date:"d" }}</strong>
+                                                                        {% if my_lect_ing.lect_state.state_no == 4 %}
+                                                                            <span class="recruiting-end">완 강</span>
+                                                                        {% elif my_lect_ing.lect_state.state_no == 3 %}
+                                                                            {% if my_lect_ing.is_expired %}
+                                                                                <span class="recruiting-ing">진행중</span>
+                                                                            {% else %}
+                                                                                <span class="recruiting">모집중</span>
+                                                                            {% endif %}
+                                                                        {% endif %}
+                                                                    </li>
+                                                                    <!-- 강의 내용에 대한 짧은 소개 -->
+                                                                    <li class="text-cut">{{ my_lect_ing.lect_no.lect_intro }}
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                            <div class="event-bottom">
+                                                                <ul>
+                                                                    <!-- 강의 요일, 장소, 인원 li-->
+                                                                    <li class="event-hosted">
+                                                                        <!-- 강의를 정기적으로 진행하는 요일 -->
+                                                                        <span class="text-primary mr-3">요일</span>
+                                                                        <!-- 강의에 해당하는 요일을 DB에서 가져와야 함 -->
+                                                                        <span>{{ my_lect_ing.lect_no.lect_day }}</span>
+                                                                        <!-- 강의 진행방식 Zoom 혹은 강의실 호수 -->
+                                                                        <span class="text-primary mr-3 m-l30"><i
+                                                                                class="ti-location-pin"></i></span>
+                                                                        <!-- 강의 진행방식을 DB에서 가져와야 함 -->
+                                                                        <span>{{ my_lect_ing.lect_no.lect_method.method_name }}</span>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                        {# 페이지네이션 #}
+                                        <div style="display: flex; justify-content: center; align-items: center">
+                                            <nav aria-label="Page navigation example">
+                                                <!-- staff_margin_bottom_0는 staff_cr.css에 정의되어 있음.  -->
+                                                <ul class="pagination m-b0">
+                                                    <li class="page-item"><a class="page-link" href="#">&lt;</a>
+                                                    </li>
+                                                    <li class="page-item"><a class="page-link" href="#">2</a>
+                                                    </li>
+                                                    <li class="page-item"><a class="page-link" href="#">&gt;</a>
+                                                    </li>
+                                                </ul>
+                                            </nav>
+                                        </div>
+                                        {# 페이지네이션 #}
                                     </div>
                                 </div>
                             </div>
+                            <!--========================= 내가수강중인 강의 박스 끝 =========================-->
+                            <!--========================= 이미 수강한 강의 박스 시작 =========================-->
+                            <div class="col-xl-12">
+                                <div class="content-box">
+                                    <div class="content-header">
+                                        <h3 class="title">수강 완료한 강의</h3>
+                                    </div>
+                                    <div class="content-body">
+                                        <div class="row {% if my_lect_fin_list|length == 0 %}justify-content-center{% endif %}">
+                                            <!--================= 여기부터 박스 내 게시글 반복시작 =================-->
+                                            <!-- 게시글 1 -->
+                                            {% if my_lect_fin_list|length == 0 %}
+                                                <p>내가 수강 완료한 강의가 없습니다.</p>
+                                            {% else %}
+                                                {% for my_lect_fin in my_lect_fin_list %}
+                                                    <div class="col-lg-4 col-md-6 col-sm-6">
+                                                        <div class="listing-bx event-listing m-b10">
+                                                            <!-- 게시글 대표 이미지 -->
+                                                            <!-- 이미지를 클릭하면, 해당 게시글로 이동함 -->
+                                                            <a href="{% url 'lect_room_main' room_no=my_lect_fin.lect_no.lect_no %}">
+                                                                <img style="height: 200px; width: 100%"
+                                                                     src="/media/{{ my_lect_fin.lect_no.lect_pic }}"
+                                                                     alt="">
+                                                            </a>
+                                                            <!-- 강의 제목 및 간단소개 div -->
+                                                            <div class="listing-info" style="height: 110px">
+                                                                <!-- 강의제목 -->
+                                                                <!-- 제목 클릭 시, 해당 게시글로 이동 -->
+                                                                <h3 class="title">
+                                                                    <a href="{% url 'lect_room_main' room_no=my_lect_fin.lect_no.lect_no %}">{{ my_lect_fin.lect_no.lect_title }}</a>
+                                                                </h3>
+                                                                <!-- 강의 간단소개 -->
+                                                                <ul class="event-meta">
+                                                                    <!-- 마감일 및 모집 상태 -->
+                                                                    <li class="event-date">
+                                                                        <!-- 강의 시작월 -->
+                                                                        <!-- 강의 모집 마감월이 아니라 시작월을 가져와야 함 -->
+                                                                        <span class="text-primary">{{ my_lect_fin.lect_no.lect_deadline|date:"m" }}월</span>
+                                                                        <!-- 강의 시작일 -->
+                                                                        <!-- 강의 모집 마감일이 아니라 시작일을 가져와야 함 -->
+                                                                        <strong>{{ my_lect_fin.lect_no.lect_deadline|date:"d" }}</strong>
+                                                                        {% if my_lect_fin.lect_state.state_no == 4 %}
+                                                                            <span class="recruiting-end">완 강</span>
+                                                                        {% elif my_lect_fin.lect_state.state_no == 3 %}
+                                                                            {% if my_lect_fin.is_expired %}
+                                                                                <span class="recruiting-ing">진행중</span>
+                                                                            {% else %}
+                                                                                <span class="recruiting">모집중</span>
+                                                                            {% endif %}
+                                                                        {% endif %}
+                                                                    </li>
+                                                                    <!-- 강의 내용에 대한 짧은 소개 -->
+                                                                    <li class="text-cut">{{ my_lect_fin.lect_no.lect_intro }}
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                            <div class="event-bottom">
+                                                                <ul>
+                                                                    <!-- 강의 요일, 장소, 인원 li-->
+                                                                    <li class="event-hosted">
+                                                                        <!-- 강의를 정기적으로 진행하는 요일 -->
+                                                                        <span class="text-primary mr-3">요일</span>
+                                                                        <!-- 강의에 해당하는 요일을 DB에서 가져와야 함 -->
+                                                                        <span>{{ my_lect_fin.lect_no.lect_day }}</span>
+                                                                        <!-- 강의 진행방식 Zoom 혹은 강의실 호수 -->
+                                                                        <span class="text-primary mr-3 m-l30"><i
+                                                                                class="ti-location-pin"></i></span>
+                                                                        <!-- 강의 진행방식을 DB에서 가져와야 함 -->
+                                                                        <span>{{ my_lect_fin.lect_no.lect_method.method_name }}</span>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                        <div style="display: flex; justify-content: center; align-items: center">
+                                            <nav aria-label="Page navigation example">
+                                                <!-- staff_margin_bottom_0는 staff_cr.css에 정의되어 있음.  -->
+                                                <ul class="pagination m-b0">
+                                                    <li class="page-item"><a class="page-link" href="#">&lt;</a>
+                                                    </li>
+                                                    <li class="page-item"><a class="page-link" href="#">1</a>
+                                                    </li>
+                                                    <li class="page-item"><a class="page-link" href="#">&gt;</a>
+                                                    </li>
+                                                </ul>
+                                            </nav>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--========================= 과거 수강한 강의 박스  =========================-->
                         </div>
                     </div>
                     <!--개설강의 관리-->
@@ -168,10 +349,84 @@
                             <div class="col-xl-12">
                                 <div class="content-box">
                                     <div class="content-header">
-                                        <h3 class="title">개설강의관리 제목</h3>
+                                        <h3 class="title">개설 강의 관리</h3>
                                     </div>
                                     <div class="content-body">
-                                        <p>개설강의관리 내용~~~~~~~~~~~~~~~~~~~~~~</p>
+                                        <div class="row {% if my_lect_made_list|length == 0 %}justify-content-center{% endif %}">
+                                            <!--================= 여기부터 박스 내 게시글 반복시작 =================-->
+                                            <!-- 게시글 1 -->
+                                            {% if my_lect_made_list|length == 0 %}
+                                                <p class="text-center">내가 개설한 강의가 없습니다.</p>
+                                            {% else %}
+                                                {% for my_lect_made in my_lect_made_list %}
+                                                    <div class="col-lg-4 col-md-6 col-sm-6">
+                                                        <div class="listing-bx event-listing m-b10">
+                                                            <!-- 게시글 대표 이미지 -->
+                                                            <!-- 이미지를 클릭하면, 해당 게시글로 이동함 -->
+                                                            <a href="{% url 'lect_detail' lect_no=my_lect_made.lect_no %}">
+                                                                <img style="height: 200px; width: 100%"
+                                                                     src="/media/{{ my_lect_made.lect_pic }}"
+                                                                     alt="">
+                                                            </a>
+                                                            <!-- 강의 제목 및 간단소개 div -->
+                                                            <div class="listing-info" style="height: 110px">
+                                                                <!-- 강의제목 -->
+                                                                <!-- 제목 클릭 시, 해당 게시글로 이동 -->
+                                                                <h3 class="title">
+                                                                    <a href="{% url 'lect_detail' lect_no=my_lect_made.lect_no %}">{{ my_lect_made.lect_title }}</a>
+                                                                </h3>
+                                                                <!-- 강의 간단소개 -->
+                                                                <ul class="event-meta">
+                                                                    <!-- 마감일 및 모집 상태 -->
+                                                                    <li class="event-date">
+                                                                        <!-- 강의 시작월 -->
+                                                                        <!-- 강의 모집 마감월이 아니라 시작월을 가져와야 함 -->
+                                                                        <span class="text-primary">{{ my_lect_made.lect_deadline|date:"m" }}월</span>
+                                                                        <!-- 강의 시작일 -->
+                                                                        <!-- 강의 모집 마감일이 아니라 시작일을 가져와야 함 -->
+                                                                        <strong>{{ my_lect_made.lect_deadline|date:"d" }}</strong>
+                                                                        {% if my_lect_made.lect_state.state_no == 4 %}
+                                                                            <span class="recruiting-end">종 강</span>
+                                                                        {% elif my_lect_made.lect_state.state_no == 3 %}
+                                                                            {% if my_lect_made.is_expired %}
+                                                                                <span class="recruiting-ing">진행중</span>
+                                                                            {% else %}
+                                                                                <span class="recruiting">모집중</span>
+                                                                            {% endif %}
+                                                                        {% elif my_lect_made.lect_state.state_no == 2 %}
+                                                                            <span class="recruiting-end">거절됨</span>
+                                                                        {% else %}
+                                                                            <span class="recruiting-wait">대기중</span>
+                                                                        {% endif %}
+
+
+                                                                    </li>
+                                                                    <!-- 강의 내용에 대한 짧은 소개 -->
+                                                                    <li class="text-cut">{{ my_lect_made.lect_intro }}
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                            <div class="event-bottom">
+                                                                <ul>
+                                                                    <!-- 강의 요일, 장소, 인원 li-->
+                                                                    <li class="event-hosted">
+                                                                        <!-- 강의를 정기적으로 진행하는 요일 -->
+                                                                        <span class="text-primary mr-3">요일</span>
+                                                                        <!-- 강의에 해당하는 요일을 DB에서 가져와야 함 -->
+                                                                        <span>{{ my_lect_made.lect_day }}</span>
+                                                                        <!-- 강의 진행방식 Zoom 혹은 강의실 호수 -->
+                                                                        <span class="text-primary mr-3 m-l30"><i
+                                                                                class="ti-location-pin"></i></span>
+                                                                        <!-- 강의 진행방식을 DB에서 가져와야 함 -->
+                                                                        <span>{{ my_lect_made.lect_method.method_name }}</span>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
                                     </div>
                                 </div>
                             </div>

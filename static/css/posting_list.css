@@ -7,6 +7,20 @@
     color: green;
 }
 
+.recruiting-wait {
+    border: solid 1px grey;
+    border-radius: 5px;
+    padding: 2px;
+    color: grey;
+}
+
+.recruiting-ing {
+    border: solid 1px #17539a;
+    border-radius: 5px;
+    padding: 2px;
+    color: #17539a;
+}
+
 /* 모집 마감 */
 .recruiting-end {
     border: solid 1px red;
@@ -24,17 +38,16 @@
 }
 
 /* 썸네일 이미지 사이지 */
-.lect-thumbnail{
+.lect-thumbnail {
     width: 100%;
     height: 220px;
 }
 
 /* 상단 검색창 크기고정 */
-.lect-search-bar{
+.lect-search-bar {
     width: 500px;
     display: flex;
 }
-
 
 
 /*================================== 앨범형식 게시글 리스트 관련 css ==================================*/
@@ -52,6 +65,7 @@
 form {
 
 }
+
 .board-item:hover /* 게시글 위에 마우스 커서를 올리면 투명도를 조정하게 함 */
 {
     opacity: 0.8;

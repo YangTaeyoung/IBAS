@@ -3,6 +3,7 @@
 {% block content %}
     {% load custom_tags %}
     <link rel="stylesheet" href="{% static 'css/posting_register.css' %}"/>
+    <script src="{% static 'js/checkbox.js' %}"></script>
     <script>
         onload = function () {
             const obj = document.getElementById("lect_method")
@@ -56,7 +57,14 @@
             <!--===============================================입력란=========================================================-->
             {% load widget_tweaks %}
             <form action="
-                    {% if is_update %}{% url 'lect_update' lect_no=lect_no %}{% else %}{% url 'lect_register' %}{% endif %}"
+
+
+
+
+
+
+
+                {% if is_update %}{% url 'lect_update' lect_no=lect_no %}{% else %}{% url 'lect_register' %}{% endif %}"
                   class="add-listing-form" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 {# 히든태그 #}
@@ -68,23 +76,29 @@
                         <div class="container">
                             <!--=====================-->
                             <div class="content-box listing-timing-box accordion" id="accordion">
-                                <div class="content-header listing-timing-header accordion-item" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                <div class="content-header listing-timing-header accordion-item" data-toggle="collapse"
+                                     data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
                                     <div class="head-left accordion-header">
-                                        <span><i class="la la-money m-r10"></i>강의비 지급기준</span>
+                                        <span><i class="la la-money m-r10"></i>강의비 지급기준/주</span>
                                     </div>
                                     <div class="head-right">
                                         <span class="m-l10"><i class="la la-angle-down"></i></span>
                                     </div>
                                 </div>
-                                <div class="content-body collapse" id="collapseOne" aria-labelledby="headingOne" data-parent="#accordion">
+                                <div class="content-body collapse" id="collapseOne" aria-labelledby="headingOne"
+                                     data-parent="#accordion">
                                     <ul class="listing-time-list">
-                                        <li class="open"><span class="listing-day">출석인원 1~5명</span> <span class="listing-hours">￦5,000</span></li>
+                                        <li class="open"><span class="listing-day">출석인원 1~5명</span> <span
+                                                class="listing-hours">￦10,000</span></li>
                                         <hr/>
-                                        <li class="open"><span class="listing-day">출석인원 6~10명</span> <span class="listing-hours">￦10,000</span></li>
+                                        <li class="open"><span class="listing-day">출석인원 6~10명</span> <span
+                                                class="listing-hours">￦20,000</span></li>
                                         <hr/>
-                                        <li class="open"><span class="listing-day">출석인원 11~20명</span> <span class="listing-hours">￦15,000</span></li>
+                                        <li class="open"><span class="listing-day">출석인원 11~20명</span> <span
+                                                class="listing-hours">￦30,000</span></li>
                                         <hr/>
-                                        <li class="open"><span class="listing-day">출석인원 21명 이상</span> <span class="listing-hours">￦20,000</span></li>
+                                        <li class="open"><span class="listing-day">출석인원 21명 이상</span> <span
+                                                class="listing-hours">￦40,000</span></li>
                                     </ul>
                                 </div>
                             </div>
@@ -138,6 +152,61 @@
                                 </div>
                             </div>
                             <!--====================================일정계획 입력 끝=============================================-->
+                            <!--====================================요일 입력 시작==============================================-->
+                            <div class="content-box">
+                                <div class="content-header">
+                                    <h3 class="title">요일</h3>
+                                </div>
+                                <div class="content-body">
+                                    <div class="form-group">
+                                        <!--입력하는 곳-->
+                                        <input name="day" id="mon" value="월" type="checkbox"
+                                                {% if lect_day|is_exist:"월" %}
+                                               checked="checked"
+                                                {% endif %}
+                                               onclick="getCheckboxValue()"/>
+                                        <label for="mon">월요일</label>
+                                        <input name="day" id="tue" value="화" type="checkbox"
+                                               {% if lect_day|is_exist:"화" %}
+                                               checked="checked"
+                                                {% endif %}
+                                               onclick="getCheckboxValue()"/>
+                                        <label for="tue">화요일</label>
+                                        <input name="day" id="wen" value="수" type="checkbox"
+                                               {% if lect_day|is_exist:"수" %}
+                                               checked="checked"
+                                                {% endif %}
+                                               onclick="getCheckboxValue()"/>
+                                        <label for="wen">수요일</label>
+                                        <input name="day" id="thu" value="목" type="checkbox"
+                                               {% if lect_day|is_exist:"목" %}
+                                               checked="checked"
+                                                {% endif %}
+                                               onclick="getCheckboxValue()"/>
+                                        <label for="thu">목요일</label>
+                                        <input name="day" id="fri" value="금" type="checkbox"
+                                               {% if lect_day|is_exist:"금" %}
+                                               checked="checked"
+                                                {% endif %}
+                                               onclick="getCheckboxValue()"/>
+                                        <label for="fri">금요일</label>
+                                        <input name="day" id="sat" value="토" type="checkbox"
+                                               {% if lect_day|is_exist:"토" %}
+                                               checked="checked"
+                                                {% endif %}
+                                               onclick="getCheckboxValue()"/>
+                                        <label for="sat">토요일</label>
+                                        <input name="day" id="sun" value="일" type="checkbox"
+                                               {% if lect_day|is_exist:"일" %}
+                                               checked="checked"
+                                                {% endif %}
+                                               onclick="getCheckboxValue()"/>
+                                        <label for="sun">일요일</label>
+                                        <input id="result" name="lect_day" value="{{ lect_day }}" type="hidden"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--====================================요일 입력 끝=============================================-->
                             <!--====================================제한인원 입력 시작==============================================-->
                             <!--=======강의, 스터디 게시판에서만 사용하기 때문에 취미모임 게시판일 경우에는 뜨지 않도록 수정======-->
                             <div class="content-box">
