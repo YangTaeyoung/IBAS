@@ -129,13 +129,7 @@
 
                                                     <!-- 강의에 해당하는 요일을 DB에서 가져와야 함 -->
                                                     <span>
-                                                        {% for lect_day in lect.lectday_set.all %}
-                                                            {% if forloop.counter == lect.lectday_set.all|length %}
-                                                                {{ lect_day.day_name }}
-                                                            {% else %}
-                                                                {{ lect_day.day_name }},&nbsp;
-                                                            {% endif %}
-                                                        {% endfor %}
+                                                        {{ lect.lect_day }}
                                                     </span>
                                                     <!-- 강의 진행방식 Zoom 혹은 강의실 호수 -->
                                                     <span class="text-primary mr-3 m-l30"><i
