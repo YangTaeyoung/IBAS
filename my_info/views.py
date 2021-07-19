@@ -1,16 +1,13 @@
 import os
 from django.shortcuts import render, redirect, reverse
-from DB.models import Board, User, Comment, Bank, UserUpdateRequest, UserEmail, StateInfo, MajorInfo, UserDelete, \
-    ContestBoard, ContestComment, History, Answer, Lect, LectBoard, LectEnrollment, LectAttendance
+from DB.models import Board, User, Comment, Bank, UserUpdateRequest, UserEmail, StateInfo, MajorInfo, Lect, \
+    LectEnrollment
 from django.db.models import Q
-from user_controller import get_logined_user, login_required, get_social_login_info, initialize_user, \
-    get_default_pic_path, is_default_pic, delete_all_infomation, delete_user
+from user_controller import get_logined_user, login_required, get_social_login_info, get_default_pic_path, \
+    is_default_pic, delete_user
 from django.conf import settings
 from member.session import save_session
-
-from file_controller import FileController
 import hashlib
-from django.db import transaction
 
 
 def get_ecrypt_value(value: str):
