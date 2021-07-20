@@ -66,13 +66,11 @@ def bank_update(request, bank_no):
         bank_form = BankForm(request.POST)
         file_form = FileForm(request.POST, request.FILES)
 
-        if bank_form.is_valid() and file_form.is_valid():
-            with transaction.atomic():
-                bank_form.update(instance=bank)
-                bank_files = BankFile.objects.filter(bank_no=bank)  # 게시글 파일을 불러옴
-                FileController.remove_files_by_user(request, bank_files)  # 사용자가 삭제한 파일을 제거
-                file_form.save(instance=bank)
-
+        if bank_form.is_valid():  # 새로 올라온 파일이 있는 경우
+            bank_form.update(instance=bank)
+            bank_files = BankFile.objects.filter(file_fk=bank)  # 게시글 파일을 불러옴
+            FileController.update_file_by_file_form(request=request, instance=bank, files=bank_files,
+                                                    file_form=file_form, required=True)
         return redirect(reverse('bank_list'))
     else:  # 비정상적인 접근의 경우 (해킹시도)
         return redirect(reverse("index"))  # 메인페이지로 보내버림
