@@ -1,6 +1,5 @@
 from django import forms
 from DB.models import UserDeleteComment
-from user_controller import get_logined_user
 
 
 class FileFormBase(forms.Form):
