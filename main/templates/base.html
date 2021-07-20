@@ -107,6 +107,10 @@
                                     <li><a href="{% url 'board_view' board_type_no=2 %}">자유게시판</a></li>
                                     <li><a href="{% url 'board_view' board_type_no=3 %}">질문게시판</a></li>
                                     <li><a href="{% url 'contest_list' %}">공모전게시판</a></li>
+                                    {% if logined_user.user_role.role_no <= 4 %}
+                                        <li><a href="{% url 'board_view' board_type_no=8 %}">회장단 게시판</a></li>
+                                    {% endif %}
+                                    <li><a href="{% url 'board_view' board_type_no=9 %}">건의사항</a></li>
                                 </ul>
                             </li>
                             <!--====================강의실을 상위메뉴로 가지고 있는 메뉴====================-->
@@ -249,7 +253,8 @@
 <footer>
     <!-- content 담는 부분이 footer-top -->
     <!-- footer-top에 대한 정의는 bottom_bar.css에 정의되어 있음. (height 관련) -->
-    <div class="ibas-footer-top" style="background-image: url({% static 'images/botton_bar.jpg' %}); background-repeat: no-repeat; background-size: 100%; background-position: center">
+    <div class="ibas-footer-top"
+         style="background-image: url({% static 'images/botton_bar.jpg' %}); background-repeat: no-repeat; background-size: 100%; background-position: center">
         <!-- content 시작 -->
         <!-- cont-grid에 대한 정의는 bottom_bar.css에 정의되어 있음. (grid 관련) -->
         <div class="cont-grid">
