@@ -99,8 +99,19 @@ def is_writer(request, **kwargs):
 
 
 # 역할이 맞는지 확인 하는 함수
-def role_check(request, role_no):
-    return get_logined_user(request).user_role.role_no == role_no
+# 입력: request, 기준이 될 역할 번호, 검증할 부등호
+# 출력: 로그인 한 유저가 해당 조건에 만족하는지의 여부를 반환
+def role_check(request, role_no, sign="equal"):
+    if sign == "equal": # 등호
+        return get_logined_user(request).user_role.role_no == role_no
+    elif sign == "lte":  # 이하
+        return get_logined_user(request).user_role.role_no <= role_no
+    elif sign == "gte":  # 이상
+        return get_logined_user(request).user_role.role_no >= role_no
+    elif sign == "lt":  # 미만
+        return get_logined_user(request).user_role.role_no < role_no
+    elif sign == "gt":  # 초과
+        return get_logined_user(request).user_role.role_no > role_no
 
 
 #
@@ -432,7 +443,6 @@ def delete_all_infomation(user: User):
         my_alarm.delete()
 
 
-
 # 삭제 로직
 def delete_user(user: User):
     if not user.user_role.role_no <= 4:
@@ -450,6 +460,3 @@ def delete_user(user: User):
                 user.delete()
             return True
     return False
-
-
-
