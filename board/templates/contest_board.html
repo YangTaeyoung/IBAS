@@ -38,13 +38,13 @@
                                         <div style="margin-bottom: 20px">
                                             <h4 class="title">게시글 검색</h4>
                                             <div class="">
-                                                <form role="search" action={% url 'board_search' %}  method="post">
+                                                <form role="search" action="{% url 'contest_search' %}" method="get">
                                                     <div class="input-group">
-                                                        <input name="text" type="text" class="form-control"
+                                                        <input name="keyword" type="text" class="form-control"
                                                                placeholder="검색어를 입력하세요.">
                                                         <span class="input-group-btn">
 												            <button type="submit" class="site-button"><i
-                                                            class="fa fa-search"></i></button>
+                                                                    class="fa fa-search"></i></button>
                                                         </span>
                                                     </div>
                                                 </form>
@@ -73,7 +73,8 @@
                                                     ({{ contest_num }}+)
                                                 </li>
                                                 <li><a href="{% url 'activity' %}">활동게시판</a>
-                                                    ({{ activity_num }}+)</li>
+                                                    ({{ activity_num }}+)
+                                                </li>
                                             </ul>
                                         </div>
                                     </div>
@@ -81,81 +82,84 @@
                             </div>
                             <!--========== 오른쪽 공모전 게시글 리스트 부분 시작 ===========-->
                             <div class="col-lg-10 col-xl-8 p-b30">
-                                <div class="row">
-                                {% if contest_list %}
-                                    <!--================= 여기부터 게시글 반복시작 =================-->
-                                    <!-- 게시글 1 -->
+                                <div class="row {% if contest_list|length == 0 %}justify-content-center mt-xl-5 mb-lg-5{% endif %}">
+                                    {% if contest_list %}
+                                        <!--================= 여기부터 게시글 반복시작 =================-->
+                                        <!-- 게시글 1 -->
 
-                                    {% for contest in contest_list %}
-                                    <div class="col-lg-6">
-                                        <div class="listing-bx event-listing m-b10">
-                                            <!-- 게시글 대표 이미지 div -->
-                                            <div class="listing-media">
-                                                <!-- 이미지를 클릭하면, 해당 게시글로 이동함 -->
-                                                <a href="{% url 'contest_detail' contest.contest_no %}">
+                                        {% for contest in contest_list %}
+                                            <div class="col-lg-6">
+                                                <div class="listing-bx event-listing m-b10">
+                                                    <!-- 게시글 대표 이미지 div -->
+                                                    <div class="listing-media">
+                                                        <!-- 이미지를 클릭하면, 해당 게시글로 이동함 -->
+                                                        <a href="{% url 'contest_detail' contest.contest_no %}">
 
-                                                    <img src="/media/{{ contest.files.all|get_first_img}}"
-                                                         alt="이미지를 표시할 수 없습니다.">
-                                                </a>
+                                                            <img src="/media/{{ contest.files.all|get_first_img }}"
+                                                                 alt="이미지를 표시할 수 없습니다.">
+                                                        </a>
+                                                    </div>
+                                                    <!-- 공모전 내용 간단소개 div -->
+                                                    <div class="listing-info" style="height: 110px">
+                                                        <!-- 공모전 제목 -->
+                                                        <h3 class="title"><a
+                                                                href="{% url 'contest_detail' contest.contest_no %}">{{ contest.contest_title }}</a>
+                                                        </h3>
+                                                        <!-- 공모전 간단소개 -->
+                                                        <ul class="event-meta">
+                                                            <!-- 마감일 및 모집 상태 -->
+                                                            <li class="event-date">
+                                                                <!-- 공모전 마감일 -->
+                                                                <!-- 마감 월 (영어로 표기됨) -->
+                                                                <span class="text-primary">{{ contest.contest_deadline | date:"N" }}</span>
+                                                                <!-- 마감일 -->
+                                                                <strong>{{ contest.contest_deadline | date:"d" }}</strong>
+                                                                <!-- 모집 및 마감 상태 -->
+                                                                <!-- 공모전 기간 중에 있으면 모집이라고 뜨고, 공모전 기간이 자나면, 자동으로 마감으로 뜨게 처리 -->
+                                                                {% if contest.is_past_due %}
+                                                                    <span class="recruiting">모 집</span></li>
+                                                                {% else %}
+                                                                    <span class="recruiting-end">마 감</span></li>
+                                                                {% endif %}
+                                                            <!-- 공모전에 대한 간단소개 -->
+                                                            <li class="text-cut">
+                                                                {{ contest.contest_topic }}
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="event-bottom">
+                                                        <ul>
+                                                            <!-- 공모전 기간 -->
+                                                            <li class="event-hosted">
+                                                                <span class="text-primary mr-3">기간</span>
+                                                                <span> {{ contest.contest_start |date:"Y.m.d" }} ~ {{ contest.contest_deadline | date:"Y.m.d" }}</span>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <!-- 공모전 내용 간단소개 div -->
-                                            <div class="listing-info" style="height: 110px">
-                                                <!-- 공모전 제목 -->
-                                                <h3 class="title"><a href="{% url 'contest_detail' contest.contest_no %}">{{ contest.contest_title }}</a></h3>
-                                                <!-- 공모전 간단소개 -->
-                                                <ul class="event-meta">
-                                                    <!-- 마감일 및 모집 상태 -->
-                                                    <li class="event-date">
-                                                        <!-- 공모전 마감일 -->
-                                                        <!-- 마감 월 (영어로 표기됨) -->
-                                                        <span class="text-primary">{{ contest.contest_deadline | date:"N" }}</span>
-                                                        <!-- 마감일 -->
-                                                        <strong>{{ contest.contest_deadline | date:"d" }}</strong>
-                                                        <!-- 모집 및 마감 상태 -->
-                                                        <!-- 공모전 기간 중에 있으면 모집이라고 뜨고, 공모전 기간이 자나면, 자동으로 마감으로 뜨게 처리 -->
-                                                        {% if contest.is_past_due %}
-                                                        <span class="recruiting">모 집</span></li>
-                                                        {% else %}
-                                                        <span class="recruiting-end">마 감</span></li>
-                                                        {% endif %}
-                                                    <!-- 공모전에 대한 간단소개 -->
-                                                    <li class="text-cut">
-                                                        {{ contest.contest_topic }}
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div class="event-bottom">
-                                                <ul>
-                                                    <!-- 공모전 기간 -->
-                                                    <li class="event-hosted">
-                                                        <span class="text-primary mr-3">기간</span>
-                                                        <span> {{ contest.contest_start |date:"Y.m.d"}} ~ {{ contest.contest_deadline | date:"Y.m.d" }}</span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {% endfor %}
-                                    <!--================= 여기부터 게시글 반복 끝 =================-->
-                                {% else %}
-                                    <tr>
-                                        <td colspan="4" style="text-align: center">게시글이 존재하지 않습니다.</td>
-                                    </tr>
-                                {% endif %}
+                                        {% endfor %}
+                                        <!--================= 여기부터 게시글 반복 끝 =================-->
+                                    {% else %}
+                                        <tr>
+                                            <td colspan="4" style="text-align: center">게시글이 존재하지 않습니다.</td>
+                                        </tr>
+                                    {% endif %}
                                 </div>
                                 {% if is_logined and logined_user.user_auth.auth_no < 3 %}
-                                <div class="extra-cell text-right  m-t20">
-                                    <!-- 게시글 등록 버튼 -->
-                                    <button class="site-button radius-xl m-l10" onclick="location.href='{% url 'contest_register'%}'">
-                                        <i class="fa fa-plus m-r5"></i>게시글 등록
-                                    </button>
-                                </div>
+                                    <div class="extra-cell text-right  m-t20">
+                                        <!-- 게시글 등록 버튼 -->
+                                        <button class="site-button radius-xl m-l10"
+                                                onclick="location.href='{% url 'contest_register' %}'">
+                                            <i class="fa fa-plus m-r5"></i>게시글 등록
+                                        </button>
+                                    </div>
                                 {% endif %}
                                 <!--========== 페이지네이션 시작 ===========-->
                                 <!-- 1페이지에 6~8개 게시글 끌고오고, 게시글이 그보다 적으면, 페이지네이션 안보이게 처리 -->
-                            {% if contest_list|length != 0 %}
-                                {% include 'pagination.html' with item_list=contest_list %}
-                            {% endif %}
+                                {% if contest_list|length != 0 %}
+                                    {% include 'pagination.html' with item_list=contest_list %}
+                                {% endif %}
                                 <!--========== 페이지네이션 끝 ===========-->
                             </div>
                         </div>
