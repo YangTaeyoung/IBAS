@@ -31,59 +31,58 @@
                 <div class="content-block">
                     <div class="section-full content-inner bg-white">
                         <div class="container">
-                            <div class="row">
+                            <div class="row {% if board_list|length == 0 %}justify-content-center min-height-150{% endif %}">
                                 <!-- 게시글 리스트 출력부분 -->
                                 {% if board_list %}
-                                {% for board in board_list %}
-                                    <!--============ 게시글 박스 시작 ============-->
-                                    <div class="col-lg-4 col-md-6 col-sm-6 m-b30">
-                                        <div class="listing-bx board-item overlap"
-                                             onclick="location.href='{% url "activity_detail" board_no=board.board_no %}'">
-                                            <form action="{% url 'activity_detail' board_no=board.board_no %}"
-                                                  method="POST">
-                                                {% csrf_token %}
+                                    {% for board in board_list %}
+                                        <!--============ 게시글 박스 시작 ============-->
+                                        <div class="col-lg-4 col-md-6 col-sm-6 m-b30">
+                                            <div class="listing-bx board-item overlap"
+                                                 onclick="location.href='{% url "activity_detail" board_no=board.board_no %}'">
+                                                <form action="{% url 'activity_detail' board_no=board.board_no %}"
+                                                      method="POST">
+                                                    {% csrf_token %}
 
 
-                                                <!-- 게시글 박스에 보이는 대표사진 -->
-                                                <div class="listing-media height-350">
-                                                    <!-- 첫번째 사진만 가져오기 -->
-                                                    <img src="/media/{{ board.files.first.file_path }}"
-                                                         alt="">
-                                                </div>
-                                                <!--게시글 제목, 작성자 및 작성시간을 담 div 시작-->
-                                                <div class="listing-info">
-                                                    <!--게시글 제목-->
-                                                    <div class="line1">
-                                                        <input type="submit" class="title line1"
-                                                               value="{{ board.board_title }}"
-                                                               style="background-color:transparent; border:0px transparent solid;">
+                                                    <!-- 게시글 박스에 보이는 대표사진 -->
+                                                    <div class="listing-media height-350">
+                                                        <!-- 첫번째 사진만 가져오기 -->
+                                                        <img src="/media/{{ board.files.first.file_path }}"
+                                                             alt="">
                                                     </div>
-                                                    <!-- 게시글 작성자 및 작성시간는 div -->
-                                                    <div class="dlab-post-meta">
-                                                        <ul class="d-flex align-items-center">
-                                                            <!-- 게시글 작성자 -->
-                                                            <li class="post-author" style="color: white"><i
-                                                                    class="ti-user"
-                                                                    style="color: white"></i>
-                                                                <a
-                                                                >{{ board.board_writer.user_name }}</a></li>
-                                                            <!--게시글 작성시간-->
-                                                            <li class="post-date" style="color: white"><i
-                                                                    class="ti-alarm-clock"
-                                                                    style="color: white"></i>
-                                                                {{ board.board_created | date:"Y-m-d h:i" }}
-                                                            </li>
-                                                            <!-- 히든으로 넘기는 것, board_no 넘김 -->
-                                                            <input type="hidden" name="board_no"
-                                                                   value="{{ board.board_no }}">
-                                                        </ul>
+                                                    <!--게시글 제목, 작성자 및 작성시간을 담 div 시작-->
+                                                    <div class="listing-info">
+                                                        <!--게시글 제목-->
+                                                        <div class="line1">
+                                                            <input type="submit" class="title line1"
+                                                                   value="{{ board.board_title }}"
+                                                                   style="background-color:transparent; border:0px transparent solid;">
+                                                        </div>
+                                                        <!-- 게시글 작성자 및 작성시간는 div -->
+                                                        <div class="dlab-post-meta">
+                                                            <ul class="d-flex align-items-center">
+                                                                <!-- 게시글 작성자 -->
+                                                                <li class="post-author" style="color: white"><i
+                                                                        class="ti-user"
+                                                                        style="color: white"></i>
+                                                                    <a
+                                                                    >{{ board.board_writer.user_name }}</a></li>
+                                                                <!--게시글 작성시간-->
+                                                                <li class="post-date" style="color: white"><i
+                                                                        class="ti-alarm-clock"
+                                                                        style="color: white"></i>
+                                                                    {{ board.board_created | date:"Y-m-d h:i" }}
+                                                                </li>
+                                                                <!-- 히든으로 넘기는 것, board_no 넘김 -->
+                                                                <input type="hidden" name="board_no"
+                                                                       value="{{ board.board_no }}">
+                                                            </ul>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </form>
+                                                </form>
+                                            </div>
                                         </div>
-                                    </div>
-
-                                {% endfor %}
+                                    {% endfor %}
                                 {% else %}
                                     <tr>
                                         <td colspan="4" style="text-align: center">게시글이 존재하지 않습니다.</td>
@@ -101,12 +100,12 @@
                                 {% endif %}
                             </div>
 
-                       <!--========== 페이지네이션 시작 ===========-->
-                        <!-- 1페이지에 6~8개 게시글 끌고오고, 게시글이 그보다 적으면, 페이지네이션 안보이게 처리해야 함 -->
-                        {% if board_list|length != 0 %}
-                            {% include 'pagination.html' with item_list=board_list%}
-                        {% endif %}
-                        <!--========== 페이지네이션 끝 ===========-->
+                            <!--========== 페이지네이션 시작 ===========-->
+                            <!-- 1페이지에 6~8개 게시글 끌고오고, 게시글이 그보다 적으면, 페이지네이션 안보이게 처리해야 함 -->
+                            {% if board_list|length != 0 %}
+                                {% include 'pagination.html' with item_list=board_list %}
+                            {% endif %}
+                            <!--========== 페이지네이션 끝 ===========-->
                         </div>
                     </div>
                 </div>
