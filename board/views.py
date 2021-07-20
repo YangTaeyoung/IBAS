@@ -7,11 +7,34 @@ from board.forms import BoardForm, ContestForm, FileForm
 from file_controller import FileController
 from pagination_handler import get_page_object
 from alarm.alarm_controller import create_comment_alarm, create_comment_ref_alarm
-from user_controller import login_required, writer_only, auth_check
+from user_controller import login_required, writer_only, auth_check, get_logined_user, not_allowed, role_check
 from alarm.alarm_controller import create_board_notice_alarm
 from django.contrib import messages
 
-# ---- get_sidebar_information ---- #
+
+# 등록 버튼을 표시할 지, 말지 고르는 함수
+def is_register_btn_show(request, board_type_no):
+    auth_no = get_logined_user(request).user_auth.auth_no
+    if board_type_no == 1:  # 공지사항
+        if role_check(request, 4, "lte"):  # 회장단인가
+            return True
+    if board_type_no < 5:  # 자유게시판, 질문게시판, 활동게시판
+        if auth_no != 3:  # 미승인 회원이 아닌가
+            return True
+    elif 6 <= board_type_no <= 7:
+        if auth_no == 1:  # 활동 회원인가?
+            return True
+    elif board_type_no == 8:  # 회장단 게시판
+        if role_check(request, 4, "lte"):  # 회장단인가
+            return True
+    elif board_type_no == 9:  # 건의 게시판
+        if auth_no != 3:  # 미승인 회원이 아닌가
+            return True
+    return False
+
+    # ---- get_sidebar_information ---- #
+
+
 # INPUT : Board 객체 or ContestBoard 객체
 # OUTPUT : 없음
 # RETURN : dict Type / 각 게시판의 게시글 수
@@ -19,7 +42,7 @@ from django.contrib import messages
 # 마지막 수정 일시 : 2021.04.13
 def get_sidebar_information():
     return {
-        "all_num": Board.objects.all().count(),
+        "all_num": Board.objects.filter(board_type_no__board_type_no__lte=4).count(),
         "notice_num": Board.objects.filter(board_type_no__board_type_no=1).count(),
         "free_num": Board.objects.filter(board_type_no__board_type_no=2).count(),
         "quest_num": Board.objects.filter(board_type_no__board_type_no=3).count(),
@@ -97,8 +120,22 @@ def board_view(request, board_type_no):  # 게시판 페이지로 이동
     if board_type_no == 5:
         board_list = Board.objects.filter(board_type_no__board_type_no__lte=4).select_related("board_writer").order_by(
             "board_type_no").order_by("-board_created")
+    elif board_type_no == 8:
+        if role_check(request, 4, "lte"):  # 회장단인 경우
+            board_list = Board.objects.filter(board_type_no__board_type_no=board_type_no).select_related(
+                "board_writer").order_by("-board_created")
+        else:
+            return not_allowed(request, msg="비정상적인 접근입니다.")
+    elif board_type_no == 9:  # 건의 게시판의 경우(1대1로 진행해야 함)
+        if role_check(request, 4, "lte"):  # 회장단인 경우
+            board_list = Board.objects.filter(board_type_no__board_type_no=board_type_no).select_related(
+                "board_writer").order_by("-board_created")
+        else:  # 회장단이 아닌 경우
+            # 자신이 쓴 게시글만 확인
+            board_list = Board.objects.filter(Q(board_type_no__board_type_no=board_type_no) & Q(
+                board_writer=get_logined_user(request))).select_related("board_writer").order_by("-board_created")
     else:
-        board_list = Board.objects.filter(board_type_no=BoardType.objects.get(pk=board_type_no)).select_related(
+        board_list = Board.objects.filter(board_type_no__board_type_no=board_type_no).select_related(
             "board_writer").order_by("-board_created")
 
     board_list = get_page_object(request, board_list)
@@ -107,6 +144,7 @@ def board_view(request, board_type_no):  # 게시판 페이지로 이동
         "board_name": BoardType.objects.get(pk=board_type_no).board_type_name,
         "board_exp": BoardType.objects.get(pk=board_type_no).board_type_exp,
         "board_type_no": board_type_no,
+        "is_register_btn_show": is_register_btn_show(request, board_type_no)
     }
     context.update(get_sidebar_information())
 
@@ -117,13 +155,23 @@ def board_view(request, board_type_no):  # 게시판 페이지로 이동
 # : 게시글 검색
 # 작성자 : 양태영
 # 마지막 수정 일시 :
-def board_search(request):
+def board_search(request, board_type_no):
     if request.method == "GET":
         keyword = request.GET.get("keyword")
         board_list = Board.objects.filter(
-            Q(board_cont__icontains=keyword) | Q(board_title__icontains=keyword) | Q(
-                board_writer__user_name__icontains=keyword)).select_related("board_writer").order_by(
-            "-board_created").all()
+            Q(board_cont__icontains=keyword) |
+            Q(board_title__icontains=keyword) |
+            Q(board_writer__user_name__icontains=keyword)).filter(board_type_no__board_type_no__lte=3).select_related(
+            "board_writer").order_by("-board_created").all()
+        if 8 <= board_type_no <= 9:
+            board_list = Board.objects.filter(
+                Q(board_cont__icontains=keyword) |
+                Q(board_title__icontains=keyword) |
+                Q(board_writer__user_name__icontains=keyword) |
+                Q(board_type_no__board_type_no=board_type_no)
+            )
+            if board_type_no == 9:
+                board_list = board_list.filter(board_writer=get_logined_user(request))
 
         item = get_page_object(request, board_list)
         context = {
@@ -146,10 +194,16 @@ def board_search(request):
 # 마지막 수정 일시 : 2021.04.13 (유동현)
 # 수정내용 : 코드 최적화
 #   - context 변수 가져오는 함수 생성
-@auth_check(active=True)
+@auth_check()
 def board_detail(request, board_no):  # 게시글 상세 보기
-    context = get_context_of_board_(board_no)
+    board = Board.objects.get(pk=board_no)
+    board_type_no = board.board_type_no.board_type_no
+    if board_type_no == 8 and not role_check(request, 4, "lte"):
+        return not_allowed(request, "비 정상적인 접근입니다.")
+    elif board_type_no == 9 and (board.board_writer != get_logined_user(request) and not role_check(request, 4, "lte")):
+        return not_allowed(request, "비 정상적인 접근입니다.")
 
+    context = get_context_of_board_(board_no)
     return render(request, 'board_detail.html', context)
 
 
@@ -177,6 +231,10 @@ def board_register(request):
 
     else:  # 게시글 등록 버튼을 눌렀을 때
         board_type_no = BoardType.objects.get(pk=request.GET.get('board_type_no'))
+        if board_type_no.board_type_no == 1 and not role_check(request, 4, "lte"):  # 공지사항 게시판에서 글쓰기 버튼을 눌렀을 경우 회장단이 아니면
+            return not_allowed(request, "비 정상적인 접근입니다.")
+        if board_type_no.board_type_no == 8 and not role_check(request, 4, "lte"):  # 회장단 게시판에서 글쓰기 버튼을 눌렀을 경우 회장단이 아니면
+            return not_allowed(request, "비 정상적인 접근입니다.")
         context = {
             "board_type_no": board_type_no.board_type_no,
             "board_name": board_type_no.board_type_name,
@@ -212,9 +270,9 @@ def board_update(request, board_no):
         board_form = BoardForm(request.POST)
         file_form = FileForm(request.POST, request.FILES)
 
-        if board_form.is_valid() and file_form.is_valid():
-            with transaction.atomic():
-                board_form.update(instance=board)
+        if board_form.is_valid():
+            board_form.update(instance=board)
+            if file_form.is_valid():
                 board_files = BoardFile.objects.filter(file_fk=board)  # 파일들을 갖고 옴
                 FileController.remove_files_by_user(request, board_files)  # 사용자가 제거한 파일 삭제
                 file_form.save(instance=board)  # 파일 업로드
@@ -298,17 +356,17 @@ def board_comment_update(request):
 # 마지막 수정 일시 : 2021.04.13
 # 수정내용 :
 @login_required
-def contest_list(request):
+def contest_view(request):
     # 공모전 게시물 전부를 해당 파일과 함께 Queryset 으로 가져오기
     contest_board_list = ContestBoard.objects.all().order_by('-contest_deadline').prefetch_related("files")
 
     # pagination 을 위한 page 객체 (page 객체 안에는 한 페이지에 보여줄만큼의 게시물이 들어있다.)
-    contest__list = get_page_object(request, contest_board_list, num_of_boards_in_one_page=6)
+    contest_list = get_page_object(request, contest_board_list, num_of_boards_in_one_page=6)
 
     context = {
-        "contest_list": contest__list,
+        "contest_list": contest_list,
         "board_name": "공모전 게시판",
-        "board_exp": "공모전 정보를 알려주는 게시판",
+        "board_exp": "공모전 정보를 알려주는 게시판"
     }
     # update() 는 dict 자료형을 이어주는 함수. list.append() 와 같은 함수
     context.update(get_sidebar_information())
@@ -337,7 +395,8 @@ def contest_register(request):  # 공모전 등록
                 file_form.save(instance=contest)
                 messages.success(request, '게시글을 성공적으로 등록하셨습니다.')
                 return redirect("contest_detail", contest_no=contest.contest_no)
-        messages.error(request, '꼭 이미지 파일은 한 개 이상 첨부되어야 합니다.') # 이미지가 없을 시 에러가 뜨도록 하는 것. (작동하지 않음. 랜더 함수가 두번호출 돼서 초기화되는데 원인을 모르겠음.)
+        messages.error(request,
+                       '꼭 이미지 파일은 한 개 이상 첨부되어야 합니다.')  # 이미지가 없을 시 에러가 뜨도록 하는 것. (작동하지 않음. 랜더 함수가 두번호출 돼서 초기화되는데 원인을 모르겠음.)
     # 목록에서 신규 등록 버튼 눌렀을때
     form_context = {
         'contest_form': ContestForm(),
@@ -404,17 +463,39 @@ def contest_update(request, contest_no):
         contest_form = ContestForm(request.POST)
         file_form = FileForm(request.POST, request.FILES)
 
-        if contest_form.is_valid() and file_form.is_valid():
+        if contest_form.is_valid():
             with transaction.atomic():
                 contest_form.update(instance=contest)
                 contest_files = ContestFile.objects.filter(file_fk=contest)  # 게시글 파일을 불러옴
-                FileController.remove_files_by_user(request, contest_files)  # 사용자가 삭제한 파일을 제거
-                file_form.save(contest)  # 유효성 검사 문제. 썸네일이 보장되는가..?
-
+                FileController.update_file_by_file_form(request=request, instance=contest, file_form=file_form,
+                                                        files=contest_files, required=True)
             # 수정된 게시글 페이지로 이동
             return redirect("contest_detail", contest_no=contest.contest_no)
         else:
             return redirect(reverse('contest_list'))
+
+
+@auth_check()
+def contest_search(request):
+    if request.method == "GET":
+        keyword = request.GET.get("keyword")
+        contest_list = ContestBoard.objects.filter(
+            Q(contest_title__icontains=keyword) |
+            Q(contest_cont__icontains=keyword) |
+            Q(contest_writer__user_name__icontains=keyword) |
+            Q(contest_asso__icontains=keyword) |
+            Q(contest_topic__icontains=keyword)
+        )
+        contest_list = get_page_object(request,model_list=contest_list,num_of_boards_in_one_page=6)
+        context = {
+            "contest_list": contest_list,
+            "board_name": "공모전 검색 결과",
+            "board_exp": '"' + keyword + '"로 검색한 결과입니다.'
+        }
+        context.update(get_sidebar_information())
+        return render(request, 'contest_board.html', context)
+    else:
+        return redirect(reverse("contest_list"))
 
 
 # ---- contest_comment_update ---- #
