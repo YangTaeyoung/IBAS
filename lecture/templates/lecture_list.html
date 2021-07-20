@@ -69,7 +69,7 @@
                                 </div>
                             </form>
                         </div>
-                        <div class="row">
+                        <div class="row {% if item_list|length == 0 %}justify-content-center{% endif %}">
                             <!--================= 여기부터 게시글 반복시작 =================-->
                             {% if item_list|length == 0 %}
                                 {% if type.type_no != 4 %}
