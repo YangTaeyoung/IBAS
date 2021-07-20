@@ -79,23 +79,40 @@ class FileController:
         return files, image_list, doc_list
 
     # ---- remove_files_by_user ---- #
-    # INPUT : HttpRequest 객체, File 객체 리스트
+    # INPUT : HttpRequest 객체, File 객체 리스트, *꼭 필요한 사진이 있는지 여부
     # OUTPUT : 없음
     # RETURN : 없음
     # : 게시글 수정하는 과정에서 사용자가 제거한 파일들을 삭제함.
-    # 마지막 수정 일시 : 2021.04.13
+    # 마지막 수정 일시 : 2021.07.21
     # 작성자 : 유동현
+    # 수정자 : 양태영
+    # 수정 내용: required=True 로 설정할 경우 제거한 파일이 전부 일 때 삭제하지 않음.
     @staticmethod
-    def remove_files_by_user(request, files):
+    def remove_files_by_user(request, files, required=False):
+        is_remove = True
+        remove_file_list = list()
         for file in files:
             # exist_file_path_{파일id}가 없는 경우: 사용자가 기존에 있던 파일을 삭제하기로 결정하였음 (input tag가 없어지면서 값이 전송되지 않음)
             if request.POST.get("exist_file_path_" + str(file.file_id)) is None:
-                location = os.path.join(MEDIA_ROOT, str(file.file_path))
+                remove_file_list.append(file)
+        if required:
+            if len(remove_file_list) == len(files):
+                is_remove = False
+        if is_remove:
+            for remove_file in remove_file_list:
+                location = os.path.join(MEDIA_ROOT, str(remove_file.file_path))
                 # 해당 파일이 존재하면 삭제 (존재하지 않는 경우 에러 발생)
                 if os.path.exists(location):
                     os.remove(location)  # 기존에 있던 저장소에 파일 삭제
+                remove_file.delete()  # db 기록 삭제
 
-                file.delete()  # db 기록 삭제
+    @staticmethod
+    def update_file_by_file_form(request, instance, file_form, files, required=False):
+        if file_form.is_valid():
+            FileController.remove_files_by_user(request, files, required=False)
+            file_form.save(instance=instance)
+        else:
+            FileController.remove_files_by_user(request, files, required=required)
 
     # ---- delete_all_files_of_ ---- #
     # INPUT : Board 객체 or ContestBoard 객체
