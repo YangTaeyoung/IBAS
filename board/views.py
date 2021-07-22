@@ -396,7 +396,7 @@ def contest_view(request):
     contest_board_list = ContestBoard.objects.all().order_by('-contest_deadline').prefetch_related("files")
 
     # pagination 을 위한 page 객체 (page 객체 안에는 한 페이지에 보여줄만큼의 게시물이 들어있다.)
-    contest_list = get_page_object(request, contest_board_list, num_of_boards_in_one_page=6)
+    contest_list = get_page_object(request, contest_board_list, num_of_boards_in_one_page=4)
 
     context = {
         "contest_list": contest_list,
@@ -521,7 +521,7 @@ def contest_search(request):
             Q(contest_asso__icontains=keyword) |
             Q(contest_topic__icontains=keyword)
         )
-        contest_list = get_page_object(request, model_list=contest_list, num_of_boards_in_one_page=6)
+        contest_list = get_page_object(request, model_list=contest_list, num_of_boards_in_one_page=4)
         context = {
             "contest_list": contest_list,
             "board_name": "공모전 검색 결과",
