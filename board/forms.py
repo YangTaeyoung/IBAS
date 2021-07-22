@@ -9,7 +9,7 @@ from django.utils.translation import gettext_lazy as _
 class BoardForm(forms.ModelForm):
     class Meta:
         model = Board
-        exclude = ('board_writer', 'board_created',)  # fields 또는 exclude 필수
+        exclude = ('board_writer', 'board_created', 'board_fixdate')  # fields 또는 exclude 필수
 
         # ModelForm 은 pk를 일부러 사용하지 못하게 한다. 수정할 필요가 없기 때문.
         # 히든태그로 템플릿에 전달했을 때 html 개발자 도구를 통해 편집할 수 있는 가능성을 차단.
@@ -18,6 +18,7 @@ class BoardForm(forms.ModelForm):
             'board_type_no': forms.HiddenInput(),
             'board_title': forms.TextInput(attrs={'placeholder': _('제목을 입력하세요.')}),
             'board_cont': forms.Textarea(),
+
         }
 
     # overriding
@@ -29,6 +30,8 @@ class BoardForm(forms.ModelForm):
         board = super().save(commit=False)
         board.board_type_no = self.cleaned_data.get('board_type_no')
         board.board_writer = kwargs.get('board_writer')
+        if kwargs.get('board_fixdate') is not None:
+            board.board_fixdate = kwargs.get('board_fixdate')
         board.save()
 
         return board

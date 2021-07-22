@@ -112,7 +112,30 @@
                                     <!-- 끌고오는 게시글 파트 -->
                                     <tbody>
                                     <!-- 게시글 출력부 -->
-                                    {% if board_list %}
+                                    {% if board_list or board_fixed_list %}
+                                        {% for board_fixed in board_fixed_list %}
+                                            <tr style="background-color: #fff7e4">
+                                                <!-- 게시글 번호 -->
+                                                <th scope="row"><i class="fa fa-thumb-tack" style="opacity:1; color: rgb(95 81 7);"></i></th>
+                                                <!-- 게시글 제목 -->
+                                                <!-- 게시글 제목 클릭 시 해당 게시글의 상세 페이지로 이동하며, 제목을 a태크 처리함 -->
+                                                <td>
+                                                    {% if board_fixed.board_type_no.board_type_no == 4 %}
+                                                        <a href="{% url 'activity_detail' board_no=board_fixed.board_no %}">
+                                                            {{ board_fixed.board_title }}
+                                                        </a>
+                                                    {% else %}
+                                                        <a href="{% url 'board_detail' board_no=board_fixed.board_no %}">
+                                                            <b>{{ board_fixed.board_title }}</b>
+                                                        </a>
+                                                    {% endif %}
+                                                </td>
+                                                <!-- 게시글 작성자 -->
+                                                <td>{{ board_fixed.board_writer.user_name }}</td>
+                                                <!-- 게시글 작성일자 -->
+                                                <td>{{ board_fixed.board_created|date:"Y-m-d" }}</td>
+                                            </tr>
+                                        {% endfor %}
                                         {% for board in board_list %}
                                             <tr>
                                                 <!-- 게시글 번호 -->

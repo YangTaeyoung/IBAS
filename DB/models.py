@@ -13,6 +13,8 @@ from datetime import datetime
 from IBAS.settings import MEDIA_ROOT
 import pytz
 
+CONT_SIZE = 1000000
+
 
 class Answer(models.Model):
     answer_id = models.AutoField(db_column='ANSWER_ID', primary_key=True)  # Field name made lowercase.
@@ -120,9 +122,10 @@ class Board(models.Model):
     board_type_no = models.ForeignKey('BoardType', models.DO_NOTHING,
                                       db_column='BOARD_TYPE_NO')  # Field name made lowercase.
     board_title = models.CharField(db_column='BOARD_TITLE', max_length=100)  # Field name made lowercase.
-    board_cont = models.CharField(db_column='BOARD_CONT', max_length=5000)  # Field name made lowercase.
+    board_cont = models.CharField(db_column='BOARD_CONT', max_length=CONT_SIZE)  # Field name made lowercase.
     board_writer = models.ForeignKey('User', on_delete=models.CASCADE, db_column='BOARD_WRITER')
     board_created = models.DateTimeField(db_column='BOARD_CREATED', auto_now_add=True)  # Field name made lowercase.
+    board_fixdate = models.DateTimeField(db_column='BOARD_FIXDATE', null=True, blank=True)
 
     class Meta:
         managed = False
@@ -184,7 +187,7 @@ class Comment(models.Model):
 class ContestBoard(models.Model):
     contest_no = models.AutoField(db_column='CONTEST_NO', primary_key=True)
     contest_title = models.CharField(db_column='CONTEST_TITLE', max_length=100)
-    contest_cont = models.CharField(db_column='CONTEST_CONT', max_length=5000)
+    contest_cont = models.CharField(db_column='CONTEST_CONT', max_length=CONT_SIZE)
     contest_writer = models.ForeignKey('User', on_delete=models.CASCADE, db_column='CONTEST_WRITER')
     contest_created = models.DateTimeField(db_column='CONTEST_CREATED', auto_now_add=True)
     contest_topic = models.CharField(db_column='CONTEST_TOPIC', max_length=500)
@@ -416,7 +419,7 @@ class LectBoardAnswer(models.Model):
                                           db_column='LECT_BOARD_ANSWER')  # Field name made lowercase.
     lect_user_stu = models.ForeignKey('User', on_delete=models.CASCADE,
                                       db_column='LECT_USER_STU')  # Field name made lowercase.
-    lect_ans_cont = models.CharField(db_column='LECT_ANS_CONT', max_length=5000, blank=True,
+    lect_ans_cont = models.CharField(db_column='LECT_ANS_CONT', max_length=CONT_SIZE, blank=True,
                                      null=True)  # Field name made lowercase.
     lect_ans_created = models.DateTimeField(db_column='LECT_ANS_CREATED',
                                             auto_now_add=True)  # Field name made lowercase.
@@ -580,7 +583,7 @@ class UserAuth(models.Model):
 class UserDelete(models.Model):
     user_delete_no = models.AutoField(db_column="USER_DELETE_NO", primary_key=True)
     user_delete_title = models.CharField(db_column="USER_DELETE_TITLE", max_length=100)
-    user_delete_content = models.CharField(db_column="USER_DELETE_CONTENT", max_length=5000)
+    user_delete_content = models.CharField(db_column="USER_DELETE_CONTENT", max_length=CONT_SIZE)
     user_delete_created = models.DateTimeField(db_column="USER_DELETE_CREATED", auto_now_add=True)
     deleted_user = models.ForeignKey(User, on_delete=models.CASCADE, db_column='DELETED_USER',
                                      related_name="DELETED_USER")

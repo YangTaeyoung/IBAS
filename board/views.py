@@ -10,6 +10,18 @@ from alarm.alarm_controller import create_comment_alarm, create_comment_ref_alar
 from user_controller import login_required, writer_only, auth_check, get_logined_user, not_allowed, role_check
 from alarm.alarm_controller import create_board_notice_alarm
 from django.contrib import messages
+from date_controller import today_after_day, today_after_year, today
+
+
+# 상단 기준일을 가지고 오는 함수
+def get_fixdate(request):
+    is_board_fixed = request.POST.get("board_fixdate")
+    board_fixdate = None
+    if is_board_fixed == "2weeks":
+        board_fixdate = today_after_day(14)
+    elif is_board_fixed == "permanent":
+        board_fixdate = today_after_year(100)
+    return board_fixdate
 
 
 # 등록 버튼을 표시할 지, 말지 고르는 함수
@@ -117,7 +129,11 @@ def get_context_of_contest_(contest_no):
 # 마지막 수정 일시 :
 @login_required
 def board_view(request, board_type_no):  # 게시판 페이지로 이동
+    board_fixed_list = Board.objects.filter(
+        Q(board_fixdate__gt=today()) & Q(board_type_no__board_type_no=board_type_no)).order_by("-board_fixdate")
     if board_type_no == 5:
+        board_fixed_list = Board.objects.filter(
+            Q(board_fixdate__gt=today()) & Q(board_type_no__board_type_no=1)).order_by("-board_fixdate")
         board_list = Board.objects.filter(board_type_no__board_type_no__lte=4).select_related("board_writer").order_by(
             "board_type_no").order_by("-board_created")
     elif board_type_no == 8:
@@ -140,6 +156,7 @@ def board_view(request, board_type_no):  # 게시판 페이지로 이동
 
     board_list = get_page_object(request, board_list)
     context = {
+        "board_fixed_list": board_fixed_list,
         "board_list": board_list,
         "board_name": BoardType.objects.get(pk=board_type_no).board_type_name,
         "board_exp": BoardType.objects.get(pk=board_type_no).board_type_exp,
@@ -158,18 +175,27 @@ def board_view(request, board_type_no):  # 게시판 페이지로 이동
 def board_search(request, board_type_no):
     if request.method == "GET":
         keyword = request.GET.get("keyword")
-        board_list = Board.objects.filter(
-            Q(board_cont__icontains=keyword) |
-            Q(board_title__icontains=keyword) |
-            Q(board_writer__user_name__icontains=keyword)).filter(board_type_no__board_type_no__lte=3).select_related(
-            "board_writer").order_by("-board_created").all()
-        if 8 <= board_type_no <= 9:
+        if 1 <= board_type_no <= 5:
+            board_list = Board.objects.filter(
+                Q(board_cont__icontains=keyword) |
+                Q(board_title__icontains=keyword) |
+                Q(board_writer__user_name__icontains=keyword)).filter(
+                board_type_no__board_type_no__lte=3).select_related(
+                "board_writer").order_by("-board_created").all()
+        elif 6 <= board_type_no <= 7:
+            board_list = Board.objects.filter(
+                Q(board_cont__icontains=keyword) |
+                Q(board_title__icontains=keyword) |
+                Q(board_writer__user_name__icontains=keyword)).filter(
+                Q(board_type_no__board_type_no=6) & Q(board_type_no__board_type_no__lte=7)).select_related(
+                "board_writer").order_by("-board_created").all()
+        elif 8 <= board_type_no <= 9:
             board_list = Board.objects.filter(
                 Q(board_cont__icontains=keyword) |
                 Q(board_title__icontains=keyword) |
                 Q(board_writer__user_name__icontains=keyword) |
                 Q(board_type_no__board_type_no=board_type_no)
-            )
+            ).select_related("board_writer").order_by("-board_created")
             if board_type_no == 9:
                 board_list = board_list.filter(board_writer=get_logined_user(request))
 
@@ -177,9 +203,9 @@ def board_search(request, board_type_no):
         context = {
             "message": "\"" + keyword + "\"로 검색한 게시글이 존재하지 않습니다.",
             "board_list": item,
-            'board_type_no': 5,
+            'board_type_no': board_type_no,
             "board_name": "검색결과",
-            "board_exp": keyword + "로 검색한 결과입니다.",
+            "board_exp": "\""+keyword + "\"로 검색한 결과입니다.",
         }
         context.update(get_sidebar_information())
 
@@ -208,26 +234,31 @@ def board_detail(request, board_no):  # 게시글 상세 보기
 
 
 # ---- board_register ---- #
-# : 게시글 등록
+# : 게시글 등록부
 # 작성자 : 양태영
-# 마지막 수정 일시 : 2021.04.30 (유동현)
-# 수정내용 : 모델 폼 적용에 따른 코드 수정
+# 수정 일시 : #1. 2021.04.30 (유동현),
+#            #2. 2021.07.22 (양태영)
+# 수정내용 : #1. 모델 폼 적용에 따른 코드 수정
+#           #2. 상단 고정 변수 추가
 @auth_check()
 def board_register(request):
     # 글쓰기 들어와서 등록 버튼을 누르면 실행이 되는 부분
     if request.method == "POST":
         board_form = BoardForm(request.POST)
         file_form = FileForm(request.POST, request.FILES)
-
+        # 게시글 상단 고정 여
+        board_fixdate = get_fixdate(request)
         if board_form.is_valid() and file_form.is_valid():
             with transaction.atomic():
-                board = board_form.save(
-                    board_writer=User.objects.get(pk=request.session.get('user_stu')))
+                board_param = {"board_writer": User.objects.get(pk=request.session.get('user_stu'))}
+                if board_fixdate is not None:
+                    board_param["board_fixdate"] = board_fixdate
+                board = board_form.save(**board_param)
                 file_form.save(instance=board)
                 create_board_notice_alarm(board)
             return redirect("board_detail", board_no=board.board_no)
         else:
-            return redirect("board_view", board_type_no=5)
+            return redirect(reverse("board_register"))
 
     else:  # 게시글 등록 버튼을 눌렀을 때
         board_type_no = BoardType.objects.get(pk=request.GET.get('board_type_no'))
@@ -272,6 +303,10 @@ def board_update(request, board_no):
 
         if board_form.is_valid():
             board_form.update(instance=board)
+            board_fixdate = get_fixdate(request)
+            if board_fixdate is not None:
+                board.board_fixdate = get_fixdate(request)
+                board.save()
             if file_form.is_valid():
                 board_files = BoardFile.objects.filter(file_fk=board)  # 파일들을 갖고 옴
                 FileController.remove_files_by_user(request, board_files)  # 사용자가 제거한 파일 삭제
@@ -486,7 +521,7 @@ def contest_search(request):
             Q(contest_asso__icontains=keyword) |
             Q(contest_topic__icontains=keyword)
         )
-        contest_list = get_page_object(request,model_list=contest_list,num_of_boards_in_one_page=6)
+        contest_list = get_page_object(request, model_list=contest_list, num_of_boards_in_one_page=6)
         context = {
             "contest_list": contest_list,
             "board_name": "공모전 검색 결과",
