@@ -18,6 +18,7 @@ urlpatterns = [
     path('member/delete/aor/<int:user_delete_no>', views.member_delete_aor, name='member_delete_aor'),
     path('member/applications/', views.member_applications, name='member_applications'),
     path('member/aor/', views.member_aor, name="member_aor"),
-    path('members/aor/', views.members_aor, name="members_aor")
+    path('members/aor/', views.members_aor, name="members_aor"),
+    # path("management/",views.management, name="management"),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

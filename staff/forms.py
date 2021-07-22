@@ -1,5 +1,5 @@
 from django import forms
-from DB.models import UserDelete
+from DB.models import UserDelete, LectSchedule, UserSchedule, LectMoneyStandard
 
 
 class UserDeleteForm(forms.ModelForm):
@@ -28,3 +28,39 @@ class UserDeleteForm(forms.ModelForm):
             user_delete.user_delete_content = self.cleaned_data.get('user_delete_content')
             return user_delete.save()
         return user_delete
+
+
+class UserScheduleForm(forms.ModelForm):
+    class Meta:
+        model = UserSchedule
+        fields = "__all__"
+        widgets = {
+            "generation": forms.NumberInput(),
+            "user_register_start": forms.DateTimeInput(),
+            "user_register_end": forms.DateTimeInput(),
+            "user_interview_start": forms.DateTimeInput(),
+            "user_interview_end": forms.DateTimeInput(),
+            "result_announce_date": forms.DateTimeInput()
+        }
+
+
+class LectScheduleForm(forms.ModelForm):
+    class Meta:
+        model = LectSchedule
+        fields = "__all__"
+        widgets = {
+            "lect_register_start": forms.DateTimeInput(),
+            "lect_register_end": forms.DateTimeInput(),
+        }
+
+
+class LectMoneyStandardForm(forms.ModelForm):
+    class Meta:
+        model = LectMoneyStandard
+        fields = "__all__"
+        widgets = {
+            "money_1to5": forms.NumberInput(),
+            "money_6to10": forms.NumberInput(),
+            "money_11to20": forms.NumberInput(),
+            "money_21over": forms.NumberInput()
+        }

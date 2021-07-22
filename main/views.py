@@ -269,3 +269,13 @@ def alarm_check(request, alarm_no):
     alarm.alarm_ischecked = 1
     alarm.save()
     return HttpResponseRedirect(alarm.alarm_link)
+
+
+''' 명예의 전당 준비
+@auth_check()
+def hall_of_fame(request):
+    context = {
+        "graduated_user_list": User.objects.filter(Q(user_apply_publish=1) & Q(user_grade=0))
+    }
+    return render(request, "hall_of_fame.html", context)
+'''

@@ -1,8 +1,8 @@
 from django.shortcuts import render, reverse, redirect, get_object_or_404
 from DB.models import User, UserRole, UserAuth, Answer, UserUpdateRequest, \
     UserDelete, UserDeleteAor, UserDeleteFile, UserDeleteComment, UserDeleteState, \
-    UserEmail, StateInfo  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
-from staff.forms import UserDeleteForm
+    UserEmail, StateInfo, LectSchedule, LectMoneyStandard, UserSchedule  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
+from staff.forms import UserDeleteForm, UserScheduleForm, LectScheduleForm, LectMoneyStandardForm
 from pagination_handler import get_page_object
 from IBAS.forms import FileFormBase, CommentBaseForm
 import os
@@ -403,3 +403,17 @@ def user_name_update(request):
             user_update_request.updated_state = StateInfo.objects.get(pk=aor)
             user_update_request.save()
     return redirect(reverse("staff_member_list"))
+
+
+# # 관리자 페이지
+# @superuser_only()
+# def management(request):
+#     lect_schedule = LectSchedule.objects.get(pk=1)
+#     user_schedule = UserSchedule.objects.get(pk=1)
+#     lect_money_standard = LectMoneyStandard.objects.get(pk=1)
+#     context = {
+#         "lect_schedule_form": LectScheduleForm(instance=lect_schedule),
+#         "user_schedule_form": UserScheduleForm(instance=user_schedule),
+#         "lect_money_standard_form": LectMoneyStandardForm(instance=lect_money_standard)
+#     }
+#     return render(request, "admin_page.html", context)

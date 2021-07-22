@@ -290,11 +290,12 @@
                                             </div>
                                         </div>
                                         <div class="client-info-bx">
-                                            <!-- 회장단 전화번호 -->
-                                            <h5>{{ chief_crew.user_phone }}</h5>
                                             <!-- 회장단 이메일 -->
                                             <h5>{{ chief_crew.useremail_set.first.user_email }}</h5>
-                                            <h5>{% if chief_crew.user_intro %}{{ chief_crew.user_intro }}{% endif %}</h5>
+                                            <!-- 회장단 전화번호 -->
+                                            <h5>{{ chief_crew.user_phone }}</h5>
+                                            <!-- 회장단 소개 -->
+                                            <p>{% if chief_crew.user_intro %}{{ chief_crew.user_intro }}{% endif %}</p>
                                         </div>
                                     </div>
                                 </div>

@@ -506,6 +506,28 @@ class LectCheck(models.Model):
         db_table = 'LECT_CHECK'
 
 
+class LectMoneyStandard(models.Model):
+    money_no = models.AutoField(db_column="MONEY_NO", primary_key=True)
+    money_1to5 = models.IntegerField(db_column="MONEY1TO5")
+    money_6to10 = models.IntegerField(db_column="MONEY6TO10")
+    money_11to20 = models.IntegerField(db_column="MONEY11TO20")
+    money_21over = models.IntegerField(db_column="MONEY21OVER")
+
+    class Meta:
+        managed = False
+        db_table = "LECT_MONEY_STANDARD"
+
+
+class LectSchedule(models.Model):
+    lect_schedule_no = models.AutoField(db_column="LECT_SCHEDULE_NO", primary_key=True)
+    lect_schedule_start = models.DateTimeField(db_column="LECT_SCHEDULE_START")
+    lect_schedule_end = models.DateTimeField(db_column="LECT_SCHEDULE_END")
+
+    class Meta:
+        managed = False
+        db_table = "LECT_SCHEDULE"
+
+
 class LectType(models.Model):
     type_no = models.AutoField(db_column='TYPE_NO', primary_key=True)  # Field name made lowercase.
     type_name = models.CharField(db_column='TYPE_NAME', unique=True, max_length=20)  # Field name made lowercase.
@@ -659,6 +681,19 @@ class UserRole(models.Model):
     class Meta:
         managed = False
         db_table = 'USER_ROLE'
+
+
+class UserSchedule(models.Model):
+    user_schedule_no = models.AutoField(db_column="USER_SCHEDULE_NO", primary_key=True)
+    generation = models.IntegerField(db_column="GENERATION")
+    user_register_start = models.DateTimeField(db_column="USER_REGISTER_START")
+    user_register_end = models.DateTimeField(db_column="USER_REGISTER_END")
+    user_interview_start = models.DateTimeField(db_column="USER_INTERVIEW_START")
+    user_interview_end = models.DateTimeField(db_column="USER_INTERVIEW_END")
+
+    class Meta:
+        managed = False
+        db_table = "USER_SCHEDULE"
 
 
 class UserUpdateRequest(models.Model):
