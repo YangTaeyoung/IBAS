@@ -31,7 +31,8 @@
                                 <div>
                                     <!-- bank-margin-bottom_0는 bank_yejin.css에 정의되어 있음.  -->
                                     <!-- bank-year는 bank_yejin.js에 사용됨. bank_select 부분과 관련 -->
-                                    <h3 id="bank-year" class="title bank-margin-bottom_0" style="font-size: 22px">전체 회계 내역</h3>
+                                    <h3 id="bank-year" class="title bank-margin-bottom_0" style="font-size: 22px">전체 회계
+                                        내역</h3>
                                 </div>
                             </div>
                             <div>
@@ -78,81 +79,82 @@
                         <!-- 각 td에 스타일 padding: 10px 0;이 적용되어 있는데, 외부 css파일로 스타일 적용이 안되어 따로 지정해 준 것임.  -->
                         {% for bank in bank_list %}
                             <tr class="bank-tr text-center">
-                                    <!-- 사용일 -->
-                                    <td scope="row" style="padding: 10px 0; width: 100px;">
-                                        <!-- bank-date-1는 bank_yejin.js에 사용됨. bank_select, bank_update 부분과 관련 -->
-                                        <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
-                                        <input class="bank-date bank-input-con" type="text"
-                                               value="{{ bank.bank_used|date:"Y-m-d" }}"
-                                               style="width: 100px;" disabled="disabled">
-                                    </td>
+                                <!-- 사용일 -->
+                                <td scope="row" style="padding: 10px 0; width: 100px;">
+                                    <!-- bank-date-1는 bank_yejin.js에 사용됨. bank_select, bank_update 부분과 관련 -->
+                                    <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
+                                    <input class="bank-date bank-input-con" type="text"
+                                           value="{{ bank.bank_used|date:"Y-m-d" }}"
+                                           style="width: 100px;" disabled="disabled">
+                                </td>
 
-                                    <!-- 게시일 -->
-                                    <td style="padding: 10px 0">
-                                        <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
-                                        <input class="bank-input-con" type="text"
-                                               value="{{ bank.bank_created|date:"Y-m-d" }}"
-                                               style="width: 100px;" disabled="disabled">
-                                    </td>
+                                <!-- 게시일 -->
+                                <td style="padding: 10px 0">
+                                    <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
+                                    <input class="bank-input-con" type="text"
+                                           value="{{ bank.bank_created|date:"Y-m-d" }}"
+                                           style="width: 100px;" disabled="disabled">
+                                </td>
 
-                                    <!-- 수정일 -->
-                                    <td style="padding: 10px 0">
-                                        <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
-                                        <input class="bank-input-con" type="text"
-                                               value="{{ bank.bank_updated|date:"Y-m-d" }}"
-                                               style="width: 100px;" disabled="disabled">
-                                    </td>
+                                <!-- 수정일 -->
+                                <td style="padding: 10px 0">
+                                    <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
+                                    <input class="bank-input-con" type="text"
+                                           value="{{ bank.bank_updated|date:"Y-m-d" }}"
+                                           style="width: 100px;" disabled="disabled">
+                                </td>
 
 
-                                    <!-- 내용 -->
-                                    <td style="width: 400px; padding: 10px 0; text-align: start">
-                                        <!-- bank-txt-1는 bank_yejin.js에 사용됨. bank_update 부분과 관련 -->
-                                        <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
-                                        <input class="bank-input-con" type="text"
-                                               value="{{ bank.bank_title }}"
-                                               disabled="disabled" style="width: 430px;">
-                                    </td>
+                                <!-- 내용 -->
+                                <td style="width: 400px; padding: 10px 0; text-align: start">
+                                    <!-- bank-txt-1는 bank_yejin.js에 사용됨. bank_update 부분과 관련 -->
+                                    <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
+                                    <input class="bank-input-con" type="text"
+                                           value="{{ bank.bank_title }}"
+                                           disabled="disabled" style="width: 430px;">
+                                </td>
 
-                                    <!-- 수입액 -->
-                                    <td style="width: 123px;padding: 10px 0;">
-                                        <!-- bank-earn-1는 bank_yejin.js에 사용됨. bank_update 부분과 관련 -->
-                                        <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
-                                        <input class="bank-input-con" type="text"
-                                               value="{{ bank.bank_plus|intcomma }}"
-                                               disabled="disabled">
-                                    </td>
+                                <!-- 수입액 -->
+                                <td style="width: 123px;padding: 10px 0;">
+                                    <!-- bank-earn-1는 bank_yejin.js에 사용됨. bank_update 부분과 관련 -->
+                                    <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
+                                    <input class="bank-input-con" type="text"
+                                           value="{{ bank.bank_plus|intcomma }}"
+                                           disabled="disabled">
+                                </td>
 
-                                    <!-- 지출액 -->
-                                    <td style="width: 123px;padding: 10px 0;">
-                                        <!-- bank-spend-1는 bank_yejin.js에 사용됨. bank_update 부분과 관련 -->
-                                        <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
-                                        <input class="bank-input-con" type="text"
-                                               value="{{ bank.bank_minus|intcomma }}"
-                                               disabled="disabled">
-                                    </td>
+                                <!-- 지출액 -->
+                                <td style="width: 123px;padding: 10px 0;">
+                                    <!-- bank-spend-1는 bank_yejin.js에 사용됨. bank_update 부분과 관련 -->
+                                    <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
+                                    <input class="bank-input-con" type="text"
+                                           value="{{ bank.bank_minus|intcomma }}"
+                                           disabled="disabled">
+                                </td>
 
-                                    <!-- 증빙자료 버튼 -->
-                                    <td style="width: 86px;padding: 10px 0;">
-                                        <!-- 누르면 증빙자료모달 보이게 함 -->
-                                        <a data-toggle="modal" data-target="#bank-modal-bg-{{ bank.bank_no }}"
+                                <!-- 증빙자료 버튼 -->
+                                <td style="width: 86px;padding: 10px 0;">
+                                    <!-- 누르면 증빙자료모달 보이게 함 -->
+                                    <a data-toggle="modal" data-target="#bank-modal-bg-{{ bank.bank_no }}"
+                                       href="javascript:void(0);"
+                                       class="site-button-link black bank-flex">
+                                        <i class="fa fa-file-text-o"></i>
+                                    </a>
+                                </td>
+                                {% if logined_user.user_role.role_no == 4 %}
+                                    <!-- 수정 -->
+                                    <!-- bank_update는 bank_yejin.js에 정의됨. -->
+                                    <td style="width: 55px; padding: 10px 0;">
+                                        <!-- bank-update는 bank_yejin.js에 사용됨. bank_update 부분과 관련 -->
+                                        <a data-toggle="modal" data-target="#bank-modal-update-{{ bank.bank_no }}"
                                            href="javascript:void(0);"
                                            class="site-button-link black bank-flex">
-                                            <i class="fa fa-file-text-o"></i>
+                                            <i id="bank-update" class="fa fa-pencil " style="color: #606269"></i>
                                         </a>
                                     </td>
-                                    {% if logined_user.user_role.role_no == 4 %}
-                                        <!-- 수정 -->
-                                        <!-- bank_update는 bank_yejin.js에 정의됨. -->
-                                        <td style="width: 55px; padding: 10px 0;">
-                                            <!-- bank-update는 bank_yejin.js에 사용됨. bank_update 부분과 관련 -->
-                                            <a data-toggle="modal" data-target="#bank-modal-update-{{ bank.bank_no }}"
-                                               href="javascript:void(0);"
-                                               class="site-button-link black bank-flex">
-                                                <i id="bank-update" class="fa fa-pencil " style="color: #606269"></i>
-                                            </a>
-                                        </td>
 
-                                    <form id="form-bank-delete-{{ bank.bank_no }}" action="{% url 'bank_delete' bank.bank_no %}"
+                                    <form id="form-bank-delete-{{ bank.bank_no }}"
+                                          action="{% url 'bank_delete' bank.bank_no %}"
                                           method="post">
                                         {% csrf_token %}
                                         <!-- 삭제 -->
@@ -205,9 +207,13 @@
                                                 <div class="introduce-li-flex">
                                                     {{ bank.bank_title }}
                                                 </div>
-
+                                                <hr/>
+                                                <div>
+                                                    {{ bank.bank_reason }}
+                                                </div>
+                                                <hr/>
                                             </div>
-                                        <!-- 영수증 이미지 출력부 -->
+                                            <!-- 영수증 이미지 출력부 -->
                                             {% for bank_file in bank.files.all %}
                                                 <div class="bank-image-flex">
                                                     <img src="/media/{{ bank_file.file_path }}"
@@ -239,10 +245,12 @@
                                                   action="{% url 'bank_update' bank.bank_no %}" method="post"
                                                   enctype="multipart/form-data">
                                                 {% csrf_token %}
-                                                <input type="hidden" name="bank_cfo" value="{{ logined_user.user_stu }}"/>
+                                                <input type="hidden" name="bank_cfo"
+                                                       value="{{ logined_user.user_stu }}"/>
                                                 <!-- 날짜 -->
                                                 <div class="form-group">
-                                                    <input required="" name="bank_used" class="form-control" type="date" value="{{ bank.bank_used|date:"Y-m-d" }}"/>
+                                                    <input required="" name="bank_used" class="form-control" type="date"
+                                                           value="{{ bank.bank_used|date:"Y-m-d" }}"/>
                                                     <div class="form-text font-10">영수증에 명시된 사용일을 적어주세요.</div>
                                                 </div>
 
@@ -287,17 +295,18 @@
                                                            type="number"/>
                                                 </div>
 
-                                        <!-- 첨부된 파일 불러오기 -->
-                                        <!-- 파일 리스트 길이가 0이 아닐 경우에만 파일 리스트를 출력하게 함. -->
+                                                <!-- 첨부된 파일 불러오기 -->
+                                                <!-- 파일 리스트 길이가 0이 아닐 경우에만 파일 리스트를 출력하게 함. -->
 
-                                                 <!-- 첨부된 파일 불러오기 -->
+                                                <!-- 첨부된 파일 불러오기 -->
                                                 <!-- 파일 리스트 길이가 0이 아닐 경우에만 파일 리스트를 출력하게 함. -->
                                                 {% if bank.files.all %}
                                                     <div id="bank-update-file-parent" class="download-box mb-5"
                                                          style="font-size: 13px">
                                                         {% for bank_file in bank.files.all %}
                                                             <!-- 첨부파일 1 -->
-                                                            <div id="bank-update-file-{{ bank_file.file_id }}" class="d-flex">
+                                                            <div id="bank-update-file-{{ bank_file.file_id }}"
+                                                                 class="d-flex">
                                                                  <i class="fa fa-download m-r15 m-t5"></i>
                                                                 <a class="line2" href="#">
                                                                     {{ bank_file.file_name }}
@@ -395,7 +404,9 @@
                                         <!-- 첨부버튼 -->
                                         <div class="form-group">
                                             <div class="form-group">
-                                                <label style="font-size: 13px; font-weight: 100"><span style="color:red">*</span><b>증빙자료 첨부</b> <span style="font-size: 8px; color:red;">&nbsp;&nbsp; ※ 해당 란은 이미지만 첨부할 수 있습니다.</span></label>
+                                                <label style="font-size: 13px; font-weight: 100"><span
+                                                        style="color:red">*</span><b>증빙자료 첨부</b> <span
+                                                        style="font-size: 8px; color:red;">&nbsp;&nbsp; ※ 해당 란은 이미지만 첨부할 수 있습니다.</span></label>
                                                 {{ file_form.upload_file }}
                                             </div>
                                         </div>
@@ -412,9 +423,9 @@
 
                     <!--========== 페이지네이션 시작 ===========-->
                     <!-- 1페이지에 15개 게시글 끌고오고, 게시글이 그보다 적으면, 페이지네이션 안보이게 처리 -->
-                {% if bank_list|length != 0 %}
-                    {% include 'pagination.html' with item_list=bank_list %}
-                {% endif %}
+                    {% if bank_list|length != 0 %}
+                        {% include 'pagination.html' with item_list=bank_list %}
+                    {% endif %}
                     <!--========== 페이지네이션 끝 ===========-->
                 </div>
             </div>
