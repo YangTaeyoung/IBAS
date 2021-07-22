@@ -133,7 +133,7 @@ def bank_support_register(request):
 @auth_check()
 def bank_support_detail(request, bank_no):
     bank = get_object_or_404(Bank, pk=bank_no)
-    bank_file_list = BankFile.objects.filter(bank_no=bank)
+    bank_file_list = BankFile.objects.filter(file_fk=bank)
     context = {
         "bank": bank,
         "bank_file_list": bank_file_list
