@@ -103,7 +103,7 @@
                                                     <div class="listing-info" style="height: 110px">
                                                         <!-- 공모전 제목 -->
                                                         <h3 class="title"><a
-                                                                href="{% url 'contest_detail' contest.contest_no %}">{{ contest.contest_title|truncatechars:55 }}</a>
+                                                                href="{% url 'contest_detail' contest.contest_no %}">{{ contest.contest_title|truncatechars:23}}</a>
                                                         </h3>
                                                         <!-- 공모전 간단소개 -->
                                                         <ul class="event-meta">
@@ -123,7 +123,7 @@
                                                                 {% endif %}
                                                             <!-- 공모전에 대한 간단소개 -->
                                                             <li class="text-cut">
-                                                                {{ contest.contest_topic }}
+                                                                {{ contest.contest_topic|truncatechars:55  }}
                                                             </li>
                                                         </ul>
                                                     </div>
