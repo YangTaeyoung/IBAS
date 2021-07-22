@@ -207,12 +207,13 @@
                                                 <div class="introduce-li-flex">
                                                     {{ bank.bank_title }}
                                                 </div>
-                                                <hr/>
-                                                <div>
-                                                    {{ bank.bank_reason }}
-                                                </div>
-                                                <hr/>
+
                                             </div>
+                                            <hr/>
+                                            <div>
+                                                {{ bank.bank_reason }}
+                                            </div>
+                                            <hr/>
                                             <!-- 영수증 이미지 출력부 -->
                                             {% for bank_file in bank.files.all %}
                                                 <div class="bank-image-flex">
