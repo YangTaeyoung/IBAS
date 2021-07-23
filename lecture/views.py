@@ -159,6 +159,9 @@ def lect_delete(request, lect_no):
     if request.method == "POST":
         lect_type_no = lect.lect_type.type_no  # 강의 삭제 전 DB에 저장되어 있는 게시판 타입을 받아옴: 강의 리스트로 페이지를 리다이렉팅 하기 위함.
         FileController.delete_all_files_of_(lect)  # 강의에 저장되어 있는 사진 삭제
+        for lect_board in lect.lectures.all():
+            FileController.delete_all_files_of_(lect_board)
+            lect_board.delete()
         lect.delete()  # 강의 DB에서 삭제
         return redirect("lect_view", type_no=lect_type_no)  # 강의 리스트로 페이지 전환
     return redirect("lect_detail", lect_no=lect.lect_no)

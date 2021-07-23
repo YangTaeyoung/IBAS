@@ -364,7 +364,7 @@ class LectBoard(models.Model):
     lect_board_created = models.DateTimeField(db_column='LECT_BOARD_CREATED', auto_now_add=True)
     lect_board_cont = models.TextField(db_column='LECT_BOARD_CONT')
     lect_board_writer = models.ForeignKey('User', on_delete=models.CASCADE, db_column='LECT_BOARD_WRITER')
-    lect_no = models.ForeignKey(Lect, models.DO_NOTHING, db_column='LECT_NO', related_name='lectures')
+    lect_no = models.ForeignKey(Lect, on_delete=models.CASCADE, db_column='LECT_NO', related_name='lectures')
     lect_board_type = models.ForeignKey('LectBoardType', models.DO_NOTHING, db_column='LECT_BOARD_TYPE')
     lect_board_link = models.CharField(db_column='LECT_BOARD_LINK', max_length=500, null=True, blank=True)
     assignment_deadline = models.DateTimeField(db_column='LECT_ASSIGNMENT_DEADLINE', null=True)
