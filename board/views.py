@@ -95,6 +95,14 @@ def get_context_of_board_(board_no):
     return context
 
 
+def get_context_by_board_type(board_type: BoardType):
+    return {
+        "board_type_no": board_type.board_type_no,
+        "board_name": board_type.board_type_name,
+        "board_exp": board_type.board_type_exp
+    }
+
+
 # ---- get_context_of_contest_ ---- #
 # INPUT : 공모전 게시글 번호
 # OUTPUT : 없음
@@ -205,7 +213,7 @@ def board_search(request, board_type_no):
             "board_list": item,
             'board_type_no': board_type_no,
             "board_name": "검색결과",
-            "board_exp": "\""+keyword + "\"로 검색한 결과입니다.",
+            "board_exp": "\"" + keyword + "\"로 검색한 결과입니다.",
         }
         context.update(get_sidebar_information())
 
@@ -267,12 +275,10 @@ def board_register(request):
         if board_type_no.board_type_no == 8 and not role_check(request, 4, "lte"):  # 회장단 게시판에서 글쓰기 버튼을 눌렀을 경우 회장단이 아니면
             return not_allowed(request, "비 정상적인 접근입니다.")
         context = {
-            "board_type_no": board_type_no.board_type_no,
-            "board_name": board_type_no.board_type_name,
-            "board_exp": board_type_no.board_type_exp,
             "board_form": BoardForm(initial={'board_type_no': board_type_no.board_type_no}),
             "file_form": FileForm(),
         }
+        context.update(get_context_by_board_type(board_type_no))
         return render(request, "board_register.html", context)
 
 
@@ -294,6 +300,7 @@ def board_update(request, board_no):
             'file_form': FileForm(),
             'file_list': BoardFile.objects.filter(file_fk=board)
         }
+        context.update(get_context_by_board_type(board.board_type_no))
         return render(request, "board_register.html", context)
 
     # 수정을 하고 난 후 수정 버튼을 누를 경우 이걸로 진행 됌
