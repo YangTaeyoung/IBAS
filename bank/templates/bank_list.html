@@ -3,6 +3,7 @@
 {% load humanize %}
 {% block content %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/ibas_contents.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/posting_detail.css' %}">
     <script src="{% static 'js/ibas_centents.js' %}"></script>
     <!----------상단 제목부분----------->
     <!--제목을 감싸는 배경-->
@@ -204,7 +205,7 @@
                                                        style="justify-content: center; font-size: 25px"></i>
                                                 </div>
 
-                                                <div class="introduce-li-flex">
+                                                <div class="word-break-all introduce-li-flex">
                                                     {{ bank.bank_title }}
                                                 </div>
 
@@ -215,7 +216,7 @@
                                                     <i class="la la-list"
                                                        style="justify-content: center; font-size: 25px"></i>
                                                 </div>
-                                                <div class="introduce-li-flex">
+                                                <div class="word-break-all introduce-li-flex">
                                                     {{ bank.bank_reason }}
                                                 </div>
                                             </div>

@@ -195,45 +195,47 @@
                                             {% endfor %}
                                             </tbody>
                                         </table>
-                                        <!--페이지네이션-->
-                                        <div style="display: flex; justify-content: center; align-items: center">
-                                            <nav aria-label="Page navigation example">
-                                                <!-- staff_margin_bottom_0는 staff_cr.css에 정의되어 있음.  -->
-                                                <ul class="pagination m-b0">
-                                                    {% if new_user_list.has_previous %}
-                                                        <li class="page-item">
-                                                            <a class="page-link" href="?new_user_page=1"
-                                                               aria-label="Previous">
-                                                                <span aria-hidden="true">&laquo;</span>
-                                                            </a>
-                                                        </li>
-                                                        <li class="page-item">
-                                                            <a class="page-link"
-                                                               href="?new_user_page={{ new_user_list.previous_page_number }}">
-                                                                {{ new_user_list.previous_page_number }}
-                                                            </a>
-                                                        </li>
-                                                    {% endif %}
-                                                    <li class="page-item"><a class="page-link"
-                                                                             href="#">{{ new_user_list.number }}</a>
-                                                    </li>
-                                                    {% if new_user_list.has_next %}
+                                        {% if new_user_list|length != 0 %}
+                                            <!--페이지네이션-->
+                                            <div style="display: flex; justify-content: center; align-items: center">
+                                                <nav aria-label="Page navigation example">
+                                                    <!-- staff_margin_bottom_0는 staff_cr.css에 정의되어 있음.  -->
+                                                    <ul class="pagination m-b0">
+                                                        {% if new_user_list.has_previous %}
+                                                            <li class="page-item">
+                                                                <a class="page-link" href="?new_user_page=1"
+                                                                   aria-label="Previous">
+                                                                    <span aria-hidden="true">&laquo;</span>
+                                                                </a>
+                                                            </li>
+                                                            <li class="page-item">
+                                                                <a class="page-link"
+                                                                   href="?new_user_page={{ new_user_list.previous_page_number }}">
+                                                                    {{ new_user_list.previous_page_number }}
+                                                                </a>
+                                                            </li>
+                                                        {% endif %}
                                                         <li class="page-item"><a class="page-link"
-                                                                                 href="?new_user_page={{ new_user_list.next_page_number }}">
-                                                            {{ new_user_list.next_page_number }}
-                                                        </a>
+                                                                                 href="#">{{ new_user_list.number }}</a>
                                                         </li>
-                                                        <li class="page-item">
-                                                            <a class="page-link"
-                                                               href="?new_user_page={{ new_user_list.paginator.num_pages }}"
-                                                               aria-label="Next">
-                                                                <span aria-hidden="true">&raquo;</span>
+                                                        {% if new_user_list.has_next %}
+                                                            <li class="page-item"><a class="page-link"
+                                                                                     href="?new_user_page={{ new_user_list.next_page_number }}">
+                                                                {{ new_user_list.next_page_number }}
                                                             </a>
-                                                        </li>
-                                                    {% endif %}
-                                                </ul>
-                                            </nav>
-                                        </div>
+                                                            </li>
+                                                            <li class="page-item">
+                                                                <a class="page-link"
+                                                                   href="?new_user_page={{ new_user_list.paginator.num_pages }}"
+                                                                   aria-label="Next">
+                                                                    <span aria-hidden="true">&raquo;</span>
+                                                                </a>
+                                                            </li>
+                                                        {% endif %}
+                                                    </ul>
+                                                </nav>
+                                            </div>
+                                        {% endif %}
                                         <!--페이지네이션 끝-->
                                     </div>
                                 </div>
@@ -534,7 +536,7 @@
                                                 <nav aria-label="Page navigation example">
                                                     <!-- staff_margin_bottom_0는 staff_cr.css에 정의되어 있음.  -->
                                                     <ul class="pagination m-b0">
-                                                        {% if exist_user_list.has_previous %}
+                                                        {% if user_update_request_list.has_previous %}
                                                             <li class="page-item">
                                                                 <a class="page-link"
                                                                    href="?request_page=1"
@@ -545,14 +547,14 @@
                                                             <li class="page-item">
                                                                 <a class="page-link"
                                                                    href="?request_page={{ user_update_request_list.previous_page_number }}">
-                                                                    {{ exist_user_list.previous_page_number }}
+                                                                    {{ user_update_request_list.previous_page_number }}
                                                                 </a>
                                                             </li>
                                                         {% endif %}
                                                         <li class="page-item"><a class="page-link"
                                                                                  href="#">{{ user_update_request_list.number }}</a>
                                                         </li>
-                                                        {% if exist_user_list.has_next %}
+                                                        {% if user_update_request_list.has_next %}
                                                             <li class="page-item"><a class="page-link"
                                                                                      href="?request_page={{ user_update_request_list.next_page_number }}">
                                                                 {{ user_update_request_list.next_page_number }}

@@ -34,7 +34,11 @@
             type="image/x-icon"
             href="{% static 'images/favicon.png' %}"
     />
-
+    <script>
+        loading_obj = document.createElement("div")
+        loading_obj.className = "loading"
+        document.getElementById("btn-submit")
+    </script>
     <!-- PAGE TITLE HERE -->
     <title>입부신청</title>
 
@@ -156,9 +160,7 @@
                                         <input type="submit" class="site-button button-md width-150" value="입부신청"/>
                                     </div>
                                 </div>
-
                             </div>
-
                             <!-- 입부신청 작성란  -->
                         </form>
                     </div>
