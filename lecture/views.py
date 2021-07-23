@@ -93,7 +93,7 @@ def lect_register(request):  # 강의/스터디/취미모임 등록 페이지로
 def lect_detail(request, lect_no):
     lect = Lect.objects.get(pk=lect_no)
     lect.lect_day = lect.lect_day.replace(" ", ",")
-    lect.lect_day = lect.lect_day[:len(lect.lect_day)-1]
+    lect.lect_day = lect.lect_day[:len(lect.lect_day) - 1]
     context = {
         'lect': lect,
         'lect_user_num': len(LectEnrollment.objects.filter(lect_no=lect_no)),
@@ -367,8 +367,9 @@ def lect_board_detail(request, room_no, lect_board_no):
         'doc_list': file_list,
         'submitted_assignment': submitted_assignment,
     }
-
-    return render(request, 'lecture_room_board_detail.html', context | link_embedding | code)
+    context.update(link_embedding)
+    context.update(code)
+    return render(request, 'lecture_room_board_detail.html', context)
 
 
 # 강의/공지 게시글 삭제
