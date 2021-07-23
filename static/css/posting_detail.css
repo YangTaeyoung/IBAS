@@ -41,9 +41,15 @@
     border-color: #4611a7 !important;
     transform: scale(1.01);
 }
+
 /*회의 바로 가기 박스 중 다른 앱 사용 부분의 사진*/
 .lectRoom_center {
     display: flex;
     justify-content: center;
     align-items: center
+}
+
+/* 문자가 지정한 width를 넘어가면 저절로 줄 바꿈을 해줌. */
+.word-break-all {
+    word-break: break-all;
 }
