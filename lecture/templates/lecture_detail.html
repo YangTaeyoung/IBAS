@@ -261,7 +261,7 @@
                                 {% csrf_token %}
                             </form>
                             <a href="#" class="site-button red radius-xl m-l10"
-                               onclick="goSubmit('id-form-lect-delete', true, '정말 {{ lect.lect_title }} 강의를 삭제하시겠습니까?')">
+                               onclick="goSubmit('id-form-lect-delete', true, '정말 {{ lect.lect_title }} 강의를 삭제하시겠습니까?\n등록했던 모든 강의 및 게시글이 삭제됩니다.')">
                                 <i class="fa fa-trash m-r5"></i>
                                 {{ lect.lect_type.type_name }} 삭제
                             </a>
