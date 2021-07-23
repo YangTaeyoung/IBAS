@@ -536,7 +536,7 @@
                                                 <nav aria-label="Page navigation example">
                                                     <!-- staff_margin_bottom_0는 staff_cr.css에 정의되어 있음.  -->
                                                     <ul class="pagination m-b0">
-                                                        {% if exist_user_list.has_previous %}
+                                                        {% if user_update_request_list.has_previous %}
                                                             <li class="page-item">
                                                                 <a class="page-link"
                                                                    href="?request_page=1"
@@ -547,14 +547,14 @@
                                                             <li class="page-item">
                                                                 <a class="page-link"
                                                                    href="?request_page={{ user_update_request_list.previous_page_number }}">
-                                                                    {{ exist_user_list.previous_page_number }}
+                                                                    {{ user_update_request_list.previous_page_number }}
                                                                 </a>
                                                             </li>
                                                         {% endif %}
                                                         <li class="page-item"><a class="page-link"
                                                                                  href="#">{{ user_update_request_list.number }}</a>
                                                         </li>
-                                                        {% if exist_user_list.has_next %}
+                                                        {% if user_update_request_list.has_next %}
                                                             <li class="page-item"><a class="page-link"
                                                                                      href="?request_page={{ user_update_request_list.next_page_number }}">
                                                                 {{ user_update_request_list.next_page_number }}
