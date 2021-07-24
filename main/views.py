@@ -15,7 +15,7 @@ from user_controller import login_required, writer_only, auth_check, superuser_o
 # 메인페이지 이동 함수
 def index(request):
     # 임시 로그인
-    # session.save_session(request, user_model=User.objects.get(pk=12162359), logined_email="0130yang@gmail.com", provider="google")
+    session.save_session(request, user_model=User.objects.get(pk=12162359), logined_email="0130yang@gmail.com", provider="google")
     # session.save_session(request, user_model=User.objects.get(pk=12171652))
     return render(request, "index.html", {})
 
@@ -269,3 +269,10 @@ def alarm_check(request, alarm_no):
     alarm.alarm_ischecked = 1
     alarm.save()
     return HttpResponseRedirect(alarm.alarm_link)
+
+
+def honor(request):
+    context = {
+
+    }
+    return render(request,'honor.html', context)
