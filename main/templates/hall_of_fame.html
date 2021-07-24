@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    <!--커스텀 css-->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/ibas_contents.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/comment.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/size.css' %}">
+    <script src="{% static 'js/jquery.min.js' %}"></script><!-- JQUERY.MIN JS -->
+    <script src="{% static 'js/comment.js' %}"></script>
+
+    <style>
+        /* 여기서만 써야하는 css */
+        .owl-dots-primary-full.owl-theme .owl-dots .owl-dot span, .owl-dots-primary-big.owl-theme .owl-dots .owl-dot span {
+            background-color: white;
+        }
+
+    </style>
+
+    <div class="page-wraper">
+
+        <div class="page-content bg-white">
+
+
+            <!----------============= 본문 시작 ================----------->
+            <!-- Online Community -->
+            <div class="section-full bg-white content-inner-2 bg-img-fix overlay-black-dark owl-out"
+                 style="background-image:url('{% static 'images/board_name_img.jpg' %}');
+                         {# url(images/background/bg1.jpg) #}; background-position: left bottom;">
+                <div class="container">
+                    <div class="section-head text-center text-white">
+                        <h2 class="box-title">명예의 전당</h2>
+                        <div class="dlab-separator bg-primary bg-white"></div>
+                        <p>졸업생 분들 중 정보공개에 동의하신 선배님들입니다. IBAS의 성장을 위해 함께해주셔서 감사합니다.</p>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="row justify-content-center">
+                                <!--졸업생 3명 이하 일 때-->
+                                {% if graduated_user_list|length == 0 %}
+                                    여기에 없을 경우를 가정해서 집어 넣을 것. 또한 전체적으로 컨텐츠 높이 조정이 필요함.. QHD에서는 박살나는듯.. 화면 축소해가며 컨텐츠 크기 조정 해주길 바람.
+                                {% elif graduated_user_list|length <= 3 %}
+                                    {% for graduated_user in graduated_user_list %}
+                                        <div class="item m-r30">
+                                            <div class="testimonial-2 testimonial-bg">
+                                                <div class="testimonial-text width-360 honor-card">
+                                                    <p><i class="ti-email"></i>
+                                                        &nbsp;&nbsp;{{ graduated_user.useremail_set.first.user_email }}
+                                                    </p>
+                                                    <p>{{ graduated_user.user_intro }}</p>
+                                                    <p><i class="fa fa-phone"></i>
+                                                        &nbsp;&nbsp;{{ graduated_user.user_phone }}</p>
+                                                </div>
+                                                <div class="testimonial-detail clearfix">
+                                                    <div class="testimonial-pic quote-left radius shadow"><img
+                                                            src="/media/{{ graduated_user.user_pic }}"
+                                                            width="100" height="100" alt=""></div>
+                                                    <strong class="testimonial-name">{{ graduated_user.user_name }}</strong>
+                                                    <p
+                                                            class="testimonial-position d-inline-block"
+                                                            style="color: white">{{ graduated_user.user_major.major_name }}</p>
+                                                    <p class="testimonial-position d-inline-block" style="color: white">
+                                                        {{ graduated_user.user_stu|stringformat:"s"|slice:"2:4" }}학번</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <!-- 졸업생이 4명 이상일 떄 -->
+                                    <div id="owl-demo"
+                                         class="testimonial-one owl-loaded owl-theme owl-carousel owl-btn-center-lr owl-btn-3 btn-white owl-dots-primary-big style-2">
+                                        {% for graduated_user in graduated_user_list %}
+                                            <div class="item">
+                                                <div class="testimonial-2 testimonial-bg">
+                                                    <div class="testimonial-text honor-card"
+                                                         style="background-color: white; color: #3a3a3a">
+                                                        <p>
+                                                            <i class="ti-email"></i>
+                                                            &nbsp;&nbsp;{{ graduated_user.useremail_set.first.user_email }}
+                                                        </p>
+                                                        <p>{{ graduated_user.user_intro }}</p>
+                                                        <p>
+                                                            <i class="fa fa-phone"></i>
+                                                            &nbsp;&nbsp;{{ graduated_user.user_phone }}
+                                                        </p>
+                                                    </div>
+                                                    <div class="testimonial-detail clearfix">
+                                                        <div class="testimonial-pic quote-left radius shadow"><img
+                                                                src="/media/{{ graduated_user.user_pic }}"
+                                                                width="100" height="100" alt=""></div>
+                                                        <strong class="testimonial-name">{{ graduated_user.user_name }}</strong>
+                                                        <p
+                                                                class="testimonial-position d-inline-block"
+                                                                style="color: white">{{ graduated_user.user_major.major_name }}</p>
+                                                        <p class="testimonial-position d-inline-block"
+                                                           style="color: white">
+                                                            {{ graduated_user.user_stu|stringformat:"s"|slice:"2:4" }}학번</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Online Community End -->
+        </div>
+        <!-- 상단으로 올라가는 버튼 -->
+        <button class="scroltop fa fa-chevron-up"></button>
+    </div>
+
+{% endblock %}
