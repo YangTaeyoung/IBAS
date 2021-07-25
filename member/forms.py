@@ -1,5 +1,5 @@
 from django import forms
-from DB.models import User, Answer, QuestForm, UserSchedule
+from DB.models import User, Answer, UserSchedule
 from urllib.request import urlretrieve  # 인터넷에 있는 파일 다운로드
 from django.conf import settings
 from user_controller import get_default_pic_path
@@ -39,11 +39,12 @@ class UserForm(forms.ModelForm):
         return user
 
 
-class AnswerForm(forms.ModelForm):
-    class Meta:
-        model = Answer
-        exclude = ("answer_user", "answer_created")
-        widgets = {
-            "answer_quest": forms.HiddenInput(),
-            "answer_cont": forms.Textarea(),
-        }
+# class AnswerForm(forms.ModelForm):
+#     class Meta:
+#         model = Answer
+#         exclude = ("answer_user", "answer_created")
+#         widgets = {
+#             "answer_quest": forms.HiddenInput(),
+#             "answer_cont": forms.Textarea(),
+#         }
+#
