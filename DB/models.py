@@ -573,7 +573,7 @@ def user_pic_upload_to(instance, filename):
 class User(models.Model):
     user_stu = models.IntegerField(db_column='USER_STU', primary_key=True)
     user_name = models.CharField(db_column='USER_NAME', max_length=50)
-    user_major = models.ForeignKey(MajorInfo, models.DO_NOTHING, db_column='USER_MAJOR', null=True)
+    user_major = models.ForeignKey(MajorInfo, models.DO_NOTHING, db_column='USER_MAJOR', null=True, blank=True)
     user_pic = models.ImageField(db_column='USER_PIC', upload_to=user_pic_upload_to, blank=True, null=True)
     user_auth = models.ForeignKey('UserAuth', models.DO_NOTHING, db_column='USER_AUTH', null=True)
     user_role = models.ForeignKey('UserRole', models.DO_NOTHING, db_column='USER_ROLE', null=True)

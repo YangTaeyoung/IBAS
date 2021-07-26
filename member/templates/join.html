@@ -1,5 +1,5 @@
 {% load static %}
-
+{% load widget_tweaks %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -115,6 +115,7 @@
                 alert("회원 입력 양식을 다시 한번 확인하세요")
             } else // 모두 정상인 경우
             {
+                document.getElementById("id_user_stu").value = document.getElementById("user_stu").value
                 document.getElementById("btn-next").click(); // 보이지 않는 submit 버튼을 클릭하도록 설정.
             }
 
@@ -124,6 +125,10 @@
             if (object.value.length > object.maxLength) {
                 object.value = object.value.slice(0, object.maxLength);
             }
+        }
+
+        function key_check(object) {
+            object.value = object.value.replace(/[^0-9]/g, '');
         }
     </script>
     <style>
@@ -158,7 +163,7 @@
                             </a>
                         </div>
 
-                        <!-- 회원 가입 입력 폼 시작 -->
+                        <!-- 회원 가입 입력 폼 시작z -->
                         <form id="join-form" action="
                                 {% if user_role == "6" %}{% url 'join_chk' %}{% else %}{% url 'quest_chk' %}{% endif %}"
                               method="post">
@@ -166,24 +171,13 @@
                             <!--POST전송을 위한 CSRF 토큰-->
                             {% csrf_token %}
                             <!-- 바로 사용하지 못하는 것들은 사전 설정함. -->
-                            <!--사전 설정-->
-                            <input type="hidden" id="user_token" name="user_token" value="{{ token }}"/>
-                            {% if user_role == "5" %} <!-- 교수일 경우 -->
-                                <input type="hidden" id="user_auth" name="user_auth" value="1"/> <!-- 계정을 바로 활성화 시킴 -->
-                            {% else %} <!-- 학생일 경우 -->
-                                <input type="hidden" id="user_auth" name="user_auth" value="3"/> <!-- 계정을 비활성화 시킴 -->
-                            {% endif %}
-                            <!-- 기본 권한 -->
-                            <input type="hidden" id="user_role" name="user_role" value="{{ user_role }}"/>
-                            <input type="hidden" id="provider" name="provider" value="{{ provider }}"/>
-                            <input type="hidden" id="is_activated" name="is_activated" value="0"/>
-                            <!-- 승인 전까지는 대기하도록 0으로 설정 -->
-                            <input type="hidden" id="user_gen" name="user_gen" value="1"/> <!-- 기수, 바꿔주는게 필요할 듯. -->
-                            <input type="hidden" id="user_pic" name="user_pic" value="{{ pic }}">
-                            <!-- 프로필 사진, 받아온 것 그대로 넘기기 -->
-                            <input type="hidden" name="user_email" value="{{ email }}"/> <!-- 이메일, 받아온 것 그대로 넘기기 -->
-                            <!-- 토큰 끝  -->
-
+                            {% for hidden_field in user_form.hidden_fields %}
+                                {{ hidden_field }}
+                            {% endfor %}
+                            {% for hidden_field in user_email_form.hidden_fields %}
+                                {{ hidden_field }}
+                            {% endfor %}
+                            <input type="hidden" name="user_pic" value="{{ pic }}"/>
                             <!-- 입부신청 작성란 시작 -->
                             <!-- 단답 작성란 시작 -->
                             <div class="tab-content nav">
@@ -192,15 +186,7 @@
                                     <div class="hr-sect">기본정보</div>
                                     <!--이름 input / 구글이나 네이버로부터 정보 받아옴-->
                                     <div class="form-group mb-0">
-                                        <input
-                                                id="user_name"
-                                                type="text"
-                                                name="user_name"
-                                                value="{{ name }}"
-                                                placeholder="이름"
-                                                class="form-control"
-                                                required=""
-                                        />
+                                        {% render_field user_form.user_name id='user_name' class='form-control' %}
                                     </div>
                                     <p class="mb-1 mt-1" style="font-size: 8pt;color:red;line-height: 120%">
                                         <i class="la la-check"></i>
@@ -211,22 +197,11 @@
                                     <!--이메일은 수정하지 못하도록 고정 / 구글이나 네이버로부터 정보 받아옴-->
                                     <!-- 안에 적힐 내용의 css는 form-control_instead에서 지정함.  -->
                                     <div class="form-group form-control_instead" style="background-color: #bcbcbc">
-                                        <b>{{ email }}</b>
+                                        <b>{{ user_email }}</b>
                                     </div>
-
                                     <!-- 핸드폰 번호 input -->
                                     <div class="form-group">
-                                        <input
-                                                id="user_phone"
-                                                type="tel"
-                                                name="user_phone"
-                                                class="form-control"
-                                                placeholder="핸드폰번호"
-                                                maxlength="13"
-                                                required="required"
-                                                onfocusout="phone_check()"
-                                                onkeyup="inputPhoneNumber(this)"
-                                        />
+                                        {% render_field user_form.user_phone id="user_phone" class="form-control" onfocusout="phone_check()" onkeyup="inputPhoneNumber(this)" %}
                                     </div>
                                     <p id="error_text_phone" class="error-text">입력한 핸드폰 번호가 중복됩니다.</p>
                                     <!-- 학년, 학번 컨테이너 -->
@@ -234,43 +209,20 @@
                                         <!--학년 컨테이너-->
                                         {% if user_role == "6" %}
                                             <div class="width-100">
-                                                <select name="user_grade" required="required">
-                                                    <option value="1">
-                                                        1학년
-                                                    </option>
-                                                    <option value="2">
-                                                        2학년
-                                                    </option>
-                                                    <option value="3">
-                                                        3학년
-                                                    </option>
-                                                    <option value="4">
-                                                        4학년 이상
-                                                    </option>
-                                                </select>
+                                                {% render_field user_form.user_grade %}
                                             </div>
                                         {% else %}
                                             <input type="hidden" name="user_grade" value="5"/>
                                         {% endif %}
                                         <!-- 학번 input -->
                                         <div class="form-group form-item-flex-std-no">
-                                            <input
-                                                    id="user_stu"
-                                                    type="number"
-                                                    name="user_stu"
-                                                    class="form-control"
-                                                    required="required"
-                                                    {% if user_role == "6" %}
-                                                    placeholder="학번(12112233)"
-                                                    maxlength="8"
-                                                    {% else %}
-                                                    placeholder="교수번호"
-                                                    maxlength="6"
-                                                    {% endif %}
-                                                    oninput="maxLengthCheck(this)"
-                                                    onfocusout="stu_check()"
-                                                    onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"
-                                            />
+
+                                            {% if user_role == "6" %}
+                                                {% render_field user_form.user_stu id="user_stu" class="form-control" placeholder="학번(ex. 1219****)" maxlength="8" oninput="maxLengthCheck(this)" onfocusout="stu_check()" onkeyup="key_check(this)" %}
+                                            {% else %}
+                                                {% render_field user_form.user_stu id="user_stu" class="form-control" placeholder="교수번호" maxlength="6" oninput="maxLengthCheck(this)" onfocusout="stu_check()" onkeyup="key_check(this)" %}
+                                            {% endif %}
+
                                         </div>
 
                                     </div>
@@ -279,17 +231,12 @@
                                     <!-- 전공 input -->
                                     <div class="form-container-flex form-group m-b0">
                                         <div class="width-400">
-                                            <input
-                                                    type="text"
-                                                    id="user_major"
-                                                    name="user_major"
-                                                    placeholder="전공을 검색하려면 클릭하세요."
-                                                    class="form-control_instead"
-                                                    required="required"
-                                                    readonly="readonly"
-                                                    onclick="popUp()"
-                                            />
+                                            <input id="user_major" class="form-control_instead" type="text"
+                                                   placeholder="전공을 입력하려면 클릭하세요." required="required"
+                                                   readonly="readonly"
+                                                   onclick="popUp()"/>
                                         </div>
+
                                         <!-- 전공 검색 버튼 -->
                                         <div class="form-group" onclick="popUp()">
                                             <i class="fa fa-search fa-2x form-item-flex-major-icon search-btn"></i>

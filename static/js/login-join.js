@@ -76,6 +76,7 @@ function popDown() {
 // 전공을 클릭하면 전공 입력창에 선택한 전공이 입력되도록 하는 함수
 function printResult(major_no) {
     document.getElementById("user_major").value = document.getElementById("major_name_" + major_no.toString()).innerHTML;
+    document.getElementById("id_user_major").value = major_no.toString()
     popDown();
 }
 
