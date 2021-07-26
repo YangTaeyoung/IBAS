@@ -14,12 +14,14 @@
         .owl-dots-primary-full.owl-theme .owl-dots .owl-dot span, .owl-dots-primary-big.owl-theme .owl-dots .owl-dot span {
             display: none;
         }
+
         /* 해상도 QHD 일때 미디어쿼리*/
         @media (min-width: 2560px) {
             /* 카드 개수 아무것도 없을 때 */
             #honor-none {
                 height: 805px !important;
             }
+
             /* 카드 css 높이 너비 수정 */
             .honor-card {
                 width: 400px;
@@ -31,20 +33,24 @@
                 -ms-overflow-style: none; /* IE and Edge */
                 scrollbar-width: none; /* Firefox */
             }
+
             /* 화면꽉차게 하려고 만든 css (3개 이하일 떄)*/
             #honor-exist {
                 height: 900px !important;
             }
+
             /* 화면꽉차게 하려고 만든 css (4개 이샹일 떄)*/
             #honor-row {
                 height: 900px !important;
             }
+
             /* margin 조정 (3개 이하일 떄)*/
             #honor-margin {
                 margin-right: 100px !important;
             }
+
             /* 너비 조정 (4개 이상일 떄)*/
-            #honor-width{
+            #honor-width {
                 width: 360px !important;
             }
         }
@@ -78,8 +84,11 @@
                                         <div>
                                             <h4 class="text-white d-flex justify-content-center align-items-center">아직
                                                 정보공개를 동의한 졸업생이 없습니다. </h4>
-                                            <a href="#" class="d-flex justify-content-center text-white"><u>정보공개 동의하러
-                                                가기</u></a>
+                                            {% if logined_user.user_apply_publish == 0 %}
+                                                <a href="{% url 'my_info' %}"
+                                                   class="d-flex justify-content-center text-white"><u>정보공개 동의하러
+                                                    가기</u></a>
+                                            {% endif %}
                                         </div>
                                     </div>
 
@@ -123,7 +132,8 @@
                                             {% for graduated_user in graduated_user_list %}
                                                 <div class="item">
                                                     <div class="testimonial-2 testimonial-bg">
-                                                        <div id="honor-width" class="testimonial-text width-360 honor-card"
+                                                        <div id="honor-width"
+                                                             class="testimonial-text width-360 honor-card"
                                                              style="background-color: white; color: #3a3a3a">
                                                             <p>
                                                                 <i class="ti-email"></i>
