@@ -417,3 +417,9 @@ def user_name_update(request):
 #         "lect_money_standard_form": LectMoneyStandardForm(instance=lect_money_standard)
 #     }
 #     return render(request, "admin_page.html", context)
+
+
+#관리자 페이지
+def management(request):
+    context = {}
+    return render(request, 'management.html', context)

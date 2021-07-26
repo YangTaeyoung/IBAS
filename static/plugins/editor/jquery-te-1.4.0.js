@@ -265,7 +265,7 @@
 			// insertion the toolbar button
 			for(var n = 0; n < buttons.length; n++)
 			{
-				// if setting of this button is activated (is it true?)
+				// if management.html of this button is activated (is it true?)
 				if(vars[buttons[n].name])
 				{
 					// if it have a title, add to this button
