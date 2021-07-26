@@ -606,3 +606,8 @@
 .btn.btn-round {
     border-radius: 2px;
 }
+
+/* 회원가입 약관 hover시 글자 없어지는 현상 해결 위한 효과*/
+.quest-text:hover {
+    color: #4611a7;
+}
