@@ -10,8 +10,43 @@
 
     <style>
         /* 여기서만 써야하는 css */
+        /* 카드 개수 동그라미 안보기에 하는 것 */
         .owl-dots-primary-full.owl-theme .owl-dots .owl-dot span, .owl-dots-primary-big.owl-theme .owl-dots .owl-dot span {
-            background-color: white;
+            display: none;
+        }
+        /* 해상도 QHD 일때 미디어쿼리*/
+        @media (min-width: 2560px) {
+            /* 카드 개수 아무것도 없을 때 */
+            #honor-none {
+                height: 805px !important;
+            }
+            /* 카드 css 높이 너비 수정 */
+            .honor-card {
+                width: 400px;
+                height: 400px;
+                min-height: 400px;
+                background-color: white !important;
+                color: #3a3a3a !important;
+                /*overflow: auto;*/
+                -ms-overflow-style: none; /* IE and Edge */
+                scrollbar-width: none; /* Firefox */
+            }
+            /* 화면꽉차게 하려고 만든 css (3개 이하일 떄)*/
+            #honor-exist {
+                height: 900px !important;
+            }
+            /* 화면꽉차게 하려고 만든 css (4개 이샹일 떄)*/
+            #honor-row {
+                height: 900px !important;
+            }
+            /* margin 조정 (3개 이하일 떄)*/
+            #honor-margin {
+                margin-right: 100px !important;
+            }
+            /* 너비 조정 (4개 이상일 떄)*/
+            #honor-width{
+                width: 360px !important;
+            }
         }
 
     </style>
@@ -34,59 +69,39 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="row justify-content-center">
-                                <!--졸업생 3명 이하 일 때-->
+                            <div id="honor-row" class="row justify-content-center align-items-center">
+                                <!--졸업생 0명일 때-->
                                 {% if graduated_user_list|length == 0 %}
-                                    여기에 없을 경우를 가정해서 집어 넣을 것. 또한 전체적으로 컨텐츠 높이 조정이 필요함.. QHD에서는 박살나는듯.. 화면 축소해가며 컨텐츠 크기 조정 해주길 바람.
+                                    <div id="honor-none" class="d-flex justify-content-center align-items-center"
+                                         style="height: 180px">
+                                        <i class="fa fa-exclamation-circle fa-4x text-white d-flex justify-content-center m-r30"></i>
+                                        <div>
+                                            <h4 class="text-white d-flex justify-content-center align-items-center">아직
+                                                정보공개를 동의한 졸업생이 없습니다. </h4>
+                                            <a href="#" class="d-flex justify-content-center text-white"><u>정보공개 동의하러
+                                                가기</u></a>
+                                        </div>
+                                    </div>
+
                                 {% elif graduated_user_list|length <= 3 %}
                                     {% for graduated_user in graduated_user_list %}
-                                        <div class="item m-r30">
-                                            <div class="testimonial-2 testimonial-bg">
-                                                <div class="testimonial-text width-360 honor-card">
-                                                    <p><i class="ti-email"></i>
-                                                        &nbsp;&nbsp;{{ graduated_user.useremail_set.first.user_email }}
-                                                    </p>
-                                                    <p>{{ graduated_user.user_intro }}</p>
-                                                    <p><i class="fa fa-phone"></i>
-                                                        &nbsp;&nbsp;{{ graduated_user.user_phone }}</p>
-                                                </div>
-                                                <div class="testimonial-detail clearfix">
-                                                    <div class="testimonial-pic quote-left radius shadow"><img
-                                                            src="/media/{{ graduated_user.user_pic }}"
-                                                            width="100" height="100" alt=""></div>
-                                                    <strong class="testimonial-name">{{ graduated_user.user_name }}</strong>
-                                                    <p
-                                                            class="testimonial-position d-inline-block"
-                                                            style="color: white">{{ graduated_user.user_major.major_name }}</p>
-                                                    <p class="testimonial-position d-inline-block" style="color: white">
-                                                        {{ graduated_user.user_stu|stringformat:"s"|slice:"2:4" }}학번</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    {% endfor %}
-                                {% else %}
-                                    <!-- 졸업생이 4명 이상일 떄 -->
-                                    <div id="owl-demo"
-                                         class="testimonial-one owl-loaded owl-theme owl-carousel owl-btn-center-lr owl-btn-3 btn-white owl-dots-primary-big style-2">
-                                        {% for graduated_user in graduated_user_list %}
-                                            <div class="item">
+                                        <div id="honor-exist" class="d-flex justify-content-center align-items-center">
+                                            <div id="honor-margin" class="item m-r30">
                                                 <div class="testimonial-2 testimonial-bg">
-                                                    <div class="testimonial-text honor-card"
-                                                         style="background-color: white; color: #3a3a3a">
-                                                        <p>
-                                                            <i class="ti-email"></i>
+                                                    <div class="testimonial-text width-360 honor-card">
+                                                        <p><i class="ti-email"></i>
                                                             &nbsp;&nbsp;{{ graduated_user.useremail_set.first.user_email }}
                                                         </p>
                                                         <p>{{ graduated_user.user_intro }}</p>
-                                                        <p>
-                                                            <i class="fa fa-phone"></i>
-                                                            &nbsp;&nbsp;{{ graduated_user.user_phone }}
-                                                        </p>
+                                                        <p><i class="fa fa-phone"></i>
+                                                            &nbsp;&nbsp;{{ graduated_user.user_phone }}</p>
                                                     </div>
                                                     <div class="testimonial-detail clearfix">
-                                                        <div class="testimonial-pic quote-left radius shadow"><img
-                                                                src="/media/{{ graduated_user.user_pic }}"
-                                                                width="100" height="100" alt=""></div>
+                                                        <div class="testimonial-pic quote-left radius shadow border-0">
+                                                            <img
+                                                                    src="/media/{{ graduated_user.user_pic }}"
+                                                                    width="100" height="100" alt=""
+                                                                    class="max-min-width-height-80"></div>
                                                         <strong class="testimonial-name">{{ graduated_user.user_name }}</strong>
                                                         <p
                                                                 class="testimonial-position d-inline-block"
@@ -97,7 +112,47 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        {% endfor %}
+                                        </div>
+
+                                    {% endfor %}
+                                {% else %}
+                                    <!-- 졸업생이 4명 이상일 떄 -->
+                                    <div id="honor-exist" class="d-flex justify-content-center align-items-center">
+                                        <div id="owl-demo"
+                                             class="testimonial-one owl-loaded owl-theme owl-carousel owl-btn-center-lr owl-btn-3 btn-white owl-dots-primary-big style-2">
+                                            {% for graduated_user in graduated_user_list %}
+                                                <div class="item">
+                                                    <div class="testimonial-2 testimonial-bg">
+                                                        <div id="honor-width" class="testimonial-text width-360 honor-card"
+                                                             style="background-color: white; color: #3a3a3a">
+                                                            <p>
+                                                                <i class="ti-email"></i>
+                                                                &nbsp;&nbsp;{{ graduated_user.useremail_set.first.user_email }}
+                                                            </p>
+                                                            <p>{{ graduated_user.user_intro }}</p>
+                                                            <p>
+                                                                <i class="fa fa-phone"></i>
+                                                                &nbsp;&nbsp;{{ graduated_user.user_phone }}
+                                                            </p>
+                                                        </div>
+                                                        <div class="testimonial-detail clearfix">
+                                                            <div class="testimonial-pic quote-left radius shadow border-0">
+                                                                <img
+                                                                        src="/media/{{ graduated_user.user_pic }}"
+                                                                        width="100" height="100" alt=""
+                                                                        class="max-min-width-height-80"></div>
+                                                            <strong class="testimonial-name">{{ graduated_user.user_name }}</strong>
+                                                            <p
+                                                                    class="testimonial-position d-inline-block"
+                                                                    style="color: white">{{ graduated_user.user_major.major_name }}</p>
+                                                            <p class="testimonial-position d-inline-block"
+                                                               style="color: white">
+                                                                {{ graduated_user.user_stu|stringformat:"s"|slice:"2:4" }}학번</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
                                     </div>
                                 {% endif %}
                             </div>

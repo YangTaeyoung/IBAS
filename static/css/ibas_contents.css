@@ -724,8 +724,15 @@ input[type=checkbox] + label:after {
 }
 
 .honor-card {
-    height: 250px;
+    height: 300px;
     min-height: 250px;
-    background-color: white; !important;
-    color: #3a3a3a;
+    background-color: white !important;
+    color: #3a3a3a !important;
+    /*overflow: auto;*/
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+.honor-card::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
 }
