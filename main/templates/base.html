@@ -46,6 +46,7 @@
     <!--직접 만든거-->
     <link rel="stylesheet" type="text/css" href="{% static 'css/ibas_contents.css' %}">
     <link class="skin" rel="stylesheet" type="text/css" href="{% static 'css/top-bottom.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/media.css' %}">
 
     {% if messages %}
         {% for message in messages %}
@@ -250,14 +251,14 @@
 {% endblock %}
 
 <!-- Footer 하단바 시작 -->
-<footer>
+<footer class="footer-media">
     <!-- content 담는 부분이 footer-top -->
     <!-- footer-top에 대한 정의는 bottom_bar.css에 정의되어 있음. (height 관련) -->
-    <div class="ibas-footer-top"
-         style="background-image: url({% static 'images/botton_bar.jpg' %}); background-repeat: no-repeat; background-size: 100%; background-position: center">
+    <div class="ibas-footer-top footer-bg"
+         style="background-image: url({% static 'images/botton_bar.jpg' %}); background-size: cover;">
         <!-- content 시작 -->
         <!-- cont-grid에 대한 정의는 bottom_bar.css에 정의되어 있음. (grid 관련) -->
-        <div class="cont-grid">
+        <div class="cont-grid ft-flex">
             <!-- 로고 div 시작 -->
             <!-- logo-center에 대한 정의는 bottom_bar.css에 정의되어 있음. (grid 관련) -->
             <div class="logo-center">
@@ -309,7 +310,7 @@
     </div>
     <!-- copyright 부분 시작 -->
     <!-- footer-bottom, min-width_1400에 대한 정의는 bottom_bar.css에 정의되어 있음. (flex 관련)(min-with 관련) -->
-    <div class="footer-bottom min-width_1400">
+    <div class="footer-bottom min-width_1400 dvl-name">
         <!-- design-with에 대한 정의는 bottom_bar.css에 정의되어 있음. (font, margin 관련) -->
         <p class="fbottom-like design-with">© 2021 Developed By <a class="like-btn"
                                                                    href="javascript:void(0)">

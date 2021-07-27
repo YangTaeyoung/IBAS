@@ -33,3 +33,45 @@
     }
 
 }
+
+@media (max-width: 770px) {
+    .main-logo{
+        width: 50%;
+        height: auto;
+    }
+
+    .footer-media{
+        width: auto;
+        height: auto;
+        display: flex;
+        flex-wrap: wrap;
+        align-content: flex-start;
+
+    }
+
+    .footer-bg{
+        width: auto;
+        height: auto;
+        background-size: cover;
+
+    }
+
+    .ft-flex{
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        align-content: space-around;
+        margin-left: 3%;
+
+    }
+
+    .dvl-name{
+        min-width: auto;
+    }
+
+
+
+
+}
+
+
