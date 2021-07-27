@@ -110,6 +110,11 @@ def quest_chk(request):
         user_phone = request.POST.get("user_phone")
         user_pic = request.POST.get("user_pic")
         provider = request.POST.get("provider")
+        if len(User.objects.filter(user_stu=user_stu)) != 0: # 중복 방지 로직. 이미 등록되어 있다면 DB등록 전에 세션등록을 하고 리다이렉션 함. 우선 이게 최선인듯.
+            session.save_session(request, user_model=User.objects.get(pk=user_stu), logined_email=user_email,
+                                 provider=provider)  # 자동 로그인을 위해 세션 등록
+            return redirect("welcome")
+            
         if user_pic is not None:
             try:  # 자신의 폴더가 남아 있을 경우의 예외처리
                 os.mkdir(settings.MEDIA_ROOT + "/member/" + user_stu)
@@ -123,6 +128,7 @@ def quest_chk(request):
                 pass
         # 받은 정보로 user 모델 인스턴스 변수 생성
         # 사용자 정보를 DB에 저장
+
         with transaction.atomic():
             user = User.objects.create(
                 user_name=user_name,  # 이름
