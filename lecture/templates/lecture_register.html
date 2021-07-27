@@ -158,50 +158,50 @@
                                     <h3 class="title">요일</h3>
                                 </div>
                                 <div class="content-body">
-                                    <div class="form-group">
+                                    <div class="form-group" style="display: flex">
                                         <!--입력하는 곳-->
                                         <input name="day" id="mon" value="월" type="checkbox"
                                                 {% if lect_day|is_exist:"월" %}
                                                checked="checked"
                                                 {% endif %}
                                                onclick="getCheckboxValue()"/>
-                                        <label for="mon">월요일</label>
+                                        <label class="m-r40" for="mon">월요일</label>
                                         <input name="day" id="tue" value="화" type="checkbox"
                                                {% if lect_day|is_exist:"화" %}
                                                checked="checked"
                                                 {% endif %}
                                                onclick="getCheckboxValue()"/>
-                                        <label for="tue">화요일</label>
+                                        <label class="m-r40" for="tue">화요일</label>
                                         <input name="day" id="wen" value="수" type="checkbox"
                                                {% if lect_day|is_exist:"수" %}
                                                checked="checked"
                                                 {% endif %}
                                                onclick="getCheckboxValue()"/>
-                                        <label for="wen">수요일</label>
+                                        <label class="m-r40" for="wen">수요일</label>
                                         <input name="day" id="thu" value="목" type="checkbox"
                                                {% if lect_day|is_exist:"목" %}
                                                checked="checked"
                                                 {% endif %}
                                                onclick="getCheckboxValue()"/>
-                                        <label for="thu">목요일</label>
+                                        <label class="m-r40" for="thu">목요일</label>
                                         <input name="day" id="fri" value="금" type="checkbox"
                                                {% if lect_day|is_exist:"금" %}
                                                checked="checked"
                                                 {% endif %}
                                                onclick="getCheckboxValue()"/>
-                                        <label for="fri">금요일</label>
+                                        <label class="m-r40" for="fri">금요일</label>
                                         <input name="day" id="sat" value="토" type="checkbox"
                                                {% if lect_day|is_exist:"토" %}
                                                checked="checked"
                                                 {% endif %}
                                                onclick="getCheckboxValue()"/>
-                                        <label for="sat">토요일</label>
+                                        <label class="m-r40" for="sat">토요일</label>
                                         <input name="day" id="sun" value="일" type="checkbox"
                                                {% if lect_day|is_exist:"일" %}
                                                checked="checked"
                                                 {% endif %}
                                                onclick="getCheckboxValue()"/>
-                                        <label for="sun">일요일</label>
+                                        <label class="m-r40" for="sun">일요일</label>
                                         <input id="result" name="lect_day" value="{{ lect_day }}" type="hidden"/>
                                     </div>
                                 </div>
