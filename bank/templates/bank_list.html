@@ -213,6 +213,28 @@
                                             <hr/>
                                             <div style="width: 100%; display: grid; grid-template-columns:50px 300px; ">
                                                 <div>
+                                                    <i class="la la-user"
+                                                       style="justify-content: center; font-size: 25px"></i>
+                                                </div>
+                                                <div class="word-break-all introduce-li-flex">
+                                                    {{ bank.bank_cfo.user_name }}&nbsp;&nbsp;<span class="font-14 text-blue font-italic">회계 처리자</span>
+                                                </div>
+                                            </div>
+                                            <hr/>
+                                            {% if bank.bank_plus == 0 %}
+                                                <div style="width: 100%; display: grid; grid-template-columns:50px 300px; ">
+                                                    <div>
+                                                        &nbsp;<i class="fa fa-user"
+                                                           style="justify-content: center; font-size: 25px"></i>
+                                                    </div>
+                                                    <div class="word-break-all introduce-li-flex">
+                                                        {{ bank.bank_used_user.user_name }}&nbsp;&nbsp;<span class="font-14 text-green font-italic">지급 대상</span>
+                                                    </div>
+                                                </div>
+                                                <hr/>
+                                            {% endif %}
+                                            <div style="width: 100%; display: grid; grid-template-columns:50px 300px; ">
+                                                <div>
                                                     <i class="la la-list"
                                                        style="justify-content: center; font-size: 25px"></i>
                                                 </div>
