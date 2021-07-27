@@ -405,21 +405,39 @@ def user_name_update(request):
     return redirect(reverse("staff_member_list"))
 
 
-# # 관리자 페이지
-# @superuser_only()
-# def management(request):
-#     lect_schedule = LectSchedule.objects.get(pk=1)
-#     user_schedule = UserSchedule.objects.get(pk=1)
-#     lect_money_standard = LectMoneyStandard.objects.get(pk=1)
-#     context = {
-#         "lect_schedule_form": LectScheduleForm(instance=lect_schedule),
-#         "user_schedule_form": UserScheduleForm(instance=user_schedule),
-#         "lect_money_standard_form": LectMoneyStandardForm(instance=lect_money_standard)
-#     }
-#     return render(request, "admin_page.html", context)
-
-
-#관리자 페이지
+# 관리자 페이지
+@chief_only(vice=True)
 def management(request):
-    context = {}
-    return render(request, 'management.html', context)
+    max_gen = User.objects.order_by("-user_gen").first().user_gen
+    lect_schedule = LectSchedule.objects.get(pk=1)
+    user_schedule = UserSchedule.objects.get(pk=1)
+    lect_money_standard = LectMoneyStandard.objects.get(pk=1)
+    context = {
+        "max_gen": max_gen,
+        "lect_schedule": lect_schedule,
+        "user_schedule": user_schedule,
+        "lect_money_standard": lect_money_standard,
+        "lect_schedule_form": LectScheduleForm(instance=lect_schedule),
+        "user_schedule_form": UserScheduleForm(instance=user_schedule),
+        "lect_money_standard_form": LectMoneyStandardForm(instance=lect_money_standard)
+    }
+    return render(request, "management.html", context)
+
+
+@chief_only()
+def management_update(request, form_no):
+    if request.method == "POST":
+        if form_no == 1:
+            user_schedule_form = UserScheduleForm(request.POST, instance=UserSchedule.objects.get(pk=1))
+            if user_schedule_form.is_valid():
+                user_schedule_form.save()
+        elif form_no == 2:
+            lect_schedule_form = LectScheduleForm(request.POST, instance=LectSchedule.objects.get(pk=1))
+            if lect_schedule_form.is_valid():
+                lect_schedule_form.save()
+        elif form_no == 3:
+            lect_money_standard_update_form = LectMoneyStandardForm(request.POST,
+                                                                    instance=LectMoneyStandard.objects.get(pk=1))
+            if lect_money_standard_update_form.is_valid():
+                lect_money_standard_update_form.save()
+    return redirect(reverse("management"))

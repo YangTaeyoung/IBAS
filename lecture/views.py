@@ -3,9 +3,9 @@ from django.db.models import Q
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.utils.dateformat import DateFormat
 from alarm.alarm_controller import create_lect_full_alarm, create_lect_enroll_alarm
-
+from django.contrib import messages
 from DB.models import LectType, Lect, LectDay, MethodInfo, LectBoard, LectEnrollment, LectAttendance, \
-    LectAssignmentSubmit
+    LectAssignmentSubmit,LectMoneyStandard
 from file_controller import FileController
 from lecture.forms import LectForm, LectRejectForm, LectPicForm, make_lect_board_form, \
     FileForm, AssignmentSubmitForm
@@ -15,7 +15,7 @@ from user_controller import get_logined_user, superuser_only, writer_only, auth_
 from utils.crawler import get_og_tag
 from utils.url_regex import is_youtube
 from utils.youtube import get_youtube
-
+from date_controller import is_lect_recruiting
 
 def get_pol_name(method_no):
     pol_name = MethodInfo.objects.get(pk=method_no).method_name
@@ -61,11 +61,15 @@ def lect_register(request):  # 강의/스터디/취미모임 등록 페이지로
         lect_type = LectType.objects.get(pk=request.GET.get("lect_type"))
         init_dict = {"lect_type": lect_type.type_no}
         if lect_type.type_no == 1:  # 강의일 때
+            if not is_lect_recruiting():
+                messages.warning(request, message="강의 등록 기간이 아닙니다.")
+                return redirect("lect_view", type_no=lect_type.type_no)
             init_dict.update(lect_state=1)
         else:  # 강의가 아닐 때
             init_dict.update(lect_state=3)
 
         context = {
+            "lect_money_standard": LectMoneyStandard.objects.get(pk=1),
             "lect_type": lect_type,
             "method_list": MethodInfo.objects.all(),
             "lect_form": LectForm(initial=init_dict),
@@ -139,6 +143,7 @@ def lect_update(request, lect_no):
         return redirect("lect_detail", lect_no=lect.lect_no)
     else:  # 상세 페이지에서 수정 버튼을 눌렀을 때
         context = {
+            "lect_money_standard": LectMoneyStandard.objects.get(pk=1),
             "lect_type": lect.lect_type,
             "method_list": MethodInfo.objects.all(),
             "lect_form": LectForm(instance=lect),

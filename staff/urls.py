@@ -20,5 +20,6 @@ urlpatterns = [
     path('member/aor/', views.member_aor, name="member_aor"),
     path('members/aor/', views.members_aor, name="members_aor"),
     path("management/",views.management, name="management"),
+    path("management/update/<int:form_no>", views.management_update, name="management_update")
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

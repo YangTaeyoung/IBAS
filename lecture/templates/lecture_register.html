@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load humanize %}
 {% load static %}
 {% block content %}
     {% load custom_tags %}
@@ -57,13 +58,6 @@
             <!--===============================================입력란=========================================================-->
             {% load widget_tweaks %}
             <form action="
-
-
-
-
-
-
-
                 {% if is_update %}{% url 'lect_update' lect_no=lect_no %}{% else %}{% url 'lect_register' %}{% endif %}"
                   class="add-listing-form" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
@@ -89,16 +83,16 @@
                                      data-parent="#accordion">
                                     <ul class="listing-time-list">
                                         <li class="open"><span class="listing-day">출석인원 1~5명</span> <span
-                                                class="listing-hours">￦10,000</span></li>
+                                                class="listing-hours">￦{{ lect_money_standard.money_1to5|intcomma }}</span></li>
                                         <hr/>
                                         <li class="open"><span class="listing-day">출석인원 6~10명</span> <span
-                                                class="listing-hours">￦20,000</span></li>
+                                                class="listing-hours">￦{{ lect_money_standard.money_6to10|intcomma }}</span></li>
                                         <hr/>
                                         <li class="open"><span class="listing-day">출석인원 11~20명</span> <span
-                                                class="listing-hours">￦30,000</span></li>
+                                                class="listing-hours">￦{{ lect_money_standard.money_11to20|intcomma }}</span></li>
                                         <hr/>
                                         <li class="open"><span class="listing-day">출석인원 21명 이상</span> <span
-                                                class="listing-hours">￦40,000</span></li>
+                                                class="listing-hours">￦{{ lect_money_standard.money_21over|intcomma }}</span></li>
                                     </ul>
                                 </div>
                             </div>
@@ -167,37 +161,37 @@
                                                onclick="getCheckboxValue()"/>
                                         <label for="mon">월요일</label>
                                         <input name="day" id="tue" value="화" type="checkbox"
-                                               {% if lect_day|is_exist:"화" %}
+                                                {% if lect_day|is_exist:"화" %}
                                                checked="checked"
                                                 {% endif %}
                                                onclick="getCheckboxValue()"/>
                                         <label for="tue">화요일</label>
                                         <input name="day" id="wen" value="수" type="checkbox"
-                                               {% if lect_day|is_exist:"수" %}
+                                                {% if lect_day|is_exist:"수" %}
                                                checked="checked"
                                                 {% endif %}
                                                onclick="getCheckboxValue()"/>
                                         <label for="wen">수요일</label>
                                         <input name="day" id="thu" value="목" type="checkbox"
-                                               {% if lect_day|is_exist:"목" %}
+                                                {% if lect_day|is_exist:"목" %}
                                                checked="checked"
                                                 {% endif %}
                                                onclick="getCheckboxValue()"/>
                                         <label for="thu">목요일</label>
                                         <input name="day" id="fri" value="금" type="checkbox"
-                                               {% if lect_day|is_exist:"금" %}
+                                                {% if lect_day|is_exist:"금" %}
                                                checked="checked"
                                                 {% endif %}
                                                onclick="getCheckboxValue()"/>
                                         <label for="fri">금요일</label>
                                         <input name="day" id="sat" value="토" type="checkbox"
-                                               {% if lect_day|is_exist:"토" %}
+                                                {% if lect_day|is_exist:"토" %}
                                                checked="checked"
                                                 {% endif %}
                                                onclick="getCheckboxValue()"/>
                                         <label for="sat">토요일</label>
                                         <input name="day" id="sun" value="일" type="checkbox"
-                                               {% if lect_day|is_exist:"일" %}
+                                                {% if lect_day|is_exist:"일" %}
                                                checked="checked"
                                                 {% endif %}
                                                onclick="getCheckboxValue()"/>

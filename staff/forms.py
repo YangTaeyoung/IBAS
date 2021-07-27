@@ -1,6 +1,7 @@
 from django import forms
 from DB.models import UserDelete, LectSchedule, UserSchedule, LectMoneyStandard
 
+DATETIME_LOCAL_FORMAT = "%Y-%m-%dT%H:%M"
 
 class UserDeleteForm(forms.ModelForm):
     class Meta:
@@ -33,14 +34,14 @@ class UserDeleteForm(forms.ModelForm):
 class UserScheduleForm(forms.ModelForm):
     class Meta:
         model = UserSchedule
-        fields = "__all__"
+        exclude = tuple()
         widgets = {
             "generation": forms.NumberInput(),
-            "user_register_start": forms.DateTimeInput(),
-            "user_register_end": forms.DateTimeInput(),
-            "user_interview_start": forms.DateTimeInput(),
-            "user_interview_end": forms.DateTimeInput(),
-            "result_announce_date": forms.DateTimeInput()
+            "user_register_start": forms.DateTimeInput(format=DATETIME_LOCAL_FORMAT),
+            "user_register_end": forms.DateTimeInput(format=DATETIME_LOCAL_FORMAT),
+            "user_interview_start": forms.DateInput(),
+            "user_interview_end": forms.DateInput(),
+            "result_announce_date": forms.DateTimeInput(format=DATETIME_LOCAL_FORMAT)
         }
 
 
@@ -49,8 +50,8 @@ class LectScheduleForm(forms.ModelForm):
         model = LectSchedule
         fields = "__all__"
         widgets = {
-            "lect_register_start": forms.DateTimeInput(),
-            "lect_register_end": forms.DateTimeInput(),
+            "lect_register_start": forms.DateTimeInput(format=DATETIME_LOCAL_FORMAT),
+            "lect_register_end": forms.DateTimeInput(format=DATETIME_LOCAL_FORMAT),
         }
 
 
