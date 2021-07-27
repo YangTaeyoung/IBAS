@@ -1372,7 +1372,7 @@ newMomentProto.week = newMomentProto.weeks = function (input) {
 //
 // SETTER
 // You can supply a Duration, a Moment, or a Duration-like argument.
-// When setting the time, and the moment has an ambiguous time, it then becomes unambiguous.
+// When management.html the time, and the moment has an ambiguous time, it then becomes unambiguous.
 newMomentProto.time = function (time) {
     // Fallback to the original method (if there is one) if this moment wasn't created via FullCalendar.
     // `time` is a generic enough method name where this precaution is necessary to avoid collisions w/ other plugins.
@@ -2572,7 +2572,7 @@ function locale(localeCode, newFcOptions) {
     }
     // compute locale options that weren't defined.
     // always do this. newFcOptions can be undefined when initializing from i18n file,
-    // so no way to tell if this is an initialization or a default-setting.
+    // so no way to tell if this is an initialization or a default-management.html.
     momOptions = getMomentLocaleData(localeCode); // will fall back to en
     $.each(momComputableOptions, function (name, func) {
         if (fcOptions[name] == null) {
@@ -2648,7 +2648,7 @@ exports.globalDefaults = {
     },
     // buttonIcons: null,
     allDayText: 'all-day',
-    // allows setting a min-height to the event segment to prevent short events overlapping each other
+    // allows management.html a min-height to the event segment to prevent short events overlapping each other
     agendaEventMinHeight: 0,
     // jquery-ui theming
     theme: false,
@@ -4406,8 +4406,8 @@ var EventRenderer = /** @class */ (function () {
     // Compute the text that should be displayed on an event's element.
     // `range` can be the Event object itself, or something range-like, with at least a `start`.
     // If event times are disabled, or the event has no time, will return a blank string.
-    // If not specified, formatStr will default to the eventTimeFormat setting,
-    // and displayEnd will default to the displayEventEnd setting.
+    // If not specified, formatStr will default to the eventTimeFormat management.html,
+    // and displayEnd will default to the displayEventEnd management.html.
     EventRenderer.prototype.getTimeText = function (eventFootprint, formatStr, displayEnd) {
         return this._getTimeText(eventFootprint.eventInstance.dateProfile.start, eventFootprint.eventInstance.dateProfile.end, eventFootprint.componentFootprint.isAllDay, formatStr, displayEnd);
     };
@@ -7368,7 +7368,7 @@ var BasicView = /** @class */ (function (_super) {
             '</tbody>' +
             '</table>';
     };
-    // Generates an HTML attribute string for setting the width of the week number column, if it is known
+    // Generates an HTML attribute string for management.html the width of the week number column, if it is known
     BasicView.prototype.weekNumberStyleAttr = function () {
         if (this.weekNumberWidth != null) {
             return 'style="width:' + this.weekNumberWidth + 'px"';
@@ -7389,7 +7389,7 @@ var BasicView = /** @class */ (function (_super) {
         var scrollerHeight;
         var scrollbarWidths;
         // hack to give the view some height prior to dayGrid's columns being rendered
-        // TODO: separate setting height from scroller VS dayGrid.
+        // TODO: separate management.html height from scroller VS dayGrid.
         if (!this.dayGrid.rowEls) {
             if (!isAuto) {
                 scrollerHeight = this.computeScrollerHeight(totalHeight);
@@ -10942,7 +10942,7 @@ var EventDragging = /** @class */ (function (_super) {
     };
     // seg isn't draggable, but let's use a generic DragListener
     // simply for the delay, so it can be selected.
-    // Has side effect of setting/unsetting `dragListener`
+    // Has side effect of management.html/unsetting `dragListener`
     EventDragging.prototype.buildSelectListener = function (seg) {
         var _this = this;
         var view = this.view;
@@ -10968,7 +10968,7 @@ var EventDragging = /** @class */ (function (_super) {
     };
     // Builds a listener that will track user-dragging on an event segment.
     // Generic enough to work with any type of Grid.
-    // Has side effect of setting/unsetting `dragListener`
+    // Has side effect of management.html/unsetting `dragListener`
     EventDragging.prototype.buildDragListener = function (seg) {
         var _this = this;
         var component = this.component;
@@ -11381,7 +11381,7 @@ var AgendaView = /** @class */ (function (_super) {
             '</tbody>' +
             '</table>';
     };
-    // Generates an HTML attribute string for setting the width of the axis, if it is known
+    // Generates an HTML attribute string for management.html the width of the axis, if it is known
     AgendaView.prototype.axisStyleAttr = function () {
         if (this.axisWidth != null) {
             return 'style="width:' + this.axisWidth + 'px"';
@@ -11404,7 +11404,7 @@ var AgendaView = /** @class */ (function (_super) {
         // make all axis cells line up, and record the width so newly created axis cells will have it
         this.axisWidth = util_1.matchCellWidths(this.el.find('.fc-axis'));
         // hack to give the view some height prior to timeGrid's columns being rendered
-        // TODO: separate setting height from scroller VS timeGrid.
+        // TODO: separate management.html height from scroller VS timeGrid.
         if (!this.timeGrid.colEls) {
             if (!isAuto) {
                 scrollerHeight = this.computeScrollerHeight(totalHeight);

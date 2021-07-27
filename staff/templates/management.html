@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    <!--커스텀 css-->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/posting_list.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/size.css' %}">
+
+
+    <!--===================================== 제목 및 부제목 부 시작 =====================================-->
+    <div class="page-wraper">
+        <div class="page-content bg-white">
+            <!----------상단 제목부분----------->
+            <!--제목을 감싸는 배경-->
+            <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"
+                 style=" background-image: url('{% static 'images/board_name_img.jpg' %}'); height: 350px">
+                <a href="{% url 'activity' %}">
+                    <div class="container clearfix">
+                        <div class="dlab-bnr-inr-entry">
+                            <!--제목-->
+                            <h1 class="text-white introduce-letter-spacing_5">관리자 페이지</h1>
+                            <!--부제목-->
+                            <p class="m-t20">홈페이지 설정을 수정할 수 있습니다.</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="clearfix">
+                <!--===================================== 본문 시작 =====================================-->
+                <div class="content-block">
+                <div class="section-full content-inner bg-white">
+                    <div class="container">
+                            <!-- 강의개설 기간 설정 콘텐츠 시작 -->
+                            <div class="content-box">
+                                <div class="content-header">
+                                    <h3 class="title"><i class="la la-clock-o m-r5"></i>강의개설 기간 설정</h3>
+                                </div>
+                                <!-- 강의개설 기간 설정 내용 -->
+                                <form action="" method="post">
+                                    <div class="content-body ">
+                                        <div class="form-group">
+                                            <!--입력하는 곳-->
+                                            <label>강의개설 신청 시작</label>
+                                            <!--강의개설 신청시작 입력-->
+                                            <input type="datetime-local" class="form-control" name="lect_register_start"/>
+                                            <hr/>
+                                            <label>강의개설 신청 마감</label>
+                                            <!--강의개설 신청마감 입력-->
+                                            <input type="datetime-local" class="form-control" name="lect_register_end"/>
+                                            <div class="m-t20" style="display: grid; justify-items: center">
+                                                <!--강의개설 기간 설정 적용하기 버튼-->
+                                                <button class="site-button" type="button" onclick="submitForm('')">
+                                                    <i class="la la-check m-r5"
+                                                       style="font-weight: bold"
+                                                    ></i>&nbsp;적용하기
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- 가입 관련 설정 콘텐츠 시작 -->
+                            <div class="content-box">
+                                <div class="content-header">
+                                    <h3 class="title"><i class="la la-user m-r5"></i>가입 관련 설정</h3>
+                                </div>
+                                <!-- 가입 관련 설정 내용 -->
+                                <form action="" method="post">
+                                    <div class="content-body ">
+                                        <div class="form-group">
+                                            <!--입력하는 곳-->
+                                            <div style="display: flex;">
+                                                <label>기수 설정</label>
+                                                <!--가장 최근 기수 표시하는 부분-->
+                                                <p class="ml-2" style="font-style: italic">( 가장 최근에 들어온 기수 : 2기 )</p>
+                                            </div>
+                                            <!--기수 설정 입력-->
+                                            <input type="number" class="form-control" name="lect_register_start"/>
+                                            <hr/>
+                                            <label>입부신청 시작</label>
+                                            <!--입부신청 시작 입력-->
+                                            <input type="datetime-local" class="form-control" name="user_register_start"/>
+                                            <hr/>
+                                            <label>입부신청 마감</label>
+                                            <!--입부신청 마감 입력-->
+                                            <input type="datetime-local" class="form-control" name="user_register_end"/>
+                                            <hr/>
+                                            <label>3-4학년 면접 시작</label>
+                                            <!-- 3-4학년 면접 시작 입력-->
+                                            <input type="date" class="form-control" name="user_interview_start"/>
+                                            <hr/>
+                                            <label>3-4학년 면접 종료</label>
+                                            <!-- 3-4학년 면접 종료 입력-->
+                                            <input type="date" class="form-control" name="user_interview_end"/>
+                                            <hr/>
+                                            <label>합격여부 발표</label>
+                                            <!--합격여부 발표 입력-->
+                                            <input type="date" class="form-control" name="result_announce_date"/>
+
+                                            <div class="m-t20" style="display: grid; justify-items: center">
+                                                <!--가입관련 설정 적용하기 버튼-->
+                                                <button class="site-button" type="button" onclick="submitForm('')">
+                                                    <i class="la la-check m-r5"
+                                                       style="font-weight: bold"
+                                                    ></i>&nbsp;적용하기
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- 강의비 관련 설정 콘텐츠 시작 -->
+                            <div class="content-box">
+                                <div class="content-header">
+                                    <h3 class="title"><i class="la la-money m-r5"></i>기준별 강의비 설정</h3>
+                                </div>
+                                <!-- 강으비 관련 설정 내용 -->
+                                <form action="" method="post">
+                                    <div class="content-body ">
+                                        <div class="form-group">
+                                            <!--입력하는 곳-->
+                                            <label>1-5명 금액</label>
+                                            <!--1-5명 금액 입력-->
+                                            <input type="number" class="form-control" name="money1to5"/>
+                                            <hr/>
+                                            <label>6-10명 금액</label>
+                                            <!--6-10명 금액 입력-->
+                                            <input type="number" class="form-control" name="money6to10"/>
+                                            <hr/>
+                                            <label>11-20명 금액</label>
+                                            <!--11-20명 금액 입력-->
+                                            <input type="number" class="form-control" name="money11to20"/>
+                                            <hr/>
+                                            <label>21명 이상 금액</label>
+                                            <!--21명 이상 금액 입력-->
+                                            <input type="number" class="form-control" name="money20over"/>
+
+                                            <div class="m-t20" style="display: grid; justify-items: center">
+                                                <!--가입관련 설정 적용하기 버튼-->
+                                                <button class="site-button" type="button" onclick="submitForm('')">
+                                                    <i class="la la-check m-r5"
+                                                       style="font-weight: bold"
+                                                    ></i>&nbsp;적용하기
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <!-- 상단으로 한번에 올라가게 하는 버튼 -->
+            <button class="scroltop fa fa-chevron-up"></button>
+        </div>
+    </div>
+{% endblock %}
