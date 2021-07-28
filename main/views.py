@@ -271,7 +271,6 @@ def alarm_check(request, alarm_no):
     return HttpResponseRedirect(alarm.alarm_link)
 
 
-
 # 명예의 전당
 @auth_check()
 def hall_of_fame(request):

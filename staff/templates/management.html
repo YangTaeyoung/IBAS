@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+    <!--커스텀 css-->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/posting_list.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/size.css' %}">
+    <script src="{% static 'js/form.js' %}"></script>
+
+    <!--===================================== 제목 및 부제목 부 시작 =====================================-->
+    <div class="page-wraper">
+        <div class="page-content bg-white">
+            <!----------상단 제목부분----------->
+            <!--제목을 감싸는 배경-->
+            <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"
+                 style=" background-image: url('{% static 'images/board_name_img.jpg' %}'); height: 350px">
+                <a href="{% url 'management' %}">
+                    <div class="container clearfix">
+                        <div class="dlab-bnr-inr-entry">
+                            <!--제목-->
+                            <h1 class="text-white introduce-letter-spacing_5">관리자 페이지</h1>
+                            <!--부제목-->
+                            <p class="m-t20">홈페이지 설정을 수정할 수 있습니다.</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="clearfix">
+                <!--===================================== 본문 시작 =====================================-->
+                <div class="content-block">
+                    <div class="section-full content-inner bg-white">
+                        <div class="container">
+                            <!-- 강의개설 기간 설정 콘텐츠 시작 -->
+                            <div class="content-box">
+                                <div class="content-header">
+                                    <h3 class="title"><i class="la la-clock-o m-r5"></i>강의개설 기간 설정</h3>
+                                </div>
+                                <!-- 강의개설 기간 설정 내용 -->
+                                <form id="form-management-update-2" action="{% url 'management_update' form_no=2 %}" method="post">
+                                    {% csrf_token %}
+                                    <div class="content-body ">
+                                        <div class="form-group">
+                                            <!--입력하는 곳-->
+                                            <label>강의개설 신청 시작</label>
+                                            <!--강의개설 신청시작 입력-->
+                                            {% render_field lect_schedule_form.lect_register_start class='form-control' type="datetime-local" %}
+                                            <hr/>
+                                            <label>강의개설 신청 마감</label>
+                                            <!--강의개설 신청마감 입력-->
+                                            {% render_field lect_schedule_form.lect_register_end class='form-control' type="datetime-local" %}
+                                            <div class="m-t20" style="display: grid; justify-items: center">
+                                                <!--강의개설 기간 설정 적용하기 버튼-->
+                                                <button class="site-button" type="button" onclick="goSubmit('form-management-update-2', true, '입력한 강의 개설 기간으로 모든 내용이 반영됩니다. \n\n정말 반영하시겠습니까?')">
+                                                    <i class="la la-check m-r5"
+                                                       style="font-weight: bold"
+                                                    ></i>&nbsp;적용하기
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- 가입 관련 설정 콘텐츠 시작 -->
+                            <div class="content-box">
+                                <div class="content-header">
+                                    <h3 class="title"><i class="la la-user m-r5"></i>가입 관련 설정</h3>
+                                </div>
+                                <!-- 가입 관련 설정 내용 -->
+                                <form id="form-management-update-1" action="{% url 'management_update' form_no=1 %}" method="post">
+                                    {% csrf_token %}
+                                    <div class="content-body ">
+                                        <div class="form-group">
+                                            <!--입력하는 곳-->
+                                            <div style="display: flex;">
+                                                <label>기수 설정</label>
+                                                <!--가장 최근 기수 표시하는 부분-->
+                                                <p class="ml-2" style="font-style: italic">( 가장 최근에 들어온 기수
+                                                    : {{ max_gen }}기, 현재 설정된 기수 : {{ user_schedule.generation }}기 )</p>
+                                            </div>
+                                            <!--기수 설정 입력-->
+                                            {% render_field user_schedule_form.generation class="form-control" %}
+                                            <p class="font-italic text-red m-1" style="font-size: 8pt"> ※ 새로운 부원이 가입하면
+                                                해당 기수로 설정됩니다.</p>
+                                            <hr/>
+                                            <label>입부신청 시작</label>
+                                            <!--입부신청 시작 입력-->
+                                            {% render_field user_schedule_form.user_register_start class='form-control' type="datetime-local" %}
+                                            <hr/>
+                                            <label>입부신청 마감</label>
+                                            <!--입부신청 마감 입력-->
+                                            {% render_field user_schedule_form.user_register_end class='form-control' type="datetime-local" %}
+                                            <hr/>
+                                            <label>3-4학년 면접 시작</label>
+                                            <!-- 3-4학년 면접 시작 입력-->
+                                            {% render_field user_schedule_form.user_interview_start class='form-control' type="date" %}
+                                            <hr/>
+                                            <label>3-4학년 면접 종료</label>
+                                            <!-- 3-4학년 면접 종료 입력-->
+                                            {% render_field user_schedule_form.user_interview_end class='form-control' type="date" %}
+                                            <hr/>
+                                            <label>합격여부 발표</label>
+                                            <!--합격여부 발표 입력-->
+                                            {% render_field user_schedule_form.result_announce_date class='form-control' type="datetime-local" %}
+
+                                            <div class="m-t20" style="display: grid; justify-items: center">
+                                                <!--가입관련 설정 적용하기 버튼-->
+                                                <button class="site-button" type="button" onclick="goSubmit('form-management-update-1', true, '입력한 회원 모집 일정으로 모든 내용이 반영됩니다. \n\n정말 반영하시겠습니까?')">
+                                                    <i class="la la-check m-r5"
+                                                       style="font-weight: bold"
+                                                    ></i>&nbsp;적용하기
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- 강의비 관련 설정 콘텐츠 시작 -->
+                            <div class="content-box">
+                                <div class="content-header">
+                                    <h3 class="title"><i class="la la-money m-r5"></i>기준별 강의비 설정</h3>
+                                </div>
+                                <!-- 강의비 관련 설정 내용 -->
+                                <form id="form-management-update-3" action="{% url 'management_update' form_no=3 %}" method="post">
+                                    {% csrf_token %}
+                                    <div class="content-body ">
+                                        <div class="form-group">
+                                            <!--입력하는 곳-->
+                                            <label>1-5명 금액</label>
+                                            <!--1-5명 금액 입력-->
+                                            {% render_field lect_money_standard_form.money_1to5 class="form-control" %}
+                                            <hr/>
+                                            <label>6-10명 금액</label>
+                                            <!--6-10명 금액 입력-->
+                                            {% render_field lect_money_standard_form.money_6to10 class="form-control" %}
+                                            <hr/>
+                                            <label>11-20명 금액</label>
+                                            <!--11-20명 금액 입력-->
+                                            {% render_field lect_money_standard_form.money_11to20 class="form-control" %}
+                                            <hr/>
+                                            <label>21명 이상 금액</label>
+                                            <!--21명 이상 금액 입력-->
+                                            {% render_field lect_money_standard_form.money_21over class="form-control" %}
+
+                                            <div class="m-t20" style="display: grid; justify-items: center">
+                                                <!--가입관련 설정 적용하기 버튼-->
+                                                <button class="site-button" type="button" onclick="goSubmit('form-management-update-3', true, '입력한 금액으로 모든 강의비가 반영됩니다. \n\n정말 반영하시겠습니까?')">
+                                                    <i class="la la-check m-r5"
+                                                       style="font-weight: bold"
+                                                    ></i>&nbsp;적용하기
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 상단으로 한번에 올라가게 하는 버튼 -->
+        <button class="scroltop fa fa-chevron-up"></button>
+    </div>
+    </div>
+{% endblock %}

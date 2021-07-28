@@ -55,7 +55,7 @@
                     <div class="listing-info">
                         <!--이름, 학과, 학번 표시되는 곳, Back : 본인 이름, 학과, 한번 들어갈 수 있도록 수정-->
                         <div class="listing-info-left">
-                            <h3 class="title">{{ logined_user.user_name }}</h3>
+                            <h3 class="title">{{ logined_user.user_name }}</h3
                             <p>{{ logined_user.user_major.major_name }} &#8226; {{ logined_user.user_stu }}</p>
                         </div>
                         <!--상단 오른쪽에 뜨는버튼 버튼-->
@@ -683,14 +683,19 @@
                                             <!--권한-->
                                             <tr>
                                                 <th scope="row">역할</th>
-                                                <!--Back : 회장이면 회장, 부회장이면 부회장 ...... 일반회원이면 일반회원으로 뜨도록 수정-->
+                                                {#  Back : 회장이면 회장, 부회장이면 부회장 ...... 일반회원이면 일반회원으로 뜨도록 수정 #}
                                                 <td>{{ logined_user.user_role.role_name }}</td>
-                                                <td></td>
+                                                <td>
+                                                    {# 회장, 부회장에게만 노출 #}
+                                                    {% if logined_user.user_role.role_no <= 2 %}
+                                                        <a href="{% url 'management' %}">관리자 페이지</a>
+                                                    {% endif %}
+                                                </td>
                                             </tr>
                                             <!--이름-->
                                             <tr>
                                                 <th scope="row">자기소개</th>
-                                                <!-- Back : 자기 소개 뜨도록 수정, 등록 안돼있으면 아래 내용 뜨도록 -->
+                                                {# Back : 자기 소개 뜨도록 수정, 등록 안돼있으면 아래 내용 뜨도록 #}
                                                 {% if logined_user.user_intro %}
                                                     <td style="width: 50%">
                                                         {{ logined_user.user_intro }} &nbsp;&nbsp;&nbsp;
@@ -1129,7 +1134,8 @@
                                                 <!--설명 내용 수정 부분-->
                                                 <textarea name="user_intro" required="required"
                                                           class="form-control"
-                                                          placeholder="간단한 본인 소개를 적어주세요">{% if logined_user.user_intro %}{{ logined_user.user_intro }}{% endif %}</textarea>
+                                                          placeholder="간단한 본인 소개를 적어주세요">{% if logined_user.user_intro %}
+                                                    {{ logined_user.user_intro }}{% endif %}</textarea>
                                             </div>
                                             <!--수정신청하기 버튼, Back : 누르면 회장에게 승인을 요구하도록 수정-->
                                             <a href="#" class="site-button"

@@ -12,33 +12,26 @@ import os
 from django.conf import settings
 from user_controller import get_social_login_info
 from django.db import transaction
+from date_controller import user_recruit_check, is_user_recruiting
+from django.contrib import messages
 
 
 # Create your views here.
-
 def choose_std_or_pro(request):  # 학생인지, 교수인지 고르게 하는 것.
     if request.method == "POST":  # POST로 온 요청의 경우, 즉 정상적인 요청인 경우
         if request.POST.get("password") is not None:  # pass페이지에서 password가 파라미터로 넘어왔을 경우, 즉 정상적으로 구글 로그인을 마친 경우
             user_token = request.POST.get("password")  # 토큰 정보를 받음
             social_dict = get_social_login_info(user_token)
             # ------------------------------소셜 로그인으로 받은 정보 처리 끝---------------------------------------#
-            if len(UserEmail.objects.filter(user_email=social_dict.get(
-                    "email"))) == 0:  # 토큰 정보로 USER DB를 검색 했을 때 나오는 유저 정보가 없을 경우, 즉 입부 신청하지 않은 유저의 경우
-                # 컨텍스트에 자동완성 정보를 등록
-                stu_list = list()
-                for user in User.objects.all():
-                    stu_list.append(user.user_stu)
 
-                # if len(User.objects.filter(
-                #         user_email=email)) == 0:
-                #     # 컨텍스트에 자동완성 정보를 등록
-                #     stu_list = list()
-                #     for user in User.objects.all():
-                #         stu_list.append(user.user_stu)
+            # 토큰 정보로 USER DB를 검색 했을 때 나오는 유저 정보가 없을 경우, 즉 입부 신청하지 않은 유저의 경우
 
-                context = social_dict
-
-                return render(request, 'std_or_pro.html', context)
+            if len(UserEmail.objects.filter(user_email=social_dict.get("email"))) == 0:
+                if is_user_recruiting():
+                    context = social_dict
+                    return render(request, 'std_or_pro.html', context)
+                messages.warning(request, "입부 신청 기간이 아닙니다.")
+                return redirect("index")
             else:  # 이미 입부신청 되어있는 유저의 경우
                 # tar_member에 유저 정보를 저장
                 user_email = UserEmail.objects.get(pk=social_dict.get("email"))
@@ -51,6 +44,7 @@ def choose_std_or_pro(request):  # 학생인지, 교수인지 고르게 하는 �
         return render(request, "index.html", {'lgn_is_failed': 1})  # 자바 스크립트 경고를 띄우기 위한 변수 지정 후 index로 보냄.
 
 
+@user_recruit_check
 def join(request):  # 회원 가입 페이지를 랜더링 하는 함수
     stu_list = list()  # 학생번호 리스트를 담을 변수.
     phone_list = list()  # 핸드폰 번호를 담을 변수.
@@ -72,6 +66,7 @@ def join(request):  # 회원 가입 페이지를 랜더링 하는 함수
     return render(request, "join.html", context)
 
 
+@user_recruit_check
 def join_chk(request):  # 회원 가입 페이지로 부터 정보를 받
     if request.method == "POST":  # POST로 데이터가 들어왔을 경우, 안들어 왔다면 -> 비정상 적인 접근임. 일반적으로 GET을 통해서는 접근이 불가능 해야함.
         # 사용자 정보를 받아옴
@@ -96,6 +91,7 @@ def join_chk(request):  # 회원 가입 페이지로 부터 정보를 받
     return render(request, "index.html", {'lgn_is_failed': 1})
 
 
+@user_recruit_check
 def quest_chk(request):
     if request.method == "POST":  # POST로 데이터가 들어왔을 경우, 안들어 왔다면 -> 비정상 적인 접근임. 일반적으로 GET을 통해서는 접근이 불가능 해야함.
         # 사용자 정보를 받아옴
@@ -110,6 +106,12 @@ def quest_chk(request):
         user_phone = request.POST.get("user_phone")
         user_pic = request.POST.get("user_pic")
         provider = request.POST.get("provider")
+        if len(User.objects.filter(
+                user_stu=user_stu)) != 0:  # 중복 방지 로직. 이미 등록되어 있다면 DB등록 전에 세션등록을 하고 리다이렉션 함. 우선 이게 최선인듯.
+            session.save_session(request, user_model=User.objects.get(pk=user_stu), logined_email=user_email,
+                                 provider=provider)  # 자동 로그인을 위해 세션 등록
+            return redirect("welcome")
+
         if user_pic is not None:
             try:  # 자신의 폴더가 남아 있을 경우의 예외처리
                 os.mkdir(settings.MEDIA_ROOT + "/member/" + user_stu)
@@ -123,6 +125,7 @@ def quest_chk(request):
                 pass
         # 받은 정보로 user 모델 인스턴스 변수 생성
         # 사용자 정보를 DB에 저장
+
         with transaction.atomic():
             user = User.objects.create(
                 user_name=user_name,  # 이름

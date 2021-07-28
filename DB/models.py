@@ -520,8 +520,8 @@ class LectMoneyStandard(models.Model):
 
 class LectSchedule(models.Model):
     lect_schedule_no = models.AutoField(db_column="LECT_SCHEDULE_NO", primary_key=True)
-    lect_schedule_start = models.DateTimeField(db_column="LECT_SCHEDULE_START")
-    lect_schedule_end = models.DateTimeField(db_column="LECT_SCHEDULE_END")
+    lect_register_start = models.DateTimeField(db_column="LECT_REGISTER_START")
+    lect_register_end = models.DateTimeField(db_column="LECT_REGISTER_END")
 
     class Meta:
         managed = False
@@ -690,6 +690,7 @@ class UserSchedule(models.Model):
     user_register_end = models.DateTimeField(db_column="USER_REGISTER_END")
     user_interview_start = models.DateTimeField(db_column="USER_INTERVIEW_START")
     user_interview_end = models.DateTimeField(db_column="USER_INTERVIEW_END")
+    result_announce_date = models.DateTimeField(db_column="RESULT_ANNOUNCE_DATE")
 
     class Meta:
         managed = False
