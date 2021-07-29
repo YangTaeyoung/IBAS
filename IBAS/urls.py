@@ -31,6 +31,7 @@ urlpatterns = [
     path('bank/', include('bank.urls')),
     path('staff/', include('staff.urls')),
     path('my_info/', include('my_info.urls')),
+    path('comment/', include('comment.urls')),
     # 템플릿 테스팅 링크
     path('test/add/listing/', views.add_listing, name="add_listing"),
     path('test/blog/detail/', views.blog_detail, name="blog_detail"),
