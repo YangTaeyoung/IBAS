@@ -21,5 +21,6 @@ urlpatterns = [
     path('history/delete/', views.history_delete, name='history_delete'),
     path('alarm/chk/<int:alarm_no>/', views.alarm_check, name="alarm_check"),
     path('hof/', views.hall_of_fame, name="hall_of_fame"),
+    path('errorpage/', views.error_page, name='error_page'),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
