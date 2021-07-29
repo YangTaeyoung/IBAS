@@ -1,7 +1,7 @@
 from django.db import transaction
 from django.http import QueryDict
 from django.shortcuts import render, redirect, reverse, get_object_or_404
-from DB.models import Board, BoardFile, BoardType, Comment, ContestBoard, ContestFile, ContestComment, User
+from DB.models import Board, BoardFile, BoardType, Comment, ContestBoard, ContestFile, User
 from django.db.models import Q
 from board.forms import BoardForm, ContestForm, FileForm
 from file_controller import FileController

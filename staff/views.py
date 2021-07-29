@@ -1,6 +1,6 @@
 from django.shortcuts import render, reverse, redirect, get_object_or_404
 from DB.models import User, UserRole, UserAuth, Answer, UserUpdateRequest, \
-    UserDelete, UserDeleteAor, UserDeleteFile, UserDeleteComment, UserDeleteState, \
+    UserDelete, UserDeleteAor, UserDeleteFile, UserDeleteState, \
     UserEmail, StateInfo, LectSchedule, LectMoneyStandard, UserSchedule  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
 from staff.forms import UserDeleteForm, UserScheduleForm, LectScheduleForm, LectMoneyStandardForm
 from pagination_handler import get_page_object

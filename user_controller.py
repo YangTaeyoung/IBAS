@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.http import Http404
 from django.shortcuts import redirect, reverse, render
 from DB.models import User, ContestBoard, Board, Bank, Lect, UserDelete, AuthUser, History, LectEnrollment, \
-    ContestComment, LectBoard, Answer, UserEmail, Comment, LectAssignmentSubmit, Alarm
+    LectBoard, Answer, UserEmail, Comment, LectAssignmentSubmit, Alarm
 from allauth.socialaccount.models import SocialAccount, SocialToken
 from file_controller import FileController
 from django.db.models import Q

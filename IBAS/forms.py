@@ -1,5 +1,4 @@
 from django import forms
-from DB.models import UserDeleteComment
 
 
 class FileFormBase(forms.Form):

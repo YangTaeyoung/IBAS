@@ -1,6 +1,4 @@
-from django import forms
 from DB.models import Comment, CommentType
-from django.utils.translation import gettext_lazy as _
 from user_controller import get_logined_user
 from rest_framework import serializers
 
@@ -11,7 +9,6 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = ('comment_cont', 'comment_cont_ref')
         comment_ref_list = serializers.PrimaryKeyRelatedField(queryset=Comment.objects.filter())
         depth = 2
-
 
     def save(self, **kwargs):
         comment = super().save(commit=False)
