@@ -148,12 +148,12 @@ def get_user_get(request):
 # 수정자: 양태영
 # 수정일자: 21.07.29
 # 수정내용: next_url 파라미터를 추가, 입력하지 않으면 디폴트로 index로 이동하며 추가로 입력할 경우 해당 url로 이동함.
-def not_allowed(request, msg="접근 권한이 없습니다.", error_404=False, next_url=redirect(reverse("index"))):
+def not_allowed(request, msg="접근 권한이 없습니다.", error_404=False, next_url="index" ):
     if error_404:
         raise Http404
     else:
         messages.warning(request, msg)  # 메인에서 alert 창 띄우기
-        return next_url
+        return redirect(next_url)
 
 
 # 데코레이터
@@ -164,7 +164,7 @@ def login_required(func):
         if is_logined(request):
             return func(request, *args, **kwargs)
         else:
-            return not_allowed(request, msg='로그인이 필요합니다!', next_url=redirect(reverse("login")))
+            return not_allowed(request, msg='로그인이 필요합니다!',next_url="login")
 
     return wrapper
 

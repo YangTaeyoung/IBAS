@@ -1,5 +1,9 @@
 {% load static %} {% load socialaccount %} {% providers_media_js %}
-
+    {% if messages %}
+        {% for message in messages %}
+            <script>alert("{{ message }}")</script>
+        {% endfor %}
+    {% endif %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
