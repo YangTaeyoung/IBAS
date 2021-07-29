@@ -1,4 +1,19 @@
 from django.shortcuts import render
+from user_controller import get_logined_user
+from DB.models import UserDeleteComment, UserDelete
+
+def comment_register(request):
+    comment_base_dict = {
+        "comment_cont": request.POST.get('comment_cont'),
+        "comment_wrtier": get_logined_user(request),
+    }
+    if request.POST.get("comment_cont_ref") is not None:
+        comment_base_dict.update(comment_cont_ref=request.POST.get("comment_cont_ref"))
+
+    if request.POST.get('user_delete_no') is not None:
+        comment_base_dict.update(user_delete_no=UserDelete.objects.get(pk=request.POST.get("user_delete_no")))
+        UserDeleteComment.objects.create(comment_base_dict)
+
 
 
 def add_listing(request):
