@@ -278,3 +278,6 @@ def hall_of_fame(request):
         "graduated_user_list": User.objects.filter(Q(user_apply_publish=1) & Q(user_grade=0))
     }
     return render(request, "hall_of_fame.html", context)
+
+def error_handler500(request):
+    return render(request, "../templates/error_page.html", status=500)

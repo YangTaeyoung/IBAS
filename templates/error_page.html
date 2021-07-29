@@ -70,18 +70,18 @@
                     <!-- 페이지 컨텐츠 시작 -->
                     <div class="welcome-title">
                         <!-- 오류종류(오류 종류에 따라 숫자 바꿔어야 함) -->
-                        <span>404</span><br>
+                        <span>{{ error_code }}</span><br>
                         <!-- 오류 종류에 따라 문구 변경해도 되지만, 고정해도 됨 -->
-                        <span>찾을 수 없는 페이지 입니다!</span>
+                        <span>{{ error_title }}</span>
                     </div>
                     <!-- 메인 타이틀 -->
                     <div class="welcome-content">
                         <!-- 페이지 오류 안내문구 (안내문구는 오류 종류에 따라 바꿔도 되지만, 고정해도 됨) -->
-                        요청하신 페이지가 사라졌거나, 잘못된 경로를 입력하셨습니다.
-                        <br>아래 Back to home page 버튼 클릭 후 메인페이지로 이동하여 주시기 바랍니다.
+                        {{ error_cont }}
+
                     </div>
                     <!-- 메인페이지로 돌아가는 버튼 -->
-                    <div class="font-alt mt-30"><a class="btn btn-border-w btn-round" href="{% url 'index' %}">Back to home page</a>
+                    <div class="font-alt mt-30"><a class="btn btn-border-w btn-round" href="{% url 'index' %}">홈으로 돌아가기</a>
                     </div>
                 </div>
             </div>

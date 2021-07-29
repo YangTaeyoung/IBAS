@@ -28,7 +28,7 @@ ROOT_DIR = os.path.dirname(BASE_DIR)
 SECRET_KEY = '_vthq1y2s@$+o&+759)d)0r59e&%!gdcp7(^tsu1=+b-cog_@1'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = DEBUG_MODE
 
 ALLOWED_HOSTS = ['*']
 
@@ -90,6 +90,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
+            "templates",
             BASE_DIR / 'templates',
             MY_TEMPLATE_ROOT,
         ]
