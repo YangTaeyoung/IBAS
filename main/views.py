@@ -281,3 +281,9 @@ def hall_of_fame(request):
 
 def error_handler500(request):
     return render(request, "../templates/error_page.html", status=500)
+
+
+def toast(request):
+    context = {
+    }
+    return render(request, "toast.html", context)
