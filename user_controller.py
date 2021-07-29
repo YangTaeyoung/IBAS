@@ -102,7 +102,7 @@ def is_writer(request, **kwargs):
 # 입력: request, 기준이 될 역할 번호, 검증할 부등호
 # 출력: 로그인 한 유저가 해당 조건에 만족하는지의 여부를 반환
 def role_check(request, role_no, sign="equal"):
-    if sign == "equal": # 등호
+    if sign == "equal":  # 등호
         return get_logined_user(request).user_role.role_no == role_no
     elif sign == "lte":  # 이하
         return get_logined_user(request).user_role.role_no <= role_no
@@ -145,12 +145,15 @@ def get_user_get(request):
 # 잘못된 접근시 메인페이지로 이동시킴
 # msg 에 메세지를 적으면, 메인페이지에서 alert 창으로 경고를 띄움 (default msg = '접근 권한이 없습니다.')
 # 차라리 조용히 404 페이지를 띄워주는것도 좋을거같고..? => 해당 url 이 존재하는지 외부로부터 감출 수 있음
-def not_allowed(request, msg="접근 권한이 없습니다.", error_404=False):
+# 수정자: 양태영
+# 수정일자: 21.07.29
+# 수정내용: next_url 파라미터를 추가, 입력하지 않으면 디폴트로 index로 이동하며 추가로 입력할 경우 해당 url로 이동함.
+def not_allowed(request, msg="접근 권한이 없습니다.", error_404=False, next_url=redirect(reverse("index"))):
     if error_404:
         raise Http404
     else:
         messages.warning(request, msg)  # 메인에서 alert 창 띄우기
-        return redirect(reverse("index"))
+        return next_url
 
 
 # 데코레이터
@@ -161,7 +164,7 @@ def login_required(func):
         if is_logined(request):
             return func(request, *args, **kwargs)
         else:
-            return not_allowed(request, msg='로그인이 필요합니다!')
+            return not_allowed(request, msg='로그인이 필요합니다!', next_url=redirect(reverse("login")))
 
     return wrapper
 
