@@ -382,6 +382,9 @@
     });
 
 </script>
-
+<!-- django 렌더링 끝나고 나서 vue.js 렌더링 -->
+<script type="text/javascript" src="{% static 'src/vue/dist/js/chunk-vendors.js' %}"></script>
+<script type="text/javascript" src="{% static 'src/vue/dist/js/app.js' %}"></script>
+<!-- django 렌더링 끝나고 나서 vue.js 렌더링 -->
 </body>
 </html>
