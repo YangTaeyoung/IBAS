@@ -59,6 +59,8 @@ INSTALLED_APPS = [
     'staff',
     # 강의 관련 앱
     'lecture',
+    # 덧글 관련 앱
+    'comment',
     # widget_tweaks
     'widget_tweaks',
     # 템플릿에서 산술연산을 하기 위한 앱
