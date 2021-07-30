@@ -4,6 +4,7 @@ from IBAS.forms import FileFormBase
 from file_controller import FileController
 from DB.models import Board, ContestBoard
 from django.utils.translation import gettext_lazy as _
+from django_summernote.widgets import SummernoteWidget
 
 
 class BoardForm(forms.ModelForm):
@@ -17,8 +18,7 @@ class BoardForm(forms.ModelForm):
         widgets = {
             'board_type_no': forms.HiddenInput(),
             'board_title': forms.TextInput(attrs={'placeholder': _('제목을 입력하세요.')}),
-            'board_cont': forms.Textarea(),
-
+            'board_cont': SummernoteWidget(),
         }
 
     # overriding
