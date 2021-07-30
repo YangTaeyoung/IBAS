@@ -18,6 +18,11 @@
     <link rel="icon" href="{% static 'images/IBAS_favicon.png' %}" type="image/x-icon"/>
     <link rel="shortcut icon" type="image/x-icon" href="{% static 'images/IBAS_favicon.png' %}"/>
 
+    <!--toast editor-->
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+
+
     <!-- PAGE TITLE HERE -->
     <title>IBAS</title>
 
@@ -382,6 +387,19 @@
     });
 
 </script>
+
+
+<script>
+
+        const Editor = toastui.Editor;
+
+        const editor = new Editor({
+              el: document.querySelector('#editor'),
+              height: '600px',
+              initialEditType: 'WYSIWYG',
+              previewStyle: 'vertical'
+            });
+    </script>
 
 </body>
 </html>
