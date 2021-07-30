@@ -122,9 +122,19 @@
                                         </div>
                                     {% endif %}
                                     <!--내용입력란-->
+{#                                    <div class="form-group">#}
+{#                                        {% render_field board_form.board_cont class="jqte-test" %}#}
+{#                                    </div>#}
+
+
+                                <!--내용입력란 : 텍스트 에디터 수정한거 test 버전-->
                                     <div class="form-group">
-                                        {% render_field board_form.board_cont class="jqte-test" %}
+                                        <div id="editor" style="box-sizing: border-box; height: 500px;"></div>
                                     </div>
+
+
+                                <!--test-->
+
                                 </div>
                             </div>
 
