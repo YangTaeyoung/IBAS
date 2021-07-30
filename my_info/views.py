@@ -199,4 +199,4 @@ def user_activate_request(request):
     if current_user.user_auth.auth_no > 1:
         create_user_activate_alarm(current_user)
         messages.warning(request, "회비 납부 확인 요청이 완료되었습니다. \n\n순차적으로 확인하고 있으니 더 이상 요청하지 말아주세요.")
-    return redirect(reverse("my_info"))
+    return redirect("my_info")
