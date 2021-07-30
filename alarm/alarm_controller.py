@@ -1,6 +1,8 @@
-from DB.models import Alarm, Comment, User, Lect, LectEnrollment, Board, UserDelete, Bank
+import board
+from DB.models import Alarm, Comment, User, Lect, LectEnrollment, Board, UserDelete, Bank, LectBoard
 from django.shortcuts import resolve_url
 from django.db.models import Q
+from user_controller import get_logined_user
 
 
 # 대댓글 대상자에게 알람 보내는 함수
@@ -93,6 +95,49 @@ def create_board_notice_alarm(board: Board):
             )
 
 
+# 관리자에 의해 게시글이 삭제되었을 때 알림
+def delete_board_by_superuser_alarm(request, board: Board):
+    Alarm.objects.create(
+        alarm_user=board.board_writer,
+        alarm_cont=get_logined_user(
+            request).user_name + "님에 의해 \"" + board.board_title[:7] + "...\" 게시글이 삭제되었습니다. 운영 정책에 위반됩니다.",
+        alarm_link=resolve_url("board_view", board_type_no=board.board_type_no.board_type_no)
+    )
+
+
+# 관리자에 의해 덧글이 삭제되었을 때 알림.
+def delete_comment_by_superuser_alarm(request, comment: Comment):
+    comment_board = comment.comment_board_no.board_no
+    Alarm.objects.create(
+        alarm_user=comment.comment_writer,
+        alarm_cont=get_logined_user(
+            request).user_name + "님에 의해 \"" + comment.comment_cont[:7] + "...\" 덧글이 삭제되었습니다. 운영 정책에 위반됩니다.",
+        alarm_link=resolve_url("board_detail", board_no=comment_board)
+    )
+
+
+# 관리자에 의해 강의가 삭제되었을 때 알림.
+def delete_lect_by_superuser_alarm(request, lect: Lect):
+    lect_type = lect.lect_type.type_no
+    Alarm.objects.create(
+        alarm_user=lect.lect_chief,
+        alarm_cont=get_logined_user(request).user_name + "님에 의해 \"" + lect.lect_title[
+                                                                      :7] + "...\" 강의가 삭제되었습니다. 운영 정책에 위반됩니다.",
+        alarm_link=resolve_url("lect_view", type_no=lect_type)
+    )
+
+
+# 관리자에 의해 강의 게시글이 삭제되었을 때 알림.
+def delete_lect_board_by_superuser_alarm(request, lect_board: LectBoard):
+    lect_no = lect_board.lect_no.lect_no
+    Alarm.objects.create(
+        alarm_user=lect_board.lect_board_writer,
+        alarm_cont=get_logined_user(request).user_name + "님에 의해\"" + lect_board.lect_board_title[
+                                                                     :7] + "...\" 강의가 삭제되었습니다. 운영 정책에 위반됩니다.",
+        alarm_link=resolve_url("lect_room_main", room_no=lect_no)
+    )
+
+
 # 제명 안건이 올라왔을 때
 def create_user_delete_alarm(user_delete: UserDelete):
     Alarm.objects.create(
@@ -122,7 +167,7 @@ def create_finish_user_delete_alarm(user_delete: UserDelete):
 
 # 예산 지원신청을 넣었을 때
 def create_bank_alarm(bank: Bank):
-    cfo_list = User.objects.filter(user_role__role_no=4)
+    cfo_list = User.objects.filter(Q(user_role__role_no=4)&Q(user_auth__auth_no=1))
     for cfo in cfo_list:
         Alarm.objects.create(
             alarm_user=cfo,
@@ -130,3 +175,26 @@ def create_bank_alarm(bank: Bank):
             alarm_link=resolve_url("bank_support_detail", bank_no=bank.bank_no)
         )
 
+
+# 새로운 회원이 가입을 할 경우
+def create_user_join_alarm(user: User):
+    # 운영팀 이상의 회장단을 데려 옴
+    chief_crews = User.objects.filter(Q(user_role__role_no__lte=3) & Q(user_auth__auth_no=1))
+
+    for chief_crew in chief_crews:
+        Alarm.objects.create(
+            alarm_user=chief_crew,
+            alarm_cont=user.user_name + "님이 가입 대기중입니다. 확인해주세요.",
+            alarm_link=resolve_url("staff_member_list")
+        )
+
+
+# 회원이 회비 납부요청을 할 경우.
+def create_user_activate_alarm(user: User):
+    cfo_list = User.objects.filter(Q(user_role__role_no=4)&Q(user_auth__auth_no=1))
+    for cfo in cfo_list:
+        Alarm.objects.create(
+            alarm_user=cfo,
+            alarm_cont=user.user_name + "님이 회비 납부하였습니다. 확인 후, 권한을 수정해주세요.",
+            alarm_link=resolve_url("staff_member_list")
+        )

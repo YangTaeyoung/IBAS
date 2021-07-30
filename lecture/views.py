@@ -2,20 +2,21 @@ from django.db import transaction, connection
 from django.db.models import Q
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.utils.dateformat import DateFormat
-from alarm.alarm_controller import create_lect_full_alarm, create_lect_enroll_alarm
+from alarm.alarm_controller import create_lect_full_alarm, create_lect_enroll_alarm, delete_lect_by_superuser_alarm
 from django.contrib import messages
 from DB.models import LectType, Lect, LectDay, MethodInfo, LectBoard, LectEnrollment, LectAttendance, \
-    LectAssignmentSubmit,LectMoneyStandard
+    LectAssignmentSubmit, LectMoneyStandard
 from file_controller import FileController
 from lecture.forms import LectForm, LectRejectForm, LectPicForm, make_lect_board_form, \
     FileForm, AssignmentSubmitForm
 from pagination_handler import get_page_object
 from user_controller import get_logined_user, superuser_only, writer_only, auth_check, is_superuser, \
-    is_logined, is_writer, member_only
+    is_logined, is_writer, member_only, role_check
 from utils.crawler import get_og_tag
 from utils.url_regex import is_youtube
 from utils.youtube import get_youtube
 from date_controller import is_lect_recruiting
+
 
 def get_pol_name(method_no):
     pol_name = MethodInfo.objects.get(pk=method_no).method_name
@@ -131,15 +132,13 @@ def lect_update(request, lect_no):
         lect_form = LectForm(request.POST)
         lect_pic_form = LectPicForm(request.POST, request.FILES)
         if lect_form.is_valid():
-            with transaction.atomic():
-                lect = lect_form.update(instance=lect)
-                print(request.POST.get("lect_day"))
-                lect.lect_day = request.POST.get("lect_day")
-                lect.save()
-                if lect_pic_form.is_valid():
-                    if lect_pic_form.has_changed():
-                        FileController.delete_all_files_of_(lect)
-                        lect_pic_form.save(instance=lect)
+            lect = lect_form.update(instance=lect)
+            lect.lect_day = request.POST.get("lect_day")
+            lect.save()
+            if lect_pic_form.is_valid():
+                if lect_pic_form.has_changed():
+                    FileController.delete_all_files_of_(lect)
+                    lect_pic_form.save(instance=lect)
         return redirect("lect_detail", lect_no=lect.lect_no)
     else:  # 상세 페이지에서 수정 버튼을 눌렀을 때
         context = {
@@ -162,6 +161,9 @@ def lect_update(request, lect_no):
 def lect_delete(request, lect_no):
     lect = Lect.objects.get(pk=lect_no)
     if request.method == "POST":
+        # 회장단에 의해 강의가 삭제된 경우 삭제된 강의에 대해 강의자에게 알림을 날림.
+        if lect.lect_chief != get_logined_user(request) and role_check(request, 3, "lte"):
+            delete_lect_by_superuser_alarm(request, lect)
         lect_type_no = lect.lect_type.type_no  # 강의 삭제 전 DB에 저장되어 있는 게시판 타입을 받아옴: 강의 리스트로 페이지를 리다이렉팅 하기 위함.
         FileController.delete_all_files_of_(lect)  # 강의에 저장되어 있는 사진 삭제
         for lect_board in lect.lectures.all():

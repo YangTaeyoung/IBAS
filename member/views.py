@@ -14,6 +14,7 @@ from user_controller import get_social_login_info
 from django.db import transaction
 from date_controller import user_recruit_check, is_user_recruiting
 from django.contrib import messages
+from alarm.alarm_controller import create_user_join_alarm
 
 
 # Create your views here.
@@ -155,6 +156,8 @@ def quest_chk(request):
                     )
             session.save_session(request, user_model=user, logined_email=user_email,
                                  provider=provider)  # 자동 로그인을 위해 세션 등록
+            # 새로운 유저 가입을 회장단에게 알림.
+            create_user_join_alarm(user)
         return redirect(reverse("welcome"))  # 정상 회원가입 완료시 회원 가입 완료 페이지로 이동.
     return render(request, "index.html", {'lgn_is_failed': 1})  # 비정상 적인 접근 시 로그인 실패 메시지 출력과 함께 메인페이지 이동.
 

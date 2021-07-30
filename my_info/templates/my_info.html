@@ -678,7 +678,13 @@
                                                 <th scope="row">권한</th>
                                                 <!--Back : 승인 안되면 미승인, 승인되면 승인 뜨도록 수정-->
                                                 <td>{{ logined_user.user_auth.auth_name }}</td>
-                                                <td></td>
+                                                <td>
+                                                    {% if logined_user.user_auth.auth_no == 2 %}
+                                                        <a href="{% url 'user_activate_request' %}">
+                                                            회비 납부 확인 요청
+                                                        </a>
+                                                    {% endif %}
+                                                </td>
                                             </tr>
                                             <!--권한-->
                                             <tr>

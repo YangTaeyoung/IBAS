@@ -6,9 +6,8 @@ from django.db.models import Q
 from board.forms import BoardForm, ContestForm, FileForm
 from file_controller import FileController
 from pagination_handler import get_page_object
-from alarm.alarm_controller import create_comment_alarm, create_comment_ref_alarm
+from alarm.alarm_controller import create_comment_alarm, create_comment_ref_alarm, create_board_notice_alarm, delete_board_by_superuser_alarm
 from user_controller import login_required, writer_only, auth_check, get_logined_user, not_allowed, role_check
-from alarm.alarm_controller import create_board_notice_alarm
 from django.contrib import messages
 from date_controller import today_after_day, today_after_year, today
 
@@ -331,12 +330,14 @@ def board_update(request, board_no):
 @writer_only(superuser=True)
 def board_delete(request, board_no):
     board = Board.objects.get(pk=board_no)
-
+    board_type_no = board.board_type_no.board_type_no
     with transaction.atomic():
+        if board.board_writer != get_logined_user(request) and role_check(request=request, role_no=3, sign="lte"):
+            delete_board_by_superuser_alarm(request, board)
         FileController.delete_all_files_of_(board)  # 해당 게시글에 등록된 파일 모두 제거
         board.delete()  # 파일과 폴더 삭제 후, 게시글 DB 에서 삭제
 
-    return redirect('board_view', board_type_no=5)
+    return redirect('board_view', board_type_no=board_type_no)
 
 
 # 댓글 달기 코드

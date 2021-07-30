@@ -3,9 +3,12 @@ from django.shortcuts import render, redirect, reverse
 from DB.models import Board, User, Comment, Bank, UserUpdateRequest, UserEmail, StateInfo, MajorInfo, Lect, \
     LectEnrollment
 from django.db.models import Q
+
+from alarm.alarm_controller import create_user_activate_alarm
 from user_controller import get_logined_user, login_required, get_social_login_info, get_default_pic_path, \
     is_default_pic, delete_user
 from django.conf import settings
+from django.contrib import messages
 from member.session import save_session
 import hashlib
 
@@ -188,3 +191,12 @@ def user_grade_update(request):
         current_user.user_grade = int(request.POST.get("user_grade"))
         current_user.save()
     return redirect(reverse('my_info'))
+
+
+@login_required
+def user_activate_request(request):
+    current_user = get_logined_user(request)
+    if current_user.user_auth.auth_no > 1:
+        create_user_activate_alarm(current_user)
+        messages.warning(request, "회비 납부 확인 요청이 완료되었습니다. \n\n순차적으로 확인하고 있으니 더 이상 요청하지 말아주세요.")
+    return redirect(reverse("my_info"))
