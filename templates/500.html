@@ -81,8 +81,14 @@
 
                     </div>
                     <!-- 메인페이지로 돌아가는 버튼 -->
-                    <div class="font-alt mt-30"><a class="btn btn-border-w btn-round" href="{% url 'index' %}">홈으로 돌아가기</a>
-                    </div>
+                    {% if is_logined %}
+                        <div class="font-alt mt-30"><a class="btn btn-border-w btn-round" href="{% url 'board_register' %}">건의사항 글쓰기</a>
+                        </div>
+                    {% else %}
+                        <div class="font-alt mt-30"><a class="btn btn-border-w btn-round" href="{% url 'index' %}">홈으로
+                            돌아가기</a>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
