@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404
 from DB.models import CommentType, Comment
 from django.db.models import Q, F
 from django.http.response import JsonResponse,HttpResponse
+from rest_framework.response import Response
 
 # Create your views here.
 
@@ -41,7 +42,7 @@ def comment_view(request, type_no, board_ref):
         Q(comment_type__comment_type_no=type_no) & Q(comment_board_ref=board_ref) & Q(
             comment_cont_ref__isnull=True)).prefetch_related("comment_ref").order_by("-comment_created")
     comment_serializer = CommentSerializer(comment_list, many=True)
-    return HttpResponse(comment_serializer)
+    return Response(comment_serializer.data)
 
 
 def axios_response(request):

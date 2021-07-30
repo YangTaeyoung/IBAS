@@ -7,7 +7,6 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = ('comment_cont', 'comment_cont_ref')
-        comment_ref_list = serializers.PrimaryKeyRelatedField(queryset=Comment.objects.filter())
         depth = 2
 
     def save(self, **kwargs):

@@ -8,3 +8,5 @@ sqlparse==0.4.1
 django-allauth~=0.44.0
 requests~=2.25.1
 beautifulsoup4~=4.9.3
+
+djangorestframework~=3.12.4

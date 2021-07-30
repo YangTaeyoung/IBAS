@@ -4,7 +4,7 @@ from DB.models import User, UserRole, UserAuth, Answer, UserUpdateRequest, \
     UserEmail, StateInfo, LectSchedule, LectMoneyStandard, UserSchedule  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
 from staff.forms import UserDeleteForm, UserScheduleForm, LectScheduleForm, LectMoneyStandardForm
 from pagination_handler import get_page_object
-from IBAS.forms import FileFormBase, CommentBaseForm
+from IBAS.forms import FileFormBase
 import os
 from user_controller import superuser_only, writer_only, get_logined_user, chief_only, delete_user, role_check, \
     is_default_pic
