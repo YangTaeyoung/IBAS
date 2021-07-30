@@ -1,8 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-    <script src="{% static 'js/posting_register.js' %}"></script>
-    <link rel="stylesheet" href="{% static 'css/posting_register.css' %}"/>
+
 
     <div class="page-wraper">
         <div class="page-content bg-white">
@@ -29,16 +28,9 @@
             {% load widget_tweaks %}
             <!--===============================================입력란=========================================================-->
             <form action="
-
-
-
-
-
                     {% if board_no is None %}{% url 'board_register' %}{% else %}{% url 'board_update' board_no %}{% endif %}"
                   class="add-listing-form" method="post" enctype="multipart/form-data">
-
                 {% csrf_token %}
-
                 <!-- 히든태그!! 몽땅!!-->
                 {% for field in board_form.hidden_fields %}
                     {{ field }}
@@ -73,11 +65,11 @@
                                         게시글 작성&nbsp;&nbsp;&nbsp;&nbsp;
                                         {% if logined_user.user_role.role_no <= 4 and board_type_no != 2 %}
                                             <div class="d-inline-block width-120">
-                                            <select name="board_fixdate">
-                                                <option value="0"> 상단 고정 여부</option>
-                                                <option value="2weeks">2주 고정</option>
-                                                <option value="permanent">영구 고정</option>
-                                            </select>
+                                                <select name="board_fixdate">
+                                                    <option value="0"> 상단 고정 여부</option>
+                                                    <option value="2weeks">2주 고정</option>
+                                                    <option value="permanent">영구 고정</option>
+                                                </select>
                                             </div>
                                         {% endif %}
                                     </h3>
@@ -122,18 +114,12 @@
                                         </div>
                                     {% endif %}
                                     <!--내용입력란-->
-{#                                    <div class="form-group">#}
-{#                                        {% render_field board_form.board_cont class="jqte-test" %}#}
-{#                                    </div>#}
-
-
-                                <!--내용입력란 : 텍스트 에디터 수정한거 test 버전-->
                                     <div class="form-group">
-                                        <div id="editor" style="box-sizing: border-box; height: 500px;"></div>
+                                        {% render_field board_form.board_cont %}
                                     </div>
 
 
-                                <!--test-->
+                                    <!--test-->
 
                                 </div>
                             </div>

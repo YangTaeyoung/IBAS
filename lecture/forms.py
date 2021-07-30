@@ -9,6 +9,7 @@ from IBAS.forms import FileFormBase
 from user_controller import get_logined_user
 from utils.url_regex import *
 
+from django_summernote.widgets import SummernoteWidget
 
 class LectForm(forms.ModelForm):
     class Meta:
@@ -17,8 +18,8 @@ class LectForm(forms.ModelForm):
         exclude = ("lect_chief", "lect_created", "lect_pic", "lect_day")
         widgets = {
             "lect_title": forms.TextInput(attrs={"placeholder": "강의 제목을 입력하세요"}),
-            "lect_curri": forms.Textarea(attrs={"placeholder": "강의 계획을 작성해주세요"}),
-            "lect_intro": forms.Textarea(attrs={"placeholder": "간략하게 강의를 소개해주세요"}),
+            "lect_curri": SummernoteWidget(attrs={"placeholder": "강의 계획을 작성해주세요"}),
+            "lect_intro": SummernoteWidget(attrs={"placeholder": "간략하게 강의를 소개해주세요"}),
             "lect_method": forms.Select(),
             "lect_place_or_link": forms.TextInput(attrs={"placeholder": "강의 방식을 먼저 선택하세요.", "disabled": "disabled"}),
             "lect_type": forms.HiddenInput(),

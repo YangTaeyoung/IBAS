@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
+    # 에디터 앱
+    "django_summernote",
     # DB 관련 앱
     'DB',
     # 유저 관련 앱
@@ -207,3 +209,14 @@ if IS_SERVER:
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     SECURE_SSL_REDIRECT = True
+
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+
+SUMMERNOTE_CONFIG = {
+    'summernote': {
+        'width': '100%',
+        'height': '480',
+    }
+}
+
+SUMMERNOTE_THEME = 'bs3'
