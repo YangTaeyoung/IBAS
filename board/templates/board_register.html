@@ -28,6 +28,8 @@
             {% load widget_tweaks %}
             <!--===============================================입력란=========================================================-->
             <form action="
+
+
                     {% if board_no is None %}{% url 'board_register' %}{% else %}{% url 'board_update' board_no %}{% endif %}"
                   class="add-listing-form" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
@@ -83,7 +85,11 @@
 
                                         <!--이미지, 파일 업로드란-->
                                         <div class="form-group">
-                                            {{ file_form.upload_file }}
+                                            {% if board_type_no == 8 %}
+                                                {% render_field file_form.upload_file accept="*" %}
+                                            {% else %}
+                                                {{ file_form.upload_file }}
+                                            {% endif %}
                                         </div>
                                     </div>
                                     <!-- 이미 존재하고 있던 이미지: 삭제 가능 (수정모드)-->
