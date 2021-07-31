@@ -79,6 +79,7 @@ def staff_member_list(request):
         return redirect(reverse("index"))  # 메인페이지로 보냄
 
 
+@superuser_only(cfo_included=True)
 def staff_member_update(request):
     if request.method == "POST":  # 파라미터가 POST로 넘어왔는가? (정상적인 접근)
         user_auth = request.POST.get("user_auth")
