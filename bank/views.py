@@ -184,7 +184,7 @@ def bank_support_update(request, bank_no):
         if bank_support_form.is_valid() and file_form.is_valid():
             with transaction.atomic():
                 bank_support_form.update(instance=bank)
-                bank_file_list = BankFile.objects.filter(bank_no=bank)
+                bank_file_list = BankFile.objects.filter(file_fk=bank)
                 FileController.remove_files_by_user(request, bank_file_list)
                 file_form.save(instance=bank)
 
