@@ -171,7 +171,7 @@ def bank_support_update(request, bank_no):
     if request.method == "GET":
         context = {
             "bank_no": bank_no,
-            "bank_file_list": BankFile.objects.filter(bank_no=bank),
+            "bank_file_list": BankFile.objects.filter(file_fk=bank),
             "bank_support_form": BankSupportForm(instance=bank),
             "file_form": FileForm(),
         }
