@@ -680,7 +680,7 @@
                                                 <td>{{ logined_user.user_auth.auth_name }}</td>
                                                 <td>
                                                     {% if logined_user.user_auth.auth_no == 2 %}
-                                                        <a href="{% url 'user_activate_request' %}">
+                                                        <a href="{% url 'user_activate_request' %}" onclick="alert('회비 납부 확인 요청이 완료되었습니다. \n\n순차적으로 확인하고 있으니 더 이상 요청하지 말아주세요.')">
                                                             회비 납부 확인 요청
                                                         </a>
                                                     {% endif %}
