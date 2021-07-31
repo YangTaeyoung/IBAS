@@ -704,7 +704,7 @@
                                                 {# Back : 자기 소개 뜨도록 수정, 등록 안돼있으면 아래 내용 뜨도록 #}
                                                 {% if logined_user.user_intro %}
                                                     <td style="width: 50%">
-                                                        {{ logined_user.user_intro }} &nbsp;&nbsp;&nbsp;
+                                                        {{ logined_user.user_intro|linebreaksbr }} &nbsp;&nbsp;&nbsp;
                                                         {% if logined_user.user_apply_publish == 1 %}
                                                             <span style="color:#00a834">(공개됨)</span>
                                                         {% else %}
@@ -1140,8 +1140,7 @@
                                                 <!--설명 내용 수정 부분-->
                                                 <textarea name="user_intro" required="required"
                                                           class="form-control"
-                                                          placeholder="간단한 본인 소개를 적어주세요">{% if logined_user.user_intro %}
-                                                    {{ logined_user.user_intro }}{% endif %}</textarea>
+                                                          placeholder="간단한 본인 소개를 적어주세요">{% if logined_user.user_intro %}{{ logined_user.user_intro }}{% endif %}</textarea>
                                             </div>
                                             <!--수정신청하기 버튼, Back : 누르면 회장에게 승인을 요구하도록 수정-->
                                             <a href="#" class="site-button"
