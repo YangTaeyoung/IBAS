@@ -295,7 +295,7 @@
                                             <!-- 회장단 전화번호 -->
                                             <h5>{{ chief_crew.user_phone }}</h5>
                                             <!-- 회장단 소개 -->
-                                            <p>{% if chief_crew.user_intro %}{{ chief_crew.user_intro }}{% endif %}</p>
+                                            <p>{% if chief_crew.user_intro %}{{ chief_crew.user_intro|linebreaksbr }}{% endif %}</p>
                                         </div>
                                     </div>
                                 </div>
