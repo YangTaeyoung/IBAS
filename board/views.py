@@ -204,6 +204,8 @@ def board_search(request, board_type_no):
                 Q(board_writer__user_name__icontains=keyword) |
                 Q(board_type_no__board_type_no=board_type_no)
             ).select_related("board_writer").order_by("-board_created")
+            if board_type_no == 8 and not role_check(request, role_no=4, sign="lte"):
+                return not_allowed(request)
             if board_type_no == 9:
                 board_list = board_list.filter(board_writer=get_logined_user(request))
 
