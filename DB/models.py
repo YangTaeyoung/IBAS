@@ -273,8 +273,8 @@ class Lect(models.Model):
     lect_intro = models.CharField(db_column='LECT_INTRO', max_length=300)
     lect_state = models.ForeignKey('StateInfo', models.DO_NOTHING, db_column='LECT_STATE',
                                    default=1, null=True, blank=True)
-    lect_curri = models.TextField(db_column='LECT_CURRI')
-    lect_limit_num = models.IntegerField(db_column='LECT_LIMIT_NUM')
+    lect_curri = SummernoteTextField(db_column='LECT_CURRI', max_length=CONT_SIZE)
+    lect_limit_num = models.IntegerField(db_column='LECT_LIMIT_NUM', blank=True, null=True)
     lect_place_or_link = models.CharField(db_column='LECT_PLACE_OR_LINK', max_length=1000, null=True, blank=True)
     lect_method = models.ForeignKey('MethodInfo', models.DO_NOTHING, db_column='LECT_METHOD',
                                     choices=METHOD_CHOICES, null=True, blank=True)

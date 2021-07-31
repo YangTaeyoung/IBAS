@@ -294,8 +294,12 @@ def member_only(func):
     @functools.wraps(func)
     def wrapper(request, *args, **kwargs):
         current_user = get_logined_user(request)
-        lect_room = Lect.objects.prefetch_related(
-            'enrolled_students').get(pk=kwargs.get('room_no', kwargs.get('lect_no')))
+        try:
+            lect_room = Lect.objects.prefetch_related(
+                'enrolled_students').get(pk=kwargs.get('room_no', kwargs.get('lect_no')))
+        except Lect.DoesNotExist:
+            messages.warning(request, "해당 강의를 찾을 수 없습니다. 삭제되었을 수 있습니다.")
+            return redirect("lect_view", type_no=1)
         if current_user == lect_room.lect_chief:
             return func(request, *args, **kwargs)
         elif member := lect_room.enrolled_students.filter(lect_no=lect_room, student=current_user).first():

@@ -18,7 +18,7 @@
                             <h1 class="text-white introduce-letter-spacing_5">{{ lect.lect_title }}</h1>
                             <!--부제목-->
                             <!-- DB에서 부제목 꺼내와야 함 (공지사항, 강의, 과제, 제출된 과제 리스트) -->
-                            <p class="m-t20 ">{{ lect.lect_intro }}</p>
+                            <p class="m-t20 ">{{ lect.lect_intro|safe }}</p>
                         </div>
                     </div>
                 </a>

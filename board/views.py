@@ -6,10 +6,12 @@ from django.db.models import Q
 from board.forms import BoardForm, ContestForm, FileForm
 from file_controller import FileController
 from pagination_handler import get_page_object
-from alarm.alarm_controller import create_comment_alarm, create_comment_ref_alarm, create_board_notice_alarm, delete_board_by_superuser_alarm
+from alarm.alarm_controller import create_comment_alarm, create_comment_ref_alarm, create_board_notice_alarm, \
+    delete_board_by_superuser_alarm
 from user_controller import login_required, writer_only, auth_check, get_logined_user, not_allowed, role_check
 from django.contrib import messages
 from date_controller import today_after_day, today_after_year, today
+from exception_handler import board_exist_check, contest_board_exist_check
 
 
 # 상단 기준일을 가지고 오는 함수
@@ -112,7 +114,6 @@ def get_context_of_contest_(contest_no):
     contest = ContestBoard.objects.get(pk=contest_no)  # 해당 공모전 정보 db에서 불러오기
     # 게시글 파일 받아오기. (순서대로 전체파일, 이미지파일, 문서파일)
     contest_file_list, image_list, doc_list = FileController.get_images_and_files_of_(contest)  # 공모전 이미지와 문서 받아오기
-
     # 댓글 불러오기
     comment_list = ContestComment.objects.filter(comment_board_no=contest).filter(
         comment_cont_ref__isnull=True).order_by("comment_created").prefetch_related("contestcomment_set")
@@ -229,6 +230,8 @@ def board_search(request, board_type_no):
 #   - context 변수 가져오는 함수 생성
 @auth_check()
 def board_detail(request, board_no):  # 게시글 상세 보기
+    if is_redirect := board_exist_check(request, board_no):
+        return is_redirect
     board = Board.objects.get(pk=board_no)
     board_type_no = board.board_type_no.board_type_no
     if board_type_no == 8 and not role_check(request, 4, "lte"):
@@ -289,7 +292,6 @@ def board_register(request):
 @writer_only()
 def board_update(request, board_no):
     board = get_object_or_404(Board, pk=board_no)
-
     # 수정을 누르면 GET 방식으로 DB 에 있는 것을 꺼내 온다.
     if request.method == "GET":
         context = {
@@ -456,9 +458,12 @@ def contest_register(request):  # 공모전 등록
 @auth_check()
 def contest_detail(request, contest_no):  # 게시판 상세 페이지로 이동
     if request.method == 'GET':
-        context = get_context_of_contest_(contest_no)
-        return render(request, 'contest_detail.html', context)
-
+        try:
+            context = get_context_of_contest_(contest_no)
+            return render(request, 'contest_detail.html', context)
+        except ContestBoard.DoesNotExist:
+            messages.warning(request, "해당 공모전을 찾을 수 없습니다. 삭제되었을 수 있습니다.")
+            return redirect(reverse("contest_list"))
     else:  # 비정상적인 접근
         print(request)  # LOGGING :: 로그 파일 생성하는 코드 나중에 수정해야 함.
         return redirect(reverse('contest_list'))

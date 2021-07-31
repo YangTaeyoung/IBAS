@@ -10,6 +10,7 @@ from member import session
 from alarm.alarm_controller import create_comment_alarm, create_comment_ref_alarm
 from django.http import HttpResponseRedirect
 from user_controller import login_required, writer_only, auth_check, superuser_only
+from exception_handler import activity_exist_check
 
 
 # 메인페이지 이동 함수
@@ -41,6 +42,7 @@ def introduce(request):
 #   - 코드 최적화 paginator 부분
 def activity_list(request):
     # 최신순으로 정렬하고, 1:M 관계로 가져오기 위해 prefetch_related 함수 사용
+
     board_list = Board.objects.filter(board_type_no__board_type_no=4).order_by('-board_created').prefetch_related(
         "files")
     board_list = get_page_object(request, board_list, 6)
@@ -57,11 +59,11 @@ def activity_list(request):
 #   - 단순 코드 정리..
 def activity_detail(request, board_no):
     if board_no is not None:
+        if is_redirect := activity_exist_check(request, board_no):
+            return is_redirect
         board = Board.objects.get(pk=board_no)
-
         comment_list = Comment.objects.filter(comment_board_no=board).filter(comment_cont_ref__isnull=True).order_by(
             "comment_created").prefetch_related("comment_set")
-
         context = {
             "board": board,
             "board_file_list": BoardFile.objects.filter(file_fk=board),
@@ -278,6 +280,7 @@ def hall_of_fame(request):
         "graduated_user_list": User.objects.filter(Q(user_apply_publish=1) & Q(user_grade=0))
     }
     return render(request, "hall_of_fame.html", context)
+
 
 def error_handler500(request):
     return render(request, "../templates/error_page.html", status=500)
