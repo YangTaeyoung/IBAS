@@ -1,7 +1,11 @@
+import pytz
 from django import forms
-from DB.models import UserDelete, LectSchedule, UserSchedule, LectMoneyStandard
+from DB.models import UserDelete, LectSchedule, UserSchedule, LectMoneyStandard, PolicyTerms, PolicyType
+from django_summernote.widgets import SummernoteWidget
+from date_controller import today
 
 DATETIME_LOCAL_FORMAT = "%Y-%m-%dT%H:%M"
+
 
 class UserDeleteForm(forms.ModelForm):
     class Meta:
@@ -65,3 +69,26 @@ class LectMoneyStandardForm(forms.ModelForm):
             "money_11to20": forms.NumberInput(),
             "money_21over": forms.NumberInput()
         }
+
+
+class PolicyTermsForms(forms.ModelForm):
+    class Meta:
+        model = PolicyTerms
+        exclude = ('policy_user', 'policy_updated')
+        labels = {
+            "policy_title": "약관 제목",
+            "policy_content": "약관 내용",
+            "policy_type": "약관 종류"
+        }
+        widgets = {
+            "policy_title": forms.TextInput(attrs={"placeholder": "약관 제목을 입력하세요."}),
+            "policy_content": SummernoteWidget(),
+            "policy_type": forms.HiddenInput()
+        }
+
+    def save(self, **kwargs):
+        policy_terms = super().save(commit=False)
+        policy_terms.policy_user = kwargs.get("policy_user")
+        policy_terms.policy_updated = today()
+        policy_terms.save()
+        return policy_terms

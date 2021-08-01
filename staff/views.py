@@ -1,8 +1,8 @@
 from django.shortcuts import render, reverse, redirect, get_object_or_404
 from DB.models import User, UserRole, UserAuth, Answer, UserUpdateRequest, \
     UserDelete, UserDeleteAor, UserDeleteFile, UserDeleteComment, UserDeleteState, \
-    UserEmail, StateInfo, LectSchedule, LectMoneyStandard, UserSchedule  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
-from staff.forms import UserDeleteForm, UserScheduleForm, LectScheduleForm, LectMoneyStandardForm
+    UserEmail, StateInfo, LectSchedule, LectMoneyStandard, UserSchedule, PolicyTerms  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
+from staff.forms import UserDeleteForm, UserScheduleForm, LectScheduleForm, LectMoneyStandardForm, PolicyTermsForms
 from pagination_handler import get_page_object
 from IBAS.forms import FileFormBase, CommentBaseForm
 import os
@@ -406,6 +406,23 @@ def user_name_update(request):
     return redirect(reverse("staff_member_list"))
 
 
+def get_content_of_policy_terms(type_no):
+    policy_terms = PolicyTerms.objects.filter(policy_type__type_no=type_no).order_by("-policy_updated")
+    if len(policy_terms) != 0:
+        policy_terms = policy_terms.first()
+        return {
+            "policy_title": policy_terms.policy_title,
+            "policy_content": policy_terms.policy_content,
+            "policy_type": policy_terms.policy_type.type_no
+        }
+    else:
+        return {
+            "policy_title": "",
+            "policy_content": "",
+            "policy_type": type_no
+        }
+
+
 # 관리자 페이지
 @chief_only(vice=True)
 def management(request):
@@ -413,6 +430,7 @@ def management(request):
     lect_schedule = LectSchedule.objects.get(pk=1)
     user_schedule = UserSchedule.objects.get(pk=1)
     lect_money_standard = LectMoneyStandard.objects.get(pk=1)
+    print(get_content_of_policy_terms(2))
     context = {
         "max_gen": max_gen,
         "lect_schedule": lect_schedule,
@@ -420,7 +438,10 @@ def management(request):
         "lect_money_standard": lect_money_standard,
         "lect_schedule_form": LectScheduleForm(instance=lect_schedule),
         "user_schedule_form": UserScheduleForm(instance=user_schedule),
-        "lect_money_standard_form": LectMoneyStandardForm(instance=lect_money_standard)
+        "lect_money_standard_form": LectMoneyStandardForm(instance=lect_money_standard),
+        "policy_form_1": PolicyTermsForms(initial=get_content_of_policy_terms(1)),
+        "policy_form_2": PolicyTermsForms(initial=get_content_of_policy_terms(2)),
+        "policy_form_3": PolicyTermsForms(initial=get_content_of_policy_terms(3))
     }
     return render(request, "management.html", context)
 
@@ -441,4 +462,10 @@ def management_update(request, form_no):
                                                                     instance=LectMoneyStandard.objects.get(pk=1))
             if lect_money_standard_update_form.is_valid():
                 lect_money_standard_update_form.save()
+        else:
+            policy_terms_form = PolicyTermsForms(request.POST)
+            if policy_terms_form.is_valid():
+                policy_terms_form.save(policy_user=get_logined_user(request))
+            else:
+                print(policy_terms_form.errors)
     return redirect(reverse("management"))

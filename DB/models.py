@@ -421,7 +421,7 @@ class LectBoardAnswer(models.Model):
     lect_user_stu = models.ForeignKey('User', on_delete=models.CASCADE,
                                       db_column='LECT_USER_STU')  # Field name made lowercase.
     lect_ans_cont = SummernoteTextField(db_column='LECT_ANS_CONT', max_length=CONT_SIZE, blank=True,
-                                     null=True)  # Field name made lowercase.
+                                        null=True)  # Field name made lowercase.
     lect_ans_created = models.DateTimeField(db_column='LECT_ANS_CREATED',
                                             auto_now_add=True)  # Field name made lowercase.
 
@@ -547,6 +547,28 @@ class MajorInfo(models.Model):
     class Meta:
         managed = False
         db_table = 'MAJOR_INFO'
+
+
+class PolicyType(models.Model):
+    type_no = models.AutoField(db_column="TYPE_NO", primary_key=True)
+    type_name = models.CharField(db_column="TYPE_NAME", max_length=100)
+
+    class Meta:
+        managed = False
+        db_table = "POLICY_TYPE"
+
+
+class PolicyTerms(models.Model):
+    policy_no = models.AutoField(db_column='POLICY_NO', primary_key=True)
+    policy_title = models.CharField(db_column="POLICY_TITLE", max_length=500)
+    policy_content = SummernoteTextField(db_column="POLICY_CONTENT", max_length=CONT_SIZE)
+    policy_user = models.ForeignKey("User", on_delete=models.DO_NOTHING, db_column="POLICY_USER", null=True, blank=True)
+    policy_type = models.ForeignKey("PolicyType",db_column="POLICY_TYPE", on_delete=models.CASCADE)
+    policy_updated = models.DateTimeField(db_column="POLICY_UPDATED", auto_now=True)
+
+    class Meta:
+        managed = False
+        db_table = "POLICY_TERMS"
 
 
 class QuestForm(models.Model):
