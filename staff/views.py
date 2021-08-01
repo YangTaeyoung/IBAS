@@ -439,9 +439,9 @@ def management(request):
         "lect_schedule_form": LectScheduleForm(instance=lect_schedule),
         "user_schedule_form": UserScheduleForm(instance=user_schedule),
         "lect_money_standard_form": LectMoneyStandardForm(instance=lect_money_standard),
-        "policy_form_1": PolicyTermsForms(initial=get_content_of_policy_terms(1)),
-        "policy_form_2": PolicyTermsForms(initial=get_content_of_policy_terms(2)),
-        "policy_form_3": PolicyTermsForms(initial=get_content_of_policy_terms(3))
+        "policy_form_1": PolicyTermsForms(initial=get_content_of_policy_terms(1), prefix='form_1'),
+        "policy_form_2": PolicyTermsForms(initial=get_content_of_policy_terms(2), prefix='form_2'),
+        "policy_form_3": PolicyTermsForms(initial=get_content_of_policy_terms(3), prefix='form_3')
     }
     return render(request, "management.html", context)
 
@@ -462,10 +462,16 @@ def management_update(request, form_no):
                                                                     instance=LectMoneyStandard.objects.get(pk=1))
             if lect_money_standard_update_form.is_valid():
                 lect_money_standard_update_form.save()
-        else:
-            policy_terms_form = PolicyTermsForms(request.POST)
+        elif form_no == 4:
+            policy_terms_form = PolicyTermsForms(request.POST, prefix='form_1')
             if policy_terms_form.is_valid():
                 policy_terms_form.save(policy_user=get_logined_user(request))
-            else:
-                print(policy_terms_form.errors)
+        elif form_no == 5:
+            policy_terms_form = PolicyTermsForms(request.POST, prefix='form_2')
+            if policy_terms_form.is_valid():
+                policy_terms_form.save(policy_user=get_logined_user(request))
+        elif form_no == 6:
+            policy_terms_form = PolicyTermsForms(request.POST, prefix='form_3')
+            if policy_terms_form.is_valid():
+                policy_terms_form.save(policy_user=get_logined_user(request))
     return redirect(reverse("management"))
