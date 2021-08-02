@@ -113,6 +113,7 @@ TEMPLATES = [
                 'utils.context_processors.superuser_check',  # 슈퍼유저 확인을 위한 context_processor
                 'utils.context_processors.is_active',
                 'utils.context_processors.cfo_check',
+                'utils.context_processors.get_policies',
             ],
         },
     },

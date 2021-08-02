@@ -94,37 +94,10 @@
                     <div class="form-center-position form-width-large mt-5">
                         <!-- 약관 제목 -->
                         <!-- 약관 종류에 따라, 개인정보 제공 동의 약관 / 동아리 회칙 등을 DB에서 꺼냐와야 함 -->
-                        <h1>개인정보 제공 동의 약관</h1>
+                        <h1>{{ policy_terms.policy_title }}</h1>
+                        <hr/>
                         <!-- 태크를 붙여둔 상태로 DB에 저장/불러오기 해야 함 -->
-                        <h5>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                            labore et dolore magna aliqua. Nisl tincidunt eget nullam non. Quis hendrerit dolor magna
-                            eget est lorem ipsum dolor sit. Volutpat odio facilisis mauris sit amet massa. Commodo odio
-                            aenean sed adipiscing diam donec adipiscing tristique. Mi eget mauris pharetra et. Non
-                            tellus orci ac auctor augue. Elit at imperdiet dui accumsan sit. Ornare arcu dui vivamus
-                            arcu felis. Egestas integer eget aliquet nibh praesent. In hac habitasse platea dictumst
-                            quisque sagittis purus. Pulvinar elementum integer enim neque volutpat ac.
-                            </br>
-                            Senectus et netus et malesuada. Nunc pulvinar sapien et ligula ullamcorper malesuada proin.
-                            Neque convallis a cras semper auctor. Libero id faucibus nisl tincidunt eget. Leo a diam
-                            sollicitudin tempor id. A lacus vestibulum sed arcu non odio euismod lacinia. In tellus
-                            integer feugiat scelerisque. Feugiat in fermentum posuere urna nec tincidunt praesent.
-                            Porttitor rhoncus dolor purus non enim praesent elementum facilisis. Nisi scelerisque eu
-                            ultrices vitae auctor eu augue ut lectus. Ipsum faucibus vitae aliquet nec ullamcorper sit
-                            amet risus. Et malesuada fames ac turpis egestas sed. Sit amet nisl suscipit adipiscing
-                            bibendum est ultricies. Arcu ac tortor dignissim convallis aenean et tortor at. Pretium
-                            viverra suspendisse potenti nullam ac tortor vitae purus. Eros donec ac odio tempor orci
-                            dapibus ultrices. Elementum nibh tellus molestie nunc. Et magnis dis parturient montes
-                            nascetur. Est placerat in egestas erat imperdiet. Consequat interdum varius sit amet mattis
-                            vulputate enim.
-                            </br>
-                            Sit amet nulla facilisi morbi tempus. Nulla facilisi cras fermentum odio eu. Etiam erat
-                            velit scelerisque in dictum non consectetur a erat. Enim nulla aliquet porttitor lacus
-                            luctus accumsan tortor posuere. Ut sem nulla pharetra diam. Fames ac turpis egestas
-                            maecenas. Bibendum neque egestas congue quisque egestas diam. Laoreet id donec ultrices
-                            tincidunt arcu non sodales neque. Eget felis eget nunc lobortis mattis aliquam faucibus
-                            purus. Faucibus interdum posuere lorem ipsum dolor sit.</h5>
-
-
+                        {{ policy_terms.policy_content|safe }}
                         <!--===================== 동아리 약관 모달창 예시 (추후 삭제예정) =====================-->
                         <!-- 로컬에서는 Main 페이지로 리디렉션 되어, 페이지를 만들 수 없었기 때문에 아래에 예시로 추가함 -->
                         <!-- 서버컴퓨터에 추가하면, 삭제할 예정 여기부터는 디자인 참고용으로 봐주시면 됩니다 (여기서 DB작업 X) -->
@@ -158,44 +131,7 @@
         </div>
 
 
-        <!--===================== 동아리 약관 Modal 창 예시 시작 (추후 삭제예정)=====================-->
-        <div class="modal fade modal-bx-info modal-lg" id="hi" tabindex="-1" role="dialog"
-             aria-labelledby="ReportReviewsModalLongTitle" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <!--제목부분-->
-                    <div class="modal-header">
-                        <!-- 누르는 a 태그에 따라, 불러오는 내용이 달라야 함 (개인정보 제공 동의 약관 / 동아리 회칙에 대한 약관) -->
-                        <h5 class="modal-title" id="ReportReviewsModalLongTitle">개인정보제공 동의 약관</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true"><i class="la la-close"></i></span>
-                        </button>
-                    </div>
-                    <!--내용부분-->
-                    <div class="modal-body">
-                        <!-- 개인정보 제공 동의 약관 / 동아리 회칙을 DB에서 불러옴 -->
-                        <!-- 태크를 붙여둔 상태로 DB에 저장/불러오기 해야 함 -->
-                        <div class="form-group pb-0 mb-1">
-                            본 채용홈페이지를 통해 제출하는 지원서는 귀하께서 지원서를 제출하는 회사(이하 채용회사)가
 
-                            직접 접수하고 관리하며, 향후 지원서 관리책임은 채용회사에 있습니다.</br>
-
-
-                            지원자는 아래 개인정보 제공 등에 관해 동의하지 않을 권리가 있습니다.
-
-                            다만, 지원서를 통해 제공받은 정보는 채용회사의 채용 및 선발에 필수적인 항목으로
-
-                            해당 정보를 제공받지 못할 경우 회사는 공정한 선발전형을 진행할 수 없습니다.
-
-
-                            따라서 아래 개인정보 제공에 대해 동의하지 않는 경우 채용 및 선발전형에 지원이 제한될 수 있습니다.
-                            지원자의 동의 거부 권리 및 동의 거부에 따른 불이익은 아래에 제시되는 모든 동의사항에 해당됩니다.
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--===================== 동아리 약관 Modal 창 예시 끝 (추후 삭제예정)=====================-->
 
 
     </div>

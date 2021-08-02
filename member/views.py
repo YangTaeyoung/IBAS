@@ -3,7 +3,7 @@ from allauth.socialaccount.models import SocialAccount, \
     SocialToken  # 소셜 계정 DB, socialaccount_socialaccount 테이블을 사용하기 위함.
 from django.urls import reverse
 from DB.models import User, UserAuth, UserRole, QuestForm, Answer, UserEmail, \
-    MajorInfo  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
+    MajorInfo,PolicyTerms  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
 from django.http import HttpResponseRedirect
 # 내가 만든 세션 모듈 불러오기
 from . import session
@@ -15,6 +15,8 @@ from django.db import transaction
 from date_controller import user_recruit_check, is_user_recruiting
 from django.contrib import messages
 from alarm.alarm_controller import create_user_join_alarm
+
+
 
 
 # Create your views here.
