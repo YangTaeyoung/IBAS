@@ -2,10 +2,7 @@
 {% load static %}
 {% block content %}
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
     <div class="page-content bg-white" style="padding-bottom: 0px">
         <!-- Section Banner -->
@@ -36,35 +33,46 @@
                         <!--=================href에 아무것도 걸지 않으므로 달라진 점이 없다. ==========-->
                     {% endif %}
 
+
+
                 </div>
             </div>
-
-
-
 
 
         </div>
     </div>
     <!-- Section Banner END -->
-
-
-    <div class="container" style="position: absolute; left: 0px; bottom:20px;">
-      <div class="toast" data-autohide="false">
+    <!--면접 기간 알려주는 알림창, 로그인안한 사람만, 해당기간에 볼 수 있도록 해야함-->
+    <div class="container" style="position: fixed; right: 0px; bottom:20px; width: 400px;" id="ibas-toast">
+      <div class="bg-white" data-autohide="false" style="box-shadow: 2px 2px 10px grey; border-radius: 10px;">
         <div class="toast-header">
-          <strong class="mr-auto text-primary">IBAS 공지</strong>
-          <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
+          <strong class="mr-auto" style="color: #4015a0">IBAS 공지</strong>
+          <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" onclick="toastpopDown()">&times;</button>
         </div>
         <div class="toast-body">
-          IBAS 3기의 3-4학년 면접일은<br/>21.01.01 부터 21.02.02 까지 입니다.
+            IBAS
+            <!--회장단이 설정한 기수 들어가도록-->
+            3기의 3-4학년 면접일은
+            <br/>
+            <!--회장단이 설정한 면접 시작일 들어가도록-->
+            21.01.01
+             부터
+            <!--회장단이 설정한 면접 종룟일 들어가도록-->
+            21.02.02
+             까지 입니다.
         </div>
       </div>
     </div>
 
     <script>
-    $(document).ready(function(){
-      $('.toast').toast('show');
-    });
+    function toastpopDown() {
+        document.getElementById("ibas-toast").style.display ="none"
+    }
     </script>
 
 
+
+
 {% endblock %}
+
+
