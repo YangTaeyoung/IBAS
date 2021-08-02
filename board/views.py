@@ -545,59 +545,59 @@ def contest_search(request):
 # 작성자 : 유동현
 # 마지막 수정 일시 : 2021.04.15
 # 수정내용 :
-# @writer_only()
-# def contest_comment_update(request):
-#     if request.method == "POST":
-#         contest_no = request.POST.get("contest_no")
-#         comment = ContestComment.objects.get(pk=request.POST.get("comment_id"))
-#         comment.comment_cont = request.POST.get("comment_cont")
-#         comment.save()
-#
-#         return redirect("contest_detail", contest_no=contest_no)
-#
-#
-# # ---- contest_comment_delete ---- #
-# # : 공모전 댓글 삭제
-# # 작성자 : 유동현
-# # 마지막 수정 일시 : 2021.04.15
-# # 수정내용 :
-# @writer_only(superuser=True)
-# def contest_comment_delete(request):
-#     if request.method == "POST":
-#         contest_no = request.POST.get('contest_no')
-#         comment = ContestComment.objects.get(pk=request.POST.get('comment_id'))
-#         comment.delete()
-#         return redirect("contest_detail", contest_no=contest_no)
-#     else:
-#         return render(request, "contest_board.html")
-#
-#
-# # ---- contest_comment_register ---- #
-# # : 공모전 댓글 등록
-# # 작성자 : 유동현
-# # 마지막 수정 일시 : 2021.04.15
-# # 수정내용 :
-# @auth_check()
-# def contest_comment_register(request):
-#     contest = None
-#
-#     # 댓글 등록할 때
-#     if request.method == "POST":
-#         contest = ContestBoard.objects.get(pk=request.POST.get("contest_no"))
-#         ContestComment.objects.create(
-#             comment_writer=User.objects.get(user_stu=request.session.get("user_stu")),
-#             comment_cont=request.POST.get("comment_cont"),
-#             comment_board_no=contest
-#         )
-#
-#     # 대댓글 등록할 때
-#     elif request.method == "GET":
-#         contest = ContestBoard.objects.get(pk=request.GET.get("board_no"))  # sy.js AddReply 함수. <input name='board_no'>
-#         ContestComment.objects.create(
-#             comment_writer=User.objects.get(user_stu=request.session.get("user_stu")),
-#             comment_cont=request.GET.get("comment_cont"),
-#             comment_board_no=contest,
-#             comment_cont_ref=ContestComment.objects.get(pk=request.GET.get("comment_ref"))
-#         )
-#
-#     return redirect("contest_detail", contest_no=contest.contest_no)
+@writer_only()
+def contest_comment_update(request):
+    if request.method == "POST":
+        contest_no = request.POST.get("contest_no")
+        comment = Comment.objects.get(pk=request.POST.get("comment_id"))
+        comment.comment_cont = request.POST.get("comment_cont")
+        comment.save()
+
+        return redirect("contest_detail", contest_no=contest_no)
+
+
+# ---- contest_comment_delete ---- #
+# : 공모전 댓글 삭제
+# 작성자 : 유동현
+# 마지막 수정 일시 : 2021.04.15
+# 수정내용 :
+@writer_only(superuser=True)
+def contest_comment_delete(request):
+    if request.method == "POST":
+        contest_no = request.POST.get('contest_no')
+        comment = Comment.objects.get(pk=request.POST.get('comment_id'))
+        comment.delete()
+        return redirect("contest_detail", contest_no=contest_no)
+    else:
+        return render(request, "contest_board.html")
+
+
+# ---- contest_comment_register ---- #
+# : 공모전 댓글 등록
+# 작성자 : 유동현
+# 마지막 수정 일시 : 2021.04.15
+# 수정내용 :
+@auth_check()
+def contest_comment_register(request):
+    contest = None
+
+    # 댓글 등록할 때
+    if request.method == "POST":
+        contest = ContestBoard.objects.get(pk=request.POST.get("contest_no"))
+        Comment.objects.create(
+            comment_writer=User.objects.get(user_stu=request.session.get("user_stu")),
+            comment_cont=request.POST.get("comment_cont"),
+            comment_board_no=contest
+        )
+
+    # 대댓글 등록할 때
+    elif request.method == "GET":
+        contest = ContestBoard.objects.get(pk=request.GET.get("board_no"))  # sy.js AddReply 함수. <input name='board_no'>
+        Comment.objects.create(
+            comment_writer=User.objects.get(user_stu=request.session.get("user_stu")),
+            comment_cont=request.GET.get("comment_cont"),
+            comment_board_no=contest,
+            comment_cont_ref=Comment.objects.get(pk=request.GET.get("comment_ref"))
+        )
+
+    return redirect("contest_detail", contest_no=contest.contest_no)

@@ -21,15 +21,18 @@ type_no = {
 }
 
 
+@auth_check()
 def comment_register(request, type, board_ref):
     comment_type = get_object_or_404(CommentType, pk=type_no[type])
 
     if request.method == "POST":
+        data = json.loads(request.body)
         comment = Comment.objects.create(
             comment_type=comment_type,
             comment_writer=get_logined_user(request),
-            comment_cont=json.loads(request.body)['comment_cont'],
-            comment_board_ref=int(board_ref)
+            comment_cont=data['comment_cont'],
+            comment_board_ref=int(board_ref),
+            comment_cont_ref_id=data.get('comment_cont_ref', None)
         )
 
         comment_json = {
@@ -39,7 +42,7 @@ def comment_register(request, type, board_ref):
             'comment_writer': comment.comment_writer_id,
             'comment_cont': comment.comment_cont,
             'comment_created': comment.comment_created,
-            'comment_cont_ref': comment.comment_cont_ref
+            'comment_cont_ref': comment.comment_cont_ref_id
         }
 
         return JsonResponse({'comment': comment_json}, safe=False)
@@ -47,15 +50,6 @@ def comment_register(request, type, board_ref):
         # if comment_form.is_valid():
         #     comment_form.save(comment_type=comment_type, comment_board_ref=board_ref)
         # pass
-    else:
-        return JsonResponse(status=400, data={})
-
-
-def comment_ref_register(request, comment_id):
-    if request.method == "POST":
-        comment_form = CommentSerializer(instance=request.data)
-        if comment_form.is_valid():
-            pass
     else:
         return JsonResponse(status=400, data={})
 
@@ -71,6 +65,7 @@ def comment_delete(request, comment_id):
         return JsonResponse(status=400, data={})
 
 
+@writer_only()
 def comment_update(request, comment_id):
     if request.method == "PUT":
         comment = get_object_or_404(Comment, pk=comment_id)
@@ -84,7 +79,7 @@ def comment_update(request, comment_id):
             'comment_writer': comment.comment_writer_id,
             'comment_cont': comment.comment_cont,
             'comment_created': comment.comment_created,
-            'comment_cont_ref': comment.comment_cont_ref
+            'comment_cont_ref': comment.comment_cont_ref_id
         }
 
         return JsonResponse({'comment': comment_json}, safe=False)
@@ -101,6 +96,7 @@ def comment_view(request, type, board_ref):
     return Response(comment_serializer.data)
 
 
+# 시리얼라이저 완성되기 전까지 임의로 사용
 @ensure_csrf_cookie
 def axios_response(request, type, board_ref):
     comments = Comment.objects.prefetch_related("comment_ref")\

@@ -14,8 +14,8 @@
       </p>
       <!-- 댓글작성 버튼 -->
       <p class="form-submit" style="text-align: right">
-        <input v-on:click="addComment(comment_cont)" value="댓글등록"
-               class="submit site-button" id="submit" name="submit">
+        <input v-on:click="addComment()" value="댓글등록"
+               class="submit site-button">
       </p>
 
     </div>
@@ -44,6 +44,7 @@ export default {
         alert('댓글을 입력하세요!');
       } else if(confirm("댓글을 등록하시겠습니까?")) {
         this.$emit("addComment", this.comment_cont);
+        this.comment_cont = ""
       }
     }
   },

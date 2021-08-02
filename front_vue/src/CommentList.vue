@@ -1,6 +1,6 @@
 <template>
   <div class="clear" id="comment-list">
-    <template v-if="comment_list.length > 0">
+    <template v-if="comment_list!=null">
       <!-- 게시글과 댓글을 구분짓는 구분선 -->
       <div class="dlab-divider bg-gray-dark"></div>
     </template>
@@ -9,14 +9,16 @@
         <ol class="comment-list">
           <li v-for="(comment, i) in comment_list" v-bind:key="i" :ref="'comment_' + comment.comment_id" class="comment">
 
-            <comment @deleteComment="deleteComment" @updateComment="updateComment" :sendComment="comment" :sendLoginedUser="logined_user"></comment>
-
+            <comment @deleteComment="deleteComment" @updateComment="updateComment" @addRecomment="addComment"
+                     :send-comment="comment" :send-logined-user="logined_user" :send-index="i" :send-comment-set="comment_set_list[i]"></comment>
+<!--
             <div v-if="comment_set_list[i]!=null">
-              <div v-for="(commentRef, j) in comment_set_list[i]"  v-bind:key="j">
-                <div  class="dlab-divider bg-gray-dark"></div>
-                <comment :send-comment="commentRef" style="margin-left: 20px;"></comment>
+              <div v-for="(commentRef, j) in comment_set_list[i]"  v-bind:key="j" :ref="'comment_' + commentRef.comment_id">
+                <comment @deleteComment="deleteComment" @updateComment="updateComment"
+                    :send-comment="commentRef" :send-logined-user="logined_user"
+                         style="margin-left: 20px;"></comment>
               </div>
-            </div>
+            </div>-->
 
           </li>
         </ol>
@@ -74,43 +76,61 @@ export default {
             console.log("Failed to get commentList", response);
           });
     },
-    addComment: function (comment_cont) {
-      var this_vue = this;
-      console.log("add comment...", comment_cont);
+    addComment: function (comment_cont, comment_cont_ref, index) {
+      if(confirm('댓글을 등록하시겠습니까?')) {
+        var this_vue = this;
+        console.log("add comment...");
 
-      var postData = {comment_cont: comment_cont}
-      axios.post("http://127.0.0.1:8000/comment/" + this_vue.board_type + "/register/" + this_vue.board_no, postData)
-          .then(function (response) {
-            // 통신 성공하면, 해당 댓글 정보 받아와서, 새로 붙이기.
-            console.log('adding comment POST', response);
-            this_vue.comment_list.push(response.data.comment);
-          })
-          .catch(function (err) {
-            console.log("adding error", err);
-          })
+        var postData = {comment_cont: comment_cont, comment_cont_ref: comment_cont_ref}
+        axios.post("http://127.0.0.1:8000/comment/" + this_vue.board_type + "/register/" + this_vue.board_no, postData)
+            .then(function (response) {
+              // 통신 성공하면, 해당 댓글 정보 받아와서, 새로 붙이기.
+              console.log('adding comment POST', response);
+              if (comment_cont_ref === undefined) {
+                console.log('댓글', comment_cont_ref)
+                this_vue.comment_list.push(response.data.comment);
+              } else {
+                console.log('대댓글', comment_cont_ref)
+                // 첫 대댓글 오류
+                if (this_vue.comment_set_list[index] == null) {
+                  this_vue.comment_set_list[index] = [response.data.comment,];
+                } else {
+                  this_vue.comment_set_list[index].push(response.data.comment);
+                }
+              }
+
+            })
+            .catch(function (err) {
+              console.log("adding error", err);
+            })
+      }
     },
     deleteComment: function (comment_id) {
-      console.log("deleting comment", comment_id)
+      if(confirm('댓글을 삭제하시겠습니까?')) {
+        console.log("deleting comment", comment_id)
 
-      axios.delete("http://127.0.0.1:8000/comment/delete/" + comment_id)
-          .then(response => {
-            let commentToDelete = this.$refs["comment_"+comment_id][0];
-            commentToDelete.parentNode.removeChild(commentToDelete);
-            console.log("Success deletion!" , response);
-          })
-          .catch(response => {
-            console.log("Failed to remove the comment", response);
-          });
+        axios.delete("http://127.0.0.1:8000/comment/delete/" + comment_id)
+            .then(response => {
+              let commentToDelete = this.$refs['comment_' + comment_id][0];
+              commentToDelete.parentNode.removeChild(commentToDelete);
+              console.log("Success deletion!", response);
+            })
+            .catch(response => {
+              console.log("Failed to remove the comment", response);
+            });
+      }
     },
     updateComment: function (comment_id, comment_cont) {
-      console.log('update comment' + comment_id + comment_cont);
-      axios.put("http://127.0.0.1:8000/comment/update/" + comment_id, {comment_cont: comment_cont})
-          .then(response => {
-            console.log("Success!" , response.data);
-          })
-          .catch(response => {
-            console.log("Failed to update the comment", response);
-          });
+      if(confirm('댓글을 수정하시겠습니까?')) {
+        console.log('update comment' + comment_id + comment_cont);
+        axios.put("http://127.0.0.1:8000/comment/update/" + comment_id, {comment_cont: comment_cont})
+            .then(response => {
+              console.log("Success!", response.data);
+            })
+            .catch(response => {
+              console.log("Failed to update the comment", response);
+            });
+      }
     }
   }
 };
