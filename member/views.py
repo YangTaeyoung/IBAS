@@ -177,3 +177,6 @@ def login(request):  # 로그인 페이지로 이동
 
 def welcome(request):  # 입부신청 완료 페이지로 이동
     return render(request, 'welcome.html', {})
+
+def rulebook(request): # 동아리 회칙 / 개인정보 이용 동의 사이트로 이동
+    return render(request, 'rulebook.html',{})
