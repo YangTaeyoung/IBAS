@@ -1,8 +1,11 @@
+from django.core.serializers.json import json
+
 from django.db import transaction
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from DB.models import Board, BoardFile, BoardType, Comment, ContestBoard, ContestFile, ContestComment, User
 from django.db.models import Q
 from board.forms import BoardForm, ContestForm, FileForm
+from comment.views import axios_response
 from file_controller import FileController
 from pagination_handler import get_page_object
 from alarm.alarm_controller import create_comment_alarm, create_comment_ref_alarm
@@ -146,7 +149,7 @@ def board_search(request):
 def board_detail(request, board_no):  # 게시글 상세 보기
     context = get_context_of_board_(board_no)
 
-    return render(request, 'board_detail.html', context)
+    return render(request, 'board_detail.html', context | {'vue': axios_response(request)})
 
 
 # ---- board_register ---- #

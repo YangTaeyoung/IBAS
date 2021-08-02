@@ -1,25 +1,33 @@
 <template>
-  <div class="clearfix">
-    <ol class="comment-list">
-      <li v-for="(comment, i) in comment_list" v-bind:key="i" :ref="'comment_' + i" class="comment">
+  <div class="clear" id="comment-list">
+    <div class="comments-area" id="comments">
+      <div class="clearfix">
+        <ol class="comment-list">
+          <li v-for="(comment, i) in comment_list" v-bind:key="i" :ref="'comment_' + i" class="comment">
 
-          <comment @deleteComment="deleteComment(i)" @updateComment="updateComment(comment)" :sendComment="comment" ></comment>
+              <comment @deleteComment="deleteComment(i)" @updateComment="updateComment(comment)" :sendComment="comment" ></comment>
 
-            <div v-if="comment_set_list[i]!=null">
-              <div v-for="(commentRef, j) in comment_set_list[i]"  v-bind:key="j">
-                <div  class="dlab-divider bg-gray-dark"></div>
-                <comment :send-comment="commentRef" style="margin-left: 20px;"></comment>
-              </div>
-            </div>
+                <div v-if="comment_set_list[i]!=null">
+                  <div v-for="(commentRef, j) in comment_set_list[i]"  v-bind:key="j">
+                    <div  class="dlab-divider bg-gray-dark"></div>
+                    <comment :send-comment="commentRef" style="margin-left: 20px;"></comment>
+                  </div>
+                </div>
 
-      </li>
-    </ol>
+          </li>
+        </ol>
+
+        <comment-input></comment-input>
+
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
 import Comment from "./components/Comment";
+import CommentInput from "./components/CommentInput";
 
 export default {
   data: () => {
@@ -30,13 +38,18 @@ export default {
   },
 
   components: {
+    'comment-input': CommentInput,
     'comment': Comment
   },
 
-  mounted() { // DOM 객체 생성 후 drf server 에서 데이터를 가져와 todoList 저장
+  mounted() { // DOM 객체 생성 후 drf server 에서 데이터를 가져와 CommentList 렌더링
+    // let pathname = location.pathname.split('/')
+    // let board_type = pathname[0]
+    // let board_no = pathname[pathname.length-1]
+
     axios({
       method: "GET",
-      url: "http://127.0.0.1:8000/comment"
+      url: "http://127.0.0.1:8000/comment/" //+ board_type + "/view/" + board_no
     })
         .then(response => {
           this.comment_list = response.data.comment_list;

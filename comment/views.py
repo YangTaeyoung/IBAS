@@ -1,4 +1,5 @@
 from django.core import serializers
+from django.core.serializers.json import DjangoJSONEncoder
 import json
 from django.db.models import F
 from django.http import HttpResponse, JsonResponse
@@ -145,6 +146,7 @@ def axios_response(request):
                                'comment_cont', 'comment_created', 'comment_cont_ref')
 
     return JsonResponse({'comment_list': list(comments), 'comment_set_list': comment_set_list}, safe=False)
+    #return json.dumps({'comment_list': list(comments), 'comment_set_list': comment_set_list}, cls=DjangoJSONEncoder)
 
 
 def update(request):
