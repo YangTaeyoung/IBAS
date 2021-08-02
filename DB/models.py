@@ -82,13 +82,14 @@ class File(models.Model):
     class Meta:
         abstract = True
 
-#
+
 class CommentType(models.Model):
-    comment_type_no = models.AutoField(db_column="COMMENT_TYPE_NO", primary_key=True)
-    comment_type_name = models.CharField(db_column="COMMENT_TYPE_NAME", max_length=20)
+    comment_type_no = models.AutoField(db_column="TYPE_NO", primary_key=True)
+    comment_type_name = models.CharField(db_column="TYPE_NAME", max_length=20)
 
     class Meta:
         managed = False
+        db_table = "COMMENT_TYPE"
 
 
 # COMMENT 공용테이블

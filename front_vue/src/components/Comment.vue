@@ -20,7 +20,7 @@
         <li class="post-comment"><i
             class="ti ti-alarm-clock"></i>
           <a href="javascript:void(0);">
-            {{ comment.comment_created | timeFormat}}
+            {{ comment.comment_created | timeFormat }}
           </a>
         </li>
       </ul>
@@ -38,43 +38,51 @@
 
     <div class="reply-btn-div">
       <button class="btnAdd comment-btn m-r20">
-        <i class="fa fa-commenting m-r5"></i>답글쓰기
-      </button>
-      <button @click="updateComment()" class="comment-btn m-r10">
-        <i class="fa fa-pencil m-r5"></i>수정
-      </button>
-      <button @click="deleteComment()" class="comment-btn m-r10">
-        <i class="fa fa-trash m-r5"></i>삭제</button>
+        <i class="fa fa-commenting m-r5"></i>답글쓰기</button>
+
+      <template v-if="logined_user.user_stu === comment.comment_writer" >
+        <button @click="updateComment()" class="comment-btn m-r10">
+          <i class="fa fa-pencil m-r5"></i>수정</button>
+      </template>
+
+      <template v-if="logined_user.user_stu === comment.comment_writer || logined_user.user_role < 3" >
+        <button @click="deleteComment()" class="comment-btn m-r10">
+          <i class="fa fa-trash m-r5"></i>삭제</button>
+      </template>
+
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  props: ['sendComment'],
+  props: ['sendComment', 'sendLoginedUser'],
   name: "Comment.vue",
+
 
   data: () => {
     return {
       comment: null,
       isDisabled: true,
+      logined_user: null
     };
   },
 
   created() {
     this.comment = this.sendComment
+    this.logined_user = this.sendLoginedUser
   },
 
   methods: {  // CRUD 로직이 들어갈 부분
     updateComment: function () {
       if (this.isDisabled === false) {
-        this.$emit("updateComment")
+        this.$emit("updateComment", this.comment.comment_id, this.comment.comment_cont)
       }
       this.isDisabled = !this.isDisabled
     },
 
     deleteComment: function () {
-      this.$emit("deleteComment")  // 이벤트가 상위 컴포넌트에서 실행된 후에 다음 코드 실행됨.
+      this.$emit("deleteComment", this.comment.comment_id)  // 이벤트가 상위 컴포넌트에서 실행된 후에 다음 코드 실행됨.
       this.$destroy()
       this.$el.parentNode.removeChild(this.$el)
     },

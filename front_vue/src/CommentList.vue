@@ -1,11 +1,15 @@
 <template>
   <div class="clear" id="comment-list">
+    <template v-if="comment_list.length > 0">
+      <!-- 게시글과 댓글을 구분짓는 구분선 -->
+      <div class="dlab-divider bg-gray-dark"></div>
+    </template>
     <div class="comments-area" id="comments">
       <div class="clearfix">
         <ol class="comment-list">
-          <li v-for="(comment, i) in comment_list" v-bind:key="i" :ref="'comment_' + i" class="comment">
+          <li v-for="(comment, i) in comment_list" v-bind:key="i" :ref="'comment_' + comment.comment_id" class="comment">
 
-            <comment @deleteComment="deleteComment(i)" @updateComment="updateComment(comment)" :sendComment="comment" ></comment>
+            <comment @deleteComment="deleteComment" @updateComment="updateComment" :sendComment="comment" :sendLoginedUser="logined_user"></comment>
 
             <div v-if="comment_set_list[i]!=null">
               <div v-for="(commentRef, j) in comment_set_list[i]"  v-bind:key="j">
@@ -17,7 +21,7 @@
           </li>
         </ol>
 
-        <comment-input></comment-input>
+        <comment-input @addComment="addComment"></comment-input>
 
       </div>
     </div>
@@ -29,11 +33,17 @@ import axios from "axios";
 import Comment from "./components/Comment";
 import CommentInput from "./components/CommentInput";
 
+axios.defaults.xsrfCookieName = 'csrftoken';
+axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+
 export default {
   data: () => {
     return {
+      logined_user: null,
       comment_list: null,
       comment_set_list: null,
+      board_type: null,
+      board_no: null,
     };
   },
 
@@ -43,58 +53,64 @@ export default {
   },
 
   mounted() { // DOM 객체 생성 후 drf server 에서 데이터를 가져와 CommentList 렌더링
-    // let pathname = location.pathname.split('/')
-    // let board_type = pathname[0]
-    // let board_no = pathname[pathname.length-1]
-
-    axios({
-      method: "GET",
-      url: "http://127.0.0.1:8000/comment/" //+ board_type + "/view/" + board_no
-    })
-        .then(response => {
-          this.comment_list = response.data.comment_list;
-          this.comment_set_list = response.data.comment_set_list;
-        })
-        .catch(response => {
-          console.log("Failed to get todoList", response);
-        });
+    let pathname = location.pathname.split('/')
+    this.board_type = pathname[1]
+    this.board_no = pathname[pathname.length-2]
+    this.fetch_all_comment()
   },
 
   methods: {
-    deleteComment: function (index) {
-      let commentToDelete = this.$refs["comment_"+index][0];
-      commentToDelete.parentNode.removeChild(commentToDelete);
-      // axios({
-      //   method: "POST",
-      //   url: "http://127.0.0.1:8000/comment/delete/",
-      //   xsrfHeaderName: "X-CSRFToken",
-      // })
-      //     .then(response => {
-      //       let commentToDelete = this.$refs["comment_"+index][0];
-      //       commentToDelete.parentNode.removeChild(commentToDelete);
-      //       console.log("Success!" , response.data);
-      //     })
-      //     .catch(response => {
-      //       console.log("Failed to remove the comment", response);
-      //     });
+    fetch_all_comment: function () {
+      var this_vue = this
+      //console.log(this_vue.board_type, this_vue.board_no)
+
+      axios.get("http://127.0.0.1:8000/comment/" + this_vue.board_type + "/view/" + this_vue.board_no)
+          .then(response => {
+            this.comment_list = response.data.comment_list;
+            this.comment_set_list = response.data.comment_set_list;
+            this.logined_user =response.data.logined_user;
+          })
+          .catch(response => {
+            console.log("Failed to get commentList", response);
+          });
     },
-    updateComment: function (comment) {
-      console.log(comment);
-      // axios({
-      //   method: "POST",
-      //   url: "http://127.0.0.1:8000/comment/update/",
-      //   data: {
-      //      'comment_id': comment.comment_id,
-      //      'comment_cont: comment.comment_cont
-      //   },
-      //   xsrfHeaderName: "X-CSRFToken",
-      // })
-      //     .then(response => {
-      //       console.log("Success!" , response.data);
-      //     })
-      //     .catch(response => {
-      //       console.log("Failed to update the comment", response);
-      //     });
+    addComment: function (comment_cont) {
+      var this_vue = this;
+      console.log("add comment...", comment_cont);
+
+      var postData = {comment_cont: comment_cont}
+      axios.post("http://127.0.0.1:8000/comment/" + this_vue.board_type + "/register/" + this_vue.board_no, postData)
+          .then(function (response) {
+            // 통신 성공하면, 해당 댓글 정보 받아와서, 새로 붙이기.
+            console.log('adding comment POST', response);
+            this_vue.comment_list.push(response.data.comment);
+          })
+          .catch(function (err) {
+            console.log("adding error", err);
+          })
+    },
+    deleteComment: function (comment_id) {
+      console.log("deleting comment", comment_id)
+
+      axios.delete("http://127.0.0.1:8000/comment/delete/" + comment_id)
+          .then(response => {
+            let commentToDelete = this.$refs["comment_"+comment_id][0];
+            commentToDelete.parentNode.removeChild(commentToDelete);
+            console.log("Success deletion!" , response);
+          })
+          .catch(response => {
+            console.log("Failed to remove the comment", response);
+          });
+    },
+    updateComment: function (comment_id, comment_cont) {
+      console.log('update comment' + comment_id + comment_cont);
+      axios.put("http://127.0.0.1:8000/comment/update/" + comment_id, {comment_cont: comment_cont})
+          .then(response => {
+            console.log("Success!" , response.data);
+          })
+          .catch(response => {
+            console.log("Failed to update the comment", response);
+          });
     }
   }
 };
