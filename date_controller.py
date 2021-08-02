@@ -41,6 +41,11 @@ def is_user_recruiting():
     return len(
         UserSchedule.objects.filter(Q(user_register_start__lte=today()) & Q(user_register_end__gte=today()))) != 0
 
+# 면접이 진행중인지 판단하는 함수.
+def is_interview_progress():
+    return len(
+        UserSchedule.objects.filter(Q(user_interview_start__lte=today()) & Q(user_interview_end__gte=today()))) != 0
+
 
 # 부원 모집중인지 확인하는 데코레이터
 def user_recruit_check(func):

@@ -1,26 +1,22 @@
-from webbrowser import get
-
-import django.db
 from django.db import transaction, connection
 from django.db.models import Q
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.utils.dateformat import DateFormat
 from alarm.alarm_controller import create_lect_full_alarm, create_lect_enroll_alarm, delete_lect_by_superuser_alarm
 from django.contrib import messages
-from DB.models import LectType, Lect, LectDay, MethodInfo, LectBoard, LectEnrollment, LectAttendance, \
+from DB.models import LectType, Lect, MethodInfo, LectBoard, LectEnrollment, LectAttendance, \
     LectAssignmentSubmit, LectMoneyStandard
 from file_controller import FileController
 from lecture.forms import LectForm, LectRejectForm, LectPicForm, make_lect_board_form, \
     FileForm, AssignmentSubmitForm
 from pagination_handler import get_page_object
 from user_controller import get_logined_user, superuser_only, writer_only, auth_check, is_superuser, \
-    is_logined, is_writer, member_only, role_check
+    is_logined, member_only, role_check
 from utils.crawler import get_og_tag
 from utils.url_regex import is_youtube
 from utils.youtube import get_youtube
 from date_controller import is_lect_recruiting
 from exception_handler import lect_exist_check, lect_board_exist_check
-
 
 def get_pol_name(method_no):
     pol_name = MethodInfo.objects.get(pk=method_no).method_name

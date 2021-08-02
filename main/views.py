@@ -6,19 +6,24 @@ from main.forms import ActivityForm
 from pagination_handler import *
 from file_controller import FileController
 from django.db.models import Q
-from member import session
 from alarm.alarm_controller import create_comment_alarm, create_comment_ref_alarm
 from django.http import HttpResponseRedirect
 from user_controller import login_required, writer_only, auth_check, superuser_only
 from exception_handler import activity_exist_check
-
+from DB.models import UserSchedule
+from date_controller import is_user_recruiting, is_interview_progress
 
 # 메인페이지 이동 함수
 def index(request):
     # 임시 로그인
     # session.save_session(request, user_model=User.objects.get(pk=12162359), logined_email="0130yang@gmail.com", provider="google")
     # session.save_session(request, user_model=User.objects.get(pk=12171652))
-    return render(request, "index.html", {})
+    context = {
+        "is_user_recruiting": is_user_recruiting(),
+        "is_interview_progress": is_interview_progress(),
+        "user_schedule": UserSchedule.objects.get(pk=1)
+    }
+    return render(request, "index.html", context)
 
 
 # 동아리 소개 작업할 것임
@@ -285,8 +290,3 @@ def hall_of_fame(request):
 def error_handler500(request):
     return render(request, "../templates/error_page.html", status=500)
 
-
-def toast(request):
-    context = {
-    }
-    return render(request, "toast.html", context)
