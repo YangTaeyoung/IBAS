@@ -16,7 +16,7 @@
                         <!-- 개인정보 제공 동의 약관 / 동아리 회칙을 DB에서 불러옴 -->
                         <!-- 태크를 붙여둔 상태로 DB에 저장/불러오기 해야 함 -->
                         <div class="form-group pb-0 mb-1">
-                            {{ policy_terms.policy_content }}
+                            {{ policy_terms.policy_content|safe }}
                         </div>
                     </div>
                 </div>
