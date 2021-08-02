@@ -40,8 +40,10 @@
         </div>
     </div>
     <!-- Section Banner END -->
-    {% if is_user_recruiting %}
-        {% include "toast.html" %}
+    {% if not is_logined or logined_user.user_auth.auth_no == 3  %}
+        {% if is_user_recruiting %}
+            {% include "toast.html" %}
+        {% endif %}
     {% endif %}
 
     <script>

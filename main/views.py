@@ -1,6 +1,7 @@
 from django.db import transaction
 from django.shortcuts import render, get_object_or_404, reverse, redirect
 from DB.models import Alarm, Board, BoardFile, BoardType, Comment, History, User
+from member import session
 from board.forms import FileForm
 from main.forms import ActivityForm
 from pagination_handler import *
