@@ -237,8 +237,9 @@ def full_check(func):
         if lect_no != -1:
             lect = Lect.objects.get(pk=lect_no)
             lect_enrollment = LectEnrollment.objects.filter(lect_no=lect)
-            if lect.lect_limit_num <= len(lect_enrollment) and len(
-                    lect_enrollment.filter(student=get_logined_user(request))) == 0 or lect.is_expired:
+            if (lect.lect_limit_num <= len(lect_enrollment) and len(lect_enrollment.filter(
+                    student=get_logined_user(request))) == 0 and lect.lect_chief != get_logined_user(
+                    request)) or lect.is_expired:
                 messages.warning(request, "강의가 마감되었습니다.")
                 return redirect("lect_view", type_no=lect.lect_type.type_no)
         return func(request, *args, **kwargs)

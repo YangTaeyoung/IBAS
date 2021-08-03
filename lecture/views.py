@@ -11,12 +11,13 @@ from lecture.forms import LectForm, LectRejectForm, LectPicForm, make_lect_board
     FileForm, AssignmentSubmitForm
 from pagination_handler import get_page_object
 from user_controller import get_logined_user, superuser_only, writer_only, auth_check, is_superuser, \
-    is_logined, member_only, role_check
+    is_logined, member_only, role_check, full_check
 from utils.crawler import get_og_tag
 from utils.url_regex import is_youtube
 from utils.youtube import get_youtube
 from date_controller import is_lect_recruiting
 from exception_handler import lect_exist_check, lect_board_exist_check
+
 
 def get_pol_name(method_no):
     pol_name = MethodInfo.objects.get(pk=method_no).method_name
@@ -94,7 +95,7 @@ def lect_register(request):  # 강의/스터디/취미모임 등록 페이지로
 
 
 # 강의 상세 페이지로 이동 (활동 회원만 가능)
-@auth_check(active=True)
+@full_check
 def lect_detail(request, lect_no):
     if is_redirect := lect_exist_check(request, lect_no):
         return is_redirect
@@ -204,6 +205,7 @@ def lect_search(request, type_no):
 
 
 # 유저 강의 명단 등록 함수
+@full_check
 def lect_enroll(request, lect_no):
     lect_enrollment = LectEnrollment.objects.create(
         lect_no=Lect.objects.get(pk=lect_no),
@@ -241,6 +243,7 @@ def get_assignment_list(cur_user, lect_room, name_in_html):
 
 # 강의룸 메인 페이지
 @member_only
+@full_check
 def lect_room_main(request, room_no):
     try:
         lect_room = Lect.objects.prefetch_related('lectures', 'enrolled_students').get(pk=room_no)
@@ -259,6 +262,7 @@ def lect_room_main(request, room_no):
 
 
 @member_only
+@full_check
 def lect_room_search(request, room_no):
     if request.method == "GET":
         k = request.GET.get("keyword")
@@ -292,6 +296,7 @@ def lect_room_search(request, room_no):
 
 # 더보기 눌렀을 때 나오는 게시판 (공지게시판(1)/강의게시판(2)/과제게시판(3))
 @member_only
+@full_check
 def lect_room_list(request, room_no, board_type):
     try:
         lect_room = Lect.objects.prefetch_related('enrolled_students', 'lectures', 'submitted_assignments').get(
@@ -351,9 +356,9 @@ def lect_board_register(request, room_no, board_type):
 # 강의/공지 게시글 상세보기
 @member_only
 def lect_board_detail(request, room_no, lect_board_no):
-    if is_redirect:=lect_exist_check(request, room_no):
+    if is_redirect := lect_exist_check(request, room_no):
         return is_redirect
-    if is_redirect:=lect_board_exist_check(request,room_no=room_no,lect_board_no=lect_board_no):
+    if is_redirect := lect_board_exist_check(request, room_no=room_no, lect_board_no=lect_board_no):
         return is_redirect
     lect_room = Lect.objects.get(pk=room_no)
     board = LectBoard.objects.get(pk=lect_board_no)
