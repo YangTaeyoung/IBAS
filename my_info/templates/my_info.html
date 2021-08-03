@@ -510,12 +510,12 @@
                                             {% for my_comment in my_comment_list %}
                                                 <tr>
                                                     <!-- 게시판 유형 -->
-                                                    <td>{{ my_comment.comment_board_no.board_type_no.board_type_name }}</td>
+                                                    <td>{{ my_comment.board_type }}</td>
                                                     <!-- 댓글내용 -->
                                                     <td>{{ my_comment.comment_cont }}</td>
                                                     <!-- 원문으로 이동하는 a태그 -->
                                                     <td>
-                                                        <a href="{% url 'board_detail' board_no=my_comment.comment_board_no.board_no %}">원문보기
+                                                        <a href="{% url 'board_detail' board_no=my_comment.comment_board_ref %}">원문보기
                                                             ▶</a></td>
                                                     <td>{{ my_comment.comment_created|date:"Y-m-d" }}</td>
                                                 </tr>
