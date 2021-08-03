@@ -64,6 +64,7 @@ export default {
 
     } else if (location.pathname.includes('staff/')) {
       this.board_type = 'staff'
+      this.board_no = pathname[2]
     }
     else if (location.pathname.includes('activity/')){
       this.board_type = 'activity'
