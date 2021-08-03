@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.http import Http404
 from django.shortcuts import redirect, reverse, render
 from DB.models import User, ContestBoard, Board, Bank, Lect, UserDelete, AuthUser, History, LectEnrollment, \
-    LectBoard, Answer, UserEmail, Comment, LectAssignmentSubmit, Alarm
+    LectBoard, Answer, UserEmail, Comment, LectAssignmentSubmit, Alarm, PolicyTerms
 from allauth.socialaccount.models import SocialAccount, SocialToken
 from file_controller import FileController
 from django.db.models import Q
@@ -153,7 +153,7 @@ def get_user_get(request):
 # 수정자: 양태영
 # 수정일자: 21.07.29
 # 수정내용: next_url 파라미터를 추가, 입력하지 않으면 디폴트로 index로 이동하며 추가로 입력할 경우 해당 url로 이동함.
-def not_allowed(request, msg="접근 권한이 없습니다.", error_404=False, next_url="index" ):
+def not_allowed(request, msg="접근 권한이 없습니다.", error_404=False, next_url="index"):
     if error_404:
         raise Http404
     else:
@@ -169,7 +169,7 @@ def login_required(func):
         if is_logined(request):
             return func(request, *args, **kwargs)
         else:
-            return not_allowed(request, msg='로그인이 필요합니다!',next_url="login")
+            return not_allowed(request, msg='로그인이 필요합니다!', next_url="login")
 
     return wrapper
 
@@ -223,6 +223,26 @@ def superuser_only(cfo_included=False):
         return wrapper
 
     return decorator
+
+
+def full_check(func):
+    @auth_check(active=True)
+    @functools.wraps(func)
+    def wrapper(request, *args, **kwargs):
+        lect_no = -1
+        if kwargs.get("lect_no"):
+            lect_no = kwargs.get("lect_no")
+        elif kwargs.get("room_no"):
+            lect_no = kwargs.get("room_no")
+        if lect_no != -1:
+            lect = Lect.objects.get(pk=lect_no)
+            lect_enrollment = LectEnrollment.objects.filter(lect_no=lect)
+            if lect.lect_limit_num <= len(lect_enrollment) and len(
+                    lect_enrollment.filter(student=get_logined_user(request))) == 0:
+                return redirect("lect_view", type_no=lect.lect_type.type_no)
+        return func(request, *args, **kwargs)
+
+    return wrapper
 
 
 # 데코레이터
@@ -366,6 +386,9 @@ def is_related(user: User):
     # 연혁에 개입하였는가?
     if len(History.objects.filter(history_writer=user)) != 0:
         return True
+    # 정책에 개입하였는가?
+    if len(PolicyTerms.objects.filter(policy_user=user)) != 0:
+        return True
     return False
 
 
@@ -406,12 +429,6 @@ def delete_all_infomation(user: User):
     #     FileController.delete_all_files_of_(my_contest)
     #     my_contest.delete()
     # -------------------------------------
-
-    # 본인 공모전 덧글 삭제
-    my_contest_comment_list = ContestComment.objects.filter(
-        Q(comment_writer=user) | Q(comment_cont_ref__comment_writer=user))
-    for my_contest_comment in my_contest_comment_list:
-        my_contest_comment.delete()
 
     # 본인이 제명 대상자로 있거나, 본인이 발안한 제명 안건 삭제
     my_user_delete_list = UserDelete.objects.filter(

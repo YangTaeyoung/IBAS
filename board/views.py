@@ -241,7 +241,7 @@ def board_detail(request, board_no):  # 게시글 상세 보기
         return not_allowed(request, "비 정상적인 접근입니다.")
     elif board_type_no == 9 and (board.board_writer != get_logined_user(request) and not role_check(request, 4, "lte")):
         return not_allowed(request, "비 정상적인 접근입니다.")
-
+    print('board_detail', request.session.get("user_stu"))
     context = get_context_of_board_(board_no)
     return render(request, 'board_detail.html', context)
 
@@ -403,7 +403,7 @@ def board_delete(request, board_no):
 # 작성자 : 유동현
 # 마지막 수정 일시 : 2021.04.13
 # 수정내용 :
-@login_required
+@auth_check(active=True)
 def contest_view(request):
     # 공모전 게시물 전부를 해당 파일과 함께 Queryset 으로 가져오기
     contest_board_list = ContestBoard.objects.all().order_by('-contest_deadline').prefetch_related("files")
@@ -429,7 +429,7 @@ def contest_view(request):
 # 수정내용 : 모델 폼으로 처리하는 걸로 코드 수정
 # 버그 처리해야할 사항 :: 등록 버튼 누르고 가끔 로딩되면서 화면전환이 늦어질 때가 있는데,
 #                      그 때 등록버튼 연타하면 클릭한수만큼 동일한 게시글 작성됨.
-@auth_check()
+@auth_check(active=True)
 def contest_register(request):  # 공모전 등록
     if request.method == 'POST':
         contest_form = ContestForm(request.POST)
@@ -458,7 +458,7 @@ def contest_register(request):  # 공모전 등록
 # 작성자 : 유동현
 # 마지막 수정 일시 : 2021.04.13
 # 수정내용 :
-@auth_check()
+@auth_check(active=True)
 def contest_detail(request, contest_no):  # 게시판 상세 페이지로 이동
     if request.method == 'GET':
         try:
