@@ -81,7 +81,7 @@ def join_chk(request):  # 회원 가입 페이지로 부터 정보를 받
             "user_major": request.POST.get("user_major"),
             "user_name": request.POST.get("user_name"),
             "user_stu": request.POST.get("user_stu"),
-            "user_grade": request.POST.get("user_grade"),
+            "user_grade": int(request.POST.get("user_grade")),
             "user_gen": request.POST.get("user_gen"),
             "user_phone": request.POST.get("user_phone"),
             "user_pic": request.POST.get("user_pic"),
