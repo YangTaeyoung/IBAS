@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.http import Http404
 from django.shortcuts import redirect, reverse, render
 from DB.models import User, ContestBoard, Board, Bank, Lect, UserDelete, AuthUser, History, LectEnrollment, \
-    ContestComment, LectBoard, Answer, UserEmail, Comment, LectAssignmentSubmit, Alarm
+    LectBoard, Answer, UserEmail, Comment, LectAssignmentSubmit, Alarm
 from allauth.socialaccount.models import SocialAccount, SocialToken
 from file_controller import FileController
 from django.db.models import Q
@@ -66,6 +66,7 @@ def is_writer(request, **kwargs):
     lect_no = kwargs.get('lect_no', kwargs.get('room_no'))
     user_delete_no = kwargs.get('user_delete_no')
     assignment_submit_no = kwargs.get('submit_no')  # 수강생 과제 제출
+    comment_id = kwargs.get("comment_id")
 
     # comment_no = kwargs.get('comment_no')
 
@@ -93,6 +94,10 @@ def is_writer(request, **kwargs):
     elif user_delete_no is not None:
         user_delete = UserDelete.objects.get(pk=user_delete_no)
         if current_user == user_delete.suggest_user:
+            return True
+    elif comment_id is not None:
+        comment = Comment.objects.get(pk=comment_id)
+        if current_user == comment.comment_writer:
             return True
     else:
         return False

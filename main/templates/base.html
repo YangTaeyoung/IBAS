@@ -18,11 +18,6 @@
     <link rel="icon" href="{% static 'images/IBAS_favicon.png' %}" type="image/x-icon"/>
     <link rel="shortcut icon" type="image/x-icon" href="{% static 'images/IBAS_favicon.png' %}"/>
 
-    <!--toast editor-->
-    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"/>
-    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
-
-
     <!-- PAGE TITLE HERE -->
     <title>IBAS</title>
 
@@ -415,6 +410,9 @@
         previewStyle: 'vertical'
     });
 </script>
-
+<!-- django 렌더링 끝나고 나서 vue.js 렌더링 -->
+<script type="text/javascript" src="{% static 'src/vue/dist/js/chunk-vendors.js' %}"></script>
+<script type="text/javascript" src="{% static 'src/vue/dist/js/app.js' %}"></script>
+<!-- django 렌더링 끝나고 나서 vue.js 렌더링 -->
 </body>
 </html>

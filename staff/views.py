@@ -1,10 +1,10 @@
 from django.shortcuts import render, reverse, redirect, get_object_or_404
 from DB.models import User, UserRole, UserAuth, Answer, UserUpdateRequest, \
-    UserDelete, UserDeleteAor, UserDeleteFile, UserDeleteComment, UserDeleteState, \
+    UserDelete, UserDeleteAor, UserDeleteFile, UserDeleteState, \
     UserEmail, StateInfo, LectSchedule, LectMoneyStandard, UserSchedule, PolicyTerms  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
 from staff.forms import UserDeleteForm, UserScheduleForm, LectScheduleForm, LectMoneyStandardForm, PolicyTermsForms
 from pagination_handler import get_page_object
-from IBAS.forms import FileFormBase, CommentBaseForm
+from IBAS.forms import FileFormBase
 import os
 from user_controller import superuser_only, writer_only, get_logined_user, chief_only, delete_user, role_check, \
     is_default_pic
@@ -432,7 +432,6 @@ def management(request):
     lect_schedule = LectSchedule.objects.get(pk=1)
     user_schedule = UserSchedule.objects.get(pk=1)
     lect_money_standard = LectMoneyStandard.objects.get(pk=1)
-    print(get_content_of_policy_terms(2))
     context = {
         "max_gen": max_gen,
         "lect_schedule": lect_schedule,

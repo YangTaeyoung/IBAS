@@ -1,5 +1,4 @@
 from django import forms
-from DB.models import UserDeleteComment
 
 
 class FileFormBase(forms.Form):
@@ -45,17 +44,3 @@ class FileFormBase(forms.Form):
         super().clean()
         self.cleaned_data['upload_file'] = self.files.getlist('upload_file')
 
-
-
-
-class CommentBaseForm(forms.Form):
-    comment_cont = forms.CharField(required=True, widget=forms.Textarea(attrs={"placeholder": "덧글을 입력하세요"}))
-    comment_cont_ref = forms.IntegerField(required=False, widget=forms.HiddenInput())
-
-    def save(self, instance, writer):
-        if isinstance(instance, UserDeleteComment):
-            UserDeleteComment.objects.create(
-                comment_cont=self.cleaned_data.get('comment_cont'),
-                comment_cont_ref=self.cleaned_data.get('comment_cont_ref'),
-                comment_writer=writer
-            )
