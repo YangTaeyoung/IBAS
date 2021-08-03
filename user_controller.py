@@ -230,7 +230,7 @@ def is_closed(lect: Lect):
     lect_enrollment = LectEnrollment.objects.filter(lect_no=lect)
     if lect.lect_limit_num <= len(lect_enrollment):  # 강의가 가득 찼는가?
         flag = True
-    if not lect.is_expired:  # 강의 모집 기간이 만료되었는가?
+    if lect.is_expired:  # 강의 모집 기간이 만료되었는가?
         flag = True
     return flag
 
