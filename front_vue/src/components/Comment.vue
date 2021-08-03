@@ -141,7 +141,7 @@ export default {
     updateRecomment: function (comment_id, comment_cont, index) {
       if (comment_cont.trim() === "") {
         alert('댓글을 입력하세요!')
-      } else if (confirm('댓글을 수정하시겠습니까?')) {
+      } else {
         var this_vue = this;
 
         axios({
@@ -150,7 +150,6 @@ export default {
           data: {comment_cont: comment_cont}
         })
             .then(response => {
-              alert('댓글이 수정되었습니다!')
               this_vue.comment_set_list[index] = response.data.comment;
             })
             .catch(response => {
@@ -167,7 +166,6 @@ export default {
         axios.delete("comment/delete/" + comment_id)
             .then(() => {
               vm.comment_set_list.splice(index, 1)
-              alert('댓글이 삭제되었습니다!')
             })
             .catch(response => {
               console.log("Failed to remove the comment", response);
