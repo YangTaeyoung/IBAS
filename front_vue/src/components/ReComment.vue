@@ -68,7 +68,11 @@ export default {
       logined_user: null
     };
   },
-
+  watch: {
+    sendIndex: function (newVal) {
+      this.index = newVal;
+    }
+  },
   created() {
     this.index = this.sendIndex;
     this.comment = this.sendRecomment;
