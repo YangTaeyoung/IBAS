@@ -52,12 +52,12 @@
                                         </h2>
                                     </div>
                                     <!--============================== 게시글 본문 시작 ==============================-->
-                                    <div class="dlab-post-text">
+                                    <div class="post-context dlab-post-text">
                                         <!-- 본문 입력 내용 -->
-                                        {% autoescape off %}
+
                                             <!-- DB에서 꺼내온 것들 중 해당 블럭 안에 있는 것을 HTML 태그로 인식하게 함-->
-                                            {{ board.board_cont }}
-                                        {% endautoescape %}
+                                        {{ board.board_cont|safe }}
+
                                         <!-- 게시글 속 사진 모음 -->
                                         <div class="widget widget_gallery gallery-grid-4 lightgallery">
                                             <ul>

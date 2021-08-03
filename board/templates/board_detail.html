@@ -56,11 +56,11 @@
                                         </h2>
                                     </div>
                                     <!--============================== 게시글 본문 시작 ==============================-->
-                                    <div class="word-break-all dlab-post-text">
+                                    <div class="post-context word-break-all dlab-post-text">
                                         <!-- 본문 입력 내용 -->
-                                        {% autoescape off %}
-                                            {{ board.board_cont }}
-                                        {% endautoescape %}
+
+                                        {{ board.board_cont|safe }}
+
                                         <!-- 첨부된 파일 불러오는 곳 -->
                                         <!-- download 쪽에 파일 경로 설정 -->
                                         <!-- 파일 리스트 길이가 0이 아닐 경우에만 파일 리스트를 출력하게 함. -->
