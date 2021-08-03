@@ -34,23 +34,24 @@
 
 }
 
-@media (max-width: 770px) {
+@media (max-width: 1000px) {
     .main-logo{
         width: 50%;
         height: auto;
     }
 
     .footer-media{
-        width: auto;
+        width: 100%;
         height: auto;
         display: flex;
         flex-wrap: wrap;
         align-content: flex-start;
+        flex-direction: column;
 
     }
 
     .footer-bg{
-        width: auto;
+        width: 100%;
         height: auto;
         background-size: cover;
 
@@ -61,7 +62,6 @@
         flex-direction: column;
         flex-wrap: wrap;
         align-content: space-around;
-        margin-left: 3%;
 
     }
 
@@ -69,9 +69,33 @@
         min-width: auto;
     }
 
+    .cont-grid{
+        min-width: auto;
+    }
+
+    .tb-mg10{
+        margin-top: 30px;
+        margin-bottom: 30px;
+        margin-right: 0px;
+    }
+
+    .line-ft{
+        background-color: white;
+        height: 1px;
+        width: 80%;
+        opacity: 50%;
+        margin-bottom: 20px;
+    }
 
 
 
+
+}
+
+@media (min-width: 1001px) {
+    .dis-none{
+        display: none;
+    }
 }
 
 
