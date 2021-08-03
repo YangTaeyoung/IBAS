@@ -11,7 +11,7 @@ from lecture.forms import LectForm, LectRejectForm, LectPicForm, make_lect_board
     FileForm, AssignmentSubmitForm
 from pagination_handler import get_page_object
 from user_controller import get_logined_user, superuser_only, writer_only, auth_check, is_superuser, \
-    is_logined, member_only, role_check, full_check
+    is_logined, member_only, role_check, room_enter_check,enroll_check,is_closed
 from utils.crawler import get_og_tag
 from utils.url_regex import is_youtube
 from utils.youtube import get_youtube
@@ -94,7 +94,7 @@ def lect_register(request):  # 강의/스터디/취미모임 등록 페이지로
 
 
 # 강의 상세 페이지로 이동 (활동 회원만 가능)
-@full_check
+@room_enter_check
 def lect_detail(request, lect_no):
     if is_redirect := lect_exist_check(request, lect_no):
         return is_redirect
@@ -107,6 +107,7 @@ def lect_detail(request, lect_no):
         'is_in': LectEnrollment.objects.filter(student=get_logined_user(request),
                                                lect_no_id=lect_no).first() is not None,
         'lect_reject_form': LectRejectForm(instance=lect),
+        'is_closed': is_closed(lect)
     }
     # 취미 모임의 경우 강의 방식이 없음 따라서 해당 부분에 대한 예외처리
     if lect.lect_method is not None:
@@ -204,7 +205,7 @@ def lect_search(request, type_no):
 
 
 # 유저 강의 명단 등록 함수
-@full_check
+@enroll_check
 def lect_enroll(request, lect_no):
     lect_enrollment = LectEnrollment.objects.create(
         lect_no=Lect.objects.get(pk=lect_no),
@@ -242,7 +243,7 @@ def get_assignment_list(cur_user, lect_room, name_in_html):
 
 # 강의룸 메인 페이지
 @member_only
-@full_check
+@room_enter_check
 def lect_room_main(request, room_no):
     try:
         lect_room = Lect.objects.prefetch_related('lectures', 'enrolled_students').get(pk=room_no)
@@ -261,7 +262,7 @@ def lect_room_main(request, room_no):
 
 
 @member_only
-@full_check
+@room_enter_check
 def lect_room_search(request, room_no):
     if request.method == "GET":
         k = request.GET.get("keyword")
@@ -295,7 +296,7 @@ def lect_room_search(request, room_no):
 
 # 더보기 눌렀을 때 나오는 게시판 (공지게시판(1)/강의게시판(2)/과제게시판(3))
 @member_only
-@full_check
+@room_enter_check
 def lect_room_list(request, room_no, board_type):
     try:
         lect_room = Lect.objects.prefetch_related('enrolled_students', 'lectures', 'submitted_assignments').get(
@@ -323,6 +324,7 @@ def lect_room_list(request, room_no, board_type):
 
 # 강의 게시글(공지/강의) 등록
 @writer_only()
+@room_enter_check
 def lect_board_register(request, room_no, board_type):
     if request.method == "GET":
         lect_room = Lect.objects.prefetch_related('lectures').get(pk=room_no)
@@ -354,6 +356,7 @@ def lect_board_register(request, room_no, board_type):
 
 # 강의/공지 게시글 상세보기
 @member_only
+@room_enter_check
 def lect_board_detail(request, room_no, lect_board_no):
     if is_redirect := lect_exist_check(request, room_no):
         return is_redirect

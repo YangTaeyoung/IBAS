@@ -225,7 +225,36 @@ def superuser_only(cfo_included=False):
     return decorator
 
 
-def full_check(func):
+def is_closed(lect: Lect):
+    flag = False
+    lect_enrollment = LectEnrollment.objects.filter(lect_no=lect)
+    if lect.lect_limit_num <= len(lect_enrollment):  # 강의가 가득 찼는가?
+        flag = True
+    if not lect.is_expired:  # 강의 모집 기간이 만료되었는가?
+        flag = True
+    return flag
+
+
+def enroll_check(func):
+    @auth_check(active=True)
+    @functools.wraps(func)
+    def wrapper(request, *args, **kwargs):
+        lect_no = -1
+        if kwargs.get("lect_no"):
+            lect_no = kwargs.get("lect_no")
+        elif kwargs.get("room_no"):
+            lect_no = kwargs.get("room_no")
+        if lect_no != -1:
+            lect = Lect.objects.get(pk=lect_no)
+            if is_closed(lect):
+                messages.warning(request, "강의가 마감되었습니다. 신청할 수 없습니다.")
+                return redirect("lect_view", type_no=lect.lect_type.type_no)
+        return func(request, *args, **kwargs)
+
+    return wrapper
+
+
+def room_enter_check(func):
     @auth_check(active=True)
     @functools.wraps(func)
     def wrapper(request, *args, **kwargs):
