@@ -186,7 +186,7 @@ def member_aor(request):
                           from_email=settings.EMAIL_HOST_USER,
                           recipient_list=user_email_list)
                 user.delete()
-        return redirect(reverse("my_info"))
+        return redirect(reverse("staff_member_list"))
     return redirect(reverse("index"))
 
 
