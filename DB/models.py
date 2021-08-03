@@ -12,6 +12,7 @@ from django.db import models
 from datetime import datetime
 from IBAS.settings import MEDIA_ROOT
 import pytz
+from django_summernote.fields import SummernoteTextField
 
 CONT_SIZE = 1000000
 
@@ -134,7 +135,7 @@ class Board(models.Model):
     board_type_no = models.ForeignKey('BoardType', models.DO_NOTHING,
                                       db_column='BOARD_TYPE_NO')  # Field name made lowercase.
     board_title = models.CharField(db_column='BOARD_TITLE', max_length=100)  # Field name made lowercase.
-    board_cont = models.CharField(db_column='BOARD_CONT', max_length=CONT_SIZE)  # Field name made lowercase.
+    board_cont = SummernoteTextField(db_column='BOARD_CONT', max_length=CONT_SIZE)  # Field name made lowercase.
     board_writer = models.ForeignKey('User', on_delete=models.CASCADE, db_column='BOARD_WRITER')
     board_created = models.DateTimeField(db_column='BOARD_CREATED', auto_now_add=True)  # Field name made lowercase.
     board_fixdate = models.DateTimeField(db_column='BOARD_FIXDATE', null=True, blank=True)
@@ -199,7 +200,7 @@ class ChiefCarrier(models.Model):
 class ContestBoard(models.Model):
     contest_no = models.AutoField(db_column='CONTEST_NO', primary_key=True)
     contest_title = models.CharField(db_column='CONTEST_TITLE', max_length=100)
-    contest_cont = models.CharField(db_column='CONTEST_CONT', max_length=CONT_SIZE)
+    contest_cont = SummernoteTextField(db_column='CONTEST_CONT', max_length=CONT_SIZE)
     contest_writer = models.ForeignKey('User', on_delete=models.CASCADE, db_column='CONTEST_WRITER')
     contest_created = models.DateTimeField(db_column='CONTEST_CREATED', auto_now_add=True)
     contest_topic = models.CharField(db_column='CONTEST_TOPIC', max_length=500)
@@ -284,8 +285,8 @@ class Lect(models.Model):
     lect_intro = models.CharField(db_column='LECT_INTRO', max_length=300)
     lect_state = models.ForeignKey('StateInfo', models.DO_NOTHING, db_column='LECT_STATE',
                                    default=1, null=True, blank=True)
-    lect_curri = models.TextField(db_column='LECT_CURRI')
-    lect_limit_num = models.IntegerField(db_column='LECT_LIMIT_NUM')
+    lect_curri = SummernoteTextField(db_column='LECT_CURRI', max_length=CONT_SIZE)
+    lect_limit_num = models.IntegerField(db_column='LECT_LIMIT_NUM', blank=True, null=True)
     lect_place_or_link = models.CharField(db_column='LECT_PLACE_OR_LINK', max_length=1000, null=True, blank=True)
     lect_method = models.ForeignKey('MethodInfo', models.DO_NOTHING, db_column='LECT_METHOD',
                                     choices=METHOD_CHOICES, null=True, blank=True)
@@ -374,7 +375,7 @@ class LectBoard(models.Model):
     lect_board_no = models.AutoField(db_column='LECT_BOARD_NO', primary_key=True)
     lect_board_title = models.CharField(db_column='LECT_BOARD_TITLE', max_length=100)
     lect_board_created = models.DateTimeField(db_column='LECT_BOARD_CREATED', auto_now_add=True)
-    lect_board_cont = models.TextField(db_column='LECT_BOARD_CONT')
+    lect_board_cont = SummernoteTextField(db_column='LECT_BOARD_CONT')
     lect_board_writer = models.ForeignKey('User', on_delete=models.CASCADE, db_column='LECT_BOARD_WRITER')
     lect_no = models.ForeignKey(Lect, on_delete=models.CASCADE, db_column='LECT_NO', related_name='lectures')
     lect_board_type = models.ForeignKey('LectBoardType', models.DO_NOTHING, db_column='LECT_BOARD_TYPE')
@@ -431,8 +432,8 @@ class LectBoardAnswer(models.Model):
                                           db_column='LECT_BOARD_ANSWER')  # Field name made lowercase.
     lect_user_stu = models.ForeignKey('User', on_delete=models.CASCADE,
                                       db_column='LECT_USER_STU')  # Field name made lowercase.
-    lect_ans_cont = models.CharField(db_column='LECT_ANS_CONT', max_length=CONT_SIZE, blank=True,
-                                     null=True)  # Field name made lowercase.
+    lect_ans_cont = SummernoteTextField(db_column='LECT_ANS_CONT', max_length=CONT_SIZE, blank=True,
+                                        null=True)  # Field name made lowercase.
     lect_ans_created = models.DateTimeField(db_column='LECT_ANS_CREATED',
                                             auto_now_add=True)  # Field name made lowercase.
 
@@ -560,6 +561,28 @@ class MajorInfo(models.Model):
         db_table = 'MAJOR_INFO'
 
 
+class PolicyType(models.Model):
+    type_no = models.AutoField(db_column="TYPE_NO", primary_key=True)
+    type_name = models.CharField(db_column="TYPE_NAME", max_length=100)
+
+    class Meta:
+        managed = False
+        db_table = "POLICY_TYPE"
+
+
+class PolicyTerms(models.Model):
+    policy_no = models.AutoField(db_column='POLICY_NO', primary_key=True)
+    policy_title = models.CharField(db_column="POLICY_TITLE", max_length=500)
+    policy_content = SummernoteTextField(db_column="POLICY_CONTENT", max_length=CONT_SIZE)
+    policy_user = models.ForeignKey("User", on_delete=models.DO_NOTHING, db_column="POLICY_USER", null=True, blank=True)
+    policy_type = models.ForeignKey("PolicyType",db_column="POLICY_TYPE", on_delete=models.CASCADE)
+    policy_updated = models.DateTimeField(db_column="POLICY_UPDATED", auto_now=True)
+
+    class Meta:
+        managed = False
+        db_table = "POLICY_TERMS"
+
+
 class QuestForm(models.Model):
     quest_no = models.AutoField(db_column='QUEST_NO', primary_key=True)  # Field name made lowercase.
     quest_name = models.CharField(db_column='QUEST_NAME', max_length=500)  # Field name made lowercase.
@@ -617,7 +640,7 @@ class UserAuth(models.Model):
 class UserDelete(models.Model):
     user_delete_no = models.AutoField(db_column="USER_DELETE_NO", primary_key=True)
     user_delete_title = models.CharField(db_column="USER_DELETE_TITLE", max_length=100)
-    user_delete_content = models.CharField(db_column="USER_DELETE_CONTENT", max_length=CONT_SIZE)
+    user_delete_content = SummernoteTextField(db_column="USER_DELETE_CONTENT", max_length=CONT_SIZE)
     user_delete_created = models.DateTimeField(db_column="USER_DELETE_CREATED", auto_now_add=True)
     deleted_user = models.ForeignKey(User, on_delete=models.CASCADE, db_column='DELETED_USER',
                                      related_name="DELETED_USER")
