@@ -347,30 +347,6 @@ def get_default_pic_path():
 def is_default_pic(img_path):
     return str(img_path) == get_default_pic_path()
 
-
-# # ------------ deprecated -------------
-# # 삭제 사유: 관리하기 불편함. is_related(user) 함수를 사용할 것.
-# # 활동 게시판과 유저가 관련되어 있는지 확인하는 함수
-# def is_activity_related(user: User):
-#     return len(Board.objects.filter(Q(board_writer=user) & Q(board_type_no__board_type_no=4))) != 0
-#
-#
-# # 공모전 게시판과 유저가 관련되어 있는지 확인하는 함수.
-# def is_contest_related(user: User):
-#     return len(ContestBoard.objects.filter(contest_writer=user)) != 0
-#
-#
-# # 회계와 관련되어있는지 확인하는 함수
-# def is_bank_related(user: User):
-#     return len(Bank.objects.filter(Q(bank_cfo=user) | Q(bank_used_user=user))) != 0
-#
-#
-# # 연혁과 관련되어있는지
-# def is_history_related(user: User):
-#     return len(History.objects.filter(history_writer=user)) != 0
-# ---------------------------------------
-
-
 # 초기화를 할지 삭제를 할 지 결정하는 함수
 def is_related(user: User):
     # 활동 게시판이랑 관련이 있는가?

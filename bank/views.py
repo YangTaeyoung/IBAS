@@ -7,7 +7,7 @@ from bank.forms import BankForm, FileForm, BankSupportForm
 from date_controller import today
 from file_controller import FileController
 from pagination_handler import get_page_object
-from user_controller import login_required, get_logined_user, writer_only, cfo_only, auth_check
+from user_controller import get_logined_user, writer_only, cfo_only, auth_check
 from alarm.alarm_controller import create_bank_alarm
 
 

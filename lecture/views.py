@@ -29,7 +29,6 @@ def get_pol_name(method_no):
         pol_name = pol_name + " 개인 채널 링크"
     return pol_name
 
-
 # 타입에 맞는 강의 리스트를 반환하는 함수
 def get_lect_list(request, type_no):
     if type_no != 4:  # 강의 개설 신청 게시판이 아닌 일반 게시판(강의, 스터디, 취미모임)의 경우
