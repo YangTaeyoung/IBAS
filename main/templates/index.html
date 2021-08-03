@@ -16,7 +16,7 @@
                     <!--=====================여기서 부터 세션 작업이 되었음=========== -->
                     <!-- 현재 로그인이 안되어있다면, 로고 및 입부신청 버튼을 눌렀을 때 창이 연결된다.-->
                     {% if not is_logined %}
-                        <img class="ibas_logo" onclick="location.href = '{% url "login" %}'"
+                        <img class="ibas_logo media-logo" onclick="location.href = '{% url "login" %}'"
                              src="{% static 'images/ibas_main_logo.png' %}"/>
                         <div class="m-t50"><img src="{% static 'images/main-text.png' %}"/></div>
                         <div onclick="location.href = '{% url "login" %}'" class="category-bx"
@@ -27,7 +27,7 @@
                         </div>
                     {% else %}
                         <!--======================여기는 로그인이 된 상태(세션이 등록되어 있음)====== -->
-                        <img class="ibas_logo" src="{% static 'images/ibas_main_logo.png' %}"/>
+                        <img class="ibas_logo media-logo" src="{% static 'images/ibas_main_logo.png' %}"/>
                         <div class="m-t50"><img src="{% static 'images/main-text.png' %}"/></div>
                         <div class="category-bx" style="margin-top: 100px; margin-bottom: 100px"></div>
                         <!--=================href에 아무것도 걸지 않으므로 달라진 점이 없다. ==========-->

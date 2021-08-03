@@ -35,8 +35,8 @@
 }
 
 @media (max-width: 1000px) {
-    .main-logo{
-        width: 50%;
+    .media-logo{
+        width: 70%;
         height: auto;
     }
 
@@ -50,14 +50,14 @@
 
     }
 
-    .footer-bg{
+    .media-footer-bg{
         width: 100%;
         height: auto;
         background-size: cover;
 
     }
 
-    .ft-flex{
+    .media-ft-flex{
         display: flex;
         flex-direction: column;
         flex-wrap: wrap;
@@ -66,7 +66,7 @@
 
     }
 
-    .dvl-name{
+    .media-dvl-name{
         min-width: auto;
     }
 
@@ -74,13 +74,16 @@
         min-width: auto;
     }
 
-    .tb-mg10{
+    .media-tb-mg30{
         margin-top: 30px;
         margin-bottom: 30px;
+    }
+
+    .media-r-mg0{
         margin-right: 0px;
     }
 
-    .line-ft{
+    .media-line-ft{
         background-color: white;
         height: 1px;
         width: 80%;
@@ -91,6 +94,14 @@
 
     .dis-none-media{
         display: none;
+    }
+
+    .media-auto-w{
+        width: auto;
+    }
+
+    .media-pl10{
+        padding-left: 10px;
     }
 
 
