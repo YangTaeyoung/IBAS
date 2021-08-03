@@ -104,6 +104,9 @@
         padding-left: 10px;
     }
 
+    .width-390{
+        width: auto;
+    }
 
 
 
@@ -113,6 +116,11 @@
     .dis-none{
         display: none;
     }
+
+    .width-390{
+        width: 390px;
+    }
+
 }
 
 
