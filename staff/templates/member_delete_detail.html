@@ -78,7 +78,8 @@
                                                         class="fa fa-pencil m-r5"></i>게시글 수정
                                             </button>
                                         {% endif %}
-                                        {% if is_writer or is_superuser %}
+                                        {# 게시자가 아닌 이상 제명안건은 절대 철회할 수 없음. #}
+                                        {% if is_writer %}
                                             <button class="site-button red radius-xl m-l10"
                                                     onclick="goSubmit('id-form-user-delete-delete', true, '정말 제명 안건을 철회하시겠습니까?')">
                                                 <i class="fa fa-trash m-r5"></i>게시글 삭제
@@ -288,7 +289,7 @@
                                         {% endif %}
                                     {% endif %}
                                 </div>
-                            <div id="CommentList"></div>
+                                <div id="CommentList"></div>
                             </div>
 
                         </div>
