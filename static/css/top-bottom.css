@@ -7,7 +7,7 @@
 .cont-grid {
     display: grid;
     grid-template-columns: repeat(3,1fr);
-    min-width: 1400px;
+    min-width: 100%;
     justify-items: center;
 }
 
@@ -45,7 +45,7 @@
 .td-size_big {
     width: 250px;
     height: 35px;
-    padding: 1px 0 0 0;
+    padding: 1px 0 0 10px;
 }
 /* copyright 부분의 flex를 위해 만들어짐. */
 .footer-bottom {
@@ -59,9 +59,5 @@
 .design-with {
     margin: 0;
     font-size: 12px;
-}
-/* 창 줄여도 모양 변하지 않게 하기 위해 필요함. */
-.min-width_1400 {
-    min-width: 1400px;
 }
 

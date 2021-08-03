@@ -96,18 +96,14 @@
         display: none;
     }
 
-    .media-auto-w{
-        width: auto;
+    .media-contus{
+        width: 50%;
+        padding-right: 0px;
     }
 
-    .media-pl10{
-        padding-left: 10px;
+    .cont-w {
+        width: 50%;
     }
-
-    .width-390{
-        width: auto;
-    }
-
 
 
 }
@@ -117,9 +113,9 @@
         display: none;
     }
 
-    .width-390{
-        width: 390px;
-    }
+    .cont-w {
+        width: 80%;
+}
 
 }
 
