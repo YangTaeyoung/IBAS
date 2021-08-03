@@ -36,7 +36,8 @@
                                     <h3 class="title"><i class="la la-clock-o m-r5"></i>강의개설 기간 설정</h3>
                                 </div>
                                 <!-- 강의개설 기간 설정 내용 -->
-                                <form id="form-management-update-2" action="{% url 'management_update' form_no=2 %}" method="post">
+                                <form id="form-management-update-2" action="{% url 'management_update' form_no=2 %}"
+                                      method="post">
                                     {% csrf_token %}
                                     <div class="content-body ">
                                         <div class="form-group">
@@ -50,7 +51,8 @@
                                             {% render_field lect_schedule_form.lect_register_end class='form-control' type="datetime-local" %}
                                             <div class="m-t20" style="display: grid; justify-items: center">
                                                 <!--강의개설 기간 설정 적용하기 버튼-->
-                                                <button class="site-button" type="button" onclick="goSubmit('form-management-update-2', true, '입력한 강의 개설 기간으로 모든 내용이 반영됩니다. \n\n정말 반영하시겠습니까?')">
+                                                <button class="site-button" type="button"
+                                                        onclick="goSubmit('form-management-update-2', true, '입력한 강의 개설 기간으로 모든 내용이 반영됩니다. \n\n정말 반영하시겠습니까?')">
                                                     <i class="la la-check m-r5"
                                                        style="font-weight: bold"
                                                     ></i>&nbsp;적용하기
@@ -67,7 +69,8 @@
                                     <h3 class="title"><i class="la la-user m-r5"></i>가입 관련 설정</h3>
                                 </div>
                                 <!-- 가입 관련 설정 내용 -->
-                                <form id="form-management-update-1" action="{% url 'management_update' form_no=1 %}" method="post">
+                                <form id="form-management-update-1" action="{% url 'management_update' form_no=1 %}"
+                                      method="post">
                                     {% csrf_token %}
                                     <div class="content-body ">
                                         <div class="form-group">
@@ -105,7 +108,8 @@
 
                                             <div class="m-t20" style="display: grid; justify-items: center">
                                                 <!--가입관련 설정 적용하기 버튼-->
-                                                <button class="site-button" type="button" onclick="goSubmit('form-management-update-1', true, '입력한 회원 모집 일정으로 모든 내용이 반영됩니다. \n\n정말 반영하시겠습니까?')">
+                                                <button class="site-button" type="button"
+                                                        onclick="goSubmit('form-management-update-1', true, '입력한 회원 모집 일정으로 모든 내용이 반영됩니다. \n\n정말 반영하시겠습니까?')">
                                                     <i class="la la-check m-r5"
                                                        style="font-weight: bold"
                                                     ></i>&nbsp;적용하기
@@ -122,7 +126,8 @@
                                     <h3 class="title"><i class="la la-money m-r5"></i>기준별 강의비 설정</h3>
                                 </div>
                                 <!-- 강의비 관련 설정 내용 -->
-                                <form id="form-management-update-3" action="{% url 'management_update' form_no=3 %}" method="post">
+                                <form id="form-management-update-3" action="{% url 'management_update' form_no=3 %}"
+                                      method="post">
                                     {% csrf_token %}
                                     <div class="content-body ">
                                         <div class="form-group">
@@ -145,7 +150,99 @@
 
                                             <div class="m-t20" style="display: grid; justify-items: center">
                                                 <!--가입관련 설정 적용하기 버튼-->
-                                                <button class="site-button" type="button" onclick="goSubmit('form-management-update-3', true, '입력한 금액으로 모든 강의비가 반영됩니다. \n\n정말 반영하시겠습니까?')">
+                                                <button class="site-button" type="button"
+                                                        onclick="goSubmit('form-management-update-3', true, '입력한 금액으로 모든 강의비가 반영됩니다. \n\n정말 반영하시겠습니까?')">
+                                                    <i class="la la-check m-r5"
+                                                       style="font-weight: bold"
+                                                    ></i>&nbsp;적용하기
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            {# 약관 관련 #}
+                            <div class="content-box">
+                                <div class="content-header">
+                                    <h3 class="title"><i class="la la-money m-r5"></i>제3자 개인정보 이용수집 동의 약관 설정</h3>
+                                </div>
+                                <form id="form-management-update-4" action="{% url 'management_update' form_no=4 %}"
+                                      method="post">
+                                    {% csrf_token %}
+                                    <div class="content-body">
+                                        <div class="form-group">
+                                            {% for field in policy_form_1.visible_fields %}
+                                                <label>{{ field.label }}</label>
+                                                {% render_field field class="form-control" %}
+                                                <hr/>
+                                            {% endfor %}
+                                            {% for field in policy_form_1.hidden_fields %}
+                                                {{ field }}
+                                            {% endfor %}
+                                            <div class="m-t20" style="display: grid; justify-items: center">
+                                                <!--가입관련 설정 적용하기 버튼-->
+                                                <button class="site-button" type="button"
+                                                        onclick="goSubmit('form-management-update-4', true, '입력한 양식으로 개인정보 제3자 동의 약관이 변경됩니다. \n\n정말 반영하시겠습니까?')">
+                                                    <i class="la la-check m-r5"
+                                                       style="font-weight: bold"
+                                                    ></i>&nbsp;적용하기
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="content-box">
+                                <div class="content-header">
+                                    <h3 class="title"><i class="la la-money m-r5"></i>동아리 회칙 설정</h3>
+                                </div>
+                                <form id="form-management-update-5" action="{% url 'management_update' form_no=5 %}"
+                                      method="post">
+                                    {% csrf_token %}
+                                    <div class="content-body">
+                                        <div class="form-group">
+                                            {% for field in policy_form_2.visible_fields %}
+                                                <label>{{ field.label }}</label>
+                                                {% render_field field class="form-control" %}
+                                                <hr/>
+                                            {% endfor %}
+                                            {% for field in policy_form_2.hidden_fields %}
+                                                {{ field }}
+                                            {% endfor %}
+                                            <div class="m-t20" style="display: grid; justify-items: center">
+                                                <!--가입관련 설정 적용하기 버튼-->
+                                                <button class="site-button" type="button"
+                                                        onclick="goSubmit('form-management-update-5', true, '입력한 양식으로 동아리 회칙이 변경됩니다. \n\n정말 반영하시겠습니까?')">
+                                                    <i class="la la-check m-r5"
+                                                       style="font-weight: bold"
+                                                    ></i>&nbsp;적용하기
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="content-box">
+                                <div class="content-header">
+                                    <h3 class="title"><i class="la la-money m-r5"></i>홈페이지 이용약관 설정</h3>
+                                </div>
+                                <form id="form-management-update-6" action="{% url 'management_update' form_no=6 %}"
+                                      method="post">
+                                    {% csrf_token %}
+                                    <div class="content-body">
+                                        <div class="form-group">
+                                            {% for field in policy_form_3.visible_fields %}
+                                                <label>{{ field.label }}</label>
+                                                {% render_field field class="form-control" %}
+                                                <hr/>
+                                            {% endfor %}
+                                            {% for field in policy_form_3.hidden_fields %}
+                                                {{ field }}
+                                            {% endfor %}
+                                            <div class="m-t20" style="display: grid; justify-items: center">
+                                                <!--가입관련 설정 적용하기 버튼-->
+                                                <button class="site-button" type="button"
+                                                        onclick="goSubmit('form-management-update-6', true, '입력한 양식으로 홈페이지 이용약관이 변경됩니다. \n\n정말 반영하시겠습니까?')">
                                                     <i class="la la-check m-r5"
                                                        style="font-weight: bold"
                                                     ></i>&nbsp;적용하기
@@ -156,7 +253,7 @@
                                 </form>
                             </div>
 
-
+                            {# 약관 폼 종료 #}
                         </div>
                     </div>
                 </div>
@@ -164,6 +261,5 @@
         </div>
         <!-- 상단으로 한번에 올라가게 하는 버튼 -->
         <button class="scroltop fa fa-chevron-up"></button>
-    </div>
     </div>
 {% endblock %}

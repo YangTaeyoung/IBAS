@@ -1,8 +1,8 @@
 from django.shortcuts import render, reverse, redirect, get_object_or_404
 from DB.models import User, UserRole, UserAuth, Answer, UserUpdateRequest, \
     UserDelete, UserDeleteAor, UserDeleteFile, UserDeleteComment, UserDeleteState, \
-    UserEmail, StateInfo, LectSchedule, LectMoneyStandard, UserSchedule  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
-from staff.forms import UserDeleteForm, UserScheduleForm, LectScheduleForm, LectMoneyStandardForm
+    UserEmail, StateInfo, LectSchedule, LectMoneyStandard, UserSchedule, PolicyTerms  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
+from staff.forms import UserDeleteForm, UserScheduleForm, LectScheduleForm, LectMoneyStandardForm, PolicyTermsForms
 from pagination_handler import get_page_object
 from IBAS.forms import FileFormBase, CommentBaseForm
 import os
@@ -79,6 +79,7 @@ def staff_member_list(request):
         return redirect(reverse("index"))  # 메인페이지로 보냄
 
 
+@superuser_only(cfo_included=True)
 def staff_member_update(request):
     if request.method == "POST":  # 파라미터가 POST로 넘어왔는가? (정상적인 접근)
         user_auth = request.POST.get("user_auth")
@@ -97,11 +98,6 @@ def staff_member_update(request):
                 int(user_role) == 2 and len(user_stu_list) == 1):  # 회장 위임의 조건을 충족한 경우. (한명만 골랐을 때)
             # 기존 회장, 부회장 권한 수정 -> 일반회원
             with transaction.atomic():
-                user = User.objects.filter(user_role__role_no=user_role).first()
-                if user_role == 1:
-                    user.user_role = UserRole.objects.get(pk=6)  # 바꾸고자 하는 사람은 일반 회원으로 역할 변경됨.
-                    user.save()
-                    create_user_role_update_alarm(user)
                 # 새로운 회장 부회장.
                 new_user = User.objects.get(pk=user_stu_list[0])  # 새로운 회장 부회장의 객체를 얻어옴.
                 new_user.user_role = UserRole.objects.get(pk=user_role)  # 권한 수정
@@ -109,6 +105,12 @@ def staff_member_update(request):
                 new_user.save()
                 create_user_role_update_alarm(new_user)
                 create_user_auth_update_alarm(new_user, False)
+                user = User.objects.filter(user_role__role_no=user_role).first()
+                if int(user_role) == 1:
+                    user.user_role = UserRole.objects.get(pk=6)  # 바꾸고자 하는 사람은 일반 회원으로 역할 변경됨.
+                    user.save()
+                    create_user_role_update_alarm(user)
+                    return redirect(reverse("my_info"))
         else:
             for user in User.objects.all():  # 모든 유저 순회
                 for user_stu in user_stu_list:  # 사용자가 권한을 바꾸기로 한 학번 리스트를 순회
@@ -406,6 +408,23 @@ def user_name_update(request):
     return redirect(reverse("staff_member_list"))
 
 
+def get_content_of_policy_terms(type_no):
+    policy_terms = PolicyTerms.objects.filter(policy_type__type_no=type_no).order_by("-policy_updated")
+    if len(policy_terms) != 0:
+        policy_terms = policy_terms.first()
+        return {
+            "policy_title": policy_terms.policy_title,
+            "policy_content": policy_terms.policy_content,
+            "policy_type": policy_terms.policy_type.type_no
+        }
+    else:
+        return {
+            "policy_title": "",
+            "policy_content": "",
+            "policy_type": type_no
+        }
+
+
 # 관리자 페이지
 @chief_only(vice=True)
 def management(request):
@@ -413,6 +432,7 @@ def management(request):
     lect_schedule = LectSchedule.objects.get(pk=1)
     user_schedule = UserSchedule.objects.get(pk=1)
     lect_money_standard = LectMoneyStandard.objects.get(pk=1)
+    print(get_content_of_policy_terms(2))
     context = {
         "max_gen": max_gen,
         "lect_schedule": lect_schedule,
@@ -420,7 +440,10 @@ def management(request):
         "lect_money_standard": lect_money_standard,
         "lect_schedule_form": LectScheduleForm(instance=lect_schedule),
         "user_schedule_form": UserScheduleForm(instance=user_schedule),
-        "lect_money_standard_form": LectMoneyStandardForm(instance=lect_money_standard)
+        "lect_money_standard_form": LectMoneyStandardForm(instance=lect_money_standard),
+        "policy_form_1": PolicyTermsForms(initial=get_content_of_policy_terms(1), prefix='form_1'),
+        "policy_form_2": PolicyTermsForms(initial=get_content_of_policy_terms(2), prefix='form_2'),
+        "policy_form_3": PolicyTermsForms(initial=get_content_of_policy_terms(3), prefix='form_3')
     }
     return render(request, "management.html", context)
 
@@ -441,4 +464,16 @@ def management_update(request, form_no):
                                                                     instance=LectMoneyStandard.objects.get(pk=1))
             if lect_money_standard_update_form.is_valid():
                 lect_money_standard_update_form.save()
+        elif form_no == 4:
+            policy_terms_form = PolicyTermsForms(request.POST, prefix='form_1')
+            if policy_terms_form.is_valid():
+                policy_terms_form.save(policy_user=get_logined_user(request))
+        elif form_no == 5:
+            policy_terms_form = PolicyTermsForms(request.POST, prefix='form_2')
+            if policy_terms_form.is_valid():
+                policy_terms_form.save(policy_user=get_logined_user(request))
+        elif form_no == 6:
+            policy_terms_form = PolicyTermsForms(request.POST, prefix='form_3')
+            if policy_terms_form.is_valid():
+                policy_terms_form.save(policy_user=get_logined_user(request))
     return redirect(reverse("management"))

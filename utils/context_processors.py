@@ -1,4 +1,4 @@
-from DB.models import Alarm, User
+from DB.models import Alarm, User, PolicyTerms
 from django.db.models import Q
 from user_controller import get_logined_user, is_logined
 from date_controller import today, today_before_day, today_after_day
@@ -62,3 +62,11 @@ def cfo_check(request):
         return {"is_cfo": get_logined_user(request).user_role.role_no == 4}
     else:
         return {"is_cfo": False}
+
+
+def get_policies(request):
+    return {
+        "policy_type_1": PolicyTerms.objects.filter(policy_type__type_no=1).order_by("-policy_updated").first(),
+        "policy_type_2": PolicyTerms.objects.filter(policy_type__type_no=2).order_by("-policy_updated").first(),
+        "policy_type_3": PolicyTerms.objects.filter(policy_type__type_no=3).order_by("-policy_updated").first()
+    }

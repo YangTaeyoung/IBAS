@@ -11,7 +11,7 @@
     <meta name="description" content="IBAS 동아리 공식 홈페이지 입니다."/>
     <meta property="og:title" content="IBAS"/>
     <meta property="og:description" content="IBAS 동아리 공식 홈페이지입니다."/>
-    <meta property="og:image" content=""/>
+    <meta property="og:image" content="{% static 'images/logo_puple.png' %}"/>
     <meta name="format-detection" content="telephone=no">
 
     <!-- FAVICONS ICON -->
@@ -19,7 +19,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="{% static 'images/IBAS_favicon.png' %}"/>
 
     <!--toast editor-->
-    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"/>
     <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
 
 
@@ -51,6 +51,8 @@
     <!--직접 만든거-->
     <link rel="stylesheet" type="text/css" href="{% static 'css/ibas_contents.css' %}">
     <link class="skin" rel="stylesheet" type="text/css" href="{% static 'css/top-bottom.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/media.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/size.css' %}">
 
     {% if messages %}
         {% for message in messages %}
@@ -255,25 +257,26 @@
 {% endblock %}
 
 <!-- Footer 하단바 시작 -->
-<footer>
+<footer class="footer-media">
     <!-- content 담는 부분이 footer-top -->
     <!-- footer-top에 대한 정의는 bottom_bar.css에 정의되어 있음. (height 관련) -->
-    <div class="ibas-footer-top"
-         style="background-image: url({% static 'images/botton_bar.jpg' %}); background-repeat: no-repeat; background-size: 100%; background-position: center">
+    <div class="ibas-footer-top media-footer-bg"
+         style="background-image: url({% static 'images/botton_bar.jpg' %}); background-size: cover;">
         <!-- content 시작 -->
         <!-- cont-grid에 대한 정의는 bottom_bar.css에 정의되어 있음. (grid 관련) -->
-        <div class="cont-grid">
+        <div class="cont-grid media-ft-flex">
             <!-- 로고 div 시작 -->
             <!-- logo-center에 대한 정의는 bottom_bar.css에 정의되어 있음. (grid 관련) -->
-            <div class="logo-center">
+            <div class="logo-center media-tb-mg30 media-logo">
                 <!-- 여기 부분이 이미지임   -->
                 <!-- width_300에 대한 정의는 bottom_bar.css에 정의되어 있음. (width 관련) -->
                 <img src="{% static 'images/logo_white.png' %} " class="m-b15" alt="" style="width: 350px">
             </div>
+            <div class="media-line-ft dis-none"></div>
             <!-- 로고 div 끝 -->
             <!-- contact us div 시작 -->
             <!-- margin-left_70에 대한 정의는 bottom_bar.css에 정의되어 있음. (margin 관련) -->
-            <div style="margin-top: 10px; width: 390px; margin-right: 50px;">
+            <div class="m-t10 media-tb-mg30 media-r-mg0 cont-w">
                 <h5 class="mb-2 text-white">Contact us</h5>
                 <!-- contact us table 시작 -->
                 <!-- padding_0에 대한 정의는 bottom_bar.css에 정의되어 있음. (padding 관련) -->
@@ -297,28 +300,38 @@
                         <td class="td-size_big">{{ chief.useremail_set.first.user_email }}</td>
                     </tr>
                 </table>
+
             </div>
+            <div class="media-line-ft dis-none"></div>
             <!-- contact us div 끝 -->
             <!-- 인하대 로고 div 시작 -->
             <!-- logo-center에 대한 정의는 bottom_bar.css에 정의되어 있음. (grid 관련) -->
-            <div class="logo-center">
+            <div class="logo-center media-tb-mg30 media-logo">
                 <!-- 여기 부분이 이미지임 -->
                 <a href="https://www.inha.ac.kr">
                     <!-- width_300에 대한 정의는 bottom_bar.css에 정의되어 있음. (width 관련) -->
-                    <img src="{% static 'images/inha_en_logo.png' %} " class="m-b15" alt=""
-                         style="width: 450px; margin-right: 50px">
+                    <img src="{% static 'images/inha_en_logo.png' %} " class="m-b15 p-r50 media-r-mg0 media-pr-0" alt=""
+                         style="width: 450px;">
                 </a>
             </div>
             <!-- 인하대 로고 div 끝 -->
+
         </div>
+    </div>
+    <div class="footer-bottom text-center mx-auto text-white dis-none-media">
+            <a class="font-12" href="{% url 'rulebook' type_no=1 %}">제 3자 개인정보 이용·수집제공 약관</a>&nbsp;·&nbsp;
+            <a class="font-12" href="{% url 'rulebook' type_no=2 %}">동아리 회칙</a>&nbsp;·&nbsp;
+            <a class="font-12" href="{% url 'rulebook' type_no=3 %}">웹사이트 운영정책</a>
     </div>
     <!-- copyright 부분 시작 -->
     <!-- footer-bottom, min-width_1400에 대한 정의는 bottom_bar.css에 정의되어 있음. (flex 관련)(min-with 관련) -->
-    <div class="footer-bottom min-width_1400">
+    <div class="footer-bottom media-dvl-name" style="min-width: 100%">
         <!-- design-with에 대한 정의는 bottom_bar.css에 정의되어 있음. (font, margin 관련) -->
-        <p class="fbottom-like design-with">© 2021 Developed By <a class="like-btn"
-                                                                   href="javascript:void(0)">
-        </a> 양태영, 신승연, 김채림, 윤예진, 유동현 </p>
+        <p class="fbottom-like design-with">© 2021 Developed By
+            <a class="like-btn" href="javascript:void(0)">
+            </a>
+            양태영, 신승연, 김채림, 윤예진, 유동현
+        </p>
     </div>
 </footer>
 <!-- Footer END-->
@@ -391,15 +404,15 @@
 
 <script>
 
-        const Editor = toastui.Editor;
+    const Editor = toastui.Editor;
 
-        const editor = new Editor({
-              el: document.querySelector('#editor'),
-              height: '600px',
-              initialEditType: 'WYSIWYG',
-              previewStyle: 'vertical'
-            });
-    </script>
+    const editor = new Editor({
+        el: document.querySelector('#editor'),
+        height: '600px',
+        initialEditType: 'WYSIWYG',
+        previewStyle: 'vertical'
+    });
+</script>
 
 </body>
 </html>

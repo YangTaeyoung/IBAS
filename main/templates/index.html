@@ -3,9 +3,6 @@
 {% block content %}
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <div class="page-content bg-white" style="padding-bottom: 0px">
         <!-- Section Banner -->
@@ -19,18 +16,18 @@
                     <!--=====================여기서 부터 세션 작업이 되었음=========== -->
                     <!-- 현재 로그인이 안되어있다면, 로고 및 입부신청 버튼을 눌렀을 때 창이 연결된다.-->
                     {% if not is_logined %}
-                        <img class="ibas_logo" onclick="location.href = '{% url "login" %}'"
+                        <img class="ibas_logo media-logo" onclick="location.href = '{% url "login" %}'"
                              src="{% static 'images/ibas_main_logo.png' %}"/>
                         <div class="m-t50"><img src="{% static 'images/main-text.png' %}"/></div>
                         <div onclick="location.href = '{% url "login" %}'" class="category-bx"
                              style="margin-top: 100px; margin-bottom: 100px">
-                            <a href="#" class="category" style="width: 500px;">
+                            <a href="#" class="category dis-none-media" style="width: 500px;">
                                 <p style=" font-weight: bolder; font-size: 20px; padding-top: 12px">입부신청</p>
                             </a>
                         </div>
                     {% else %}
                         <!--======================여기는 로그인이 된 상태(세션이 등록되어 있음)====== -->
-                        <img class="ibas_logo" src="{% static 'images/ibas_main_logo.png' %}"/>
+                        <img class="ibas_logo media-logo" src="{% static 'images/ibas_main_logo.png' %}"/>
                         <div class="m-t50"><img src="{% static 'images/main-text.png' %}"/></div>
                         <div class="category-bx" style="margin-top: 100px; margin-bottom: 100px"></div>
                         <!--=================href에 아무것도 걸지 않으므로 달라진 점이 없다. ==========-->
@@ -40,31 +37,24 @@
             </div>
 
 
-
-
-
         </div>
     </div>
     <!-- Section Banner END -->
-
-
-    <div class="container" style="position: absolute; left: 0px; bottom:20px;">
-      <div class="toast" data-autohide="false">
-        <div class="toast-header">
-          <strong class="mr-auto text-primary">IBAS 공지</strong>
-          <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
-        </div>
-        <div class="toast-body">
-          IBAS 3기의 3-4학년 면접일은<br/>21.01.01 부터 21.02.02 까지 입니다.
-        </div>
-      </div>
-    </div>
+    {% if not is_logined or logined_user.user_auth.auth_no == 3  %}
+        {% if is_user_recruiting %}
+            {% include "toast.html" %}
+        {% endif %}
+    {% endif %}
 
     <script>
-    $(document).ready(function(){
-      $('.toast').toast('show');
-    });
+        function toastpopDown() {
+            document.getElementById("ibas-toast").style.display = "none"
+        }
     </script>
 
 
+
+
 {% endblock %}
+
+

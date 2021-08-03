@@ -151,7 +151,7 @@ def create_user_delete_alarm(user_delete: UserDelete):
     for chief in chief_list:
         Alarm.objects.create(
             alarm_user=chief,
-            alarm_cont=user_delete.suggest_user.user_name + "님에게 제명안건이 발안되었습니다. 투표해주세요.",
+            alarm_cont=user_delete.deleted_user.user_name + "님에게 제명안건이 발안되었습니다. 투표해주세요.",
             alarm_link=resolve_url("member_delete_detail", user_delete_no=user_delete.user_delete_no)
         )
 

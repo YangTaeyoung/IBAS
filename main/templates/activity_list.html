@@ -42,8 +42,6 @@
                                                 <form action="{% url 'activity_detail' board_no=board.board_no %}"
                                                       method="POST">
                                                     {% csrf_token %}
-
-
                                                     <!-- 게시글 박스에 보이는 대표사진 -->
                                                     <div class="listing-media height-350">
                                                         <!-- 첫번째 사진만 가져오기 -->
@@ -55,7 +53,7 @@
                                                         <!--게시글 제목-->
                                                         <div class="line1">
                                                             <input type="submit" class="title line1"
-                                                                   value="{{ board.board_title }}"
+                                                                   value="{{ board.board_title|truncatechars:22 }}"
                                                                    style="background-color:transparent; border:0px transparent solid;">
                                                         </div>
                                                         <!-- 게시글 작성자 및 작성시간는 div -->
