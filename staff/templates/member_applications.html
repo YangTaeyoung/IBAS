@@ -1,33 +1,33 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-        <link rel="stylesheet" type="text/css" href="{% static 'css/star-rating-svg.css' %}"/>
-        <link
-                rel="stylesheet"
-                type="text/css"
-                href="{% static 'plugins/editor/jquery-te-1.4.0.css' %}"
-        />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/star-rating-svg.css' %}"/>
+    <link
+            rel="stylesheet"
+            type="text/css"
+            href="{% static 'plugins/editor/jquery-te-1.4.0.css' %}"
+    />
 
-        <link
-                rel="stylesheet"
-                type="text/css"
-                href="{% static 'plugins/drop/imageuploadify.min.css' %}"
-        />
-        <link rel="stylesheet" href="{% static 'plugins/tag-editor/jquery.tag-editor.css' %}"/>
-        <script>
-            function member_pass() {
-                if (confirm("지원자를 합격시키겠습니까?")) {
-                    document.getElementById("form-apply").submit();
-                }
+    <link
+            rel="stylesheet"
+            type="text/css"
+            href="{% static 'plugins/drop/imageuploadify.min.css' %}"
+    />
+    <link rel="stylesheet" href="{% static 'plugins/tag-editor/jquery.tag-editor.css' %}"/>
+    <script>
+        function member_pass() {
+            if (confirm("지원자를 합격시키겠습니까?")) {
+                document.getElementById("form-apply").submit();
             }
+        }
 
-            function member_nopass() {
-                if (confirm("지원자를 탈락시키겠습니까?\n모든 DB에서 해당 지원자에 대한 기록이 사라집니다.")) {
-                    document.getElementById("form-deny").submit();
-                }
+        function member_nopass() {
+            if (confirm("지원자를 탈락시키겠습니까?\n모든 DB에서 해당 지원자에 대한 기록이 사라집니다.")) {
+                document.getElementById("form-deny").submit();
             }
+        }
 
-        </script>
+    </script>
     <body>
     <div class="page-wraper">
         <div class="page-content bg-white">
@@ -129,6 +129,30 @@
                             </div>
                         </div>
                         <!--====================================학과 끝=============================================-->
+                        <!--====================================이메일 시작==============================================-->
+                        <div class="content-box">
+                            <div class="content-header">
+                                <h3 class="title">이메일</h3>
+                            </div>
+                            <div class="content-body">
+                                <div class="form-group">
+                                    <a>{{ user.useremail_set.first.user_email }}</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!--====================================이메일 끝=============================================-->
+                        <!--====================================핸드폰 시작==============================================-->
+                        <div class="content-box">
+                            <div class="content-header">
+                                <h3 class="title">핸드폰 번호</h3>
+                            </div>
+                            <div class="content-body">
+                                <div class="form-group">
+                                    <a>{{ user.user_phone }}</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!--====================================핸드폰 끝=============================================-->
                         <!--====================================질문에 대한 답변 1 시작==============================================-->
                         {% for user_answer in user_answer_list %}
                             <div class="content-box">
