@@ -718,6 +718,21 @@ input[type=checkbox] + label:after {
   }
 }
 
+.introduce-hover {
+    background-color: rgba(0,0,0,0.08) !important;
+    border-radius: 500px;
+}
+
+.introduce-hover:hover {
+    background-color: rgba(0,0,0,0.25) !important;
+    border-radius: 500px;
+}
+
+.introduce-v4:hover {
+    font-size: 60pt !important;
+    color: white !important;
+}
+
 /* 명예의 전당 자기소개 박스 꼬리 하얗게 설정하기 위함*/
 .listing-nav li a.active, .center .testimonial-2.testimonial-bg .testimonial-text:after {
      border-top-color: white; !important;
