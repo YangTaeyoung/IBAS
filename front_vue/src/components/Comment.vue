@@ -143,7 +143,7 @@ export default {
 
         axios({
           method: 'put',
-          url: "http://127.0.0.1:8000/comment/update/" + comment_id,
+          url: "comment/update/" + comment_id,
           data: {comment_cont: comment_cont}
         })
           .then(response => {
@@ -161,7 +161,7 @@ export default {
     deleteRecomment: function (comment_id, index) {
       if (confirm('댓글을 삭제하시겠습니까?')) {
         var vm = this;
-        axios.delete("http://127.0.0.1:8000/comment/delete/" + comment_id)
+        axios.delete("comment/delete/" + comment_id)
             .then(() => {
               vm.comment_set_list.splice(index, 1)
               alert('댓글이 삭제되었습니다!')

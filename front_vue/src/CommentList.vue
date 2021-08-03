@@ -2,9 +2,13 @@
   <div class="clear" id="comment-list">
     <template v-if="comment_list!=null">
       <!-- 게시글과 댓글을 구분짓는 구분선 -->
+      <h3 class="font-26">덧글</h3>
       <div class="dlab-divider bg-gray-dark"></div>
+
     </template>
+
     <div class="comments-area" id="comments">
+
       <div class="clearfix">
         <ol class="comment-list">
           <li v-for="(comment, i) in comment_list" :key="comment.comment_id" class="comment">
@@ -30,7 +34,7 @@ import {alert_msg_for_client} from "./assets/response.js"
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
-
+axios.defaults.baseURL = 'https://inhabas.com/'
 export default {
   data: () => {
     return {
@@ -71,7 +75,7 @@ export default {
 
       axios({
         method: 'get',
-        url: "http://127.0.0.1:8000/comment/" + this_vue.board_type + "/view/" + this_vue.board_no
+        url:  "comment/" + this_vue.board_type + "/view/" + this_vue.board_no
       })
           .then(response => {
             this.comment_list = response.data.comment_list;
@@ -87,13 +91,13 @@ export default {
       if(comment_cont.trim() === "") {
         alert('댓글을 입력하세요!')
       }
-      else if(confirm('댓글을 등록하시겠습니까?')) {
+      else {
         var this_vue = this;
 
         var postData = {comment_cont: comment_cont, comment_cont_ref: comment_cont_ref}
         axios({
           method: 'post',
-          url: "http://127.0.0.1:8000/comment/" + this_vue.board_type + "/register/" + this_vue.board_no,
+          url: "comment/" + this_vue.board_type + "/register/" + this_vue.board_no,
           data: postData
         })
             .then(response => {
@@ -103,26 +107,26 @@ export default {
               } else { // 대댓글
                 this_vue.comment_set_list[index].push(response.data.comment);
               }
-              alert('댓글이 등록되었습니다!')
             })
             .catch(response => {
               console.log("Failed to add the comment", response);
               alert_msg_for_client(response)
+              alert("덧글 등록에 실패했습니다. 웹팀 팀장 유동현에게 문의하세요!!")
             })
       }
     },
 
     deleteComment: function (comment_id, index) {
       if(confirm('댓글을 삭제하시겠습니까?')) {
-        axios.delete("http://127.0.0.1:8000/comment/delete/" + comment_id)
+        axios.delete("comment/delete/" + comment_id)
             .then(() => {
               this.comment_list.splice(index, 1);  // 해당 댓글 삭제
               this.comment_set_list[index] = null;  // 대댓글 컴포넌트를 생성하게 만드는 대댓글 데이터 삭제
-              alert('댓글이 삭제되었습니다!')
             })
             .catch(response => {
               console.log("Failed to remove the comment", response);
               alert_msg_for_client(response)
+              alert("덧글 삭에 실패했습니다. 웹팀 팀장 유동현에게 문의하세요!!")
             });
       }
     },
@@ -131,20 +135,20 @@ export default {
       if(comment_cont.trim() === "") {
         alert('댓글을 입력하세요!')
       }
-      else if(confirm('댓글을 수정하시겠습니까?')) {
+      else {
         var vm = this;
         axios({
           method: 'put',
-          url: "http://127.0.0.1:8000/comment/update/" + comment_id,
+          url: "comment/update/" + comment_id,
           data: {comment_cont: comment_cont}
         })
             .then(response => {
               vm.comment_list[index] = response.data.comment;
-              alert('댓글이 수정되었습니다!')
             })
             .catch(response => {
               console.log("Failed to update the comment", response);
               alert_msg_for_client(response)
+              alert("덧글 수정에 실패했습니다. 웹팀 팀장 유동현에게 문의하세요!!")
             });
       }
     }

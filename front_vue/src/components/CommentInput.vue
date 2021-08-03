@@ -14,8 +14,8 @@
       </p>
       <!-- 댓글작성 버튼 -->
       <p class="form-submit" style="text-align: right">
-        <input v-on:click="addComment()" value="댓글등록"
-               class="submit site-button">
+        <input type="submit" v-on:click="addComment()" value="댓글등록"
+                class="submit site-button"/>
       </p>
 
     </div>
