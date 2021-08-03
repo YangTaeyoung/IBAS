@@ -99,7 +99,7 @@ def staff_member_update(request):
             # 기존 회장, 부회장 권한 수정 -> 일반회원
             with transaction.atomic():
                 user = User.objects.filter(user_role__role_no=user_role).first()
-                if user_role == 1:
+                if int(user_role) == 1:
                     user.user_role = UserRole.objects.get(pk=6)  # 바꾸고자 하는 사람은 일반 회원으로 역할 변경됨.
                     user.save()
                     create_user_role_update_alarm(user)
