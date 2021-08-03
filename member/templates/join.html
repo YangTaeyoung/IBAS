@@ -168,11 +168,7 @@
                             <!-- 바로 사용하지 못하는 것들은 사전 설정함. -->
                             <!--사전 설정-->
                             <input type="hidden" id="user_token" name="user_token" value="{{ token }}"/>
-                            {% if user_role == "5" %} <!-- 교수일 경우 -->
-                                <input type="hidden" id="user_auth" name="user_auth" value="1"/> <!-- 계정을 바로 활성화 시킴 -->
-                            {% else %} <!-- 학생일 경우 -->
-                                <input type="hidden" id="user_auth" name="user_auth" value="3"/> <!-- 계정을 비활성화 시킴 -->
-                            {% endif %}
+                            <input type="hidden" id="user_auth" name="user_auth" value="3"/> <!-- 계정을 비활성화 시킴 -->
                             <!-- 기본 권한 -->
                             <input type="hidden" id="user_role" name="user_role" value="{{ user_role }}"/>
                             <input type="hidden" id="provider" name="provider" value="{{ provider }}"/>

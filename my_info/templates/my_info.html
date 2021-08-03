@@ -55,7 +55,7 @@
                     <div class="listing-info">
                         <!--이름, 학과, 학번 표시되는 곳, Back : 본인 이름, 학과, 한번 들어갈 수 있도록 수정-->
                         <div class="listing-info-left">
-                            <h3 class="title">{{ logined_user.user_name }}</h3
+                            <h3 class="title">{{ logined_user.user_name }}</h3>
                             <p>{{ logined_user.user_major.major_name }} &#8226; {{ logined_user.user_stu }}</p>
                         </div>
                         <!--상단 오른쪽에 뜨는버튼 버튼-->
@@ -640,7 +640,8 @@
                                                 </td>
                                             </tr>
                                             <!--학년-->
-                                            <tr>
+                                            {% if logined_user.user_grade != 5 %}
+                                                <tr>
                                                 <th scope="row">학년</th>
                                                 <!--Back : 자기 학년 뜨도록 수정-->
                                                 {% if logined_user.user_grade == 0 %}
@@ -648,12 +649,12 @@
                                                 {% else %}
                                                     <td>{{ logined_user.user_grade }}학년</td>
                                                 {% endif %}
+                                            {% endif %}
 
-
-                                                <td>
-                                                    <a href="javascript:void(0);" data-toggle="modal"
-                                                       data-target="#grade_edit"><i class="la la-pencil"></i></a>
-                                                </td>
+                                            <td>
+                                                <a href="javascript:void(0);" data-toggle="modal"
+                                                   data-target="#grade_edit"><i class="la la-pencil"></i></a>
+                                            </td>
                                             </tr>
                                             <!--이메일-->
                                             <tr>
@@ -680,7 +681,8 @@
                                                 <td>{{ logined_user.user_auth.auth_name }}</td>
                                                 <td>
                                                     {% if logined_user.user_auth.auth_no == 2 %}
-                                                        <a href="{% url 'user_activate_request' %}" onclick="alert('회비 납부 확인 요청이 완료되었습니다. \n\n순차적으로 확인하고 있으니 더 이상 요청하지 말아주세요.')">
+                                                        <a href="{% url 'user_activate_request' %}"
+                                                           onclick="alert('회비 납부 확인 요청이 완료되었습니다. \n\n순차적으로 확인하고 있으니 더 이상 요청하지 말아주세요.')">
                                                             회비 납부 확인 요청
                                                         </a>
                                                     {% endif %}
@@ -1140,7 +1142,8 @@
                                                 <!--설명 내용 수정 부분-->
                                                 <textarea name="user_intro" required="required"
                                                           class="form-control"
-                                                          placeholder="간단한 본인 소개를 적어주세요">{% if logined_user.user_intro %}{{ logined_user.user_intro }}{% endif %}</textarea>
+                                                          placeholder="간단한 본인 소개를 적어주세요">{% if logined_user.user_intro %}
+                                                    {{ logined_user.user_intro }}{% endif %}</textarea>
                                             </div>
                                             <!--수정신청하기 버튼, Back : 누르면 회장에게 승인을 요구하도록 수정-->
                                             <a href="#" class="site-button"
