@@ -235,12 +235,28 @@ def full_check(func):
         elif kwargs.get("room_no"):
             lect_no = kwargs.get("room_no")
         if lect_no != -1:
+
             lect = Lect.objects.get(pk=lect_no)
             lect_enrollment = LectEnrollment.objects.filter(lect_no=lect)
             current_user = get_logined_user(request)
-            if (lect.lect_limit_num <= len(lect_enrollment) and len(lect_enrollment.filter(
-                    student=get_logined_user(request))) == 0 and lect.lect_chief != current_user and not role_check(
-                    request, 3, "lte")) or lect.is_expired:
+            flag = False
+
+            #### 처음 두개의 질문, 강의를 모집 마감 시킴. ####
+            if lect.lect_limit_num <= len(lect_enrollment):  # 강의가 가득 찼는가?
+                flag = True
+            if not lect.is_expired:  # 강의 모집 기간이 만료되었는가?
+                flag = True
+
+            #### 마지막 3개의 질문, 마감이나, 다른 조건이 있더라도 예외로 허용시킴. ####
+            if len(lect_enrollment.filter(student=get_logined_user(request))) != 0:  # 등록한 사람 중 자신이 있는가?
+                flag = False
+            if lect.lect_chief == current_user:  # 자신이 강의자인가?
+                flag = False
+            if role_check(request, 3, "lte"):  # 자신이 회장단인가?(1: 회장, 2: 부회장, 3: 운영팀 중 하나)
+                flag = False
+
+            #### flag에 따라 경고, 혹은 강의실로 입장하게 됨. ####
+            if flag:
                 messages.warning(request, "강의가 마감되었습니다.")
                 return redirect("lect_view", type_no=lect.lect_type.type_no)
         return func(request, *args, **kwargs)
