@@ -19,7 +19,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="{% static 'images/IBAS_favicon.png' %}"/>
 
     <!--toast editor-->
-    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"/>
     <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
 
 
@@ -297,6 +297,7 @@
                         <td class="td-size_big">{{ chief.useremail_set.first.user_email }}</td>
                     </tr>
                 </table>
+
             </div>
             <!-- contact us div 끝 -->
             <!-- 인하대 로고 div 시작 -->
@@ -310,15 +311,23 @@
                 </a>
             </div>
             <!-- 인하대 로고 div 끝 -->
+
+        </div>
+        <div class="text-center mx-auto">
+            <a class="font-12" style="color:white;opacity: 0.6;" href="{% url 'rulebook' type_no=1 %}">제 3자 개인정보 이용·수집제공 약관</a>&nbsp;·&nbsp;
+            <a class="font-12" style="color:white;opacity: 0.6;" href="{% url 'rulebook' type_no=2 %}">동아리 회칙</a>&nbsp;·&nbsp;
+            <a class="font-12" style="color:white;opacity: 0.6;" href="{% url 'rulebook' type_no=3 %}">웹사이트 운영정책</a>
         </div>
     </div>
     <!-- copyright 부분 시작 -->
     <!-- footer-bottom, min-width_1400에 대한 정의는 bottom_bar.css에 정의되어 있음. (flex 관련)(min-with 관련) -->
     <div class="footer-bottom min-width_1400">
         <!-- design-with에 대한 정의는 bottom_bar.css에 정의되어 있음. (font, margin 관련) -->
-        <p class="fbottom-like design-with">© 2021 Developed By <a class="like-btn"
-                                                                   href="javascript:void(0)">
-        </a> 양태영, 신승연, 김채림, 윤예진, 유동현 </p>
+        <p class="fbottom-like design-with">© 2021 Developed By
+            <a class="like-btn" href="javascript:void(0)">
+            </a>
+            양태영, 신승연, 김채림, 윤예진, 유동현
+        </p>
     </div>
 </footer>
 <!-- Footer END-->
@@ -391,15 +400,15 @@
 
 <script>
 
-        const Editor = toastui.Editor;
+    const Editor = toastui.Editor;
 
-        const editor = new Editor({
-              el: document.querySelector('#editor'),
-              height: '600px',
-              initialEditType: 'WYSIWYG',
-              previewStyle: 'vertical'
-            });
-    </script>
+    const editor = new Editor({
+        el: document.querySelector('#editor'),
+        height: '600px',
+        initialEditType: 'WYSIWYG',
+        previewStyle: 'vertical'
+    });
+</script>
 
 </body>
 </html>

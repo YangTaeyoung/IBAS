@@ -98,30 +98,10 @@
                         <hr/>
                         <!-- 태크를 붙여둔 상태로 DB에 저장/불러오기 해야 함 -->
                         {{ policy_terms.policy_content|safe }}
-                        <!--===================== 동아리 약관 모달창 예시 (추후 삭제예정) =====================-->
-                        <!-- 로컬에서는 Main 페이지로 리디렉션 되어, 페이지를 만들 수 없었기 때문에 아래에 예시로 추가함 -->
-                        <!-- 서버컴퓨터에 추가하면, 삭제할 예정 여기부터는 디자인 참고용으로 봐주시면 됩니다 (여기서 DB작업 X) -->
-                        <div id="register" class="tab-pane active mt-5">
-                            <!-- 개인정보사용동의란 부분 체크박스와 상세 내용 -->
-                            <div class="submit-btn-center mb-5">
-                                <!-- 체크 박스, 동의 문구 컨테이너 -->
-                                <div style="display: flex; flex-direction: column">
-                                    <div class="form-group item_flex_btn_center mb-0">
-                                        <input type="checkbox" id="privacy-policy" required="required"/>
-                                        <label for="privacy-policy"
-                                        >본인은
-                                            <a href="#" data-toggle="modal"
-                                               data-target="#hi" class="btn-link quest-text">제3자 개인정보 제공 동의 약관</a>과
-                                            <a href="#" class="btn-link quest-text">동아리 회칙</a>에
-                                            동의합니다.</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!--===================== 동아리 약관 모달창 예시 끝 (추후 삭제예정) =====================-->
-
-
                     </div>
+                </div>
+                <div class="text-center">
+                    <button class="btn site-button" type="button" onclick="history.back()">돌아가기</button>
                 </div>
             </div>
             <!-- 화면 오른쪽 그림 div -->
@@ -136,7 +116,6 @@
 
     </div>
     <!-- Content END-->
-    <button class="scroltop fa fa-chevron-up"></button>
 </div>
 <!-- JAVASCRIPT FILES ========================================= -->
 <script src="{% static 'js/jquery.min.js' %}"></script>
