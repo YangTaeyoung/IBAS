@@ -7,6 +7,7 @@ from django.shortcuts import get_object_or_404
 from DB.models import CommentType, Comment
 from django.db.models import Q, F
 from django.http.response import JsonResponse
+
 # url 기준  www.inhabas.com/comment/ ??? / .... /
 # ??? 부분으로 구분
 type_no = {
@@ -14,6 +15,7 @@ type_no = {
     'contest': 2,
     'lect': 3,
     'staff': 4,
+    'activity': 1,
 }
 
 
