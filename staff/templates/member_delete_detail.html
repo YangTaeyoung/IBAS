@@ -60,7 +60,7 @@
                                     <!--============================== 게시글 본문 시작 ==============================-->
                                     <div class="dlab-post-text">
                                         <!-- 본문 입력 내용 -->
-                                        {{ user_delete.user_delete_content }}
+                                        {{ user_delete.user_delete_content|safe }}
                                         <!-- 첨부된 파일 불러오는 곳 -->
                                         <!-- download 쪽에 파일 경로 설정 -->
                                         {% include "file_detail.html" %}

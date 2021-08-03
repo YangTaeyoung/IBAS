@@ -299,10 +299,11 @@ def member_delete_detail(request, user_delete_no):
         "is_decided": is_decided(user_delete),
     }
     if len(user_delete_aor_apply) + len(user_delete_aor_reject) != 0:
-        apply_ratio = (len(UserDeleteAor.objects.filter(Q(user_delete_no=user_delete) & Q(aor=1))) // (
+        apply_ratio = (len(UserDeleteAor.objects.filter(Q(user_delete_no=user_delete) & Q(aor=1))) / (
                 len(UserDeleteAor.objects.filter(Q(user_delete_no=user_delete) & Q(aor=0))) +
                 len(UserDeleteAor.objects.filter(Q(user_delete_no=user_delete) & Q(aor=1)))
         )) * 100
+        apply_ratio = round(apply_ratio, 1)
         reject_ratio = 100 - apply_ratio
         context.update(apply_ratio=apply_ratio, reject_ratio=reject_ratio)
     return render(request, 'member_delete_detail.html', context)
