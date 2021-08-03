@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-    <!-- Content -->
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
     <div class="page-content bg-white" style="padding-bottom: 0px">
         <!-- Section Banner -->
         <!--메인페이지에 들어갈 이미지 들어가는 자리-->
@@ -33,7 +35,26 @@
 
                 </div>
             </div>
+
+
         </div>
     </div>
     <!-- Section Banner END -->
+    {% if not is_logined or logined_user.user_auth.auth_no == 3  %}
+        {% if is_user_recruiting %}
+            {% include "toast.html" %}
+        {% endif %}
+    {% endif %}
+
+    <script>
+        function toastpopDown() {
+            document.getElementById("ibas-toast").style.display = "none"
+        }
+    </script>
+
+
+
+
 {% endblock %}
+
+

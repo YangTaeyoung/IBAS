@@ -1,13 +1,12 @@
-import re
-
 from django import forms
 from django.core.exceptions import ValidationError
 
-from DB.models import Lect, MethodInfo, LectBoard, LectBoardType, LectAssignmentSubmit
+from DB.models import Lect, MethodInfo, LectBoard, LectAssignmentSubmit
 from django.utils.translation import gettext_lazy as _
 from IBAS.forms import FileFormBase
-from user_controller import get_logined_user
 from utils.url_regex import *
+
+from django_summernote.widgets import SummernoteWidget
 
 
 class LectForm(forms.ModelForm):
@@ -17,7 +16,7 @@ class LectForm(forms.ModelForm):
         exclude = ("lect_chief", "lect_created", "lect_pic", "lect_day")
         widgets = {
             "lect_title": forms.TextInput(attrs={"placeholder": "강의 제목을 입력하세요"}),
-            "lect_curri": forms.Textarea(attrs={"placeholder": "강의 계획을 작성해주세요"}),
+            "lect_curri": SummernoteWidget(attrs={"placeholder": "강의 계획을 작성해주세요"}),
             "lect_intro": forms.Textarea(attrs={"placeholder": "간략하게 강의를 소개해주세요"}),
             "lect_method": forms.Select(),
             "lect_place_or_link": forms.TextInput(attrs={"placeholder": "강의 방식을 먼저 선택하세요.", "disabled": "disabled"}),
@@ -33,6 +32,8 @@ class LectForm(forms.ModelForm):
         lect.lect_chief = kwargs["lect_chief"]
         lect.lect_type = self.cleaned_data.get("lect_type")
         lect.lect_state = self.cleaned_data.get("lect_state")
+        if self.cleaned_data.get("lect_limit_num") is None:
+            lect.lect_limit_num = 999
         lect.save()
         return lect
 
@@ -61,7 +62,7 @@ class LectPicForm(forms.ModelForm):
         model = Lect
         exclude = (
             "lect_chief", "lect_created", "lect_title", "lect_curri", "lect_intro", "lect_method", "lect_place_or_link",
-            "lect_type", "lect_deadline", "lect_limit_num", "lect_state", "lect_reject_reason",'lect_day'
+            "lect_type", "lect_deadline", "lect_limit_num", "lect_state", "lect_reject_reason", 'lect_day'
         )
         widgets = {
             "lect_pic": forms.FileInput(attrs={"multiple": "multiple"})
@@ -158,7 +159,7 @@ class LectBoardFormBase(forms.ModelForm):
 # 강의 게시글 폼
 class LectBoardForm(LectBoardFormBase):
     class Meta(LectBoardFormBase.Meta):
-        exclude = ("assignment_deadline", )
+        exclude = ("assignment_deadline",)
 
     def update(self, instance):
         lect_board = super().update(instance)
@@ -187,7 +188,7 @@ class LectNoticeForm(LectBoardFormBase):
 
 class LectAssignmentForm(LectBoardFormBase):
     class Meta(LectBoardFormBase.Meta):
-        exclude = ('lect_board_link', )
+        exclude = ('lect_board_link',)
 
         labels = {
             'lect_board_title': _('과제 제목'),
@@ -256,6 +257,3 @@ class AssignmentSubmitForm(forms.ModelForm):
 # 이거 지우면 큰일 남
 class FileForm(FileFormBase):
     pass
-
-
-

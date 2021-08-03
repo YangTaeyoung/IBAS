@@ -2379,7 +2379,7 @@
             var a = '';
             var isVideo = this.core.isVideo(src, index) || {};
     
-            // Enable autoplay based on setting for first video if poster doesn't exist
+            // Enable autoplay based on management.html for first video if poster doesn't exist
             if (noPoster) {
                 if (this.videoLoaded) {
                     autoplay = 0;

@@ -288,7 +288,7 @@
                                                 </div>
                                             {% endif %}
                                             <!-- staff_mem_btn는 staff_cr.css에 정의되어 있음.  -->
-                                            {% if logined_user.user_role.role_no <= 2 %}
+                                            {% if logined_user.user_role.role_no <= 2 or logined_user.user_role.role_no == 4 %}
                                                 <div class="staff_mem_btn m-b20 listing-info-right">
                                                     <!-- &nbsp;는 띄어쓰기 -->
                                                     <button class="site-button" type="submit"><i

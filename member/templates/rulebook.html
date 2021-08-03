@@ -1,0 +1,173 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- 여기서부터 기존 템플릿에 있던 것 -->
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="keywords" content=""/>
+    <meta name="author" content=""/>
+    <meta name="robots" content=""/>
+    <meta
+            name="description"
+            content="회원가입 질문 양식 페이지입니다."
+    />
+    <meta
+            property="og:title"
+            content="회원가입 질문 양식 페이지"
+    />
+    <meta
+            property="og:description"
+            content="회원가입 질문 양식 페이지"
+    />
+    <meta property="og:image" content=""/>
+    <meta name="format-detection" content="telephone=no"/>
+
+    <!-- FAVICONS ICON -->
+    <link
+            rel="icon"
+            href="{% static 'images/favicon.ico' %}"
+            type="image/x-icon"
+    />
+    <link
+            rel="shortcut icon"
+            type="image/x-icon"
+            href="{% static 'images/favicon.png' %}"
+    />
+    <script>
+        loading_obj = document.createElement("div")
+        loading_obj.className = "loading"
+        document.getElementById("btn-submit")
+    </script>
+    <!-- PAGE TITLE HERE -->
+    <title>입부신청</title>
+
+    <!-- MOBILE SPECIFIC -->
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <!--[if lt IE 9]>
+      <script src="{% static 'js/html5shiv.min.js' %}"></script>
+      <script src="{% static 'js/respond.min.js' %}"></script>
+    <![endif]-->
+
+    <!-- STYLESHEETS -->
+    <link
+            rel="stylesheet"
+            type="text/css"
+            href="{% static 'css/plugins.css' %}"
+    />
+    <link
+            rel="stylesheet"
+            type="text/css"
+            href="{% static 'css/style.css' %}"
+    />
+    <link
+            rel="stylesheet"
+            type="text/css"
+            href="{% static 'css/templete_1.css' %}"
+    />
+    <link
+            class="skin"
+            rel="stylesheet"
+            type="text/css"
+            href="{% static 'css/skin/skin-1.css' %}"
+    />
+    <!-- 여기까지 기존 템플릿에 있던 것 -->
+    <!--외부 css파일 받는 링크 / 이 html에서만 쓰는 것. -->
+    <link rel="stylesheet" href="{% static 'css/login-join.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/size.css' %}">
+
+</head>
+<body id="bg">
+<div id="loading-area"></div>
+<div class="page-wraper">
+    <!-- Content -->
+    <div
+            class="page-content dlab-login bg-primary"
+            style="background-position: top right; background-blend-mode: screen"
+    >
+        <div class="container-flex">
+            <!-- 화면 왼쪽 약관 내용부분 -->
+            <div class="item_flex_join login-form-box">
+                <!-- 여기서부터 약관 시작  -->
+                <div class="join-form2">
+                    <div class="form-center-position form-width-large mt-5">
+                        <!-- 약관 제목 -->
+                        <!-- 약관 종류에 따라, 개인정보 제공 동의 약관 / 동아리 회칙 등을 DB에서 꺼냐와야 함 -->
+                        <h1>{{ policy_terms.policy_title }}</h1>
+                        <hr/>
+                        <!-- 태크를 붙여둔 상태로 DB에 저장/불러오기 해야 함 -->
+                        {{ policy_terms.policy_content|safe }}
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button class="btn site-button" type="button" onclick="history.back()">돌아가기</button>
+                </div>
+            </div>
+            <!-- 화면 오른쪽 그림 div -->
+            <div class="item_flex_bg">
+                <img style="height: 100%; width: 100%" src="{% static 'images/blue-purple-technology-circuit.jpg' %}">
+            </div>
+        </div>
+
+
+
+
+
+    </div>
+    <!-- Content END-->
+</div>
+<!-- JAVASCRIPT FILES ========================================= -->
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<!-- JQUERY.MIN JS -->
+<script src="{% static 'plugins/bootstrap/js/popper.min.js' %}"></script>
+<!-- BOOTSTRAP.MIN JS -->
+<script src="{% static 'plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+<!-- BOOTSTRAP.MIN JS -->
+<script src="{% static 'plugins/bootstrap-select/bootstrap-select.min.js' %}"></script>
+<!-- FORM JS -->
+<script src="{% static 'plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.js' %}"></script>
+<!-- FORM JS -->
+<script src="{% static 'plugins/magnific-popup/magnific-popup.js' %}"></script>
+<!-- MAGNIFIC POPUP JS -->
+<script src="{% static 'plugins/counter/waypoints-min.js' %}"></script>
+<!-- WAYPOINTS JS -->
+<script src="{% static 'plugins/counter/counterup.min.js' %}"></script>
+<!-- COUNTERUP JS -->
+<script src="{% static 'plugins/imagesloaded/imagesloaded.js' %}"></script>
+<!-- IMAGESLOADED -->
+<script src="{% static 'plugins/masonry/masonry-3.1.4.js' %}"></script>
+<!-- MASONRY -->
+<script src="{% static 'plugins/masonry/masonry.filter.js' %}"></script>
+<!-- MASONRY -->
+<script src="{% static 'plugins/rangeslider/rangeslider.js' %}"></script>
+<!-- RANGESLIDER -->
+<script src="{% static 'plugins/owl-carousel/owl.carousel.js' %}"></script>
+<!-- OWL SLIDER -->
+<script src="{% static 'js/custom.js' %}"></script>
+<!-- CUSTOM FUCTIONS  -->
+<script src="{% static 'js/dz.carousel.js' %}"></script>
+<!-- SORTCODE FUCTIONS  -->
+<script src="{% static 'js/dz.ajax.js' %}"></script>
+<!-- CONTACT JS  -->
+<style>
+    .wrap textarea {
+        width: 100%;
+        resize: none;
+        overflow-y: hidden; /* prevents scroll bar flash */
+        padding: 1.1em; /* prevents text jump on Enter keypress */
+        padding-bottom: 0.2em;
+        line-height: 1.6;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        $('.wrap').on('keyup', 'textarea', function (e) {
+            $(this).css('height', 'auto');
+            $(this).height(this.scrollHeight);
+        });
+        $('.wrap').find('textarea').keyup();
+    });
+</script>
+</body>
+</html>

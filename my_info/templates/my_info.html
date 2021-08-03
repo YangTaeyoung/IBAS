@@ -55,7 +55,7 @@
                     <div class="listing-info">
                         <!--이름, 학과, 학번 표시되는 곳, Back : 본인 이름, 학과, 한번 들어갈 수 있도록 수정-->
                         <div class="listing-info-left">
-                            <h3 class="title">{{ logined_user.user_name }}</h3>
+                            <h3 class="title">{{ logined_user.user_name }}</h3
                             <p>{{ logined_user.user_major.major_name }} &#8226; {{ logined_user.user_stu }}</p>
                         </div>
                         <!--상단 오른쪽에 뜨는버튼 버튼-->
@@ -678,22 +678,33 @@
                                                 <th scope="row">권한</th>
                                                 <!--Back : 승인 안되면 미승인, 승인되면 승인 뜨도록 수정-->
                                                 <td>{{ logined_user.user_auth.auth_name }}</td>
-                                                <td></td>
+                                                <td>
+                                                    {% if logined_user.user_auth.auth_no == 2 %}
+                                                        <a href="{% url 'user_activate_request' %}" onclick="alert('회비 납부 확인 요청이 완료되었습니다. \n\n순차적으로 확인하고 있으니 더 이상 요청하지 말아주세요.')">
+                                                            회비 납부 확인 요청
+                                                        </a>
+                                                    {% endif %}
+                                                </td>
                                             </tr>
                                             <!--권한-->
                                             <tr>
                                                 <th scope="row">역할</th>
-                                                <!--Back : 회장이면 회장, 부회장이면 부회장 ...... 일반회원이면 일반회원으로 뜨도록 수정-->
+                                                {#  Back : 회장이면 회장, 부회장이면 부회장 ...... 일반회원이면 일반회원으로 뜨도록 수정 #}
                                                 <td>{{ logined_user.user_role.role_name }}</td>
-                                                <td></td>
+                                                <td>
+                                                    {# 회장, 부회장에게만 노출 #}
+                                                    {% if logined_user.user_role.role_no <= 2 %}
+                                                        <a href="{% url 'management' %}">관리자 페이지</a>
+                                                    {% endif %}
+                                                </td>
                                             </tr>
                                             <!--이름-->
                                             <tr>
                                                 <th scope="row">자기소개</th>
-                                                <!-- Back : 자기 소개 뜨도록 수정, 등록 안돼있으면 아래 내용 뜨도록 -->
+                                                {# Back : 자기 소개 뜨도록 수정, 등록 안돼있으면 아래 내용 뜨도록 #}
                                                 {% if logined_user.user_intro %}
                                                     <td style="width: 50%">
-                                                        {{ logined_user.user_intro }} &nbsp;&nbsp;&nbsp;
+                                                        {{ logined_user.user_intro|linebreaksbr }} &nbsp;&nbsp;&nbsp;
                                                         {% if logined_user.user_apply_publish == 1 %}
                                                             <span style="color:#00a834">(공개됨)</span>
                                                         {% else %}

@@ -1,8 +1,8 @@
 from django.shortcuts import render, reverse, redirect, get_object_or_404
 from DB.models import User, UserRole, UserAuth, Answer, UserUpdateRequest, \
     UserDelete, UserDeleteAor, UserDeleteFile, UserDeleteComment, UserDeleteState, \
-    UserEmail, StateInfo, LectSchedule, LectMoneyStandard, UserSchedule  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
-from staff.forms import UserDeleteForm, UserScheduleForm, LectScheduleForm, LectMoneyStandardForm
+    UserEmail, StateInfo, LectSchedule, LectMoneyStandard, UserSchedule, PolicyTerms  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
+from staff.forms import UserDeleteForm, UserScheduleForm, LectScheduleForm, LectMoneyStandardForm, PolicyTermsForms
 from pagination_handler import get_page_object
 from IBAS.forms import FileFormBase, CommentBaseForm
 import os
@@ -79,6 +79,7 @@ def staff_member_list(request):
         return redirect(reverse("index"))  # 메인페이지로 보냄
 
 
+@superuser_only(cfo_included=True)
 def staff_member_update(request):
     if request.method == "POST":  # 파라미터가 POST로 넘어왔는가? (정상적인 접근)
         user_auth = request.POST.get("user_auth")
@@ -405,15 +406,72 @@ def user_name_update(request):
     return redirect(reverse("staff_member_list"))
 
 
-# # 관리자 페이지
-# @superuser_only()
-# def management(request):
-#     lect_schedule = LectSchedule.objects.get(pk=1)
-#     user_schedule = UserSchedule.objects.get(pk=1)
-#     lect_money_standard = LectMoneyStandard.objects.get(pk=1)
-#     context = {
-#         "lect_schedule_form": LectScheduleForm(instance=lect_schedule),
-#         "user_schedule_form": UserScheduleForm(instance=user_schedule),
-#         "lect_money_standard_form": LectMoneyStandardForm(instance=lect_money_standard)
-#     }
-#     return render(request, "admin_page.html", context)
+def get_content_of_policy_terms(type_no):
+    policy_terms = PolicyTerms.objects.filter(policy_type__type_no=type_no).order_by("-policy_updated")
+    if len(policy_terms) != 0:
+        policy_terms = policy_terms.first()
+        return {
+            "policy_title": policy_terms.policy_title,
+            "policy_content": policy_terms.policy_content,
+            "policy_type": policy_terms.policy_type.type_no
+        }
+    else:
+        return {
+            "policy_title": "",
+            "policy_content": "",
+            "policy_type": type_no
+        }
+
+
+# 관리자 페이지
+@chief_only(vice=True)
+def management(request):
+    max_gen = User.objects.order_by("-user_gen").first().user_gen
+    lect_schedule = LectSchedule.objects.get(pk=1)
+    user_schedule = UserSchedule.objects.get(pk=1)
+    lect_money_standard = LectMoneyStandard.objects.get(pk=1)
+    print(get_content_of_policy_terms(2))
+    context = {
+        "max_gen": max_gen,
+        "lect_schedule": lect_schedule,
+        "user_schedule": user_schedule,
+        "lect_money_standard": lect_money_standard,
+        "lect_schedule_form": LectScheduleForm(instance=lect_schedule),
+        "user_schedule_form": UserScheduleForm(instance=user_schedule),
+        "lect_money_standard_form": LectMoneyStandardForm(instance=lect_money_standard),
+        "policy_form_1": PolicyTermsForms(initial=get_content_of_policy_terms(1), prefix='form_1'),
+        "policy_form_2": PolicyTermsForms(initial=get_content_of_policy_terms(2), prefix='form_2'),
+        "policy_form_3": PolicyTermsForms(initial=get_content_of_policy_terms(3), prefix='form_3')
+    }
+    return render(request, "management.html", context)
+
+
+@chief_only()
+def management_update(request, form_no):
+    if request.method == "POST":
+        if form_no == 1:
+            user_schedule_form = UserScheduleForm(request.POST, instance=UserSchedule.objects.get(pk=1))
+            if user_schedule_form.is_valid():
+                user_schedule_form.save()
+        elif form_no == 2:
+            lect_schedule_form = LectScheduleForm(request.POST, instance=LectSchedule.objects.get(pk=1))
+            if lect_schedule_form.is_valid():
+                lect_schedule_form.save()
+        elif form_no == 3:
+            lect_money_standard_update_form = LectMoneyStandardForm(request.POST,
+                                                                    instance=LectMoneyStandard.objects.get(pk=1))
+            if lect_money_standard_update_form.is_valid():
+                lect_money_standard_update_form.save()
+        elif form_no == 4:
+            policy_terms_form = PolicyTermsForms(request.POST, prefix='form_1')
+            if policy_terms_form.is_valid():
+                policy_terms_form.save(policy_user=get_logined_user(request))
+        elif form_no == 5:
+            policy_terms_form = PolicyTermsForms(request.POST, prefix='form_2')
+            if policy_terms_form.is_valid():
+                policy_terms_form.save(policy_user=get_logined_user(request))
+        elif form_no == 6:
+            policy_terms_form = PolicyTermsForms(request.POST, prefix='form_3')
+            if policy_terms_form.is_valid():
+                policy_terms_form.save(policy_user=get_logined_user(request))
+    return redirect(reverse("management"))

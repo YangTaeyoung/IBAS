@@ -19,7 +19,7 @@
                             <h1 class="text-white introduce-letter-spacing_5">{{ lect.lect_title }}</h1>
                             <!--부제목-->
                             <!-- DB에서 제목 꺼내와야 함 (강의 간단소개 db 가져오면 됨) -->
-                            <p class="introduce-margin-top_20">{{ lect.lect_intro }}</p>
+                            <p class="introduce-margin-top_20">{{ lect.lect_intro|safe }}</p>
                         </div>
                     </div>
                 </a>

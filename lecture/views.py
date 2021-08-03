@@ -2,20 +2,21 @@ from django.db import transaction, connection
 from django.db.models import Q
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.utils.dateformat import DateFormat
-from alarm.alarm_controller import create_lect_full_alarm, create_lect_enroll_alarm
-
-from DB.models import LectType, Lect, LectDay, MethodInfo, LectBoard, LectEnrollment, LectAttendance, \
-    LectAssignmentSubmit
+from alarm.alarm_controller import create_lect_full_alarm, create_lect_enroll_alarm, delete_lect_by_superuser_alarm
+from django.contrib import messages
+from DB.models import LectType, Lect, MethodInfo, LectBoard, LectEnrollment, LectAttendance, \
+    LectAssignmentSubmit, LectMoneyStandard
 from file_controller import FileController
 from lecture.forms import LectForm, LectRejectForm, LectPicForm, make_lect_board_form, \
     FileForm, AssignmentSubmitForm
 from pagination_handler import get_page_object
 from user_controller import get_logined_user, superuser_only, writer_only, auth_check, is_superuser, \
-    is_logined, is_writer, member_only
+    is_logined, member_only, role_check
 from utils.crawler import get_og_tag
 from utils.url_regex import is_youtube
 from utils.youtube import get_youtube
-
+from date_controller import is_lect_recruiting
+from exception_handler import lect_exist_check, lect_board_exist_check
 
 def get_pol_name(method_no):
     pol_name = MethodInfo.objects.get(pk=method_no).method_name
@@ -61,11 +62,15 @@ def lect_register(request):  # 강의/스터디/취미모임 등록 페이지로
         lect_type = LectType.objects.get(pk=request.GET.get("lect_type"))
         init_dict = {"lect_type": lect_type.type_no}
         if lect_type.type_no == 1:  # 강의일 때
+            if not is_lect_recruiting():
+                messages.warning(request, message="강의 등록 기간이 아닙니다.")
+                return redirect("lect_view", type_no=lect_type.type_no)
             init_dict.update(lect_state=1)
         else:  # 강의가 아닐 때
             init_dict.update(lect_state=3)
 
         context = {
+            "lect_money_standard": LectMoneyStandard.objects.get(pk=1),
             "lect_type": lect_type,
             "method_list": MethodInfo.objects.all(),
             "lect_form": LectForm(initial=init_dict),
@@ -91,6 +96,8 @@ def lect_register(request):  # 강의/스터디/취미모임 등록 페이지로
 # 강의 상세 페이지로 이동 (활동 회원만 가능)
 @auth_check(active=True)
 def lect_detail(request, lect_no):
+    if is_redirect := lect_exist_check(request, lect_no):
+        return is_redirect
     lect = Lect.objects.get(pk=lect_no)
     lect.lect_day = lect.lect_day.replace(" ", ",")
     lect.lect_day = lect.lect_day[:len(lect.lect_day) - 1]
@@ -127,18 +134,17 @@ def lect_update(request, lect_no):
         lect_form = LectForm(request.POST)
         lect_pic_form = LectPicForm(request.POST, request.FILES)
         if lect_form.is_valid():
-            with transaction.atomic():
-                lect = lect_form.update(instance=lect)
-                print(request.POST.get("lect_day"))
-                lect.lect_day = request.POST.get("lect_day")
-                lect.save()
-                if lect_pic_form.is_valid():
-                    if lect_pic_form.has_changed():
-                        FileController.delete_all_files_of_(lect)
-                        lect_pic_form.save(instance=lect)
+            lect = lect_form.update(instance=lect)
+            lect.lect_day = request.POST.get("lect_day")
+            lect.save()
+            if lect_pic_form.is_valid():
+                if lect_pic_form.has_changed():
+                    FileController.delete_all_files_of_(lect)
+                    lect_pic_form.save(instance=lect)
         return redirect("lect_detail", lect_no=lect.lect_no)
     else:  # 상세 페이지에서 수정 버튼을 눌렀을 때
         context = {
+            "lect_money_standard": LectMoneyStandard.objects.get(pk=1),
             "lect_type": lect.lect_type,
             "method_list": MethodInfo.objects.all(),
             "lect_form": LectForm(instance=lect),
@@ -157,6 +163,9 @@ def lect_update(request, lect_no):
 def lect_delete(request, lect_no):
     lect = Lect.objects.get(pk=lect_no)
     if request.method == "POST":
+        # 회장단에 의해 강의가 삭제된 경우 삭제된 강의에 대해 강의자에게 알림을 날림.
+        if lect.lect_chief != get_logined_user(request) and role_check(request, 3, "lte"):
+            delete_lect_by_superuser_alarm(request, lect)
         lect_type_no = lect.lect_type.type_no  # 강의 삭제 전 DB에 저장되어 있는 게시판 타입을 받아옴: 강의 리스트로 페이지를 리다이렉팅 하기 위함.
         FileController.delete_all_files_of_(lect)  # 강의에 저장되어 있는 사진 삭제
         for lect_board in lect.lectures.all():
@@ -233,7 +242,11 @@ def get_assignment_list(cur_user, lect_room, name_in_html):
 # 강의룸 메인 페이지
 @member_only
 def lect_room_main(request, room_no):
-    lect_room = Lect.objects.prefetch_related('lectures', 'enrolled_students').get(pk=room_no)
+    try:
+        lect_room = Lect.objects.prefetch_related('lectures', 'enrolled_students').get(pk=room_no)
+    except Lect.DoesNotExist:
+        messages.warning(request, "해당 강의를 찾을 수 없습니다. 삭제되었을 수 있습니다.")
+        return redirect("lect_view", type_no=1)
     cur_user = get_logined_user(request)
 
     context = {
@@ -280,8 +293,12 @@ def lect_room_search(request, room_no):
 # 더보기 눌렀을 때 나오는 게시판 (공지게시판(1)/강의게시판(2)/과제게시판(3))
 @member_only
 def lect_room_list(request, room_no, board_type):
-    lect_room = Lect.objects.prefetch_related('enrolled_students', 'lectures', 'submitted_assignments').get(pk=room_no)
-
+    try:
+        lect_room = Lect.objects.prefetch_related('enrolled_students', 'lectures', 'submitted_assignments').get(
+            pk=room_no)
+    except Lect.DoesNotExist:
+        messages.warning(request, "해당 강의가 존재하지 않습니다. 삭제되었을 수 있습니다.")
+        return redirect("lect_view", type_no=1)
     # 공지사항 및 강의게시판
     if board_type < 3:
         board_list = lect_room.lectures.filter(lect_board_type_id=board_type)
@@ -334,12 +351,15 @@ def lect_board_register(request, room_no, board_type):
 # 강의/공지 게시글 상세보기
 @member_only
 def lect_board_detail(request, room_no, lect_board_no):
-    lect_room = get_object_or_404(Lect, pk=room_no)
-    board = LectBoard.objects.prefetch_related('files').get(pk=lect_board_no)
+    if is_redirect:=lect_exist_check(request, room_no):
+        return is_redirect
+    if is_redirect:=lect_board_exist_check(request,room_no=room_no,lect_board_no=lect_board_no):
+        return is_redirect
+    lect_room = Lect.objects.get(pk=room_no)
+    board = LectBoard.objects.get(pk=lect_board_no)
     files = board.files.all()
     link = board.lect_board_link
     file_list, img_list, doc_list = FileController.get_images_and_files_of_(board)
-
     # 과제 글
     submitted_assignment = None
     if board.lect_board_type_id == 3:

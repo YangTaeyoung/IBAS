@@ -1,0 +1,54 @@
+<!--면접 기간 알려주는 알림창, 로그인안한 사람만, 해당기간에 볼 수 있도록 해야함-->
+<style>
+    .toast-body p {
+        line-height: 120%;
+        margin-bottom: 0px;
+
+    }
+
+    .toast-body .toast-small-title {
+        margin-top: 25px;
+    }
+</style>
+<div class="container" style="position: fixed; right: 0px; bottom:20px; width: 400px;" id="ibas-toast">
+    <div class="bg-white" data-autohide="false" style="box-shadow: 2px 2px 10px grey; border-radius: 10px;">
+        <div class="toast-header">
+            <strong class="mx-auto mr-auto font-22" style="color: #4015a0">IBAS 모집 일정 안내</strong>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" onclick="toastpopDown()">&times;</button>
+        </div>
+        <hr class="m-0"/>
+        <div class="toast-body">
+            <p class="font-weight-bold"># 모집 기수</p>
+            <p>&gt; {{ user_schedule.generation }}기</p>
+            <p class="font-weight-bold toast-small-title"># 모집 기간
+                {% if is_user_recruiting %}
+                    <span class="text-green font-12">&nbsp;(모집 중)</span>
+                {% endif %}
+            </p>
+            <p {% if is_user_recruiting %}class="font-weight-bold"{% endif %}>
+                &gt; {{ user_schedule.user_register_start|date:"Y-m-d h:i" }}
+                ~ {{ user_schedule.user_register_end|date:"Y-m-d h:i" }}
+
+            </p>
+            <p class="font-weight-bold toast-small-title"># 면접 일정
+                <span class="font-weight-normal font-12"
+                      style="color: #adadad">(3-4학년 및 외국인 해당)
+                </span>
+                {% if is_interview_progress %}
+                    <span class="text-green font-12">&nbsp;(진행 중)</span>
+                {% endif %}
+            </p>
+            <p {% if is_interview_progress %}class="font-weight-bold"{% endif %}>
+                &gt; {{ user_schedule.user_interview_start|date:"Y-m-d" }}
+                ~ {{ user_schedule.user_interview_end|date:"Y-m-d" }}
+
+            </p>
+            <p class="font-12 text-red mt-1">※ 면접 대상자의 경우 일정 조율을 위해 운영진이 연락할 예정입니다.</p>
+            <p class="font-weight-bold toast-small-title"># 결과 발표일</p>
+            <p>&gt; {{ user_schedule.result_announce_date|date:"Y-m-d" }}</p>
+            <p class="font-12 mt-1" style="color: #adadad">※ 해당 일정은 가장 늦게 발표했을 때를 가정하며, 조기 발표될 수 있음을 알립니다. 결과는 각자 이메일로
+                통보됩니다.</p>
+            <br/>
+        </div>
+    </div>
+</div>

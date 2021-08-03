@@ -5,6 +5,7 @@ from . import views
 from django.conf import settings
 from django.conf.urls.static import static
 
+
 urlpatterns = [
     path('', views.index, name="index"),  # 메인페이지 이동 링크
     path('introduce/', views.introduce, name='introduce'),  # 동아리 소개 작업

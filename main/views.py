@@ -1,23 +1,30 @@
 from django.db import transaction
 from django.shortcuts import render, get_object_or_404, reverse, redirect
 from DB.models import Alarm, Board, BoardFile, BoardType, Comment, History, User
+from member import session
 from board.forms import FileForm
 from main.forms import ActivityForm
 from pagination_handler import *
 from file_controller import FileController
 from django.db.models import Q
-from member import session
 from alarm.alarm_controller import create_comment_alarm, create_comment_ref_alarm
 from django.http import HttpResponseRedirect
 from user_controller import login_required, writer_only, auth_check, superuser_only
-
+from exception_handler import activity_exist_check
+from DB.models import UserSchedule
+from date_controller import is_user_recruiting, is_interview_progress
 
 # 메인페이지 이동 함수
 def index(request):
     # 임시 로그인
     # session.save_session(request, user_model=User.objects.get(pk=12162359), logined_email="0130yang@gmail.com", provider="google")
     # session.save_session(request, user_model=User.objects.get(pk=12171652))
-    return render(request, "index.html", {})
+    context = {
+        "is_user_recruiting": is_user_recruiting(),
+        "is_interview_progress": is_interview_progress(),
+        "user_schedule": UserSchedule.objects.get(pk=1)
+    }
+    return render(request, "index.html", context)
 
 
 # 동아리 소개 작업할 것임
@@ -25,7 +32,7 @@ def introduce(request):
     # 히스토리 내역을 가져옴
     context = {'history_list': History.objects.all().order_by("history_date")}
     chief_crews = User.objects.filter(Q(user_role__role_no__lte=4) & Q(user_auth__auth_no=1)).prefetch_related(
-        'chiefcarrier_set').prefetch_related('useremail_set').all()
+        'chiefcarrier_set').prefetch_related('useremail_set').order_by("user_role__role_no").all()
     if len(chief_crews) != 0:
         # 회장단인 사람의 객체를 가져오고 등록, chief_carrier에서 이력 정보도 함께 가져옴
         context['chief_crews'] = chief_crews
@@ -41,6 +48,7 @@ def introduce(request):
 #   - 코드 최적화 paginator 부분
 def activity_list(request):
     # 최신순으로 정렬하고, 1:M 관계로 가져오기 위해 prefetch_related 함수 사용
+
     board_list = Board.objects.filter(board_type_no__board_type_no=4).order_by('-board_created').prefetch_related(
         "files")
     board_list = get_page_object(request, board_list, 6)
@@ -57,11 +65,11 @@ def activity_list(request):
 #   - 단순 코드 정리..
 def activity_detail(request, board_no):
     if board_no is not None:
+        if is_redirect := activity_exist_check(request, board_no):
+            return is_redirect
         board = Board.objects.get(pk=board_no)
-
         comment_list = Comment.objects.filter(comment_board_no=board).filter(comment_cont_ref__isnull=True).order_by(
             "comment_created").prefetch_related("comment_set")
-
         context = {
             "board": board,
             "board_file_list": BoardFile.objects.filter(file_fk=board),
@@ -271,7 +279,6 @@ def alarm_check(request, alarm_no):
     return HttpResponseRedirect(alarm.alarm_link)
 
 
-
 # 명예의 전당
 @auth_check()
 def hall_of_fame(request):
@@ -279,3 +286,8 @@ def hall_of_fame(request):
         "graduated_user_list": User.objects.filter(Q(user_apply_publish=1) & Q(user_grade=0))
     }
     return render(request, "hall_of_fame.html", context)
+
+
+def error_handler500(request):
+    return render(request, "../templates/error_page.html", status=500)
+

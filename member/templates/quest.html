@@ -140,10 +140,11 @@
                                             <input type="checkbox" id="privacy-policy" required="required"/>
                                             <label for="privacy-policy"
                                             >본인은
-                                                <a href="#" class="btn-link quest-text">제3자 개인정보 동의 약관</a>과
-                                                <a href="#" class="btn-link quest-text">동아리 회칙</a>에 동의합니다.</label>
+                                                <a href="#" data-toggle="modal" data-target="#policy_1" class="btn-link quest-text">제3자 개인정보 동의 약관</a>과
+                                                <a href="#" data-toggle="modal" data-target="#policy_3" class="btn-link quest-text">웹사이트 이용약관</a>,
+                                                <a href="#" data-toggle="modal" data-target="#policy_2" class="btn-link quest-text">동아리 회칙</a>에 동의합니다.</label>
                                         </div>
-                                        {% if user_grade == "3" or user_grade == "4" %}
+                                        {% if user_grade >= 3 %}
                                             <div class="form-group item_flex_btn_center m-b0">
                                                 <input type="checkbox" id="interview_policy" required="required"
                                                        onclick="alert('빠른 시일 내에 면접을 위해 연락드리겠습니다.')"/>
@@ -174,6 +175,10 @@
         </div>
     </div>
     <!-- Content END-->
+    <!-- 약관 모달창 -->
+    {% include "policy_modal.html" with modal_id="policy_1" policy_terms=policy_type_1%}
+    {% include "policy_modal.html" with modal_id="policy_2" policy_terms=policy_type_2%}
+    {% include "policy_modal.html" with modal_id="policy_3" policy_terms=policy_type_3%}
     <button class="scroltop fa fa-chevron-up"></button>
 </div>
 <!-- JAVASCRIPT FILES ========================================= -->

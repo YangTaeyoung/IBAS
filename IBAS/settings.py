@@ -28,7 +28,7 @@ ROOT_DIR = os.path.dirname(BASE_DIR)
 SECRET_KEY = '_vthq1y2s@$+o&+759)d)0r59e&%!gdcp7(^tsu1=+b-cog_@1'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = DEBUG_MODE
 
 ALLOWED_HOSTS = ['*']
 
@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
+    # 에디터 앱
+    "django_summernote",
     # DB 관련 앱
     'DB',
     # 유저 관련 앱
@@ -59,6 +61,8 @@ INSTALLED_APPS = [
     'staff',
     # 강의 관련 앱
     'lecture',
+    # 덧글 관련 앱
+    'comment',
     # widget_tweaks
     'widget_tweaks',
     # 템플릿에서 산술연산을 하기 위한 앱
@@ -90,6 +94,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
+            "templates",
             BASE_DIR / 'templates',
             MY_TEMPLATE_ROOT,
         ]
@@ -108,6 +113,7 @@ TEMPLATES = [
                 'utils.context_processors.superuser_check',  # 슈퍼유저 확인을 위한 context_processor
                 'utils.context_processors.is_active',
                 'utils.context_processors.cfo_check',
+                'utils.context_processors.get_policies',
             ],
         },
     },
@@ -204,3 +210,14 @@ if IS_SERVER:
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     SECURE_SSL_REDIRECT = True
+
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+
+SUMMERNOTE_CONFIG = {
+    'summernote': {
+        'width': '100%',
+        'height': '480',
+    }
+}
+
+SUMMERNOTE_THEME = 'bs3'

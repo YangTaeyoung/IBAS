@@ -1,18 +1,19 @@
 from DB.models import Board, BoardType
 from django import forms
+from django_summernote.widgets import SummernoteWidget
 
 
 class ActivityForm(forms.ModelForm):
     class Meta:
         model = Board
-        exclude = ('board_writer', 'board_created','board_type_no')  # fields 또는 exclude 필수
+        exclude = ('board_writer', 'board_created', 'board_type_no')  # fields 또는 exclude 필수
 
         # ModelForm 은 pk를 일부러 사용하지 못하게 한다. 수정할 필요가 없기 때문.
         # 히든태그로 템플릿에 전달했을 때 html 개발자 도구를 통해 편집할 수 있는 가능성을 차단.
         # widgets 에 pk 인 board_no를 선언해도 템플릿에서는 인식되지 않는다.
         widgets = {
             'board_title': forms.TextInput(attrs={'placeholder': '제목을 입력하세요.'}),
-            'board_cont': forms.Textarea(),
+            'board_cont': SummernoteWidget(),
         }
 
     # overriding

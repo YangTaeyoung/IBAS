@@ -292,14 +292,32 @@ function introduce_click(num) {
     // 클릭 했을 때 아이콘의 그림부분에 introduce-tab-disappear가 있으면 없애고, 없으면 추가하기
     document.getElementById('introduce_div_' + num).classList.toggle('introduce-tab-disappear');
 
+    var box = document.getElementsByClassName('number-box')
+
     if (num === 1) {
+
+        if(box[0].innerHTML === 'X') {
+            box[0].innerHTML = num
+        }
+        else {
+            box[0].innerHTML = 'X';
+        }
         // 1번 제외 나머지 아이콘 display 를 none으로 바꾸기
         for (number = 2; number < 5; number++) {
             document.getElementById('introduce_icon_' + number).classList.toggle('d-none');
         }
+
+
     }
 
     else if (num === 2) {
+        if(box[1].innerHTML === 'X') {
+            box[1].innerHTML = num
+        }
+        else {
+            box[1].innerHTML = 'X';
+        }
+
         // introduce_icon부분에 marginTop: 100이 적용되어 있으면 지우고 marginTop: 0을 추가하기
         if(document.getElementById('introduce_icon_' + num).classList.contains('m-t100')) {
             document.getElementById('introduce_icon_' + num).classList.remove('m-t100');
@@ -321,6 +339,12 @@ function introduce_click(num) {
     }
 
     else if (num === 3) { // Hidden이므로, 여전히 자리를 차지함. 그래서 flex에 자리를 차지하게 됨.
+        if(box[2].innerHTML === 'X') {
+            box[2].innerHTML = num
+        }
+        else {
+            box[2].innerHTML = 'X';
+        }
         // introduce_icon부분에 marginTop: 70이 적용되어 있으면 지우고 marginTop: 0을 추가하기
         if(document.getElementById('introduce_icon_' + num).classList.contains('m-t70')) {
             document.getElementById('introduce_icon_' + num).classList.remove('m-t70');
@@ -340,6 +364,13 @@ function introduce_click(num) {
     }
 
     else {
+        if(box[3].innerHTML === 'X') {
+            box[3].innerHTML = num
+        }
+        else {
+            box[3].innerHTML = 'X';
+        }
+
         // introduce_icon부분에 marginTop: 20이 적용되어 있으면 지우고 marginTop: 0을 추가하기
         if(document.getElementById('introduce_icon_' + num).classList.contains('m-t20')) {
             document.getElementById('introduce_icon_' + num).classList.remove('m-t20');
@@ -428,3 +459,4 @@ function AssignmentAorFormSubmit() {
     $("#aor").val(-1);
     $("#assignment_aor").submit()
 }
+

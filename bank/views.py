@@ -95,7 +95,7 @@ def bank_register(request):
         return redirect(reverse("index"))
 
 
-@auth_check()
+@auth_check(active=True)
 def bank_support_board(request):
     bank_list = Bank.objects.filter(~Q(bank_apply__bank_apply_no=4))
 
@@ -109,7 +109,7 @@ def bank_support_board(request):
     return render(request, 'bank_support_board.html', context)  # 게시판 목록
 
 
-@auth_check()
+@auth_check(active=True)
 def bank_support_register(request):
     if request.method == "POST":
         bank_support_form = BankSupportForm(request.POST)
@@ -130,7 +130,7 @@ def bank_support_register(request):
         return render(request, 'bank_support_register.html', context)
 
 
-@auth_check()
+@auth_check(active=True)
 def bank_support_detail(request, bank_no):
     bank = get_object_or_404(Bank, pk=bank_no)
     bank_file_list = BankFile.objects.filter(file_fk=bank)
@@ -171,7 +171,7 @@ def bank_support_update(request, bank_no):
     if request.method == "GET":
         context = {
             "bank_no": bank_no,
-            "bank_file_list": BankFile.objects.filter(bank_no=bank),
+            "bank_file_list": BankFile.objects.filter(file_fk=bank),
             "bank_support_form": BankSupportForm(instance=bank),
             "file_form": FileForm(),
         }
@@ -184,7 +184,7 @@ def bank_support_update(request, bank_no):
         if bank_support_form.is_valid() and file_form.is_valid():
             with transaction.atomic():
                 bank_support_form.update(instance=bank)
-                bank_file_list = BankFile.objects.filter(bank_no=bank)
+                bank_file_list = BankFile.objects.filter(file_fk=bank)
                 FileController.remove_files_by_user(request, bank_file_list)
                 file_form.save(instance=bank)
 
@@ -197,9 +197,7 @@ def bank_support_update(request, bank_no):
 def bank_support_delete(request, bank_no):  # 예산지원 삭제
     if request.method == "POST":  # 포스트로 넘어오는 경우
         bank = get_object_or_404(Bank, pk=bank_no)
-
         FileController.delete_all_files_of_(bank)  # 로컬 파일 삭제
-
         bank.delete()  # 파일과 폴더 삭제 후, 회계 DB 에서 삭제
 
     # 삭제 성공 유무와 상관없이 이동.
