@@ -68,7 +68,7 @@ export default {
       this.board_type = 'staff'
     } else if (location.pathname.includes('activity/')) {
       this.board_type = 'activity'
-      this.board_no = pathname[1]
+      this.board_no = pathname[0]
     }
 
     this.fetch_all_comment()
