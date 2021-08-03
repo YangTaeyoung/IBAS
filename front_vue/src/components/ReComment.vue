@@ -6,17 +6,17 @@
     <div class="comment-author vcard">
       <cite class="fn">
         <img
-            src="/media/"
+            :src="comment.comment_writer.user_pic"
             width="35"
             height="35" class="comment-profile-size"
-            alt="현재 브라우저에서 지원하지 않는 형식입니다."> {{ comment.writer_name }}
+            alt="현재 브라우저에서 지원하지 않는 형식입니다."> {{ comment.comment_writer.user_name }}
       </cite>
     </div>
     <div class="dlab-post-meta m-l10">
       <ul class="d-flex">
         <li class="post-author">
-          <a href="javascript:void(0);"> {{ comment.writer_major }}
-            {{ comment.comment_writer | truncate(2) }}학번</a>
+          <a href="javascript:void(0);"> {{ comment.comment_writer.user_major }}
+            {{ comment.comment_writer.user_stu | truncate(2) }}학번</a>
         </li>
 
 
@@ -40,12 +40,12 @@
 
     <div class="reply-btn-div">
 
-      <template v-if="logined_user.user_stu === comment.comment_writer" >
+      <template v-if="logined_user.user_stu === comment.comment_writer.user_stu" >
         <button @click="updateRecomment()" class="comment-btn m-r10">
           <i class="fa fa-pencil m-r5"></i>수정</button>
       </template>
 
-      <template v-if="logined_user.user_stu === comment.comment_writer || logined_user.user_role < 3" >
+      <template v-if="logined_user.user_stu === comment.comment_writer.user_stu || logined_user.user_role < 3" >
         <button @click="deleteRecomment()" class="comment-btn m-r10">
           <i class="fa fa-trash m-r5"></i>삭제</button>
       </template>
@@ -58,10 +58,11 @@
 <script>
 export default {
   name: "ReComment",
-  props: ['sendRecomment', 'sendLoginedUser'],
+  props: ['sendRecomment', 'sendLoginedUser', 'sendIndex'],
 
   data: () => {
     return {
+      index: null,
       comment: null,
       isDisabled: true,
       logined_user: null
@@ -69,21 +70,23 @@ export default {
   },
 
   created() {
-      this.comment = this.sendRecomment;
-      this.logined_user = this.sendLoginedUser;
+    this.index = this.sendIndex;
+    this.comment = this.sendRecomment;
+    this.logined_user = this.sendLoginedUser;
   },
   methods: {
     // 대댓글 수정하도록 상위 컴포넌트(Comment)에 이벤트 발생
     updateRecomment: function () {
       if (this.isDisabled === false) {
-        this.$emit('updateRecomment', this.comment.comment_id, this.comment.comment_cont)
+        this.$emit('updateRecomment', this.comment.comment_id, this.comment.comment_cont, this.index)
       }
       this.isDisabled = !this.isDisabled;
     },
 
     // 대댓글 삭제하도록 상위 컴포넌트(Comment)에 이벤트 발생
     deleteRecomment: function () {
-      this.$emit('deleteRecomment', this.comment.comment_id);
+      this.$emit('deleteRecomment');
+      this.$destroy()
     }
 
   },

@@ -37,15 +37,8 @@ export default {
 
   methods: {
     addComment: function () {
-      console.log("call parent add comment function...", this.comment_cont)
-
-      if(this.comment_cont === null) {
-        // 빈 내용을 댓글로 추가하려는 경우
-        alert('댓글을 입력하세요!');
-      } else if(confirm("댓글을 등록하시겠습니까?")) {
-        this.$emit("addComment", this.comment_cont);
-        this.comment_cont = ""
-      }
+      this.$emit("addComment", this.comment_cont);
+      this.comment_cont = ""
     }
   },
 

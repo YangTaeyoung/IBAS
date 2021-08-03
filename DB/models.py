@@ -95,10 +95,10 @@ class CommentType(models.Model):
 # COMMENT 공용테이블
 class Comment(models.Model):
     comment_id = models.AutoField(db_column='COMMENT_ID', primary_key=True)
-    comment_writer = models.ForeignKey('User', models.DO_NOTHING, db_column='COMMENT_WRITER', null=True)
+    comment_writer = models.ForeignKey('User', models.DO_NOTHING, db_column='COMMENT_WRITER', blank=True)
     comment_cont = models.CharField(db_column='COMMENT_CONT', max_length=5000)
     comment_cont_ref = models.ForeignKey('self', on_delete=models.CASCADE, db_column='COMMENT_CONT_REF', blank=True,
-                                         null=True, related_name="comment_ref")
+                                         null=True, related_name="re_comments")
     comment_created = models.DateTimeField(db_column='COMMENT_CREATED', auto_now_add=True)
     comment_type = models.ForeignKey("CommentType", on_delete=models.CASCADE, db_column="COMMENT_TYPE")
     comment_board_ref = models.IntegerField(db_column="COMMENT_BOARD_REF")

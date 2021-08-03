@@ -32,17 +32,11 @@ export default {
     },
 
     addRecomment: function () {
-      if(this.comment_cont == null) {
-        alert('답글을 입력하세요!');
-      } else {
-        console.log('add recomment...');
-        this.$emit("addRecomment", this.comment_cont);
-        this.comment_cont = "";
-        this.cancelInput();
-      }
-
-
+      this.$emit("addRecomment", this.comment_cont);
+      this.comment_cont = "";
+      this.cancelInput();
     }
+
 
   }
 }

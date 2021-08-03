@@ -3,17 +3,17 @@
     <div class="comment-author vcard">
       <cite class="fn">
         <img
-            src="/media/"
+            :src="comment.comment_writer.user_pic"
             width="35"
             height="35" class="comment-profile-size"
-            alt="현재 브라우저에서 지원하지 않는 형식입니다."> {{ comment.writer_name }}
+            alt="현재 브라우저에서 지원하지 않는 형식입니다."> {{ comment.comment_writer.user_name }}
       </cite>
     </div>
     <div class="dlab-post-meta m-l10">
       <ul class="d-flex">
         <li class="post-author">
-          <a href="javascript:void(0);"> {{ comment.writer_major }}
-            {{ comment.comment_writer | truncate(2) }}학번</a>
+          <a href="javascript:void(0);"> {{ comment.comment_writer.user_major }}
+            {{ comment.comment_writer.user_stu | truncate(2) }}학번</a>
         </li>
 
 
@@ -41,12 +41,12 @@
         <i class="fa fa-commenting m-r5"></i>답글쓰기</button>
 
 
-      <template v-if="logined_user.user_stu === comment.comment_writer" >
+      <template v-if="logined_user.user_stu === comment.comment_writer.user_stu" >
         <button @click="updateComment()" class="comment-btn m-r10">
           <i class="fa fa-pencil m-r5"></i>수정</button>
       </template>
 
-      <template v-if="logined_user.user_stu === comment.comment_writer || logined_user.user_role < 3" >
+      <template v-if="logined_user.user_stu === comment.comment_writer.user_stu || logined_user.user_role < 3" >
         <button @click="deleteComment()" class="comment-btn m-r10">
           <i class="fa fa-trash m-r5"></i>삭제</button>
       </template>
@@ -57,9 +57,9 @@
       </template>
 
       <template v-if="comment_set_list != null">
-        <div v-for="(recomment, j) in comment_set_list"  v-bind:key="j" :ref="'recomment_' + recomment.comment_id">
-          <recomment @deleteRecomment="deleteRecomment" @updateRecomment="updateRecomment"
-                   :send-recomment="recomment" :send-logined-user="logined_user" style="margin-left: 20px;"></recomment>
+        <div v-for="(recomment, j) in comment_set_list"  :key="recomment.comment_id" >
+          <recomment @deleteRecomment="deleteRecomment(recomment.comment_id, j)" @updateRecomment="updateRecomment"
+                   :send-recomment="recomment" :send-logined-user="logined_user" :send-index="j" style="margin-left: 20px;"></recomment>
         </div>
       </template>
 
@@ -71,6 +71,7 @@
 import ReCommentInput from "./ReCommentInput";
 import ReComment from "./ReComment";
 import axios from "axios";
+import {alert_msg_for_client} from "../assets/response.js"
 
 export default {
   props: ['sendComment', 'sendLoginedUser', 'sendIndex', 'sendCommentSet'],
@@ -105,34 +106,15 @@ export default {
     // 댓글 수정하도록 상위 컴포넌트(commentList)에 이벤트 발생
     updateComment: function () {
       if (this.isDisabled === false) {
-        this.updateRecomment(this.comment.comment_id, this.comment.comment_cont)
+        this.$emit("updateComment", this.comment.comment_id, this.comment.comment_cont, this.index)
       }
       this.isDisabled = !this.isDisabled;
     },
 
-    // 대댓글 수정하도록 상위 컴포넌트(commentList)에 이벤트 발생
-    updateRecomment: function(comment_id, comment_cont) {
-      this.$emit("updateComment", comment_id, comment_cont);
-    },
-
     // 댓글 삭제하도록 상위 컴포넌트(commentList)에 이벤트 발생
     deleteComment: function () {
-        this.$emit('deleteComment', this.comment.comment_id)
-    },
-
-    // 대댓글 삭제하기
-    deleteRecomment: function (comment_id) {
-      if (confirm('댓글을 삭제하시겠습니까?')) {
-        axios.delete("http://127.0.0.1:8000/comment/delete/" + comment_id)
-            .then(response => {
-              let commentToDelete = this.$refs['recomment_' + comment_id][0];
-              commentToDelete.parentNode.removeChild(commentToDelete);
-              console.log("Success deletion!" , response);
-            })
-            .catch(response => {
-              console.log("Failed to remove the comment", response);
-            });
-      }
+      this.$emit('deleteComment')
+      this.$destroy()
     },
 
     // 대댓글 입력 창 열고 닫기
@@ -142,9 +124,50 @@ export default {
 
     // 대댓글 등록하기
     addRecomment: function (recomment_cont) {
-      console.log('addREcomment..')
       this.$emit('addRecomment', recomment_cont, this.comment.comment_id, this.index)
-    }
+    },
+
+    // 대댓글 수정하도록 상위 컴포넌트(commentList)에 이벤트 발생
+    updateRecomment: function(comment_id, comment_cont, index) {
+      if(comment_cont.trim() === "") {
+        alert('댓글을 입력하세요!')
+      }
+      else if(confirm('댓글을 수정하시겠습니까?')) {
+        var this_vue = this;
+
+        axios({
+          method: 'put',
+          url: "http://127.0.0.1:8000/comment/update/" + comment_id,
+          data: {comment_cont: comment_cont}
+        })
+          .then(response => {
+            alert('댓글이 수정되었습니다!')
+            this_vue.comment_set_list[index] = response.data.comment;
+          })
+          .catch(response => {
+            console.log("Failed to update the comment", response);
+            alert_msg_for_client(response)
+          })
+      }
+    },
+
+    // 대댓글 삭제하기
+    deleteRecomment: function (comment_id, index) {
+      if (confirm('댓글을 삭제하시겠습니까?')) {
+        var vm = this;
+        axios.delete("http://127.0.0.1:8000/comment/delete/" + comment_id)
+            .then(() => {
+              // let commentToDelete = this.$refs['recomment_' + comment_id][0];
+              // commentToDelete.parentNode.removeChild(commentToDelete);
+              vm.comment_set_list.splice(index, 1)
+              alert('댓글이 삭제되었습니다!')
+            })
+            .catch(response => {
+              console.log("Failed to remove the comment", response);
+              alert_msg_for_client(response)
+            });
+      }
+    },
   },
 
   filters: {

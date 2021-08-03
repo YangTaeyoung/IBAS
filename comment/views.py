@@ -1,15 +1,12 @@
 import json
-
-from django.shortcuts import render
+from django.core.exceptions import ValidationError
 from django.views.decorators.csrf import ensure_csrf_cookie
-
 from comment.serializer import CommentSerializer
 from user_controller import get_logined_user, auth_check, writer_only
 from django.shortcuts import get_object_or_404
 from DB.models import CommentType, Comment
 from django.db.models import Q, F
-from django.http.response import JsonResponse, HttpResponse
-from rest_framework.response import Response
+from django.http.response import JsonResponse
 
 # url 기준  www.inhabas.com/comment/ ??? / .... /
 # ??? 부분으로 구분
@@ -27,31 +24,27 @@ def comment_register(request, type, board_ref):
 
     if request.method == "POST":
         data = json.loads(request.body)
-        comment = Comment.objects.create(
+        comment = Comment(
             comment_type=comment_type,
             comment_writer=get_logined_user(request),
-            comment_cont=data['comment_cont'],
+            comment_cont=data['comment_cont'].strip(),
             comment_board_ref=int(board_ref),
             comment_cont_ref_id=data.get('comment_cont_ref', None)
         )
 
-        comment_json = {
-            'comment_id': comment.comment_id,
-            'writer_name': comment.comment_writer.user_name,
-            'writer_major': comment.comment_writer.user_major.major_name,
-            'comment_writer': comment.comment_writer_id,
-            'comment_cont': comment.comment_cont,
-            'comment_created': comment.comment_created,
-            'comment_cont_ref': comment.comment_cont_ref_id
-        }
+        content = comment.comment_cont
+        if not 0 < len(content) < 5001:
+            raise ValidationError(
+                code=400,
+                message='댓글 내용 길이 제한을 확인하세요'
+            )
+        else:
+            comment.save()
+            serializer = CommentSerializer(comment)
 
-        return JsonResponse({'comment': comment_json}, safe=False)
-        # comment_form = CommentSerializer(request.POST)
-        # if comment_form.is_valid():
-        #     comment_form.save(comment_type=comment_type, comment_board_ref=board_ref)
-        # pass
-    else:
-        return JsonResponse(status=400, data={})
+            return JsonResponse({'comment': serializer.data}, safe=False)
+
+    return JsonResponse(data={}, status=400)
 
 
 @writer_only(superuser=True)
@@ -62,7 +55,7 @@ def comment_delete(request, comment_id):
 
         return JsonResponse(data={}, status=204)
     else:
-        return JsonResponse(status=400, data={})
+        return JsonResponse(data={}, status=400)
 
 
 @writer_only()
@@ -72,54 +65,20 @@ def comment_update(request, comment_id):
         comment.comment_cont = json.loads(request.body)['comment_cont']
         comment.save()
 
-        comment_json = {
-            'comment_id': comment.comment_id,
-            'writer_name': comment.comment_writer.user_name,
-            'writer_major': comment.comment_writer.user_major.major_name,
-            'comment_writer': comment.comment_writer_id,
-            'comment_cont': comment.comment_cont,
-            'comment_created': comment.comment_created,
-            'comment_cont_ref': comment.comment_cont_ref_id
-        }
+        serializer = CommentSerializer(comment)
 
-        return JsonResponse({'comment': comment_json}, safe=False)
+        return JsonResponse({'comment': serializer.data}, safe=False)
     else:
-        return JsonResponse(status=400, data={})
+        return JsonResponse(data={}, status=400)
 
 
 @ensure_csrf_cookie
 def comment_view(request, type, board_ref):
     comment_list = Comment.objects.filter(
         Q(comment_type_id=type_no[type]) & Q(comment_board_ref=board_ref) & Q(
-            comment_cont_ref__isnull=True)).prefetch_related("comment_ref").order_by("-comment_created")
+            comment_cont_ref__isnull=True)).prefetch_related("re_comments").order_by("comment_created")
+    commentset_serializer = [CommentSerializer(comment.re_comments.all(), many=True).data for comment in comment_list]
     comment_serializer = CommentSerializer(comment_list, many=True)
-    return Response(comment_serializer.data)
-
-
-# 시리얼라이저 완성되기 전까지 임의로 사용
-@ensure_csrf_cookie
-def axios_response(request, type, board_ref):
-    comments = Comment.objects.prefetch_related("comment_ref")\
-        .filter(comment_cont_ref__isnull=True, comment_board_ref=board_ref, comment_type_id=type_no[type]) \
-        .order_by("comment_created") \
-        .annotate(
-        writer_name=F('comment_writer__user_name'),
-        writer_major=F('comment_writer__user_major__major_name')) \
-
-    comment_set_list = [
-        list(
-            comment.comment_ref
-                .annotate(
-                    writer_name=F('comment_writer__user_name'),
-                    writer_major=F('comment_writer__user_major__major_name'))
-                .values(
-                    'comment_id', 'writer_name', 'writer_major', 'comment_writer',
-                    'comment_cont', 'comment_created', 'comment_cont_ref')
-        )
-        for comment in comments]
-
-    comments = comments.values('comment_id', 'writer_name', 'writer_major', 'comment_writer',
-                               'comment_cont', 'comment_created', 'comment_cont_ref')
 
     cur_user = get_logined_user(request)
     logined_user = {
@@ -128,6 +87,6 @@ def axios_response(request, type, board_ref):
     }
 
     return JsonResponse({
-        'comment_list': list(comments),
-        'comment_set_list': comment_set_list,
+        'comment_list': comment_serializer.data,
+        'comment_set_list': commentset_serializer,
         'logined_user': logined_user}, safe=False)
