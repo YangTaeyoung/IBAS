@@ -98,11 +98,6 @@ def staff_member_update(request):
                 int(user_role) == 2 and len(user_stu_list) == 1):  # 회장 위임의 조건을 충족한 경우. (한명만 골랐을 때)
             # 기존 회장, 부회장 권한 수정 -> 일반회원
             with transaction.atomic():
-                user = User.objects.filter(user_role__role_no=user_role).first()
-                if int(user_role) == 1:
-                    user.user_role = UserRole.objects.get(pk=6)  # 바꾸고자 하는 사람은 일반 회원으로 역할 변경됨.
-                    user.save()
-                    create_user_role_update_alarm(user)
                 # 새로운 회장 부회장.
                 new_user = User.objects.get(pk=user_stu_list[0])  # 새로운 회장 부회장의 객체를 얻어옴.
                 new_user.user_role = UserRole.objects.get(pk=user_role)  # 권한 수정
@@ -110,6 +105,12 @@ def staff_member_update(request):
                 new_user.save()
                 create_user_role_update_alarm(new_user)
                 create_user_auth_update_alarm(new_user, False)
+                user = User.objects.filter(user_role__role_no=user_role).first()
+                if int(user_role) == 1:
+                    user.user_role = UserRole.objects.get(pk=6)  # 바꾸고자 하는 사람은 일반 회원으로 역할 변경됨.
+                    user.save()
+                    create_user_role_update_alarm(user)
+                    return redirect(reverse("my_info"))
         else:
             for user in User.objects.all():  # 모든 유저 순회
                 for user_stu in user_stu_list:  # 사용자가 권한을 바꾸기로 한 학번 리스트를 순회
