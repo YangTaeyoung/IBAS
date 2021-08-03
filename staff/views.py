@@ -7,7 +7,7 @@ from pagination_handler import get_page_object
 from IBAS.forms import FileFormBase
 import os
 from user_controller import superuser_only, writer_only, get_logined_user, chief_only, delete_user, role_check, \
-    is_default_pic
+    is_default_pic, not_allowed
 from django.db.models import Q, Count, Aggregate
 from django.core.mail import send_mail
 from django.conf import settings
@@ -286,6 +286,9 @@ def member_delete_register(request, deleted_user):
 
 def member_delete_detail(request, user_delete_no):
     user_delete = UserDelete.objects.get(pk=user_delete_no)
+    # 제명 페이지는 일반인에게는 공개되어서는 안됨. 따라서 404페이지로 이동.
+    if not role_check(request, 4, "lte") and user_delete.deleted_user != get_logined_user(request):
+        return not_allowed(request, error_404=True)
     user_delete_aor_apply = UserDeleteAor.objects.filter(Q(user_delete_no=user_delete) & Q(aor=1))
     user_delete_aor_reject = UserDeleteAor.objects.filter(Q(user_delete_no=user_delete) & Q(aor=0))
     total_chief_num = len(User.objects.filter(Q(user_role__role_no__lte=4) & Q(user_auth__auth_no=1)))
