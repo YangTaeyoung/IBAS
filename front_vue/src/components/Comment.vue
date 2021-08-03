@@ -90,6 +90,12 @@ export default {
     };
   },
 
+  watch: {
+    sendIndex: function (newVal) {
+      this.index = newVal;
+    }
+  },
+
   components: {
     'recomment_input': ReCommentInput,
     'recomment': ReComment
@@ -157,8 +163,6 @@ export default {
         var vm = this;
         axios.delete("http://127.0.0.1:8000/comment/delete/" + comment_id)
             .then(() => {
-              // let commentToDelete = this.$refs['recomment_' + comment_id][0];
-              // commentToDelete.parentNode.removeChild(commentToDelete);
               vm.comment_set_list.splice(index, 1)
               alert('댓글이 삭제되었습니다!')
             })
