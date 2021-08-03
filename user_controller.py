@@ -361,7 +361,10 @@ def chief_only(vice=False):
 # 데코레이터
 # 제작일: 21.7.13
 # 제작자: 유동현
+# 수정일: 21.8.4
+# 수정자: 양태영
 # 용도: 강의 또는 스터디 구성원인지 확인하는 용도
+# 수정 내용: 회장단도 해당 구성원에 포함.
 def member_only(func):
     @login_required
     @functools.wraps(func)
@@ -378,6 +381,8 @@ def member_only(func):
         elif member := lect_room.enrolled_students.filter(lect_no=lect_room, student=current_user).first():
             if member.status_id == 1:
                 return func(request, *args, **kwargs)
+        elif role_check(request, 3, "lte"):
+            return func(request, *args, **kwargs)
 
         return not_allowed(request, msg='수강정지 되었거나, 접근할 수 없는 멤버입니다!')
 
