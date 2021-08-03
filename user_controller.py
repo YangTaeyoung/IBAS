@@ -237,9 +237,10 @@ def full_check(func):
         if lect_no != -1:
             lect = Lect.objects.get(pk=lect_no)
             lect_enrollment = LectEnrollment.objects.filter(lect_no=lect)
+            current_user = get_logined_user(request)
             if (lect.lect_limit_num <= len(lect_enrollment) and len(lect_enrollment.filter(
-                    student=get_logined_user(request))) == 0 and lect.lect_chief != get_logined_user(
-                    request)) or lect.is_expired:
+                    student=get_logined_user(request))) == 0 and lect.lect_chief != current_user and not role_check(
+                    request, 3, "lte")) or lect.is_expired:
                 messages.warning(request, "강의가 마감되었습니다.")
                 return redirect("lect_view", type_no=lect.lect_type.type_no)
         return func(request, *args, **kwargs)
@@ -346,6 +347,7 @@ def get_default_pic_path():
 # 기존의 이미지 패스가 디폴트 패스인지 검사
 def is_default_pic(img_path):
     return str(img_path) == get_default_pic_path()
+
 
 # 초기화를 할지 삭제를 할 지 결정하는 함수
 def is_related(user: User):
