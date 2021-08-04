@@ -1,10 +1,14 @@
 <script>
     $(function () {
-        if ($(".lectRoom_attend") === '출석') {
-            $("#lectRoom_color").addClass('staff-fin')
+        $(".lectRoom_attend").each(function (index, td) {
+            if ($(td).text() === '출석') {
+            $(td).addClass('staff-fin')
         } else {
-            $("#lectRoom_color").addClass('staff-ing')
+            $(td).addClass('staff-ing')
         }
+        });
+
+
     });
 </script>
 

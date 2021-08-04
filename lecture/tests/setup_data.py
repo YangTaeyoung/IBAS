@@ -33,7 +33,7 @@ def _test_data():
         LectEnrollment.objects.create(lect_no=lecture, student=_TEST_STUDENT)
 
         # 한 수강생이 수업을 들었다.
-        LectAttendance.objects.create(lect_no=lecture, lect_board_no=ref, student=LectEnrollment.objects.first().student)
+        LectAttendance.objects.create(lect_no=lecture, lect_board_no=ref, student=_TEST_STUDENT)
 
         # 수강생이 과제를 제출했다.
         LectAssignmentSubmit.objects.create(lect_no=lecture, assignment_no=assi, assignment_submitter=_TEST_STUDENT)

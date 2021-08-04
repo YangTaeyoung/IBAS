@@ -11,7 +11,7 @@ from lecture.forms import LectForm, LectRejectForm, LectPicForm, make_lect_board
     FileForm, AssignmentSubmitForm
 from pagination_handler import get_page_object
 from user_controller import get_logined_user, superuser_only, writer_only, auth_check, is_superuser, \
-    is_logined, member_only, role_check, room_enter_check,enroll_check,is_closed
+    is_logined, member_only, role_check, room_enter_check, enroll_check, is_closed, is_lect_instructor, instructor_only
 from utils.crawler import get_og_tag
 from utils.url_regex import is_youtube
 from utils.youtube import get_youtube
@@ -325,8 +325,7 @@ def lect_room_list(request, room_no, board_type):
 
 
 # 강의 게시글(공지/강의) 등록
-@writer_only()
-@room_enter_check
+@instructor_only()
 def lect_board_register(request, room_no, board_type):
     if request.method == "GET":
         lect_room = Lect.objects.prefetch_related('lectures').get(pk=room_no)
@@ -417,7 +416,7 @@ def lect_board_delete(request, room_no, lect_board_no):
 
 
 # 강의/공지 게시글 수정
-@writer_only()
+@instructor_only()
 def lect_board_update(request, room_no, lect_board_no):
     board = LectBoard.objects.prefetch_related('files').get(pk=lect_board_no)
     board_type = board.lect_board_type_id
@@ -550,8 +549,8 @@ def lect_assignment_delete(request, room_no, assignment_submit_no):
     # 수강생 메뉴 #
 
 
-# 제출한 과제 보기
-@writer_only()
+# 제출한 과제 보기/
+@writer_only(is_lect_assignment=True)
 def lect_assignment_detail(request, room_no, submit_no):
     lect_room = get_object_or_404(Lect, pk=room_no)
     submitted_assignment = LectAssignmentSubmit.objects.prefetch_related('files').select_related('assignment_no').get(
@@ -602,7 +601,7 @@ def lect_room_student_status(request, room_no):
 
 
 # 강의자가 수강생의 과제 디테일 조회 시, 수강생의 과제를 통과 또는 실패 처리 시킴
-@writer_only()
+@instructor_only()
 def lect_assignment_aor(request, room_no, submit_no):
     if request.method == "POST":
         aor = int(request.POST.get('aor'))
@@ -618,7 +617,7 @@ def lect_assignment_aor(request, room_no, submit_no):
 
 
 # 강의자가 수강생 수강정지 시킬 수 있는 곳.
-@writer_only()
+@instructor_only()
 def lect_room_manage_member(request, room_no):
     lect_room = Lect.objects.prefetch_related('lectures', 'attendance', 'submitted_assignments',
                                               'lectures__assignments').get(pk=room_no)
@@ -664,7 +663,7 @@ def lect_room_manage_member(request, room_no):
 
 
 # 과제 현황 조회
-@writer_only()
+@instructor_only()
 def lect_room_manage_assignment(request, room_no):
     if request.method == "GET":
         lect_room = Lect.objects.prefetch_related(
@@ -713,7 +712,7 @@ def lect_room_manage_assignment(request, room_no):
 # 출석 현황 확인 및 변경
 # 강의 게시글이 존재하지 않으면 => 출석부 ('_table_attendance_check.html') 렌더하지 않음.
 # 강의 게시글은 존재하지만, 학생이 없으면 => 출석부 렌더하지만, 학생이 아무도 없음.
-@writer_only()
+@instructor_only()
 def lect_room_manage_attendance(request, room_no):
     lect_room = Lect.objects.prefetch_related("lectures", "enrolled_students__student").get(pk=room_no)
     lect_board_list = lect_room.lectures.filter(lect_board_type_id=2).order_by('-lect_board_no')  # 강의 게시글만 가져옴
