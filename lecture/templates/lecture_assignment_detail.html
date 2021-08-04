@@ -94,7 +94,7 @@
                                             {% if logined_user == submitted_assignment.assignment_submitter and not submitted_assignment.assignment_no.is_expired %}
 
                                                 <!-- 게시글 수정 버튼 -->
-                                                <form method="get"
+                                                <form method="get" class="d-inline-block"
                                                       action="{% url "lect_assignment_update" lect.pk submitted_assignment.pk %}">
                                                     {% csrf_token %}
                                                     <button class="site-button radius-xl m-l10" type="submit">
@@ -104,7 +104,8 @@
 
 
                                                 <!-- 게시글 삭제 버튼 -->
-                                                <form action="{% url "lect_assignment_delete" lect.pk submitted_assignment.pk %}">
+                                                <form class="d-inline-block"
+                                                      action="{% url "lect_assignment_delete" lect.pk submitted_assignment.pk %}">
                                                     {% csrf_token %}
                                                     <button class="site-button red radius-xl m-l10" type="submit">
                                                         <i class="fa fa-trash m-r5"></i>과제 삭제

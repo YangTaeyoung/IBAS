@@ -311,11 +311,10 @@ class ManageMemberTest(TestCase):
                 강의자 메뉴 中 : 수강생 관리 페이지, 수강생 정보 변경
         """
         lect_room = Lect.objects.get(lect_title=_TEST_TITLE)
-        std = lect_room.attendance.first().student.user_stu  # 임의의 한 강의를 들었던 사람의 학번
         save_sesssion(self)
         for status_mode in range(2):
             context = {
-                'is_checked_' + str(std): LectEnrollment.objects.get(lect_no=lect_room.lect_no, student_id=std).pk,
+                'is_checked_' + str(_TEST_STUDENT): LectEnrollment.objects.get(lect_no=lect_room.lect_no, student_id=_TEST_STUDENT).pk,
                 'status_mode': status_mode
             }
 

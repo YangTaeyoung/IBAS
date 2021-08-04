@@ -1,10 +1,14 @@
 <script>
     $(function () {
-        if ($(".lectRoom_attend") === '출석') {
-            $("#lectRoom_color").addClass('staff-fin')
+        $(".lectRoom_attend").each(function (index, td) {
+            if ($(td).text() === '출석') {
+            $(td).addClass('staff-fin')
         } else {
-            $("#lectRoom_color").addClass('staff-ing')
+            $(td).addClass('staff-ing')
         }
+        });
+
+
     });
 </script>
 
@@ -57,13 +61,13 @@
                                class="staff_label_margin m-l20"></label>
                     </div>
                 </td>
-                <td class="text-center">{{ forloop.counter }}</td>
+                <td class="text-center">{{ student.index }}</td>
                 <!-- 회원 이름 -->
                 <td class="align-middle text-center">{{ student.name }}</td>
                 <!-- 회원 학번 -->
                 <td class="text-center">{{ student.stu }}</td>
                 <!-- 회원 학과 -->
-                <td>컴퓨터공학과</td>
+                <td>{{ student.major }}</td>
                 <!-- 출결 -->
                 <td id="lectRoom_color" class="text-center lectRoom_attend">{{ student.attendance }}</td>
 

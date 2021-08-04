@@ -6,10 +6,13 @@
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from abc import abstractmethod
-from datetime import date
+from datetime import date, timedelta
 import os
 from django.db import models
 from datetime import datetime
+
+from django.utils import timezone
+
 from IBAS.settings import MEDIA_ROOT
 import pytz
 from django_summernote.fields import SummernoteTextField
@@ -304,7 +307,9 @@ class Lect(models.Model):
 
     @property
     def is_expired(self):
-        return pytz.UTC.localize(datetime.now()) > pytz.UTC.localize(self.lect_deadline)
+        # 마감일을 2021.08.04 로 설정하면 db 에는 2021.08.04 00:00:00 으로 저장됨.
+        # 마감일의 의미상 당일 23:59:59 까지는 가능해야함. 그래서 하루 더해줬음.
+        return timezone.now() > self.lect_deadline + timedelta(days=1)
 
 
 class LectDay(models.Model):

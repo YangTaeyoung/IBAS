@@ -52,6 +52,20 @@ def is_logined(request):
 
 
 # 관리자인지의 여부를 확인하는 함수
+def is_superuser(cur_user):
+    return cur_user.user_role.role_no <= 3
+
+
+# 강의자 여부 확인 함수
+def is_lect_instructor(cur_user, **kwargs):
+    lect_no = kwargs.get('lect_no', kwargs.get('room_no', None))
+
+    if lect_no is not None and cur_user == Lect.objects.get(pk=lect_no).lect_chief:
+        return True
+    if lect_no is None:
+        print('강의를 확인할 수 없습니다, is lect instructor 확인바람')
+    return False
+
 def is_superuser(request, **kwargs):
     print(kwargs.get('bank_no'))
     if kwargs.get('bank_no'):
@@ -61,8 +75,7 @@ def is_superuser(request, **kwargs):
 
 
 # 글쓴이인지의 여부를 확인하는 함수
-def is_writer(request, **kwargs):
-    current_user = get_logined_user(request)
+def is_writer(cur_user, **kwargs):
     board_no = kwargs.get('board_no')
     contest_no = kwargs.get('contest_no')
     bank_no = kwargs.get('bank_no')
@@ -71,36 +84,34 @@ def is_writer(request, **kwargs):
     assignment_submit_no = kwargs.get('submit_no')  # 수강생 과제 제출
     comment_id = kwargs.get("comment_id")
 
-    # comment_no = kwargs.get('comment_no')
-
     # 글쓴이인가요
     if board_no is not None:
         board = Board.objects.get(pk=board_no)
-        if current_user == board.board_writer:
+        if cur_user == board.board_writer:
             return True
     elif contest_no is not None:
         contest = ContestBoard.objects.get(pk=contest_no)
-        if current_user == contest.contest_writer:
+        if cur_user == contest.contest_writer:
             return True
     elif assignment_submit_no is not None:
         assignment = LectAssignmentSubmit.objects.get(pk=assignment_submit_no)
-        if current_user == assignment.assignment_submitter:
+        if cur_user == assignment.assignment_submitter:
             return True
     elif lect_no is not None:
         lect = Lect.objects.get(pk=lect_no)
-        if current_user == lect.lect_chief:
+        if cur_user == lect.lect_chief:
             return True
     elif bank_no is not None:
         bank = Bank.objects.get(pk=bank_no)
-        if current_user == bank.bank_used_user:
+        if cur_user == bank.bank_used_user:
             return True
     elif user_delete_no is not None:
         user_delete = UserDelete.objects.get(pk=user_delete_no)
-        if current_user == user_delete.suggest_user:
+        if cur_user == user_delete.suggest_user:
             return True
     elif comment_id is not None:
         comment = Comment.objects.get(pk=comment_id)
-        if current_user == comment.comment_writer:
+        if cur_user == comment.comment_writer:
             return True
     else:
         return False
@@ -184,18 +195,52 @@ def login_required(func):
 # superuser=True 이면 관리자 모드. 관리자인 경우도 접근 허용
 # superuser=False 이면 관리자도 접근 불가. 글쓴이만 접근 가능
 # 수정내용: 체크 부분 모듈화로 코드 간결화
-def writer_only(superuser=False):
+# 추가 수정 (2021-08-04) is_writer/is_superuser 내부의 get_logined_user 제거, 쿼리 발생 줄임
+def writer_only(superuser=False, is_lect_assignment=False):
     def decorator(func):
         @login_required
         @functools.wraps(func)
         def wrapper(request, *args, **kwargs):
             # 권한이 일치하지 않으면 메인페이지로 이동
+            cur_user = get_logined_user(request)
+
             if superuser:
-                if is_writer(request, **kwargs) or is_superuser(request, **kwargs):
+                if is_writer(cur_user, **kwargs) or is_superuser(cur_user):
                     return func(request, *args, **kwargs)
+
+            elif is_lect_assignment:
+                if is_writer(cur_user, **kwargs) or is_superuser(cur_user) or is_lect_instructor(cur_user, **kwargs):
+                    return func(request, *args, **kwargs)
+
             else:
-                if is_writer(request, **kwargs):
+                if is_writer(cur_user, **kwargs):
                     return func(request, *args, **kwargs)
+
+            return not_allowed(request)
+
+        return wrapper
+
+    return decorator
+
+
+# 데코레이터
+# 작성자: 유동현
+# 2021.08.04
+# 현재 접속 중인 유저가 강의자인지 확인하는 함수
+def instructor_only(superuser=False):
+    def decorator(func):
+        @login_required
+        @functools.wraps(func)
+        def wrapper(request, *args, **kwargs):
+            # 권한이 일치하지 않으면 메인페이지로 이동
+            cur_user = get_logined_user(request)
+
+            if superuser:
+                if is_lect_instructor(cur_user, **kwargs) or is_superuser(cur_user):
+                    return func(request, *args, **kwargs)
+
+            if is_lect_instructor(cur_user, **kwargs):
+                return func(request, *args, **kwargs)
 
             return not_allowed(request, error_404=True)
 
@@ -268,19 +313,19 @@ def room_enter_check(func):
             lect_no = kwargs.get("room_no")
         if lect_no != -1:
 
-            lect = Lect.objects.get(pk=lect_no)
-            lect_enrollment = LectEnrollment.objects.filter(lect_no=lect)
+            lect = Lect.objects.prefetch_related('enrolled_students').get(pk=lect_no)
+            enrolled_students = lect.enrolled_students.all()
             current_user = get_logined_user(request)
             flag = False
 
             #### 처음 두개의 질문, 강의를 모집 마감 시킴. ####
-            if lect.lect_limit_num <= len(lect_enrollment):  # 강의가 가득 찼는가?
+            if lect.lect_limit_num <= len(enrolled_students):  # 강의가 가득 찼는가?
                 flag = True
             if lect.is_expired:  # 강의 모집 기간이 만료되었는가?
                 flag = True
 
             #### 마지막 3개의 질문, 마감이나, 다른 조건이 있더라도 예외로 허용시킴. ####
-            if len(lect_enrollment.filter(student=get_logined_user(request))) != 0:  # 등록한 사람 중 자신이 있는가?
+            if len(enrolled_students.filter(student=get_logined_user(request))) != 0:  # 등록한 사람 중 자신이 있는가?
                 flag = False
             if lect.lect_chief == current_user:  # 자신이 강의자인가?
                 flag = False
@@ -381,7 +426,7 @@ def member_only(func):
             return redirect("lect_view", type_no=1)
         if current_user == lect_room.lect_chief:
             return func(request, *args, **kwargs)
-        elif member := lect_room.enrolled_students.filter(lect_no=lect_room, student=current_user).first():
+        elif member := lect_room.enrolled_students.filter(student=current_user).first():
             if member.status_id == 1:
                 return func(request, *args, **kwargs)
         elif role_check(request, 3, "lte"):

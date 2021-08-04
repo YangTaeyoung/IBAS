@@ -144,5 +144,8 @@
         <!-- 상단으로 올라가는 버튼 -->
         <button class="scroltop fa fa-chevron-up"></button>
     </div>
-
+<!-- django 렌더링 끝나고 나서 vue.js 렌더링 -->
+<script type="text/javascript" src="{% static 'src/vue/dist/js/chunk-vendors.js' %}"></script>
+<script type="text/javascript" src="{% static 'src/vue/dist/js/app.js' %}"></script>
+<!-- django 렌더링 끝나고 나서 vue.js 렌더링 -->
 {% endblock %}
