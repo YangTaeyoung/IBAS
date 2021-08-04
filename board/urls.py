@@ -19,7 +19,7 @@ urlpatterns = [
     path('contest/delete/<int:contest_no>', views.contest_delete, name="contest_delete"),
     path('contest/update/<int:contest_no>', views.contest_update, name="contest_update"),
     path('contest/search/', views.contest_search, name="contest_search"),
-    path('contest/comment/update', views.contest_comment_update, name="contest_comment_update"),
-    path('contest/comment/delete', views.contest_comment_delete, name="contest_comment_delete"),
-    path('contest/comment/register', views.contest_comment_register, name="contest_comment_register"),
+    # path('contest/comment/update', views.contest_comment_update, name="contest_comment_update"),
+    # path('contest/comment/delete', views.contest_comment_delete, name="contest_comment_delete"),
+    # path('contest/comment/register', views.contest_comment_register, name="contest_comment_register"),
 ]
