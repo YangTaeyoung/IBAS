@@ -52,8 +52,12 @@ def is_logined(request):
 
 
 # 관리자인지의 여부를 확인하는 함수
-def is_superuser(cur_user):
-    return cur_user.user_role.role_no <= 3
+def is_superuser(cur_user, **kwargs):
+    print(kwargs.get('bank_no'))
+    if kwargs.get('bank_no'):
+        return role_check(cur_user, 4, "equal")
+    else:
+        return role_check(cur_user, 3, "lte")
 
 
 # 강의자 여부 확인 함수
@@ -65,13 +69,6 @@ def is_lect_instructor(cur_user, **kwargs):
     if lect_no is None:
         print('강의를 확인할 수 없습니다, is lect instructor 확인바람')
     return False
-
-def is_superuser(request, **kwargs):
-    print(kwargs.get('bank_no'))
-    if kwargs.get('bank_no'):
-        return role_check(request, 4, "equal")
-    else:
-        return role_check(request, 3, "lte")
 
 
 # 글쓴이인지의 여부를 확인하는 함수
@@ -120,17 +117,17 @@ def is_writer(cur_user, **kwargs):
 # 역할이 맞는지 확인 하는 함수
 # 입력: request, 기준이 될 역할 번호, 검증할 부등호
 # 출력: 로그인 한 유저가 해당 조건에 만족하는지의 여부를 반환
-def role_check(request, role_no, sign="equal"):
+def role_check(cur_user, role_no, sign="equal"):
     if sign == "equal":  # 등호
-        return get_logined_user(request).user_role.role_no == role_no
+        return cur_user.user_role.role_no == role_no
     elif sign == "lte":  # 이하
-        return get_logined_user(request).user_role.role_no <= role_no
+        return cur_user.user_role.role_no <= role_no
     elif sign == "gte":  # 이상
-        return get_logined_user(request).user_role.role_no >= role_no
+        return cur_user.user_role.role_no >= role_no
     elif sign == "lt":  # 미만
-        return get_logined_user(request).user_role.role_no < role_no
+        return cur_user.user_role.role_no < role_no
     elif sign == "gt":  # 초과
-        return get_logined_user(request).user_role.role_no > role_no
+        return cur_user.user_role.role_no > role_no
 
 
 #
@@ -329,7 +326,7 @@ def room_enter_check(func):
                 flag = False
             if lect.lect_chief == current_user:  # 자신이 강의자인가?
                 flag = False
-            if role_check(request, 3, "lte"):  # 자신이 회장단인가?(1: 회장, 2: 부회장, 3: 운영팀 중 하나)
+            if role_check(current_user, 3, "lte"):  # 자신이 회장단인가?(1: 회장, 2: 부회장, 3: 운영팀 중 하나)
                 flag = False
 
             #### flag에 따라 경고, 혹은 강의실로 입장하게 됨. ####
