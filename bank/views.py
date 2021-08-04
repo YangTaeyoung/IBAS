@@ -120,7 +120,8 @@ def bank_support_register(request):
                 bank = bank_support_form.save(user=get_logined_user(request))
                 file_form.save(instance=bank)
                 create_bank_alarm(bank)
-        return redirect("bank_support_detail", bank_no=bank.bank_no)
+                return redirect("bank_support_detail", bank_no=bank.bank_no)
+        return redirect("bank_support_board")
 
     elif request.method == 'GET':
         context = {
@@ -199,10 +200,13 @@ def bank_support_update(request, bank_no):
 def bank_support_delete(request, bank_no):  # 예산지원 삭제
     if request.method == "POST":  # 포스트로 넘어오는 경우
         bank = get_object_or_404(Bank, pk=bank_no)
-        if bank.bank_apply.bank_apply_no == 4:
+        if bank.bank_apply.bank_apply_no <= 3:
             return not not_allowed(request=request, msg="예산 지원 신청이 이미 회계에 반영되었습니다.\n\n삭제를 원하시면 총무에게 문의하세요.", error_404=False,
                                    next_url="my_info")
         FileController.delete_all_files_of_(bank)  # 로컬 파일 삭제
+        bank_file_list = BankFile.objects.filter(file_fk=bank)
+        for bank_file in bank_file_list:
+            bank_file.delete()
         bank.delete()  # 파일과 폴더 삭제 후, 회계 DB 에서 삭제
 
     # 삭제 성공 유무와 상관없이 이동.

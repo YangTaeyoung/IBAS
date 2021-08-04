@@ -53,7 +53,7 @@ def is_logined(request):
 
 # 관리자인지의 여부를 확인하는 함수
 def is_superuser(request, **kwargs):
-    current_user = get_logined_user(request)
+    print(kwargs.get('bank_no'))
     if kwargs.get('bank_no'):
         return role_check(request, 4, "equal")
     else:
