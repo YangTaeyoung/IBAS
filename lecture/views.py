@@ -166,7 +166,8 @@ def lect_delete(request, lect_no):
 
     if request.method == "POST":
         # 회장단에 의해 강의가 삭제된 경우 삭제된 강의에 대해 강의자에게 알림을 날림.
-        if lect.lect_chief != get_logined_user(request) and role_check(request, 3, "lte"):
+        cur_user = get_logined_user(request)
+        if lect.lect_chief != cur_user and role_check(cur_user, 3, "lte"):
             delete_lect_by_superuser_alarm(request, lect)
         lect_type_no = lect.lect_type.type_no  # 강의 삭제 전 DB에 저장되어 있는 게시판 타입을 받아옴: 강의 리스트로 페이지를 리다이렉팅 하기 위함.
         FileController.delete_all_files_of_(lect)  # 강의에 저장되어 있는 사진 삭제

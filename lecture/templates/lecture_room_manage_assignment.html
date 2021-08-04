@@ -71,7 +71,7 @@
                                                                             {% if lect_board.assignments.all %}
                                                                                 {% for assignment in lect_board.assignments.all %}
                                                                                     <option value="{{ assignment.lect_board_no }}">
-                                                                                       [{{ i }}회차] {{ assignment.lect_board_title|truncate:9}}
+                                                                                       [{{ i }}회차] {{ assignment.lect_board_title}}
                                                                                     </option>
                                                                                 {% endfor %}
                                                                             {% endif %}
