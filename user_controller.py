@@ -58,7 +58,6 @@ def is_superuser(cur_user, is_bank=False):
         print("체크3")
         return role_check(cur_user, 4, "equal")
     else:
-        print("체크4")
         return role_check(cur_user, 3, "lte")
 
 
@@ -75,7 +74,6 @@ def is_lect_instructor(cur_user, **kwargs):
 
 # 글쓴이인지의 여부를 확인하는 함수
 def is_writer(cur_user, **kwargs):
-    print('체크5')
     board_no = kwargs.get('board_no')
     contest_no = kwargs.get('contest_no')
     bank_no = kwargs.get('bank_no')
@@ -101,7 +99,6 @@ def is_writer(cur_user, **kwargs):
         if cur_user == lect.lect_chief:
             return True
     elif bank_no is not None:
-        print("체크6")
         bank = Bank.objects.get(pk=bank_no)
         if cur_user == bank.bank_used_user:
             return True
@@ -201,28 +198,21 @@ def writer_only(superuser=False, is_lect_assignment=False):
             cur_user = get_logined_user(request)
             print("체크 1")
             if superuser:
-                print("올바른 패스1")
                 # 예산 지원 신청의 경우 총무가 삭제해야 함. 관리자 권한을 일반 운영팀이 아닌 총무로 할당.
                 if kwargs.get("bank_no") and is_superuser(cur_user, is_bank=True):
-                    print("올바른 패스2")
                     return func(request, *args, **kwargs)
                 # 예산 지원 신청이 아닌 경우.
                 if is_writer(cur_user, **kwargs) or is_superuser(cur_user):
-                    print("잘못된 패스1")
                     return func(request, *args, **kwargs)
 
             elif is_lect_assignment:
-                print("잘못된 패스2")
                 if is_writer(cur_user, **kwargs) or is_superuser(cur_user) or is_lect_instructor(cur_user, **kwargs):
-                    print("잘못된 패스2")
                     return func(request, *args, **kwargs)
 
             else:
-                print("잘못된 패스3")
                 if is_writer(cur_user, **kwargs):
-                    print("잘못된 패스4")
                     return func(request, *args, **kwargs)
-                print("잘못된 패스5")
+
             return not_allowed(request)
 
         return wrapper
