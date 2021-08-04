@@ -426,7 +426,7 @@ def member_only(func):
         elif member := lect_room.enrolled_students.filter(student=current_user).first():
             if member.status_id == 1:
                 return func(request, *args, **kwargs)
-        elif role_check(request, 3, "lte"):
+        elif role_check(current_user, 3, "lte"):
             return func(request, *args, **kwargs)
 
         return not_allowed(request, msg='수강정지 되었거나, 접근할 수 없는 멤버입니다!')

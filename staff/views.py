@@ -55,9 +55,9 @@ def staff_member_list(request):
         grade_list.sort()
         auth_list = UserAuth.objects.filter(auth_no__lte=2)  # 기존 회원은 미승인 회원으로 넘길 수 없으므로, role_no 가 2 이하인 튜플만 가져옴.
         role_list = {}
-        if role_check(request, 1):  # 로그인 한 유저의 권한이 회장일 경우
+        if role_check(user, 1):  # 로그인 한 유저의 권한이 회장일 경우
             role_list = UserRole.objects.filter(~Q(role_no=5))  # 교수를 제외한 모든 유저의 권한을 조정가능.
-        elif role_check(request, 2):  # 로그인 한 유저의 권한이 부회장 인 경우
+        elif role_check(user, 2):  # 로그인 한 유저의 권한이 부회장 인 경우
             role_list = UserRole.objects.filter(Q(role_no__gt=2) & ~Q(role_no=5))  # 회장, 부회장, 교수를 제외한 유저의 권한을 조정할 수 있음.
         # 제명 리스트 받아오기 (최신 상위 5개만)
         user_delete_list = UserDelete.objects.all().order_by("-user_delete_created")[:5]
@@ -287,14 +287,15 @@ def member_delete_register(request, deleted_user):
 def member_delete_detail(request, user_delete_no):
     user_delete = UserDelete.objects.get(pk=user_delete_no)
     # 제명 페이지는 일반인에게는 공개되어서는 안됨. 따라서 404페이지로 이동.
-    if not role_check(request, 4, "lte") and user_delete.deleted_user != get_logined_user(request):
+    cur_user = get_logined_user(request)
+    if not role_check(cur_user, 4, "lte") and user_delete.deleted_user != get_logined_user(request):
         return not_allowed(request, error_404=True)
     user_delete_aor_apply = UserDeleteAor.objects.filter(Q(user_delete_no=user_delete) & Q(aor=1))
     user_delete_aor_reject = UserDeleteAor.objects.filter(Q(user_delete_no=user_delete) & Q(aor=0))
     total_chief_num = len(User.objects.filter(Q(user_role__role_no__lte=4) & Q(user_auth__auth_no=1)))
     file_list, img_list, doc_list = FileController.get_images_and_files_of_(user_delete)
     context = {
-        "is_writer": get_logined_user(request) == user_delete.suggest_user,
+        "is_writer": cur_user == user_delete.suggest_user,
         "is_voted": is_voted(request, user_delete),
         "doc_list": doc_list,
         "img_list": img_list,

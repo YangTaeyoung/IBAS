@@ -40,7 +40,7 @@ class LectAttendanceTest(TestCase):
                 강의자 메뉴 中 : 출석 페이지, 수강생 이름 + 학번 + 출석여부 띄우기
         """
         lect_room = Lect.objects.prefetch_related("enrolled_students", "lectures"
-                                                  ).filter(lect_title=_TEST_TITLE).first()
+                                                  ).get(lect_title=_TEST_TITLE)
         lect_board = lect_room.lectures.first()
         query = f"""
                             SELECT 
