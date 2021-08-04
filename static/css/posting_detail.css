@@ -53,3 +53,7 @@
 .word-break-all {
     word-break: break-all;
 }
+
+.post-context{
+    min-height: 150px;
+}

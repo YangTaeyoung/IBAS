@@ -7,14 +7,14 @@ from bank.forms import BankForm, FileForm, BankSupportForm
 from date_controller import today
 from file_controller import FileController
 from pagination_handler import get_page_object
-from user_controller import login_required, get_logined_user, writer_only, cfo_only, auth_check
+from user_controller import get_logined_user, writer_only, cfo_only, auth_check, not_allowed
 from alarm.alarm_controller import create_bank_alarm
 
 
 @auth_check()
 def bank(request):
     # 회계 내역
-    bank_list = Bank.objects.filter(bank_apply__bank_apply_no=4).order_by('bank_used').prefetch_related('files').all()
+    bank_list = Bank.objects.filter(bank_apply__bank_apply_no=4).order_by('-bank_used').prefetch_related('files').all()
 
     # 연도를 담을 리스트
     year_list = [bank.bank_used.year for bank in bank_list]
@@ -165,7 +165,9 @@ def bank_support_aor(request, bank_no):  # 총무가 승인, 승인거절, 지�
 @writer_only()
 def bank_support_update(request, bank_no):
     bank = get_object_or_404(Bank, pk=bank_no)
-
+    if bank.bank_apply.bank_apply_no <= 3:
+        return not not_allowed(request=request, msg="거절되었거나, 처리 완료된 예산 지원 신청입니다.\n\n수정이 불가능합니다.", error_404=False,
+                               next_url="my_info")
     # ???
     # if request.POST.get("is_move") is not None:  # 단순 수정페이지 이동의 경우
     if request.method == "GET":
@@ -197,6 +199,9 @@ def bank_support_update(request, bank_no):
 def bank_support_delete(request, bank_no):  # 예산지원 삭제
     if request.method == "POST":  # 포스트로 넘어오는 경우
         bank = get_object_or_404(Bank, pk=bank_no)
+        if bank.bank_apply.bank_apply_no == 4:
+            return not not_allowed(request=request, msg="예산 지원 신청이 이미 회계에 반영되었습니다.\n\n삭제를 원하시면 총무에게 문의하세요.", error_404=False,
+                                   next_url="my_info")
         FileController.delete_all_files_of_(bank)  # 로컬 파일 삭제
         bank.delete()  # 파일과 폴더 삭제 후, 회계 DB 에서 삭제
 

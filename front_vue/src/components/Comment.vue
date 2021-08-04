@@ -13,7 +13,7 @@
       <ul class="d-flex">
         <li class="post-author">
           <a href="javascript:void(0);"> {{ comment.comment_writer.user_major }}
-            {{ comment.comment_writer.user_stu | truncate(2) }}학번</a>
+            {{ comment.comment_writer.user_stu | subStr(2,4) }}학번</a>
         </li>
 
 
@@ -38,17 +38,20 @@
     <div class="reply-btn-div">
 
       <button class="btnAdd comment-btn m-r20" @click="Recomment()">
-        <i class="fa fa-commenting m-r5"></i>답글쓰기</button>
+        <i class="fa fa-commenting m-r5"></i>답글쓰기
+      </button>
 
 
-      <template v-if="logined_user.user_stu === comment.comment_writer.user_stu" >
+      <template v-if="logined_user.user_stu === comment.comment_writer.user_stu">
         <button @click="updateComment()" class="comment-btn m-r10">
-          <i class="fa fa-pencil m-r5"></i>수정</button>
+          <i class="fa fa-pencil m-r5"></i>수정
+        </button>
       </template>
 
-      <template v-if="logined_user.user_stu === comment.comment_writer.user_stu || logined_user.user_role < 3" >
+      <template v-if="logined_user.user_stu === comment.comment_writer.user_stu || logined_user.user_role < 3">
         <button @click="deleteComment()" class="comment-btn m-r10">
-          <i class="fa fa-trash m-r5"></i>삭제</button>
+          <i class="fa fa-trash m-r5"></i>삭제
+        </button>
       </template>
 
       <template v-if="recomment_mode === true">
@@ -57,9 +60,10 @@
       </template>
 
       <template v-if="comment_set_list != null">
-        <div v-for="(recomment, j) in comment_set_list"  :key="recomment.comment_id" >
+        <div v-for="(recomment, j) in comment_set_list" :key="recomment.comment_id">
           <recomment @deleteRecomment="deleteRecomment(recomment.comment_id, j)" @updateRecomment="updateRecomment"
-                   :send-recomment="recomment" :send-logined-user="logined_user" :send-index="j" style="margin-left: 20px;"></recomment>
+                     :send-recomment="recomment" :send-logined-user="logined_user" :send-index="j"
+                     style="margin-left: 20px;"></recomment>
         </div>
       </template>
 
@@ -134,18 +138,16 @@ export default {
     },
 
     // 대댓글 수정하도록 상위 컴포넌트(commentList)에 이벤트 발생
-    updateRecomment: function(comment_id, comment_cont, index) {
-      if(comment_cont.trim() === "") {
+    updateRecomment: function (comment_id, comment_cont, index) {
+      if (comment_cont.trim() === "") {
         alert('댓글을 입력하세요!')
-      }
-      else if(confirm('댓글을 수정하시겠습니까?')) {
+      } else {
         axios({
           method: 'put',
           url: "comment/update/" + comment_id,
           data: {comment_cont: comment_cont}
         })
           .then(response => {
-            alert('댓글이 수정되었습니다!')
             this.comment_set_list[index] = response.data.comment;
           })
           .catch(response => {
@@ -161,7 +163,6 @@ export default {
         axios.delete("comment/delete/" + comment_id)
             .then(() => {
               this.comment_set_list.splice(index, 1)
-              alert('댓글이 삭제되었습니다!')
             })
             .catch(response => {
               console.log("Failed to remove the comment", response);
@@ -173,7 +174,10 @@ export default {
 
   filters: {
     truncate: function (text, length) {
-      return String(text).slice(0,length)
+      return String(text).slice(0, length)
+    },
+    subStr: function (text, start, end) {
+      return String(text).substring(start, end);
     },
     timeFormat: function (date) {
       date = new Date(date)

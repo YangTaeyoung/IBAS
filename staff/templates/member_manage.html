@@ -364,15 +364,16 @@
                                                         </td>
                                                         <!-- 제명건의 -->
                                                         <td class="text-center">
-
-                                                            {% if exist_user.is_going_to_delete %}
-                                                                <a class="m-0"
-                                                                   href="{% url "member_delete_detail" user_delete_no=exist_user.delete_no %}"
-                                                                   style="font-size: 12px; font-weight: bold; color: #dc3545 "
-                                                                >제명진행중</a>
-                                                            {% else %}
-                                                                <a href="{% url "member_delete_register" deleted_user=exist_user.user_stu %}"
-                                                                   style="font-size: 12px; font-weight: bold">제명건의</a>
+                                                            {% if exist_user.user_role.role_no != 5 %}
+                                                                {% if exist_user.is_going_to_delete %}
+                                                                    <a class="m-0"
+                                                                       href="{% url "member_delete_detail" user_delete_no=exist_user.delete_no %}"
+                                                                       style="font-size: 12px; font-weight: bold; color: #dc3545 "
+                                                                    >제명진행중</a>
+                                                                {% else %}
+                                                                    <a href="{% url "member_delete_register" deleted_user=exist_user.user_stu %}"
+                                                                       style="font-size: 12px; font-weight: bold">제명건의</a>
+                                                                {% endif %}
                                                             {% endif %}
                                                         </td>
                                                     </tr>

@@ -16,7 +16,7 @@
       <ul class="d-flex">
         <li class="post-author">
           <a href="javascript:void(0);"> {{ comment.comment_writer.user_major }}
-            {{ comment.comment_writer.user_stu | truncate(2) }}학번</a>
+            {{ comment.comment_writer.user_stu | subStr(2,4) }}학번</a>
         </li>
 
 
@@ -40,14 +40,16 @@
 
     <div class="reply-btn-div">
 
-      <template v-if="logined_user.user_stu === comment.comment_writer.user_stu" >
+      <template v-if="logined_user.user_stu === comment.comment_writer.user_stu">
         <button @click="updateRecomment()" class="comment-btn m-r10">
-          <i class="fa fa-pencil m-r5"></i>수정</button>
+          <i class="fa fa-pencil m-r5"></i>수정
+        </button>
       </template>
 
-      <template v-if="logined_user.user_stu === comment.comment_writer.user_stu || logined_user.user_role < 3" >
+      <template v-if="logined_user.user_stu === comment.comment_writer.user_stu || logined_user.user_role < 3">
         <button @click="deleteRecomment()" class="comment-btn m-r10">
-          <i class="fa fa-trash m-r5"></i>삭제</button>
+          <i class="fa fa-trash m-r5"></i>삭제
+        </button>
       </template>
 
     </div>
@@ -96,7 +98,10 @@ export default {
   },
   filters: {
     truncate: function (text, length) {
-      return String(text).slice(0,length)
+      return String(text).slice(0, length)
+    },
+    subStr: function (text, start, end) {
+      return String(text).substring(start, end);
     },
     timeFormat: function (date) {
       date = new Date(date)

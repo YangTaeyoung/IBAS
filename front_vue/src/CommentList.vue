@@ -13,8 +13,10 @@
         <ol class="comment-list">
           <li v-for="(comment, i) in comment_list" :key="comment.comment_id" class="comment">
 
-            <comment @deleteComment="deleteComment(comment.comment_id, i)" @updateComment="updateComment" @addRecomment="addComment"
-                     :send-comment="comment" :send-logined-user="logined_user" :send-index="i" :send-comment-set="comment_set_list[i]"></comment>
+            <comment @deleteComment="deleteComment(comment.comment_id, i)" @updateComment="updateComment"
+                     @addRecomment="addComment"
+                     :send-comment="comment" :send-logined-user="logined_user" :send-index="i"
+                     :send-comment-set="comment_set_list[i]"></comment>
 
           </li>
         </ol>
@@ -35,8 +37,7 @@ import {alert_msg_for_client} from "./assets/response.js"
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
-axios.defaults.baseURL = 'http://127.0.0.1:8000/'
-// axios.defaults.baseURL = 'https://inhabas.com/'
+axios.defaults.baseURL = 'https://inhabas.com/'
 export default {
   data: () => {
     return {
@@ -55,7 +56,7 @@ export default {
 
   mounted() { // DOM 객체 생성 후 drf server 에서 데이터를 가져와 CommentList 렌더링
     let pathname = location.pathname.split('/')
-    this.board_no = pathname[pathname.length-1]
+    this.board_no = pathname[pathname.length - 1]
     if (location.pathname.includes('board/contest')) {
       this.board_type = 'contest'
     } else if (location.pathname.includes('board/')) {
@@ -66,6 +67,9 @@ export default {
 
     } else if (location.pathname.includes('staff/')) {
       this.board_type = 'staff'
+    } else if (location.pathname.includes('activity/')) {
+      this.board_type = 'board'
+      this.board_no = pathname[2]
     }
 
     this.fetch_all_comment()
@@ -80,7 +84,7 @@ export default {
           .then(response => {
             this.comment_list = response.data.comment_list;
             this.comment_set_list = response.data.comment_set_list;
-            this.logined_user =response.data.logined_user;
+            this.logined_user = response.data.logined_user;
           })
           .catch(response => {
             console.log("Failed to get commentList", response);
@@ -88,10 +92,9 @@ export default {
     },
 
     addComment: function (comment_cont, comment_cont_ref, index) {
-      if(comment_cont.trim() === "") {
+      if (comment_cont.trim() === "") {
         alert('댓글을 입력하세요!')
-      }
-      else {
+      } else {
         var postData = {comment_cont: comment_cont, comment_cont_ref: comment_cont_ref}
         axios({
           method: 'post',
@@ -116,7 +119,7 @@ export default {
     },
 
     deleteComment: function (comment_id, index) {
-      if(confirm('댓글을 삭제하시겠습니까?')) {
+      if (confirm('댓글을 삭제하시겠습니까?')) {
         axios.delete("comment/delete/" + comment_id)
             .then(() => {
               Vue.delete(this.comment_list, index);  // 해당 댓글 삭제
@@ -131,10 +134,9 @@ export default {
     },
 
     updateComment: function (comment_id, comment_cont, index) {
-      if(comment_cont.trim() === "") {
+      if (comment_cont.trim() === "") {
         alert('댓글을 입력하세요!')
-      }
-      else {
+      } else {
         axios({
           method: 'put',
           url: "comment/update/" + comment_id,
@@ -155,10 +157,6 @@ export default {
 
 
 </script>
-
-
-
-
 
 
 <style>

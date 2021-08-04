@@ -64,10 +64,9 @@
                                     </div>
 
                                     <!--============================== 게시글 본문 시작 ==============================-->
-                                    <div class="dlab-post-text">
-                                        {% autoescape off %}
-                                            {{ submitted_assignment.assignment_cont }}
-                                        {% endautoescape %}
+                                    <div class="post-context dlab-post-text">
+
+                                        {{ submitted_assignment.assignment_cont|safe }}
 
                                         {% include "file_detail.html" %}
 
@@ -87,7 +86,7 @@
 
                                         {% endif %}
 
-                                         <!-- 게시글 삭제 및 수정 div -->
+                                        <!-- 게시글 삭제 및 수정 div -->
                                         <div class="extra-cell text-right">
 
                                             <!-- 관련자만 보이게 처리 -->
@@ -98,7 +97,7 @@
                                                       action="{% url "lect_assignment_update" lect.pk submitted_assignment.pk %}">
                                                     {% csrf_token %}
                                                     <button class="site-button radius-xl m-l10" type="submit">
-                                                            <i class="fa fa-pencil m-r5"></i>과제 수정
+                                                        <i class="fa fa-pencil m-r5"></i>과제 수정
                                                     </button>
                                                 </form>
 
@@ -107,7 +106,7 @@
                                                 <form action="{% url "lect_assignment_delete" lect.pk submitted_assignment.pk %}">
                                                     {% csrf_token %}
                                                     <button class="site-button red radius-xl m-l10" type="submit">
-                                                            <i class="fa fa-trash m-r5"></i>과제 삭제
+                                                        <i class="fa fa-trash m-r5"></i>과제 삭제
                                                     </button>
                                                 </form>
 
@@ -118,12 +117,14 @@
                                         {% if logined_user == lect.lect_chief %}
                                             <!--===<<강의자>> 수강생의 과제 제출을 보고 승인, 기각을 결졍할 수 있음.===-->
                                             <div class="d-flex justify-content-center m-b40">
-                                                <form id="assignment_aor" method="POST" action="{% url 'lect_assignment_aor' lect.pk submitted_assignment.pk %}">
+                                                <form id="assignment_aor" method="POST"
+                                                      action="{% url 'lect_assignment_aor' lect.pk submitted_assignment.pk %}">
                                                     {% csrf_token %}
                                                     <input type="hidden" name="aor" id="aor" value="1">
                                                     <input type="hidden" name="reject_reason" id="reject_reason">
 
-                                                    <button type="submit" class="btn btn-outline-success btn-lg" style="width: 200px; font-weight: bold">
+                                                    <button type="submit" class="btn btn-outline-success btn-lg"
+                                                            style="width: 200px; font-weight: bold">
                                                         통과
                                                     </button>
                                                 </form>
@@ -131,7 +132,8 @@
                                                 <button type="button" class="btn btn-outline-danger btn-lg"
                                                         style="width: 200px; margin-left: 10px; font-weight: bold"
                                                         onclick="return confirm('과제를 실패 처리 하시겠습니까?')"
-                                                        href="javascript:void(0);" data-toggle="modal" data-target="#favorite"
+                                                        href="javascript:void(0);" data-toggle="modal"
+                                                        data-target="#favorite"
                                                         class="site-button gray">
                                                     실패
                                                 </button>
@@ -161,21 +163,21 @@
                                                         <div id="login" class="tab-pane active"
                                                              style="margin-bottom: -25px; margin-top: 10px">
 
-                                                                <!--기각 사유 입력창-->
+                                                            <!--기각 사유 입력창-->
 
-                                                                <div class="form-group">
-                                                                    <input class="form-control"
-                                                                           id="modal-reject-reason"
-                                                                           placeholder="과제제출 기각 사유를 입력해주세요"
-                                                                           type="text"/>
-                                                                </div>
-                                                                <!--거절버튼-->
-                                                                <div class="form-group">
-                                                                    <button type="submit"
-                                                                            class="site-button btn-block button-md"
-                                                                            onclick="AssignmentAorFormSubmit()">입력
-                                                                    </button>
-                                                                </div>
+                                                            <div class="form-group">
+                                                                <input class="form-control"
+                                                                       id="modal-reject-reason"
+                                                                       placeholder="과제제출 기각 사유를 입력해주세요"
+                                                                       type="text"/>
+                                                            </div>
+                                                            <!--거절버튼-->
+                                                            <div class="form-group">
+                                                                <button type="submit"
+                                                                        class="site-button btn-block button-md"
+                                                                        onclick="AssignmentAorFormSubmit()">입력
+                                                                </button>
+                                                            </div>
 
                                                         </div>
                                                     </div>

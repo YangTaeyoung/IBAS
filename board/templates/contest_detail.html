@@ -81,10 +81,8 @@
                                             <img class="img-cover" src="/media/{{ image.file_path }}" alt=""/>
                                         {% endfor %}
                                         <!--공모전 상세내용 나오는 곳-->
-                                        <p class="font-weight-400"></p>
-                                        {% autoescape off %}
-                                            {{ contest.contest_cont }}
-                                        {% endautoescape %}
+                                        <p class="post-context font-weight-400"></p>
+                                        {{ contest.contest_cont|safe }}
                                         <p class="font-weight-300"></p>
 
                                         <!-- 첨부된 파일 불러오는 곳 -->

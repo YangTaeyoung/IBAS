@@ -225,7 +225,17 @@ def superuser_only(cfo_included=False):
     return decorator
 
 
-def full_check(func):
+def is_closed(lect: Lect):
+    flag = False
+    lect_enrollment = LectEnrollment.objects.filter(lect_no=lect)
+    if lect.lect_limit_num <= len(lect_enrollment):  # 강의가 가득 찼는가?
+        flag = True
+    if lect.is_expired:  # 강의 모집 기간이 만료되었는가?
+        flag = True
+    return flag
+
+
+def enroll_check(func):
     @auth_check(active=True)
     @functools.wraps(func)
     def wrapper(request, *args, **kwargs):
@@ -236,10 +246,46 @@ def full_check(func):
             lect_no = kwargs.get("room_no")
         if lect_no != -1:
             lect = Lect.objects.get(pk=lect_no)
+            if is_closed(lect):
+                messages.warning(request, "강의가 마감되었습니다. 신청할 수 없습니다.")
+                return redirect("lect_view", type_no=lect.lect_type.type_no)
+        return func(request, *args, **kwargs)
+
+    return wrapper
+
+
+def room_enter_check(func):
+    @auth_check(active=True)
+    @functools.wraps(func)
+    def wrapper(request, *args, **kwargs):
+        lect_no = -1
+        if kwargs.get("lect_no"):
+            lect_no = kwargs.get("lect_no")
+        elif kwargs.get("room_no"):
+            lect_no = kwargs.get("room_no")
+        if lect_no != -1:
+
+            lect = Lect.objects.get(pk=lect_no)
             lect_enrollment = LectEnrollment.objects.filter(lect_no=lect)
-            if (lect.lect_limit_num <= len(lect_enrollment) and len(lect_enrollment.filter(
-                    student=get_logined_user(request))) == 0 and lect.lect_chief != get_logined_user(
-                    request)) or lect.is_expired:
+            current_user = get_logined_user(request)
+            flag = False
+
+            #### 처음 두개의 질문, 강의를 모집 마감 시킴. ####
+            if lect.lect_limit_num <= len(lect_enrollment):  # 강의가 가득 찼는가?
+                flag = True
+            if not lect.is_expired:  # 강의 모집 기간이 만료되었는가?
+                flag = True
+
+            #### 마지막 3개의 질문, 마감이나, 다른 조건이 있더라도 예외로 허용시킴. ####
+            if len(lect_enrollment.filter(student=get_logined_user(request))) != 0:  # 등록한 사람 중 자신이 있는가?
+                flag = False
+            if lect.lect_chief == current_user:  # 자신이 강의자인가?
+                flag = False
+            if role_check(request, 3, "lte"):  # 자신이 회장단인가?(1: 회장, 2: 부회장, 3: 운영팀 중 하나)
+                flag = False
+
+            #### flag에 따라 경고, 혹은 강의실로 입장하게 됨. ####
+            if flag:
                 messages.warning(request, "강의가 마감되었습니다.")
                 return redirect("lect_view", type_no=lect.lect_type.type_no)
         return func(request, *args, **kwargs)
@@ -315,7 +361,10 @@ def chief_only(vice=False):
 # 데코레이터
 # 제작일: 21.7.13
 # 제작자: 유동현
+# 수정일: 21.8.4
+# 수정자: 양태영
 # 용도: 강의 또는 스터디 구성원인지 확인하는 용도
+# 수정 내용: 회장단도 해당 구성원에 포함.
 def member_only(func):
     @login_required
     @functools.wraps(func)
@@ -332,6 +381,8 @@ def member_only(func):
         elif member := lect_room.enrolled_students.filter(lect_no=lect_room, student=current_user).first():
             if member.status_id == 1:
                 return func(request, *args, **kwargs)
+        elif role_check(request, 3, "lte"):
+            return func(request, *args, **kwargs)
 
         return not_allowed(request, msg='수강정지 되었거나, 접근할 수 없는 멤버입니다!')
 
@@ -346,29 +397,6 @@ def get_default_pic_path():
 # 기존의 이미지 패스가 디폴트 패스인지 검사
 def is_default_pic(img_path):
     return str(img_path) == get_default_pic_path()
-
-
-# # ------------ deprecated -------------
-# # 삭제 사유: 관리하기 불편함. is_related(user) 함수를 사용할 것.
-# # 활동 게시판과 유저가 관련되어 있는지 확인하는 함수
-# def is_activity_related(user: User):
-#     return len(Board.objects.filter(Q(board_writer=user) & Q(board_type_no__board_type_no=4))) != 0
-#
-#
-# # 공모전 게시판과 유저가 관련되어 있는지 확인하는 함수.
-# def is_contest_related(user: User):
-#     return len(ContestBoard.objects.filter(contest_writer=user)) != 0
-#
-#
-# # 회계와 관련되어있는지 확인하는 함수
-# def is_bank_related(user: User):
-#     return len(Bank.objects.filter(Q(bank_cfo=user) | Q(bank_used_user=user))) != 0
-#
-#
-# # 연혁과 관련되어있는지
-# def is_history_related(user: User):
-#     return len(History.objects.filter(history_writer=user)) != 0
-# ---------------------------------------
 
 
 # 초기화를 할지 삭제를 할 지 결정하는 함수

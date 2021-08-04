@@ -87,7 +87,7 @@ def get_context_of_board_(board_no):
         "file_list": doc_list,
         "img_list": image_list,
         'board_file_list': board_file_list,
-        #"comment_list": comment_list,
+        # "comment_list": comment_list,
         "board_type_no": board.board_type_no.board_type_no,
         "board_name": board.board_type_no.board_type_name,
         "board_exp": board.board_type_no.board_type_exp,
@@ -126,7 +126,7 @@ def get_context_of_contest_(contest_no):
         'contest_file_list': contest_file_list,
         "board_name": "공모전 게시판",
         "board_exp": "공모전 정보를 알려주는 게시판",
-        #"comment_list": comment_list,
+        # "comment_list": comment_list,
     }
 
     return context
@@ -196,18 +196,18 @@ def board_search(request, board_type_no):
                 Q(board_cont__icontains=keyword) |
                 Q(board_title__icontains=keyword) |
                 Q(board_writer__user_name__icontains=keyword)).filter(
-                Q(board_type_no__board_type_no=6) & Q(board_type_no__board_type_no__lte=7)).select_related(
+                Q(board_type_no__board_type_no__gte=6) & Q(board_type_no__board_type_no__lte=7)).select_related(
                 "board_writer").order_by("-board_created").all()
         elif 8 <= board_type_no <= 9:
             board_list = Board.objects.filter(
                 Q(board_cont__icontains=keyword) |
                 Q(board_title__icontains=keyword) |
-                Q(board_writer__user_name__icontains=keyword) |
-                Q(board_type_no__board_type_no=board_type_no)
-            ).select_related("board_writer").order_by("-board_created")
+                Q(board_writer__user_name__icontains=keyword)
+            ).filter(board_type_no__board_type_no=board_type_no).select_related("board_writer").order_by(
+                "-board_created")
             if board_type_no == 8 and not role_check(request, role_no=4, sign="lte"):
                 return not_allowed(request)
-            if board_type_no == 9:
+            if board_type_no == 9 and role_check(request, 6, "equal"):
                 board_list = board_list.filter(board_writer=get_logined_user(request))
 
         item = get_page_object(request, board_list)
@@ -396,7 +396,6 @@ def board_delete(request, board_no):
 #         return redirect("board_detail", board_no=board_no)  # 게시글 상세 페이지로 돌아감
 #     else:
 #         return redirect("board_view", board_type_no=5)  # 잘못된 요청의 경우 전체 게시판으로 이동하게 함.
-
 
 # ---- contest_list ---- #
 # : 공모전 글 목록 페이지
