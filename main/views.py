@@ -49,7 +49,6 @@ def introduce(request):
 #   - 코드 최적화 paginator 부분
 def activity_list(request):
     # 최신순으로 정렬하고, 1:M 관계로 가져오기 위해 prefetch_related 함수 사용
-
     board_list = Board.objects.filter(board_type_no__board_type_no=4).order_by('-board_created').prefetch_related(
         "files")
     board_list = get_page_object(request, board_list, 6)
