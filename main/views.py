@@ -18,7 +18,7 @@ from post_controller import comment_delete_by_post_delete
 # 메인페이지 이동 함수
 def index(request):
     # 임시 로그인
-    session.save_session(request, user_model=User.objects.get(pk=12162359), logined_email="0130yang@gmail.com", provider="google")
+    # session.save_session(request, user_model=User.objects.get(pk=12162359), logined_email="0130yang@gmail.com", provider="google")
     # session.save_session(request, user_model=User.objects.get(pk=12171652))
     context = {
         "is_user_recruiting": is_user_recruiting(),
