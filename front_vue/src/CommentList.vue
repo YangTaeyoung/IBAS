@@ -36,7 +36,7 @@ import {alert_msg_for_client} from "./assets/response.js"
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
-axios.defaults.baseURL = 'http://127.0.0.1:8000'
+axios.defaults.baseURL = 'https://inhabas.com'
 export default {
   data: () => {
     return {
