@@ -273,7 +273,7 @@ def room_enter_check(func):
             #### 처음 두개의 질문, 강의를 모집 마감 시킴. ####
             if lect.lect_limit_num <= len(lect_enrollment):  # 강의가 가득 찼는가?
                 flag = True
-            if not lect.is_expired:  # 강의 모집 기간이 만료되었는가?
+            if lect.is_expired:  # 강의 모집 기간이 만료되었는가?
                 flag = True
 
             #### 마지막 3개의 질문, 마감이나, 다른 조건이 있더라도 예외로 허용시킴. ####
