@@ -13,6 +13,7 @@ from user_controller import login_required, writer_only, auth_check, superuser_o
 from exception_handler import activity_exist_check
 from DB.models import UserSchedule
 from date_controller import is_user_recruiting, is_interview_progress
+from post_controller import comment_delete_by_post_delete
 
 # 메인페이지 이동 함수
 def index(request):
@@ -155,7 +156,7 @@ def activity_update(request, board_no):
 @writer_only(superuser=True)
 def activity_delete(request, board_no):
     board = Board.objects.get(pk=board_no)
-
+    comment_delete_by_post_delete(board)
     with transaction.atomic():
         FileController.delete_all_files_of_(board)  # 해당 게시글에 등록된 파일 모두 제거
         board.delete()  # 파일과 폴더 삭제 후, 게시글 DB 에서 삭제

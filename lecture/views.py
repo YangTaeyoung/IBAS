@@ -17,7 +17,7 @@ from utils.url_regex import is_youtube
 from utils.youtube import get_youtube
 from date_controller import is_lect_recruiting
 from exception_handler import lect_exist_check, lect_board_exist_check
-
+from post_controller import comment_delete_by_post_delete
 
 def get_pol_name(method_no):
     pol_name = MethodInfo.objects.get(pk=method_no).method_name
@@ -163,6 +163,7 @@ def lect_update(request, lect_no):
 @writer_only(superuser=True)
 def lect_delete(request, lect_no):
     lect = Lect.objects.get(pk=lect_no)
+
     if request.method == "POST":
         # 회장단에 의해 강의가 삭제된 경우 삭제된 강의에 대해 강의자에게 알림을 날림.
         if lect.lect_chief != get_logined_user(request) and role_check(request, 3, "lte"):
@@ -171,6 +172,7 @@ def lect_delete(request, lect_no):
         FileController.delete_all_files_of_(lect)  # 강의에 저장되어 있는 사진 삭제
         for lect_board in lect.lectures.all():
             FileController.delete_all_files_of_(lect_board)
+            comment_delete_by_post_delete(lect_board)
             lect_board.delete()
         lect.delete()  # 강의 DB에서 삭제
         return redirect("lect_view", type_no=lect_type_no)  # 강의 리스트로 페이지 전환
@@ -408,6 +410,7 @@ def lect_board_delete(request, room_no, lect_board_no):
     lect_board = get_object_or_404(LectBoard, pk=lect_board_no)
 
     FileController.delete_all_files_of_(lect_board)
+    comment_delete_by_post_delete(lect_board)
     lect_board.delete()
 
     return redirect('lect_room_main', room_no=room_no)

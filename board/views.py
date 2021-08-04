@@ -12,7 +12,7 @@ from user_controller import login_required, writer_only, auth_check, get_logined
 from django.contrib import messages
 from date_controller import today_after_day, today_after_year, today
 from exception_handler import board_exist_check, contest_board_exist_check
-
+from post_controller import  comment_delete_by_post_delete
 
 # 상단 기준일을 가지고 오는 함수
 def get_fixdate(request):
@@ -340,6 +340,7 @@ def board_delete(request, board_no):
         if board.board_writer != get_logined_user(request) and role_check(request=request, role_no=3, sign="lte"):
             delete_board_by_superuser_alarm(request, board)
         FileController.delete_all_files_of_(board)  # 해당 게시글에 등록된 파일 모두 제거
+        comment_delete_by_post_delete(board)
         board.delete()  # 파일과 폴더 삭제 후, 게시글 DB 에서 삭제
 
     return redirect('board_view', board_type_no=board_type_no)

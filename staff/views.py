@@ -18,7 +18,7 @@ from alarm.alarm_controller import create_user_auth_update_alarm, create_user_ro
 from file_controller import FileController
 from django.db import transaction
 from django.contrib import messages
-
+from post_controller import comment_delete_by_post_delete
 
 # 모델에 따른 이메일 리스트를 불러오는 함수
 def get_email_list(user_model):
@@ -320,6 +320,7 @@ def member_delete_delete(request, user_delete_no):
     if request.method == "POST":
         user_delete = get_object_or_404(UserDelete, pk=user_delete_no)
         FileController.delete_all_files_of_(user_delete)
+        comment_delete_by_post_delete(user_delete)
         user_delete.delete()
         return redirect(reverse("member_delete_list"))
     else:
