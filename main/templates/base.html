@@ -8,9 +8,9 @@
     <meta name="keywords" content=""/>
     <meta name="author" content=""/>
     <meta name="robots" content=""/>
-    <meta name="description" content="IBAS 동아리 공식 홈페이지 입니다."/>
+    <meta name="description" content="인하대학교 빅데이터 학회 IBAS 공식 홈페이지입니다."/>
     <meta property="og:title" content="IBAS"/>
-    <meta property="og:description" content="IBAS 동아리 공식 홈페이지입니다."/>
+    <meta property="og:description" content="인하대학교 빅데이터 학회 IBAS 공식 홈페이지입니다."/>
     <meta property="og:image" content="{% static 'images/logo_puple.png' %}"/>
     <meta name="format-detection" content="telephone=no">
 
@@ -70,11 +70,13 @@
                     <!-- ====ibas 로고 들어가는 곳==== -->
                     <div class="logo-header mostion">
                         <!--드래그 안했을 때 나오는 로고/href 메이페이지 링크 연결해줘야 함-->
-                        <a href="{% url 'index' %}" class="logo-1"><img src="{% static 'images/logo_white.png' %}"
-                                                                        style="margin-top: 4px; margin-bottom: 4px"></a>
+                        <a href="{% url 'index' %}" class="logo-1">
+                            <img src="{% static 'images/logo_white.png' %}" style="margin-top: 4px; margin-bottom: 4px">
+                        </a>
                         <!--밑으로 드래그 했을 때 나오는 로고/href 메이페이지 링크 연결해줘야 함-->
-                        <a href="{% url 'index' %}" class="logo-2"><img src="{% static 'images/logo_puple.png' %}"
-                                                                        style="margin-top: 4px; margin-bottom: 4px"></a>
+                        <a href="{% url 'index' %}" class="logo-2">
+                            <img src="{% static 'images/logo_puple.png' %}" style="margin-top: 4px; margin-bottom: 4px">
+                        </a>
                     </div>
 
 
@@ -93,6 +95,9 @@
                                     {# 밑에 있는 회계내역, 예산지원 신청은 회원들만 신청을 할 수 있음. #}
                                     {% if is_logined %}
                                         <li><a href="{% url 'bank_list' %}">회계내역</a></li>
+                                        {% if logined_user.user_role.role_no == 4 %}
+                                            <li><a href="{% url 'bank_lecture_summary' %}">강의 회계 요약</a></li>
+                                        {% endif %}
                                         <li><a href="{% url 'bank_support_board' %}">예산지원신청</a></li>
                                     {% endif %}
 
@@ -139,24 +144,12 @@
                             </li>
                             <!--====================취미모임 메뉴====================-->
                             <li class="active" style="padding-top: 7px"><a
-                                    href="{% url 'lect_view' type_no=3 %}">취미모임</a></li>
+                                    href="{% url 'lect_view' type_no=3 %}">취미모임</a>
+                            </li>
 
                             <!--====================로그인 여부에 따라 다르게 보이는 곳====================-->
                             <!--====================로그인했을 때====================-->
                             {% if is_logined %}
-                                <!--회원관리 버튼, 혹시몰라서 삭제안하고 주석처리함-->
-                                {#                                {% if logined_user.user_role.role_no <= 4 %}#}
-                                {#                                    <li class="active" style="padding-top: 7px; padding-right: 5px; padding-left: 5px"#}
-                                {#                                        onclick="document.getElementById('hd-form-member-list').submit()">#}
-                                {##}
-                                {#                                        <a href="#" style="padding: 19px 0px 0px 3px">회원관리</a>#}
-                                {#                                        <i class="fa fa-user-plus"></i>#}
-                                {#                                    </li>#}
-                                {#                                    <form id="hd-form-member-list" action="{% url 'staff_member_list' %}" method="post"#}
-                                {#                                          style="display: none">#}
-                                {#                                        {% csrf_token %}#}
-                                {#                                    </form>#}
-                                {#                                {% endif %}#}
                                 <!--======로그아웃 버튼======-->
                                 <li class="active" onclick="printConfirm('정말 로그아웃 하시겠습니까?', '{% url "logout" %}')"
                                     style="padding-top: 7px; padding-right: 10px">
@@ -231,10 +224,6 @@
                                 <li class="active" style="padding-top: 5px;">
                                     <a href="{% url 'login' %}">Log In</a>
                                 </li>
-                                {#                                <li class="active" style="padding-top: 5px;">#}
-                                {#                                    <a href="#">Sign Up</a>#}
-                                {#                                </li>#}
-
                             {% endif %}
                         </ul>
                     </div>
@@ -314,11 +303,11 @@
         </div>
     </div>
     <div class="footer-bottom text-center mx-auto text-white dis-none-media" style="padding-bottom: 0px">
-            <a class="font-12" href="{% url 'rulebook' type_no=1 %}">제 3자 개인정보 이용·수집제공 약관</a>&nbsp;
+        <a class="font-12" href="{% url 'rulebook' type_no=1 %}">제 3자 개인정보 이용·수집제공 약관</a>&nbsp;
         <a class="font-12 m-l5 m-r5">·</a>&nbsp;
-            <a class="font-12" href="{% url 'rulebook' type_no=2 %}">동아리 회칙</a>&nbsp;
+        <a class="font-12" href="{% url 'rulebook' type_no=2 %}">동아리 회칙</a>&nbsp;
         <a class="font-12 m-l5 m-r5">·</a>&nbsp;
-            <a class="font-12" href="{% url 'rulebook' type_no=3 %}">웹사이트 운영정책</a>
+        <a class="font-12" href="{% url 'rulebook' type_no=3 %}">웹사이트 운영정책</a>
     </div>
     <!-- copyright 부분 시작 -->
     <!-- footer-bottom, min-width_1400에 대한 정의는 bottom_bar.css에 정의되어 있음. (flex 관련)(min-with 관련) -->
@@ -334,6 +323,7 @@
 <!-- Footer END-->
 <button class="scroltop fa fa-chevron-up"></button>
 </div>
+
 <!-- 직접 만든 js-->
 <script src="{% static 'js/login-join.js' %}"></script>
 <!-- JAVASCRIPT FILES ========================================= -->
@@ -364,51 +354,5 @@
 <script src="{% static 'plugins/lightgallery/js/lightgallery-all.min.js' %}"></script><!-- Lightgallery -->
 
 
-<script>
-    jQuery(document).ready(function () {
-
-        $('.jqte-test').jqte();
-
-        // settings of status
-        var jqteStatus = true;
-        $(".status").on('click', function () {
-            jqteStatus = jqteStatus ? false : true;
-            $('.jqte-test').jqte({"status": jqteStatus})
-        });
-
-        $('[data-toggle="tooltip"]').tooltip()
-
-
-        jQuery(document).on('click', '.add-social-btn', function () {
-            var copy_data = '<div class="input-group"><select id="mySelect"><option>Instagram</option><option>LinkedIn</option><option>Facebook</option></select><input type="text" class="form-control" placeholder="http://"><div class="input-group-prepend"><button class="site-button btn-block add-social-btn" type="button"><i class="fa fa-plus"></i> Add</button><button class="site-button btn-block remove-social-btn red" type="button"><i class="fa fa-times"></i> Close</button></div></div>';
-            jQuery('.social-btn-container').append(copy_data);
-            jQuery('select').selectpicker();
-        });
-
-        jQuery(document).on('click', '.remove-social-btn', function () {
-            jQuery(this).parents('.input-group').remove();
-        });
-
-        $('input[type="file"]').imageuploadify();
-
-        $('#input-tags').tagEditor({
-            placeholder: 'Enter tags ...',
-        });
-    });
-
-</script>
-
-
-<script>
-
-    const Editor = toastui.Editor;
-
-    const editor = new Editor({
-        el: document.querySelector('#editor'),
-        height: '600px',
-        initialEditType: 'WYSIWYG',
-        previewStyle: 'vertical'
-    });
-</script>
 </body>
 </html>

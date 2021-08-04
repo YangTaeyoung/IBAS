@@ -445,7 +445,7 @@ def lect_board_update(request, room_no, lect_board_no):
             with transaction.atomic():
                 if board_type == 3:  # 과제글의 경우
                     board.lect_board_ref = get_object_or_404(LectBoard, pk=request.POST.get("lect_board_ref"))
-                lect_board_form.update()
+                lect_board_form.update(instance=board)
                 FileController.remove_files_by_user(request, board.files.all())
                 file_form.save(instance=board)
 

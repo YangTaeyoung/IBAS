@@ -15,7 +15,6 @@
         function phone_check() // 핸드폰 중복 체크를 위한 함수
         {
             const phone_chk = document.getElementById("user_phone");
-
             {% for user in user_list %}
                 if (phone_chk.value === "{{ user.user_phone }}") // 이미 유저 DB에 중복되는 핸드폰 번호가 존재하는 경우
                 {
@@ -1208,5 +1207,5 @@
         <!-- contact area END -->
     </div>
     <!-- Content END-->
-
+    {% include "file_script.html" %}
 {% endblock %}

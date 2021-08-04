@@ -380,7 +380,7 @@ class LectBoard(models.Model):
     lect_board_no = models.AutoField(db_column='LECT_BOARD_NO', primary_key=True)
     lect_board_title = models.CharField(db_column='LECT_BOARD_TITLE', max_length=100)
     lect_board_created = models.DateTimeField(db_column='LECT_BOARD_CREATED', auto_now_add=True)
-    lect_board_cont = SummernoteTextField(db_column='LECT_BOARD_CONT')
+    lect_board_cont = SummernoteTextField(db_column='LECT_BOARD_CONT', max_length=CONT_SIZE)
     lect_board_writer = models.ForeignKey('User', on_delete=models.CASCADE, db_column='LECT_BOARD_WRITER')
     lect_no = models.ForeignKey(Lect, on_delete=models.CASCADE, db_column='LECT_NO', related_name='lectures')
     lect_board_type = models.ForeignKey('LectBoardType', models.DO_NOTHING, db_column='LECT_BOARD_TYPE')

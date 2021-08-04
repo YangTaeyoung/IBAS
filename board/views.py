@@ -237,9 +237,9 @@ def board_search(request, board_type_no):
 #   - context 변수 가져오는 함수 생성
 @auth_check()
 def board_detail(request, board_no):  # 게시글 상세 보기
-    cur_user = get_logined_user(request)
     if is_redirect := board_exist_check(request, board_no):
         return is_redirect
+    cur_user = get_logined_user(request)
     board = Board.objects.get(pk=board_no)
     board_type_no = board.board_type_no.board_type_no
     if board_type_no == 8 and not role_check(cur_user, 4, "lte"):
@@ -268,7 +268,7 @@ def board_register(request):
         board_fixdate = get_fixdate(request)
         if board_form.is_valid() and file_form.is_valid():
             with transaction.atomic():
-                board_param = {"board_writer": User.objects.get(pk=request.session.get('user_stu'))}
+                board_param = {"board_writer": cur_user}
                 if board_fixdate is not None:
                     board_param["board_fixdate"] = board_fixdate
                 board = board_form.save(**board_param)
@@ -351,64 +351,6 @@ def board_delete(request, board_no):
 
     return redirect('board_view', board_type_no=board_type_no)
 
-
-# 댓글 달기 코드
-@auth_check()
-# def board_comment_register(request):
-#     if request.method == "POST":
-#         board = Board.objects.get(pk=request.POST.get('board_no'))  # 게시글 번호 들고오는 것임
-#
-#         comment = Comment.objects.create(
-#             comment_board_no=board,  # 해당 게시글에
-#             comment_writer=User.objects.get(pk=request.session.get('user_stu')),  # 해당 학번이
-#             comment_cont=request.POST.get('comment_cont')  # 사용자가 쓴 내용을 가져옴
-#         )
-#         create_comment_alarm(comment)
-#
-#     else:
-#         board = Board.objects.get(pk=request.GET.get('board_no'))  # 게시글 번호 들고오는 것임
-#         # 객체로 받아서 저장할 예정
-#         comment = Comment.objects.create(
-#             comment_board_no=board,
-#             comment_writer=User.objects.get(pk=request.session.get('user_stu')),
-#             comment_cont=request.GET.get('comment_cont'),
-#             comment_cont_ref=Comment.objects.get(pk=request.GET.get("comment_ref"))
-#         )
-#         create_comment_ref_alarm(comment)
-#
-#         # 데이터 베이스에 저장
-#     return redirect("board_detail", board_no=board.board_no)
-#
-#
-# # 댓글 삭제 코드
-# @writer_only(superuser=True)
-# def board_comment_delete(request):
-#     if request.method == "POST":  # 댓글 삭제를 누를 경우
-#         board_no = request.POST.get('board_no')
-#         comment = Comment.objects.get(pk=request.POST.get('comment_id'))
-#         comment.delete()
-#         return redirect("board_detail", board_no=board_no)  # 게시글 상세페이지로 이동
-#     else:
-#         return redirect("board_view", board_type_no=5)  # 잘못 들어온 접근은 전체 게시판으로 이동
-#
-#
-# # 댓글 수정 코드
-# @writer_only()
-# def board_comment_update(request):
-#     if request.method == "POST":  # 정상적으로 파라미터가 넘어왔을 경우
-#         board_no = request.POST.get('board_no')
-#         comment = Comment.objects.get(pk=request.POST.get('comment_id'))  # 가져온 comment_id를 토대로 수정 내역을 적용
-#         comment.comment_cont = request.POST.get('comment_cont')  # 수정할 내용을 가져옴
-#         comment.save()  # DB 저장
-#         return redirect("board_detail", board_no=board_no)  # 게시글 상세 페이지로 돌아감
-#     else:
-#         return redirect("board_view", board_type_no=5)  # 잘못된 요청의 경우 전체 게시판으로 이동하게 함.
-
-# ---- contest_list ---- #
-# : 공모전 글 목록 페이지
-# 작성자 : 유동현
-# 마지막 수정 일시 : 2021.04.13
-# 수정내용 :
 @auth_check(active=True)
 def contest_view(request):
     # 공모전 게시물 전부를 해당 파일과 함께 Queryset 으로 가져오기
@@ -445,12 +387,10 @@ def contest_register(request):  # 공모전 등록
                 # 학번 오류 처리 필요
                 # 파일 저장시 오류 발생하거나, 로딩 중 저장 여러번 누르는 등 부적절한 저장 피하기 => 트랜젝션
                 contest = contest_form.save(
-                    contest_writer=User.objects.get(pk=request.session.get('user_stu')))
+                    contest_writer=get_logined_user(request))
                 file_form.save(instance=contest)
                 messages.success(request, '게시글을 성공적으로 등록하셨습니다.')
                 return redirect("contest_detail", contest_no=contest.contest_no)
-        messages.error(request,
-                       '꼭 이미지 파일은 한 개 이상 첨부되어야 합니다.')  # 이미지가 없을 시 에러가 뜨도록 하는 것. (작동하지 않음. 랜더 함수가 두번호출 돼서 초기화되는데 원인을 모르겠음.)
     # 목록에서 신규 등록 버튼 눌렀을때
     form_context = {
         'contest_form': ContestForm(),
@@ -474,7 +414,6 @@ def contest_detail(request, contest_no):  # 게시판 상세 페이지로 이동
             messages.warning(request, "해당 공모전을 찾을 수 없습니다. 삭제되었을 수 있습니다.")
             return redirect(reverse("contest_list"))
     else:  # 비정상적인 접근
-        print(request)  # LOGGING :: 로그 파일 생성하는 코드 나중에 수정해야 함.
         return redirect(reverse('contest_list'))
 
 
@@ -504,7 +443,6 @@ def contest_delete(request, contest_no):
 @writer_only()
 def contest_update(request, contest_no):
     contest = get_object_or_404(ContestBoard, pk=contest_no)
-
     # 게시물 상세보기에서 수정하기 버튼 눌렀을 때
     if request.method == "GET":
         context = {
@@ -532,10 +470,13 @@ def contest_update(request, contest_no):
             return redirect(reverse('contest_list'))
 
 
-@auth_check()
+# 공모전 검색
+@auth_check(active=True)
 def contest_search(request):
     if request.method == "GET":
+        # 키워드를 GET 파라미터로 받음
         keyword = request.GET.get("keyword")
+        # 제목, 내용, 글쓴이 이름, 주최기관, 주제에 관련해 키워드가 포함되는지 검색
         contest_list = ContestBoard.objects.filter(
             Q(contest_title__icontains=keyword) |
             Q(contest_cont__icontains=keyword) |
@@ -543,76 +484,16 @@ def contest_search(request):
             Q(contest_asso__icontains=keyword) |
             Q(contest_topic__icontains=keyword)
         )
+        # 페이지 가능하게 해당 공모전 리스트를 변화시킴.
         contest_list = get_page_object(request, model_list=contest_list, num_of_boards_in_one_page=4)
+        # 컨텍스트 등록.
         context = {
             "contest_list": contest_list,
             "board_name": "공모전 검색 결과",
             "board_exp": '"' + keyword + '"로 검색한 결과입니다.'
         }
+        # 컨텍스트 사이드바 옵션 가져옴.
         context.update(get_sidebar_information())
         return render(request, 'contest_board.html', context)
     else:
         return redirect(reverse("contest_list"))
-
-
-# # ---- contest_comment_update ---- #
-# # : 공모전 댓글 수정
-# # 작성자 : 유동현
-# # 마지막 수정 일시 : 2021.04.15
-# # 수정내용 :
-# @writer_only()
-# def contest_comment_update(request):
-#     if request.method == "POST":
-#         contest_no = request.POST.get("contest_no")
-#         comment = Comment.objects.get(pk=request.POST.get("comment_id"))
-#         comment.comment_cont = request.POST.get("comment_cont")
-#         comment.save()
-#
-#         return redirect("contest_detail", contest_no=contest_no)
-#
-#
-# # ---- contest_comment_delete ---- #
-# # : 공모전 댓글 삭제
-# # 작성자 : 유동현
-# # 마지막 수정 일시 : 2021.04.15
-# # 수정내용 :
-# @writer_only(superuser=True)
-# def contest_comment_delete(request):
-#     if request.method == "POST":
-#         contest_no = request.POST.get('contest_no')
-#         comment = Comment.objects.get(pk=request.POST.get('comment_id'))
-#         comment.delete()
-#         return redirect("contest_detail", contest_no=contest_no)
-#     else:
-#         return render(request, "contest_board.html")
-#
-#
-# # ---- contest_comment_register ---- #
-# # : 공모전 댓글 등록
-# # 작성자 : 유동현
-# # 마지막 수정 일시 : 2021.04.15
-# # 수정내용 :
-# @auth_check()
-# def contest_comment_register(request):
-#     contest = None
-#
-#     # 댓글 등록할 때
-#     if request.method == "POST":
-#         contest = ContestBoard.objects.get(pk=request.POST.get("contest_no"))
-#         Comment.objects.create(
-#             comment_writer=User.objects.get(user_stu=request.session.get("user_stu")),
-#             comment_cont=request.POST.get("comment_cont"),
-#             comment_board_no=contest
-#         )
-#
-#     # 대댓글 등록할 때
-#     elif request.method == "GET":
-#         contest = ContestBoard.objects.get(pk=request.GET.get("board_no"))  # sy.js AddReply 함수. <input name='board_no'>
-#         Comment.objects.create(
-#             comment_writer=User.objects.get(user_stu=request.session.get("user_stu")),
-#             comment_cont=request.GET.get("comment_cont"),
-#             comment_board_no=contest,
-#             comment_cont_ref=Comment.objects.get(pk=request.GET.get("comment_ref"))
-#         )
-#
-#     return redirect("contest_detail", contest_no=contest.contest_no)

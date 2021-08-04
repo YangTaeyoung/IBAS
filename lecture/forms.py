@@ -5,7 +5,7 @@ from DB.models import Lect, MethodInfo, LectBoard, LectAssignmentSubmit
 from django.utils.translation import gettext_lazy as _
 from IBAS.forms import FileFormBase
 from utils.url_regex import *
-
+import re
 from django_summernote.widgets import SummernoteWidget
 
 
@@ -115,7 +115,7 @@ class LectBoardFormBase(forms.ModelForm):
             'lect_board_link': forms.TextInput(attrs={"placeholder": _("강의 링크를 적어주세요."),
                                                       "class": "form-control"}),
             'lect_board_type': forms.HiddenInput(),
-            'lect_board_cont': forms.TextInput(attrs={"class": "jqte-test"}),
+            'lect_board_cont': SummernoteWidget(),
             'assignment_deadline': forms.DateInput(attrs={"type": 'date',
                                                           "class": "form-control"}),
         }
@@ -230,7 +230,7 @@ class AssignmentSubmitForm(forms.ModelForm):
                                                        "style": "font-size: 25px; height: 70px;",
                                                        "disabled": "disabled",
                                                        "class": "form-control"}),
-            'assignment_cont': forms.TextInput(attrs={"class": "jqte-test"}),
+            'assignment_cont': SummernoteWidget,
         }
 
         labels = {

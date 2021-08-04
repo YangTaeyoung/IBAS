@@ -2,7 +2,8 @@ from django.db import transaction
 from django.db.models import Sum, Q
 from django.shortcuts import render, get_object_or_404, reverse, redirect
 from DB.models import AuthUser, User, ChiefCarrier, UserRole, Board, BoardFile, \
-    BoardType, Comment, History, Bank, BankFile, BankApplyInfo  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
+    BoardType, Comment, History, Bank, BankFile, BankApplyInfo, Lect, LectBoard, LectAttendance, \
+    LectAssignmentStatus, LectMoneyStandard  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
 from bank.forms import BankForm, FileForm, BankSupportForm
 from date_controller import today
 from file_controller import FileController
@@ -211,3 +212,79 @@ def bank_support_delete(request, bank_no):  # 예산지원 삭제
 
     # 삭제 성공 유무와 상관없이 이동.
     return redirect(reverse('bank_support_board'))  # 예산 지원 신청 게시판으로 이동
+
+
+def get_lect_student(lect_board: LectBoard):
+    attendences = LectAttendance.objects.filter(lect_board_no=lect_board)
+    return len(attendences)
+
+
+def get_lect_money(student_num):
+    lect_money_standard = LectMoneyStandard.objects.get(pk=1)
+    if student_num == 0:
+        money = 0
+    elif student_num < 6:
+        money = lect_money_standard.money_1to5
+    elif student_num < 11:
+        money = lect_money_standard.money_6to10
+    elif student_num < 21:
+        money = lect_money_standard.money_11to20
+    else:
+        money = lect_money_standard.money_21over
+    return money
+
+
+def get_lect_stat(lect_board: LectBoard):
+    student_num = get_lect_student(lect_board)
+    money = get_lect_money(student_num)
+    return f"{student_num}명(₩ {format(money, ',d')})"
+
+
+def get_lect_sum(lect: Lect):
+    sum = 0
+    lect_board_list = lect.lectures.filter(Q(lect_board_type_id=2) & Q(lect_board_ref__isnull=True))
+    for lect_board in lect_board_list:
+        sum += get_lect_money(get_lect_student(lect_board))
+    return sum
+
+
+def get_lect_board_stat_list(lect: Lect):
+    result = list()
+    lect_board_list = lect.lectures.filter(Q(lect_board_type_id=2) & Q(lect_board_ref__isnull=True))[::-1]
+    for i in range(10):
+        result.append("-")
+    for i in range(10):
+        try:
+            result[i] = get_lect_stat(lect_board_list[i])
+        except IndexError:
+            break
+    return result
+
+@cfo_only
+def bank_lecture_summary(request):
+    lect_summary_list = []
+    lect_list = Lect.objects.filter(lect_type_id=1)
+    lect_num_list = []
+    sum_list = []
+    for lect in lect_list:
+        lect_num_list.append(len(lect.lectures.filter(Q(lect_board_type_id=2) & Q(lect_board_ref__isnull=True))))
+    for lect in lect_list:
+        lect_summary_dict = {}
+        lect_summary_dict["lect_title"] = lect.lect_title
+        lect_summary_dict["summary_list"] = get_lect_board_stat_list(lect)
+        lect_sum = get_lect_sum(lect)
+        lect_summary_dict["sum_of_lect"] = lect_sum
+        sum_list.append(lect_sum)
+        lect_summary_list.append(lect_summary_dict)
+    try:
+        max_column = max(lect_num_list)
+    except ValueError:
+        max_column = 0
+    context = {
+        "lect_summary_list": lect_summary_list,
+        "all_sum_of_lect": sum(sum_list),
+        "max_column": max_column + 2,
+        "max_column_list": list(range(max_column))
+    }
+
+    return render(request, "bank_lecture_summary.html", context)

@@ -36,3 +36,4 @@ def is_exist(arg: str, tar: str):
     if arg is None:
         return False
     return arg.find(tar) != -1
+
