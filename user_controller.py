@@ -78,7 +78,6 @@ def is_writer(cur_user, **kwargs):
     lect_no = kwargs.get('lect_no', kwargs.get('room_no'))
     user_delete_no = kwargs.get('user_delete_no')
     assignment_submit_no = kwargs.get('submit_no')  # 수강생 과제 제출
-    comment_id = kwargs.get("comment_id")
 
     # 글쓴이인가요
     if board_no is not None:
@@ -104,10 +103,6 @@ def is_writer(cur_user, **kwargs):
     elif user_delete_no is not None:
         user_delete = UserDelete.objects.get(pk=user_delete_no)
         if cur_user == user_delete.suggest_user:
-            return True
-    elif comment_id is not None:
-        comment = Comment.objects.get(pk=comment_id)
-        if cur_user == comment.comment_writer:
             return True
     else:
         return False
