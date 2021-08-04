@@ -200,7 +200,7 @@ def bank_support_update(request, bank_no):
 def bank_support_delete(request, bank_no):  # 예산지원 삭제
     if request.method == "POST":  # 포스트로 넘어오는 경우
         bank = get_object_or_404(Bank, pk=bank_no)
-        if bank.bank_apply.bank_apply_no <= 3:
+        if bank.bank_apply.bank_apply_no >= 3:
             return not_allowed(request=request, msg="예산 지원 신청이 이미 회계에 반영되었습니다.\n\n삭제를 원하시면 총무에게 문의하세요.", error_404=False,
                                    next_url="my_info")
         FileController.delete_all_files_of_(bank)  # 로컬 파일 삭제
