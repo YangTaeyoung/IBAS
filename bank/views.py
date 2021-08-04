@@ -248,12 +248,12 @@ def get_lect_sum(lect: Lect):
     return sum
 
 
-def get_lect_board_stat_list(lect: Lect):
+def get_lect_board_stat_list(lect: Lect, col_num):
     result = list()
     lect_board_list = lect.lectures.filter(Q(lect_board_type_id=2) & Q(lect_board_ref__isnull=True))[::-1]
-    for i in range(10):
+    for i in range(col_num):
         result.append("-")
-    for i in range(10):
+    for i in range(col_num):
         try:
             result[i] = get_lect_stat(lect_board_list[i])
         except IndexError:
@@ -268,18 +268,19 @@ def bank_lecture_summary(request):
     sum_list = []
     for lect in lect_list:
         lect_num_list.append(len(lect.lectures.filter(Q(lect_board_type_id=2) & Q(lect_board_ref__isnull=True))))
-    for lect in lect_list:
-        lect_summary_dict = {}
-        lect_summary_dict["lect_title"] = lect.lect_title
-        lect_summary_dict["summary_list"] = get_lect_board_stat_list(lect)
-        lect_sum = get_lect_sum(lect)
-        lect_summary_dict["sum_of_lect"] = lect_sum
-        sum_list.append(lect_sum)
-        lect_summary_list.append(lect_summary_dict)
     try:
         max_column = max(lect_num_list)
     except ValueError:
         max_column = 0
+    for lect in lect_list:
+        lect_summary_dict = {}
+        lect_summary_dict["lect_title"] = lect.lect_title
+        lect_summary_dict["summary_list"] = get_lect_board_stat_list(lect, max_column)
+        lect_sum = get_lect_sum(lect)
+        lect_summary_dict["sum_of_lect"] = lect_sum
+        sum_list.append(lect_sum)
+        lect_summary_list.append(lect_summary_dict)
+
     context = {
         "lect_summary_list": lect_summary_list,
         "all_sum_of_lect": sum(sum_list),
