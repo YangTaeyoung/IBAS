@@ -729,22 +729,31 @@ def lect_room_manage_attendance(request, room_no):
             # 장고 ORM 으로 쿼리 수행 불가하여, raw query 작성.
             # connection : default db에 연결되어 있는 built in 객체
             # (on 부분) enrollment.STUDENT 가 없으면 mariadb 오류!
-            query = f"""SELECT u.USER_NAME, u.USER_STU, if(isnull(attend.LECT_ATTEND_DATE),false,true) as attendance
+            query = f"""
+                    SELECT 
+                        u.USER_NAME, 
+                        u.USER_STU, 
+                        MAJOR_INFO.MAJOR_NAME, 
+                        if(isnull(attend.LECT_ATTEND_DATE),false,true) as attendance
                     FROM LECT_ENROLLMENT AS enrollment
 
-                    LEFT OUTER JOIN LECT_ATTENDANCE AS attend
-                    on (enrollment.STUDENT = attend.STUDENT AND attend.LECT_BOARD_NO = {lect_board_no})
+                    LEFT OUTER JOIN 
+                        LECT_ATTENDANCE AS attend 
+                        on (enrollment.STUDENT = attend.STUDENT AND attend.LECT_BOARD_NO = {lect_board_no})
 
-                    INNER JOIN USER as u
-                    ON (enrollment.STUDENT = u.USER_STU)
+                    INNER JOIN 
+                        USER as u ON (enrollment.STUDENT = u.USER_STU),
+                        MAJOR_INFO
 
-                    WHERE enrollment.LECT_NO = {lect_room.lect_no}
+                    WHERE 
+                        enrollment.LECT_NO = {lect_room.lect_no} 
+                        and u.USER_MAJOR = MAJOR_INFO.MAJOR_NO
 
                     ORDER BY u.USER_NAME ;"""
             cursor = connection.cursor()
             cursor.execute(query)  # 쿼리 수행
-            students_list = [{'name': name, 'stu': stu, 'attendance': '출석' if attendance == 1 else '결석'}
-                             for name, stu, attendance in cursor.fetchall()]  # 쿼리 반환 값을 템플릿에서 사용할 수 있게, dict 로 변환
+            students_list = [{'name': name, 'stu': stu, 'major': major, 'attendance': '출석' if attendance == 1 else '결석'}
+                             for name, stu, major, attendance in cursor.fetchall()]  # 쿼리 반환 값을 템플릿에서 사용할 수 있게, dict 로 변환
 
         context = {
             'lect': lect_room,
