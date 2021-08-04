@@ -139,8 +139,6 @@ export default {
         alert('댓글을 입력하세요!')
       }
       else if(confirm('댓글을 수정하시겠습니까?')) {
-        var this_vue = this;
-
         axios({
           method: 'put',
           url: "comment/update/" + comment_id,
@@ -148,7 +146,7 @@ export default {
         })
           .then(response => {
             alert('댓글이 수정되었습니다!')
-            this_vue.comment_set_list[index] = response.data.comment;
+            this.comment_set_list[index] = response.data.comment;
           })
           .catch(response => {
             console.log("Failed to update the comment", response);
@@ -160,10 +158,9 @@ export default {
     // 대댓글 삭제하기
     deleteRecomment: function (comment_id, index) {
       if (confirm('댓글을 삭제하시겠습니까?')) {
-        var vm = this;
         axios.delete("comment/delete/" + comment_id)
             .then(() => {
-              vm.comment_set_list.splice(index, 1)
+              this.comment_set_list.splice(index, 1)
               alert('댓글이 삭제되었습니다!')
             })
             .catch(response => {

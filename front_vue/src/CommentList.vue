@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import axios from "axios";
 import Comment from "./components/Comment";
 import CommentInput from "./components/CommentInput";
@@ -34,7 +35,8 @@ import {alert_msg_for_client} from "./assets/response.js"
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
-axios.defaults.baseURL = 'https://inhabas.com/'
+axios.defaults.baseURL = 'http://127.0.0.1:8000/'
+// axios.defaults.baseURL = 'https://inhabas.com/'
 export default {
   data: () => {
     return {
@@ -71,11 +73,9 @@ export default {
 
   methods: {
     fetch_all_comment: function () {
-      var this_vue = this
-
       axios({
         method: 'get',
-        url:  "comment/" + this_vue.board_type + "/view/" + this_vue.board_no
+        url:  "comment/" + this.board_type + "/view/" + this.board_no
       })
           .then(response => {
             this.comment_list = response.data.comment_list;
@@ -92,26 +92,25 @@ export default {
         alert('댓글을 입력하세요!')
       }
       else {
-        var this_vue = this;
-
         var postData = {comment_cont: comment_cont, comment_cont_ref: comment_cont_ref}
         axios({
           method: 'post',
-          url: "comment/" + this_vue.board_type + "/register/" + this_vue.board_no,
+          url: "comment/" + this.board_type + "/register/" + this.board_no,
           data: postData
         })
             .then(response => {
               // 통신 성공하면, 해당 댓글 정보 받아와서, 새로 붙이기.
               if (comment_cont_ref === undefined) { // 댓글
-                this_vue.comment_list.push(response.data.comment);
+                this.comment_list.push(response.data.comment); // 댓글 붙이기
+                this.comment_set_list.push([]); // 해당 댓글의 대댓글 배열 생성
               } else { // 대댓글
-                this_vue.comment_set_list[index].push(response.data.comment);
+                this.comment_set_list[index].push(response.data.comment); // 대댓글 붙이기
               }
             })
             .catch(response => {
               console.log("Failed to add the comment", response);
               alert_msg_for_client(response)
-              alert("덧글 등록에 실패했습니다. 웹팀 팀장 유동현에게 문의하세요!!")
+              alert("덧글 등록에 실패했습니다. 새로고침한 후 지속되면 웹팀에 문의하세요!!")
             })
       }
     },
@@ -120,13 +119,13 @@ export default {
       if(confirm('댓글을 삭제하시겠습니까?')) {
         axios.delete("comment/delete/" + comment_id)
             .then(() => {
-              this.comment_list.splice(index, 1);  // 해당 댓글 삭제
-              this.comment_set_list[index] = null;  // 대댓글 컴포넌트를 생성하게 만드는 대댓글 데이터 삭제
+              Vue.delete(this.comment_list, index);  // 해당 댓글 삭제
+              Vue.delete(this.comment_set_list, index);  // 대댓글 컴포넌트를 생성하게 만드는 대댓글 데이터 삭제
             })
             .catch(response => {
               console.log("Failed to remove the comment", response);
               alert_msg_for_client(response)
-              alert("덧글 삭에 실패했습니다. 웹팀 팀장 유동현에게 문의하세요!!")
+              alert("덧글 삭제에 실패했습니다. 새로고침한 후 지속되면 웹팀에 문의하세요!!")
             });
       }
     },
@@ -136,19 +135,18 @@ export default {
         alert('댓글을 입력하세요!')
       }
       else {
-        var vm = this;
         axios({
           method: 'put',
           url: "comment/update/" + comment_id,
           data: {comment_cont: comment_cont}
         })
             .then(response => {
-              vm.comment_list[index] = response.data.comment;
+              this.comment_list[index] = response.data.comment;
             })
             .catch(response => {
               console.log("Failed to update the comment", response);
               alert_msg_for_client(response)
-              alert("덧글 수정에 실패했습니다. 웹팀 팀장 유동현에게 문의하세요!!")
+              alert("덧글 수정에 실패했습니다. 새로고침한 후 지속되면 웹팀에 문의하세요!!")
             });
       }
     }
