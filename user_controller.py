@@ -446,8 +446,10 @@ def delete_all_infomation(user: User):
         my_board.delete()
 
     # 본인 덧글 삭제
-    my_comment_list = Comment.objects.filter(
-        Q(comment_writer=user) | Q(comment_cont_ref__comment_writer=user))
+    my_comment_list = Comment.objects.filter(Q(comment_cont_ref__comment_writer=user))
+    for my_comment in my_comment_list:
+        my_comment.delete()
+    my_comment_list = Comment.objects.filter(comment_writer=user)
     for my_comment in my_comment_list:
         my_comment.delete()
 
