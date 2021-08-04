@@ -752,15 +752,19 @@ def lect_room_manage_attendance(request, room_no):
                     ORDER BY u.USER_NAME ;"""
             cursor = connection.cursor()
             cursor.execute(query)  # 쿼리 수행
-            students_list = [{'name': name, 'stu': stu, 'major': major, 'attendance': '출석' if attendance == 1 else '결석'}
-                             for name, stu, major, attendance in cursor.fetchall()]  # 쿼리 반환 값을 템플릿에서 사용할 수 있게, dict 로 변환
+            students_list = [{
+                'index': index + 1,
+                'name': name,
+                'stu': stu,
+                'major': major,
+                'attendance': '출석' if attendance == 1 else '결석'
+            } for index, (name, stu, major, attendance) in enumerate(cursor.fetchall())]
 
         context = {
             'lect': lect_room,
             'lect_board_list': lect_board_list,
-            'students_list': students_list,  # 이름/학번/출석결석
             'cur_lect_board': None if lect_board_no is None else LectBoard.objects.get(pk=lect_board_no),  # 현재 게시글
-            'item_list': get_page_object(request, students_list, 15),  # 15 명씩 보이게 출력
+            'students_list': get_page_object(request, students_list, 15),  # 15 명씩 보이게 출력
         }
         return render(request, 'lecture_room_manage_attendance.html', context)
 
