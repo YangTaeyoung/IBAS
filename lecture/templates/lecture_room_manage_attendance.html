@@ -11,7 +11,25 @@
 
 
     $(function () {
-        $("#selectbox").val({{ cur_lect_board.lect_board_no }}).prop('selected',true);
+        let select_box = $("#selectbox")
+        select_box.val({{ cur_lect_board.lect_board_no }}).prop('selected',true);
+
+        // 셀렉트박스 옵션 길이 조절
+        let options = select_box.children('option')
+        options.each(function (index, option) {
+            var text = $(option).text().trim()
+            if (text.length > 15) {
+                console.log(text + '...')
+                $(option).text(text + '...')
+            } else {
+                var arr = []
+                arr.length = 15 - text.length
+                arr.fill('\xa0') // &nbsp;
+                $(option).text(text + arr.join(''))
+                console.log('\''+text + arr.join('')+'\'')
+            }
+
+        })
     });
     </script>
 
@@ -70,7 +88,7 @@
 
                                                                         {% for lecture in lect_board_list %}
                                                                             <option value="{{ lecture.lect_board_no }}">
-                                                                               [{{ forloop.revcounter }}회차] {{ lecture.lect_board_title|truncate:9}}
+                                                                               [{{ forloop.revcounter }}회차] {{ lecture.lect_board_title }}
                                                                             </option>
                                                                         {% endfor %}
 
