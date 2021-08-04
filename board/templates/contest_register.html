@@ -2,6 +2,7 @@
 {% load static %}
 {% block content %}
     <script src="{% static 'js/posting_register.js' %}"></script>
+    <script src="{% static 'js/validation_check_for_fileupload.js' %}"></script>
     <link rel="stylesheet" href="{% static 'css/posting_register.css' %}"/>
     <body>
     <div class="page-wraper">
@@ -202,7 +203,7 @@
                             <!--등록하기 버튼, 누르면 게시글 상세보기로-->
                             <!--최초 글작성 시 나오는 버튼-->
                                 <div style="display: grid; justify-items: center">
-                                    <button class="site-button btn-block button-md" type="submit" style="width: 30%">
+                                    <button class="site-button btn-block button-md" type="submit" onclick="is_valid_for_fileupload()" style="width: 30%">
                                         {% if contest_no is None %}
                                             등록하기
                                         {% else %}

@@ -514,7 +514,7 @@ def contest_update(request, contest_no):
         contest_form = ContestForm(request.POST)
         file_form = FileForm(request.POST, request.FILES)
 
-        if contest_form.is_valid():
+        if contest_form.is_valid() and file_form.is_valid():
             with transaction.atomic():
                 contest_form.update(instance=contest)
                 contest_files = ContestFile.objects.filter(file_fk=contest)  # 게시글 파일을 불러옴

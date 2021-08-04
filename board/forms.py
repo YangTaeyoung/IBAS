@@ -128,6 +128,7 @@ class FileForm(FileFormBase):
         calling_function = sys._getframe(5).f_code.co_name
 
         if calling_function in ['contest_register', 'contest_update', 'activity_register', 'activity_update']:
+            print("이미지 있니?", self._check_contest_thumbnail())
             # 이미지 파일이 없는 경우
             if not self._check_contest_thumbnail():
                 self.cleaned_data['upload_file'] = None  # cleaned_data 를 비운다
@@ -137,21 +138,16 @@ class FileForm(FileFormBase):
                 )
 
     # protected
-    # contest 경우에는 이미지 파일이 항상 첫번째로 오게 해야함.
-    # contest_list 에서 표지 보여줄 때 항상 첫번째로 저장되어 있는 파일을 가져오기 때문
-    # 이미지 파일이 없는 경우, 보여줄 표지가 없기 때문에 오류!
     def _check_contest_thumbnail(self):
         for key, value in self.data.items():
             # request 를 통해 넘겨받은 데이터 중,
             # exist_file_path 라는 문자열을 포함한 id 값이 있으면,
-            # 이미지 파일은 항상 첫번째에 있기 때문에 (contestFile 모델 ordering 정의),
-            # 첫번째 파일이 이미지가 아니면, 이 공모전 게시글에는 이미지가 없다고 판단.
+            # 해당 value 는 파일 이름이므로, 확장자가 이미지 파일인지 검사한다.
+            # 이미지 파일이 하나라도 있으면 괜춘!
             if 'exist_file_path' in key:
                 # 이미지가 있으면 괜춘!
-                if FileController.is_image(value):  #
+                if FileController.is_image(value):
                     return True
-                else:
-                    break
 
         # 파일 폼 객체는 files 라는 Query dict 객체 존재  {'upload_file' : InMemoryUploadedFile 리스트}
         # InMemoryUploadedFile 객체 (장고에 의해 파일명으로 임시 저장되어 있음)
