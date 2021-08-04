@@ -241,7 +241,6 @@ def board_detail(request, board_no):  # 게시글 상세 보기
         return not_allowed(request, "비 정상적인 접근입니다.")
     elif board_type_no == 9 and (board.board_writer != get_logined_user(request) and not role_check(request, 4, "lte")):
         return not_allowed(request, "비 정상적인 접근입니다.")
-    print('board_detail', request.session.get("user_stu"))
     context = get_context_of_board_(board_no)
     return render(request, 'board_detail.html', context)
 

@@ -52,9 +52,12 @@ def is_logined(request):
 
 
 # 관리자인지의 여부를 확인하는 함수
-def is_superuser(request):
+def is_superuser(request, **kwargs):
     current_user = get_logined_user(request)
-    return current_user.user_role.role_no <= 3
+    if kwargs.get('bank_no'):
+        return role_check(request, 4, "equal")
+    else:
+        return role_check(request, 3, "lte")
 
 
 # 글쓴이인지의 여부를 확인하는 함수
@@ -188,7 +191,7 @@ def writer_only(superuser=False):
         def wrapper(request, *args, **kwargs):
             # 권한이 일치하지 않으면 메인페이지로 이동
             if superuser:
-                if is_writer(request, **kwargs) or is_superuser(request):
+                if is_writer(request, **kwargs) or is_superuser(request, **kwargs):
                     return func(request, *args, **kwargs)
             else:
                 if is_writer(request, **kwargs):
