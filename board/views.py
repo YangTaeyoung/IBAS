@@ -27,9 +27,11 @@ def get_fixdate(request):
 
 # 등록 버튼을 표시할 지, 말지 고르는 함수
 def is_register_btn_show(request, board_type_no):
-    auth_no = get_logined_user(request).user_auth.auth_no
+    cur_user = get_logined_user(request)
+    auth_no = cur_user.user_auth.auth_no
+
     if board_type_no == 1:  # 공지사항
-        if role_check(request, 4, "lte"):  # 회장단인가
+        if role_check(cur_user, 4, "lte"):  # 회장단인가
             return True
     if board_type_no < 5:  # 자유게시판, 질문게시판, 활동게시판
         if auth_no != 3:  # 미승인 회원이 아닌가
@@ -38,7 +40,7 @@ def is_register_btn_show(request, board_type_no):
         if auth_no == 1:  # 활동 회원인가?
             return True
     elif board_type_no == 8:  # 회장단 게시판
-        if role_check(request, 4, "lte"):  # 회장단인가
+        if role_check(cur_user, 4, "lte"):  # 회장단인가
             return True
     elif board_type_no == 9:  # 건의 게시판
         if auth_no != 3:  # 미승인 회원이 아닌가
@@ -138,6 +140,7 @@ def get_context_of_contest_(contest_no):
 # 마지막 수정 일시 :
 @login_required
 def board_view(request, board_type_no):  # 게시판 페이지로 이동
+    cur_user = get_logined_user(request)
     board_fixed_list = Board.objects.filter(
         Q(board_fixdate__gt=today()) & Q(board_type_no__board_type_no=board_type_no)).order_by("-board_fixdate")
     if board_type_no == 5:
@@ -146,19 +149,19 @@ def board_view(request, board_type_no):  # 게시판 페이지로 이동
         board_list = Board.objects.filter(board_type_no__board_type_no__lte=4).select_related("board_writer").order_by(
             "board_type_no").order_by("-board_created")
     elif board_type_no == 8:
-        if role_check(request, 4, "lte"):  # 회장단인 경우
+        if role_check(cur_user, 4, "lte"):  # 회장단인 경우
             board_list = Board.objects.filter(board_type_no__board_type_no=board_type_no).select_related(
                 "board_writer").order_by("-board_created")
         else:
             return not_allowed(request, msg="비정상적인 접근입니다.")
     elif board_type_no == 9:  # 건의 게시판의 경우(1대1로 진행해야 함)
-        if role_check(request, 4, "lte"):  # 회장단인 경우
+        if role_check(cur_user, 4, "lte"):  # 회장단인 경우
             board_list = Board.objects.filter(board_type_no__board_type_no=board_type_no).select_related(
                 "board_writer").order_by("-board_created")
         else:  # 회장단이 아닌 경우
             # 자신이 쓴 게시글만 확인
             board_list = Board.objects.filter(Q(board_type_no__board_type_no=board_type_no) & Q(
-                board_writer=get_logined_user(request))).select_related("board_writer").order_by("-board_created")
+                board_writer=cur_user)).select_related("board_writer").order_by("-board_created")
     else:
         board_list = Board.objects.filter(board_type_no__board_type_no=board_type_no).select_related(
             "board_writer").order_by("-board_created")
@@ -183,6 +186,7 @@ def board_view(request, board_type_no):  # 게시판 페이지로 이동
 # 마지막 수정 일시 :
 def board_search(request, board_type_no):
     if request.method == "GET":
+        cur_user = get_logined_user(request)
         keyword = request.GET.get("keyword")
         if 1 <= board_type_no <= 5:
             board_list = Board.objects.filter(
@@ -205,9 +209,9 @@ def board_search(request, board_type_no):
                 Q(board_writer__user_name__icontains=keyword)
             ).filter(board_type_no__board_type_no=board_type_no).select_related("board_writer").order_by(
                 "-board_created")
-            if board_type_no == 8 and not role_check(request, role_no=4, sign="lte"):
+            if board_type_no == 8 and not role_check(cur_user, role_no=4, sign="lte"):
                 return not_allowed(request)
-            if board_type_no == 9 and role_check(request, 6, "equal"):
+            if board_type_no == 9 and role_check(cur_user, 6, "equal"):
                 board_list = board_list.filter(board_writer=get_logined_user(request))
 
         item = get_page_object(request, board_list)
@@ -233,13 +237,14 @@ def board_search(request, board_type_no):
 #   - context 변수 가져오는 함수 생성
 @auth_check()
 def board_detail(request, board_no):  # 게시글 상세 보기
+    cur_user = get_logined_user(request)
     if is_redirect := board_exist_check(request, board_no):
         return is_redirect
     board = Board.objects.get(pk=board_no)
     board_type_no = board.board_type_no.board_type_no
-    if board_type_no == 8 and not role_check(request, 4, "lte"):
+    if board_type_no == 8 and not role_check(cur_user, 4, "lte"):
         return not_allowed(request, "비 정상적인 접근입니다.")
-    elif board_type_no == 9 and (board.board_writer != get_logined_user(request) and not role_check(request, 4, "lte")):
+    elif board_type_no == 9 and (board.board_writer != cur_user and not role_check(cur_user, 4, "lte")):
         return not_allowed(request, "비 정상적인 접근입니다.")
     context = get_context_of_board_(board_no)
     return render(request, 'board_detail.html', context)
@@ -254,6 +259,7 @@ def board_detail(request, board_no):  # 게시글 상세 보기
 #           #2. 상단 고정 변수 추가
 @auth_check()
 def board_register(request):
+    cur_user = get_logined_user(request)
     # 글쓰기 들어와서 등록 버튼을 누르면 실행이 되는 부분
     if request.method == "POST":
         board_form = BoardForm(request.POST)
@@ -274,9 +280,9 @@ def board_register(request):
 
     else:  # 게시글 등록 버튼을 눌렀을 때
         board_type_no = BoardType.objects.get(pk=request.GET.get('board_type_no'))
-        if board_type_no.board_type_no == 1 and not role_check(request, 4, "lte"):  # 공지사항 게시판에서 글쓰기 버튼을 눌렀을 경우 회장단이 아니면
+        if board_type_no.board_type_no == 1 and not role_check(cur_user, 4, "lte"):  # 공지사항 게시판에서 글쓰기 버튼을 눌렀을 경우 회장단이 아니면
             return not_allowed(request, "비 정상적인 접근입니다.")
-        if board_type_no.board_type_no == 8 and not role_check(request, 4, "lte"):  # 회장단 게시판에서 글쓰기 버튼을 눌렀을 경우 회장단이 아니면
+        if board_type_no.board_type_no == 8 and not role_check(cur_user, 4, "lte"):  # 회장단 게시판에서 글쓰기 버튼을 눌렀을 경우 회장단이 아니면
             return not_allowed(request, "비 정상적인 접근입니다.")
         context = {
             "board_form": BoardForm(initial={'board_type_no': board_type_no.board_type_no}),
@@ -333,10 +339,11 @@ def board_update(request, board_no):
 # 수정내용 : 모델폼 사용 => urls.py 변경에 따른 코드 수정
 @writer_only(superuser=True)
 def board_delete(request, board_no):
+    cur_user = get_logined_user(request)
     board = Board.objects.get(pk=board_no)
     board_type_no = board.board_type_no.board_type_no
     with transaction.atomic():
-        if board.board_writer != get_logined_user(request) and role_check(request=request, role_no=3, sign="lte"):
+        if board.board_writer != cur_user and role_check(cur_user, role_no=3, sign="lte"):
             delete_board_by_superuser_alarm(request, board)
         FileController.delete_all_files_of_(board)  # 해당 게시글에 등록된 파일 모두 제거
         comment_delete_by_post_delete(board)

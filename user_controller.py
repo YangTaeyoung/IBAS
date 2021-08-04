@@ -52,12 +52,11 @@ def is_logined(request):
 
 
 # 관리자인지의 여부를 확인하는 함수
-def is_superuser(cur_user, **kwargs):
-    print(kwargs.get('bank_no'))
-    if kwargs.get('bank_no'):
-        return role_check(cur_user, 4, "equal")
+def is_superuser(cur_user, is_bank=False):
+    if is_bank:
+        return cur_user.user_role.role_no == 4
     else:
-        return role_check(cur_user, 3, "lte")
+        return cur_user.user_role.role_no <= 3
 
 
 # 강의자 여부 확인 함수
@@ -202,6 +201,10 @@ def writer_only(superuser=False, is_lect_assignment=False):
             cur_user = get_logined_user(request)
 
             if superuser:
+                # 예산 지원 신청의 경우 총무가 삭제해야 함. 관리자 권한을 일반 운영팀이 아닌 총무로 할당.
+                if kwargs.get("bank_no") and is_superuser(cur_user, is_bank=True):
+                    return func(request, *args, **kwargs)
+                # 예산 지원 신청이 아닌 경우.
                 if is_writer(cur_user, **kwargs) or is_superuser(cur_user):
                     return func(request, *args, **kwargs)
 
