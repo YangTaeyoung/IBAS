@@ -1,6 +1,6 @@
 from DB.models import Alarm, User, PolicyTerms
 from django.db.models import Q
-from user_controller import get_logined_user, is_logined
+from user_controller import get_logined_user, is_logined, role_check
 from date_controller import today, today_before_day, today_after_day
 
 
@@ -51,7 +51,7 @@ def is_active(request):
 # 로그인한 유저가 관리자인지 확인하는 함수
 def superuser_check(request):
     if is_logined(request):
-        return {"is_superuser": get_logined_user(request).user_role.role_no <= 3}
+        return {"is_superuser": role_check(get_logined_user(request), 3, "equal")}
     else:
         return {"is_superuser": False}
 
