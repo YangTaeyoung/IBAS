@@ -290,6 +290,7 @@ def bank_lecture_summary(request):
 
     return render(request, "bank_lecture_summary.html", context)
 
+@cfo_only
 def bank_lecture_summary_update(request):
     if request.method == "POST":
         lect = Lect.objects.get(pk=request.POST.get("lect_no"))
