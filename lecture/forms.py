@@ -20,11 +20,12 @@ class LectForm(forms.ModelForm):
             "lect_intro": forms.Textarea(attrs={"placeholder": "간략하게 강의를 소개해주세요"}),
             "lect_method": forms.Select(),
             "lect_place_or_link": forms.TextInput(attrs={"placeholder": "강의 방식을 먼저 선택하세요.", "disabled": "disabled"}),
-            "lect_type": forms.HiddenInput(),
             "lect_deadline": forms.DateTimeInput(),
-            "lect_state": forms.HiddenInput(),
             "lect_limit_num": forms.NumberInput(attrs={"placeholder": "강의 최대 수강인원수를 작성하세요. 미 작성시 무한정 수강 가능하도록 설정됩니다."}),
             "lect_reject_reason": forms.TextInput(attrs={"placeholder": "거절 사유를 입력해주세요."}),
+            "lect_type": forms.HiddenInput(),
+            "lect_state": forms.HiddenInput(),
+            "lect_paid": forms.HiddenInput()
         }
 
     def save(self, **kwargs):

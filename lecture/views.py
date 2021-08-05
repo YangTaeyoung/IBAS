@@ -60,7 +60,7 @@ def get_lect_type(request, type_no):
 def lect_register(request):  # 강의/스터디/취미모임 등록 페이지로 이동하는 것
     if request.method == "GET":
         lect_type = LectType.objects.get(pk=request.GET.get("lect_type"))
-        init_dict = {"lect_type": lect_type.type_no}
+        init_dict = {"lect_type": lect_type.type_no, "lect_paid": 0}
         if lect_type.type_no == 1:  # 강의일 때
             if not is_lect_recruiting():
                 messages.warning(request, message="강의 등록 기간이 아닙니다.")

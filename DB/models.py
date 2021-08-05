@@ -296,6 +296,7 @@ class Lect(models.Model):
     lect_deadline = models.DateTimeField(db_column='LECT_DEADLINE')
     lect_reject_reason = models.CharField(db_column='LECT_REJECT_REASON', null=True, blank=True, max_length=200)
     lect_day = models.CharField(db_column="LECT_DAY", null=True, max_length=20)
+    lect_paid = models.IntegerField(db_column="LECT_PAID", null=True, blank=True, default=0)
 
     class Meta:
         managed = False

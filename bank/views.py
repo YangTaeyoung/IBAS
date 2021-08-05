@@ -263,7 +263,7 @@ def get_lect_board_stat_list(lect: Lect, col_num):
 @cfo_only
 def bank_lecture_summary(request):
     lect_summary_list = []
-    lect_list = Lect.objects.filter(lect_type_id=1)
+    lect_list = Lect.objects.filter(lect_type_id=1).order_by("lect_paid").order_by("-lect_created")
     lect_num_list = []
     sum_list = []
     for lect in lect_list:
@@ -274,7 +274,7 @@ def bank_lecture_summary(request):
         max_column = 0
     for lect in lect_list:
         lect_summary_dict = {}
-        lect_summary_dict["lect_title"] = lect.lect_title
+        lect_summary_dict["lect"] = lect
         lect_summary_dict["summary_list"] = get_lect_board_stat_list(lect, max_column)
         lect_sum = get_lect_sum(lect)
         lect_summary_dict["sum_of_lect"] = lect_sum
@@ -284,8 +284,15 @@ def bank_lecture_summary(request):
     context = {
         "lect_summary_list": lect_summary_list,
         "all_sum_of_lect": sum(sum_list),
-        "max_column": max_column + 2,
+        "max_column": max_column + 3,
         "max_column_list": list(range(max_column))
     }
 
     return render(request, "bank_lecture_summary.html", context)
+
+def bank_lecture_summary_update(request):
+    if request.method == "POST":
+        lect = Lect.objects.get(pk=request.POST.get("lect_no"))
+        lect.lect_paid = 1
+        lect.save()
+    return redirect("bank_lecture_summary")

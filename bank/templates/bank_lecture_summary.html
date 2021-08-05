@@ -5,6 +5,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/ibas_contents.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/posting_detail.css' %}">
     <script src="{% static 'js/ibas_centents.js' %}"></script>
+    <script src="{% static 'js/form.js' %}"></script>
     <!----------상단 제목부분----------->
     <!--제목을 감싸는 배경-->
     <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"
@@ -48,8 +49,9 @@
                             <tr id="bank-tr-head" style="text-align: center">
                                 <th scope="col" style="width: 150px;">강의명</th>
                                 {% for max_col in max_column_list %}
-                                <th scope="col" style="width: 150px;">{{ max_col }}주차</th>
+                                    <th scope="col" style="width: 150px;">{{ max_col }}주차</th>
                                 {% endfor %}
+                                <th scope="col" style="width: 150px;">지급여부</th>
                                 <th scope="col" style="width: 200px;">지급 예상액</th>
                             </tr>
                             </thead>
@@ -61,17 +63,39 @@
                                 </tr>
                             {% endif %}
                             {% for lect_summary in lect_summary_list %}
-                                <tr>
-                                    <th>{{ lect_summary.lect_title }}</th>
+
+                                <tr {% if lect_summary.lect.lect_paid == 1 %}style="background-color: #c5c5c5"{% endif %}>
+                                    <th>
+                                        <a href="{% url 'lect_detail' lect_no=lect_summary.lect.lect_no %}">{{ lect_summary.lect.lect_title }}</a>
+                                    </th>
                                     {% for summary in lect_summary.summary_list %}
                                         <td>{{ summary }}</td>
                                     {% endfor %}
-                                    <td>{{ lect_summary.sum_of_lect }}</td>
+                                    <td class="text-center">
+
+                                        {% if lect_summary.lect.lect_paid == 0 %}
+                                            <button class="site-button" type="button"
+                                                    onclick="goSubmit('form-lect-paid-update',true,'지급 하신게 확실합니까?\n\n해당 강의의 강의비 지급여부는 회계에 영향을 끼치지 않으며\n반영 이후 다시 변경할 수 없습니다.')">
+                                                강의비 지급확인
+                                            </button>
+                                            <form id="form-lect-paid-update"
+                                                  action="{% url "bank_lecture_summary_update" %}" method="post">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="lect_no"
+                                                       value="{{ lect_summary.lect.lect_no }}"/>
+                                            </form>
+                                        {% else %}
+                                            <span class="font-weight-bold" style="color:#828282">지급 완료</span>
+                                        {% endif %}
+
+                                    </td>
+                                    <td class="text-right">₩ {{ lect_summary.sum_of_lect|intcomma }}</td>
                                 </tr>
                             {% endfor %}
                             <tr>
                                 <td class="text-right" colspan="{{ max_column }}">
-                                    총액: <span class="font-weight-bold" style="color:#500606">₩ {{ all_sum_of_lect|intcomma }}</span>
+                                    총액: <span class="font-weight-bold"
+                                              style="color:#500606">₩ {{ all_sum_of_lect|intcomma }}</span>
                                 </td>
                             </tr>
                             </tbody>
