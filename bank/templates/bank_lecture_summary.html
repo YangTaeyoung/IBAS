@@ -92,12 +92,14 @@
                                     <td class="text-right">₩ {{ lect_summary.sum_of_lect|intcomma }}</td>
                                 </tr>
                             {% endfor %}
-                            <tr>
-                                <td class="text-right" colspan="{{ max_column }}">
-                                    총액: <span class="font-weight-bold"
-                                              style="color:#500606">₩ {{ all_sum_of_lect|intcomma }}</span>
-                                </td>
-                            </tr>
+                            {% if lect_summary_list|length != 0 %}
+                                <tr>
+                                    <td class="text-right" colspan="{{ max_column }}">
+                                        총액: <span class="font-weight-bold"
+                                                  style="color:#500606">₩ {{ all_sum_of_lect|intcomma }}</span>
+                                    </td>
+                                </tr>
+                            {% endif %}
                             </tbody>
                         </table>
                     </div>
