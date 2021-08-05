@@ -159,7 +159,7 @@
                         </div>
                         <!--====================================사용인 끝=============================================-->
                         <!--====================================입금계좌 시작==============================================-->
-                        {% if logined_user.user_role.role_no == 4 %}
+                        {% if logined_user.user_role.role_no == 4 or logined_user == bank.bank_used_user %}
                             <div class="content-box">
                                 <div class="content-header">
                                     <h3 class="title">입금받을 계좌</h3>
