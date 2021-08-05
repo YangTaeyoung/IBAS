@@ -146,7 +146,7 @@
                                         </tr>
                                     {% endif %}
                                 </div>
-                                {% if is_logined and logined_user.user_auth.auth_no == 1 %}
+                                {% if is_logined and logined_user.user_auth.auth_no == 1 and is_superuser %}
                                     <div class="extra-cell text-right  m-t20">
                                         <!-- 게시글 등록 버튼 -->
                                         <button class="site-button radius-xl m-l10"

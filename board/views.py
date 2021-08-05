@@ -8,11 +8,13 @@ from file_controller import FileController
 from pagination_handler import get_page_object
 from alarm.alarm_controller import create_comment_alarm, create_comment_ref_alarm, create_board_notice_alarm, \
     delete_board_by_superuser_alarm
-from user_controller import login_required, writer_only, auth_check, get_logined_user, not_allowed, role_check
+from user_controller import login_required, writer_only, auth_check, get_logined_user, not_allowed, role_check, \
+    superuser_only
 from django.contrib import messages
 from date_controller import today_after_day, today_after_year, today
 from exception_handler import board_exist_check, contest_board_exist_check
-from post_controller import  comment_delete_by_post_delete
+from post_controller import comment_delete_by_post_delete
+
 
 # 상단 기준일을 가지고 오는 함수
 def get_fixdate(request):
@@ -31,7 +33,7 @@ def is_register_btn_show(request, board_type_no):
     auth_no = cur_user.user_auth.auth_no
 
     if board_type_no == 1:  # 공지사항
-        if role_check(cur_user, 4, "lte"):  # 회장단인가
+        if role_check(cur_user, 5, "lte"):  # 회장단 or 교수인가?
             return True
     if board_type_no < 5:  # 자유게시판, 질문게시판, 활동게시판
         if auth_no != 3:  # 미승인 회원이 아닌가
@@ -280,7 +282,8 @@ def board_register(request):
 
     else:  # 게시글 등록 버튼을 눌렀을 때
         board_type_no = BoardType.objects.get(pk=request.GET.get('board_type_no'))
-        if board_type_no.board_type_no == 1 and not role_check(cur_user, 4, "lte"):  # 공지사항 게시판에서 글쓰기 버튼을 눌렀을 경우 회장단이 아니면
+        if board_type_no.board_type_no == 1 and not role_check(cur_user, 5,
+                                                               "lte"):  # 공지사항 게시판에서 글쓰기 버튼을 눌렀을 경우 회장단이 아니면
             return not_allowed(request, "비 정상적인 접근입니다.")
         if board_type_no.board_type_no == 8 and not role_check(cur_user, 4, "lte"):  # 회장단 게시판에서 글쓰기 버튼을 눌렀을 경우 회장단이 아니면
             return not_allowed(request, "비 정상적인 접근입니다.")
@@ -351,6 +354,7 @@ def board_delete(request, board_no):
 
     return redirect('board_view', board_type_no=board_type_no)
 
+
 @auth_check(active=True)
 def contest_view(request):
     # 공모전 게시물 전부를 해당 파일과 함께 Queryset 으로 가져오기
@@ -377,7 +381,7 @@ def contest_view(request):
 # 수정내용 : 모델 폼으로 처리하는 걸로 코드 수정
 # 버그 처리해야할 사항 :: 등록 버튼 누르고 가끔 로딩되면서 화면전환이 늦어질 때가 있는데,
 #                      그 때 등록버튼 연타하면 클릭한수만큼 동일한 게시글 작성됨.
-@auth_check(active=True)
+@superuser_only()
 def contest_register(request):  # 공모전 등록
     if request.method == 'POST':
         contest_form = ContestForm(request.POST)
