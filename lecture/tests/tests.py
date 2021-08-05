@@ -40,24 +40,34 @@ class LectAttendanceTest(TestCase):
                 강의자 메뉴 中 : 출석 페이지, 수강생 이름 + 학번 + 출석여부 띄우기
         """
         lect_room = Lect.objects.prefetch_related("enrolled_students", "lectures"
-                                                  ).filter(lect_title=_TEST_TITLE).first()
+                                                  ).get(lect_title=_TEST_TITLE)
         lect_board = lect_room.lectures.first()
-        query = f"""SELECT u.USER_NAME, u.USER_STU, if(isnull(attend.LECT_ATTEND_DATE),false,true) as attendance
-                    FROM LECT_ENROLLMENT AS enrollment
+        query = f"""
+                            SELECT 
+                                u.USER_NAME, 
+                                u.USER_STU, 
+                                MAJOR_INFO.MAJOR_NAME, 
+                                if(isnull(attend.LECT_ATTEND_DATE),false,true) as attendance
+                            FROM LECT_ENROLLMENT AS enrollment
 
-                    LEFT OUTER JOIN LECT_ATTENDANCE AS attend
-                    on (enrollment.STUDENT = attend.STUDENT AND attend.LECT_BOARD_NO = {lect_board.lect_board_no})
+                            LEFT OUTER JOIN 
+                                LECT_ATTENDANCE AS attend 
+                                on (enrollment.STUDENT = attend.STUDENT AND attend.LECT_BOARD_NO = {lect_board.lect_board_no})
 
-                    INNER JOIN USER as u
-                    ON (enrollment.STUDENT = u.USER_STU)
+                            INNER JOIN 
+                                USER as u ON (enrollment.STUDENT = u.USER_STU),
+                                MAJOR_INFO
 
-                    WHERE enrollment.LECT_NO = {lect_room.lect_no}
+                            WHERE 
+                                enrollment.LECT_NO = {lect_room.lect_no} 
+                                and u.USER_MAJOR = MAJOR_INFO.MAJOR_NO
 
-                    ORDER BY u.USER_NAME;"""
+                            ORDER BY u.USER_NAME ;"""
+
         cursor = connection.cursor()
         cursor.execute(query)  # 쿼리 수행
-        students_list = [{'name': name, 'stu': stu, 'attendance': '출석' if attendance == 1 else '결석'}
-                         for name, stu, attendance in cursor.fetchall()]
+        students_list = [{'name': name, 'stu': stu, 'major': major, 'attendance': '출석' if attendance == 1 else '결석'}
+                         for name, stu, major, attendance in cursor.fetchall()]
 
         save_sesssion(self)
         response = self.client.get(reverse('lect_room_manage_attendance', args=[lect_room.lect_no]))

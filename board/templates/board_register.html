@@ -30,6 +30,7 @@
             <form action="
 
 
+
                     {% if board_no is None %}{% url 'board_register' %}{% else %}{% url 'board_update' board_no %}{% endif %}"
                   class="add-listing-form" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
@@ -151,4 +152,5 @@
         </div>
     </div>
 
+    {% include "file_script.html" %}
 {% endblock %}

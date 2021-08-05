@@ -1,8 +1,7 @@
 <template>
   <div class="clear" id="comment-list">
-    <template v-if="comment_list!=null">
+    <template v-if="comment_list != null && comment_list.length > 0">
       <!-- 게시글과 댓글을 구분짓는 구분선 -->
-      <h3 class="font-26">덧글</h3>
       <div class="dlab-divider bg-gray-dark"></div>
 
     </template>
@@ -37,7 +36,7 @@ import {alert_msg_for_client} from "./assets/response.js"
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
-axios.defaults.baseURL = 'https://inhabas.com/'
+axios.defaults.baseURL = 'https://inhabas.com'
 export default {
   data: () => {
     return {
@@ -57,17 +56,16 @@ export default {
   mounted() { // DOM 객체 생성 후 drf server 에서 데이터를 가져와 CommentList 렌더링
     let pathname = location.pathname.split('/')
     this.board_no = pathname[pathname.length - 1]
-    if (location.pathname.includes('board/contest')) {
+    if (/board\/contest\/detail\/\d+/.test(location.pathname)) {
       this.board_type = 'contest'
-    } else if (location.pathname.includes('board/')) {
+    } else if (/board\/detail\/\d+/.test(location.pathname)) {
       this.board_type = 'board'
       this.board_no = pathname[3]
-    } else if (location.pathname.includes('lect/')) {
+    } else if (/lect\/room\/\d+\/detail\/\d+/.test(location.pathname)) {
       this.board_type = 'lect'
-
-    } else if (location.pathname.includes('staff/')) {
+    } else if (/staff\/memver\/delete\/detail\/\d+/.test(location.pathname)) {
       this.board_type = 'staff'
-    } else if (location.pathname.includes('activity/')) {
+    } else if (/activity\/\d+\/detail/.test(location.pathname)) {
       this.board_type = 'board'
       this.board_no = pathname[2]
     }
@@ -158,67 +156,3 @@ export default {
 
 </script>
 
-
-<style>
-
-ol.comment-list li.comment .comment-body {
-  margin-left: 0;
-  border: 1px solid #e9e9e9;
-  margin-bottom: 30px;
-}
-
-ol.comment-list li.comment .reply a {
-  position: static;
-}
-
-.reply-btn-div {
-  margin-top: 15px;
-  font-weight: 400;
-  font-size: 14px;
-}
-
-/*댓글 관련 아웃라인 none*/
-* {
-  outline: none;
-}
-
-.comment-btn {
-  padding: 0;
-  color: #4611a7;
-  border-color: transparent;
-  background-color: white;
-  cursor: pointer;
-  display: inline-block;
-}
-
-.comment-btn:hover {
-  color: #0e91e3;
-}
-
-.comment-profile-size {
-  width: 35px;
-  height: 35px;
-  border: 2px solid #606269;
-  border-radius: 17.5px;
-  margin-right: 10px;
-
-}
-
-input:disabled {
-  padding: 0px;
-  cursor: auto;
-  font-size: 14px;
-  width: 706px;
-  display: block;
-  color: #606269;
-  cursor: alias;
-  background-color: transparent;
-  border-width: 0px;
-}
-
-.reply-line {
-  height: 1px;
-  position: relative;
-  margin: 20px 0;
-}
-</style>

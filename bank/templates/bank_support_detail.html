@@ -3,18 +3,7 @@
 {% block content %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/posting_detail.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/star-rating-svg.css' %}"/>
-    <link
-            rel="stylesheet"
-            type="text/css"
-            href="{% static 'plugins/editor/jquery-te-1.4.0.css' %}"
-    />
-
-    <link
-            rel="stylesheet"
-            type="text/css"
-            href="{% static 'plugins/drop/imageuploadify.min.css' %}"
-    />
-    <link rel="stylesheet" href="{% static 'plugins/tag-editor/jquery.tag-editor.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'plugins/drop/imageuploadify.min.css' %}"/>
     <script>
         function goApply() {
             if (confirm("예산 지원 요청을 승인하시겠습니까?")) {
@@ -38,8 +27,6 @@
             }
         }
     </script>
-
-    <body>
     <div class="page-wraper">
         <div class="page-content bg-white">
             <!----------상단 제목부분----------->
@@ -356,7 +343,4 @@
             </div>
         </div>
     </div>
-    </body>
-    </html>
-
 {% endblock %}

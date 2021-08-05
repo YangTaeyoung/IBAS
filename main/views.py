@@ -18,7 +18,7 @@ from post_controller import comment_delete_by_post_delete
 # 메인페이지 이동 함수
 def index(request):
     # 임시 로그인
-    session.save_session(request, user_model=User.objects.get(pk=12162359), logined_email="0130yang@gmail.com", provider="google")
+    # session.save_session(request, user_model=User.objects.get(pk=12162359), logined_email="0130yang@gmail.com", provider="google")
     # session.save_session(request, user_model=User.objects.get(pk=12171652))
     context = {
         "is_user_recruiting": is_user_recruiting(),
@@ -49,7 +49,6 @@ def introduce(request):
 #   - 코드 최적화 paginator 부분
 def activity_list(request):
     # 최신순으로 정렬하고, 1:M 관계로 가져오기 위해 prefetch_related 함수 사용
-
     board_list = Board.objects.filter(board_type_no__board_type_no=4).order_by('-board_created').prefetch_related(
         "files")
     board_list = get_page_object(request, board_list, 6)

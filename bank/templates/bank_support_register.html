@@ -4,31 +4,6 @@
     <script src="{% static 'js/posting_register.js' %}"></script>
     <link rel="stylesheet" type="text/css" href="{% static 'css/posting_register.css' %}">
     <link rel="stylesheet" href="{% static 'css/ibas_contents.css' %}"/>
-    <!DOCTYPE html>
-    <html lang="en">
-
-    <head>
-        <meta charset="UTF-8">
-        <title>Title</title>
-
-        <link rel="stylesheet" type="text/css" href="{% static 'css/star-rating-svg.css' %}"/>
-        <link
-                rel="stylesheet"
-                type="text/css"
-                href="{% static 'plugins/editor/jquery-te-1.4.0.css' %}"
-        />
-
-        <link
-                rel="stylesheet"
-                type="text/css"
-                href="{% static 'plugins/drop/imageuploadify.min.css' %}"
-        />
-        <link rel="stylesheet" href="{% static 'plugins/tag-editor/jquery.tag-editor.css' %}"/>
-        <script src="{% static 'js/register.js' %}"></script>
-        <link rel="stylesheet" href="{% static 'css/posting_register.css' %}"/>
-    </head>
-
-    <body>
     <div class="page-wraper">
         <div class="page-content bg-white">
             <!----------상단 제목부분----------->
@@ -49,7 +24,8 @@
             </div>
             <!--===============================================입력란=========================================================-->
             {% load widget_tweaks %}
-            <form action="{% if bank_no is None %}{% url 'bank_support_register' %}{% else %}{% url 'bank_support_update' bank_no %}{% endif %}"
+            <form action="
+                    {% if bank_no is None %}{% url 'bank_support_register' %}{% else %}{% url 'bank_support_update' bank_no %}{% endif %}"
                   class="add-listing-form" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
 
@@ -59,24 +35,24 @@
                             <form class="add-listing-form">
                                 <!--=====================-->
 
-                            <!--====================================예산지원 폼 입력 시작=============================================-->
-                            {% for field in bank_support_form.visible_fields %}
-                                <div class="content-box">
-                                    <div class="content-header">
-                                        <h3 class="title">{{ field.label }}</h3>
-                                    </div>
-                                    <div class="content-body">
-                                        <div class="form-group">
-                                            {% if field == bank_support_form.bank_title %}
-                                                {% render_field field class="form-control" required="required" style="font-size: 25px; height: 70px;"%}
-                                            {% else %}
-                                                {% render_field field class="form-control" required="required"%}
-                                            {% endif %}
+                                <!--====================================예산지원 폼 입력 시작=============================================-->
+                                {% for field in bank_support_form.visible_fields %}
+                                    <div class="content-box">
+                                        <div class="content-header">
+                                            <h3 class="title">{{ field.label }}</h3>
+                                        </div>
+                                        <div class="content-body">
+                                            <div class="form-group">
+                                                {% if field == bank_support_form.bank_title %}
+                                                    {% render_field field class="form-control" required="required" style="font-size: 25px; height: 70px;" %}
+                                                {% else %}
+                                                    {% render_field field class="form-control" required="required" %}
+                                                {% endif %}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            {% endfor %}
-                            <!--====================================예산지원 폼 입력 끝=============================================-->
+                                {% endfor %}
+                                <!--====================================예산지원 폼 입력 끝=============================================-->
 
 
                                 <!--====================================영수증 입력 시작=============================================-->
@@ -153,7 +129,5 @@
             </form>
         </div>
     </div>
-    </body>
-    </html>
-
+    {% include "file_script.html" %}
 {% endblock %}
