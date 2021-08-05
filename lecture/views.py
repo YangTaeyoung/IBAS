@@ -16,7 +16,7 @@ from utils.crawler import get_og_tag
 from utils.url_regex import is_youtube
 from utils.youtube import get_youtube
 from date_controller import is_lect_recruiting
-from exception_handler import lect_exist_check, lect_board_exist_check
+from exception_handler import exist_check
 from post_controller import comment_delete_by_post_delete
 
 def get_pol_name(method_no):
@@ -94,10 +94,9 @@ def lect_register(request):  # 강의/스터디/취미모임 등록 페이지로
 
 
 # 강의 상세 페이지로 이동 (활동 회원만 가능)
+@exist_check
 @room_enter_check
 def lect_detail(request, lect_no):
-    if is_redirect := lect_exist_check(request, lect_no):
-        return is_redirect
     lect = Lect.objects.get(pk=lect_no)
     lect.lect_day = lect.lect_day.replace(" ", ",")
     lect.lect_day = lect.lect_day[:len(lect.lect_day) - 1]
@@ -357,13 +356,10 @@ def lect_board_register(request, room_no, board_type):
 
 
 # 강의/공지 게시글 상세보기
+@exist_check
 @member_only
 @room_enter_check
 def lect_board_detail(request, room_no, lect_board_no):
-    if is_redirect := lect_exist_check(request, room_no):
-        return is_redirect
-    if is_redirect := lect_board_exist_check(request, room_no=room_no, lect_board_no=lect_board_no):
-        return is_redirect
     lect_room = Lect.objects.get(pk=room_no)
     board = LectBoard.objects.get(pk=lect_board_no)
     files = board.files.all()

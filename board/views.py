@@ -12,7 +12,7 @@ from user_controller import login_required, writer_only, auth_check, get_logined
     superuser_only
 from django.contrib import messages
 from date_controller import today_after_day, today_after_year, today
-from exception_handler import board_exist_check, contest_board_exist_check
+from exception_handler import exist_check
 from post_controller import comment_delete_by_post_delete
 
 
@@ -238,9 +238,9 @@ def board_search(request, board_type_no):
 # 수정내용 : 코드 최적화
 #   - context 변수 가져오는 함수 생성
 @auth_check()
+@exist_check
 def board_detail(request, board_no):  # 게시글 상세 보기
-    if is_redirect := board_exist_check(request, board_no):
-        return is_redirect
+
     cur_user = get_logined_user(request)
     board = Board.objects.get(pk=board_no)
     board_type_no = board.board_type_no.board_type_no
@@ -408,6 +408,7 @@ def contest_register(request):  # 공모전 등록
 # 작성자 : 유동현
 # 마지막 수정 일시 : 2021.04.13
 # 수정내용 :
+@exist_check
 @auth_check(active=True)
 def contest_detail(request, contest_no):  # 게시판 상세 페이지로 이동
     if request.method == 'GET':
