@@ -53,9 +53,7 @@ def is_logined(request):
 
 # 관리자인지의 여부를 확인하는 함수
 def is_superuser(cur_user, is_bank=False):
-    print("체크2")
     if is_bank:
-        print("체크3")
         return role_check(cur_user, 4, "equal")
     else:
         return role_check(cur_user, 3, "lte")
@@ -196,7 +194,6 @@ def writer_only(superuser=False, is_lect_assignment=False):
         def wrapper(request, *args, **kwargs):
             # 권한이 일치하지 않으면 메인페이지로 이동
             cur_user = get_logined_user(request)
-            print("체크 1")
             if superuser:
                 # 예산 지원 신청의 경우 총무가 삭제해야 함. 관리자 권한을 일반 운영팀이 아닌 총무로 할당.
                 if kwargs.get("bank_no") and is_superuser(cur_user, is_bank=True):
