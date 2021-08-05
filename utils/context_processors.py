@@ -51,7 +51,7 @@ def is_active(request):
 # 로그인한 유저가 관리자인지 확인하는 함수
 def superuser_check(request):
     if is_logined(request):
-        return {"is_superuser": role_check(get_logined_user(request), 3, "equal")}
+        return {"is_superuser": role_check(get_logined_user(request), 3, "lte")}
     else:
         return {"is_superuser": False}
 
