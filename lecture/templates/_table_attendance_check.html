@@ -1,3 +1,4 @@
+{% load custom_tags %}
 <script>
     $(function () {
         $(".lectRoom_attend").each(function (index, td) {
@@ -63,11 +64,11 @@
                 </td>
                 <td class="text-center">{{ student.index }}</td>
                 <!-- 회원 이름 -->
-                <td class="align-middle text-center">{{ student.name }}</td>
+                <td class="align-middle text-center">{% personal_info student.name request %}</td>
                 <!-- 회원 학번 -->
-                <td class="text-center">{{ student.stu }}</td>
+                <td class="text-center">{% personal_info student.stu request %}</td>
                 <!-- 회원 학과 -->
-                <td>{{ student.major }}</td>
+                <td>{% personal_info student.major request %}</td>
                 <!-- 출결 -->
                 <td id="lectRoom_color" class="text-center lectRoom_attend">{{ student.attendance }}</td>
 

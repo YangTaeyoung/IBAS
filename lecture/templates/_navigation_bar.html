@@ -18,7 +18,7 @@
     </div>
 
 
-    {% if logined_user == lect.lect_chief %}
+    {% if logined_user == lect.lect_chief or logined_user.user_role_id <= 3 %}
         <!-- 강의자 메뉴 -->
         <div style="margin: 10px"></div>
         <div class="listing-filter-sidebar">

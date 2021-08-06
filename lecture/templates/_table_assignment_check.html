@@ -54,17 +54,17 @@
                     <td scope="row">
 
                         <div>
-                            <input id="check_{{ row.student.user_stu }}" name="is_checked_{{ row.student.user_stu }}"
+                            <input id="check_{% personal_info row.student.user_stu request %}" name="is_checked_{% personal_info row.student.user_stu request%}"
                                    type="checkbox" value="{{ row.submission.pk }}">
 
-                            <label for="check_{{ row.student.user_stu }}"
+                            <label for="check_{% personal_info row.student.user_stu request %}"
                                    class="staff_label_margin m-l20"></label>
                         </div>
                     </td>
                     <!-- 회원 이름 -->
-                    <td class="align-middle text-center">{{ row.student.user_name }}</td>
+                    <td class="align-middle text-center">{% personal_info row.student.user_name request %}  </td>
                     <!-- 회원 학번 -->
-                    <td class="text-center">{{ row.student.user_stu }}</td>
+                    <td class="text-center">{% personal_info row.student.user_stu request %}</td>
 
                     {% if row.submission %}
                         <!-- 과제제출 했을 때-->

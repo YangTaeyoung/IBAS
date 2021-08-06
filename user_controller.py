@@ -203,6 +203,8 @@ def writer_only(superuser=False, is_lect_assignment=False):
                     return func(request, *args, **kwargs)
 
             elif is_lect_assignment:
+                # lect.views.lect_assignment_detail 에서만 사용됨.
+                # 과제 작성자 본인이거나 / 운영팀이거나 / 강의자 => 수강생이 제출한 과제 열람 가능
                 if is_writer(cur_user, **kwargs) or is_superuser(cur_user) or is_lect_instructor(cur_user, **kwargs):
                     return func(request, *args, **kwargs)
 
@@ -230,8 +232,11 @@ def instructor_only(superuser=False):
             cur_user = get_logined_user(request)
 
             if superuser:
-                if is_lect_instructor(cur_user, **kwargs) or is_superuser(cur_user):
+                # 운영팀은 강의자 메뉴 열람만 가능 / 정보 변경 불가
+                if is_lect_instructor(cur_user, **kwargs) or (is_superuser(cur_user) and request.method == "GET"):
                     return func(request, *args, **kwargs)
+                elif request.method == "POST": # 권한 없는 사람이 정보 수정 시도 시
+                    return not_allowed(request, msg="권한이 없습니다", next_url=request.path)
 
             if is_lect_instructor(cur_user, **kwargs):
                 return func(request, *args, **kwargs)
@@ -407,28 +412,33 @@ def chief_only(vice=False):
 # 수정자: 양태영
 # 용도: 강의 또는 스터디 구성원인지 확인하는 용도
 # 수정 내용: 회장단도 해당 구성원에 포함.
-def member_only(func):
-    @login_required
-    @functools.wraps(func)
-    def wrapper(request, *args, **kwargs):
-        current_user = get_logined_user(request)
-        try:
-            lect_room = Lect.objects.prefetch_related(
-                'enrolled_students').get(pk=kwargs.get('room_no', kwargs.get('lect_no')))
-        except Lect.DoesNotExist:
-            messages.warning(request, "해당 강의를 찾을 수 없습니다. 삭제되었을 수 있습니다.")
-            return redirect("lect_view", type_no=1)
-        if current_user == lect_room.lect_chief:
-            return func(request, *args, **kwargs)
-        elif member := lect_room.enrolled_students.filter(student=current_user).first():
-            if member.status_id == 1:
+def member_only(superuser=False):
+    def decorator(func):
+        @login_required
+        @functools.wraps(func)
+        def wrapper(request, *args, **kwargs):
+            current_user = get_logined_user(request)
+
+            try:
+                lect_room = Lect.objects.prefetch_related(
+                    'enrolled_students').get(pk=kwargs.get('room_no', kwargs.get('lect_no')))
+            except Lect.DoesNotExist:
+                messages.warning(request, "해당 강의를 찾을 수 없습니다. 삭제되었을 수 있습니다.")
+                return redirect("lect_view", type_no=1)
+
+            if current_user == lect_room.lect_chief:
                 return func(request, *args, **kwargs)
-        elif role_check(current_user, 3, "lte"):
-            return func(request, *args, **kwargs)
+            elif member := lect_room.enrolled_students.filter(student=current_user).first():
+                if member.status_id == 1:
+                    return func(request, *args, **kwargs)
+            elif superuser and role_check(current_user, 3, "lte"):
+                return func(request, *args, **kwargs)
 
-        return not_allowed(request, msg='수강정지 되었거나, 접근할 수 없는 멤버입니다!')
+            return not_allowed(request, msg='수강정지 되었거나, 접근할 수 없는 멤버입니다!')
 
-    return wrapper
+        return wrapper
+
+    return decorator
 
 
 # 디폴트 프로필 사진의 경로를 얻어옴
