@@ -412,14 +412,6 @@
 }
 
 /* flex 컨테이너 아이템 */
-.item_flex_lgn {
-    /* 무슨일이 있더라도 width를 고정시키기 */
-    width: 500px;
-    max-width: 500px;
-    min-width: 500px;
-    height: 100vh;
-
-}
 
 .item_flex_bg {
     flex: 1
