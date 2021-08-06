@@ -235,8 +235,8 @@ def instructor_only(superuser=False):
                 # 운영팀은 강의자 메뉴 열람만 가능 / 정보 변경 불가
                 if is_lect_instructor(cur_user, **kwargs) or (is_superuser(cur_user) and request.method == "GET"):
                     return func(request, *args, **kwargs)
-                elif request.method == "POST": # 권한 없는 사람이 정보 수정 시도 시
-                    return not_allowed(request, msg="권한이 없습니다", next_url=request.path)
+                elif request.method == "POST":  # 권한 없는 사람(운영팀)이 정보 수정 시도 시, 현재 url 페이지 리다이렉트
+                    return not_allowed(request, next_url=request.path)
 
             if is_lect_instructor(cur_user, **kwargs):
                 return func(request, *args, **kwargs)
