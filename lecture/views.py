@@ -46,7 +46,7 @@ def get_lect_type(request, type_no):
     if type_no != 4:
         lect_type = LectType.objects.get(pk=type_no)
     else:
-        if not is_logined(request) or not is_superuser(request):  # 강의 개설 관련 처리는 관리자만 할 수 있으므로 관리자 권한 체크
+        if not is_logined(request) or not is_superuser(get_logined_user(request)):  # 강의 개설 관련 처리는 관리자만 할 수 있으므로 관리자 권한 체크
             return redirect(reverse("index"))
         lect_type = LectType()
         lect_type.type_no = type_no
