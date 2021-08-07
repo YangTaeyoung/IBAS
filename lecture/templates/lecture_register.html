@@ -5,6 +5,7 @@
     {% load custom_tags %}
     <link rel="stylesheet" href="{% static 'css/posting_register.css' %}"/>
     <script src="{% static 'js/checkbox.js' %}"></script>
+    <script src="{% static 'js/validation_check.js' %}"></script>
     <script>
         onload = function () {
             const obj = document.getElementById("lect_method")
@@ -312,13 +313,10 @@
                             <!--등록하기 버튼, 누르면 게시글 상세보기로-->
                             <!--최초 글작성 시 나오는 버튼-->
                             <div style="display: grid; justify-items: center">
-                                <button class="site-button btn-block button-md" type="submit" style="width: 30%">
-                                    {% if is_update %}
-                                        수정하기
-                                    {% else %}
-                                        등록하기
-                                    {% endif %}
-                                </button>
+                                <input class="site-button btn-block button-md" type="submit" style="width: 30%"
+                                        value="{% if is_update %}수정하기{% else %}등록하기{% endif %}"
+                                        onclick="return validation_check_for_lecture();">
+
                             </div>
 
 

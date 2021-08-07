@@ -140,3 +140,65 @@ function validation_check_for_board(is_activity=false) {
     }
 }
 
+// for lecture, study
+function validation_check_for_lecture() {
+    let errors = [];
+
+    // validate lect_title && lect_curri
+    let errors_of_common_things = validation_check_for_common_things();
+    if(errors_of_common_things.length > 0) {
+        errors.push(...errors_of_common_things);
+    }
+
+
+    // validate lect_intro
+    let lect_introduce = $('textarea[name="lect_intro"]').val();
+    if (lect_introduce.trim().length === 0) {
+        errors.push('소개를 입력하세요!\n');
+    } else if (lect_introduce.length > 300) {
+        errors.push('소개는 300자 이하까지 입력 가능합니다!\n');
+    }
+
+    // validate lect_day
+    let lect_day = $('input[name="day"]:checked');
+    if (lect_day.length === 0 ) {
+        errors.push('요일을 선택하세요!\n');
+    }
+
+    // validate lect_method
+    let lect_or_study_or_hobby = $('div.dlab-bnr-inr-entry').text();
+    // 강의나 스터디면, 진행 방식 및 장소링크 필수
+    if (!(lect_or_study_or_hobby.includes('취미'))) {
+        let lect_method = $('select[name="lect_method"]').val();
+        if (lect_method.length === 0) {
+            errors.push('진행 방식을 선택하세요!\n');
+        } else {
+            // validate lect_place_or_link
+            let lect_place_or_link = $('select[name="lect_place_or_link"]').val();
+            if (lect_place_or_link.length === 0) {
+                errors.push('장소나 링크를 기재해주세요!\n');
+            } else if (lect_place_or_link.length > 1000) {
+                errors.push('장소, 링크는 최대 1000자까지만 입력가능합니다.\n');
+            }
+        }
+    }
+
+
+    // validate lect_deadline
+    let lect_deadline = $('input[name="lect_deadline"]').val();
+    if (lect_deadline.length === 0) {
+        errors.push('신청 마감일을 입력하세요!\n');
+    }
+
+    // 이미지 등록 필수
+    errors.push(validation_check_for_img_file_upload());
+
+    // if there are any errors, not submit contest_form and alert all messages!
+    if (errors.length > 0) {
+        alert(errors.join(''));
+        return false;
+    } else {
+        return true;
+    }
+}
+
