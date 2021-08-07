@@ -15,7 +15,6 @@
         function phone_check() // 핸드폰 중복 체크를 위한 함수
         {
             const phone_chk = document.getElementById("user_phone");
-
             {% for user in user_list %}
                 if (phone_chk.value === "{{ user.user_phone }}") // 이미 유저 DB에 중복되는 핸드폰 번호가 존재하는 경우
                 {
@@ -126,7 +125,7 @@
             <div class="container">
                 <ul class="listing-nav nav">
                     <!--강의실 메뉴버튼,Back : 모두에게 보이게 수정-->
-                    <li><a data-toggle="tab" href="#listing_myclass" class="active"><i
+                    <li><a data-toggle="tab" href="#listing_myclass"><i
                             class="la la-home"></i><span>강의실</span></a></li>
                     <!--개설강의 메뉴버튼,Back : 강의자만 보이게 수정-->
                     <li><a data-toggle="tab" href="#listing_class_setting"><i
@@ -140,7 +139,7 @@
                     <li><a data-toggle="tab" href="#listing_mybank"><i class="la la-money"></i><span>예산 신청 내역</span></a>
                     </li>
                     <!--내정보 메뉴버튼,Back : 모두에게 보이게 수정-->
-                    <li><a data-toggle="tab" href="#listing_my_info"><i class="la la-user"></i><span>내 정보</span></a>
+                    <li><a data-toggle="tab" href="#listing_my_info" class="active"><i class="la la-user"></i><span>내 정보</span></a>
                     </li>
                 </ul>
             </div>
@@ -151,7 +150,7 @@
             <div class="container">
                 <!--강의실, 모두에게 보임-->
                 <div class="tab-content">
-                    <div id="listing_myclass" class="tab-pane active">
+                    <div id="listing_myclass" class="tab-pane">
                         <div class="row">
                             <!--========================= 내가수강중인 강의 박스 =========================-->
                             <!-- 만약 현재 내가 수강중인 강의가 없을 경우, 반스 전체가 안보이게끔 처리 필요 -->
@@ -591,7 +590,7 @@
                     </div>
                     <!--===== 내가 신청한 예산내역 코드 끝 =====-->
                     <!--내정보-->
-                    <div id="listing_my_info" class="tab-pane">
+                    <div id="listing_my_info" class="tab-pane active">
                         <div class="row">
                             <div class="col-xl-12">
                                 <div class="content-box">
@@ -1208,5 +1207,5 @@
         <!-- contact area END -->
     </div>
     <!-- Content END-->
-
+    {% include "file_script.html" %}
 {% endblock %}

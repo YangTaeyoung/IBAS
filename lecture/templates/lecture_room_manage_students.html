@@ -62,37 +62,21 @@
                                             </div>
                                             <!-- 필터부분 종료-->
 
-                                            <!-- 권한부여부분 시작-->
-                                            <div class="staff_mem_select m-b20">
-                                                <select id="status-mode" name="status_mode">
-                                                    <option selected="selected">관리</option>
-                                                    <option value="1">수강중</option>
-                                                    <option value="0">수강정지</option>
-                                                </select>
-                                            </div>
-                                            <!-- 권한부여부분 종료-->
-
-
-                                            <div class="staff_mem_btn m-b20 listing-info-right">
-                                                <!-- &nbsp;는 띄어쓰기 -->
-                                                <button class="site-button" type="submit">
-                                                    <i class="la la-check m-r5" style="font-weight: bold"></i>&nbsp;적용
-                                                </button>
-                                            </div>
-
                                             <table class="table border-top">
                                                 <thead>
                                                 <!-- 테이블 1행: 제목 -->
                                                 <tr id="lectRoom_head">
-                                                    <th class="border-top-0 width-50" scope="col"></th>
-                                                    <th class="border-top-0 width-50" scope="col"></th>
-                                                    <th class="border-top-0 width-100" scope="col">이름</th>
-                                                    <th class="border-top-0 width-100" scope="col">학번</th>
-                                                    <th class="border-top-0 width-230" scope="col">전화번호</th>
-                                                    <th class="border-top-0" scope="col">이메일</th>
-                                                    <th class="border-top-0 width-120" scope="col">과제 제출</th>
-                                                    <th class="border-top-0 width-100" scope="col">출석</th>
-                                                    <th class="border-top-0 width-120" scope="col">상태</th>
+                                                    <th class="border-top-0 width-47 min-width-47" scope="col"></th>
+                                                    <th class="border-top-0 width-42 min-width-42" scope="col"></th>
+                                                    <th class="border-top-0 width-75 min-width-75" scope="col">이름</th>
+                                                    <th class="border-top-0 width-100 min-width-100" scope="col">학번</th>
+                                                    <th class="border-top-0 width-170 min-width-170" scope="col">전화번호
+                                                    </th>
+                                                    <th class="border-top-0 width-230 min-width-230" scope="col">이메일
+                                                    </th>
+                                                    <th class="border-top-0 width-90 min-width-90" scope="col">과제</th>
+                                                    <th class="border-top-0 width-80 min-width-80" scope="col">출석</th>
+                                                    <th class="border-top-0 width-90 min-width-90" scope="col">상태</th>
                                                 </tr>
                                                 </thead>
 
@@ -116,7 +100,8 @@
                                                             <!-- 체크박스 -->
                                                             <div class="input-block">
                                                                 <input id="check_{{ info.enrolled.student.user_stu }}"
-                                                                       type="checkbox" name="is_checked_{{ info.enrolled.student.user_stu }}"
+                                                                       type="checkbox"
+                                                                       name="is_checked_{{ info.enrolled.student.user_stu }}"
                                                                        value="{{ info.enrolled.id }}">
                                                                 <!-- label이 html에 보이는 것. 역할은 input에 체크하기 위함.   -->
                                                                 <label for="check_{{ info.enrolled.student.user_stu }}"
@@ -136,14 +121,15 @@
                                                         <td>{{ info.enrolled.student.useremail_set.first.user_email }}</td>
 
                                                         <!-- 과제 미제출 수 -->
-                                                        <td style="text-align: center">{{ info.assignment_info }}</td>
+                                                        <td>{{ info.assignment_info }}</td>
                                                         <!-- 결석 수 -->
                                                         <td>{{ info.attend }}/{{ total_check }}</td>
                                                         <!--상태 -->
                                                         {% if info.enrolled.status_id == 1 %}
                                                             <td class="lectRoom_state lectRoom_state_ing_font">수강중</td>
                                                         {% else %}
-                                                            <td class="lectRoom_state lectRoom_state_stop_font">수강정지</td>
+                                                            <td class="lectRoom_state lectRoom_state_stop_font">수강정지
+                                                            </td>
                                                         {% endif %}
                                                     </tr>
                                                 {% endfor %}
@@ -153,6 +139,24 @@
                                                 </tbody>
                                             </table>
 
+                                            <!-- 적용버튼 시작-->
+                                            <div class="staff_mem_btn m-b20 listing-info-right float-right">
+                                                <!-- &nbsp;는 띄어쓰기 -->
+                                                <button class="site-button" type="submit">
+                                                    <i class="la la-check m-r5" style="font-weight: bold"></i>&nbsp;적용
+                                                </button>
+                                            </div>
+                                            <!-- 적용버튼 종료-->
+
+                                            <!-- 권한부여부분 시작-->
+                                            <div class="staff_mem_select m-b20 float-right">
+                                                <select id="status-mode" name="status_mode">
+                                                    <option selected="selected">관리</option>
+                                                    <option value="1">수강중</option>
+                                                    <option value="0">수강정지</option>
+                                                </select>
+                                            </div>
+                                            <!-- 권한부여부분 종료-->
 
                                             <!--========== 페이지네이션 시작 ===========-->
                                             <!-- 1페이지에 수강생 끌고오고, 수강생이 그보다 적으면, 페이지네이션 안보이게 처리 -->
@@ -160,6 +164,7 @@
                                                 {% include "pagination.html" %}
                                             {% endif %}
                                             <!--========== 페이지네이션 끝 ===========-->
+
                                         </div>
                                     </form>
 

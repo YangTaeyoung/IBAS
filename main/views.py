@@ -1,7 +1,6 @@
 from django.db import transaction
 from django.shortcuts import render, get_object_or_404, reverse, redirect
-from DB.models import Alarm, Board, BoardFile, BoardType, Comment, History, User
-from member import session
+from DB.models import Alarm, Board, BoardFile, Comment, History, User
 from board.forms import FileForm
 from main.forms import ActivityForm
 from pagination_handler import *
@@ -10,16 +9,21 @@ from django.db.models import Q
 from alarm.alarm_controller import create_comment_alarm, create_comment_ref_alarm
 from django.http import HttpResponseRedirect
 from user_controller import login_required, writer_only, auth_check, superuser_only
-from exception_handler import activity_exist_check
+from exception_handler import exist_check
 from DB.models import UserSchedule
 from date_controller import is_user_recruiting, is_interview_progress
 from post_controller import comment_delete_by_post_delete
+from django.contrib import messages
+
 
 # 메인페이지 이동 함수
 def index(request):
+    from member import session
     # 임시 로그인
-    session.save_session(request, user_model=User.objects.get(pk=12162359), logined_email="0130yang@gmail.com", provider="google")
+    # session.save_session(request, user_model=User.objects.get(pk=12162359), logined_email="0130yang@gmail.com", provider="google")
     # session.save_session(request, user_model=User.objects.get(pk=12171652))
+    # session.save_session(request, user_model=User.objects.get(pk=12172223))
+    # session.save_session(request, user_model=User.objects.get(pk=12172434))
     context = {
         "is_user_recruiting": is_user_recruiting(),
         "is_interview_progress": is_interview_progress(),
@@ -49,7 +53,6 @@ def introduce(request):
 #   - 코드 최적화 paginator 부분
 def activity_list(request):
     # 최신순으로 정렬하고, 1:M 관계로 가져오기 위해 prefetch_related 함수 사용
-
     board_list = Board.objects.filter(board_type_no__board_type_no=4).order_by('-board_created').prefetch_related(
         "files")
     board_list = get_page_object(request, board_list, 6)
@@ -64,16 +67,17 @@ def activity_list(request):
 # 마지막 수정 일시 : 2021.04.15 (유동현)
 # 수정 내역:
 #   - 단순 코드 정리..
+@exist_check
 def activity_detail(request, board_no):
     if board_no is not None:
-        if is_redirect := activity_exist_check(request, board_no):
-            return is_redirect
         board = Board.objects.get(pk=board_no)
+        if board.board_type_no.board_type_no != 4:
+            messages.warning(request, "해당 게시글이 존재하지 않습니다. 삭제되었을 수 있습니다.")
+            return redirect("activity")
         context = {
             "board": board,
             "board_file_list": BoardFile.objects.filter(file_fk=board),
         }
-
         return render(request, 'activity_detail.html', context)
     else:
         return redirect(reverse('activity'))

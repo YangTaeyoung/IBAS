@@ -8,11 +8,13 @@ from file_controller import FileController
 from pagination_handler import get_page_object
 from alarm.alarm_controller import create_comment_alarm, create_comment_ref_alarm, create_board_notice_alarm, \
     delete_board_by_superuser_alarm
-from user_controller import login_required, writer_only, auth_check, get_logined_user, not_allowed, role_check
+from user_controller import login_required, writer_only, auth_check, get_logined_user, not_allowed, role_check, \
+    superuser_only
 from django.contrib import messages
 from date_controller import today_after_day, today_after_year, today
-from exception_handler import board_exist_check, contest_board_exist_check
-from post_controller import  comment_delete_by_post_delete
+from exception_handler import exist_check
+from post_controller import comment_delete_by_post_delete
+
 
 # 상단 기준일을 가지고 오는 함수
 def get_fixdate(request):
@@ -27,9 +29,11 @@ def get_fixdate(request):
 
 # 등록 버튼을 표시할 지, 말지 고르는 함수
 def is_register_btn_show(request, board_type_no):
-    auth_no = get_logined_user(request).user_auth.auth_no
+    cur_user = get_logined_user(request)
+    auth_no = cur_user.user_auth.auth_no
+
     if board_type_no == 1:  # 공지사항
-        if role_check(request, 4, "lte"):  # 회장단인가
+        if role_check(cur_user, 5, "lte"):  # 회장단 or 교수인가?
             return True
     if board_type_no < 5:  # 자유게시판, 질문게시판, 활동게시판
         if auth_no != 3:  # 미승인 회원이 아닌가
@@ -38,7 +42,7 @@ def is_register_btn_show(request, board_type_no):
         if auth_no == 1:  # 활동 회원인가?
             return True
     elif board_type_no == 8:  # 회장단 게시판
-        if role_check(request, 4, "lte"):  # 회장단인가
+        if role_check(cur_user, 4, "lte"):  # 회장단인가
             return True
     elif board_type_no == 9:  # 건의 게시판
         if auth_no != 3:  # 미승인 회원이 아닌가
@@ -138,6 +142,7 @@ def get_context_of_contest_(contest_no):
 # 마지막 수정 일시 :
 @login_required
 def board_view(request, board_type_no):  # 게시판 페이지로 이동
+    cur_user = get_logined_user(request)
     board_fixed_list = Board.objects.filter(
         Q(board_fixdate__gt=today()) & Q(board_type_no__board_type_no=board_type_no)).order_by("-board_fixdate")
     if board_type_no == 5:
@@ -146,19 +151,19 @@ def board_view(request, board_type_no):  # 게시판 페이지로 이동
         board_list = Board.objects.filter(board_type_no__board_type_no__lte=4).select_related("board_writer").order_by(
             "board_type_no").order_by("-board_created")
     elif board_type_no == 8:
-        if role_check(request, 4, "lte"):  # 회장단인 경우
+        if role_check(cur_user, 4, "lte"):  # 회장단인 경우
             board_list = Board.objects.filter(board_type_no__board_type_no=board_type_no).select_related(
                 "board_writer").order_by("-board_created")
         else:
             return not_allowed(request, msg="비정상적인 접근입니다.")
     elif board_type_no == 9:  # 건의 게시판의 경우(1대1로 진행해야 함)
-        if role_check(request, 4, "lte"):  # 회장단인 경우
+        if role_check(cur_user, 4, "lte"):  # 회장단인 경우
             board_list = Board.objects.filter(board_type_no__board_type_no=board_type_no).select_related(
                 "board_writer").order_by("-board_created")
         else:  # 회장단이 아닌 경우
             # 자신이 쓴 게시글만 확인
             board_list = Board.objects.filter(Q(board_type_no__board_type_no=board_type_no) & Q(
-                board_writer=get_logined_user(request))).select_related("board_writer").order_by("-board_created")
+                board_writer=cur_user)).select_related("board_writer").order_by("-board_created")
     else:
         board_list = Board.objects.filter(board_type_no__board_type_no=board_type_no).select_related(
             "board_writer").order_by("-board_created")
@@ -183,6 +188,7 @@ def board_view(request, board_type_no):  # 게시판 페이지로 이동
 # 마지막 수정 일시 :
 def board_search(request, board_type_no):
     if request.method == "GET":
+        cur_user = get_logined_user(request)
         keyword = request.GET.get("keyword")
         if 1 <= board_type_no <= 5:
             board_list = Board.objects.filter(
@@ -205,9 +211,9 @@ def board_search(request, board_type_no):
                 Q(board_writer__user_name__icontains=keyword)
             ).filter(board_type_no__board_type_no=board_type_no).select_related("board_writer").order_by(
                 "-board_created")
-            if board_type_no == 8 and not role_check(request, role_no=4, sign="lte"):
+            if board_type_no == 8 and not role_check(cur_user, role_no=4, sign="lte"):
                 return not_allowed(request)
-            if board_type_no == 9 and role_check(request, 6, "equal"):
+            if board_type_no == 9 and role_check(cur_user, 6, "equal"):
                 board_list = board_list.filter(board_writer=get_logined_user(request))
 
         item = get_page_object(request, board_list)
@@ -232,16 +238,16 @@ def board_search(request, board_type_no):
 # 수정내용 : 코드 최적화
 #   - context 변수 가져오는 함수 생성
 @auth_check()
+@exist_check
 def board_detail(request, board_no):  # 게시글 상세 보기
-    if is_redirect := board_exist_check(request, board_no):
-        return is_redirect
+
+    cur_user = get_logined_user(request)
     board = Board.objects.get(pk=board_no)
     board_type_no = board.board_type_no.board_type_no
-    if board_type_no == 8 and not role_check(request, 4, "lte"):
+    if board_type_no == 8 and not role_check(cur_user, 4, "lte"):
         return not_allowed(request, "비 정상적인 접근입니다.")
-    elif board_type_no == 9 and (board.board_writer != get_logined_user(request) and not role_check(request, 4, "lte")):
+    elif board_type_no == 9 and (board.board_writer != cur_user and not role_check(cur_user, 4, "lte")):
         return not_allowed(request, "비 정상적인 접근입니다.")
-    print('board_detail', request.session.get("user_stu"))
     context = get_context_of_board_(board_no)
     return render(request, 'board_detail.html', context)
 
@@ -255,6 +261,7 @@ def board_detail(request, board_no):  # 게시글 상세 보기
 #           #2. 상단 고정 변수 추가
 @auth_check()
 def board_register(request):
+    cur_user = get_logined_user(request)
     # 글쓰기 들어와서 등록 버튼을 누르면 실행이 되는 부분
     if request.method == "POST":
         board_form = BoardForm(request.POST)
@@ -263,7 +270,7 @@ def board_register(request):
         board_fixdate = get_fixdate(request)
         if board_form.is_valid() and file_form.is_valid():
             with transaction.atomic():
-                board_param = {"board_writer": User.objects.get(pk=request.session.get('user_stu'))}
+                board_param = {"board_writer": cur_user}
                 if board_fixdate is not None:
                     board_param["board_fixdate"] = board_fixdate
                 board = board_form.save(**board_param)
@@ -275,9 +282,10 @@ def board_register(request):
 
     else:  # 게시글 등록 버튼을 눌렀을 때
         board_type_no = BoardType.objects.get(pk=request.GET.get('board_type_no'))
-        if board_type_no.board_type_no == 1 and not role_check(request, 4, "lte"):  # 공지사항 게시판에서 글쓰기 버튼을 눌렀을 경우 회장단이 아니면
+        if board_type_no.board_type_no == 1 and not role_check(cur_user, 5,
+                                                               "lte"):  # 공지사항 게시판에서 글쓰기 버튼을 눌렀을 경우 회장단이 아니면
             return not_allowed(request, "비 정상적인 접근입니다.")
-        if board_type_no.board_type_no == 8 and not role_check(request, 4, "lte"):  # 회장단 게시판에서 글쓰기 버튼을 눌렀을 경우 회장단이 아니면
+        if board_type_no.board_type_no == 8 and not role_check(cur_user, 4, "lte"):  # 회장단 게시판에서 글쓰기 버튼을 눌렀을 경우 회장단이 아니면
             return not_allowed(request, "비 정상적인 접근입니다.")
         context = {
             "board_form": BoardForm(initial={'board_type_no': board_type_no.board_type_no}),
@@ -334,10 +342,11 @@ def board_update(request, board_no):
 # 수정내용 : 모델폼 사용 => urls.py 변경에 따른 코드 수정
 @writer_only(superuser=True)
 def board_delete(request, board_no):
+    cur_user = get_logined_user(request)
     board = Board.objects.get(pk=board_no)
     board_type_no = board.board_type_no.board_type_no
     with transaction.atomic():
-        if board.board_writer != get_logined_user(request) and role_check(request=request, role_no=3, sign="lte"):
+        if board.board_writer != cur_user and role_check(cur_user, role_no=3, sign="lte"):
             delete_board_by_superuser_alarm(request, board)
         FileController.delete_all_files_of_(board)  # 해당 게시글에 등록된 파일 모두 제거
         comment_delete_by_post_delete(board)
@@ -346,63 +355,6 @@ def board_delete(request, board_no):
     return redirect('board_view', board_type_no=board_type_no)
 
 
-# 댓글 달기 코드
-@auth_check()
-# def board_comment_register(request):
-#     if request.method == "POST":
-#         board = Board.objects.get(pk=request.POST.get('board_no'))  # 게시글 번호 들고오는 것임
-#
-#         comment = Comment.objects.create(
-#             comment_board_no=board,  # 해당 게시글에
-#             comment_writer=User.objects.get(pk=request.session.get('user_stu')),  # 해당 학번이
-#             comment_cont=request.POST.get('comment_cont')  # 사용자가 쓴 내용을 가져옴
-#         )
-#         create_comment_alarm(comment)
-#
-#     else:
-#         board = Board.objects.get(pk=request.GET.get('board_no'))  # 게시글 번호 들고오는 것임
-#         # 객체로 받아서 저장할 예정
-#         comment = Comment.objects.create(
-#             comment_board_no=board,
-#             comment_writer=User.objects.get(pk=request.session.get('user_stu')),
-#             comment_cont=request.GET.get('comment_cont'),
-#             comment_cont_ref=Comment.objects.get(pk=request.GET.get("comment_ref"))
-#         )
-#         create_comment_ref_alarm(comment)
-#
-#         # 데이터 베이스에 저장
-#     return redirect("board_detail", board_no=board.board_no)
-#
-#
-# # 댓글 삭제 코드
-# @writer_only(superuser=True)
-# def board_comment_delete(request):
-#     if request.method == "POST":  # 댓글 삭제를 누를 경우
-#         board_no = request.POST.get('board_no')
-#         comment = Comment.objects.get(pk=request.POST.get('comment_id'))
-#         comment.delete()
-#         return redirect("board_detail", board_no=board_no)  # 게시글 상세페이지로 이동
-#     else:
-#         return redirect("board_view", board_type_no=5)  # 잘못 들어온 접근은 전체 게시판으로 이동
-#
-#
-# # 댓글 수정 코드
-# @writer_only()
-# def board_comment_update(request):
-#     if request.method == "POST":  # 정상적으로 파라미터가 넘어왔을 경우
-#         board_no = request.POST.get('board_no')
-#         comment = Comment.objects.get(pk=request.POST.get('comment_id'))  # 가져온 comment_id를 토대로 수정 내역을 적용
-#         comment.comment_cont = request.POST.get('comment_cont')  # 수정할 내용을 가져옴
-#         comment.save()  # DB 저장
-#         return redirect("board_detail", board_no=board_no)  # 게시글 상세 페이지로 돌아감
-#     else:
-#         return redirect("board_view", board_type_no=5)  # 잘못된 요청의 경우 전체 게시판으로 이동하게 함.
-
-# ---- contest_list ---- #
-# : 공모전 글 목록 페이지
-# 작성자 : 유동현
-# 마지막 수정 일시 : 2021.04.13
-# 수정내용 :
 @auth_check(active=True)
 def contest_view(request):
     # 공모전 게시물 전부를 해당 파일과 함께 Queryset 으로 가져오기
@@ -429,7 +381,7 @@ def contest_view(request):
 # 수정내용 : 모델 폼으로 처리하는 걸로 코드 수정
 # 버그 처리해야할 사항 :: 등록 버튼 누르고 가끔 로딩되면서 화면전환이 늦어질 때가 있는데,
 #                      그 때 등록버튼 연타하면 클릭한수만큼 동일한 게시글 작성됨.
-@auth_check(active=True)
+@superuser_only()
 def contest_register(request):  # 공모전 등록
     if request.method == 'POST':
         contest_form = ContestForm(request.POST)
@@ -439,12 +391,10 @@ def contest_register(request):  # 공모전 등록
                 # 학번 오류 처리 필요
                 # 파일 저장시 오류 발생하거나, 로딩 중 저장 여러번 누르는 등 부적절한 저장 피하기 => 트랜젝션
                 contest = contest_form.save(
-                    contest_writer=User.objects.get(pk=request.session.get('user_stu')))
+                    contest_writer=get_logined_user(request))
                 file_form.save(instance=contest)
                 messages.success(request, '게시글을 성공적으로 등록하셨습니다.')
                 return redirect("contest_detail", contest_no=contest.contest_no)
-        messages.error(request,
-                       '꼭 이미지 파일은 한 개 이상 첨부되어야 합니다.')  # 이미지가 없을 시 에러가 뜨도록 하는 것. (작동하지 않음. 랜더 함수가 두번호출 돼서 초기화되는데 원인을 모르겠음.)
     # 목록에서 신규 등록 버튼 눌렀을때
     form_context = {
         'contest_form': ContestForm(),
@@ -458,6 +408,7 @@ def contest_register(request):  # 공모전 등록
 # 작성자 : 유동현
 # 마지막 수정 일시 : 2021.04.13
 # 수정내용 :
+@exist_check
 @auth_check(active=True)
 def contest_detail(request, contest_no):  # 게시판 상세 페이지로 이동
     if request.method == 'GET':
@@ -468,7 +419,6 @@ def contest_detail(request, contest_no):  # 게시판 상세 페이지로 이동
             messages.warning(request, "해당 공모전을 찾을 수 없습니다. 삭제되었을 수 있습니다.")
             return redirect(reverse("contest_list"))
     else:  # 비정상적인 접근
-        print(request)  # LOGGING :: 로그 파일 생성하는 코드 나중에 수정해야 함.
         return redirect(reverse('contest_list'))
 
 
@@ -498,7 +448,6 @@ def contest_delete(request, contest_no):
 @writer_only()
 def contest_update(request, contest_no):
     contest = get_object_or_404(ContestBoard, pk=contest_no)
-
     # 게시물 상세보기에서 수정하기 버튼 눌렀을 때
     if request.method == "GET":
         context = {
@@ -526,10 +475,13 @@ def contest_update(request, contest_no):
             return redirect(reverse('contest_list'))
 
 
-@auth_check()
+# 공모전 검색
+@auth_check(active=True)
 def contest_search(request):
     if request.method == "GET":
+        # 키워드를 GET 파라미터로 받음
         keyword = request.GET.get("keyword")
+        # 제목, 내용, 글쓴이 이름, 주최기관, 주제에 관련해 키워드가 포함되는지 검색
         contest_list = ContestBoard.objects.filter(
             Q(contest_title__icontains=keyword) |
             Q(contest_cont__icontains=keyword) |
@@ -537,76 +489,16 @@ def contest_search(request):
             Q(contest_asso__icontains=keyword) |
             Q(contest_topic__icontains=keyword)
         )
+        # 페이지 가능하게 해당 공모전 리스트를 변화시킴.
         contest_list = get_page_object(request, model_list=contest_list, num_of_boards_in_one_page=4)
+        # 컨텍스트 등록.
         context = {
             "contest_list": contest_list,
             "board_name": "공모전 검색 결과",
             "board_exp": '"' + keyword + '"로 검색한 결과입니다.'
         }
+        # 컨텍스트 사이드바 옵션 가져옴.
         context.update(get_sidebar_information())
         return render(request, 'contest_board.html', context)
     else:
         return redirect(reverse("contest_list"))
-
-
-# # ---- contest_comment_update ---- #
-# # : 공모전 댓글 수정
-# # 작성자 : 유동현
-# # 마지막 수정 일시 : 2021.04.15
-# # 수정내용 :
-# @writer_only()
-# def contest_comment_update(request):
-#     if request.method == "POST":
-#         contest_no = request.POST.get("contest_no")
-#         comment = Comment.objects.get(pk=request.POST.get("comment_id"))
-#         comment.comment_cont = request.POST.get("comment_cont")
-#         comment.save()
-#
-#         return redirect("contest_detail", contest_no=contest_no)
-#
-#
-# # ---- contest_comment_delete ---- #
-# # : 공모전 댓글 삭제
-# # 작성자 : 유동현
-# # 마지막 수정 일시 : 2021.04.15
-# # 수정내용 :
-# @writer_only(superuser=True)
-# def contest_comment_delete(request):
-#     if request.method == "POST":
-#         contest_no = request.POST.get('contest_no')
-#         comment = Comment.objects.get(pk=request.POST.get('comment_id'))
-#         comment.delete()
-#         return redirect("contest_detail", contest_no=contest_no)
-#     else:
-#         return render(request, "contest_board.html")
-#
-#
-# # ---- contest_comment_register ---- #
-# # : 공모전 댓글 등록
-# # 작성자 : 유동현
-# # 마지막 수정 일시 : 2021.04.15
-# # 수정내용 :
-# @auth_check()
-# def contest_comment_register(request):
-#     contest = None
-#
-#     # 댓글 등록할 때
-#     if request.method == "POST":
-#         contest = ContestBoard.objects.get(pk=request.POST.get("contest_no"))
-#         Comment.objects.create(
-#             comment_writer=User.objects.get(user_stu=request.session.get("user_stu")),
-#             comment_cont=request.POST.get("comment_cont"),
-#             comment_board_no=contest
-#         )
-#
-#     # 대댓글 등록할 때
-#     elif request.method == "GET":
-#         contest = ContestBoard.objects.get(pk=request.GET.get("board_no"))  # sy.js AddReply 함수. <input name='board_no'>
-#         Comment.objects.create(
-#             comment_writer=User.objects.get(user_stu=request.session.get("user_stu")),
-#             comment_cont=request.GET.get("comment_cont"),
-#             comment_board_no=contest,
-#             comment_cont_ref=Comment.objects.get(pk=request.GET.get("comment_ref"))
-#         )
-#
-#     return redirect("contest_detail", contest_no=contest.contest_no)

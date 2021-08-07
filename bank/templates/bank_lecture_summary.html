@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/ibas_contents.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/posting_detail.css' %}">
+    <script src="{% static 'js/ibas_centents.js' %}"></script>
+    <script src="{% static 'js/form.js' %}"></script>
+    <!----------상단 제목부분----------->
+    <!--제목을 감싸는 배경-->
+    <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"
+         style=" background-image: url('{% static 'images/board_name_img.jpg' %}'); height: 350px">
+        <div class="container clearfix">
+            <div class="dlab-bnr-inr-entry">
+                <!--제목-->
+                <h1 class="text-white introduce-letter-spacing_5">강의 회계 요약</h1>
+                <!--부제목-->
+                <p class="m-t20">강의 출석 요약 및 회계 지출 요약 페이지입니다.</p>
+            </div>
+        </div>
+    </div>
+    <!----------============= 본문 시작 ================----------->
+    <!-- Content 부분 시작 -->
+    <div class="page-content bg-white">
+        <div class="content-block">
+            <div class="section-full content-inner bg-white">
+                <div class="container">
+                    <div class="listing-filter m-b40">
+                        <!-- bank-flex는 bank_yejin.css에 정의되어 있음.  -->
+                        <div class="bank-flex">
+                            <div class="mr-auto">
+                                <div>
+                                    <!-- bank-margin-bottom_0는 bank_yejin.css에 정의되어 있음.  -->
+                                    <!-- bank-year는 bank_yejin.js에 사용됨. bank_select 부분과 관련 -->
+                                    <h3 class="title bank-margin-bottom_0" style="font-size: 22px">강의 회계
+                                        요약</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 게시글을 담는 테이블 -->
+                    <div class="w-100" style="overflow: auto">
+                        <table class="table" style="white-space: nowrap; ">
+                            <!-- 테이블의 제목(1행) -->
+                            <thead>
+
+                            <!-- bank-tr-head는 bank_yejin.js에 사용됨. bank_select 부분과 관련 -->
+                            <tr id="bank-tr-head" style="text-align: center">
+                                <th scope="col" style="width: 150px;">강의명</th>
+                                {% for max_col in max_column_list %}
+                                    <th scope="col" style="width: 150px;">{{ max_col }}회차</th>
+                                {% endfor %}
+                                <th scope="col" style="width: 150px;">지급 여부</th>
+                                <th scope="col" style="width: 200px;">지급 예상액</th>
+                            </tr>
+                            </thead>
+                            <!-- 끌고오는 게시글 파트 -->
+                            <tbody>
+                            {% if lect_summary_list|length == 0 %}
+                                <tr>
+                                    <th class="text-center" colspan="{{ max_column }}"> 등록된 강의가 없습니다.</th>
+                                </tr>
+                            {% endif %}
+                            {% for lect_summary in lect_summary_list %}
+
+                                <tr {% if lect_summary.lect.lect_paid == 1 %}style="background-color: #c5c5c5"{% endif %}>
+                                    <th>
+                                        <a href="{% url 'lect_detail' lect_no=lect_summary.lect.lect_no %}">{{ lect_summary.lect.lect_title }}</a>
+                                    </th>
+                                    {% for summary in lect_summary.summary_list %}
+                                        <td>{{ summary }}</td>
+                                    {% endfor %}
+                                    <td class="text-center">
+
+                                        {% if lect_summary.lect.lect_paid == 0 %}
+                                            <button class="site-button" type="button"
+                                                    onclick="goSubmit('form-lect-paid-update',true,'지급 하신게 확실합니까?\n\n해당 강의의 강의비 지급여부는 회계에 영향을 끼치지 않으며\n반영 이후 다시 변경할 수 없습니다.')">
+                                                강의비 지급확인
+                                            </button>
+                                            <form id="form-lect-paid-update"
+                                                  action="{% url "bank_lecture_summary_update" %}" method="post">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="lect_no"
+                                                       value="{{ lect_summary.lect.lect_no }}"/>
+                                            </form>
+                                        {% else %}
+                                            <span class="font-weight-bold" style="color:#828282">지급 완료</span>
+                                        {% endif %}
+
+                                    </td>
+                                    <td class="text-right">₩ {{ lect_summary.sum_of_lect|intcomma }}</td>
+                                </tr>
+                            {% endfor %}
+                            {% if lect_summary_list|length != 0 %}
+                                <tr>
+                                    <td class="text-right" colspan="{{ max_column }}">
+                                        총액: <span class="font-weight-bold"
+                                                  style="color:#500606">₩ {{ all_sum_of_lect|intcomma }}</span>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact area END -->
+
+{% endblock %}

@@ -5,7 +5,7 @@ from DB.models import Lect, MethodInfo, LectBoard, LectAssignmentSubmit
 from django.utils.translation import gettext_lazy as _
 from IBAS.forms import FileFormBase
 from utils.url_regex import *
-
+import re
 from django_summernote.widgets import SummernoteWidget
 
 
@@ -20,11 +20,12 @@ class LectForm(forms.ModelForm):
             "lect_intro": forms.Textarea(attrs={"placeholder": "간략하게 강의를 소개해주세요"}),
             "lect_method": forms.Select(),
             "lect_place_or_link": forms.TextInput(attrs={"placeholder": "강의 방식을 먼저 선택하세요.", "disabled": "disabled"}),
-            "lect_type": forms.HiddenInput(),
             "lect_deadline": forms.DateTimeInput(),
-            "lect_state": forms.HiddenInput(),
             "lect_limit_num": forms.NumberInput(attrs={"placeholder": "강의 최대 수강인원수를 작성하세요. 미 작성시 무한정 수강 가능하도록 설정됩니다."}),
             "lect_reject_reason": forms.TextInput(attrs={"placeholder": "거절 사유를 입력해주세요."}),
+            "lect_type": forms.HiddenInput(),
+            "lect_state": forms.HiddenInput(),
+            "lect_paid": forms.HiddenInput()
         }
 
     def save(self, **kwargs):
@@ -115,7 +116,7 @@ class LectBoardFormBase(forms.ModelForm):
             'lect_board_link': forms.TextInput(attrs={"placeholder": _("강의 링크를 적어주세요."),
                                                       "class": "form-control"}),
             'lect_board_type': forms.HiddenInput(),
-            'lect_board_cont': forms.TextInput(attrs={"class": "jqte-test"}),
+            'lect_board_cont': SummernoteWidget(),
             'assignment_deadline': forms.DateInput(attrs={"type": 'date',
                                                           "class": "form-control"}),
         }
@@ -230,7 +231,7 @@ class AssignmentSubmitForm(forms.ModelForm):
                                                        "style": "font-size: 25px; height: 70px;",
                                                        "disabled": "disabled",
                                                        "class": "form-control"}),
-            'assignment_cont': forms.TextInput(attrs={"class": "jqte-test"}),
+            'assignment_cont': SummernoteWidget,
         }
 
         labels = {

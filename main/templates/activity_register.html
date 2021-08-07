@@ -24,7 +24,8 @@
             </div>
             <!--===============================================입력란=========================================================-->
             {% load widget_tweaks %}
-            <form action="{% if board_no is None %}{% url 'activity_register' %}{% else %}{% url 'activity_update' board_no %}{% endif %}"
+            <form action="
+                    {% if board_no is None %}{% url 'activity_register' %}{% else %}{% url 'activity_update' board_no %}{% endif %}"
                   class="add-listing-form" method="post" enctype="multipart/form-data">
 
                 {% csrf_token %}
@@ -43,7 +44,7 @@
                                     <div class="content-body">
                                         <!--제목 입력란-->
                                         <div class="form-group">
-                                           {% render_field board_form.board_title class="form-control" style="font-size: 25px; height: 70px;"%}
+                                            {% render_field board_form.board_title class="form-control" style="font-size: 25px; height: 70px;" %}
                                             <br/>
                                             <!--이미지, 파일 업로드란-->
                                             <div class="form-group">
@@ -105,5 +106,5 @@
             </form>
         </div>
     </div>
-
+    {% include "file_script.html" %}
 {% endblock %}

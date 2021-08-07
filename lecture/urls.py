@@ -30,7 +30,6 @@ urlpatterns = [
 
     # 수강생 전용 url
     path('room/<int:room_no>/attend/', views.lect_room_student_status, name="lect_room_student_status"),  # 출석 및 과제 확인
-    path('room/sample', views.sample, name="sample"),
 
     # 강의자 전용 url
     path('room/<int:room_no>/assignment/<int:submit_no>/aor', views.lect_assignment_aor, name="lect_assignment_aor"),

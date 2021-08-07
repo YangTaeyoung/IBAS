@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load custom_tags %}
 {% load static %}
 {% block content %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/posting_detail.css' %}">
@@ -48,7 +49,7 @@
                                         <ul class="d-flex align-items-center">
                                             <!-- 게시글 작성자 -->
                                             <li class="post-author"><i class="ti ti-user"></i>By <a
-                                                    href="javascript:void(0);">{{ submitted_assignment.assignment_submitter.user_name }}</a>
+                                                    href="javascript:void(0);">{% personal_info submitted_assignment.assignment_submitter.user_name request %}</a>
                                             </li>
                                             <!-- 게시글 작성시간 -->
                                             <li class="post-comment"><i class="ti ti-alarm-clock"></i> <a
@@ -64,9 +65,10 @@
                                     </div>
 
                                     <!--============================== 게시글 본문 시작 ==============================-->
-                                    <div class="post-context dlab-post-text">
-
-                                        {{ submitted_assignment.assignment_cont|safe }}
+                                    <div class="dlab-post-text">
+                                        {% autoescape off %}
+                                            {{ submitted_assignment.assignment_cont }}
+                                        {% endautoescape %}
 
                                         {% include "file_detail.html" %}
 
@@ -93,7 +95,7 @@
                                             {% if logined_user == submitted_assignment.assignment_submitter and not submitted_assignment.assignment_no.is_expired %}
 
                                                 <!-- 게시글 수정 버튼 -->
-                                                <form method="get"
+                                                <form method="get" class="d-inline-block"
                                                       action="{% url "lect_assignment_update" lect.pk submitted_assignment.pk %}">
                                                     {% csrf_token %}
                                                     <button class="site-button radius-xl m-l10" type="submit">
@@ -103,7 +105,8 @@
 
 
                                                 <!-- 게시글 삭제 버튼 -->
-                                                <form action="{% url "lect_assignment_delete" lect.pk submitted_assignment.pk %}">
+                                                <form class="d-inline-block"
+                                                      action="{% url "lect_assignment_delete" lect.pk submitted_assignment.pk %}">
                                                     {% csrf_token %}
                                                     <button class="site-button red radius-xl m-l10" type="submit">
                                                         <i class="fa fa-trash m-r5"></i>과제 삭제
@@ -117,14 +120,12 @@
                                         {% if logined_user == lect.lect_chief %}
                                             <!--===<<강의자>> 수강생의 과제 제출을 보고 승인, 기각을 결졍할 수 있음.===-->
                                             <div class="d-flex justify-content-center m-b40">
-                                                <form id="assignment_aor" method="POST"
-                                                      action="{% url 'lect_assignment_aor' lect.pk submitted_assignment.pk %}">
+                                                <form id="assignment_aor" method="POST" action="{% url 'lect_assignment_aor' lect.pk submitted_assignment.pk %}">
                                                     {% csrf_token %}
                                                     <input type="hidden" name="aor" id="aor" value="1">
                                                     <input type="hidden" name="reject_reason" id="reject_reason">
 
-                                                    <button type="submit" class="btn btn-outline-success btn-lg"
-                                                            style="width: 200px; font-weight: bold">
+                                                    <button type="submit" class="btn btn-outline-success btn-lg" style="width: 200px; font-weight: bold">
                                                         통과
                                                     </button>
                                                 </form>
@@ -132,8 +133,7 @@
                                                 <button type="button" class="btn btn-outline-danger btn-lg"
                                                         style="width: 200px; margin-left: 10px; font-weight: bold"
                                                         onclick="return confirm('과제를 실패 처리 하시겠습니까?')"
-                                                        href="javascript:void(0);" data-toggle="modal"
-                                                        data-target="#favorite"
+                                                        href="javascript:void(0);" data-toggle="modal" data-target="#favorite"
                                                         class="site-button gray">
                                                     실패
                                                 </button>

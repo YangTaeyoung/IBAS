@@ -1,5 +1,6 @@
 from django import template
 from file_controller import FileController
+from user_controller import get_logined_user
 
 register = template.Library()
 
@@ -24,6 +25,11 @@ def get_first_img(arg):
             return str(file.file_path)
 
 
+# url 표시할 때, http:// 이거 나오면 구려보여서 잘르기.
+@register.filter
+def url(url):
+    return url[url.find('w'):]
+
 # 글자수 length 초과하면 자르고 끝에 ... 붙임
 @register.filter
 def truncate(string, length):
@@ -33,15 +39,32 @@ def truncate(string, length):
         return string[:length] + '...'
 
 
-# url 표시할 때, http:// 이거 나오면 구려보여서 잘르기.
-@register.filter
-def url(url):
-    return url[url.find('w'):]
-
-
 # arg 안에 tar이 포함되는지 여부를 반환하는 함수: 날짜 스트링 안에 월, 화 수 등의 키워드가 있는지 판별할 때 사용.
 @register.filter
 def is_exist(arg: str, tar: str):
     if arg is None:
         return False
     return arg.find(tar) != -1
+
+
+# 이름이나 학번 가림.
+@register.simple_tag
+def personal_info(string, request):
+    string = str(string)
+    if get_logined_user(request).user_role_id <= 3:
+
+        # 학과는 '학과'만 표시
+        if '학과' in string:
+            return '*' * len(string[:-2]) + '학과'
+        
+        # 이름 : 성만 표기
+        elif len(string) == 3:
+            return string[0] + '**'
+
+        # 학번 : 1217****
+        elif len(string) == 8:
+            return string[:4] + '****'
+
+    else:
+        return string
+

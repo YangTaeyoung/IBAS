@@ -6,10 +6,13 @@
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from abc import abstractmethod
-from datetime import date
+from datetime import date, timedelta
 import os
 from django.db import models
 from datetime import datetime
+
+from django.utils import timezone
+
 from IBAS.settings import MEDIA_ROOT
 import pytz
 from django_summernote.fields import SummernoteTextField
@@ -293,6 +296,7 @@ class Lect(models.Model):
     lect_deadline = models.DateTimeField(db_column='LECT_DEADLINE')
     lect_reject_reason = models.CharField(db_column='LECT_REJECT_REASON', null=True, blank=True, max_length=200)
     lect_day = models.CharField(db_column="LECT_DAY", null=True, max_length=20)
+    lect_paid = models.IntegerField(db_column="LECT_PAID", null=True, blank=True, default=0)
 
     class Meta:
         managed = False
@@ -304,7 +308,9 @@ class Lect(models.Model):
 
     @property
     def is_expired(self):
-        return pytz.UTC.localize(datetime.now()) > pytz.UTC.localize(self.lect_deadline)
+        # 마감일을 2021.08.04 로 설정하면 db 에는 2021.08.04 00:00:00 으로 저장됨.
+        # 마감일의 의미상 당일 23:59:59 까지는 가능해야함. 그래서 하루 더해줬음.
+        return timezone.now() > self.lect_deadline + timedelta(days=1)
 
 
 class LectDay(models.Model):
@@ -375,7 +381,7 @@ class LectBoard(models.Model):
     lect_board_no = models.AutoField(db_column='LECT_BOARD_NO', primary_key=True)
     lect_board_title = models.CharField(db_column='LECT_BOARD_TITLE', max_length=100)
     lect_board_created = models.DateTimeField(db_column='LECT_BOARD_CREATED', auto_now_add=True)
-    lect_board_cont = SummernoteTextField(db_column='LECT_BOARD_CONT')
+    lect_board_cont = SummernoteTextField(db_column='LECT_BOARD_CONT', max_length=CONT_SIZE)
     lect_board_writer = models.ForeignKey('User', on_delete=models.CASCADE, db_column='LECT_BOARD_WRITER')
     lect_no = models.ForeignKey(Lect, on_delete=models.CASCADE, db_column='LECT_NO', related_name='lectures')
     lect_board_type = models.ForeignKey('LectBoardType', models.DO_NOTHING, db_column='LECT_BOARD_TYPE')

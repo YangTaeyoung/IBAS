@@ -15,9 +15,6 @@
             type="text/css"
             href="{% static 'plugins/drop/imageuploadify.min.css' %}"
     />
-    <link rel="stylesheet" href="{% static 'plugins/tag-editor/jquery.tag-editor.css' %}"/>
-
-    <body>
     <div class="page-wraper">
         <div class="page-content bg-white">
             <!----------상단 제목부분----------->
@@ -68,7 +65,7 @@
                                         </div>
                                         <!-- 이미 존재하고 있던 이미지: 삭제 가능 (수정모드)-->
                                         {% if is_update %}
-                                            {% include "file_update_box.html" with file_list=user_delete_file_list%}
+                                            {% include "file_update_box.html" with file_list=user_delete_file_list %}
                                         {% endif %}
                                         <!--내용입력란-->
                                         <div class="form-group">
@@ -97,7 +94,7 @@
             </form>
         </div>
     </div>
-    </body>
-    </html>
+    {% include "file_script.html" %}
+
 
 {% endblock %}
