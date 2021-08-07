@@ -395,12 +395,14 @@ def contest_register(request):  # 공모전 등록
                 file_form.save(instance=contest)
                 messages.success(request, '게시글을 성공적으로 등록하셨습니다.')
                 return redirect("contest_detail", contest_no=contest.contest_no)
+
     # 목록에서 신규 등록 버튼 눌렀을때
-    form_context = {
-        'contest_form': ContestForm(),
-        'file_form': FileForm(),
-    }
-    return render(request, 'contest_register.html', form_context)
+    elif request.method == 'GET':
+        form_context = {
+            'contest_form': ContestForm(),
+            'file_form': FileForm(),
+        }
+        return render(request, 'contest_register.html', form_context)
 
 
 # ---- contest_detail ---- #
@@ -471,8 +473,8 @@ def contest_update(request, contest_no):
                                                         files=contest_files, required=True)
             # 수정된 게시글 페이지로 이동
             return redirect("contest_detail", contest_no=contest.contest_no)
-        else:
-            return redirect(reverse('contest_list'))
+        # else:
+        #     return redirect(request.path)
 
 
 # 공모전 검색

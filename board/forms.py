@@ -128,9 +128,9 @@ class FileForm(FileFormBase):
         calling_function = sys._getframe(5).f_code.co_name
 
         if calling_function in ['contest_register', 'contest_update', 'activity_register', 'activity_update']:
-            print("이미지 있니?", self._check_contest_thumbnail())
             # 이미지 파일이 없는 경우
             if not self._check_contest_thumbnail():
+                print("이미지 있니?", self._check_contest_thumbnail())
                 self.cleaned_data['upload_file'] = None  # cleaned_data 를 비운다
                 raise forms.ValidationError(
                     _('공모전 이미지를 적어도 한 개 이상 등록해주세요!'),
