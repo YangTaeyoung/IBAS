@@ -150,7 +150,7 @@
                                                     <!-- 더보기 a태크 클릭 시, 강의룸 내 강의리스트 페이지로 이동 -->
                                                     <a href={% url 'lect_room_list' lect.lect_no 3 %}>더보기</a>
                                                 {% elif logined_user == lect.lect_chief and lect_board_list %}
-                                                    <a href={% url "lect_board_register" lect.lect_no 2 %}>등록하기</a>
+                                                    <a href={% url "lect_board_register" lect.lect_no 3 %}>등록하기</a>
                                                 {% endif %}
                                             </div>
                                             <div class="content-body">

@@ -3,11 +3,11 @@
 {% block content %}
     <!--코드 뷰어 스크립트-->
     <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?skin=desert"></script>
+    <script src="{% static 'js/validation_check.js' %}"></script>
     <script>
     $(function (){
         $("#select-box").val({{ lect_board_ref }}).prop('selected', true);
     });
-
     </script>
     <div class="page-wraper">
         <!-- 상단 제목부분 -->
@@ -108,13 +108,9 @@
 
                                     <!--등록버튼, 수정할 때는 수정하기로 뜨도록 수정필요-->
                                     <div style="display: grid; justify-items: center">
-                                        <button class="site-button btn-block button-md" type="submit" style="width: 30%">
-                                            {% if board_no %}
-                                                수정하기
-                                            {% else %}
-                                                등록하기
-                                            {% endif %}
-                                        </button>
+                                        <input class="site-button btn-block button-md" type="submit" style="width: 30%"
+                                            value="{% if board_no is None %}등록하기{% else %}수정하기{% endif %}"
+                                            onclick="return validation_check_for_board();">
                                     </div>
                                 </form>
                             </div>
@@ -129,5 +125,5 @@
         <!-- 상단으로 한번에 올라가는 버튼 -->
         <button class="scroltop fa fa-chevron-up" style="display: none;"></button>
     </div>
-    {% include "file_script.html" %}
+{% include "file_script.html" %}
 {% endblock %}

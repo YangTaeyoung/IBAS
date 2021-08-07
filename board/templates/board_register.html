@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-
+    <script src="{% static 'js/validation_check.js' %}"></script>
 
     <div class="page-wraper">
         <div class="page-content bg-white">
@@ -27,12 +27,8 @@
 
             {% load widget_tweaks %}
             <!--===============================================입력란=========================================================-->
-            <form action="
-
-
-
-                    {% if board_no is None %}{% url 'board_register' %}{% else %}{% url 'board_update' board_no %}{% endif %}"
-                  class="add-listing-form" method="post" enctype="multipart/form-data">
+            <form action="{% if board_no is None %}{% url 'board_register' %}{% else %}{% url 'board_update' board_no %}{% endif %}"
+                  class="add-listing-form" method="post" enctype="multipart/form-data"">
                 {% csrf_token %}
                 <!-- 히든태그!! 몽땅!!-->
                 {% for field in board_form.hidden_fields %}
@@ -135,13 +131,9 @@
                             <!--등록하기 버튼, 누르면 게시글 상세보기로-->
                             <!--최초 글작성 시 나오는 버튼-->
                             <div style="display: grid; justify-items: center">
-                                <button class="site-button btn-block button-md" type="submit" style="width: 30%">
-                                    {% if board_no is None %}
-                                        등록하기
-                                    {% else %}
-                                        수정하기
-                                    {% endif %}
-                                </button>
+                                <input class="site-button btn-block button-md" type="button" style="width: 30%"
+                                    value="{% if board_no is None %}등록하기{% else %}수정하기{% endif %}"
+                                    onclick="return validation_check_for_board();">
                             </div>
 
                             <!-- Pagination END -->
