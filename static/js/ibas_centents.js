@@ -61,22 +61,22 @@ function bank_select() {
 // ================================== 동아리 활동 -> 동아리 연혁 관련 js ========================================= //
 
 //수정 아이콘을 클릭하면 등록 아이콘으로 바뀌고, 등록 아이콘을 클릭했을 때 메세지 뜨기
-function introduce_update() {
-    document.getElementById('history-date').disabled = false; // input창 disabled속성을 해제, disabled 속성을 거짓이라 둠.
-    document.getElementById('history-txt').disabled = false;
-    document.getElementById('history-con').disabled = false;
+function introduce_update(history_id) {
+    document.getElementById('history-date-'+history_id).disabled = false; // input창 disabled속성을 해제, disabled 속성을 거짓이라 둠.
+    document.getElementById('history-txt-'+history_id).disabled = false;
+    document.getElementById('history-con-'+history_id).disabled = false;
 
-    document.getElementById('history-date').classList.add('history-change');
+    document.getElementById('history-date-'+history_id).classList.add('history-change');
     //disabled 가 해제 되었을 때 class로 테두리 css를 지정해줌.
-    document.getElementById('history-txt').classList.add('history-change');
+    document.getElementById('history-txt-'+history_id).classList.add('history-change');
     //disabled 가 해제 되었을 때 class로 테두리 css를 지정해줌.
-    document.getElementById('history-con').classList.add('history-change');
+    document.getElementById('history-con-'+history_id).classList.add('history-change');
     //disabled 가 해제 되었을 때 class로 테두리 css를 지정해줌.
-    document.getElementById('history-date').focus();
+    document.getElementById('history-date-'+history_id).focus();
     //날짜 input 에 포커스
 
     //아이콘 바꾸어 주기 위해 변수 선언. 수정 아이콘을 바꾸어 주어야 하므로 id로 update를 가져옴.
-    var icon = document.getElementById('history-update')
+    var icon = document.getElementById('history-update-'+history_id)
     // 아이콘 class 속성을 바꾸어 주어 아이콘 변경하기
     icon.setAttribute("class", "fa fa-check")
 
@@ -86,7 +86,7 @@ function introduce_update() {
     //check 아이콘 클릭 시 confirm 알림나옴.
     check_icon.onclick = function () {
         if (confirm("수정하시겠습니까?")) {
-            document.getElementById('btn-history-update').click()
+            document.getElementById('form-history-update-'+history_id).submit()
         }
     }
 }
@@ -94,7 +94,7 @@ function introduce_update() {
 // 아이콘 눌렀을 때 삭제 comfirm 알림 나옴.
 function introduce_del() {
     if (confirm('정말로 삭제하시겠습니까?')) {
-        document.getElementById("history-delete").submit()
+        document.getElementById("history-delete-"+history_id).submit()
     }
 
     //삭제 아이콘 찾는 변수, 지금은 안씀.

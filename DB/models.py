@@ -753,6 +753,7 @@ class UserUpdateRequest(models.Model):
 
 class History(models.Model):
     history_no = models.AutoField(db_column="HISTORY_NO", primary_key=True)
+    history_title = models.CharField(db_column="HISTORY_TITLE", max_length=100)
     history_cont = models.CharField(db_column="HISTORY_CONT", max_length=500)
     history_writer = models.ForeignKey(User, models.DO_NOTHING, db_column="HISTORY_WRITER")
     history_date = models.DateTimeField(db_column="HISTORY_DATE")

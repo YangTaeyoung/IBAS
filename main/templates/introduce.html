@@ -211,53 +211,59 @@
             </div>
             <!-- ===================================모달부분 끝======================================== -->
             <!-- ===================================연혁부분 시작======================================== -->
-            <form>
-                <div class="introduce-scroll height-70vh">
-                    <ul class="introduce-history">
-                        <!-- 여기부터 복사 -->
-                        <!-- 주의!!!!! 연도 새로 시작할때만 data-date 에 연도 지정해 주어야 함. 최고 중요. 안하면 완전 별로임 -->
-                        <!-- 주의!!!!! 하위 요소의 id는 모두 javascript 함수에 사용되는 것임.  -->
-                        <li class="introduce-event" data-date="2020">
-                            <input id="history-date" class="font-weight-400 text-white m-b5 d-block height-25 m-b10"
-                                   style=" font-size: 25px; background-color: rgba(0, 0, 0, 0); border: none"
-                                   value="동아리 설립"
-                                   disabled="disabled">
-                            <input id="history-txt" class="font-weight-300 text-white m-b5 d-block height-25"
-                                   style="font-size: 15px; background-color: rgba(0, 0, 0, 0); border: none"
-                                   value="12.31"
-                                   disabled="disabled">
-                            <input id="history-con" class="font-weight-300 text-white d-block height-30"
-                                   style="font-size: 20px; background-color: rgba(0, 0, 0, 0); border: none; width: 60vw"
-                                   value="안녕하세요 인하대학교 빅데이터 학술동아리 IBAS(Inha Bigdata Analyst Society)입니다."
-                                   disabled="disabled">
-                            <div class="text-right">
-                                <div class="d-inline-block" onclick="introduce_update()">
-                                    <input
-                                            id="btn-history-update" type="submit"
-                                            hidden>
-                                    <i id="history-update" class="fa fa-pencil" style="font-size: 20px"></i></div>
 
-                                <div class="d-inline-block" onclick="introduce_del()">
+            <div class="introduce-scroll height-70vh">
+                <ul class="introduce-history">
+                    <!-- 여기부터 복사 -->
+                    <!-- 주의!!!!! 연도 새로 시작할때만 data-date 에 연도 지정해 주어야 함. 최고 중요. 안하면 완전 별로임 -->
+                    <!-- 주의!!!!! 하위 요소의 id는 모두 javascript 함수에 사용되는 것임.  -->
+                    {% for history in history_list %}
+                        <li class="introduce-event" data-date="{{ history.history_date|date:'Y' }}">
+                            <form id="form-history-update-{{ history.history_no }}" action="{% url 'history_update' %}"
+                                  method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="history_no" value="{{ history.history_no }}"/>
+                                <input id="history-date-{{ history.history_no }}"
+                                       name="history_title"
+                                       class="font-weight-400 text-white m-b5 d-block height-25 m-b10"
+                                       style=" font-size: 25px; background-color: rgba(0, 0, 0, 0); border: none"
+                                       value="{{ history.history_title }}"
+                                       disabled="disabled">
+                                <input id="history-txt-{{ history.history_no }}"
+                                       type="text"
+                                       name="history_date"
+                                       class="font-weight-300 text-white m-b5 d-block height-25"
+                                       style="font-size: 15px; background-color: rgba(0, 0, 0, 0); border: none"
+                                       value="{{ history.history_date|date:"Y-m-d" }}"
+                                       disabled="disabled">
+                                <input id="history-con-{{ history.history_no }}"
+                                       name="history_cont"
+                                       class="font-weight-300 text-white d-block height-30"
+                                       style="font-size: 20px; background-color: rgba(0, 0, 0, 0); border: none; width: 60vw"
+                                       value="{{ history.history_cont }}"
+                                       disabled="disabled">
+                            </form>
+                            <div class="text-right">
+                                <div class="d-inline-block"
+                                     onclick="introduce_update('{{ history.history_no }}')">
+                                    <input id="btn-history-update-{{ history.history_no }}" type="submit"
+                                           hidden/>
+                                    <i id="history-update-{{ history.history_no }}" class="fa fa-pencil"
+                                       style="font-size: 20px"></i>
+                                </div>
+
+                                <div class="d-inline-block" onclick="introduce_del('{{ history.history_no }}')">
                                     <input type="submit" hidden>
                                     <i class="fa fa-trash" id="delete" style="font-size: 20px"></i>
                                 </div>
                             </div>
-                        </li>
-                        <!-- 여기까지 복사 -->
-                    </ul>
-                </div>
-            </form>
-            <!-- ===================================연혁부분 끝======================================== -->
 
-            <!-- 이 양식 참고한 codepen . 거의 그대로 사용하였음. 자유롭게 사용가능하다 해서 이용함. 혹시나를 대비하여 copyright 부분은 p태그로 적어둠. -->
-            <p class="text-white text-right" style="font-size: 10px;">Copyright (c) 2021 by Alan Houser
-                (https://codepen.io/alanhouser/pen/aErrQJ)</p>
-            {##}
-            {#Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:#}
-            {##}
-            {#The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.#}
-            {##}
-            {#THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.#}
+                        </li>
+                    {% endfor %}
+                    <!-- 여기까지 복사 -->
+                </ul>
+            </div>
+            <!-- ===================================연혁부분 끝======================================== -->
         </div>
     </section>
 
@@ -307,7 +313,8 @@
 
                                                 <!-- 이름, 직책, 전공, 학번 -->
                                                 <div class="p-tb15 d-flex flex-column justify-content-center align-items-center">
-                                                    <cite class="fn text-center" style="color: white;">{{ chief_crew.user_name }}
+                                                    <cite class="fn text-center"
+                                                          style="color: white;">{{ chief_crew.user_name }}
                                                         <span class="text-white font-weight-400"
                                                               style="font-size: 12px; letter-spacing: 2px; line-height: 24px;">
                                                                     ({{ chief_crew.user_role.role_name }})</span>

@@ -8,13 +8,12 @@ from file_controller import FileController
 from django.db.models import Q
 from alarm.alarm_controller import create_comment_alarm, create_comment_ref_alarm
 from django.http import HttpResponseRedirect
-from user_controller import login_required, writer_only, auth_check, superuser_only
+from user_controller import login_required, writer_only, auth_check, superuser_only, get_logined_user
 from exception_handler import exist_check
 from DB.models import UserSchedule
 from date_controller import is_user_recruiting, is_interview_progress
 from post_controller import comment_delete_by_post_delete
 from django.contrib import messages
-
 
 # 메인페이지 이동 함수
 def index(request):
@@ -250,13 +249,17 @@ def history_register(request):  # 연혁 등록
 def history_update(request):  # 연혁 수정
     if request.method == "POST":  # 정상적으로 파라미터가 넘어왔을 경우
         history = History.objects.get(pk=request.POST.get("history_no"))  # 가져온 history_no를 토대로 수정 내역을 적용
-        history.history_cont = request.POST.get("history_cont")
-        history.history_date = request.POST.get("history_date")
-        history.history_writer = User.objects.get(pk=request.session.get("user_stu"))
+        if history_title := request.POST.get("history_title"):
+            history.history_title = history_title
+        if history_cont := request.POST.get("history_cont"):
+            history.history_cont = history_cont
+        if history_date := request.POST.get("history_date"):
+            history.history_date = history_date
+        history.history_writer = get_logined_user(request)
         history.save()
         return redirect(reverse("introduce"))
     else:  # 비정상적인 접근의 경우 (해킹시도)
-        return render(request, "index.html", {'lgn_is_failed': 1})  # 메인페이지로 보내버림
+        return redirect("index")  # 메인페이지로 보내버림
 
 
 # ---- history_delete ---- #
@@ -270,7 +273,7 @@ def history_delete(request):  # 연혁 삭제
         history.delete()  # 삭제
         return redirect(reverse("introduce"))  # 소개 페이지로 리다이렉팅
     else:  # 비정상적인 접근의 경우(해킹시도)
-        return render(request, "index.html", {'lgn_is_failed': 1})  # 메인페이지로 보내버림
+        return redirect(reverse("index"))  # 메인페이지로 보내버림
 
 
 @login_required
