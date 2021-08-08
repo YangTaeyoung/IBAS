@@ -223,7 +223,7 @@
                     <!-- 주의!!!!! 연도 새로 시작할때만 data-date 에 연도 지정해 주어야 함. 최고 중요. 안하면 완전 별로임 -->
                     <!-- 주의!!!!! 하위 요소의 id는 모두 javascript 함수에 사용되는 것임.  -->
                     {% for history in history_list %}
-                        <li class="introduce-event" data-date="{{ history.history_date|date:'Y' }}">
+                        <li class="introduce-event" data-date="{% if history.is_marked %}{{ history.history_date|date:'Y' }}{% endif %}">
                             <form id="form-history-update-{{ history.history_no }}" action="{% url 'history_update' %}"
                                   method="post">
                                 {% csrf_token %}

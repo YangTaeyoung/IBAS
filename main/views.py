@@ -34,9 +34,23 @@ def index(request):
 # 동아리 소개 작업할 것임
 def introduce(request):
     # 히스토리 내역을 가져옴
-    context = {'history_list': History.objects.all().order_by("history_date")}
+    history_list = History.objects.all().order_by("history_date")
+    year_list = list(range(history_list.first().history_date.year, history_list.last().history_date.year+1))
+    mark_list = []
+    for year in year_list:
+        mark_list.append(History.objects.filter(history_date__year=year).order_by("history_date").first().history_no)
     chief_crews = User.objects.filter(Q(user_role__role_no__lte=4) & Q(user_auth__auth_no=1)).prefetch_related(
         'chiefcarrier_set').prefetch_related('useremail_set').order_by("user_role__role_no").all()
+    for history in history_list:
+        for mark in mark_list:
+            if history.history_no == mark:
+                history.is_marked = True
+                break
+            else:
+                history.is_marked = False
+    context = {
+        "history_list": history_list
+    }
     if len(chief_crews) != 0:
         # 회장단인 사람의 객체를 가져오고 등록, chief_carrier에서 이력 정보도 함께 가져옴
         context['chief_crews'] = chief_crews
