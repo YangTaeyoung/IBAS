@@ -61,20 +61,22 @@ function bank_select() {
 // ================================== 동아리 활동 -> 동아리 연혁 관련 js ========================================= //
 
 //수정 아이콘을 클릭하면 등록 아이콘으로 바뀌고, 등록 아이콘을 클릭했을 때 메세지 뜨기
-function introduce_update(history_no) {
-    console.log('date-' + history_no);
-    document.getElementById('date-' + history_no).disabled = false; // input창 disabled속성을 해제, disabled 속성을 거짓이라 둠.
-    document.getElementById('history-txt-' + history_no).disabled = false;
+function introduce_update() {
+    document.getElementById('history-date').disabled = false; // input창 disabled속성을 해제, disabled 속성을 거짓이라 둠.
+    document.getElementById('history-txt').disabled = false;
+    document.getElementById('history-con').disabled = false;
 
-    document.getElementById('date-' + history_no).setAttribute("class", 'introduce-js-input');
+    document.getElementById('history-date').classList.add('history-change');
     //disabled 가 해제 되었을 때 class로 테두리 css를 지정해줌.
-    document.getElementById('history-txt-' + history_no).setAttribute("class", 'introduce-js-textarea');
+    document.getElementById('history-txt').classList.add('history-change');
     //disabled 가 해제 되었을 때 class로 테두리 css를 지정해줌.
-    document.getElementById('date-' + history_no).focus();
+    document.getElementById('history-con').classList.add('history-change');
+    //disabled 가 해제 되었을 때 class로 테두리 css를 지정해줌.
+    document.getElementById('history-date').focus();
     //날짜 input 에 포커스
 
     //아이콘 바꾸어 주기 위해 변수 선언. 수정 아이콘을 바꾸어 주어야 하므로 id로 update를 가져옴.
-    var icon = document.getElementById('update-' + history_no)
+    var icon = document.getElementById('history-update')
     // 아이콘 class 속성을 바꾸어 주어 아이콘 변경하기
     icon.setAttribute("class", "fa fa-check")
 
@@ -84,15 +86,15 @@ function introduce_update(history_no) {
     //check 아이콘 클릭 시 confirm 알림나옴.
     check_icon.onclick = function () {
         if (confirm("수정하시겠습니까?")) {
-            document.getElementById('btn-history-update-' + history_no).click()
+            document.getElementById('btn-history-update').click()
         }
     }
 }
 
 // 아이콘 눌렀을 때 삭제 comfirm 알림 나옴.
-function introduce_del(history_no) {
+function introduce_del() {
     if (confirm('정말로 삭제하시겠습니까?')) {
-        document.getElementById("history-delete-" + history_no).submit()
+        document.getElementById("history-delete").submit()
     }
 
     //삭제 아이콘 찾는 변수, 지금은 안씀.
@@ -313,122 +315,13 @@ function lectRoom_manage_assign() {
 
 }
 
-// 빅데이터 소개부분 클릭 시 설명 나오게 하는 함수
-function introduce_click(num) {
-    // for 문 사용위한 변수 선언
-    var number;
-    // 클릭 했을 때 설명부분에 introduce-tab-hidden이 있으면 없애고, 없으면 추가하기
-    document.getElementById('introduce_tab_' + num).classList.toggle('introduce-tab-hidden');
-    // 클릭 했을 때 설명부분에 introduce-tab-appear가 있으면 없애고, 없으면 추가하기
-    document.getElementById('introduce_tab_' + num).classList.toggle('introduce-tab-appear');
-    // 클릭 했을 때 아이콘의 그림부분에 introduce-tab-disappear가 있으면 없애고, 없으면 추가하기
-    document.getElementById('introduce_div_' + num).classList.toggle('introduce-tab-disappear');
-
-    var box = document.getElementsByClassName('number-box')
-
-    if (num === 1) {
-
-        if(box[0].innerHTML === 'X') {
-            box[0].innerHTML = num
-        }
-        else {
-            box[0].innerHTML = 'X';
-        }
-        // 1번 제외 나머지 아이콘 display 를 none으로 바꾸기
-        for (number = 2; number < 5; number++) {
-            document.getElementById('introduce_icon_' + number).classList.toggle('d-none');
-        }
-
-
-    }
-
-    else if (num === 2) {
-        if(box[1].innerHTML === 'X') {
-            box[1].innerHTML = num
-        }
-        else {
-            box[1].innerHTML = 'X';
-        }
-
-        // introduce_icon부분에 marginTop: 100이 적용되어 있으면 지우고 marginTop: 0을 추가하기
-        if(document.getElementById('introduce_icon_' + num).classList.contains('m-t100')) {
-            document.getElementById('introduce_icon_' + num).classList.remove('m-t100');
-            document.getElementById('introduce_icon_' + num).classList.add('mt-0');
-        }
-
-        // introduce_icon부분에 marginTop: 100이 적용되어 있지 않으면 marginTop: 0을 지우고 marginTop: 100을 추가하기
-        else {
-            document.getElementById('introduce_icon_' + num).classList.add('m-t100');
-            document.getElementById('introduce_icon_' + num).classList.remove('mt-0');
-        }
-        // 2번 제외 나머지 아이콘 display 를 none으로 바꾸기
-        for (number = 3; number < 5; number++) {
-            document.getElementById('introduce_icon_' + number).classList.toggle('d-none');
-        }
-
-        document.getElementById('introduce_icon_1').classList.toggle('d-none');
-
-    }
-
-    else if (num === 3) { // Hidden이므로, 여전히 자리를 차지함. 그래서 flex에 자리를 차지하게 됨.
-        if(box[2].innerHTML === 'X') {
-            box[2].innerHTML = num
-        }
-        else {
-            box[2].innerHTML = 'X';
-        }
-        // introduce_icon부분에 marginTop: 70이 적용되어 있으면 지우고 marginTop: 0을 추가하기
-        if(document.getElementById('introduce_icon_' + num).classList.contains('m-t70')) {
-            document.getElementById('introduce_icon_' + num).classList.remove('m-t70');
-            document.getElementById('introduce_icon_' + num).classList.add('mt-0');
-        }
-        // introduce_icon부분에 marginTop: 70이 적용되어 있지 않으면 marginTop: 0을 지우고 marginTop: 70을 추가하기
-        else {
-            document.getElementById('introduce_icon_' + num).classList.add('m-t70');
-            document.getElementById('introduce_icon_' + num).classList.remove('mt-0');
-        }
-        // 3번 제외 나머지 아이콘 display 를 none으로 바꾸기
-        for (number = 1; number < 3; number++) {
-            document.getElementById('introduce_icon_' + number).classList.toggle('d-none');
-        }
-
-        document.getElementById('introduce_icon_4').classList.toggle('d-none');
-    }
-
-    else {
-        if(box[3].innerHTML === 'X') {
-            box[3].innerHTML = num
-        }
-        else {
-            box[3].innerHTML = 'X';
-        }
-
-        // introduce_icon부분에 marginTop: 20이 적용되어 있으면 지우고 marginTop: 0을 추가하기
-        if(document.getElementById('introduce_icon_' + num).classList.contains('m-t20')) {
-            document.getElementById('introduce_icon_' + num).classList.remove('m-t20');
-            document.getElementById('introduce_icon_' + num).classList.add('mt-0');
-        }
-        // introduce_icon부분에 marginTop: 20이 적용되어 있지 않으면 marginTop: 0을 지우고 marginTop: 20을 추가하기
-        else {
-            document.getElementById('introduce_icon_' + num).classList.add('m-t20');
-            document.getElementById('introduce_icon_' + num).classList.remove('mt-0');
-        }
-        // 4번 제외 나머지 아이콘 display 를 none으로 바꾸기
-        for (number = 1; number < 4; number++) {
-            document.getElementById('introduce_icon_' + number).classList.toggle('d-none');
-        }
-    }
-
-}
-
-
 function FilterFormSubmit() {
     const formElement = $("#filter-form")
     formElement.attr("method", "GET")
     formElement.submit()
- }
+}
 
-function ManageFormSubmit () {
+function ManageFormSubmit() {
     const manage_mode = $("#manage-mode").val();
 
     if (manage_mode == null) {

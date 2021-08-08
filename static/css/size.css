@@ -90,6 +90,14 @@
     width: 870px;
 }
 
+.width-25vw {
+    width: 25vw;
+}
+
+.height-25 {
+    height: 25px;
+}
+
 .height-30 {
     height: 30px;
 }
@@ -104,6 +112,14 @@
 
 .height-350 {
     height: 350px;
+}
+
+.height-50vh {
+    height: 50vh;
+}
+
+.height-70vh {
+    height: 70vh;
 }
 
 .max-min-min-height-35 {
