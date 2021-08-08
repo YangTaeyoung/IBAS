@@ -251,11 +251,14 @@
                                     <i id="history-update-{{ history.history_no }}" class="fa fa-pencil"
                                        style="font-size: 20px"></i>
                                 </div>
+                                <form id="form-history-delete-{{ history.history_no }}" action="{% url 'history_delete' %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="history_no" value="{{ history.history_no }}"/>
+                                    <div class="d-inline-block" onclick="introduce_del('{{ history.history_no }}')">
+                                        <i class="fa fa-trash" id="delete" style="font-size: 20px"></i>
+                                    </div>
+                                </form>
 
-                                <div class="d-inline-block" onclick="introduce_del('{{ history.history_no }}')">
-                                    <input type="submit" hidden>
-                                    <i class="fa fa-trash" id="delete" style="font-size: 20px"></i>
-                                </div>
                             </div>
 
                         </li>

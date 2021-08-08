@@ -92,9 +92,9 @@ function introduce_update(history_id) {
 }
 
 // 아이콘 눌렀을 때 삭제 comfirm 알림 나옴.
-function introduce_del() {
+function introduce_del(history_id) {
     if (confirm('정말로 삭제하시겠습니까?')) {
-        document.getElementById("history-delete-"+history_id).submit()
+        document.getElementById("form-history-delete-"+history_id).submit()
     }
 
     //삭제 아이콘 찾는 변수, 지금은 안씀.
