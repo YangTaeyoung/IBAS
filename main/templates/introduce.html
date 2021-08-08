@@ -294,33 +294,38 @@
                     <div class="clearfix">
                         <ol class="comment-list">
                             <!-- 여기부터 복붙 -->
-                            <li class="comment float-left" >
-                                <div class="m-l30">
-                                    <div class="comment-author vcard mb-0 d-flex">
-                                        <div class="m-r20 d-flex flex-column justify-content-center align-items-center">
-                                            <!-- 프로필사진 -->
-                                            <img
-                                                    class="photo max-min-width-height-100 rounded-circle border-3 border-white"
-                                                    src="{% static 'images/bank-test.jpg' %}"
-                                                    alt="현재 브라우저에서 지원하지 않는 형식입니다.">
+                            {% for chief_crew in chief_crews %}
+                                <li class="comment float-left">
+                                    <div class="m-l30">
+                                        <div class="comment-author vcard mb-0 d-flex">
+                                            <div class="m-r20 d-flex flex-column justify-content-center align-items-center">
+                                                <!-- 프로필사진 -->
+                                                <img
+                                                        class="photo max-min-width-height-100 rounded-circle border-3 border-white"
+                                                        src="{{ chief_crew.user_pic }}"
+                                                        alt="현재 브라우저에서 지원하지 않는 형식입니다.">
 
-                                            <!-- 이름, 직책, 전공, 학번 -->
-                                            <div class="p-tb15 d-flex flex-column justify-content-center align-items-center">
-                                                <cite class="fn text-center" style="color: white;">강지훈
-                                                    <span class="text-white font-weight-400"
-                                                          style="font-size: 12px; letter-spacing: 2px; line-height: 24px;">
-                                                                    (회장)</span>
-                                                    <div class="comment-meta font-weight-400">
-                                                        <div class="text-white font-weight-400" style="font-size: 12px">
-                                                            아태물류학과 19학번</div>
-                                                        <p class="text-white font-weight-500 text-lowercase">abcdefghijklmnop@gmail.com</p>
-                                                    </div>
-                                                </cite>
+                                                <!-- 이름, 직책, 전공, 학번 -->
+                                                <div class="p-tb15 d-flex flex-column justify-content-center align-items-center">
+                                                    <cite class="fn text-center" style="color: white;">{{ chief_crew.user_name }}
+                                                        <span class="text-white font-weight-400"
+                                                              style="font-size: 12px; letter-spacing: 2px; line-height: 24px;">
+                                                                    ({{ chief_crew.user_role.role_name }})</span>
+                                                        <div class="comment-meta font-weight-400">
+                                                            <div class="text-white font-weight-400"
+                                                                 style="font-size: 12px">
+                                                                {{ chief_crew.user_major.major_name }} {{ chief_crew.user_stu|stringformat:"s"|slice:"2:4" }}학번
+                                                            </div>
+                                                            <p class="text-white font-weight-500 text-lowercase">
+                                                                {{ chief_crew.useremail_set.first.user_email }}</p>
+                                                        </div>
+                                                    </cite>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </li>
+                                </li>
+                            {% endfor %}
                             <!-- 여기까지 복붙 -->
                         </ol>
                     </div>
