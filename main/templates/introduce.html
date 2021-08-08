@@ -134,12 +134,13 @@
         <img class="absolute" src="{% static 'images/history-bg.jpg' %}" style="width: inherit; height: inherit">
 
         <div id="timeline-content" class="relative text-center">
-            <p class="text-left p-l50 p-t60 text-white font-weight-500"
-               style="letter-spacing: 1.5px;font-size: 100px;line-height: 50px">
-                HISTORY <br>
-                <span class="p-l30 text-white introduce-pointer introduce-history-add" onclick="introduce_add()">동아리 연혁 추가하기</span>
-            </p>
-
+            {% if is_superuser %}
+                <p class="text-left p-l50 p-t60 text-white font-weight-500"
+                   style="letter-spacing: 1.5px;font-size: 100px;line-height: 50px">
+                    HISTORY <br>
+                    <span class="p-l30 text-white introduce-pointer introduce-history-add" onclick="introduce_add()">동아리 연혁 추가하기</span>
+                </p>
+            {% endif %}
             <!-- ===================================모달부분======================================== -->
             <!--introduce-modal-bg는 yejin.css에 정의되어 있음. -->
             <div id="introduce-modal-bg" class="introduce-modal-bg" tabindex="-1">
