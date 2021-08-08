@@ -146,66 +146,68 @@
                 <!--introduce-modal는 yejin.css에 정의되어 있음. -->
                 <div class="introduce-modal">
                     <div class="content-box">
-                        <div class="content-header">
-                            <h3 class="title"><i class="la la-map-signs m-r5"
-                                                 style="color: #091069; font-size: 16pt">
-                            </i>동아리 연혁 추가하기</h3>
-                        </div>
-                        <form action="{% url 'history_register' %}" method="post">
-                            {% csrf_token %}
-                            <div class="content-body">
-                                <ul class="icon-box-list">
-                                    <!--요소 간 간격을 조절하기 위해서 그리드로 짜줌. 바로 밑 형제요소와 사이즈 다르니 주의 요망 -->
-                                    <li style="width: 100%; display: grid; grid-template-columns: 50px 170px">
-                                        <div class="icon-cell bg-gray">
-                                            <i class="la la-calendar" style="justify-content: center"></i>
-                                        </div>
+                        {% if is_superuser %}
+                            <div class="content-header">
+                                <h3 class="title"><i class="la la-map-signs m-r5"
+                                                     style="color: #091069; font-size: 16pt">
+                                </i>동아리 연혁 추가하기</h3>
+                            </div>
+                            <form action="{% url 'history_register' %}" method="post">
+                                {% csrf_token %}
+                                <div class="content-body">
+                                    <ul class="icon-box-list">
+                                        <!--요소 간 간격을 조절하기 위해서 그리드로 짜줌. 바로 밑 형제요소와 사이즈 다르니 주의 요망 -->
+                                        <li style="width: 100%; display: grid; grid-template-columns: 50px 170px">
+                                            <div class="icon-cell bg-gray">
+                                                <i class="la la-calendar" style="justify-content: center"></i>
+                                            </div>
 
-                                        <!--introduce-li-flex introduce-border_none는 yejin.css에 정의되어 있음. -->
-                                        <div class="introduce-li-flex">
-                                            <input type="date" name="history_date"
-                                                   class="introduce-border_none" style="font-size: 20px"/>
-                                        </div>
-                                    </li>
-                                    <!--요소 간 간격을 조절하기 위해서 그리드로 짜줌. 바로 위 형제요소와 사이즈 다르니 주의 요망 -->
-                                    <li class="w-100" style="display: grid; grid-template-columns:50px 307px">
-                                        <div class="icon-cell bg-gray">
-                                            <i class="la la-pencil"></i>
-                                        </div>
+                                            <!--introduce-li-flex introduce-border_none는 yejin.css에 정의되어 있음. -->
+                                            <div class="introduce-li-flex">
+                                                <input type="date" name="history_date"
+                                                       class="introduce-border_none" style="font-size: 20px"/>
+                                            </div>
+                                        </li>
+                                        <!--요소 간 간격을 조절하기 위해서 그리드로 짜줌. 바로 위 형제요소와 사이즈 다르니 주의 요망 -->
+                                        <li class="w-100" style="display: grid; grid-template-columns:50px 307px">
+                                            <div class="icon-cell bg-gray">
+                                                <i class="la la-pencil"></i>
+                                            </div>
 
-                                        <!--연혁 입력-->
-                                        <div class="introduce-li-flex">
+                                            <!--연혁 입력-->
+                                            <div class="introduce-li-flex">
                                                 <textarea name="history_title"
                                                           type="text"
                                                           class="form-control"
                                                           style="resize: none; font-size: 20px"
                                                           placeholder="제목을 입력하세요."></textarea>
-                                        </div>
-                                        <!--칸 맞춰주기 위한 div-->
-                                        <div></div>
+                                            </div>
+                                            <!--칸 맞춰주기 위한 div-->
+                                            <div></div>
 
-                                        <!--연혁 설명 입력-->
-                                        <div class="introduce-li-flex m-t15">
+                                            <!--연혁 설명 입력-->
+                                            <div class="introduce-li-flex m-t15">
                                                 <textarea name="history_cont"
                                                           type="text"
                                                           class="form-control"
                                                           style=" font-size: 20px"
                                                           placeholder="설명을 입력하세요."></textarea>
-                                        </div>
-                                    </li>
-                                </ul>
+                                            </div>
+                                        </li>
+                                    </ul>
 
-                            </div>
-                            <div class="content-footer">
-                                <input type="submit" class="btn btn-primary"
-                                       style="background-color: #091069"
-                                       value="등록"/>
-                                <!-- introduce_close()는 yejin.js에 정의되어 있음. 동아리 연혁 추가 모달을 닫기 위한 함수임.  -->
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                                        onclick="introduce_close()">Close
-                                </button>
-                            </div>
-                        </form>
+                                </div>
+                                <div class="content-footer">
+                                    <input type="submit" class="btn btn-primary"
+                                           style="background-color: #091069"
+                                           value="등록"/>
+                                    <!-- introduce_close()는 yejin.js에 정의되어 있음. 동아리 연혁 추가 모달을 닫기 위한 함수임.  -->
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                            onclick="introduce_close()">Close
+                                    </button>
+                                </div>
+                            </form>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -244,24 +246,24 @@
                                        disabled="disabled">
                             </form>
                             <div class="text-right">
-                                <div class="d-inline-block"
-                                     onclick="introduce_update('{{ history.history_no }}')">
-                                    <input id="btn-history-update-{{ history.history_no }}" type="submit"
-                                           hidden/>
-                                    <i id="history-update-{{ history.history_no }}" class="fa fa-pencil"
-                                       style="font-size: 20px"></i>
-                                </div>
-                                <form id="form-history-delete-{{ history.history_no }}"
-                                      action="{% url 'history_delete' %}" method="post">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="history_no" value="{{ history.history_no }}"/>
-                                    <div class="d-inline-block" onclick="introduce_del('{{ history.history_no }}')">
-                                        <i class="fa fa-trash" id="delete" style="font-size: 20px"></i>
+                                {% if is_superuser %}
+                                    <div class="d-inline-block"
+                                         onclick="introduce_update('{{ history.history_no }}')">
+                                        <input id="btn-history-update-{{ history.history_no }}" type="submit"
+                                               hidden/>
+                                        <i id="history-update-{{ history.history_no }}" class="fa fa-pencil"
+                                           style="font-size: 20px"></i>
                                     </div>
-                                </form>
-
+                                    <form id="form-history-delete-{{ history.history_no }}"
+                                          action="{% url 'history_delete' %}" method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="history_no" value="{{ history.history_no }}"/>
+                                        <div class="d-inline-block" onclick="introduce_del('{{ history.history_no }}')">
+                                            <i class="fa fa-trash" id="delete" style="font-size: 20px"></i>
+                                        </div>
+                                    </form>
+                                {% endif %}
                             </div>
-
                         </li>
                     {% endfor %}
                     <!-- 여기까지 복사 -->
