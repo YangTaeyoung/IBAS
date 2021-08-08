@@ -175,22 +175,22 @@
 
                                         <!--연혁 입력-->
                                         <div class="introduce-li-flex">
-                                                <textarea name="history_cont"
+                                                <textarea name="history_title"
                                                           type="text"
                                                           class="form-control"
                                                           style="resize: none; font-size: 20px"
-                                                          placeholder="연혁을 입력하세요."></textarea>
+                                                          placeholder="제목을 입력하세요."></textarea>
                                         </div>
                                         <!--칸 맞춰주기 위한 div-->
                                         <div></div>
 
                                         <!--연혁 설명 입력-->
                                         <div class="introduce-li-flex m-t15">
-                                                <textarea name=""
+                                                <textarea name="history_cont"
                                                           type="text"
                                                           class="form-control"
                                                           style=" font-size: 20px"
-                                                          placeholder="연혁에 대한 설명을 입력하세요."></textarea>
+                                                          placeholder="설명을 입력하세요."></textarea>
                                         </div>
                                     </li>
                                 </ul>
@@ -251,7 +251,8 @@
                                     <i id="history-update-{{ history.history_no }}" class="fa fa-pencil"
                                        style="font-size: 20px"></i>
                                 </div>
-                                <form id="form-history-delete-{{ history.history_no }}" action="{% url 'history_delete' %}" method="post">
+                                <form id="form-history-delete-{{ history.history_no }}"
+                                      action="{% url 'history_delete' %}" method="post">
                                     {% csrf_token %}
                                     <input type="hidden" name="history_no" value="{{ history.history_no }}"/>
                                     <div class="d-inline-block" onclick="introduce_del('{{ history.history_no }}')">

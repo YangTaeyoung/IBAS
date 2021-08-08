@@ -166,60 +166,6 @@ def activity_delete(request, board_no):
 
     return redirect(reverse('activity'))
 
-
-# 댓글 달기 코드
-@auth_check(active=False)
-def activity_comment_register(request):
-    user_stu = User.objects.get(pk=request.session.get('user_stu'))  # 유저 학번 들고오는 것임
-    if request.method == "POST":
-
-        board = Board.objects.get(pk=request.POST.get('board_no'))  # 게시글 번호 들고오는 것임
-
-        # 객체로 받아서 저장할 예정
-        comment = Comment(  # 받은 정보로 덧글 생성
-            comment_board_no=board,  # 해당 게시글에
-            comment_writer=user_stu,  # 해당 학번이
-            comment_cont=request.POST.get('comment_cont')  # 사용자가 쓴 내용을 가져옴
-        )
-        create_comment_alarm(comment)
-        comment.save()
-
-    else:
-        board = Board.objects.get(pk=request.GET.get('board_no'))  # 게시글 번호 들고오는 것임
-        # 객체로 받아서 저장할 예정
-        comment = Comment(
-            comment_board_no=board,
-            comment_writer=user_stu,
-            comment_cont=request.GET.get('comment_cont'),
-            comment_cont_ref=Comment.objects.get(pk=request.GET.get("comment_ref"))
-        )
-        create_comment_ref_alarm(comment)
-        comment.save()
-        # 데이터 베이스에 저장
-    return redirect("activity_detail", board_no=board.board_no)
-
-
-# 댓글 삭제 코드
-@writer_only(superuser=True)
-def activity_comment_delete(request):
-    board_no = request.POST.get("board_no")
-    if request.method == "POST":  # 댓글 삭제를 누를 경우
-        comment = Comment.objects.get(pk=request.POST.get('comment_id'))
-        # 그 댓글의 pk 를 찾아서 DB 에서 지운다.
-        comment.delete()
-    return redirect("activity_detail", board_no=board_no)  # 게시글 상세페이지로 이동
-
-
-# 댓글 수정 코드
-@writer_only(superuser=False)
-def activity_comment_update(request):
-    if request.method == "POST":  # 정상적으로 파라미터가 넘어왔을 경우
-        comment = get_object_or_404(Comment, pk=request.POST.get('comment_id'))  # 가져온 comment_id를 토대로 수정 내역을 적용
-        comment.comment_cont = request.POST.get('comment_cont')  # 수정할 내용을 가져옴
-        comment.save()  # DB 저장
-        return redirect("activity_detail", board_no=comment.comment_board_no.board_no)
-
-
 # ---- history_register ---- #
 # : 연혁 등록하는 코드
 # 작성자 : 양태영
@@ -230,9 +176,10 @@ def activity_comment_update(request):
 def history_register(request):  # 연혁 등록
     if request.method == "POST":  # 정상적으로 값이 넘어왔을 경우
         History.objects.create(  # history 객체 생성 후 받은 값을 집어넣음.
+            history_title=request.POST.get("history_title"),
             history_cont=request.POST.get("history_cont"),
             history_date=request.POST.get("history_date"),
-            history_writer=User.objects.get(pk=request.session.get("user_stu"))
+            history_writer=get_logined_user(request)
         )
         return redirect(reverse("introduce"))  # 소개 페이지로 리다이렉트
 
