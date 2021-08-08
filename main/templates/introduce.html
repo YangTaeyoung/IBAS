@@ -38,7 +38,12 @@
             var img = document.getElementById('introduce-img');
             var p1 = document.getElementById('introduce-p1');
             var p2 = document.getElementById('introduce-p2');
+            for (i = 1; i < 4; i++) {
+                var intro_p = document.getElementById('intro-p-' + num);
+                document.getElementById('intro-p-' + i).style.color = 'grey';
+            }
 
+            intro_p.style.color = 'white'
 
             p1.innerHTML = ' ';
 
@@ -46,20 +51,25 @@
             p2.style.lineHeight = '200%'
 
             if (num === 1) {
-                img.src = '{% static "images/data-an.jpg" %}';
+                img.src = '{% static "images/data-an.png" %}';
                 p2.innerHTML = '다양한 분야의 지식을 기반으로 다방면의 데이터를 끌어모아 비즈니스 인사이트를 도출하는 역할을 합니다.' +
                     '<br>이를 위해 머신러닝 모델링 보다는 SQL을 활용해 데이터를 추출&분석 후 ' +
                     '<br>Tableau등을 통해 시각화 하고 분석보고서를 만드는 작업을 합니다. '
+
+
+
             } else if (num === 2) {
-                img.src = '{% static "images/data-eng2.jpg" %}'
+                img.src = '{% static "images/data-eng.png" %}'
                 p2.innerHTML = '데이터 분석을 효과적으로 수행하기 위해서는 방대한 데이터를 안전하고 효과적으로 저장하며 <br>' +
                     '필요시 빠르게 불러낼 수 있는 시스템을 구축해야합니다. 이를 위해 프로그래밍을 이용해<br>' +
                     ' 시스템을 구축하는 역할을 하며 특성상 진로를 Developer로 택한 이들이 많습니다.'
+
             } else if (num === 3) {
-                img.src = '{% static "images/data-sc.jpg" %}'
+                img.src = '{% static "images/data-sc.png" %}'
                 p2.innerHTML = '머신러닝,파이썬,통계 등의 다양한 방법을 활용해 대량의 데이터에서 인사이트를 뽑아낼 수 있는 사람을 의미합니다.' +
                     '<br>비즈니스에 여러 알고리즘을 적용,특정 업무에 맞는 모델링을 구현합니다. ' +
                     '<br>새로운 분석 모델이나 머신러닝 모델을 수정 혹은 개발하는 역할을 합니다.'
+
             }
         }
 
@@ -88,7 +98,7 @@
 
     <!-- 빅데이터 설명 -->
     <section class="introduce">
-        <img src="{% static 'images/3d.jpg' %}" class="relative w-100 h-100">
+        <img src="{% static 'images/bigdata-bg.png' %}" class="relative w-100 h-100">
         <div class="absolute" style="top: 35%; left: 5%">
             <p class="text-white animate__animated animate__fadeInUp m-b100 font-weight-500"
                style="font-size: 80pt;">Big Data</p>
@@ -104,7 +114,7 @@
 
     <!-- 진로 설명 -->
     <section id="introduce-career" class="introduce bg-black-light">
-        <img id="introduce-img" src="{% static 'images/data-bg.jpg' %}"
+        <img id="introduce-img" src="{% static 'images/career-bg.png' %}"
              class="absolute introduce" style="filter: brightness(50%)">
         <div class="m-l30 absolute z-index100" style="bottom: 20%; left: 5% ">
             <p id="introduce-p1" class="text-gray-1 font-weight-600 z-index100" style="font-size: 50pt;">Big
@@ -115,14 +125,14 @@
         </div>
 
         <div class="d-flex flex-column absolute" style="right: 5%; top: 10%;">
-            <p class="text-gray-1 font-weight-600 text-right m-b50 introduce-v4 z-index100 introduce-pointer introduce-career"
-               onclick="intro_show(1)">Data
+            <p id="intro-p-1" class="font-weight-600 text-right m-b50 introduce-v4 z-index100 introduce-pointer introduce-career"
+               style="color: grey" onclick="intro_show(1)">Data
                 Analyst</p>
-            <p class="text-gray-1 font-weight-600 text-right m-b50 introduce-v4 z-index100 introduce-pointer introduce-career"
-               onclick="intro_show(2)">Data
+            <p id="intro-p-2" class="font-weight-600 text-right m-b50 introduce-v4 z-index100 introduce-pointer introduce-career"
+               style="color: grey" onclick="intro_show(2)">Data
                 Engineer</p>
-            <p class="text-gray-1 font-weight-600 text-right m-b50 introduce-v4 z-index100 introduce-pointer introduce-career"
-               onclick="intro_show(3)">Data
+            <p id="intro-p-3" class="font-weight-600 text-right m-b50 introduce-v4 z-index100 introduce-pointer introduce-career"
+               style="color: grey" onclick="intro_show(3)">Data
                 Scientist</p>
 
             {#                <p class="text-white font-weight-600 m-0" style="font-size: 80pt; line-height: 120px;">Velocity</p>#}
@@ -225,7 +235,7 @@
                     {% for history in history_list %}
                         <li class="introduce-event" data-date="{% if history.is_marked %}{{ history.history_date|date:'Y' }}{% endif %}">
                             <form id="form-history-update-{{ history.history_no }}" action="{% url 'history_update' %}"
-                                  method="post">
+                                  method="post" class="m-b10">
                                 {% csrf_token %}
                                 <input type="hidden" name="history_no" value="{{ history.history_no }}"/>
                                 <input id="history-date-{{ history.history_no }}"
@@ -310,7 +320,7 @@
                         <ol class="comment-list">
                             <!-- 여기부터 복붙 -->
                             {% for chief_crew in chief_crews %}
-                                <li class="comment float-left">
+                                <li class="comment float-left d-flex justify-content-center align-items-center width-200">
                                     <div class="m-l30">
                                         <div class="comment-author vcard mb-0 d-flex">
                                             <div class="m-r20 d-flex flex-column justify-content-center align-items-center">
