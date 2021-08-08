@@ -183,18 +183,7 @@
                                                           type="text"
                                                           class="form-control"
                                                           style="resize: none; font-size: 20px"
-                                                          placeholder="제목을 입력하세요."></textarea>
-                                            </div>
-                                            <!--칸 맞춰주기 위한 div-->
-                                            <div></div>
-
-                                            <!--연혁 설명 입력-->
-                                            <div class="introduce-li-flex m-t15">
-                                                <textarea name="history_cont"
-                                                          type="text"
-                                                          class="form-control"
-                                                          style=" font-size: 20px"
-                                                          placeholder="설명을 입력하세요."></textarea>
+                                                          placeholder="내용을 입력하세요."></textarea>
                                             </div>
                                         </li>
                                     </ul>
@@ -223,30 +212,26 @@
                     <!-- 주의!!!!! 연도 새로 시작할때만 data-date 에 연도 지정해 주어야 함. 최고 중요. 안하면 완전 별로임 -->
                     <!-- 주의!!!!! 하위 요소의 id는 모두 javascript 함수에 사용되는 것임.  -->
                     {% for history in history_list %}
-                        <li class="introduce-event" data-date="{{ history.history_date|date:'Y' }}">
+                        <li class="introduce-event height-80" data-date="{{ history.history_date|date:'Y' }}">
                             <form id="form-history-update-{{ history.history_no }}" action="{% url 'history_update' %}"
                                   method="post">
                                 {% csrf_token %}
                                 <input type="hidden" name="history_no" value="{{ history.history_no }}"/>
-                                <input id="history-date-{{ history.history_no }}"
-                                       name="history_title"
-                                       class="font-weight-400 text-white m-b5 d-block height-25 m-b10"
-                                       style=" font-size: 25px; background-color: rgba(0, 0, 0, 0); border: none"
-                                       value="{{ history.history_title }}"
-                                       disabled="disabled">
                                 <input id="history-txt-{{ history.history_no }}"
                                        type="text"
                                        name="history_date"
                                        class="font-weight-300 text-white m-b5 d-block height-25"
                                        style="font-size: 15px; background-color: rgba(0, 0, 0, 0); border: none"
-                                       value="{{ history.history_date|date:"Y-m-d" }}"
+                                       value="{{ history.history_date|date:"m.d" }}"
                                        disabled="disabled">
                                 <input id="history-con-{{ history.history_no }}"
                                        name="history_cont"
-                                       class="font-weight-300 text-white d-block height-30"
-                                       style="font-size: 20px; background-color: rgba(0, 0, 0, 0); border: none; width: 60vw"
+                                       class="font-weight-500 text-white d-block height-30 m-b10"
+                                       style="font-size: 25px; background-color: rgba(0, 0, 0, 0); border: none; width: 60vw"
                                        value="{{ history.history_cont }}"
                                        disabled="disabled">
+
+
                             </form>
                             <div class="text-right">
                                 {% if is_superuser %}
@@ -347,8 +332,6 @@
                     </div>
                 </div>
             </div>
-
-
         </div>
     </section>
 
