@@ -57,7 +57,6 @@
                     '<br>Tableau등을 통해 시각화 하고 분석보고서를 만드는 작업을 합니다. '
 
 
-
             } else if (num === 2) {
                 img.src = '{% static "images/data-eng.png" %}'
                 p2.innerHTML = '데이터 분석을 효과적으로 수행하기 위해서는 방대한 데이터를 안전하고 효과적으로 저장하며 <br>' +
@@ -125,13 +124,16 @@
         </div>
 
         <div class="d-flex flex-column absolute" style="right: 5%; top: 10%;">
-            <p id="intro-p-1" class="font-weight-600 text-right m-b50 introduce-v4 z-index100 introduce-pointer introduce-career"
+            <p id="intro-p-1"
+               class="font-weight-600 text-right m-b50 introduce-v4 z-index100 introduce-pointer introduce-career"
                style="color: grey" onclick="intro_show(1)">Data
                 Analyst</p>
-            <p id="intro-p-2" class="font-weight-600 text-right m-b50 introduce-v4 z-index100 introduce-pointer introduce-career"
+            <p id="intro-p-2"
+               class="font-weight-600 text-right m-b50 introduce-v4 z-index100 introduce-pointer introduce-career"
                style="color: grey" onclick="intro_show(2)">Data
                 Engineer</p>
-            <p id="intro-p-3" class="font-weight-600 text-right m-b50 introduce-v4 z-index100 introduce-pointer introduce-career"
+            <p id="intro-p-3"
+               class="font-weight-600 text-right m-b50 introduce-v4 z-index100 introduce-pointer introduce-career"
                style="color: grey" onclick="intro_show(3)">Data
                 Scientist</p>
 
@@ -206,9 +208,10 @@
                                                           style=" font-size: 20px"
                                                           placeholder="설명을 입력하세요."></textarea>
                                             </div>
+
                                         </li>
                                     </ul>
-
+                                    <p class="font-12 text-red">해당 란을 입력하지 않을 시, 제목과 똑같이 처리합니다.</p>
                                 </div>
                                 <div class="content-footer">
                                     <input type="submit" class="btn btn-primary"
@@ -233,7 +236,8 @@
                     <!-- 주의!!!!! 연도 새로 시작할때만 data-date 에 연도 지정해 주어야 함. 최고 중요. 안하면 완전 별로임 -->
                     <!-- 주의!!!!! 하위 요소의 id는 모두 javascript 함수에 사용되는 것임.  -->
                     {% for history in history_list %}
-                        <li class="introduce-event" data-date="{% if history.is_marked %}{{ history.history_date|date:'Y' }}{% endif %}">
+                        <li class="introduce-event"
+                            data-date="{% if history.is_marked %}{{ history.history_date|date:'Y' }}{% endif %}">
                             <form id="form-history-update-{{ history.history_no }}" action="{% url 'history_update' %}"
                                   method="post" class="m-b10">
                                 {% csrf_token %}
@@ -251,12 +255,17 @@
                                        style="font-size: 15px; background-color: rgba(0, 0, 0, 0); border: none"
                                        value="{{ history.history_date|date:"Y-m-d" }}"
                                        disabled="disabled">
-                                <input id="history-con-{{ history.history_no }}"
-                                       name="history_cont"
-                                       class="font-weight-300 text-white d-block height-30"
-                                       style="font-size: 20px; background-color: rgba(0, 0, 0, 0); border: none; width: 60vw"
-                                       value="{{ history.history_cont }}"
-                                       disabled="disabled">
+
+                                    <input id="history-con-{{ history.history_no }}"
+                                           name="history_cont"
+                                           class="font-weight-300 text-white d-block height-30"
+                                           style="font-size: 20px; background-color: rgba(0, 0, 0, 0); border: none; width: 60vw"
+                                           {% if history.history_title == history.history_cont %}
+                                               type="hidden"
+                                           {% endif %}
+                                           value="{{ history.history_cont }}"
+                                           disabled="disabled">
+
                             </form>
                             <div class="text-right">
                                 {% if is_superuser %}

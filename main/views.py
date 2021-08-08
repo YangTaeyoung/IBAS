@@ -15,13 +15,14 @@ from date_controller import is_user_recruiting, is_interview_progress
 from post_controller import comment_delete_by_post_delete
 from django.contrib import messages
 
+
 # 메인페이지 이동 함수
 def index(request):
     from member import session
     # 임시 로그인
     # session.save_session(request, user_model=User.objects.get(pk=12162359), logined_email="0130yang@gmail.com", provider="google")
     # session.save_session(request, user_model=User.objects.get(pk=12171652))
-    #session.save_session(request, user_model=User.objects.get(pk=12172285))
+    # session.save_session(request, user_model=User.objects.get(pk=12172285))
     # session.save_session(request, user_model=User.objects.get(pk=12172434))
     context = {
         "is_user_recruiting": is_user_recruiting(),
@@ -35,7 +36,7 @@ def index(request):
 def introduce(request):
     # 히스토리 내역을 가져옴
     history_list = History.objects.all().order_by("history_date")
-    year_list = list(range(history_list.first().history_date.year, history_list.last().history_date.year+1))
+    year_list = list(range(history_list.first().history_date.year, history_list.last().history_date.year + 1))
     mark_list = []
     for year in year_list:
         mark_list.append(History.objects.filter(history_date__year=year).order_by("history_date").first().history_no)
@@ -180,6 +181,7 @@ def activity_delete(request, board_no):
 
     return redirect(reverse('activity'))
 
+
 # ---- history_register ---- #
 # : 연혁 등록하는 코드
 # 작성자 : 양태영
@@ -188,10 +190,14 @@ def activity_delete(request, board_no):
 #   - 단순 코드 정리 history.save 없애도 되서 없앴음.
 @superuser_only(cfo_included=False)
 def history_register(request):  # 연혁 등록
+    history_title = request.POST.get("history_title")
+    history_cont = request.POST.get("history_cont")
+    if history_cont == "":
+        history_cont = history_title
     if request.method == "POST":  # 정상적으로 값이 넘어왔을 경우
         History.objects.create(  # history 객체 생성 후 받은 값을 집어넣음.
-            history_title=request.POST.get("history_title"),
-            history_cont=request.POST.get("history_cont"),
+            history_title=history_title,
+            history_cont=history_cont,
             history_date=request.POST.get("history_date"),
             history_writer=get_logined_user(request)
         )
@@ -256,4 +262,3 @@ def hall_of_fame(request):
 
 def error_handler500(request):
     return render(request, "../templates/error_page.html", status=500)
-
