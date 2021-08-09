@@ -110,6 +110,14 @@
     }
 
 
+    .item_flex_lgn {
+    /* 무슨일이 있더라도 width를 고정시키기 */
+        width: 100%;
+        max-width: 100%;
+        min-width: 100%;
+        height: 100vh;
+    }
+
 }
 
 @media (min-width: 1001px) {
@@ -119,7 +127,15 @@
 
     .cont-w {
         width: 80%;
-}
+    }
+
+    .item_flex_lgn {
+    /* 무슨일이 있더라도 width를 고정시키기 */
+    width: 500px;
+    max-width: 500px;
+    min-width: 500px;
+    height: 100vh;
+    }
 
 }
 
