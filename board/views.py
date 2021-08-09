@@ -1,13 +1,11 @@
 from django.db import transaction
-from django.http import QueryDict
 from django.shortcuts import render, redirect, reverse, get_object_or_404
-from DB.models import Board, BoardFile, BoardType, Comment, ContestBoard, ContestFile, User
+from DB.models import Board, BoardFile, BoardType,  ContestBoard, ContestFile
 from django.db.models import Q
 from board.forms import BoardForm, ContestForm, FileForm
 from file_controller import FileController
 from pagination_handler import get_page_object
-from alarm.alarm_controller import create_comment_alarm, create_comment_ref_alarm, create_board_notice_alarm, \
-    delete_board_by_superuser_alarm
+from alarm.alarm_controller import create_board_notice_alarm, delete_board_by_superuser_alarm
 from user_controller import login_required, writer_only, auth_check, get_logined_user, not_allowed, role_check, \
     superuser_only
 from django.contrib import messages
@@ -82,16 +80,11 @@ def get_context_of_board_(board_no):
     # 게시글 파일 받아오기. (순서대로 전체파일, 이미지파일, 문서파일)
     board_file_list, image_list, doc_list = FileController.get_images_and_files_of_(board)  # 공모전 이미지와 문서 받아오기
 
-    # 댓글 불러오기
-    # comment_list = Comment.objects.filter(comment_board_no=board).filter(comment_cont_ref__isnull=True).order_by(
-    #     "comment_created").prefetch_related("comment_set")
-
     context = {
         "board": board,
         "file_list": doc_list,
         "img_list": image_list,
         'board_file_list': board_file_list,
-        # "comment_list": comment_list,
         "board_type_no": board.board_type_no.board_type_no,
         "board_name": board.board_type_no.board_type_name,
         "board_exp": board.board_type_no.board_type_exp,
@@ -119,10 +112,6 @@ def get_context_of_contest_(contest_no):
     # 게시글 파일 받아오기. (순서대로 전체파일, 이미지파일, 문서파일)
     contest_file_list, image_list, doc_list = FileController.get_images_and_files_of_(contest)  # 공모전 이미지와 문서 받아오기
 
-    # # 댓글 불러오기
-    # comment_list = ContestComment.objects.filter(comment_board_no=contest).filter(
-    #     comment_cont_ref__isnull=True).order_by("comment_created").prefetch_related("contestcomment_set")
-
     context = {
         'contest': contest,
         'file_list': doc_list,
@@ -130,7 +119,6 @@ def get_context_of_contest_(contest_no):
         'contest_file_list': contest_file_list,
         "board_name": "공모전 게시판",
         "board_exp": "공모전 정보를 알려주는 게시판",
-        # "comment_list": comment_list,
     }
 
     return context
@@ -435,6 +423,7 @@ def contest_delete(request, contest_no):
 
     with transaction.atomic():
         FileController.delete_all_files_of_(contest)  # 해당 게시글에 등록된 파일 모두 제거
+        comment_delete_by_post_delete(contest)
         contest.delete()  # 파일과 폴더 삭제 후, 게시글 DB 에서 삭제
 
     return redirect(reverse('contest_list'))
