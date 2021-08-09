@@ -407,58 +407,6 @@ class LectBoardType(models.Model):
         db_table = 'LECT_BOARD_TYPE'
 
 
-class LectBoardAnswer(models.Model):
-    lect_ans_no = models.AutoField(db_column='LECT_ANS_NO', primary_key=True)  # Field name made lowercase.
-    lect_board_answer = models.ForeignKey(LectBoard, models.DO_NOTHING,
-                                          db_column='LECT_BOARD_ANSWER')  # Field name made lowercase.
-    lect_user_stu = models.ForeignKey('User', on_delete=models.CASCADE,
-                                      db_column='LECT_USER_STU')  # Field name made lowercase.
-    lect_ans_cont = SummernoteTextField(db_column='LECT_ANS_CONT', max_length=CONT_SIZE, blank=True,
-                                        null=True)  # Field name made lowercase.
-    lect_ans_created = models.DateTimeField(db_column='LECT_ANS_CREATED',
-                                            auto_now_add=True)  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'LECT_BOARD_ANSWER'
-
-
-class LectBoardAnswerFile(models.Model):
-    lect_ans_file_id = models.AutoField(db_column='LECT_ANS_FILE_ID', primary_key=True)  # Field name made lowercase.
-    lect_ans_no = models.ForeignKey(LectBoardAnswer, on_delete=models.CASCADE,
-                                    db_column='LECT_ANS_NO')  # Field name made lowercase.
-    lect_ans_file_path = models.CharField(db_column='LECT_ANS_FILE_PATH', max_length=1000)  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'LECT_BOARD_ANSWER_FILE'
-
-
-class LectBoardEx(models.Model):
-    lect_board_ex_no = models.AutoField(db_column='LECT_BOARD_EX_NO', primary_key=True)  # Field name made lowercase.
-    lect_board_no = models.ForeignKey(LectBoard, on_delete=models.CASCADE,
-                                      db_column='LECT_BOARD_NO')  # Field name made lowercase.
-    lect_board_ex_content = models.TextField(db_column='LECT_BOARD_EX_CONTENT', blank=True,
-                                             null=True)  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'LECT_BOARD_EX'
-
-
-class LectBoardExFile(models.Model):
-    lect_board_ex_file_id = models.AutoField(db_column='LECT_BOARD_EX_FILE_ID',
-                                             primary_key=True)  # Field name made lowercase.
-    lect_board_ex_no = models.ForeignKey(LectBoardEx, on_delete=models.CASCADE,
-                                         db_column='LECT_BOARD_EX_NO')  # Field name made lowercase.
-    lect_board_ex_file_path = models.CharField(db_column='LECT_BOARD_EX_FILE_PATH',
-                                               max_length=1000)  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'LECT_BOARD_EX_FILE'
-
-
 class LectBoardFile(File):
     def file_upload_to(self, filename):
         return os.path.join('lecture', 'board', str(self.file_fk_id), filename)

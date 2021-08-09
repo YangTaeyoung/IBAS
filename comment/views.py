@@ -42,8 +42,8 @@ def comment_register(request, type, board_ref):
             )
         else:
             comment.save()
+            create_comment_alarm(comment)
             serializer = CommentSerializer(comment)
-            # create_comment_alarm(comment)
             return JsonResponse({'comment': serializer.data}, safe=False)
 
     return JsonResponse(data={}, status=400)

@@ -40,13 +40,13 @@ def create_comment_alarm(comment: Comment):
             alarm_link=resolve_url("member_delete_detail", user_delete_no=user_delete.user_delete_no)
         )
     if init_dict.get("alarm_user") != comment.comment_writer:
-        Alarm.objects.create(init_dict)
+        Alarm.objects.create(**init_dict)
 
         if comment.comment_cont_ref is not None:
             if comment.comment_cont_ref.comment_writer != comment.comment_writer:
                 Alarm.objects.create(
                     alarm_user=comment.comment_cont_ref.comment_writer,
-                    alarm_cont=f"내 덧글에 {comment.comment_writer}님께서 덧글을 남기셨습니다.",
+                    alarm_cont=f"내 덧글에 {comment.comment_writer.user_name}님께서 덧글을 남기셨습니다.",
                     alarm_link=init_dict.get("alarm_link")
                 )
 
