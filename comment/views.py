@@ -12,10 +12,10 @@ from django.http.response import JsonResponse
 # ??? 부분으로 구분
 type_no = {
     'board': 1,
+    'activity': 1,
     'contest': 2,
     'lect': 3,
     'staff': 4,
-    'activity': 1,
 }
 
 

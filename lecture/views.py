@@ -349,7 +349,7 @@ def lect_board_register(request, room_no, board_type):
                 )
                 file_form.save(instance=lecture)  # 공지 또는 강의 파일 저장
 
-        return redirect('lect_room_main', room_no=room_no)
+        return redirect('lect_board_detail', room_no=room_no, lect_board_no=lecture.pk)
 
 
 # 강의/공지 게시글 상세보기

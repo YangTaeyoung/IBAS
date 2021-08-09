@@ -473,8 +473,8 @@ def contest_update(request, contest_no):
                                                         files=contest_files, required=True)
             # 수정된 게시글 페이지로 이동
             return redirect("contest_detail", contest_no=contest.contest_no)
-        # else:
-        #     return redirect(request.path)
+        else:
+            return redirect(request.path)
 
 
 # 공모전 검색
