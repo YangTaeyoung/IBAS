@@ -10,6 +10,10 @@ from django.db.models import Q
 from django.db import transaction
 
 
+def is_professor(cur_user: User):
+    return cur_user.user_role_id == 5
+
+
 # 학교 아이디의 경우 이름/학과/학교 등으로 이름이 구성된 경우가 많음.
 # 그 경우 앞부분을 잘라주는 함수임.
 def get_real_name(name_str: str):
@@ -281,6 +285,17 @@ def is_closed(lect: Lect):
     if lect.is_expired:  # 강의 모집 기간이 만료되었는가?
         flag = True
     return flag
+
+
+def prohibit_professor(func):
+    @functools.wraps(func)
+    def wrapper(request, *args, **kwargs):
+        cur_user = get_logined_user(request)
+        if is_professor(cur_user):
+            return not_allowed(request)
+        return func(request, *args, **kwargs)
+
+    return wrapper
 
 
 def enroll_check(func):

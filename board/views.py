@@ -1,6 +1,6 @@
 from django.db import transaction
 from django.shortcuts import render, redirect, reverse, get_object_or_404
-from DB.models import Board, BoardFile, BoardType,  ContestBoard, ContestFile
+from DB.models import Board, BoardFile, BoardType, ContestBoard, ContestFile
 from django.db.models import Q
 from board.forms import BoardForm, ContestForm, FileForm
 from file_controller import FileController
@@ -37,7 +37,7 @@ def is_register_btn_show(request, board_type_no):
         if auth_no != 3:  # 미승인 회원이 아닌가
             return True
     elif 6 <= board_type_no <= 7:
-        if auth_no == 1:  # 활동 회원인가?
+        if auth_no == 1 and not role_check(cur_user, 5, "equal"):  # 활동 회원이면서 교수가 아닌가?
             return True
     elif board_type_no == 8:  # 회장단 게시판
         if role_check(cur_user, 4, "lte"):  # 회장단인가
