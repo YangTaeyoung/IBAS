@@ -639,7 +639,7 @@ def lect_room_manage_member(request, room_no):
         lect_attend_info = lect_room.attendance.filter(lect_no_id=room_no)  # 해당 강의에 속한 모든 수강생의 출석 정보
         assignment_info = lect_room.submitted_assignments  # 제출된 모든 수강생의 과제
         students = list(
-            LectEnrollment.objects.prefetch_related('student__useremail_set', ).filter(lect_no_id=room_no))  # 수강생 명단
+            LectEnrollment.objects.prefetch_related('student__user_email').filter(lect_no_id=room_no))  # 수강생 명단
         total_attend_info = [len(lect_attend_info.filter(student=stu.student)) for stu in students]  # 개인별 출석 횟수
         attend_info_list = [{
             'enrolled': stu,
