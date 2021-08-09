@@ -63,7 +63,7 @@ export default {
       this.board_no = pathname[3]
     } else if (/lect\/room\/\d+\/detail\/\d+/.test(location.pathname)) {
       this.board_type = 'lect'
-    } else if (/staff\/memver\/delete\/detail\/\d+/.test(location.pathname)) {
+    } else if (/staff\/member\/delete\/detail\/\d+/.test(location.pathname)) {
       this.board_type = 'staff'
     } else if (/activity\/\d+\/detail/.test(location.pathname)) {
       this.board_type = 'board'

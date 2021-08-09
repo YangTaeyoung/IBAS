@@ -90,7 +90,8 @@ def is_writer(cur_user, **kwargs):
             return True
     elif assignment_submit_no is not None:
         assignment = LectAssignmentSubmit.objects.get(pk=assignment_submit_no)
-        if cur_user == assignment.assignment_submitter:
+        status = LectEnrollment.objects.get(lect_no_id=lect_no, student=cur_user).status_id
+        if cur_user == assignment.assignment_submitter and status == 1:
             return True
     elif lect_no is not None:
         lect = Lect.objects.get(pk=lect_no)

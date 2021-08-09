@@ -349,7 +349,7 @@ def lect_board_register(request, room_no, board_type):
                 )
                 file_form.save(instance=lecture)  # 공지 또는 강의 파일 저장
 
-        return redirect('lect_room_main', room_no=room_no)
+        return redirect('lect_board_detail', room_no=room_no, lect_board_no=lecture.pk)
 
 
 # 강의/공지 게시글 상세보기
@@ -587,6 +587,14 @@ def lect_room_student_status(request, room_no):
 
     return render(request, 'lecture_room_student_status.html', context)
 
+
+def lect_room_exit(request, room_no):
+    cur_student = LectEnrollment.objects.get(lect_no=room_no, student_id=request.session.get('user_stu'))
+    cur_student.status_id = -1
+    cur_student.save()
+
+    return redirect('lect_view', type_no=1)
+
     # 강의자 메뉴 #
 
 
@@ -671,6 +679,7 @@ def lect_room_manage_assignment(request, room_no):
         if any_assignment and students_list:
             students_list = [{
                 'student': std.student,
+                'exit_time': std.exit_time,
                 'submission': lect_room.submitted_assignments.filter(  # 제출시간, 제출여부, 제출된 파일에 접근하기 위한 객체
                     assignment_submitter=std.student, assignment_no=assignment_no).first()
             } for std in students_list]
@@ -727,6 +736,7 @@ def lect_room_manage_attendance(request, room_no):
                         u.USER_NAME, 
                         u.USER_STU, 
                         MAJOR_INFO.MAJOR_NAME, 
+                        enrollment.exit_time,
                         if(isnull(attend.LECT_ATTEND_DATE),false,true) as attendance
                     FROM LECT_ENROLLMENT AS enrollment
 
@@ -750,8 +760,9 @@ def lect_room_manage_attendance(request, room_no):
                 'name': name,
                 'stu': stu,
                 'major': major,
+                'exit_time': exit_time,
                 'attendance': '출석' if attendance == 1 else '결석'
-            } for index, (name, stu, major, attendance) in enumerate(cursor.fetchall())]
+            } for index, (name, stu, major, exit_time, attendance) in enumerate(cursor.fetchall())]
 
         context = {
             'lect': lect_room,
