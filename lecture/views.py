@@ -15,7 +15,7 @@ from user_controller import get_logined_user, superuser_only, writer_only, auth_
 from utils.crawler import get_og_tag
 from utils.url_regex import is_youtube
 from utils.youtube import get_youtube
-from date_controller import is_lect_recruiting
+from date_controller import is_lect_recruiting, today
 from exception_handler import exist_check
 from post_controller import comment_delete_by_post_delete
 
@@ -591,6 +591,7 @@ def lect_room_student_status(request, room_no):
 def lect_room_exit(request, room_no):
     cur_student = LectEnrollment.objects.get(lect_no=room_no, student_id=request.session.get('user_stu'))
     cur_student.status_id = -1
+    cur_student.exit_time = today()
     cur_student.save()
 
     return redirect('lect_view', type_no=1)
