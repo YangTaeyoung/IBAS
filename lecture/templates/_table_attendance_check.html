@@ -50,7 +50,7 @@
     {% if students_list|length > 0 %}
         <!-- 수강생이 있을 때 나오는 열 -->
         {% for student in students_list %}
-
+            {% if not student.exit_time or student.exit_time > cur_lect_board.lect_board_created %}
             <tr class="lectRoom_mtr align-middle">
                 <!-- 체크박스 -->
                 <td scope="row">
@@ -73,6 +73,7 @@
                 <td id="lectRoom_color" class="text-center lectRoom_attend">{{ student.attendance }}</td>
 
             </tr>
+            {% endif %}
         {% endfor %}
 
     {% else %}

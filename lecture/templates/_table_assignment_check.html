@@ -49,53 +49,55 @@
             <!-- 수강생이 있을 때 나오는 열 -->
             <!--========================여기부터 복붙==========================-->
             {% for row in students_list %}
-                <tr class="lectRoom_mtr align-middle">
-                    <!-- 체크박스 -->
-                    <td scope="row">
+                {% if not row.exit_time or row.exit_time > cur_assignment.lect_board_created %}
+                    <tr class="lectRoom_mtr align-middle">
+                        <!-- 체크박스 -->
+                        <td scope="row">
 
-                        <div>
-                            <input id="check_{% personal_info row.student.user_stu request %}" name="is_checked_{% personal_info row.student.user_stu request%}"
-                                   type="checkbox" value="{{ row.submission.pk }}">
+                            <div>
+                                <input id="check_{% personal_info row.student.user_stu request %}" name="is_checked_{% personal_info row.student.user_stu request%}"
+                                       type="checkbox" value="{{ row.submission.pk }}">
 
-                            <label for="check_{% personal_info row.student.user_stu request %}"
-                                   class="staff_label_margin m-l20"></label>
-                        </div>
-                    </td>
-                    <!-- 회원 이름 -->
-                    <td class="align-middle text-center">{% personal_info row.student.user_name request %}  </td>
-                    <!-- 회원 학번 -->
-                    <td class="text-center">{% personal_info row.student.user_stu request %}</td>
+                                <label for="check_{% personal_info row.student.user_stu request %}"
+                                       class="staff_label_margin m-l20"></label>
+                            </div>
+                        </td>
+                        <!-- 회원 이름 -->
+                        <td class="align-middle text-center">{% personal_info row.student.user_name request %}  </td>
+                        <!-- 회원 학번 -->
+                        <td class="text-center">{% personal_info row.student.user_stu request %}</td>
 
-                    {% if row.submission %}
-                        <!-- 과제제출 했을 때-->
+                        {% if row.submission %}
+                            <!-- 과제제출 했을 때-->
 
-                        <!-- 상태 -->
-                        <td class="text-center lectRoom_hw">{{ row.submission.status.description }}</td>
-                        <!--제출시간 -->
-                        <td class="text-center">{{ row.submission.assignment_submit_created | date:"Y-m-d" }}</td>
-                        <!-- 과제 파일 : 1개만 보여주고, 그 이상은 (+n) 이렇게 숫자만 표현 -->
-                        <td class="align-middle"><a href="javascript:void(0);">
-                            {% if row.submission.files.all|length %}
-                                {{ row.submission.files.first.file_name|truncate:25 }}&nbsp;&nbsp;
-                                {% if row.submission.files.all|length > 1 %}(+
-                                    {{ row.submission.files.all|length |subtract:1 }}){% endif %}
-                            {% else %}-{% endif %}</a></td>
-                        <td class="font-12"><a
-                                href="{% url "lect_assignment_detail" lect.pk row.submission.pk %}">▶자세히</a></td>
+                            <!-- 상태 -->
+                            <td class="text-center lectRoom_hw">{{ row.submission.status.description }}</td>
+                            <!--제출시간 -->
+                            <td class="text-center">{{ row.submission.assignment_submit_created | date:"Y-m-d" }}</td>
+                            <!-- 과제 파일 : 1개만 보여주고, 그 이상은 (+n) 이렇게 숫자만 표현 -->
+                            <td class="align-middle"><a href="javascript:void(0);">
+                                {% if row.submission.files.all|length %}
+                                    {{ row.submission.files.first.file_name|truncate:25 }}&nbsp;&nbsp;
+                                    {% if row.submission.files.all|length > 1 %}(+
+                                        {{ row.submission.files.all|length |subtract:1 }}){% endif %}
+                                {% else %}-{% endif %}</a></td>
+                            <td class="font-12"><a
+                                    href="{% url "lect_assignment_detail" lect.pk row.submission.pk %}">▶자세히</a></td>
 
-                    {% else %}
-                        <!-- 과제제출 안했을 때-->
+                        {% else %}
+                            <!-- 과제제출 안했을 때-->
 
-                        <!-- 상태 -->
-                        <td class="text-center lectRoom_hw">미제출</td>
-                        <!--제출시간 -->
-                        <td class="text-center">-</td>
-                        <!-- 과제 파일 -->
-                        <td class="align-middle"><a href="javascript:void(0);">-</a></td>
-                        <td></td>
-                    {% endif %}
+                            <!-- 상태 -->
+                            <td class="text-center lectRoom_hw">미제출</td>
+                            <!--제출시간 -->
+                            <td class="text-center">-</td>
+                            <!-- 과제 파일 -->
+                            <td class="align-middle"><a href="javascript:void(0);">-</a></td>
+                            <td></td>
+                        {% endif %}
 
-                </tr>
+                    </tr>
+                {% endif %}
             {% endfor %}
             <!--========================여기까지 복붙==========================-->
         </form>
