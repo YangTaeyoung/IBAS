@@ -34,7 +34,9 @@
                             <div class="col-lg-3 col-xl-3">
                                 <div class="sticky-top">
                                     {% include "_search_bar.html" %}
-                                    {% include "_navigation_bar.html" %}
+                                    {% if lect.lect_type_id != 3 %}
+                                        {% include "_navigation_bar.html" %}
+                                    {% endif %}
                                 </div>
                             </div>
                             <!--========== 왼쪽 검색창 및 강의룸 네비게이션바 끝 ==========-->
@@ -50,7 +52,7 @@
                                                 <h3 class="title"><i class="fa fa-microphone m-r5"></i>공지사항</h3>
                                                 {% if notice_list %}
                                                     <!-- 더보기 a태크 클릭 시, 강의룸 내 공지사항 페이지로 이동 -->
-                                                    <a href={% url "lect_room_list" room_no=lect.pk board_type=1  %}>더보기</a>
+                                                    <a href={% url "lect_room_list" room_no=lect.pk board_type=1 %}>더보기</a>
                                                 {% elif logined_user == lect.lect_chief %}
                                                     <a href={% url "lect_board_register" lect.pk 1 %}>등록하기</a>
                                                 {% endif %}
@@ -59,136 +61,151 @@
                                             <div class="content-body">
                                                 <!-- 공지사항 게시글 테이블 -->
                                                 {% if notice_list %}
-                                                <table class="table">
-                                                    <!-- 테이블 1행: 제목 -->
-                                                    <thead>
-                                                    <tr>
-                                                        <th class="border-top-0" scope="col">번호</th>
-                                                        <th class="border-top-0" style="width: 400px" scope="col">제목
-                                                        </th>
-                                                        <th class="border-top-0" scope="col">작성자</th>
-                                                        <th class="border-top-0" scope="col">작성일</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <!-- 테이블 2행 ~: 공지사항 최근 3개 게시글 불러옴 -->
-                                                    <tbody>
-                                                    {% for notice in notice_list|slice:":3" %}
+                                                    <table class="table">
+                                                        <!-- 테이블 1행: 제목 -->
+                                                        <thead>
                                                         <tr>
-                                                            <!-- 공지사항 번호 (고정됨) -->
-                                                            <td>{{ notice_list|length |subtract:forloop.counter0 }}</td>
-                                                            <!-- 공지사항 제목-->
-                                                            <td><a href={% url "lect_board_detail" lect.pk notice.pk %}>{{ notice.lect_board_title }}</a></td>
-                                                            <!-- 공지사항 작성자: 복수 강의자일 경우, 해당 게시글을 올린 강의자 이름을 불러올 것 -->
-                                                            <td>{{ notice.lect_board_writer.user_name }}</td>
-                                                            <!-- 게시글 작성일 -->
-                                                            <td>{{ notice.lect_board_created | date:"Y-m-d" }}</td>
+                                                            <th class="border-top-0" scope="col">번호</th>
+                                                            <th class="border-top-0" style="width: 400px" scope="col">제목
+                                                            </th>
+                                                            <th class="border-top-0" scope="col">작성자</th>
+                                                            <th class="border-top-0" scope="col">작성일</th>
                                                         </tr>
-                                                    {% endfor %}
-                                                    </tbody>
-                                                </table>
-                                            {% else %}
-                                                <p class="text-center">공지사항이 없습니다.</p>
-                                            {% endif %}
+                                                        </thead>
+                                                        <!-- 테이블 2행 ~: 공지사항 최근 3개 게시글 불러옴 -->
+                                                        <tbody>
+                                                        {% for notice in notice_list|slice:":3" %}
+                                                            <tr>
+                                                                <!-- 공지사항 번호 (고정됨) -->
+                                                                <td>{{ notice_list|length |subtract:forloop.counter0 }}</td>
+                                                                <!-- 공지사항 제목-->
+                                                                <td>
+                                                                    <a href={% url "lect_board_detail" lect.pk notice.pk %}>{{ notice.lect_board_title }}</a>
+                                                                </td>
+                                                                <!-- 공지사항 작성자: 복수 강의자일 경우, 해당 게시글을 올린 강의자 이름을 불러올 것 -->
+                                                                <td>{{ notice.lect_board_writer.user_name }}</td>
+                                                                <!-- 게시글 작성일 -->
+                                                                <td>{{ notice.lect_board_created | date:"Y-m-d" }}</td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                {% else %}
+                                                    <p class="text-center">공지사항이 없습니다.</p>
+                                                {% endif %}
                                             </div>
                                         </div>
                                         <!-- 강의룸 내 강의 페이지 글을 담는 박스 -->
-                                        <div class="content-box">
-                                            <!-- 박스 제목 div -->
-                                            <div class="content-header d-flex justify-content-between">
-                                                <h3 class="title"><i class="fa fa-book m-r5"></i>{{ lect.lect_type.type_name }} 목록</h3>
-                                                {% if lect_board_list %}
-                                                    <!-- 더보기 a태크 클릭 시, 강의룸 내 강의리스트 페이지로 이동 -->
-                                                    <a href={% url "lect_room_list" lect.pk 2 %}>더보기</a>
-                                                {% elif logined_user == lect.lect_chief %}
-                                                    <a href={% url "lect_board_register" lect.pk 2 %}>등록하기</a>
-                                                {% endif %}
-                                            </div>
-                                            <div class="content-body">
-                                            {% if lect_board_list %}
-                                                <!-- 강의목록(강의페이지) 게시글 테이블 -->
-                                                <table class="table">
-                                                    <!-- 테이블 1행: 제목 -->
-                                                    <thead>
-                                                    <tr>
-                                                        <th class="border-top-0" scope="col">번호</th>
-                                                        <th class="border-top-0" style="width: 400px" scope="col">제목
-                                                        </th>
-                                                        <th class="border-top-0" scope="col">강의</th>
-                                                        <th class="border-top-0" scope="col">작성일</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <!-- 테이블 2행 ~: 강의목록(강의) 페이지 내 최근 3개 게시글 불러옴 -->
-                                                    <tbody>
-                                                    {% for board in lect_board_list|slice:':3' %}
-                                                        <tr>
-                                                            <!-- 공지사항 번호 (고정됨) -->
-                                                            <td>{{ lect_board_list|length |subtract:forloop.counter0 }}</td>
-                                                            <!-- 공지사항 제목-->
-                                                            <td><a href={% url 'lect_board_detail' lect.pk board.pk %}>{{ board.lect_board_title }}</a></td>
-                                                            <!-- 공지사항 작성자: 복수 강의자일 경우, 해당 게시글을 올린 강의자 이름을 불러올 것 -->
-                                                            <td>{{ board.lect_board_writer.user_name }}</td>
-                                                            <!-- 게시글 작성일 -->
-                                                            <td>{{ board.lect_board_created | date:"Y-m-d"}}</td>
-                                                        </tr>
+                                        {% if lect.lect_type_id != 3 %}
+                                            <div class="content-box">
+                                                <!-- 박스 제목 div -->
+                                                <div class="content-header d-flex justify-content-between">
+                                                    <h3 class="title"><i
+                                                            class="fa fa-book m-r5"></i>{{ lect.lect_type.type_name }}
+                                                        목록
+                                                    </h3>
+                                                    {% if lect_board_list %}
+                                                        <!-- 더보기 a태크 클릭 시, 강의룸 내 강의리스트 페이지로 이동 -->
+                                                        <a href={% url "lect_room_list" lect.pk 2 %}>더보기</a>
+                                                    {% elif logined_user == lect.lect_chief %}
+                                                        <a href={% url "lect_board_register" lect.pk 2 %}>등록하기</a>
+                                                    {% endif %}
+                                                </div>
+                                                <div class="content-body">
+                                                    {% if lect_board_list %}
+                                                        <!-- 강의목록(강의페이지) 게시글 테이블 -->
+                                                        <table class="table">
+                                                            <!-- 테이블 1행: 제목 -->
+                                                            <thead>
+                                                            <tr>
+                                                                <th class="border-top-0" scope="col">번호</th>
+                                                                <th class="border-top-0" style="width: 400px"
+                                                                    scope="col">제목
+                                                                </th>
+                                                                <th class="border-top-0" scope="col">강의</th>
+                                                                <th class="border-top-0" scope="col">작성일</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <!-- 테이블 2행 ~: 강의목록(강의) 페이지 내 최근 3개 게시글 불러옴 -->
+                                                            <tbody>
+                                                            {% for board in lect_board_list|slice:':3' %}
+                                                                <tr>
+                                                                    <!-- 공지사항 번호 (고정됨) -->
+                                                                    <td>{{ lect_board_list|length |subtract:forloop.counter0 }}</td>
+                                                                    <!-- 공지사항 제목-->
+                                                                    <td>
+                                                                        <a href={% url 'lect_board_detail' lect.pk board.pk %}>{{ board.lect_board_title }}</a>
+                                                                    </td>
+                                                                    <!-- 공지사항 작성자: 복수 강의자일 경우, 해당 게시글을 올린 강의자 이름을 불러올 것 -->
+                                                                    <td>{{ board.lect_board_writer.user_name }}</td>
+                                                                    <!-- 게시글 작성일 -->
+                                                                    <td>{{ board.lect_board_created | date:"Y-m-d" }}</td>
+                                                                </tr>
 
-                                                    {% endfor %}
-                                                    </tbody>
-                                                </table>
-                                            {% else %}
-                                                <p class="text-center">아직 {{ lect.lect_type.type_name }}가 없습니다.</p>
-                                            {% endif %}
+                                                            {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    {% else %}
+                                                        <p class="text-center">아직 {{ lect.lect_type.type_name }}가
+                                                            없습니다.</p>
+                                                    {% endif %}
 
+                                                </div>
                                             </div>
-                                        </div>
-                                        <!-- 강의룸 내 과제 글을 담는 박스 -->
-                                        <div class="content-box">
-                                            <!-- 박스 제목 div -->
-                                            <div class="content-header d-flex justify-content-between">
-                                                <h3 class="title"><i class="fa fa-check-square-o m-r5"></i>과제</h3>
-                                                <!-- 더보기 a태크 클릭 시, 강의룸 내 과제 페이지로 이동 -->
-                                                {% if assignment_list %}
-                                                    <!-- 더보기 a태크 클릭 시, 강의룸 내 강의리스트 페이지로 이동 -->
-                                                    <a href={% url 'lect_room_list' lect.lect_no 3 %}>더보기</a>
-                                                {% elif logined_user == lect.lect_chief and lect_board_list %}
-                                                    <a href={% url "lect_board_register" lect.lect_no 3 %}>등록하기</a>
-                                                {% endif %}
+                                            <!-- 강의룸 내 과제 글을 담는 박스 -->
+                                            <div class="content-box">
+                                                <!-- 박스 제목 div -->
+                                                <div class="content-header d-flex justify-content-between">
+                                                    <h3 class="title"><i class="fa fa-check-square-o m-r5"></i>과제</h3>
+                                                    <!-- 더보기 a태크 클릭 시, 강의룸 내 과제 페이지로 이동 -->
+                                                    {% if assignment_list %}
+                                                        <!-- 더보기 a태크 클릭 시, 강의룸 내 강의리스트 페이지로 이동 -->
+                                                        <a href={% url 'lect_room_list' lect.lect_no 3 %}>더보기</a>
+                                                    {% elif logined_user == lect.lect_chief and lect_board_list %}
+                                                        <a href={% url "lect_board_register" lect.lect_no 3 %}>등록하기</a>
+                                                    {% endif %}
+                                                </div>
+                                                <div class="content-body">
+                                                    {% if assignment_list %}
+                                                        <!-- 과제 게시글 테이블 -->
+                                                        <table class="table">
+                                                            <!-- 테이블 1행: 제목 -->
+                                                            <thead>
+                                                            <tr>
+                                                                <th class="border-top-0" scope="col">번호</th>
+                                                                <th class="border-top-0" style="width: 400px"
+                                                                    scope="col">제목
+                                                                </th>
+                                                                <th class="border-top-0" scope="col">과제 마감일</th>
+                                                                <th class="border-top-0 text-xl-center" scope="col">제출
+                                                                </th>
+                                                            </tr>
+                                                            </thead>
+                                                            <!-- 테이블 2행 ~: 과제 페이지 내 최근 3개 게시글 불러옴 -->
+                                                            <tbody>
+                                                            {% for row in assignment_list|slice:":3" %}
+                                                                <tr>
+                                                                    <!-- 게시글 번호 (고정됨) -->
+                                                                    <td>{{ row.idx }}</td>
+                                                                    <!-- 게시글 제목: a태그 클릭하면, 해당 게시글로 이동 -->
+                                                                    <td>
+                                                                        <a href="{% url "lect_board_detail" lect.pk row.assignment.pk %}">{{ row.assignment.lect_board_title }}</a>
+                                                                    </td>
+                                                                    <!-- 과제 마감일 -->
+                                                                    <td>{{ row.assignment.assignment_deadline | date:"Y-m-d" }}</td>
+                                                                    <!-- 수강생: 과제 제출 여부 (제출/미제출) 보임 -->
+                                                                    <!-- 강의자: 과제를 제출한 사람수 보임 -->
+                                                                    <td class="text-center">{{ row.status }}</td>
+                                                                </tr>
+                                                            {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    {% else %}
+                                                        <p class="text-center">아직 과제가 없습니다.</p>
+                                                    {% endif %}
+                                                </div>
                                             </div>
-                                            <div class="content-body">
-                                            {% if assignment_list %}
-                                                <!-- 과제 게시글 테이블 -->
-                                                <table class="table">
-                                                    <!-- 테이블 1행: 제목 -->
-                                                    <thead>
-                                                    <tr>
-                                                        <th class="border-top-0" scope="col">번호</th>
-                                                        <th class="border-top-0" style="width: 400px" scope="col">제목
-                                                        </th>
-                                                        <th class="border-top-0" scope="col">과제 마감일</th>
-                                                        <th class="border-top-0 text-xl-center" scope="col">제출</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <!-- 테이블 2행 ~: 과제 페이지 내 최근 3개 게시글 불러옴 -->
-                                                    <tbody>
-                                                    {% for row in assignment_list|slice:":3" %}
-                                                        <tr>
-                                                            <!-- 게시글 번호 (고정됨) -->
-                                                            <td>{{ row.idx }}</td>
-                                                            <!-- 게시글 제목: a태그 클릭하면, 해당 게시글로 이동 -->
-                                                            <td><a href="{% url "lect_board_detail" lect.pk row.assignment.pk %}">{{ row.assignment.lect_board_title }}</a></td>
-                                                            <!-- 과제 마감일 -->
-                                                            <td>{{ row.assignment.assignment_deadline | date:"Y-m-d" }}</td>
-                                                            <!-- 수강생: 과제 제출 여부 (제출/미제출) 보임 -->
-                                                            <!-- 강의자: 과제를 제출한 사람수 보임 -->
-                                                            <td class="text-center">{{ row.status }}</td>
-                                                        </tr>
-                                                    {% endfor %}
-                                                    </tbody>
-                                                </table>
-                                            {% else %}
-                                                <p class="text-center">아직 과제가 없습니다.</p>
-                                            {% endif %}
-                                            </div>
-                                        </div>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
