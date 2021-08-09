@@ -33,7 +33,7 @@ def is_register_btn_show(request, board_type_no):
     if board_type_no == 1:  # 공지사항
         if role_check(cur_user, 5, "lte"):  # 회장단 or 교수인가?
             return True
-    if board_type_no < 5:  # 자유게시판, 질문게시판, 활동게시판
+    elif board_type_no < 5:  # 자유게시판, 질문게시판, 활동게시판
         if auth_no != 3:  # 미승인 회원이 아닌가
             return True
     elif 6 <= board_type_no <= 7:
