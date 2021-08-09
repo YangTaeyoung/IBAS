@@ -69,34 +69,40 @@
                     <div class="section-full content-inner bg-white">
                         <div class="container">
                             <!--=====================-->
-                            <div class="content-box listing-timing-box accordion" id="accordion">
-                                <div class="content-header listing-timing-header accordion-item" data-toggle="collapse"
-                                     data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                                    <div class="head-left accordion-header">
-                                        <span><i class="la la-money m-r10"></i>강의비 지급기준/주</span>
+                            {% if lect_type.type_no == 1 %}
+                                <div class="content-box listing-timing-box accordion" id="accordion">
+                                    <div class="content-header listing-timing-header accordion-item"
+                                         data-toggle="collapse"
+                                         data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                        <div class="head-left accordion-header">
+                                            <span><i class="la la-money m-r10"></i>강의비 지급기준/주</span>
+                                        </div>
+                                        <div class="head-right">
+                                            <span class="m-l10"><i class="la la-angle-down"></i></span>
+                                        </div>
                                     </div>
-                                    <div class="head-right">
-                                        <span class="m-l10"><i class="la la-angle-down"></i></span>
+                                    <div class="content-body collapse" id="collapseOne" aria-labelledby="headingOne"
+                                         data-parent="#accordion">
+                                        <ul class="listing-time-list">
+                                            <li class="open"><span class="listing-day">출석인원 1~5명</span> <span
+                                                    class="listing-hours">￦{{ lect_money_standard.money_1to5|intcomma }}</span>
+                                            </li>
+                                            <hr/>
+                                            <li class="open"><span class="listing-day">출석인원 6~10명</span> <span
+                                                    class="listing-hours">￦{{ lect_money_standard.money_6to10|intcomma }}</span>
+                                            </li>
+                                            <hr/>
+                                            <li class="open"><span class="listing-day">출석인원 11~20명</span> <span
+                                                    class="listing-hours">￦{{ lect_money_standard.money_11to20|intcomma }}</span>
+                                            </li>
+                                            <hr/>
+                                            <li class="open"><span class="listing-day">출석인원 21명 이상</span> <span
+                                                    class="listing-hours">￦{{ lect_money_standard.money_21over|intcomma }}</span>
+                                            </li>
+                                        </ul>
                                     </div>
                                 </div>
-                                <div class="content-body collapse" id="collapseOne" aria-labelledby="headingOne"
-                                     data-parent="#accordion">
-                                    <ul class="listing-time-list">
-                                        <li class="open"><span class="listing-day">출석인원 1~5명</span> <span
-                                                class="listing-hours">￦{{ lect_money_standard.money_1to5|intcomma }}</span></li>
-                                        <hr/>
-                                        <li class="open"><span class="listing-day">출석인원 6~10명</span> <span
-                                                class="listing-hours">￦{{ lect_money_standard.money_6to10|intcomma }}</span></li>
-                                        <hr/>
-                                        <li class="open"><span class="listing-day">출석인원 11~20명</span> <span
-                                                class="listing-hours">￦{{ lect_money_standard.money_11to20|intcomma }}</span></li>
-                                        <hr/>
-                                        <li class="open"><span class="listing-day">출석인원 21명 이상</span> <span
-                                                class="listing-hours">￦{{ lect_money_standard.money_21over|intcomma }}</span></li>
-                                    </ul>
-                                </div>
-                            </div>
-
+                            {% endif %}
                             <!--====================================강의명/스터디명/소모임명 입력 시작==============================================-->
                             <div class="content-box">
                                 <div class="content-header">
@@ -314,8 +320,8 @@
                             <!--최초 글작성 시 나오는 버튼-->
                             <div style="display: grid; justify-items: center">
                                 <input class="site-button btn-block button-md" type="submit" style="width: 30%"
-                                        value="{% if is_update %}수정하기{% else %}등록하기{% endif %}"
-                                        onclick="return validation_check_for_lecture();">
+                                       value="{% if is_update %}수정하기{% else %}등록하기{% endif %}"
+                                       onclick="return validation_check_for_lecture();">
 
                             </div>
 
