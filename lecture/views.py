@@ -599,7 +599,7 @@ def lect_room_student_status(request, room_no):
 def lect_room_exit(request, room_no):
     cur_student = LectEnrollment.objects.prefetch_related('lect_no').get(
         lect_no=room_no, student_id=request.session.get('user_stu'))
-    cur_student.status = LectEnrollmentStatus.objects.get(pk=-1)
+    cur_student.status_id = -1
     cur_student.exit_time = today()
     cur_student.save()
 
