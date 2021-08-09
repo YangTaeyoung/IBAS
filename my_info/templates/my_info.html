@@ -139,7 +139,8 @@
                     <li><a data-toggle="tab" href="#listing_mybank"><i class="la la-money"></i><span>예산 신청 내역</span></a>
                     </li>
                     <!--내정보 메뉴버튼,Back : 모두에게 보이게 수정-->
-                    <li><a data-toggle="tab" href="#listing_my_info" class="active"><i class="la la-user"></i><span>내 정보</span></a>
+                    <li><a data-toggle="tab" href="#listing_my_info" class="active"><i
+                            class="la la-user"></i><span>내 정보</span></a>
                     </li>
                 </ul>
             </div>
@@ -641,20 +642,20 @@
                                             <!--학년-->
                                             {% if logined_user.user_grade != 5 %}
                                                 <tr>
-                                                <th scope="row">학년</th>
-                                                <!--Back : 자기 학년 뜨도록 수정-->
-                                                {% if logined_user.user_grade == 0 %}
-                                                    <td><span style="color:#1d61aa;">IBAS</span>에서 졸업해주셔서 감사합니다.</td>
-                                                {% else %}
-                                                    <td>{{ logined_user.user_grade }}학년</td>
-                                                {% endif %}
+                                                    <th scope="row">학년</th>
+                                                    <!--Back : 자기 학년 뜨도록 수정-->
+                                                    {% if logined_user.user_grade == 0 %}
+                                                        <td><span style="color:#1d61aa;">IBAS</span>에서 졸업해주셔서 감사합니다.
+                                                        </td>
+                                                    {% else %}
+                                                        <td>{{ logined_user.user_grade }}학년</td>
+                                                    {% endif %}
+                                                    <td>
+                                                        <a href="javascript:void(0);" data-toggle="modal"
+                                                           data-target="#grade_edit"><i class="la la-pencil"></i></a>
+                                                    </td>
+                                                </tr>
                                             {% endif %}
-
-                                            <td>
-                                                <a href="javascript:void(0);" data-toggle="modal"
-                                                   data-target="#grade_edit"><i class="la la-pencil"></i></a>
-                                            </td>
-                                            </tr>
                                             <!--이메일-->
                                             <tr>
                                                 <th scope="row">이메일</th>

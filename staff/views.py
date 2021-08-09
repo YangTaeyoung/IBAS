@@ -20,6 +20,7 @@ from django.db import transaction
 from django.contrib import messages
 from post_controller import comment_delete_by_post_delete
 
+
 # 모델에 따른 이메일 리스트를 불러오는 함수
 def get_email_list(user_model):
     user_email_list = list()
@@ -174,6 +175,8 @@ def member_aor(request):
                 # 메일 전송
                 send_mail(subject=mail_dict["mail_title"], message=mail_dict["mail_message"],
                           from_email=settings.EMAIL_HOST_USER, recipient_list=user_email_list)
+                if user.user_role_id == 5:
+                    user.user_auth = UserAuth.objects.get(pk=1)
                 user.save()
                 create_user_auth_update_alarm(user, True)
         else:
@@ -204,6 +207,8 @@ def members_aor(request):  # 여러명 일괄 처리시.
                         user.user_auth = UserAuth.objects.get(pk=2)  # 비활동 회원으로 변경
                         send_mail(subject=mail_dict["mail_title"], message=mail_dict["mail_message"],  # 합격 메일 전송
                                   from_email=settings.EMAIL_HOST_USER, recipient_list=get_email_list(user))
+                        if user.user_role_id == 5:
+                            user.user_auth = UserAuth.objects.get(pk=1)
                         user.save()
                         create_user_auth_update_alarm(user, True)
                     else:  # 불합격
