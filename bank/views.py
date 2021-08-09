@@ -267,8 +267,8 @@ def get_lect_board_stat_list(lect: Lect, col_num):
 @cfo_only
 def bank_lecture_summary(request):
     lect_summary_list = []
-    lect_list = Lect.objects.filter(Q(lect_type_id=1) & Q(lect_state_id__gte=3)).order_by("-lect_paid").order_by(
-        "-lect_created")
+    lect_list = Lect.objects.filter(Q(lect_type_id=1) & Q(lect_state_id__gte=3)).order_by(
+        "-lect_created").order_by("lect_paid")
     lect_num_list = []
     sum_list = []
     for lect in lect_list:
