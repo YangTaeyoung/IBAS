@@ -51,7 +51,7 @@
                                 <!--========== 왼쪽 강의룸 네비게이션바 끝 ==========-->
 
 
-                            {% if cur_assignment %}
+
                                 <!--=======================수강생 관리=========================-->
                                 <div class="col-lg-11 col-xl-8 p-b30">
                                     <div class="width-870">
@@ -64,6 +64,7 @@
                                                         <div>
                                                             <ul class="filter m-b0">
                                                                 <li>
+                                                                {% if cur_assignment %}
                                                                     <label for="selectbox"></label><select id="selectbox" name="assignment_no" onchange="FilterFormSubmit()">
 
                                                                         {% for lect_board in lect_board_list %}
@@ -79,6 +80,7 @@
                                                                         {% endfor %}
 
                                                                     </select>
+                                                                    {% endif %}
                                                                 </li>
                                                             </ul>
                                                         </div>
@@ -95,7 +97,7 @@
 
                                             <form id="manage-form" onsubmit="return ManageFormSubmit()">
                                                 <!-- 수강생 테이블 -->
-                                                {% include "_table_assignment_check.html" with cur_assignment=cur_assignment%}
+                                                {% include "_table_assignment_check.html" %}
                                                 {% csrf_token %}
                                             </form>
 
@@ -111,9 +113,9 @@
 
                                 </div>
                             </div>
-                        {% else %}
-                            <p class="text-center align-content-center">과제가 존재하지 않습니다.</p>
-                        {% endif %}
+
+
+
                         </div>
                     </div>
                     <!-- 상단으로 한번에 올라가는 버튼 -->
