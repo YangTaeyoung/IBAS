@@ -46,7 +46,7 @@ def create_comment_alarm(comment: Comment):
             if comment.comment_cont_ref.comment_writer != comment.comment_writer:
                 Alarm.objects.create(
                     alarm_user=comment.comment_cont_ref.comment_writer,
-                    alarm_cont=f"내 덧글에 {comment.comment_writer}님께서 덧글을 남기셨습니다.",
+                    alarm_cont=f"내 덧글에 {comment.comment_writer.user_name}님께서 덧글을 남기셨습니다.",
                     alarm_link=init_dict.get("alarm_link")
                 )
 
