@@ -118,6 +118,142 @@
         height: 100vh;
     }
 
+    .intro-bigdata{
+        top: 10%;
+        left: 5%;
+    }
+
+    .media-mb-50{
+        margin-bottom: 50px;
+    }
+
+    .media-mb-20{
+        margin-bottom: 20px;
+    }
+
+    .intro-career{
+        top: 7%;
+    }
+
+    .intro-job{
+        top: 35%;
+    }
+
+    .bigdata-font{
+        font-size: 50pt;
+    }
+
+    .intro-bigdata-font{
+        font-size: 11pt;
+    }
+
+    .media-mr-30p{
+        margin-right: 30%;
+    }
+
+    .ca-bigdata-font{
+        font-size: 35pt;
+    }
+
+    .ca-career-font{
+        font-size: 56pt;
+    }
+
+    .introduce-v4:hover {
+        font-size: 46pt !important;
+        color: white !important;
+    }
+
+    .introduce-career{
+        font-size: 40pt;
+    }
+
+    .r-30px{
+        right: 30px;
+    }
+
+    .intro-job-font{
+        font-size: 35%;
+    }
+
+    .media-mr-30px{
+        margin-right: 30px;
+    }
+
+    .history-font{
+        font-size: 50px;
+    }
+
+    .introduce-history .introduce-event:before {
+        left: -193px;
+        top: -17px;
+        color: rgba(255, 255, 255, 0.7);
+        content: attr(data-date);
+        text-align: right;
+        font-weight: 400;
+        font-size: 15px;
+        min-width: 120px;
+        font-family: 'Saira', sans-serif;
+    }
+
+    .media-ml-100{
+        margin-left: 100px;
+    }
+
+    .his-title-f{
+        font-size: 16px;
+    }
+
+    .his-cont-f{
+        font-size: 13px;
+    }
+
+    .his-date-f{
+        font-size: 11px;
+    }
+
+    .intro-ibas-pos{
+        position: static;
+    }
+
+    .intro-ibas-img{
+        width: 0px;
+    }
+
+    .intro-ibas-title{
+       font-size: 50px;
+    }
+
+    .intro-ibas-cont{
+       font-size: 13px;
+    }
+
+    .intro-staff-w{
+        width: 100%;
+    }
+
+    .media-pt-16px{
+        padding-top: 16px;
+    }
+
+    .intro-staff-f{
+        font-size: 32px;
+    }
+
+    .intro-ibas-h{
+        height: 125vh;
+    }
+
+    .media-max-min-w-h-60 {
+        max-height: 80px;
+        min-height: 80px;
+        max-width: 80px;
+        min-width: 80px;
+    }
+
+    .his-cont-w{
+        width: 50vw;
+    }
 }
 
 @media (min-width: 1001px) {
@@ -137,6 +273,84 @@
     height: 100vh;
     }
 
+    .intro-bigdata{
+        top: 35%;
+        left: 5%;
+    }
+
+    .intro-career{
+        bottom: 20%;
+        left: 5%;
+    }
+
+    .intro-job{
+        right: 5%;
+        top: 10%;
+    }
+
+    .ca-career-font{
+        font-size: 80pt;
+    }
+
+    .intro-bigdata-font{
+        font-size: 15pt;
+    }
+
+    .ca-bigdata-font{
+        font-size: 50pt;
+    }
+
+    .bigdata-font{
+        font-size: 80pt;
+    }
+
+    .history-font{
+        font-size: 100px;
+    }
+
+    .intro-job-font{
+        font-size: 50%;
+    }
+
+    .his-title-f{
+        font-size: 25px;
+    }
+
+    .his-cont-f{
+        font-size: 20px;
+    }
+
+    .his-date-f{
+        font-size: 15px;
+    }
+
+    .intro-ibas-pos{
+        position: relative;
+    }
+
+    .intro-ibas-img{
+        width: 35vw;
+    }
+
+    .intro-ibas-title{
+        font-size: 80px;
+    }
+
+    .intro-ibas-cont{
+       font-size: 20px;
+    }
+
+    .intro-staff-w{
+        width: 60vw;
+    }
+
+    .intro-staff-f{
+        font-size: 40px;
+    }
+
+    .his-cont-w{
+        width: 60vw;
+    }
 }
 
 
