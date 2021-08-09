@@ -13,7 +13,7 @@ from lecture.forms import LectForm, LectRejectForm, LectPicForm, make_lect_board
 from pagination_handler import get_page_object
 from user_controller import get_logined_user, superuser_only, writer_only, auth_check, is_superuser, \
     is_logined, member_only, role_check, room_enter_check, enroll_check, is_closed, instructor_only, \
-    login_required, prohibit_professor
+    login_required, prohibit_professor, not_allowed
 from utils.crawler import get_og_tag
 from utils.url_regex import is_youtube
 from utils.youtube import get_youtube
@@ -216,9 +216,12 @@ def lect_search(request, type_no):
 @prohibit_professor
 @enroll_check
 def lect_enroll(request, lect_no):
+    cur_user = get_logined_user(request)
+    if is_superuser(cur_user) and Lect.objects.get(pk=lect_no).lect_type_id == 1:
+        return not_allowed(request, "운영진은 공정성을 위해, 강의 신청 권한이 없습니다.")
     lect_enrollment = LectEnrollment.objects.create(
         lect_no=Lect.objects.get(pk=lect_no),
-        student=get_logined_user(request),
+        student=cur_user,
     )
     create_lect_enroll_alarm(lect_enrollment)
     create_lect_full_alarm(Lect.objects.get(pk=lect_no))
