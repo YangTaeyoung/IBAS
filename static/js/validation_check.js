@@ -108,7 +108,7 @@ function validation_check_for_contest() {
 
     // validate whether some image files exist or not
     let img_file_error = validation_check_for_img_file_upload()
-    if (img_file_error.length > 0) {
+    if (img_file_error != null && img_file_error.length > 0) {
         errors.push(img_file_error);
     }
 
@@ -128,7 +128,10 @@ function validation_check_for_board(is_activity=false) {
 
     // 활동 게시판은 사진 필수
     if (is_activity) {
-        errors.push(validation_check_for_img_file_upload());
+        let img_error = validation_check_for_img_file_upload();
+        if (img_error != null && img_error.length > 0) {
+            errors.push(img_error);
+        }
     }
     
     // if there are any errors, not submit contest_form and alert all messages!
@@ -216,7 +219,7 @@ function validation_check_for_lecture() {
         alert(errors.join(''));
         return false;
     } else {
-        return false;
+        return true;
     }
 }
 
