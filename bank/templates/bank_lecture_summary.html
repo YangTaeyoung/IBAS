@@ -49,7 +49,7 @@
                             <tr id="bank-tr-head" style="text-align: center">
                                 <th scope="col" style="width: 150px;">강의명</th>
                                 {% for max_col in max_column_list %}
-                                    <th scope="col" style="width: 150px;">{{ max_col }}회차</th>
+                                    <th scope="col" style="width: 150px;">{{ forloop.counter }}회차</th>
                                 {% endfor %}
                                 <th scope="col" style="width: 150px;">지급 여부</th>
                                 <th scope="col" style="width: 200px;">지급 예상액</th>
@@ -65,11 +65,11 @@
                             {% for lect_summary in lect_summary_list %}
 
                                 <tr {% if lect_summary.lect.lect_paid == 1 %}style="background-color: #c5c5c5"{% endif %}>
-                                    <th>
+                                    <th class="text-center">
                                         <a href="{% url 'lect_detail' lect_no=lect_summary.lect.lect_no %}">{{ lect_summary.lect.lect_title }}</a>
                                     </th>
                                     {% for summary in lect_summary.summary_list %}
-                                        <td>{{ summary }}</td>
+                                        <td class="text-center">{{ summary }}</td>
                                     {% endfor %}
                                     <td class="text-center">
 
@@ -89,7 +89,7 @@
                                         {% endif %}
 
                                     </td>
-                                    <td class="text-right">₩ {{ lect_summary.sum_of_lect|intcomma }}</td>
+                                    <td class="text-center">₩ {{ lect_summary.sum_of_lect|intcomma }}</td>
                                 </tr>
                             {% endfor %}
                             {% if lect_summary_list|length != 0 %}
