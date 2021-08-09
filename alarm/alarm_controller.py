@@ -40,7 +40,7 @@ def create_comment_alarm(comment: Comment):
             alarm_link=resolve_url("member_delete_detail", user_delete_no=user_delete.user_delete_no)
         )
     if init_dict.get("alarm_user") != comment.comment_writer:
-        Alarm.objects.create(init_dict)
+        Alarm.objects.create(**init_dict)
 
         if comment.comment_cont_ref is not None:
             if comment.comment_cont_ref.comment_writer != comment.comment_writer:
