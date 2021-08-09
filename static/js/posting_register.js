@@ -30,11 +30,11 @@ function decisionIcon(contObj,filePath) {
         imgObj = document.createElement("img")
         imgObj.src = "/media/" + filePath;
         imgObj.alt = "현재 브라우저에서 지원하지 않습니다.";
-        imgObj.className = "file-img";
+        imgObj.className = "file-img height-100 width-100 img-bd";
         contObj.appendChild(imgObj);
     } else {
         fileIconObj = document.createElement("div");
-        fileIconObj.className = "fa fa-file file-img";
+        fileIconObj.className = "fa fa-file fa-3x file-img height-100 width-100 img-bd file-icon-p";
         contObj.appendChild(fileIconObj);
     }
 }
