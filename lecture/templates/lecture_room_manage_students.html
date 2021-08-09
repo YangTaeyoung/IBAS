@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load custom_tags %}
 {% load static %}
 {% block content %}
     <!--커스텀 css-->
@@ -108,12 +109,12 @@
                                                             {% csrf_token %}
                                                             <!-- 체크박스 -->
                                                             <div class="input-block">
-                                                                <input id="check_{{ info.enrolled.student.user_stu }}"
+                                                                <input id="check_{% personal_info info.enrolled.student.user_stu request%} "
                                                                        type="checkbox"
-                                                                       name="is_checked_{{ info.enrolled.student.user_stu }}"
+                                                                       name="is_checked_{% personal_info info.enrolled.student.user_stu request%}"
                                                                        value="{{ info.enrolled.id }}">
                                                                 <!-- label이 html에 보이는 것. 역할은 input에 체크하기 위함.   -->
-                                                                <label for="check_{{ info.enrolled.student.user_stu }}"
+                                                                <label for="check_{% personal_info info.enrolled.student.user_stu request%}"
                                                                        class="staff_label_margin"></label>
                                                             </div>
 
@@ -121,13 +122,13 @@
                                                         <!--수강생 번호-->
                                                         <th>{{ forloop.counter }}</th>
                                                         <!-- 회원 이름 -->
-                                                        <td>{{ info.enrolled.student.user_name }}</td>
+                                                        <td>{% personal_info info.enrolled.student.user_name request%}</td>
                                                         <!-- 회원 학번 -->
-                                                        <td>{{ info.enrolled.student.user_stu }}</td>
+                                                        <td>{% personal_info info.enrolled.student.user_stu request%}</td>
                                                         <!--전화번호 -->
-                                                        <td>{{ info.enrolled.student.user_phone }}</td>
+                                                        <td>{% personal_info info.enrolled.student.user_phone request%}</td>
                                                         <!--이메일 -->
-                                                        <td>{{ info.enrolled.student.useremail_set.first.user_email }}</td>
+                                                        <td>{% personal_info info.enrolled.student.user_email request%}</td>
 
                                                         <!-- 과제 미제출 수 -->
                                                         <td>{{ info.assignment_info }}</td>
