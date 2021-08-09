@@ -169,7 +169,9 @@
                                                     <!-- 회원 이름 -->
                                                     <td class="text-center">{{ new_user.user_name }}</td>
                                                     <!-- 회원 학년 -->
-                                                    <td class="mem_grade text-center">{{ new_user.user_grade }}학년</td>
+                                                    <td class="mem_grade text-center">
+                                                        {% if new_user.user_grade != 5 %}{{ new_user.user_grade }}
+                                                            학년{% else %}교수{% endif %}</td>
                                                     <!-- 회원 학번 -->
                                                     <td class="text-center">{{ new_user.user_stu }}</td>
                                                     <!-- 회원 전화번호 -->
