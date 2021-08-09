@@ -36,7 +36,7 @@
                 <li><a href="{% url "lect_room_manage_member" lect.lect_no %}">{% if lect.lect_type_id == 1 %}수강생
                     관리{% else %}스터디원 관리{% endif %}</a>&nbsp;
                 </li>
-                <li><a class="text-red" href="#" onclick="goSubmit('form-lect-delete', true, '정말 삭제하시겠습니까?')">{{ lect.lect_type.type_name }} 삭제</a>
+                <li class="border-0 m-b10"><a class="text-red" href="#" onclick="goSubmit('form-lect-delete', true, '정말 삭제하시겠습니까?')">{{ lect.lect_type.type_name }} 삭제</a>
                 </li>
                 <form id="form-lect-delete" action="{% url 'lect_delete' lect_no=lect.lect_no %}" method="post"
                       style="display: none;">{% csrf_token %}</form>
