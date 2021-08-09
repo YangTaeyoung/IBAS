@@ -8,7 +8,7 @@ from bank.forms import BankForm, FileForm, BankSupportForm
 from date_controller import today
 from file_controller import FileController
 from pagination_handler import get_page_object
-from user_controller import get_logined_user, writer_only, cfo_only, auth_check, not_allowed
+from user_controller import get_logined_user, writer_only, cfo_only, auth_check, not_allowed, prohibit_professor
 from alarm.alarm_controller import create_bank_alarm
 
 
@@ -96,6 +96,7 @@ def bank_register(request):
         return redirect(reverse("index"))
 
 
+@prohibit_professor
 @auth_check(active=True)
 def bank_support_board(request):
     bank_list = Bank.objects.filter(~Q(bank_apply__bank_apply_no=4))
@@ -110,6 +111,7 @@ def bank_support_board(request):
     return render(request, 'bank_support_board.html', context)  # 게시판 목록
 
 
+@prohibit_professor
 @auth_check(active=True)
 def bank_support_register(request):
     if request.method == "POST":
@@ -132,6 +134,7 @@ def bank_support_register(request):
         return render(request, 'bank_support_register.html', context)
 
 
+@prohibit_professor
 @auth_check(active=True)
 def bank_support_detail(request, bank_no):
     bank = get_object_or_404(Bank, pk=bank_no)
