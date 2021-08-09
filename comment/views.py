@@ -4,9 +4,10 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from comment.serializer import CommentSerializer
 from user_controller import get_logined_user, auth_check, writer_only
 from django.shortcuts import get_object_or_404
-from DB.models import CommentType, Comment
+from DB.models import CommentType, Comment, Board
 from django.db.models import Q, F
 from django.http.response import JsonResponse
+from alarm.alarm_controller import create_comment_alarm
 
 # url 기준  www.inhabas.com/comment/ ??? / .... /
 # ??? 부분으로 구분
@@ -42,7 +43,7 @@ def comment_register(request, type, board_ref):
         else:
             comment.save()
             serializer = CommentSerializer(comment)
-
+            create_comment_alarm(comment)
             return JsonResponse({'comment': serializer.data}, safe=False)
 
     return JsonResponse(data={}, status=400)

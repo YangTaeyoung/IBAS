@@ -26,9 +26,9 @@ def my_info(request):  # 내 정보 출력
         my_comment.board_type = Board.objects.get(pk=my_comment.comment_board_ref).board_type_no.board_type_name
     context = {
         "my_lect_ing_list": LectEnrollment.objects.filter(
-            Q(student=get_logined_user(request)) & Q(lect_no__lect_state__state_no=3)),
+            Q(student=get_logined_user(request)) & Q(lect_no__lect_state__state_no=3) & Q(status_id=1)),
         "my_lect_fin_list": LectEnrollment.objects.filter(
-            Q(student=get_logined_user(request)) & Q(lect_no__lect_state__state_no=4)),
+            Q(student=get_logined_user(request)) & Q(lect_no__lect_state__state_no=4) & Q(status_id=1)),
         "my_lect_made_list": Lect.objects.filter(Q(lect_chief=get_logined_user(request))),
         "my_board_list": Board.objects.filter(board_writer=get_logined_user(request)).order_by(
             "board_type_no").order_by("-board_created"),

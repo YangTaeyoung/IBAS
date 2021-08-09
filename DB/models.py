@@ -185,19 +185,6 @@ class ChiefCarrier(models.Model):
         managed = False
         db_table = 'CHIEF_CARRIER'
 
-#
-# class Comment(models.Model):
-#     comment_id = models.AutoField(db_column='COMMENT_ID', primary_key=True)
-#     comment_board_no = models.ForeignKey(Board, db_column='COMMENT_BOARD_NO', on_delete=models.CASCADE)
-#     comment_writer = models.ForeignKey('User', on_delete=models.CASCADE, db_column='COMMENT_WRITER')
-#     comment_cont = models.CharField(db_column='COMMENT_CONT', max_length=5000)
-#     comment_cont_ref = models.ForeignKey('self', on_delete=models.CASCADE, db_column='COMMENT_CONT_REF', blank=True,
-#                                          null=True)  # Field name made lowercase.
-#     comment_created = models.DateTimeField(db_column='COMMENT_CREATED', auto_now_add=True)  # Field name made lowercase.
-#
-#     class Meta:
-#         managed = False
-#         db_table = 'COMMENT'
 
 
 class ContestBoard(models.Model):
@@ -228,19 +215,6 @@ class ContestBoard(models.Model):
     def get_file_path(self):
         return os.path.join(MEDIA_ROOT, 'contest', str(self.contest_no))
 
-#
-# class ContestComment(models.Model):
-#     comment_id = models.AutoField(db_column='COMMENT_ID', primary_key=True)
-#     comment_board_no = models.ForeignKey('ContestBoard', db_column='COMMENT_BOARD_NO', on_delete=models.CASCADE)
-#     comment_writer = models.ForeignKey('User', on_delete=models.CASCADE, db_column='COMMENT_WRITER')
-#     comment_cont = models.CharField(db_column='COMMENT_CONT', max_length=500)
-#     comment_cont_ref = models.ForeignKey('self', on_delete=models.CASCADE, db_column='COMMENT_CONT_REF', blank=True,
-#                                          null=True)  # Field name made lowercase.
-#     comment_created = models.DateTimeField(db_column='COMMENT_CREATED', auto_now_add=True)  # Field name made lowercase.
-#
-#     class Meta:
-#         managed = False
-#         db_table = 'CONTEST_COMMENT'
 
 
 class ContestFile(File):
@@ -410,6 +384,7 @@ class LectEnrollment(models.Model):
     student = models.ForeignKey('User', on_delete=models.CASCADE, db_column='STUDENT')
     status = models.ForeignKey('LectEnrollmentStatus', on_delete=models.DO_NOTHING, db_column='STATUS', default=1,
                                null=False)
+    exit_time = models.DateTimeField('EXIT_TIME')
 
     class Meta:
         managed = False
@@ -458,23 +433,6 @@ class LectBoardAnswerFile(models.Model):
         managed = False
         db_table = 'LECT_BOARD_ANSWER_FILE'
 
-#
-# class LectBoardComment(models.Model):
-#     lect_board_comment_id = models.AutoField(db_column='LECT_BOARD_COMMENT_ID',
-#                                              primary_key=True)  # Field name made lowercase.
-#     lect_board_board_no = models.ForeignKey(LectBoard, on_delete=models.CASCADE,
-#                                             db_column='LECT_BOARD_BOARD_NO')  # Field name made lowercase.
-#     lect_board_comment_cont = models.TextField(db_column='LECT_BOARD_COMMENT_CONT')  # Field name made lowercase.
-#     lect_board_comment_writer = models.ForeignKey('User', on_delete=models.CASCADE,
-#                                                   db_column='LECT_BOARD_COMMENT_WRITER')  # Field name made lowercase.
-#     lect_board_comment_date = models.DateTimeField(db_column='LECT_BOARD_COMMENT_DATE')  # Field name made lowercase.
-#     lect_board_comment_ref = models.ForeignKey('self', on_delete=models.CASCADE, db_column='LECT_BOARD_COMMENT_REF',
-#                                                blank=True, null=True)  # Field name made lowercase.
-#
-#     class Meta:
-#         managed = False
-#         db_table = 'LECT_BOARD_COMMENT'
-#
 
 class LectBoardEx(models.Model):
     lect_board_ex_no = models.AutoField(db_column='LECT_BOARD_EX_NO', primary_key=True)  # Field name made lowercase.
@@ -695,14 +653,6 @@ class UserDeleteState(models.Model):
     class Meta:
         managed = False
         db_table = "USER_DELETE_STATE"
-
-#
-# class UserDeleteComment(CommentBase):
-#     user_delete_no = models.ForeignKey(UserDelete, on_delete=models.CASCADE, db_column="USER_DELETE_NO")
-#
-#     class Meta:
-#         managed = False
-#         db_table = "USER_DELETE_COMMENT"
 
 
 class UserEmail(models.Model):

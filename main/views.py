@@ -1,12 +1,11 @@
 from django.db import transaction
 from django.shortcuts import render, get_object_or_404, reverse, redirect
-from DB.models import Alarm, Board, BoardFile, Comment, History, User
+from DB.models import Alarm, Board, BoardFile, History, User
 from board.forms import FileForm
 from main.forms import ActivityForm
 from pagination_handler import *
 from file_controller import FileController
 from django.db.models import Q
-from alarm.alarm_controller import create_comment_alarm, create_comment_ref_alarm
 from django.http import HttpResponseRedirect
 from user_controller import login_required, writer_only, auth_check, superuser_only, get_logined_user
 from exception_handler import exist_check
@@ -20,7 +19,7 @@ from django.contrib import messages
 def index(request):
     from member import session
     # 임시 로그인
-    # session.save_session(request, user_model=User.objects.get(pk=12162359), logined_email="0130yang@gmail.com", provider="google")
+    #session.save_session(request, user_model=User.objects.get(pk=12162359), logined_email="0130yang@gmail.com", provider="google")
     # session.save_session(request, user_model=User.objects.get(pk=12171652))
     # session.save_session(request, user_model=User.objects.get(pk=12172285))
     # session.save_session(request, user_model=User.objects.get(pk=12172434))
@@ -177,6 +176,7 @@ def activity_delete(request, board_no):
     comment_delete_by_post_delete(board)
     with transaction.atomic():
         FileController.delete_all_files_of_(board)  # 해당 게시글에 등록된 파일 모두 제거
+        comment_delete_by_post_delete(board)
         board.delete()  # 파일과 폴더 삭제 후, 게시글 DB 에서 삭제
 
     return redirect(reverse('activity'))

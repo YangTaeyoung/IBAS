@@ -95,7 +95,7 @@
 
                                             <form id="manage-form" onsubmit="return ManageFormSubmit()">
                                                 <!-- 수강생 테이블 -->
-                                                {% include "_table_assignment_check.html" %}
+                                                {% include "_table_assignment_check.html" with cur_assignment=cur_assignment%}
                                                 {% csrf_token %}
                                             </form>
 
