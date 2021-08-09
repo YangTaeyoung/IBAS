@@ -396,9 +396,18 @@ class AssignmentSubmitTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'lecture_assignment_submit.html')
 
+    def test_response_302_for_delete_submitted_assignment(self):
+        """
+                수강생 제출한 과제 삭제 시도
+        """
+        lect_room = Lect.objects.get(lect_title=_TestData._TEST_TITLE)
+        assignment = LectAssignmentSubmit.objects.get(assignment_submitter=_TestData._TEST_STUDENT, lect_no=lect_room)
 
-    def test_response_200_for_delete_submitted_assignment(self):
-        pass
+        save_session(self, chief=False)
+        response = self.client.get(
+            reverse('lect_assignment_delete', args=[lect_room.pk, assignment.pk])
+        )
+        self.assertRedirects(response, f'lect/room/{lect_room.pk}/assignment', status_code=302)
 
     def test_response_302_for_submit_assignment(self):
         pass
