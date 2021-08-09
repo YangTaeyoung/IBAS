@@ -185,25 +185,29 @@ function validation_check_for_lecture() {
 
     // validate lect_limit_num
     let lect_limit_num = $('input[name="lect_limit_num"]').val();
-    if (lect_limit_num <= 0) {
-        errors.push('제한인원은 0보다 커야합니다!');
+
+    if (lect_limit_num <= '0') {
+        errors.push('제한인원은 0보다 커야합니다!\n');
     }
 
     // validate lect_deadline
-    let lect_deadline = $('input[name="lect_deadline"]').val();
-    if (lect_deadline.length === 0) {
-        errors.push('신청 마감일을 입력하세요!\n');
-    } else {
-        let lect_deadline = new Date(lect_deadline);
-        let today = new Date();
-        if (lect_deadline < today){
-            errors.push('신청 마감일을 다시 설정하세요!\n')
+    let cur_status = $('input.site-button.btn-block.button-md').val();
+    if (cur_status === '등록하기') {
+        let lect_deadline = $('input[name="lect_deadline"]').val();
+        if (lect_deadline.length === 0) {
+            errors.push('신청 마감일을 입력하세요!\n');
+        } else {
+            lect_deadline = new Date(lect_deadline);
+            let today = new Date();
+            if (lect_deadline < today){
+                errors.push('신청 마감일을 다시 설정하세요!\n')
+            }
         }
     }
 
     // 이미지 등록 필수
     let img_error = validation_check_for_img_file_upload();
-    if (img_error.length > 0) {
+    if (img_error != null && img_error.length > 0) {
         errors.push(img_error);
     }
     
@@ -212,7 +216,7 @@ function validation_check_for_lecture() {
         alert(errors.join(''));
         return false;
     } else {
-        return true;
+        return false;
     }
 }
 
