@@ -122,11 +122,11 @@
                                                 <td>
                                                     {% if board_fixed.board_type_no.board_type_no == 4 %}
                                                         <a href="{% url 'activity_detail' board_no=board_fixed.board_no %}">
-                                                            {{ board_fixed.board_title }}
+                                                            {{ board_fixed.board_title|truncatechars:30 }}
                                                         </a>
                                                     {% else %}
                                                         <a href="{% url 'board_detail' board_no=board_fixed.board_no %}">
-                                                            <b>{{ board_fixed.board_title }}</b>
+                                                            <b>{{ board_fixed.board_title|truncatechars:30 }}</b>
                                                         </a>
                                                     {% endif %}
                                                 </td>
@@ -144,9 +144,9 @@
                                                 <!-- 게시글 제목 클릭 시 해당 게시글의 상세 페이지로 이동하며, 제목을 a태크 처리함 -->
                                                 <td>
                                                     {% if board.board_type_no.board_type_no == 4 %}
-                                                        <a href="{% url 'activity_detail' board_no=board.board_no %}">{{ board.board_title }}</a>
+                                                        <a href="{% url 'activity_detail' board_no=board.board_no %}">{{ board.board_title|truncatechars:30 }}</a>
                                                     {% else %}
-                                                        <a href="{% url 'board_detail' board_no=board.board_no %}">{{ board.board_title }}</a>
+                                                        <a href="{% url 'board_detail' board_no=board.board_no %}">{{ board.board_title|truncatechars:30 }}</a>
                                                     {% endif %}
                                                 </td>
                                                 <!-- 게시글 작성자 -->
