@@ -4,6 +4,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/ibas_contents.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/nav.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/size.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/media.css' %}">
     <script src="{% static 'js/ibas_centents.js' %}"></script>
     <script src="{% static 'js/nav.js' %}"></script>
     <link
@@ -46,15 +47,18 @@
             intro_p.style.color = 'white'
 
             p1.innerHTML = ' ';
+            p1.className = 'dis-none-media';
 
-            p2.style.fontSize = '50%'
+            p2.className = 'intro-job-font media-mr-30px';
             p2.style.lineHeight = '200%'
+            p2.style.color = 'white'
+            p2.style.fontWeight = 'bold'
 
             if (num === 1) {
                 img.src = '{% static "images/data-an.png" %}';
                 p2.innerHTML = '다양한 분야의 지식을 기반으로 다방면의 데이터를 끌어모아 비즈니스 인사이트를 도출하는 역할을 합니다.' +
                     '<br>이를 위해 머신러닝 모델링 보다는 SQL을 활용해 데이터를 추출&분석 후 ' +
-                    '<br>Tableau등을 통해 시각화 하고 분석보고서를 만드는 작업을 합니다. '
+                    '<br class="dis-none-media" >Tableau등을 통해 시각화 하고 분석보고서를 만드는 작업을 합니다. '
 
 
             } else if (num === 2) {
@@ -97,44 +101,44 @@
 
     <!-- 빅데이터 설명 -->
     <section class="introduce">
-        <img src="{% static 'images/bigdata-bg.png' %}" class="relative w-100 h-100">
-        <div class="absolute" style="top: 35%; left: 5%">
-            <p class="text-white animate__animated animate__fadeInUp m-b100 font-weight-500"
-               style="font-size: 80pt;">Big Data</p>
-            <p class="text-white animate__animated animate__fadeInUp font-weight-400"
-               style="font-size: 15pt;line-height: 35px">빅데이터란 디지털 환경에서 생성되는 데이터로
-                <br>그 규모가 방대하고, 생성 주기도 짧고, 형태도 수치 데이터뿐 아니라
-                <br>문자와 영상 데이터를 포함하는 대규모 데이터를 말합니다.
-                <br>빅데이터는 과거에 비해 데이터가 폭증하였고
-                <br>데이터의 종류도 다양해져 사람들의 행동은 물론이고
-                <br>위치정보와 SNS를 통해 생각과 의견까지 분석하고 예측할 수 있습니다. </p>
+        <img src="{% static 'images/bigdata-bg.png' %}" class="relative w-100 h-100" style="object-fit: cover">
+        <div class="absolute intro-bigdata" style="">
+            <p class="text-white animate__animated animate__fadeInUp m-b100 font-weight-500 media-mb-50 bigdata-font"
+               style="line-height: 110px">Big Data</p>
+            <p class="text-white animate__animated animate__fadeInUp font-weight-400 intro-bigdata-font media-mr-30p"
+               style="line-height: 35px">빅데이터란 디지털 환경에서 생성되는 데이터로
+                <br class="dis-none-media">그 규모가 방대하고, 생성 주기도 짧고, 형태도 수치 데이터뿐 아니라
+                <br class="dis-none-media">문자와 영상 데이터를 포함하는 대규모 데이터를 말합니다.
+                <br> 빅데이터는 과거에 비해 데이터가 폭증하였고
+                <br class="dis-none-media">데이터의 종류도 다양해져 사람들의 행동은 물론이고
+                <br class="dis-none-media">위치정보와 SNS를 통해 생각과 의견까지 분석하고 예측할 수 있습니다. </p>
         </div>
     </section>
 
     <!-- 진로 설명 -->
     <section id="introduce-career" class="introduce bg-black-light">
         <img id="introduce-img" src="{% static 'images/career-bg.png' %}"
-             class="absolute introduce" style="filter: brightness(50%)">
-        <div class="m-l30 absolute z-index100" style="bottom: 20%; left: 5% ">
-            <p id="introduce-p1" class="text-gray-1 font-weight-600 z-index100" style="font-size: 50pt;">Big
+             class="absolute introduce" style="filter: brightness(50%); object-fit: cover">
+        <div class="m-l30 absolute z-index100 intro-career">
+            <p id="introduce-p1" class="text-gray-1 font-weight-600 z-index100 ca-bigdata-font">Big
                 Data</p>
-            <p id="introduce-p2" class="text-white font-weight-600 m-0 z-index100"
-               style="font-size: 80pt; line-height: 120px;">
+            <p id="introduce-p2" class="text-white font-weight-600 m-0 z-index100 ca-career-font"
+               style="line-height: 80px;">
                 Career</p>
         </div>
 
-        <div class="d-flex flex-column absolute" style="right: 5%; top: 10%;">
+        <div class="d-flex flex-column absolute intro-job r-30px">
             <p id="intro-p-1"
                class="font-weight-600 text-right m-b50 introduce-v4 z-index100 introduce-pointer introduce-career"
-               style="color: grey" onclick="intro_show(1)">Data
+               style="color: grey; line-height: 60px" onclick="intro_show(1)">Data<br class="dis-none">
                 Analyst</p>
             <p id="intro-p-2"
                class="font-weight-600 text-right m-b50 introduce-v4 z-index100 introduce-pointer introduce-career"
-               style="color: grey" onclick="intro_show(2)">Data
+               style="color: grey; line-height: 60px" onclick="intro_show(2)">Data<br class="dis-none">
                 Engineer</p>
             <p id="intro-p-3"
                class="font-weight-600 text-right m-b50 introduce-v4 z-index100 introduce-pointer introduce-career"
-               style="color: grey" onclick="intro_show(3)">Data
+               style="color: grey; line-height: 60px" onclick="intro_show(3)">Data<br class="dis-none">
                 Scientist</p>
 
             {#                <p class="text-white font-weight-600 m-0" style="font-size: 80pt; line-height: 120px;">Velocity</p>#}
@@ -143,12 +147,12 @@
 
     <!-- 동아리 연혁  -->
     <section id="introduce-career" class="introduce bg-black-light">
-        <img class="absolute" src="{% static 'images/history-bg.jpg' %}" style="width: inherit; height: inherit">
+        <img class="absolute" src="{% static 'images/history-bg.jpg' %}" style="width: inherit; height: inherit; object-fit: cover">
 
         <div id="timeline-content" class="relative text-center">
 
-            <p class="text-left p-l50 p-t60 text-white font-weight-500"
-               style="letter-spacing: 1.5px;font-size: 100px;line-height: 50px">
+            <p class="text-left p-l50 p-t60 text-white font-weight-500 history-font"
+               style="letter-spacing: 1.5px; line-height: 50px">
                 HISTORY <br>
                 {% if is_superuser %}
                     <span class="p-l30 text-white introduce-pointer introduce-history-add" onclick="introduce_add()">동아리 연혁 추가하기</span>
@@ -231,7 +235,7 @@
             <!-- ===================================연혁부분 시작======================================== -->
 
             <div class="introduce-scroll height-70vh">
-                <ul class="introduce-history">
+                <ul class="introduce-history media-ml-100">
                     <!-- 여기부터 복사 -->
                     <!-- 주의!!!!! 연도 새로 시작할때만 data-date 에 연도 지정해 주어야 함. 최고 중요. 안하면 완전 별로임 -->
                     <!-- 주의!!!!! 하위 요소의 id는 모두 javascript 함수에 사용되는 것임.  -->
@@ -244,22 +248,22 @@
                                 <input type="hidden" name="history_no" value="{{ history.history_no }}"/>
                                 <input id="history-date-{{ history.history_no }}"
                                        name="history_title"
-                                       class="font-weight-400 text-white m-b5 d-block height-25 m-b10 w-100"
-                                       style="font-size: 25px; background-color: rgba(0, 0, 0, 0); border: none"
+                                       class="font-weight-400 text-white m-b5 d-block height-25 m-b10 w-100 his-title-f"
+                                       style="background-color: rgba(0, 0, 0, 0); border: none"
                                        value="{{ history.history_title }}"
                                        disabled="disabled">
                                 <input id="history-txt-{{ history.history_no }}"
                                        type="text"
                                        name="history_date"
-                                       class="font-weight-300 text-white m-b5 d-block height-25"
-                                       style="font-size: 15px; background-color: rgba(0, 0, 0, 0); border: none"
+                                       class="font-weight-300 text-white m-b5 d-block height-25 his-date-f"
+                                       style="background-color: rgba(0, 0, 0, 0); border: none"
                                        value="{{ history.history_date|date:"Y-m-d" }}"
                                        disabled="disabled">
 
                                     <input id="history-con-{{ history.history_no }}"
                                            name="history_cont"
-                                           class="font-weight-300 text-white d-block height-30"
-                                           style="font-size: 20px; background-color: rgba(0, 0, 0, 0); border: none; width: 60vw"
+                                           class="font-weight-300 text-white d-block height-30 his-cont-f his-cont-w"
+                                           style="background-color: rgba(0, 0, 0, 0); border: none;"
                                            {% if history.history_title == history.history_cont %}
                                                type="hidden"
                                            {% endif %}
@@ -296,34 +300,34 @@
     </section>
 
     <!-- IBAS 소개 -->
-    <section id="introduce-career" class="introduce bg-black-light">
+    <section id="introduce-career" class="introduce bg-black-light intro-ibas-h">
         <!-- 이미지 -->
         <img src="{% static 'images/ibas_image.jpg' %}"
-             style="width: 35vw; height: inherit; filter: brightness(0.5)"
-             class="d-inline-block absolute">
+             style="height: inherit; filter: brightness(0.5); object-fit: cover"
+             class="d-inline-block absolute intro-ibas-img">
 
         <!-- IBAS 소개 내용 -->
-        <div class="d-inline-block relative" style="left: 35vw">
-            <p class="text-left p-l30 p-t60 text-white font-weight-500"
-               style="letter-spacing: 1.5px; font-size: 80px; line-height: 40px">
+        <div class="d-inline-block intro-ibas-pos" style="left: 35vw">
+            <p class="text-left p-l30 p-t60 text-white font-weight-500 intro-ibas-title"
+               style="letter-spacing: 1.5px; line-height: 40px">
                 IBAS
                 <br><span class="text-gray-1" style="font-size: 15px">Inha Bigdata Analyst Society</span>
             </p>
 
-            <p class="d-inline-block text-white p-l30 text-left m-r50 font-weight-300"
-               style="font-size: 20px; line-height: 40px">
+            <p class="d-inline-block text-white p-l30 text-left m-r50 font-weight-300 intro-ibas-cont"
+               style="line-height: 40px">
                 안녕하세요 인하대학교 빅데이터 학술동아리 IBAS입니다. 반갑습니다.<br>
                 IBAS는 4차산업 혁명 시대의 흐름에 맞추어 필요한 빅데이터 역량을 갖춘 인재를 육성해 나가자는 취지에서
-                <br>만들어진 동아리입니다. 주로 데이터 직무(산업)에 관심있는 학생들이 모여 빅데이터 분석에 필요한 지식을
-                <br>습득, 활용해 나가며 빅데이터 역량을 갖추고 사회에 나갈 수 있도록 학습하는 빅데이터 학술동아리 입니다.</p>
-
-            <p class="text-left p-l30 p-t60 p-b30 font-weight-800 text-white"
-               style="letter-spacing: 1.5px; font-size: 40px; line-height: 40px; font-family: 'Nanum Gothic'">
+                <br class="dis-none-media">만들어진 동아리입니다. 주로 데이터 직무(산업)에 관심있는 학생들이 모여 빅데이터 분석에 필요한 지식을
+                <br class="dis-none-media">습득, 활용해 나가며 빅데이터 역량을 갖추고 사회에 나갈 수 있도록 학습하는 빅데이터 학술동아리 입니다.</p>
+        <div class="media-line-ft dis-none"></div>
+            <p class="text-left p-l30 p-t60 p-b30 font-weight-800 text-white intro-staff-f media-pt-16px"
+               style="letter-spacing: 1.5px; line-height: 40px; font-family: 'Nanum Gothic'">
                 운영진
             </p>
 
             <!-- IBAS 운영진 소개 -->
-            <div class="introduce-scroll" style=" width: 60vw; height: 30vh">
+            <div class="introduce-scroll intro-staff-w" style="height: 30vh">
                 <div class="comments-area" id="comments">
                     <div class="clearfix">
                         <ol class="comment-list">
@@ -335,7 +339,7 @@
                                             <div class="m-r20 d-flex flex-column justify-content-center align-items-center">
                                                 <!-- 프로필사진 -->
                                                 <img
-                                                        class="photo max-min-width-height-100 rounded-circle border-3 border-white"
+                                                        class="photo max-min-width-height-100 media-max-min-w-h-60 rounded-circle border-3 border-white"
                                                         src="/media/{{ chief_crew.user_pic }}"
                                                         alt="현재 브라우저에서 지원하지 않는 형식입니다.">
 
