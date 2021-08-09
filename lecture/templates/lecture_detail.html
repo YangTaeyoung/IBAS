@@ -268,7 +268,7 @@
                             </div>
                         {% endif %}
                         {% if lect.lect_state.state_no == 3 %}
-                            {% if is_logined and logined_user != lect.lect_chief and not is_in and logined_user.user_role.role_no != 5%}
+                            {% if is_logined and logined_user != lect.lect_chief and not is_in and logined_user.user_role.role_no != 5 %}
                                 <!--=======신청하기 버튼, 한번 신청하기 버튼을 누르면 없어지도록 수정======-->
                                 {% if not is_closed %}
                                     <div style="display: flex; justify-content: center; ">
@@ -287,7 +287,7 @@
                                     <button type="button" class="btn btn-outline-primary btn-lg"
                                             style="font-weight: bold"
                                             onclick="location.href='{% url "lect_room_main" lect.lect_no %}'">
-                                        강의실로 이동하기
+                                        {{ lect.lect_type.type_name }}{% if lect.lect_type_id == 1 %}실{% elif lect.lect_type_id == 2 %}룸으{% endif %}로 이동하기
                                     </button>
                                 </div>
                             {% endif %}
