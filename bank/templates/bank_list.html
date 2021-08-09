@@ -120,8 +120,7 @@
                                     <!-- bank-earn-1는 bank_yejin.js에 사용됨. bank_update 부분과 관련 -->
                                     <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
                                     <input class="bank-input-con" type="text"
-                                           value="
-                                                   {% if bank.bank_plus != 0 %}{{ bank.bank_plus|intcomma }}{% else %}-{% endif %}"
+                                           value="{% if bank.bank_plus != 0 %}{{ bank.bank_plus|intcomma }}{% else %}-{% endif %}"
                                            disabled="disabled">
                                 </td>
 
@@ -130,8 +129,7 @@
                                     <!-- bank-spend-1는 bank_yejin.js에 사용됨. bank_update 부분과 관련 -->
                                     <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
                                     <input class="bank-input-con" type="text"
-                                           value="
-                                                   {% if bank.bank_minus != 0 %}{{ bank.bank_minus|intcomma }}{% else %}-{% endif %}"
+                                           value="{% if bank.bank_minus != 0 %}{{ bank.bank_minus|intcomma }}{% else %}-{% endif %}"
                                            disabled="disabled">
                                 </td>
 
