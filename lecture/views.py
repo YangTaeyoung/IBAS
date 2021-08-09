@@ -2,7 +2,8 @@ from django.db import transaction, connection
 from django.db.models import Q
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.utils.dateformat import DateFormat
-from alarm.alarm_controller import create_lect_full_alarm, create_lect_enroll_alarm, delete_lect_by_superuser_alarm
+from alarm.alarm_controller import create_lect_full_alarm, create_lect_enroll_alarm, delete_lect_by_superuser_alarm, \
+    create_user_lect_out_alarm
 from django.contrib import messages
 from DB.models import LectType, Lect, MethodInfo, LectBoard, LectEnrollment, LectAttendance, \
     LectAssignmentSubmit, LectMoneyStandard
@@ -349,7 +350,9 @@ def lect_board_register(request, room_no, board_type):
                 )
                 file_form.save(instance=lecture)  # 공지 또는 강의 파일 저장
 
-        return redirect('lect_board_detail', room_no=room_no, lect_board_no=lecture.pk)
+            return redirect('lect_board_detail', room_no=room_no, lect_board_no=lecture.pk)
+
+        return redirect(request.path)
 
 
 # 강의/공지 게시글 상세보기
@@ -589,10 +592,13 @@ def lect_room_student_status(request, room_no):
 
 
 def lect_room_exit(request, room_no):
-    cur_student = LectEnrollment.objects.get(lect_no=room_no, student_id=request.session.get('user_stu'))
+    cur_student = LectEnrollment.objects.prefetch_related('lect_no').get(
+        lect_no=room_no, student_id=request.session.get('user_stu'))
     cur_student.status_id = -1
     cur_student.exit_time = today()
     cur_student.save()
+
+    create_user_lect_out_alarm(lect_enrollment=cur_student)
 
     return redirect('lect_view', type_no=1)
 

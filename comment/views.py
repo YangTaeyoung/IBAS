@@ -43,7 +43,7 @@ def comment_register(request, type, board_ref):
         else:
             comment.save()
             serializer = CommentSerializer(comment)
-            create_comment_alarm(comment)
+            # create_comment_alarm(comment)
             return JsonResponse({'comment': serializer.data}, safe=False)
 
     return JsonResponse(data={}, status=400)
@@ -81,7 +81,6 @@ def comment_view(request, type, board_ref):
             comment_cont_ref__isnull=True)).prefetch_related("re_comments").order_by("comment_created")
     commentset_serializer = [CommentSerializer(comment.re_comments.all(), many=True).data for comment in comment_list]
     comment_serializer = CommentSerializer(comment_list, many=True)
-    print('comment view', request.session.get('user_stu'))
     cur_user = get_logined_user(request)
     logined_user = {
         'user_role': cur_user.user_role_id,

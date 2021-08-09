@@ -228,9 +228,11 @@ def board_search(request, board_type_no):
 @auth_check()
 @exist_check
 def board_detail(request, board_no):  # 게시글 상세 보기
-
-    cur_user = get_logined_user(request)
     board = Board.objects.get(pk=board_no)
+    if board.board_type_no.board_type_no == 4:
+        return redirect("activity_detail", board_no=board_no)
+    cur_user = get_logined_user(request)
+
     board_type_no = board.board_type_no.board_type_no
     if board_type_no == 8 and not role_check(cur_user, 4, "lte"):
         return not_allowed(request, "비 정상적인 접근입니다.")
