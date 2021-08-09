@@ -396,6 +396,10 @@ class LectEnrollmentStatus(models.Model):
     status = models.IntegerField(db_column='STATUS', primary_key=True)
     description = models.CharField(db_column='DESCRIPTION', max_length=10)
 
+    class Meta:
+        managed = False
+        db_table = 'LECT_ENROLLMENT_STATUS'
+
 
 class LectBoardType(models.Model):
     lect_board_type_no = models.AutoField(db_column='LECT_BOARD_TYPE_NO', primary_key=True)
