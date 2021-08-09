@@ -98,7 +98,9 @@
                                         {% if logined_user.user_role.role_no == 4 %}
                                             <li><a href="{% url 'bank_lecture_summary' %}">강의 회계 요약</a></li>
                                         {% endif %}
-                                        <li><a href="{% url 'bank_support_board' %}">예산지원신청</a></li>
+                                        {% if logined_user.user_role.role_no != 5 %}
+                                            <li><a href="{% url 'bank_support_board' %}">예산지원신청</a></li>
+                                        {% endif %}
                                     {% endif %}
 
                                     <!-- 명예의 전달 누를 경우 url로 넘어간다. -->

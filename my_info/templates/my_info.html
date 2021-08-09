@@ -363,7 +363,7 @@
                                                         <div class="listing-bx event-listing m-b10">
                                                             <!-- 게시글 대표 이미지 -->
                                                             <!-- 이미지를 클릭하면, 해당 게시글로 이동함 -->
-                                                            <a href="{% url 'lect_detail' lect_no=my_lect_made.lect_no %}">
+                                                            <a href="{% url 'lect_room_main' room_no=my_lect_made.lect_no %}">
                                                                 <img style="height: 200px; width: 100%"
                                                                      src="/media/{{ my_lect_made.lect_pic }}"
                                                                      alt="">
@@ -373,7 +373,7 @@
                                                                 <!-- 강의제목 -->
                                                                 <!-- 제목 클릭 시, 해당 게시글로 이동 -->
                                                                 <h3 class="title">
-                                                                    <a href="{% url 'lect_detail' lect_no=my_lect_made.lect_no %}">{{ my_lect_made.lect_title }}</a>
+                                                                    <a href="{% url 'lect_room_main' room_no=my_lect_made.lect_no %}">{{ my_lect_made.lect_title }}</a>
                                                                 </h3>
                                                                 <!-- 강의 간단소개 -->
                                                                 <ul class="event-meta">
