@@ -28,7 +28,7 @@ def get_first_img(arg):
 # url 표시할 때, http:// 이거 나오면 구려보여서 잘르기.
 @register.filter
 def url(url):
-    return url[url.find('w'):]
+    return url[url.find('/') + 2:]
 
 # 글자수 length 초과하면 자르고 끝에 ... 붙임
 @register.filter
