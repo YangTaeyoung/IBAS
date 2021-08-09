@@ -34,7 +34,7 @@
                 <li><a href="{% url "lect_room_manage_attendance" lect.lect_no %}">출석 관리</a>&nbsp;</li>
                 <li><a href="{% url "lect_room_manage_assignment" lect.lect_no %}">과제 관리</a>&nbsp;</li>
                 <li><a href="{% url "lect_room_manage_member" lect.lect_no %}">{% if lect.lect_type_id == 1 %}수강생
-                    관리{% else %}스터디원 관리{% endif %}</a>&nbsp;
+                    관리{% elif lect.lect_type_id == 2 %}스터디원 관리{% else %}취미 모임 동료 보기{% endif %}</a>&nbsp;
                 </li>
                 <li class="border-0 m-b10"><a class="text-red" href="#" onclick="goSubmit('form-lect-delete', true, '정말 삭제하시겠습니까?')">{{ lect.lect_type.type_name }} 삭제</a>
                 </li>
