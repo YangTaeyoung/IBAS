@@ -12,7 +12,8 @@ from lecture.forms import LectForm, LectRejectForm, LectPicForm, make_lect_board
     FileForm, AssignmentSubmitForm
 from pagination_handler import get_page_object
 from user_controller import get_logined_user, superuser_only, writer_only, auth_check, is_superuser, \
-    is_logined, member_only, role_check, room_enter_check, enroll_check, is_closed, is_lect_instructor, instructor_only
+    is_logined, member_only, role_check, room_enter_check, enroll_check, is_closed, instructor_only, \
+    login_required
 from utils.crawler import get_og_tag
 from utils.url_regex import is_youtube
 from utils.youtube import get_youtube
@@ -181,6 +182,7 @@ def lect_delete(request, lect_no):
 
 
 # 강의 리스트 이동 함수
+@login_required
 def lect_view(request, type_no):  # 게시판 페이지로 이동
     lect_list = get_page_object(request, get_lect_list(request, type_no))
     lect_type = get_lect_type(request, type_no)
