@@ -2,6 +2,7 @@
 {% load static %}
 {% block content %}
     <script src="{% static 'js/validation_check.js' %}"></script>
+    <script src="{% static 'js/posting_register.js' %}"></script>
     <link rel="stylesheet" type="text/css" href="{% static 'css/posting_register.css' %}">
 
     <div class="page-wraper">
@@ -103,7 +104,11 @@
                                                                 onclick="delImg(document.getElementById('image-card-{{ board_file.file_id }}'))"></button>
                                                         <!-- 이미지 컨테이너 이미지 파일일 경우 img태그가, 이미지 파일이 아닐 경우 파일 모양의 아이콘이 붙음. -->
                                                         <div id="image-{{ board_file.file_id }}"
-                                                             class="image-container"></div>
+                                                             class="image-container">
+                                                        </div>
+                                                        <div class="file-detail width-100" style="text-align: center">
+                                                            <span>{{ board_file.file_path }}</span>
+                                                        </div>
                                                         <!--기존 파일링크를 이동시키기 위한 히든 링크 -->
                                                         <input type="hidden"
                                                                name="exist_file_path_{{ board_file.file_id }}"

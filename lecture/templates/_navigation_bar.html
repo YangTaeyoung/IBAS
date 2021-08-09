@@ -36,10 +36,10 @@
                 <li><a href="{% url "lect_room_manage_member" lect.lect_no %}">{% if lect.lect_type_id == 1 %}수강생
                     관리{% else %}스터디원 관리{% endif %}</a>&nbsp;
                 </li>
-                <li><a class="text-red" href="#" onclick="goSubmit('form-lect-delete', true, '정말 삭제하시겠습니까?')">강의 삭제</a>
+                <li class="border-0 m-b10"><a class="text-red" href="#" onclick="goSubmit('form-lect-delete', true, '정말 삭제하시겠습니까?')">{{ lect.lect_type.type_name }} 삭제</a>
                 </li>
                 <form id="form-lect-delete" action="{% url 'lect_delete' lect_no=lect.lect_no %}" method="post"
-                      style="display: none;"></form>
+                      style="display: none;">{% csrf_token %}</form>
             </ul>
         </div>
     </div>
@@ -58,14 +58,14 @@
     </div>
     <script>
         function Are_U_Sure() {
-            if (confirm('강의에서 나가겠습니까? 돌이킬 수 없습니다..')) {
-                let prom = prompt('정말 나갈겁니까..? 나가려면 \'나갈거야 비켜!\'를 입력하세요');
-                if (prom === '나갈거야 비켜!') {
+            if (confirm('{{ lect.lect_type.type_name }}에서 나가겠습니까? 돌이킬 수 없습니다..')) {
+                let prom = prompt('정말 나갈겁니까..? 나가려면 \'{{ lect.lect_title }} 너무 싫어!! 나갈거야 비켜!\'를 입력하세요');
+                if (prom === '{{ lect.lect_title }} 너무 싫어!! 나갈거야 비켜!') {
                     return true;
                 }
             }
             return false;
         }
     </script>
-    <p class="font-10"><a href="{% url "lect_room_exit" lect.lect_no %}" onclick="return Are_U_Sure();">강의탈주</a></p>
+    <p class="font-10"><a href="{% url "lect_room_exit" lect.lect_no %}" onclick="return Are_U_Sure();">{{ lect.lect_type.type_name }} 탈주</a></p>
 {% endif %}
