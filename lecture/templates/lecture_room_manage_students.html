@@ -6,6 +6,15 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/size.css' %}">
     <script src="{% static 'js/ibas_centents.js' %}"></script>
     <script src="{% static 'js/comment.js' %}"></script>
+    <script>
+    $(function () {
+        $('tr.lectRoom_tr').each(function () {
+            if($(this).text().includes('탈주')) {
+                $(this).find('input').prop('disabled', true);
+            }
+        })
+    })
+    </script>
 
 
     <div class="page-wraper">
@@ -127,9 +136,11 @@
                                                         <!--상태 -->
                                                         {% if info.enrolled.status_id == 1 %}
                                                             <td class="lectRoom_state lectRoom_state_ing_font">수강중</td>
-                                                        {% else %}
+                                                        {% elif info.enrolled.status_id == 0 %}
                                                             <td class="lectRoom_state lectRoom_state_stop_font">수강정지
                                                             </td>
+                                                        {% else %}
+                                                            <td class="lectRoom_state lectRoom_state_exit_font">탈주</td>
                                                         {% endif %}
                                                     </tr>
                                                 {% endfor %}

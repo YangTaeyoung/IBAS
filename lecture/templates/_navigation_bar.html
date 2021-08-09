@@ -47,5 +47,16 @@
                 </ul>
             </div>
         </div>
-        <p class="font-10"><a>강의탈주</a></p>
+        <script>
+        function Are_U_Sure() {
+            if (confirm('강의에서 나가겠습니까? 돌이킬 수 없습니다..')) {
+                let prom = prompt('정말 나갈겁니까..? 나가려면 \'나갈거야 비켜!\'를 입력하세요');
+                if (prom==='나갈거야 비켜!') {
+                    return true;
+                }
+            }
+            return false;
+        }
+        </script>
+        <p class="font-10"><a href="{% url "lect_room_exit" lect.lect_no %}" onclick="return Are_U_Sure();">강의탈주</a></p>
     {% endif %}

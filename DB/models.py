@@ -410,6 +410,7 @@ class LectEnrollment(models.Model):
     student = models.ForeignKey('User', on_delete=models.CASCADE, db_column='STUDENT')
     status = models.ForeignKey('LectEnrollmentStatus', on_delete=models.DO_NOTHING, db_column='STATUS', default=1,
                                null=False)
+    exit_time = models.DateTimeField('EXIT_TIME')
 
     class Meta:
         managed = False
