@@ -13,13 +13,14 @@ from lecture.forms import LectForm, LectRejectForm, LectPicForm, make_lect_board
 from pagination_handler import get_page_object
 from user_controller import get_logined_user, superuser_only, writer_only, auth_check, is_superuser, \
     is_logined, member_only, role_check, room_enter_check, enroll_check, is_closed, instructor_only, \
-    login_required
+    login_required, prohibit_professor
 from utils.crawler import get_og_tag
 from utils.url_regex import is_youtube
 from utils.youtube import get_youtube
 from date_controller import is_lect_recruiting, today
 from exception_handler import exist_check
 from post_controller import comment_delete_by_post_delete
+
 
 def get_pol_name(method_no):
     pol_name = MethodInfo.objects.get(pk=method_no).method_name
@@ -30,6 +31,7 @@ def get_pol_name(method_no):
     else:
         pol_name = pol_name + " 개인 채널 링크"
     return pol_name
+
 
 # 타입에 맞는 강의 리스트를 반환하는 함수
 def get_lect_list(request, type_no):
@@ -48,7 +50,8 @@ def get_lect_type(request, type_no):
     if type_no != 4:
         lect_type = LectType.objects.get(pk=type_no)
     else:
-        if not is_logined(request) or not is_superuser(get_logined_user(request)):  # 강의 개설 관련 처리는 관리자만 할 수 있으므로 관리자 권한 체크
+        if not is_logined(request) or not is_superuser(
+                get_logined_user(request)):  # 강의 개설 관련 처리는 관리자만 할 수 있으므로 관리자 권한 체크
             return redirect(reverse("index"))
         lect_type = LectType()
         lect_type.type_no = type_no
@@ -210,6 +213,7 @@ def lect_search(request, type_no):
 
 
 # 유저 강의 명단 등록 함수
+@prohibit_professor
 @enroll_check
 def lect_enroll(request, lect_no):
     lect_enrollment = LectEnrollment.objects.create(
@@ -448,8 +452,7 @@ def lect_board_update(request, room_no, lect_board_no):
 
         return redirect('lect_board_detail', room_no=room_no, lect_board_no=lect_board_no)
 
-
-                                             # 수강생 과제 CRUD #
+        # 수강생 과제 CRUD #
 
 
 # 수강생 과제 제출
