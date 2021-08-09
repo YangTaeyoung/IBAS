@@ -711,3 +711,7 @@ input[type=checkbox] + label:after {
 .honor-card::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera*/
 }
+
+.alt-tran{
+    transform: translate3d(0px, 52px, -9px) !important;
+}
