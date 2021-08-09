@@ -287,7 +287,7 @@
                                     <button type="button" class="btn btn-outline-primary btn-lg"
                                             style="font-weight: bold"
                                             onclick="location.href='{% url "lect_room_main" lect.lect_no %}'">
-                                        {{ lect.lect_type.type_name }}{% if lect.lect_type_id == 1 %}실{% elif lect.lect_type_id == 2 %}룸으{% endif %}로 이동하기
+                                        {{ lect.lect_type.type_name }}{% if lect.lect_type_id == 1 %}실{% elif lect.lect_type_id == 2 %}룸으{% else %}으{% endif %}로 이동하기
                                     </button>
                                 </div>
                             {% endif %}
