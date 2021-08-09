@@ -41,9 +41,9 @@ def comment_register(request, type, board_ref):
                 message='댓글 내용 길이 제한을 확인하세요'
             )
         else:
-            comment.save()
-            serializer = CommentSerializer(comment)
+            comment = comment.save()
             create_comment_alarm(comment)
+            serializer = CommentSerializer(comment)
             return JsonResponse({'comment': serializer.data}, safe=False)
 
     return JsonResponse(data={}, status=400)
