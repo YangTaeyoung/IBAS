@@ -191,16 +191,19 @@ function validation_check_for_lecture() {
     }
 
     // validate lect_deadline
-    let lect_deadline = $('input[name="lect_deadline"]').val();
-    if (lect_deadline.length === 0) {
-        errors.push('신청 마감일을 입력하세요!\n');
-    } else {
-        lect_deadline = new Date(lect_deadline);
-        let today = new Date()
-        console.log('마감일', lect_deadline);
-        console.log('오늘', today)
-        if (lect_deadline < today){
-            errors.push('신청 마감일을 다시 설정하세요!\n')
+    let cur_status = $('input.site-button.btn-block.button-md').val();
+    if (cur_status === '등록하기') {
+        let lect_deadline = $('input[name="lect_deadline"]').val();
+        if (lect_deadline.length === 0) {
+            errors.push('신청 마감일을 입력하세요!\n');
+        } else {
+            lect_deadline = new Date(lect_deadline);
+            let today = new Date()
+            console.log('마감일', lect_deadline);
+            console.log('오늘', today)
+            if (lect_deadline < today){
+                errors.push('신청 마감일을 다시 설정하세요!\n')
+            }
         }
     }
 
