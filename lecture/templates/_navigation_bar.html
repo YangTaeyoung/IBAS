@@ -39,7 +39,7 @@
                 <li><a class="text-red" href="#" onclick="goSubmit('form-lect-delete', true, '정말 삭제하시겠습니까?')">강의 삭제</a>
                 </li>
                 <form id="form-lect-delete" action="{% url 'lect_delete' lect_no=lect.lect_no %}" method="post"
-                      style="display: none;"></form>
+                      style="display: none;">{% csrf_token %}</form>
             </ul>
         </div>
     </div>
