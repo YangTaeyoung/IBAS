@@ -6,7 +6,7 @@ from alarm.alarm_controller import create_lect_full_alarm, create_lect_enroll_al
     create_user_lect_out_alarm
 from django.contrib import messages
 from DB.models import LectType, Lect, MethodInfo, LectBoard, LectEnrollment, LectAttendance, \
-    LectAssignmentSubmit, LectMoneyStandard
+    LectAssignmentSubmit, LectMoneyStandard, LectEnrollmentStatus
 from file_controller import FileController
 from lecture.forms import LectForm, LectRejectForm, LectPicForm, make_lect_board_form, \
     FileForm, AssignmentSubmitForm
@@ -596,7 +596,7 @@ def lect_room_student_status(request, room_no):
 def lect_room_exit(request, room_no):
     cur_student = LectEnrollment.objects.prefetch_related('lect_no').get(
         lect_no=room_no, student_id=request.session.get('user_stu'))
-    cur_student.status_id = -1
+    cur_student.status = LectEnrollmentStatus.objects.get(pk=-1)
     cur_student.exit_time = today()
     cur_student.save()
 
