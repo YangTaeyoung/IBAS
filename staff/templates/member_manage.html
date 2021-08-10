@@ -339,15 +339,17 @@
                                                 {% for exist_user in exist_user_list %}
                                                     <tr>
                                                         <td scope="row">
-                                                            <div class="input-block">
-                                                                <input id="check_{{ exist_user.user_stu }}"
-                                                                       type="checkbox"
-                                                                       name="user_stu_list[]"
-                                                                       value="{{ exist_user.user_stu }}">
-                                                                <!-- staff_label_margin는 staff_cr.css에 정의되어 있음.  -->
-                                                                <label for="check_{{ exist_user.user_stu }}"
-                                                                       class="staff_label_margin"></label>
-                                                            </div>
+                                                            {% if logined_user.user_role_id <= 2 %}
+                                                                <div class="input-block">
+                                                                    <input id="check_{{ exist_user.user_stu }}"
+                                                                           type="checkbox"
+                                                                           name="user_stu_list[]"
+                                                                           value="{{ exist_user.user_stu }}">
+                                                                    <!-- staff_label_margin는 staff_cr.css에 정의되어 있음.  -->
+                                                                    <label for="check_{{ exist_user.user_stu }}"
+                                                                           class="staff_label_margin"></label>
+                                                                </div>
+                                                            {% endif %}
                                                         </td>
                                                         <th>{{ forloop.counter }}</th>
                                                         <!-- 회원 이름 -->
