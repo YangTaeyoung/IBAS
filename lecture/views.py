@@ -37,10 +37,10 @@ def get_pol_name(method_no):
 def get_lect_list(request, type_no):
     if type_no != 4:  # 강의 개설 신청 게시판이 아닌 일반 게시판(강의, 스터디, 취미모임)의 경우
         lect_type = LectType.objects.get(pk=type_no)
-        lect_list = Lect.objects.filter(Q(lect_type=lect_type) & Q(lect_state__state_no=3)).prefetch_related(
+        lect_list = Lect.objects.filter(Q(lect_type=lect_type) & Q(lect_state_id__gte=3)).prefetch_related(
             "lectday_set", "enrolled_students").order_by("-lect_created").order_by("lect_state_id")
     else:
-        lect_list = Lect.objects.filter(Q(lect_type=LectType.objects.get(pk=1)) & Q(lect_state__state_no=1) | Q(
+        lect_list = Lect.objects.filter(Q(lect_type=LectType.objects.get(pk=1)) & Q(lect_state_id=1) | Q(
             lect_state__state_no=2)).prefetch_related("lectday_set").prefetch_related("enrolled_students").order_by(
             "-lect_created").order_by("lect_state_id")
     return lect_list
