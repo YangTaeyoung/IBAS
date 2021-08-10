@@ -135,12 +135,9 @@ export default {
       if (comment_cont.trim() === "") {
         alert('댓글을 입력하세요!')
       } else {
-        axios({
-          method: 'put',
-          url: "comment/update/" + comment_id,
-          data: {comment_cont: comment_cont}
-        })
+        axios.put("comment/update/" + comment_id, {comment_cont: comment_cont})
             .then(response => {
+              console.log('반응이 왔엉', response)
               this.comment_list[index] = response.data.comment;
             })
             .catch(response => {

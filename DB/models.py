@@ -610,7 +610,7 @@ class UserDeleteState(models.Model):
 class UserEmail(models.Model):
     user_email = models.CharField(max_length=100, db_column="USER_EMAIL", primary_key=True)
     provider = models.CharField(max_length=20, db_column="PROVIDER")
-    user_stu = models.ForeignKey(User, on_delete=models.CASCADE, db_column='user_stu')
+    user_stu = models.ForeignKey(User, on_delete=models.CASCADE, db_column='user_stu', related_name='user_email')
 
     class Meta:
         managed = False
