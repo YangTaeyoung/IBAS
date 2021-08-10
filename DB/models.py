@@ -426,18 +426,6 @@ class LectBoardFile(File):
         db_table = 'LECT_BOARD_FILE'
 
 
-class LectCheck(models.Model):
-    check_id = models.AutoField(db_column='CHECK_ID', primary_key=True)  # Field name made lowercase.
-    check_date = models.DateTimeField(db_column='CHECK_DATE')  # Field name made lowercase.
-    check_lect = models.ForeignKey(Lect, on_delete=models.CASCADE, db_column='CHECK_LECT')  # Field name made lowercase.
-    check_user = models.ForeignKey('User', on_delete=models.CASCADE,
-                                   db_column='CHECK_USER')  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'LECT_CHECK'
-
-
 class LectMoneyStandard(models.Model):
     money_no = models.AutoField(db_column="MONEY_NO", primary_key=True)
     money_1to5 = models.IntegerField(db_column="MONEY1TO5")

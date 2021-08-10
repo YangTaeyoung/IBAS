@@ -107,8 +107,9 @@
                                                     <strong>{{ lect.lect_deadline|date:'d' }}</strong>
                                                     <!-- 모집 및 마감 상태 -->
                                                     <!-- 강의, 스터디, 취미 기간 중에 있으면 모집 span 태그가 보이고, 모집 기간이 자나면, 자동으로 마감으로 뜨게 처리 -->
-
-                                                    {% if lect.is_expired or lect.lect_limit_num <= lect.enrolled_students.all|length %}
+                                                    {% if lect.lect_state_id == 4 %}
+                                                        <span class="recruiting-wait">종 료</span>
+                                                    {% elif lect.is_expired or lect.lect_limit_num <= lect.get_enrolled_std_num %}
                                                         <span class="recruiting-end">마 감</span>
                                                     {% else %}
                                                         <span class="recruiting">모 집</span>
