@@ -186,7 +186,6 @@ class ChiefCarrier(models.Model):
         db_table = 'CHIEF_CARRIER'
 
 
-
 class ContestBoard(models.Model):
     contest_no = models.AutoField(db_column='CONTEST_NO', primary_key=True)
     contest_title = models.CharField(db_column='CONTEST_TITLE', max_length=100)
@@ -214,7 +213,6 @@ class ContestBoard(models.Model):
     @property
     def get_file_path(self):
         return os.path.join(MEDIA_ROOT, 'contest', str(self.contest_no))
-
 
 
 class ContestFile(File):
@@ -285,6 +283,11 @@ class Lect(models.Model):
         # 마감일을 2021.08.04 로 설정하면 db 에는 2021.08.04 00:00:00 으로 저장됨.
         # 마감일의 의미상 당일 23:59:59 까지는 가능해야함. 그래서 하루 더해줬음.
         return timezone.now() > self.lect_deadline + timedelta(days=1)
+
+    # 등록된 학생 수를 구하는 함수.
+    @property
+    def get_enrolled_std_num(self):
+        return self.enrolled_students.filter(status_id=1)
 
 
 class LectDay(models.Model):
@@ -491,7 +494,7 @@ class PolicyTerms(models.Model):
     policy_title = models.CharField(db_column="POLICY_TITLE", max_length=500)
     policy_content = SummernoteTextField(db_column="POLICY_CONTENT", max_length=CONT_SIZE)
     policy_user = models.ForeignKey("User", on_delete=models.DO_NOTHING, db_column="POLICY_USER", null=True, blank=True)
-    policy_type = models.ForeignKey("PolicyType",db_column="POLICY_TYPE", on_delete=models.CASCADE)
+    policy_type = models.ForeignKey("PolicyType", db_column="POLICY_TYPE", on_delete=models.CASCADE)
     policy_updated = models.DateTimeField(db_column="POLICY_UPDATED", auto_now=True)
 
     class Meta:

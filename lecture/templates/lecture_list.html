@@ -140,7 +140,7 @@
                                                     <span class="text-primary m-l40 mr-3"><i
                                                             class="fa fa-user"></i></span>
                                                     <!-- 강의 신청자 및 총 정원을 DB에서 가져와야 함. -->
-                                                    <span>{{ lect.enrolled_students.count }} / {{ lect.lect_limit_num }} 명</span>
+                                                    <span>{{ lect.get_enrolled_std_num }} / {{ lect.lect_limit_num }} 명</span>
                                                 </li>
                                             </ul>
                                         </div>
