@@ -3,15 +3,21 @@ from django.contrib import messages
 from django.http import Http404
 from django.shortcuts import redirect, reverse, render
 from DB.models import User, ContestBoard, Board, Bank, Lect, UserDelete, AuthUser, History, LectEnrollment, \
-    LectBoard, Answer, UserEmail, Comment, LectAssignmentSubmit, Alarm, PolicyTerms
+    LectBoard, Answer, UserEmail, Comment, LectAssignmentSubmit, Alarm, PolicyTerms, LectAttendance
 from allauth.socialaccount.models import SocialAccount, SocialToken
 from file_controller import FileController
 from django.db.models import Q
 from django.db import transaction
+from post_controller import comment_delete_by_post_delete
 
 
 def is_professor(cur_user: User):
     return cur_user.user_role_id == 5
+
+
+# 디폴트 유저의 정보를 가져옴.
+def get_default_user():
+    return User.objects.get(pk=0)
 
 
 # 학교 아이디의 경우 이름/학과/학교 등으로 이름이 구성된 경우가 많음.
@@ -281,15 +287,9 @@ def superuser_only(cfo_included=False):
     return decorator
 
 
-def is_closed(lect: Lect):
-    flag = False
-    if lect.lect_limit_num <= lect.get_enrolled_std_num:  # 강의가 가득 찼는가?
-        flag = True
-    if lect.is_expired:  # 강의 모집 기간이 만료되었는가?
-        flag = True
-    return flag
-
-
+# 제작: 양태영
+# 제작일: 21-08-04
+# 제작 내용: 교수의 입장을 제한하는 데코레이터
 def prohibit_professor(func):
     @functools.wraps(func)
     def wrapper(request, *args, **kwargs):
@@ -301,6 +301,23 @@ def prohibit_professor(func):
     return wrapper
 
 
+# 제작: 양태영
+# 제작 내용: 일반회원 입장에서, 강의에 등록이 가능한지 확인하는 데코레이터, 강의 인원이 가득찼거나, 강의 모집기간이 만료된 경우 False를 출력 
+# INPUT: 확인할 강의 오브젝트
+# OUTPUT: 가득 찼거나, 만료되었는지 여부
+def is_closed(lect: Lect):
+    flag = False
+    # 강의가 가득 찼는가?
+    if lect.lect_limit_num <= lect.get_enrolled_std_num:
+        flag = True
+    # 강의 모집 기간이 만료되었는가?
+    if lect.is_expired:
+        flag = True
+    return flag
+
+
+# 제작: 양태영
+# 제작 내용: 일반회원 입장에서, 강의에 등록이 가능한지 확인하는 데코레이터
 def enroll_check(func):
     @auth_check(active=True)
     @functools.wraps(func)
@@ -320,6 +337,8 @@ def enroll_check(func):
     return wrapper
 
 
+# 제작: 양테영
+# 제작 내용: 일반회원 입장에서 강의에 입장이 가능한지 확인하는 데코레이터 enroll_check와는 다르게 강의실 입장 가능 여부를 판단함.
 def room_enter_check(func):
     @auth_check(active=True)
     @functools.wraps(func)
@@ -470,7 +489,12 @@ def is_default_pic(img_path):
     return str(img_path) == get_default_pic_path()
 
 
-# 초기화를 할지 삭제를 할 지 결정하는 함수
+# 제작: 양태영
+# 제작 내용: 초기화를 할지 삭제를 할 지 결정하는 함수
+# 제작 사유: 회원이 회원탈퇴를 결정하였을 때 중요한 게시판 (공지사항, 활동게시판, 공모전게시판, 예산, 연혁)에 관여한 경우
+# 그냥 나가버리면 같이 관련된 부분이 삭제되어버림 그렇다고 null로 처리하게 되면 데이터 무결성을 해치게 되며, 책임소재를 묻기 어려우므로
+# 해당 부분에 대해서 체크하는 함수.
+# 관여가 되어있다면 delete_user에서 초기화시키는 과정을 밟게 됨.
 def is_related(user: User):
     # 활동 게시판이랑 관련이 있는가?
     if len(Board.objects.filter(Q(board_writer=user) & Q(board_type_no__board_type_no=4))) != 0:
@@ -519,31 +543,24 @@ def delete_all_infomation(user: User):
     # 본인 게시글 삭제(단 활동 게시판의 게시글은 공익을 위한 게시글이므로 삭제되어선 안된다.)
     my_board_list = Board.objects.filter(
         Q(board_writer=user) & ~Q(board_type_no__board_type_no=4) & ~Q(board_type_no__board_type_no=1))
-
     for my_board in my_board_list:
         FileController.delete_all_files_of_(my_board)
+        comment_delete_by_post_delete(my_board)
         my_board.delete()
-
-    # ------------ deprecated -------------
-    # 삭제사유: 공모전 게시글은 공익을 위한 게시글이므로 삭제되어선 안된다.
-    # # 본인 공모전 글 삭제
-    # my_contest_list = ContestBoard.objects.filter(contest_writer=user)
-    # for my_contest in my_contest_list:
-    #     FileController.delete_all_files_of_(my_contest)
-    #     my_contest.delete()
-    # -------------------------------------
 
     # 본인이 제명 대상자로 있거나, 본인이 발안한 제명 안건 삭제
     my_user_delete_list = UserDelete.objects.filter(
         Q(suggest_user=user) | Q(deleted_user=user))
     for my_user_delete in my_user_delete_list:
         FileController.delete_all_files_of_(my_user_delete)
+        comment_delete_by_post_delete(my_user_delete)
         my_user_delete.delete()
 
     # 본인이 작성한 강의실 게시글 삭제
     my_lect_board_list = LectBoard.objects.filter(lect_board_writer=user)
     for my_lect_board in my_lect_board_list:
         FileController.delete_all_files_of_(my_lect_board)
+        comment_delete_by_post_delete(my_lect_board)
         my_lect_board.delete()
 
     # 본인이 수강중인 강의 삭제
@@ -570,9 +587,16 @@ def delete_all_infomation(user: User):
     if not is_default_pic(str(user.user_pic)):
         FileController.delete_all_files_of_(user)
 
+    # 자신의 알람 삭제
     my_alarm_list = Alarm.objects.filter(alarm_user=user)
     for my_alarm in my_alarm_list:
         my_alarm.delete()
+
+    # 자신의 출석 삭제
+    my_lect_attendance_list = LectAttendance.objects.filter(student=user)
+    for my_lect_attendance in my_lect_attendance_list:
+        # 삭제는 되지만 DB.models -> LectAttendance -> student -> on_delete=SET_DEFAULT로 인해 DEFAULT_USER로 설정됨.
+        my_lect_attendance.delete()
 
 
 # 삭제 로직
