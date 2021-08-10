@@ -82,6 +82,10 @@
     width: 430px;
 }
 
+.width-500 {
+    width: 500px;
+}
+
 .width-620 {
     width: 620px;
 }
@@ -106,8 +110,8 @@
     height: 50px;
 }
 
-.height-80 {
-    height: 80px;
+.height-100 {
+    height: 100px;
 }
 
 .height-200 {
@@ -125,6 +129,11 @@
 .height-70vh {
     height: 70vh;
 }
+
+.min-height-70vh {
+    min-height: 70vh;
+}
+
 
 .max-min-min-height-35 {
     max-height: 35px;

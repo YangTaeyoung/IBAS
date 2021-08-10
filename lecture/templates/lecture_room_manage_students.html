@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load custom_tags %}
 {% load static %}
 {% block content %}
     <!--커스텀 css-->
@@ -6,6 +7,15 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/size.css' %}">
     <script src="{% static 'js/ibas_centents.js' %}"></script>
     <script src="{% static 'js/comment.js' %}"></script>
+    <script>
+    $(function () {
+        $('tr.lectRoom_tr').each(function () {
+            if($(this).text().includes('탈주')) {
+                $(this).find('input').prop('disabled', true);
+            }
+        })
+    })
+    </script>
 
 
     <div class="page-wraper">
@@ -99,12 +109,12 @@
                                                             {% csrf_token %}
                                                             <!-- 체크박스 -->
                                                             <div class="input-block">
-                                                                <input id="check_{{ info.enrolled.student.user_stu }}"
+                                                                <input id="check_{% personal_info info.enrolled.student.user_stu request%} "
                                                                        type="checkbox"
-                                                                       name="is_checked_{{ info.enrolled.student.user_stu }}"
+                                                                       name="is_checked_{% personal_info info.enrolled.student.user_stu request%}"
                                                                        value="{{ info.enrolled.id }}">
                                                                 <!-- label이 html에 보이는 것. 역할은 input에 체크하기 위함.   -->
-                                                                <label for="check_{{ info.enrolled.student.user_stu }}"
+                                                                <label for="check_{% personal_info info.enrolled.student.user_stu request%}"
                                                                        class="staff_label_margin"></label>
                                                             </div>
 
@@ -112,13 +122,13 @@
                                                         <!--수강생 번호-->
                                                         <th>{{ forloop.counter }}</th>
                                                         <!-- 회원 이름 -->
-                                                        <td>{{ info.enrolled.student.user_name }}</td>
+                                                        <td>{% personal_info info.enrolled.student.user_name request%}</td>
                                                         <!-- 회원 학번 -->
-                                                        <td>{{ info.enrolled.student.user_stu }}</td>
+                                                        <td>{% personal_info info.enrolled.student.user_stu request%}</td>
                                                         <!--전화번호 -->
-                                                        <td>{{ info.enrolled.student.user_phone }}</td>
+                                                        <td>{% personal_info info.enrolled.student.user_phone request%}</td>
                                                         <!--이메일 -->
-                                                        <td>{{ info.enrolled.student.useremail_set.first.user_email }}</td>
+                                                        <td>{% personal_info info.enrolled.student.useremail_set.first.user_email request%}</td>
 
                                                         <!-- 과제 미제출 수 -->
                                                         <td>{{ info.assignment_info }}</td>
@@ -127,9 +137,11 @@
                                                         <!--상태 -->
                                                         {% if info.enrolled.status_id == 1 %}
                                                             <td class="lectRoom_state lectRoom_state_ing_font">수강중</td>
-                                                        {% else %}
+                                                        {% elif info.enrolled.status_id == 0 %}
                                                             <td class="lectRoom_state lectRoom_state_stop_font">수강정지
                                                             </td>
+                                                        {% else %}
+                                                            <td class="lectRoom_state lectRoom_state_exit_font">탈주</td>
                                                         {% endif %}
                                                     </tr>
                                                 {% endfor %}

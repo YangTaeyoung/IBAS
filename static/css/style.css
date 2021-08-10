@@ -3488,7 +3488,7 @@ blockquote:before {
     .nav.navbar-nav li a i.fa-angle-right {
         background-color: rgba(0, 0, 0, 0.2);
         color: #ffffff;
-        height: 100%;
+        height: 112%;
         line-height: 40px;
         position: absolute;
         right: 0;
@@ -3496,6 +3496,8 @@ blockquote:before {
         top: -6px;
         width: 40px;
         z-index: 3;
+        padding-top: 3px;
+
     }
 	.header-nav .nav > li .sub-menu li i.fa-angle-right:before{
 		content: "\f078";

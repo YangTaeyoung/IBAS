@@ -1,12 +1,11 @@
 from django.db import transaction
 from django.shortcuts import render, get_object_or_404, reverse, redirect
-from DB.models import Alarm, Board, BoardFile, Comment, History, User
+from DB.models import Alarm, Board, BoardFile, History, User
 from board.forms import FileForm
 from main.forms import ActivityForm
 from pagination_handler import *
 from file_controller import FileController
 from django.db.models import Q
-from alarm.alarm_controller import create_comment_alarm, create_comment_ref_alarm
 from django.http import HttpResponseRedirect
 from user_controller import login_required, writer_only, auth_check, superuser_only, get_logined_user
 from exception_handler import exist_check
@@ -15,13 +14,14 @@ from date_controller import is_user_recruiting, is_interview_progress
 from post_controller import comment_delete_by_post_delete
 from django.contrib import messages
 
+
 # 메인페이지 이동 함수
 def index(request):
     from member import session
     # 임시 로그인
     session.save_session(request, user_model=User.objects.get(pk=12162359), logined_email="0130yang@gmail.com", provider="google")
     # session.save_session(request, user_model=User.objects.get(pk=12171652))
-    #session.save_session(request, user_model=User.objects.get(pk=12172285))
+    # session.save_session(request, user_model=User.objects.get(pk=12172285))
     # session.save_session(request, user_model=User.objects.get(pk=12172434))
     context = {
         "is_user_recruiting": is_user_recruiting(),
@@ -34,9 +34,23 @@ def index(request):
 # 동아리 소개 작업할 것임
 def introduce(request):
     # 히스토리 내역을 가져옴
-    context = {'history_list': History.objects.all().order_by("history_date")}
+    history_list = History.objects.all().order_by("history_date")
+    year_list = list(range(history_list.first().history_date.year, history_list.last().history_date.year + 1))
+    mark_list = []
+    for year in year_list:
+        mark_list.append(History.objects.filter(history_date__year=year).order_by("history_date").first().history_no)
     chief_crews = User.objects.filter(Q(user_role__role_no__lte=4) & Q(user_auth__auth_no=1)).prefetch_related(
         'chiefcarrier_set').prefetch_related('useremail_set').order_by("user_role__role_no").all()
+    for history in history_list:
+        for mark in mark_list:
+            if history.history_no == mark:
+                history.is_marked = True
+                break
+            else:
+                history.is_marked = False
+    context = {
+        "history_list": history_list
+    }
     if len(chief_crews) != 0:
         # 회장단인 사람의 객체를 가져오고 등록, chief_carrier에서 이력 정보도 함께 가져옴
         context['chief_crews'] = chief_crews
@@ -162,9 +176,11 @@ def activity_delete(request, board_no):
     comment_delete_by_post_delete(board)
     with transaction.atomic():
         FileController.delete_all_files_of_(board)  # 해당 게시글에 등록된 파일 모두 제거
+        comment_delete_by_post_delete(board)
         board.delete()  # 파일과 폴더 삭제 후, 게시글 DB 에서 삭제
 
     return redirect(reverse('activity'))
+
 
 # ---- history_register ---- #
 # : 연혁 등록하는 코드
@@ -174,10 +190,14 @@ def activity_delete(request, board_no):
 #   - 단순 코드 정리 history.save 없애도 되서 없앴음.
 @superuser_only(cfo_included=False)
 def history_register(request):  # 연혁 등록
+    history_title = request.POST.get("history_title")
+    history_cont = request.POST.get("history_cont")
+    if history_cont == "":
+        history_cont = history_title
     if request.method == "POST":  # 정상적으로 값이 넘어왔을 경우
         History.objects.create(  # history 객체 생성 후 받은 값을 집어넣음.
-            history_title=request.POST.get("history_title"),
-            history_cont=request.POST.get("history_cont"),
+            history_title=history_title,
+            history_cont=history_cont,
             history_date=request.POST.get("history_date"),
             history_writer=get_logined_user(request)
         )
@@ -238,8 +258,4 @@ def hall_of_fame(request):
         "graduated_user_list": User.objects.filter(Q(user_apply_publish=1) & Q(user_grade=0))
     }
     return render(request, "hall_of_fame.html", context)
-
-
-def error_handler500(request):
-    return render(request, "../templates/error_page.html", status=500)
 

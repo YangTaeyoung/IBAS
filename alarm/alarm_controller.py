@@ -1,5 +1,5 @@
 import board
-from DB.models import Alarm, Comment, User, Lect, LectEnrollment, Board, UserDelete, Bank, LectBoard
+from DB.models import Alarm, Comment, User, Lect, LectEnrollment, Board, UserDelete, Bank, LectBoard, ContestBoard
 from django.shortcuts import resolve_url
 from django.db.models import Q
 from user_controller import get_logined_user
@@ -8,33 +8,47 @@ from user_controller import get_logined_user
 # 대댓글 대상자에게 알람 보내는 함수
 # 파라미터: 등록할 댓글 객체
 def create_comment_alarm(comment: Comment):
-    if comment.comment_board_no.board_type_no.board_type_no == 4:  # 활동 게시판의 경우
-        link = resolve_url("activity_detail", board_no=comment.comment_board_no.board_no)  # 링크를 활동 게시판 링크롤 바꿈.
-    else:  # 아닐 경우
-        link = resolve_url("board_detail", board_no=comment.comment_board_no.board_no)  # 일반 게시판.
-    if comment.comment_writer != comment.comment_board_no.board_writer:  # 자기 게시글에 남기는 덧글은 알람을 따로 받지 않음.
-        alarm = Alarm.objects.create(  # 알람 객체 생성.
-            alarm_user=comment.comment_board_no.board_writer,
-            alarm_cont="내 게시글에 " + comment.comment_writer.user_name + "님 께서 새로운 덧글을 남겼습니다",
-            alarm_link=link
-        )
-        alarm.save()
+    type = comment.comment_type.comment_type_no
+    init_dict = {
+        "alarm_cont": f"내 게시글에 {comment.comment_writer.user_name}님이 덧글을 남겼습니다."
+    }
 
-
-# 대 댓글 대상자에게 알람을 날리는 함수.
-# 파라미터: 등록할 댓글 객체
-def create_comment_ref_alarm(comment: Comment):
-    if comment.comment_board_no.board_type_no.board_type_no == 4:  # 활동 게시판의 경우
-        link = resolve_url("activity_detail", board_no=comment.comment_board_no.board_no)  # 활동 게시판 상세로 링크 조정
-    else:  # 이외의 게시판일 경우
-        link = resolve_url("board_detail", board_no=comment.comment_board_no.board_no)  # 일반 게시판 상세로 링크 조정
-    if comment.comment_writer != comment.comment_cont_ref.comment_writer:  # 자기 게시글은 받지 않음.
-        alarm = Alarm.objects.create(  # 알람 객체 생성
-            alarm_user=comment.comment_cont_ref.comment_writer,
-            alarm_cont="내 덧글에 " + comment.comment_writer.user_name + "님 께서 새로운 답글을 남겼습니다",
-            alarm_link=link
+    if type == 1:
+        board = Board.objects.get(pk=comment.comment_board_ref)
+        init_dict.update(
+            alarm_user=board.board_writer,
+            alarm_link=resolve_url("board_detail", board_no=board.board_no)
         )
-        alarm.save()
+    elif type == 2:
+        contest_board = ContestBoard.objects.get(pk=comment.comment_board_ref)
+        init_dict.update(
+            alarm_user=contest_board.contest_writer,
+            alarm_link=resolve_url("contest_detail", contest_no=contest_board.contest_no)
+        )
+    elif type == 3:
+        lect_board = LectBoard.objects.get(pk=comment.comment_board_ref)
+        init_dict.update(
+            alarm_user=lect_board.lect_board_writer,
+            alarm_link=resolve_url("lect_board_detail", room_no=lect_board.lect_no.lect_no,
+                                   lect_board_no=lect_board.lect_board_no)
+        )
+    elif type == 4:
+        user_delete = UserDelete.objects.get(pk=comment.comment_board_ref)
+        init_dict.update(
+            alarm_user=user_delete.suggest_user,
+            alarm_cont=f"내가 발의한 제명안건에 {comment.comment_writer.user_name}님이 덧글을 남겼습니다.",
+            alarm_link=resolve_url("member_delete_detail", user_delete_no=user_delete.user_delete_no)
+        )
+    if init_dict.get("alarm_user") != comment.comment_writer:
+        Alarm.objects.create(**init_dict)
+
+        if comment.comment_cont_ref is not None:
+            if comment.comment_cont_ref.comment_writer != comment.comment_writer:
+                Alarm.objects.create(
+                    alarm_user=comment.comment_cont_ref.comment_writer,
+                    alarm_cont=f"내 덧글에 {comment.comment_writer.user_name}님께서 덧글을 남기셨습니다.",
+                    alarm_link=init_dict.get("alarm_link")
+                )
 
 
 # user: alarm을 보낼 유저 객체
@@ -105,17 +119,6 @@ def delete_board_by_superuser_alarm(request, board: Board):
     )
 
 
-# 관리자에 의해 덧글이 삭제되었을 때 알림.
-def delete_comment_by_superuser_alarm(request, comment: Comment):
-    comment_board = comment.comment_board_no.board_no
-    Alarm.objects.create(
-        alarm_user=comment.comment_writer,
-        alarm_cont=get_logined_user(
-            request).user_name + "님에 의해 \"" + comment.comment_cont[:7] + "...\" 덧글이 삭제되었습니다. 운영 정책에 위반됩니다.",
-        alarm_link=resolve_url("board_detail", board_no=comment_board)
-    )
-
-
 # 관리자에 의해 강의가 삭제되었을 때 알림.
 def delete_lect_by_superuser_alarm(request, lect: Lect):
     lect_type = lect.lect_type.type_no
@@ -167,7 +170,7 @@ def create_finish_user_delete_alarm(user_delete: UserDelete):
 
 # 예산 지원신청을 넣었을 때
 def create_bank_alarm(bank: Bank):
-    cfo_list = User.objects.filter(Q(user_role__role_no=4)&Q(user_auth__auth_no=1))
+    cfo_list = User.objects.filter(Q(user_role__role_no=4) & Q(user_auth__auth_no=1))
     for cfo in cfo_list:
         Alarm.objects.create(
             alarm_user=cfo,
@@ -191,10 +194,19 @@ def create_user_join_alarm(user: User):
 
 # 회원이 회비 납부요청을 할 경우.
 def create_user_activate_alarm(user: User):
-    cfo_list = User.objects.filter(Q(user_role__role_no=4)&Q(user_auth__auth_no=1))
+    cfo_list = User.objects.filter(Q(user_role__role_no=4) & Q(user_auth__auth_no=1))
     for cfo in cfo_list:
         Alarm.objects.create(
             alarm_user=cfo,
             alarm_cont=user.user_name + "님이 회비 납부하였습니다. 확인 후, 권한을 수정해주세요.",
             alarm_link=resolve_url("staff_member_list")
         )
+
+
+# 강의에서 퇴출당할 경우
+def create_user_lect_out_alarm(lect_enrollment: LectEnrollment):
+    Alarm.objects.create(
+        alarm_user=lect_enrollment.student,
+        alarm_cont=f"{lect_enrollment.lect_no.lect_chief.user_name}(강의자)님에 의해 \"{lect_enrollment.lect_no.lect_title}\" 강의에서 퇴출되었습니다.",
+        alarm_link=resolve_url("index")
+    )

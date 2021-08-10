@@ -28,7 +28,7 @@ def get_first_img(arg):
 # url 표시할 때, http:// 이거 나오면 구려보여서 잘르기.
 @register.filter
 def url(url):
-    return url[url.find('w'):]
+    return url[url.find('/') + 2:]
 
 # 글자수 length 초과하면 자르고 끝에 ... 붙임
 @register.filter
@@ -50,20 +50,27 @@ def is_exist(arg: str, tar: str):
 # 이름이나 학번 가림.
 @register.simple_tag
 def personal_info(string, request):
-    string = str(string)
     if get_logined_user(request).user_role_id <= 3:
-
-        # 학과는 '학과'만 표시
-        if '학과' in string:
-            return '*' * len(string[:-2]) + '학과'
-        
-        # 이름 : 성만 표기
-        elif len(string) == 3:
-            return string[0] + '**'
-
         # 학번 : 1217****
-        elif len(string) == 8:
-            return string[:4] + '****'
+        if type(string) == int:
+            return str(string)[:4] + '****'
+        else:
+            string = str(string)
+            # 학과는 '학과'만 표시
+            if '학과' in string:
+                return '*' * len(string[:-2]) + '학과'
+
+            # 전화번호
+            elif '-' in string:
+                return string[:3] + '-****-****'
+
+            else:
+                # 이메일
+                if '@' in string:
+                    return '*' * string.find('@') + string[string.find('@'):]
+                # 이름 : 성만 표기
+                else:
+                    return string[0] + '*' * (len(string) - 1)
 
     else:
         return string

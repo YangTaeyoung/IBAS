@@ -13,7 +13,7 @@
         <div class="container clearfix">
             <div class="dlab-bnr-inr-entry">
                 <!--제목-->
-                <h1 class="text-white introduce-letter-spacing_5">강의 회계 요약</h1>
+                <h1 class="text-white introduce-letter-spacing_5">강의 회계 요약 <span class="text-red font-12">Beta</span></h1>
                 <!--부제목-->
                 <p class="m-t20">강의 출석 요약 및 회계 지출 요약 페이지입니다.</p>
             </div>
@@ -22,7 +22,7 @@
     <!----------============= 본문 시작 ================----------->
     <!-- Content 부분 시작 -->
     <div class="page-content bg-white">
-        <div class="content-block">
+        <div class="content-block min-height-70vh">
             <div class="section-full content-inner bg-white">
                 <div class="container">
                     <div class="listing-filter m-b40">
@@ -33,7 +33,7 @@
                                     <!-- bank-margin-bottom_0는 bank_yejin.css에 정의되어 있음.  -->
                                     <!-- bank-year는 bank_yejin.js에 사용됨. bank_select 부분과 관련 -->
                                     <h3 class="title bank-margin-bottom_0" style="font-size: 22px">강의 회계
-                                        요약</h3>
+                                        요약 <span class="text-red font-12">Beta</span></h3>
                                 </div>
                             </div>
                         </div>
@@ -49,7 +49,7 @@
                             <tr id="bank-tr-head" style="text-align: center">
                                 <th scope="col" style="width: 150px;">강의명</th>
                                 {% for max_col in max_column_list %}
-                                    <th scope="col" style="width: 150px;">{{ max_col }}회차</th>
+                                    <th scope="col" style="width: 150px;">{{ forloop.counter }}회차</th>
                                 {% endfor %}
                                 <th scope="col" style="width: 150px;">지급 여부</th>
                                 <th scope="col" style="width: 200px;">지급 예상액</th>
@@ -65,11 +65,11 @@
                             {% for lect_summary in lect_summary_list %}
 
                                 <tr {% if lect_summary.lect.lect_paid == 1 %}style="background-color: #c5c5c5"{% endif %}>
-                                    <th>
+                                    <th class="text-center">
                                         <a href="{% url 'lect_detail' lect_no=lect_summary.lect.lect_no %}">{{ lect_summary.lect.lect_title }}</a>
                                     </th>
                                     {% for summary in lect_summary.summary_list %}
-                                        <td>{{ summary }}</td>
+                                        <td class="text-center">{{ summary }}</td>
                                     {% endfor %}
                                     <td class="text-center">
 
@@ -89,7 +89,7 @@
                                         {% endif %}
 
                                     </td>
-                                    <td class="text-right">₩ {{ lect_summary.sum_of_lect|intcomma }}</td>
+                                    <td class="text-center">₩ {{ lect_summary.sum_of_lect|intcomma }}</td>
                                 </tr>
                             {% endfor %}
                             {% if lect_summary_list|length != 0 %}

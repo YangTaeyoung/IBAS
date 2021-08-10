@@ -65,7 +65,7 @@ function introduce_update(history_id) {
     document.getElementById('history-date-'+history_id).disabled = false; // input창 disabled속성을 해제, disabled 속성을 거짓이라 둠.
     document.getElementById('history-txt-'+history_id).disabled = false;
     document.getElementById('history-con-'+history_id).disabled = false;
-
+    document.getElementById('history-con-'+history_id).type = "text";
     document.getElementById('history-date-'+history_id).classList.add('history-change');
     //disabled 가 해제 되었을 때 class로 테두리 css를 지정해줌.
     document.getElementById('history-txt-'+history_id).classList.add('history-change');

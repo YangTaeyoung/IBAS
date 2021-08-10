@@ -433,6 +433,14 @@ input[type=checkbox] + label:after {
     font-style: italic;
 }
 
+/*수강생관리 상태(수강정지)의 폰트 색과 두께 설정을 위함*/
+.lectRoom_state_exit_font {
+    color: black;
+    font-weight: normal;
+    font-style: italic;
+    text-decoration:line-through;
+}
+
 /*출결 관리 주차에 대한 폰트 설정을 위함*/
 .lectRoom_week {
     /*display: inline-block;*/
@@ -702,4 +710,8 @@ input[type=checkbox] + label:after {
 
 .honor-card::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera*/
+}
+
+.alt-tran{
+    transform: translate3d(0px, 52px, -9px) !important;
 }

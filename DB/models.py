@@ -185,19 +185,6 @@ class ChiefCarrier(models.Model):
         managed = False
         db_table = 'CHIEF_CARRIER'
 
-#
-# class Comment(models.Model):
-#     comment_id = models.AutoField(db_column='COMMENT_ID', primary_key=True)
-#     comment_board_no = models.ForeignKey(Board, db_column='COMMENT_BOARD_NO', on_delete=models.CASCADE)
-#     comment_writer = models.ForeignKey('User', on_delete=models.CASCADE, db_column='COMMENT_WRITER')
-#     comment_cont = models.CharField(db_column='COMMENT_CONT', max_length=5000)
-#     comment_cont_ref = models.ForeignKey('self', on_delete=models.CASCADE, db_column='COMMENT_CONT_REF', blank=True,
-#                                          null=True)  # Field name made lowercase.
-#     comment_created = models.DateTimeField(db_column='COMMENT_CREATED', auto_now_add=True)  # Field name made lowercase.
-#
-#     class Meta:
-#         managed = False
-#         db_table = 'COMMENT'
 
 
 class ContestBoard(models.Model):
@@ -228,19 +215,6 @@ class ContestBoard(models.Model):
     def get_file_path(self):
         return os.path.join(MEDIA_ROOT, 'contest', str(self.contest_no))
 
-#
-# class ContestComment(models.Model):
-#     comment_id = models.AutoField(db_column='COMMENT_ID', primary_key=True)
-#     comment_board_no = models.ForeignKey('ContestBoard', db_column='COMMENT_BOARD_NO', on_delete=models.CASCADE)
-#     comment_writer = models.ForeignKey('User', on_delete=models.CASCADE, db_column='COMMENT_WRITER')
-#     comment_cont = models.CharField(db_column='COMMENT_CONT', max_length=500)
-#     comment_cont_ref = models.ForeignKey('self', on_delete=models.CASCADE, db_column='COMMENT_CONT_REF', blank=True,
-#                                          null=True)  # Field name made lowercase.
-#     comment_created = models.DateTimeField(db_column='COMMENT_CREATED', auto_now_add=True)  # Field name made lowercase.
-#
-#     class Meta:
-#         managed = False
-#         db_table = 'CONTEST_COMMENT'
 
 
 class ContestFile(File):
@@ -410,6 +384,7 @@ class LectEnrollment(models.Model):
     student = models.ForeignKey('User', on_delete=models.CASCADE, db_column='STUDENT')
     status = models.ForeignKey('LectEnrollmentStatus', on_delete=models.DO_NOTHING, db_column='STATUS', default=1,
                                null=False)
+    exit_time = models.DateTimeField('EXIT_TIME')
 
     class Meta:
         managed = False
@@ -421,6 +396,10 @@ class LectEnrollmentStatus(models.Model):
     status = models.IntegerField(db_column='STATUS', primary_key=True)
     description = models.CharField(db_column='DESCRIPTION', max_length=10)
 
+    class Meta:
+        managed = False
+        db_table = 'LECT_ENROLLMENT_STATUS'
+
 
 class LectBoardType(models.Model):
     lect_board_type_no = models.AutoField(db_column='LECT_BOARD_TYPE_NO', primary_key=True)
@@ -430,75 +409,6 @@ class LectBoardType(models.Model):
     class Meta:
         managed = False
         db_table = 'LECT_BOARD_TYPE'
-
-
-class LectBoardAnswer(models.Model):
-    lect_ans_no = models.AutoField(db_column='LECT_ANS_NO', primary_key=True)  # Field name made lowercase.
-    lect_board_answer = models.ForeignKey(LectBoard, models.DO_NOTHING,
-                                          db_column='LECT_BOARD_ANSWER')  # Field name made lowercase.
-    lect_user_stu = models.ForeignKey('User', on_delete=models.CASCADE,
-                                      db_column='LECT_USER_STU')  # Field name made lowercase.
-    lect_ans_cont = SummernoteTextField(db_column='LECT_ANS_CONT', max_length=CONT_SIZE, blank=True,
-                                        null=True)  # Field name made lowercase.
-    lect_ans_created = models.DateTimeField(db_column='LECT_ANS_CREATED',
-                                            auto_now_add=True)  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'LECT_BOARD_ANSWER'
-
-
-class LectBoardAnswerFile(models.Model):
-    lect_ans_file_id = models.AutoField(db_column='LECT_ANS_FILE_ID', primary_key=True)  # Field name made lowercase.
-    lect_ans_no = models.ForeignKey(LectBoardAnswer, on_delete=models.CASCADE,
-                                    db_column='LECT_ANS_NO')  # Field name made lowercase.
-    lect_ans_file_path = models.CharField(db_column='LECT_ANS_FILE_PATH', max_length=1000)  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'LECT_BOARD_ANSWER_FILE'
-
-#
-# class LectBoardComment(models.Model):
-#     lect_board_comment_id = models.AutoField(db_column='LECT_BOARD_COMMENT_ID',
-#                                              primary_key=True)  # Field name made lowercase.
-#     lect_board_board_no = models.ForeignKey(LectBoard, on_delete=models.CASCADE,
-#                                             db_column='LECT_BOARD_BOARD_NO')  # Field name made lowercase.
-#     lect_board_comment_cont = models.TextField(db_column='LECT_BOARD_COMMENT_CONT')  # Field name made lowercase.
-#     lect_board_comment_writer = models.ForeignKey('User', on_delete=models.CASCADE,
-#                                                   db_column='LECT_BOARD_COMMENT_WRITER')  # Field name made lowercase.
-#     lect_board_comment_date = models.DateTimeField(db_column='LECT_BOARD_COMMENT_DATE')  # Field name made lowercase.
-#     lect_board_comment_ref = models.ForeignKey('self', on_delete=models.CASCADE, db_column='LECT_BOARD_COMMENT_REF',
-#                                                blank=True, null=True)  # Field name made lowercase.
-#
-#     class Meta:
-#         managed = False
-#         db_table = 'LECT_BOARD_COMMENT'
-#
-
-class LectBoardEx(models.Model):
-    lect_board_ex_no = models.AutoField(db_column='LECT_BOARD_EX_NO', primary_key=True)  # Field name made lowercase.
-    lect_board_no = models.ForeignKey(LectBoard, on_delete=models.CASCADE,
-                                      db_column='LECT_BOARD_NO')  # Field name made lowercase.
-    lect_board_ex_content = models.TextField(db_column='LECT_BOARD_EX_CONTENT', blank=True,
-                                             null=True)  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'LECT_BOARD_EX'
-
-
-class LectBoardExFile(models.Model):
-    lect_board_ex_file_id = models.AutoField(db_column='LECT_BOARD_EX_FILE_ID',
-                                             primary_key=True)  # Field name made lowercase.
-    lect_board_ex_no = models.ForeignKey(LectBoardEx, on_delete=models.CASCADE,
-                                         db_column='LECT_BOARD_EX_NO')  # Field name made lowercase.
-    lect_board_ex_file_path = models.CharField(db_column='LECT_BOARD_EX_FILE_PATH',
-                                               max_length=1000)  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'LECT_BOARD_EX_FILE'
 
 
 class LectBoardFile(File):
@@ -695,14 +605,6 @@ class UserDeleteState(models.Model):
     class Meta:
         managed = False
         db_table = "USER_DELETE_STATE"
-
-#
-# class UserDeleteComment(CommentBase):
-#     user_delete_no = models.ForeignKey(UserDelete, on_delete=models.CASCADE, db_column="USER_DELETE_NO")
-#
-#     class Meta:
-#         managed = False
-#         db_table = "USER_DELETE_COMMENT"
 
 
 class UserEmail(models.Model):

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
-{% load custom_tags %}
 {% block content %}
+    {% load custom_tags %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/posting_list.css' %}">
     <div class="page-wraper">
         <!-- 상단 제목부분 -->
@@ -25,7 +25,7 @@
                 </a>
             </div>
             <!----------============= 본문 시작 ================----------->
-            <div class="content-block">
+            <div class="content-block min-height-70vh">
                 <div class="section-full content-inner bg-white">
                     <div class="container">
                         <div class="row">
