@@ -34,8 +34,8 @@
 
     <!-- STYLESHEETS -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/plugins.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/style_1.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/templete_1.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/templete.css' %}">
     <link class="skin" rel="stylesheet" type="text/css" href="{% static 'css/skin/skin-1.css' %}">
 
     <link rel="stylesheet" type="text/css" href="{% static 'css/star-rating-svg.css' %}">
@@ -79,16 +79,19 @@
                         </a>
                     </div>
                     <!-- nav toggle button -->
-                    <button class="navbar-toggler collapsed navicon justify-content-end" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-						<span></span>
-						<span></span>
-						<span></span>
-					</button>
+                    <button class="navbar-toggler collapsed navicon justify-content-end" type="button"
+                            data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+
                     <!--====================메뉴, 회원정보에 따른 버튼 시작====================-->
                     <div class="header-nav navbar-collapse collapse justify-content-end" id="navbarNavDropdown">
                         <ul class="nav navbar-nav">
                             <!--====================IBAS 상위메뉴로 가지고 있는 메뉴====================-->
-                            <li class="down active" style="padding-top: 6px"><a href="{% url 'introduce' %}">IBAS <i
+                            <li class="down active" style="margin-top: 6px"><a href="#">IBAS <i
                                     class="fa fa-chevron-down"></i></a>
                                 <ul class="sub-menu">
                                     <!-- 동아리 소개를 누를 경우 url로 넘어간다. -->
@@ -112,9 +115,8 @@
                                 </ul>
                             </li>
                             <!--====================게시판을 상위메뉴로 가지고 있는 메뉴====================-->
-                            <li class="down active" style="padding-top: 6px"><a
-                                    href="{% url 'board_view' board_type_no=5 %}">게시판<i
-                                    class="fa fa-chevron-down"></i></a>
+                            <li class="down active" style="margin-top: 6px">
+                                <a>게시판<i class="fa fa-chevron-down"></i></a>
                                 <ul class="sub-menu">
                                     <li><a href="{% url 'board_view' board_type_no=1 %}">공지사항</a></li>
                                     <li><a href="{% url 'board_view' board_type_no=2 %}">자유게시판</a></li>
@@ -127,7 +129,7 @@
                                 </ul>
                             </li>
                             <!--====================강의실을 상위메뉴로 가지고 있는 메뉴====================-->
-                            <li class="down active" style="padding-top: 7px"><a href="{% url 'lect_view' type_no=1 %}">강의실
+                            <li class="down active" style="margin-top: 6px"><a>강의실
                                 <i
                                         class="fa fa-chevron-down"></i></a>
                                 <ul class="sub-menu">
@@ -139,8 +141,8 @@
                                 </ul>
                             </li>
                             <!--====================테스터를 상위메뉴로 가지고 있는 메뉴====================-->
-                            <li class="down active" style="padding-top: 7px">
-                                <a href="#">
+                            <li class="down active" style="margin-top: 6px">
+                                <a>
                                     프로젝트<i class="fa fa-chevron-down"></i>
                                 </a>
                                 <ul class="sub-menu">
@@ -161,10 +163,10 @@
                                     style="padding-top: 7px; padding-right: 10px">
                                     <!--아래 href에 로그아웃하는 거 들어가야 함-->
                                     <a href="#" style="padding: 19px 0px 0px 15px">Log Out</a>
-                                    <a class="ti-import rotate90" style="padding:15px 0px 20px 4px;"></a>
+                                    <a class="ti-export dis-none-media" style="padding:15px 0px 14px 4px; transform: rotate(90deg)"></a>
                                 </li>
                                 <!--======회원정보 뜨는 곳======-->
-                                <li class="active">
+                                <li class="active dis-none-media">
                                     <!--아래 href에 마이페이지 링크 들어가야 함-->
                                     <a href="{% url 'my_info' %}" style="padding-right: 7px;">
                                         <!--==승인되지 않았을 때==-->
@@ -198,7 +200,7 @@
                                     </a>
                                 </li>
                                 <!--=====알림 뜨는 부분======-->
-                                <li class="active dropdown dropdown-btn" style="padding:4px; margin-left: -13px">
+                                <li class="active dropdown dropdown-btn dis-none-media" style="padding:4px; margin-left: -13px">
                                     <a class="fa fa-bell" style="padding-top: 22px"
                                        class="site-button dropdown-toggle" id="dropdownMenuButton"
                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -228,7 +230,8 @@
                             {% else %}
                                 {# 현재 로그인 된 상황이 아니므로 로그인과 sign up이 나와야 한다. #}
                                 <li class="active" style="padding-top: 5px;">
-                                    <a href="{% url 'login' %}">Log In</a>
+                                    <a href="{% url 'login' %}" style="padding: 19px 0px 0px 15px">Log In</a>
+                                    <a href="{% url 'login' %}" class="ti-import rotate90 dis-none-media" style="padding:11px 2px 14px 3px;"></a>
                                 </li>
                             {% endif %}
                         </ul>
