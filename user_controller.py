@@ -510,13 +510,6 @@ def initialize_user(user: User):
 
 # 계정 초기화를 하면 모든 게시글이 사라지지 않으므로 자신과 연관된 모든 데이터를 지우는 함수.
 def delete_all_infomation(user: User):
-    # 본인 게시글 삭제(단 활동 게시판의 게시글은 공익을 위한 게시글이므로 삭제되어선 안된다.)
-    my_board_list = Board.objects.filter(
-        Q(board_writer=user) & ~Q(board_type_no__board_type_no=4) & ~Q(board_type_no__board_type_no=1))
-    for my_board in my_board_list:
-        FileController.delete_all_files_of_(my_board)
-        my_board.delete()
-
     # 본인 덧글 삭제
     my_comment_list = Comment.objects.filter(Q(comment_cont_ref__comment_writer=user))
     for my_comment in my_comment_list:
@@ -524,6 +517,13 @@ def delete_all_infomation(user: User):
     my_comment_list = Comment.objects.filter(comment_writer=user)
     for my_comment in my_comment_list:
         my_comment.delete()
+    # 본인 게시글 삭제(단 활동 게시판의 게시글은 공익을 위한 게시글이므로 삭제되어선 안된다.)
+    my_board_list = Board.objects.filter(
+        Q(board_writer=user) & ~Q(board_type_no__board_type_no=4) & ~Q(board_type_no__board_type_no=1))
+
+    for my_board in my_board_list:
+        FileController.delete_all_files_of_(my_board)
+        my_board.delete()
 
     # ------------ deprecated -------------
     # 삭제사유: 공모전 게시글은 공익을 위한 게시글이므로 삭제되어선 안된다.

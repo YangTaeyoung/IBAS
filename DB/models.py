@@ -254,7 +254,7 @@ def lect_pic_upload_to(instance, filename):
 class Lect(models.Model):
     lect_no = models.AutoField(db_column='LECT_NO', primary_key=True)
     lect_title = models.CharField(db_column='LECT_TITLE', max_length=100)
-    lect_chief = models.ForeignKey('User', on_delete=models.DO_NOTHING, db_column='LECT_CHIEF')
+    lect_chief = models.ForeignKey('User', on_delete=models.CASCADE, db_column='LECT_CHIEF')
     lect_pic = models.ImageField(db_column='LECT_PIC', max_length=1000,
                                  upload_to=lect_pic_upload_to, null=True)
     lect_type = models.ForeignKey('LectType', models.DO_NOTHING, db_column='LECT_TYPE')
