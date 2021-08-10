@@ -10,9 +10,7 @@ from datetime import date, timedelta
 import os
 from django.db import models
 from datetime import datetime
-
 from django.utils import timezone
-
 from IBAS.settings import MEDIA_ROOT
 import pytz
 from django_summernote.fields import SummernoteTextField
@@ -305,7 +303,7 @@ class LectAttendance(models.Model):
     lect_no = models.ForeignKey('Lect', on_delete=models.CASCADE, db_column="LECT_NO", related_name='attendance')
     lect_board_no = models.ForeignKey('LectBoard', on_delete=models.CASCADE, db_column="LECT_BOARD_NO",
                                       related_name='attendance_info')  # 한 강의에 출석한 수강생들 목록
-    student = models.ForeignKey('User', on_delete=models.CASCADE, db_column='STUDENT')
+    student = models.ForeignKey('User', on_delete=models.SET_DEFAULT, db_column='STUDENT', default=0)
     lect_attend_date = models.DateTimeField(db_column='LECT_ATTEND_DATE', auto_now_add=True, null=True)
 
     class Meta:
@@ -319,12 +317,14 @@ class LectAssignmentSubmit(models.Model):
     assignment_title = models.CharField(db_column='ASSIGNMENT_TITLE', max_length=100)
     assignment_submit_created = models.DateTimeField(db_column='ASSIGNMENT_SUBMIT_CREATED', auto_now_add=True)
     assignment_cont = models.TextField(db_column='ASSIGNMENT_CONT')
-    assignment_submitter = models.ForeignKey('User', on_delete=models.DO_NOTHING, db_column='ASSIGNMENT_SUBMITTER')
+    assignment_submitter = models.ForeignKey('User', on_delete=models.SET_DEFAULT, default=0,
+                                             db_column='ASSIGNMENT_SUBMITTER')
     assignment_no = models.ForeignKey('LectBoard', on_delete=models.CASCADE, db_column='ASSIGNMENT_NO',
                                       related_name='submissions')
     lect_no = models.ForeignKey('Lect', on_delete=models.CASCADE, db_column='LECT_NO',
                                 related_name='submitted_assignments')
-    status = models.ForeignKey('LectAssignmentStatus', on_delete=models.DO_NOTHING, db_column="STATUS", default=0)
+    status = models.ForeignKey('LectAssignmentStatus', on_delete=models.SET_NULL, null=True, db_column="STATUS",
+                               default=0)
     reject_reason = models.CharField(db_column="REJECT_REASON", max_length=200, null=True)
 
     class Meta:
