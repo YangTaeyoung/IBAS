@@ -339,7 +339,7 @@
                                                 {% for exist_user in exist_user_list %}
                                                     <tr>
                                                         <td scope="row">
-                                                            {% if logined_user.user_role_id <= 2 %}
+                                                            {% if logined_user.user_role_id <= 2 and exist_user.user_role_id != 5 %}
                                                                 <div class="input-block">
                                                                     <input id="check_{{ exist_user.user_stu }}"
                                                                            type="checkbox"
