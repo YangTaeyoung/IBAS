@@ -130,6 +130,11 @@
     height: 70vh;
 }
 
+.min-height-70vh {
+    min-height: 70vh;
+}
+
+
 .max-min-min-height-35 {
     max-height: 35px;
     min-height: 35px;
