@@ -287,7 +287,7 @@ class Lect(models.Model):
     # 등록된 학생 수를 구하는 함수.
     @property
     def get_enrolled_std_num(self):
-        return self.enrolled_students.filter(status_id=1)
+        return len(self.enrolled_students.filter(status_id=1))
 
 
 class LectDay(models.Model):
