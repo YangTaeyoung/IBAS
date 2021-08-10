@@ -10,7 +10,7 @@ urlpatterns = [
     path('delete/<int:lect_no>', views.lect_delete, name="lect_delete"),
     path('<int:type_no>/search/', views.lect_search, name="lect_search"),
     path('enroll/<int:lect_no>', views.lect_enroll, name="lect_enroll"),  # 신정한 수강생을 강의 명부에 등록하고 lect_room_main 으로 이동
-
+    path('terminate/<int:lect_no>', views.lect_terminate, name="lect_terminate"),
     path('room/<int:room_no>/main/', views.lect_room_main, name="lect_room_main"),  # 강의룸 메인 게시판으로 이동
     path('room/<int:room_no>/search', views.lect_room_search, name="lect_room_search"),
 
@@ -24,8 +24,10 @@ urlpatterns = [
     # 과제 제출 CRUD
     path('room/<int:room_no>/assignment/submit', views.lect_assignment_submit, name="lect_assignment_submit"),
     path('room/<int:room_no>/assignment/<int:submit_no>', views.lect_assignment_detail, name="lect_assignment_detail"),
-    path('room/<int:room_no>/assignment/<int:submit_no>/update', views.lect_assignment_update, name="lect_assignment_update"),
-    path('room/<int:room_no>/assignment/<int:submit_no>/delete', views.lect_assignment_delete, name="lect_assignment_delete"),
+    path('room/<int:room_no>/assignment/<int:submit_no>/update', views.lect_assignment_update,
+         name="lect_assignment_update"),
+    path('room/<int:room_no>/assignment/<int:submit_no>/delete', views.lect_assignment_delete,
+         name="lect_assignment_delete"),
     path('room/<int:room_no>/assignment/', views.lect_assignment_list, name="lect_assignment_list"),  # 리스트
 
     # 수강생 전용 url
