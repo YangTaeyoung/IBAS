@@ -259,6 +259,3 @@ def hall_of_fame(request):
     }
     return render(request, "hall_of_fame.html", context)
 
-
-def error_handler500(request):
-    return render(request, "../templates/error_page.html", status=500)
