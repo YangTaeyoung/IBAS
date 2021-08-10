@@ -41,7 +41,8 @@ def get_lect_list(request, type_no):
             "lectday_set", "enrolled_students").order_by("-lect_created")
     else:
         lect_list = Lect.objects.filter(Q(lect_type=LectType.objects.get(pk=1)) & Q(lect_state__state_no=1) | Q(
-            lect_state__state_no=2)).prefetch_related("lectday_set").prefetch_related("enrolled_students").order_by("-lect_created")
+            lect_state__state_no=2)).prefetch_related("lectday_set").prefetch_related("enrolled_students").order_by(
+            "-lect_created")
     return lect_list
 
 
@@ -219,6 +220,8 @@ def lect_enroll(request, lect_no):
     cur_user = get_logined_user(request)
     if is_superuser(cur_user) and Lect.objects.get(pk=lect_no).lect_type_id == 1:
         return not_allowed(request, "운영진은 공정성을 위해, 강의 신청 권한이 없습니다.")
+    else:
+        messages.warning(request, "등록이 완료되었습니다.")
     lect_enrollment = LectEnrollment.objects.create(
         lect_no=Lect.objects.get(pk=lect_no),
         student=cur_user,
