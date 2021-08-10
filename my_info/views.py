@@ -153,10 +153,14 @@ def connect_social_account(request):
                 break
 
         if current_user is not None:
-            UserEmail.objects.create(user_stu=current_user, user_email=social_dict.get("email"),
-                                     provider=social_dict.get("provider"))
-            save_session(request, user_model=current_user, logined_email=social_dict.get("email"),
-                         provider=social_dict.get("provider"))
+            if len(UserEmail.objects.filter(user_email=social_dict.get("email"))) == 0:
+                UserEmail.objects.create(user_stu=current_user, user_email=social_dict.get("email"),
+                                         provider=social_dict.get("provider"))
+                save_session(request, user_model=current_user, logined_email=social_dict.get("email"),
+                             provider=social_dict.get("provider"))
+                messages.warning(request, "정상적으로 이메일 연동이 완료되었습니다.")
+            else:
+                messages.warning(request, "이미 해당 이메일로 등록되어 있습니다.")
             return redirect(reverse("my_info"))
     return redirect(reverse("index"))
 
