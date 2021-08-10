@@ -163,7 +163,7 @@
                                     style="padding-top: 7px; padding-right: 10px">
                                     <!--아래 href에 로그아웃하는 거 들어가야 함-->
                                     <a href="#" style="padding: 19px 0px 0px 15px">Log Out</a>
-                                    <a class="ti-import rotate90 dis-none-media" style="padding:15px 0px 20px 4px;"></a>
+                                    <a class="ti-export dis-none-media" style="padding:15px 0px 14px 4px; transform: rotate(90deg)"></a>
                                 </li>
                                 <!--======회원정보 뜨는 곳======-->
                                 <li class="active dis-none-media">
@@ -230,7 +230,8 @@
                             {% else %}
                                 {# 현재 로그인 된 상황이 아니므로 로그인과 sign up이 나와야 한다. #}
                                 <li class="active" style="padding-top: 5px;">
-                                    <a href="{% url 'login' %}">Log In</a>
+                                    <a href="{% url 'login' %}" style="padding: 19px 0px 0px 15px">Log In</a>
+                                    <a href="{% url 'login' %}" class="ti-import rotate90 dis-none-media" style="padding:11px 2px 14px 3px;"></a>
                                 </li>
                             {% endif %}
                         </ul>
