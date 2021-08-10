@@ -153,6 +153,8 @@ def board_view(request, board_type_no):  # 게시판 페이지로 이동
             board_list = Board.objects.filter(Q(board_type_no__board_type_no=board_type_no) & Q(
                 board_writer=cur_user)).select_related("board_writer").order_by("-board_created")
     else:
+        if 6 <= board_type_no <= 7 and cur_user.user_auth_id != 1:
+            return not_allowed(request)
         board_list = Board.objects.filter(board_type_no__board_type_no=board_type_no).select_related(
             "board_writer").order_by("-board_created")
 
@@ -186,6 +188,8 @@ def board_search(request, board_type_no):
                 board_type_no__board_type_no__lte=3).select_related(
                 "board_writer").order_by("-board_created").all()
         elif 6 <= board_type_no <= 7:
+            if cur_user.user_auth_id != 1:
+                return not_allowed(request)
             board_list = Board.objects.filter(
                 Q(board_cont__icontains=keyword) |
                 Q(board_title__icontains=keyword) |
@@ -234,7 +238,9 @@ def board_detail(request, board_no):  # 게시글 상세 보기
     cur_user = get_logined_user(request)
 
     board_type_no = board.board_type_no.board_type_no
-    if board_type_no == 8 and not role_check(cur_user, 4, "lte"):
+    if 6 <= board_type_no <= 7 and cur_user.user_auth_id != 1:
+        return not_allowed(request)
+    elif board_type_no == 8 and not role_check(cur_user, 4, "lte"):
         return not_allowed(request, "비 정상적인 접근입니다.")
     elif board_type_no == 9 and (board.board_writer != cur_user and not role_check(cur_user, 4, "lte")):
         return not_allowed(request, "비 정상적인 접근입니다.")
@@ -275,6 +281,8 @@ def board_register(request):
         if board_type_no.board_type_no == 1 and not role_check(cur_user, 5,
                                                                "lte"):  # 공지사항 게시판에서 글쓰기 버튼을 눌렀을 경우 회장단이 아니면
             return not_allowed(request, "비 정상적인 접근입니다.")
+        if 6 <= board_type_no <= 7 and cur_user.user_auth_id != 1:
+            return not_allowed(request)
         if board_type_no.board_type_no == 8 and not role_check(cur_user, 4, "lte"):  # 회장단 게시판에서 글쓰기 버튼을 눌렀을 경우 회장단이 아니면
             return not_allowed(request, "비 정상적인 접근입니다.")
         context = {
