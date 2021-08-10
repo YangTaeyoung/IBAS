@@ -342,10 +342,10 @@ var BizMap = function(){
 				var menu = jQuery('.sticky-header');
 				if ($(window).scrollTop() > menu.offset().top) {
 					menu.addClass('is-fixed');
-					$('.header-transparent .container > .logo-header .logo, .header-transparent .container-fluid > .logo-header .logo').attr('src',"/static/images/logo-purple.png");
+					$('.header-transparent .container > .logo-header .logo, .header-transparent .container-fluid > .logo-header .logo').attr('src',"/static/images/logo_puple.png");
 				} else {
 					menu.removeClass('is-fixed');
-					$('.header-transparent .container > .logo-header .logo, .header-transparent .container-fluid > .logo-header .logo').attr('src',"/static/images/logo-white.png")
+					$('.header-transparent .container > .logo-header .logo, .header-transparent .container-fluid > .logo-header .logo').attr('src',"/static/images/logo_puple.png")
 				}
 			}
 		});
