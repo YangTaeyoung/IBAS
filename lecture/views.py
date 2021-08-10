@@ -108,7 +108,6 @@ def lect_detail(request, lect_no):
     lect.lect_day = lect.lect_day[:len(lect.lect_day) - 1]
     context = {
         'lect': lect,
-        'lect_user_num': len(LectEnrollment.objects.filter(lect_no=lect_no)),
         'is_in': LectEnrollment.objects.filter(student=get_logined_user(request),
                                                lect_no_id=lect_no).count() > 0,
         'lect_reject_form': LectRejectForm(instance=lect),
