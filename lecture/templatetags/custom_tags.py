@@ -49,23 +49,28 @@ def is_exist(arg: str, tar: str):
 
 # 이름이나 학번 가림.
 @register.simple_tag
-def personal_info(string,boundary, request):
+def personal_info(string, request):
     if get_logined_user(request).user_role_id <= 3:
         # 학번 : 1217****
         if type(string) == int:
-            return string[:4] + '****'
-
-        # 학과는 '학과'만 표시
-        elif '학과' in str(string):
-            return '*' * len(string[:-2]) + '학과'
-
-        # 전화번호
-        elif '-' in str(string):
-            return string[:3] + '-****-****'
-
-        # 이름 : 성만 표기
+            return str(string)[:4] + '****'
         else:
-            return string[0] + '*' * (len(string) - 1)
+            string = str(string)
+            # 학과는 '학과'만 표시
+            if '학과' in string:
+                return '*' * len(string[:-2]) + '학과'
+
+            # 전화번호
+            elif '-' in string:
+                return string[:3] + '-****-****'
+
+            else:
+                # 이메일
+                if '@' in string:
+                    return '*' * string.find('@') + string[string.find('@'):]
+                # 이름 : 성만 표기
+                else:
+                    return string[0] + '*' * (len(string) - 1)
 
     else:
         return string

@@ -3,12 +3,12 @@
 {% load static %}
 <script src="{% static 'js/form.js' %}"></script>
 <div class="listing-filter-sidebar">
-    <h4 class="title">{% if lect.lect_type_id == 1 %}강의실{% else %}스터디{% endif %}</h4>
+    <h4 class="title">{% if lect.lect_type_id == 1 %}강의실{% elif lect.lect_type_id == 2 %}스터디{% else %}취미모임{% endif %}</h4>
     <div class="widget_tag">
         <ul class="m-b0">
             <!-- [메뉴바 > 강의실 > 강의] 게시판 내 강의소개 페이지로 이동 -->
-            <li><a href="{% url "lect_room_main" lect.lect_no %}">{% if lect.lect_type_id == 1 %}강의실 홈{% else %}스터디
-                홈{% endif %}</a>&nbsp;
+            <li><a href="{% url "lect_room_main" lect.lect_no %}">{% if lect.lect_type_id == 1 %}강의실 홈
+                {% elif lect.lect_type_id == 2 %}스터디 홈{% else %}취미모임 홈{% endif %}</a>&nbsp;
             </li>
             <!-- 공지사항, 강의, 과제, 제출된 과제 페이지들은 모두 동일한 레이아웃임 -->
             <!-- 다만 과제 페이지의 경우 강의자, 수강생 별 보이는 게 다르게끔 세션처리 필요 (해당 게시판 주석 참조) -->
@@ -16,6 +16,7 @@
             <li><a href={% url 'lect_room_list' lect.lect_no 1 %}>공지사항</a>&nbsp;</li>
             <li><a href={% url 'lect_room_list' lect.lect_no 2 %}>{{ lect.lect_type.type_name }} 목록</a>&nbsp;</li>
             <li><a href={% url 'lect_room_list' lect.lect_no 3 %}>과제 목록</a>&nbsp;</li>
+
         </ul>
     </div>
 </div>
@@ -26,7 +27,7 @@
     <div style="margin: 10px"></div>
     <div class="listing-filter-sidebar">
         <h4 class="title">
-            {% if lect.lect_type_id == 1 %}강의자 메뉴{% else %}스터디장 메뉴{% endif %}
+            {% if lect.lect_type_id == 1 %}강의자 메뉴{% elif lect.lect_type_id == 2 %}스터디장 메뉴{% else %}모임장 메뉴{% endif %}
         </h4>
         <div class="widget_tag">
             <ul class="m-b0">
