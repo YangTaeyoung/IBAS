@@ -281,7 +281,7 @@ def board_register(request):
         if board_type_no.board_type_no == 1 and not role_check(cur_user, 5,
                                                                "lte"):  # 공지사항 게시판에서 글쓰기 버튼을 눌렀을 경우 회장단이 아니면
             return not_allowed(request, "비 정상적인 접근입니다.")
-        if 6 <= board_type_no <= 7 and cur_user.user_auth_id != 1:
+        if 6 <= board_type_no.board_type_no <= 7 and cur_user.user_auth_id != 1:
             return not_allowed(request)
         if board_type_no.board_type_no == 8 and not role_check(cur_user, 4, "lte"):  # 회장단 게시판에서 글쓰기 버튼을 눌렀을 경우 회장단이 아니면
             return not_allowed(request, "비 정상적인 접근입니다.")
