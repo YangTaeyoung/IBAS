@@ -55,6 +55,7 @@
                                 <!--=======================수강생 관리=========================-->
                                 <div class="col-lg-11 col-xl-8 p-b30">
                                     <div class="width-870">
+                                        {% if cur_assignment %}
                                             <form id="filter-form" >
                                                 {% csrf_token %}
                                                 <!-- 강의 주차 소개 탭 -->
@@ -80,7 +81,7 @@
                                                                         {% endfor %}
 
                                                                     </select>
-                                                                    {% endif %}
+                                                                {% endif %}
                                                                 </li>
                                                             </ul>
                                                         </div>
@@ -108,7 +109,10 @@
                                                 {% include "pagination.html" %}
                                             {% endif %}
                                             <!--========== 페이지네이션 끝 ===========-->
-                                        </div>
+                                    {% else %}
+                                            과제가 생성되지 않았습니다.
+                                    {% endif %}
+                                    </div>
 
 
                                 </div>
