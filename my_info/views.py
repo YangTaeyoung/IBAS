@@ -26,9 +26,9 @@ def my_info(request):  # 내 정보 출력
         my_comment.board_type = Board.objects.get(pk=my_comment.comment_board_ref).board_type_no.board_type_name
     context = {
         "my_lect_ing_list": LectEnrollment.objects.filter(
-            Q(student=get_logined_user(request)) & Q(lect_no__lect_state__state_no=3)),
+            Q(student=get_logined_user(request)) & Q(lect_no__lect_state__state_no=3) & Q(status_id=1)),
         "my_lect_fin_list": LectEnrollment.objects.filter(
-            Q(student=get_logined_user(request)) & Q(lect_no__lect_state__state_no=4)),
+            Q(student=get_logined_user(request)) & Q(lect_no__lect_state__state_no=4) & Q(status_id=1)),
         "my_lect_made_list": Lect.objects.filter(Q(lect_chief=get_logined_user(request))),
         "my_board_list": Board.objects.filter(board_writer=get_logined_user(request)).order_by(
             "board_type_no").order_by("-board_created"),
@@ -153,11 +153,17 @@ def connect_social_account(request):
                 break
 
         if current_user is not None:
-            UserEmail.objects.create(user_stu=current_user, user_email=social_dict.get("email"),
-                                     provider=social_dict.get("provider"))
-            save_session(request, user_model=current_user, logined_email=social_dict.get("email"),
-                         provider=social_dict.get("provider"))
-            return redirect(reverse("my_info"))
+            if len(UserEmail.objects.filter(user_email=social_dict.get("email"))) == 0:
+                UserEmail.objects.create(user_stu=current_user, user_email=social_dict.get("email"),
+                                         provider=social_dict.get("provider"))
+                save_session(request, user_model=current_user, logined_email=social_dict.get("email"),
+                             provider=social_dict.get("provider"))
+                messages.warning(request, "정상적으로 이메일 연동이 완료되었습니다.")
+                return redirect(reverse("my_info"))
+            else:
+                messages.warning(request, "이미 해당 이메일로 등록되어 있습니다.")
+    else:
+        messages.warning(request, "비 정상적인 접근입니다.")
     return redirect(reverse("index"))
 
 

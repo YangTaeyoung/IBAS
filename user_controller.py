@@ -10,6 +10,10 @@ from django.db.models import Q
 from django.db import transaction
 
 
+def is_professor(cur_user: User):
+    return cur_user.user_role_id == 5
+
+
 # 학교 아이디의 경우 이름/학과/학교 등으로 이름이 구성된 경우가 많음.
 # 그 경우 앞부분을 잘라주는 함수임.
 def get_real_name(name_str: str):
@@ -78,6 +82,7 @@ def is_writer(cur_user, **kwargs):
     lect_no = kwargs.get('lect_no', kwargs.get('room_no'))
     user_delete_no = kwargs.get('user_delete_no')
     assignment_submit_no = kwargs.get('submit_no')  # 수강생 과제 제출
+    comment_id = kwargs.get('comment_id')
 
     # 글쓴이인가요
     if board_no is not None:
@@ -103,6 +108,10 @@ def is_writer(cur_user, **kwargs):
     elif user_delete_no is not None:
         user_delete = UserDelete.objects.get(pk=user_delete_no)
         if cur_user == user_delete.suggest_user:
+            return True
+    elif comment_id is not None:
+        comment = Comment.objects.get(pk=comment_id)
+        if cur_user == comment.comment_writer:
             return True
     else:
         return False
@@ -274,12 +283,22 @@ def superuser_only(cfo_included=False):
 
 def is_closed(lect: Lect):
     flag = False
-    lect_enrollment = LectEnrollment.objects.filter(lect_no=lect)
-    if lect.lect_limit_num <= len(lect_enrollment):  # 강의가 가득 찼는가?
+    if lect.lect_limit_num <= lect.get_enrolled_std_num:  # 강의가 가득 찼는가?
         flag = True
     if lect.is_expired:  # 강의 모집 기간이 만료되었는가?
         flag = True
     return flag
+
+
+def prohibit_professor(func):
+    @functools.wraps(func)
+    def wrapper(request, *args, **kwargs):
+        cur_user = get_logined_user(request)
+        if is_professor(cur_user):
+            return not_allowed(request)
+        return func(request, *args, **kwargs)
+
+    return wrapper
 
 
 def enroll_check(func):
@@ -490,13 +509,6 @@ def initialize_user(user: User):
 
 # 계정 초기화를 하면 모든 게시글이 사라지지 않으므로 자신과 연관된 모든 데이터를 지우는 함수.
 def delete_all_infomation(user: User):
-    # 본인 게시글 삭제(단 활동 게시판의 게시글은 공익을 위한 게시글이므로 삭제되어선 안된다.)
-    my_board_list = Board.objects.filter(
-        Q(board_writer=user) & ~Q(board_type_no__board_type_no=4) & ~Q(board_type_no__board_type_no=1))
-    for my_board in my_board_list:
-        FileController.delete_all_files_of_(my_board)
-        my_board.delete()
-
     # 본인 덧글 삭제
     my_comment_list = Comment.objects.filter(Q(comment_cont_ref__comment_writer=user))
     for my_comment in my_comment_list:
@@ -504,6 +516,13 @@ def delete_all_infomation(user: User):
     my_comment_list = Comment.objects.filter(comment_writer=user)
     for my_comment in my_comment_list:
         my_comment.delete()
+    # 본인 게시글 삭제(단 활동 게시판의 게시글은 공익을 위한 게시글이므로 삭제되어선 안된다.)
+    my_board_list = Board.objects.filter(
+        Q(board_writer=user) & ~Q(board_type_no__board_type_no=4) & ~Q(board_type_no__board_type_no=1))
+
+    for my_board in my_board_list:
+        FileController.delete_all_files_of_(my_board)
+        my_board.delete()
 
     # ------------ deprecated -------------
     # 삭제사유: 공모전 게시글은 공익을 위한 게시글이므로 삭제되어선 안된다.

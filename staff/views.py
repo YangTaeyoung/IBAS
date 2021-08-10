@@ -20,6 +20,7 @@ from django.db import transaction
 from django.contrib import messages
 from post_controller import comment_delete_by_post_delete
 
+
 # 모델에 따른 이메일 리스트를 불러오는 함수
 def get_email_list(user_model):
     user_email_list = list()
@@ -31,11 +32,13 @@ def get_email_list(user_model):
 def staff_member_list(request):
     user = get_logined_user(request)
     if user.user_role.role_no <= 4:  # 회원에 대한 관리는 회장단만
-        new_user_list = User.objects.filter(user_auth__auth_no=3)  # 신입 부원 리스트
+        new_user_list = User.objects.filter(Q(user_auth__auth_no=3) & Q(user_role__isnull=False))  # 신입 부원 리스트
         if user.user_role.role_no == 4:  # 총무일 경우
-            exist_user_list = User.objects.filter(~Q(user_auth__auth_no=3) & Q(user_role__role_no=6))
+            exist_user_list = User.objects.filter(
+                ~Q(user_auth__auth_no=3) & Q(user_role__role_no=6) & Q(user_role__isnull=False))
         else:
-            exist_user_list = User.objects.filter(~Q(user_auth__auth_no=3) & ~Q(user_role__role_no=1))  # 기존 회원 리스트
+            exist_user_list = User.objects.filter(
+                ~Q(user_auth__auth_no=3) & ~Q(user_role__role_no=1) & Q(user_role__isnull=False))  # 기존 회원 리스트
             for exist_user in exist_user_list:
                 if len(UserDelete.objects.filter(Q(deleted_user=exist_user) & Q(user_delete_state__state_no=1))) != 0:
                     exist_user.is_going_to_delete = True
@@ -99,18 +102,19 @@ def staff_member_update(request):
             # 기존 회장, 부회장 권한 수정 -> 일반회원
             with transaction.atomic():
                 # 새로운 회장 부회장.
-                new_user = User.objects.get(pk=user_stu_list[0])  # 새로운 회장 부회장의 객체를 얻어옴.
-                new_user.user_role = UserRole.objects.get(pk=user_role)  # 권한 수정
-                new_user.user_auth = UserAuth.objects.get(pk=1)  # 회비는 납부한 것으로 가정.
-                new_user.save()
-                create_user_role_update_alarm(new_user)
-                create_user_auth_update_alarm(new_user, False)
-                user = User.objects.filter(user_role__role_no=user_role).first()
-                if int(user_role) == 1:
-                    user.user_role = UserRole.objects.get(pk=6)  # 바꾸고자 하는 사람은 일반 회원으로 역할 변경됨.
-                    user.save()
-                    create_user_role_update_alarm(user)
-                    return redirect(reverse("my_info"))
+                cur_user = get_logined_user(request)
+                if role_check(cur_user, 1, "equal"):
+                    new_user = User.objects.get(pk=user_stu_list[0])  # 새로운 회장 부회장의 객체를 얻어옴.
+                    new_user.user_role = UserRole.objects.get(pk=user_role)  # 권한 수정
+                    new_user.user_auth = UserAuth.objects.get(pk=1)  # 회비는 납부한 것으로 가정.
+                    new_user.save()
+                    create_user_role_update_alarm(new_user)
+                    create_user_auth_update_alarm(new_user, False)
+                    if int(user_role) == 1:
+                        cur_user.user_role = UserRole.objects.get(pk=6)  # 바꾸고자 하는 사람은 일반 회원으로 역할 변경됨.
+                        cur_user.save()
+                        create_user_role_update_alarm(cur_user)
+                        return redirect(reverse("my_info"))
         else:
             for user in User.objects.all():  # 모든 유저 순회
                 for user_stu in user_stu_list:  # 사용자가 권한을 바꾸기로 한 학번 리스트를 순회
@@ -174,6 +178,8 @@ def member_aor(request):
                 # 메일 전송
                 send_mail(subject=mail_dict["mail_title"], message=mail_dict["mail_message"],
                           from_email=settings.EMAIL_HOST_USER, recipient_list=user_email_list)
+                if user.user_role_id == 5:
+                    user.user_auth = UserAuth.objects.get(pk=1)
                 user.save()
                 create_user_auth_update_alarm(user, True)
         else:
@@ -204,6 +210,8 @@ def members_aor(request):  # 여러명 일괄 처리시.
                         user.user_auth = UserAuth.objects.get(pk=2)  # 비활동 회원으로 변경
                         send_mail(subject=mail_dict["mail_title"], message=mail_dict["mail_message"],  # 합격 메일 전송
                                   from_email=settings.EMAIL_HOST_USER, recipient_list=get_email_list(user))
+                        if user.user_role_id == 5:
+                            user.user_auth = UserAuth.objects.get(pk=1)
                         user.save()
                         create_user_auth_update_alarm(user, True)
                     else:  # 불합격

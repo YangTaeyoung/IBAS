@@ -1,13 +1,11 @@
 from django.db import transaction
-from django.http import QueryDict
 from django.shortcuts import render, redirect, reverse, get_object_or_404
-from DB.models import Board, BoardFile, BoardType, Comment, ContestBoard, ContestFile, User
+from DB.models import Board, BoardFile, BoardType, ContestBoard, ContestFile
 from django.db.models import Q
 from board.forms import BoardForm, ContestForm, FileForm
 from file_controller import FileController
 from pagination_handler import get_page_object
-from alarm.alarm_controller import create_comment_alarm, create_comment_ref_alarm, create_board_notice_alarm, \
-    delete_board_by_superuser_alarm
+from alarm.alarm_controller import create_board_notice_alarm, delete_board_by_superuser_alarm
 from user_controller import login_required, writer_only, auth_check, get_logined_user, not_allowed, role_check, \
     superuser_only
 from django.contrib import messages
@@ -35,11 +33,11 @@ def is_register_btn_show(request, board_type_no):
     if board_type_no == 1:  # 공지사항
         if role_check(cur_user, 5, "lte"):  # 회장단 or 교수인가?
             return True
-    if board_type_no < 5:  # 자유게시판, 질문게시판, 활동게시판
+    elif board_type_no < 5:  # 자유게시판, 질문게시판, 활동게시판
         if auth_no != 3:  # 미승인 회원이 아닌가
             return True
     elif 6 <= board_type_no <= 7:
-        if auth_no == 1:  # 활동 회원인가?
+        if auth_no == 1 and not role_check(cur_user, 5, "equal"):  # 활동 회원이면서 교수가 아닌가?
             return True
     elif board_type_no == 8:  # 회장단 게시판
         if role_check(cur_user, 4, "lte"):  # 회장단인가
@@ -82,16 +80,11 @@ def get_context_of_board_(board_no):
     # 게시글 파일 받아오기. (순서대로 전체파일, 이미지파일, 문서파일)
     board_file_list, image_list, doc_list = FileController.get_images_and_files_of_(board)  # 공모전 이미지와 문서 받아오기
 
-    # 댓글 불러오기
-    # comment_list = Comment.objects.filter(comment_board_no=board).filter(comment_cont_ref__isnull=True).order_by(
-    #     "comment_created").prefetch_related("comment_set")
-
     context = {
         "board": board,
         "file_list": doc_list,
         "img_list": image_list,
         'board_file_list': board_file_list,
-        # "comment_list": comment_list,
         "board_type_no": board.board_type_no.board_type_no,
         "board_name": board.board_type_no.board_type_name,
         "board_exp": board.board_type_no.board_type_exp,
@@ -119,10 +112,6 @@ def get_context_of_contest_(contest_no):
     # 게시글 파일 받아오기. (순서대로 전체파일, 이미지파일, 문서파일)
     contest_file_list, image_list, doc_list = FileController.get_images_and_files_of_(contest)  # 공모전 이미지와 문서 받아오기
 
-    # # 댓글 불러오기
-    # comment_list = ContestComment.objects.filter(comment_board_no=contest).filter(
-    #     comment_cont_ref__isnull=True).order_by("comment_created").prefetch_related("contestcomment_set")
-
     context = {
         'contest': contest,
         'file_list': doc_list,
@@ -130,7 +119,6 @@ def get_context_of_contest_(contest_no):
         'contest_file_list': contest_file_list,
         "board_name": "공모전 게시판",
         "board_exp": "공모전 정보를 알려주는 게시판",
-        # "comment_list": comment_list,
     }
 
     return context
@@ -165,6 +153,8 @@ def board_view(request, board_type_no):  # 게시판 페이지로 이동
             board_list = Board.objects.filter(Q(board_type_no__board_type_no=board_type_no) & Q(
                 board_writer=cur_user)).select_related("board_writer").order_by("-board_created")
     else:
+        if 6 <= board_type_no <= 7 and cur_user.user_auth_id != 1:
+            return not_allowed(request)
         board_list = Board.objects.filter(board_type_no__board_type_no=board_type_no).select_related(
             "board_writer").order_by("-board_created")
 
@@ -198,6 +188,8 @@ def board_search(request, board_type_no):
                 board_type_no__board_type_no__lte=3).select_related(
                 "board_writer").order_by("-board_created").all()
         elif 6 <= board_type_no <= 7:
+            if cur_user.user_auth_id != 1:
+                return not_allowed(request)
             board_list = Board.objects.filter(
                 Q(board_cont__icontains=keyword) |
                 Q(board_title__icontains=keyword) |
@@ -240,11 +232,15 @@ def board_search(request, board_type_no):
 @auth_check()
 @exist_check
 def board_detail(request, board_no):  # 게시글 상세 보기
-
-    cur_user = get_logined_user(request)
     board = Board.objects.get(pk=board_no)
+    if board.board_type_no.board_type_no == 4:
+        return redirect("activity_detail", board_no=board_no)
+    cur_user = get_logined_user(request)
+
     board_type_no = board.board_type_no.board_type_no
-    if board_type_no == 8 and not role_check(cur_user, 4, "lte"):
+    if 6 <= board_type_no <= 7 and cur_user.user_auth_id != 1:
+        return not_allowed(request)
+    elif board_type_no == 8 and not role_check(cur_user, 4, "lte"):
         return not_allowed(request, "비 정상적인 접근입니다.")
     elif board_type_no == 9 and (board.board_writer != cur_user and not role_check(cur_user, 4, "lte")):
         return not_allowed(request, "비 정상적인 접근입니다.")
@@ -285,6 +281,8 @@ def board_register(request):
         if board_type_no.board_type_no == 1 and not role_check(cur_user, 5,
                                                                "lte"):  # 공지사항 게시판에서 글쓰기 버튼을 눌렀을 경우 회장단이 아니면
             return not_allowed(request, "비 정상적인 접근입니다.")
+        if 6 <= board_type_no.board_type_no <= 7 and cur_user.user_auth_id != 1:
+            return not_allowed(request)
         if board_type_no.board_type_no == 8 and not role_check(cur_user, 4, "lte"):  # 회장단 게시판에서 글쓰기 버튼을 눌렀을 경우 회장단이 아니면
             return not_allowed(request, "비 정상적인 접근입니다.")
         context = {
@@ -435,6 +433,7 @@ def contest_delete(request, contest_no):
 
     with transaction.atomic():
         FileController.delete_all_files_of_(contest)  # 해당 게시글에 등록된 파일 모두 제거
+        comment_delete_by_post_delete(contest)
         contest.delete()  # 파일과 폴더 삭제 후, 게시글 DB 에서 삭제
 
     return redirect(reverse('contest_list'))
@@ -473,8 +472,8 @@ def contest_update(request, contest_no):
                                                         files=contest_files, required=True)
             # 수정된 게시글 페이지로 이동
             return redirect("contest_detail", contest_no=contest.contest_no)
-        # else:
-        #     return redirect(request.path)
+        else:
+            return redirect(request.path)
 
 
 # 공모전 검색

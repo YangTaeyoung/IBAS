@@ -23,7 +23,7 @@
                 </a>
             </div>
             <!----------============= 본문 시작 ================----------->
-            <div class="content-block">
+            <div class="content-block min-height-70vh">
                 <div class="section-full content-inner bg-white" style="padding-top: 50px">
                     <div class="container">
 
@@ -85,7 +85,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        {% if is_logined and logined_user.user_auth.auth_no == 1 %}
+                        {% if is_logined and logined_user.user_auth.auth_no == 1 and logined_user.user_role.role_no != 5 %}
                             <!--신청하기 버튼, 누르면 작성페이지로 이동-->
                             <div class="extra-cell text-right" style="margin: 20px 20px 0px 0px">
                                 <a href="{% url 'bank_support_register' %}" class="site-button radius-xl m-l10">

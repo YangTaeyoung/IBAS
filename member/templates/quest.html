@@ -24,16 +24,9 @@
     <meta name="format-detection" content="telephone=no"/>
 
     <!-- FAVICONS ICON -->
-    <link
-            rel="icon"
-            href="{% static 'images/favicon.ico' %}"
-            type="image/x-icon"
-    />
-    <link
-            rel="shortcut icon"
-            type="image/x-icon"
-            href="{% static 'images/favicon.png' %}"
-    />
+    <link rel="icon" href="{% static 'images/IBAS_favicon.png' %}" type="image/x-icon"/>
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'images/IBAS_favicon.png' %}"/>
+
     <script>
         loading_obj = document.createElement("div")
         loading_obj.className = "loading"
@@ -76,7 +69,7 @@
     <!--외부 css파일 받는 링크 / 이 html에서만 쓰는 것. -->
     <link rel="stylesheet" href="{% static 'css/login-join.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'css/size.css' %}">
-
+    <link rel="stylesheet" type="text/css" href="{% static 'css/media.css' %}">
 </head>
 <body id="bg">
 <div id="loading-area"></div>
@@ -90,7 +83,7 @@
             <div class="item_flex_join login-form-box">
                 <!-- 여기서부터 로그인 양식 시작  -->
                 <div class="join-form2">
-                    <div class="form-center-position form-width-large mt-3">
+                    <div class="form-center-position form-width-large mt-3 media-m-50">
 
                         <!-- 회원 가입 입력 폼 시작 -->
                         <form action="{% url 'quest_chk' %}" method="post">
@@ -123,7 +116,7 @@
                                             <textarea
                                                     name="answer_{{ quest.quest_no }}"
                                                     required=""
-                                                    class="form-textarea_size form-text-area-size-add"
+                                                    class="form-textarea_size form-text-area-size-add quest-textarea-h"
                                                     placeholder="내용을 입력하세요."
                                                     type="text"
                                             ></textarea>
@@ -132,7 +125,7 @@
                                 {% endfor %}
 
                                 <!-- 개인정보사용동의란이 있다면 사용해야 할 체크박스와 상세 내용 -->
-                                <div class="submit-btn-center mb-5">
+                                <div class="submit-btn-center mb-5 media-dis-block">
                                     <!-- 체크 박스, 동의 문구 컨테이너 -->
                                     <div style="display: flex; flex-direction: column">
                                         <!-- 개인정보 제공 동의 컨테이너 -->

@@ -36,7 +36,7 @@ import {alert_msg_for_client} from "./assets/response.js"
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
-axios.defaults.baseURL = 'https://inhabas.com'
+axios.defaults.baseURL = 'https://inhabas.com';
 export default {
   data: () => {
     return {
@@ -63,7 +63,7 @@ export default {
       this.board_no = pathname[3]
     } else if (/lect\/room\/\d+\/detail\/\d+/.test(location.pathname)) {
       this.board_type = 'lect'
-    } else if (/staff\/memver\/delete\/detail\/\d+/.test(location.pathname)) {
+    } else if (/staff\/member\/delete\/detail\/\d+/.test(location.pathname)) {
       this.board_type = 'staff'
     } else if (/activity\/\d+\/detail/.test(location.pathname)) {
       this.board_type = 'board'
@@ -135,12 +135,9 @@ export default {
       if (comment_cont.trim() === "") {
         alert('댓글을 입력하세요!')
       } else {
-        axios({
-          method: 'put',
-          url: "comment/update/" + comment_id,
-          data: {comment_cont: comment_cont}
-        })
+        axios.put("comment/update/" + comment_id, {comment_cont: comment_cont})
             .then(response => {
+              console.log('반응이 왔엉', response)
               this.comment_list[index] = response.data.comment;
             })
             .catch(response => {

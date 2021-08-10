@@ -287,16 +287,6 @@
 }
 
 
-/* 쓰인 곳 : 회원가입 양식 바로 위 */
-.item_flex_join {
-  /* 무슨일이 있더라도 width를 고정시키기 */
-  width: 1050px;
-  max-width: 1050px;
-  min-width: 1050px;
-  height: 100vh;
-  overflow: auto;
-  -ms-overflow-style: none; /*스크롤 안보이게 하기 밑에거도 필요*/
-}
 /* 쓰인 곳 : 회원가입 양식 왼쪽 흰색 부분 스크롤바 */
 .item_flex_join::-webkit-scrollbar {
   display: none;
@@ -412,14 +402,6 @@
 }
 
 /* flex 컨테이너 아이템 */
-.item_flex_lgn {
-    /* 무슨일이 있더라도 width를 고정시키기 */
-    width: 500px;
-    max-width: 500px;
-    min-width: 500px;
-    height: 100vh;
-
-}
 
 .item_flex_bg {
     flex: 1
@@ -478,14 +460,14 @@
 
 /* 상위 카드를 grid로 만들어 주기 위함임.  */
 /* 사용된 곳 : 아이콘 div와 하위 카드 시작부분 사이*/
-.card-for-grid {
-    display: grid;
-    grid-template-columns: repeat(2,1fr);
-    row-gap: 30px;
-    column-gap: 20px;
-    margin-bottom: 50px;
+/*.card-for-grid {*/
+/*    display: grid;*/
+/*    grid-template-columns: repeat(2,1fr);*/
+/*    row-gap: 30px;*/
+/*    column-gap: 20px;*/
+/*    margin-bottom: 50px;*/
 
-}
+/*}*/
 
 /* 기존 템플릿이 가지고 있던 css 커스텀함. */
 /* 사용된 곳 : 하위 카드 2개 */
@@ -566,27 +548,7 @@
     text-align: center;
 }
 
-/*페이지 내 타이틀*/
-.welcome-title {
-    font-family: 'roboto', sans-serif;
-    font-weight: 500;
-    font-size: 80px;
-    line-height: 90px;
-    margin-top: 30px;
-    margin-bottom: 55px;
-    color: white;
-    min-width: 100%;
-}
 
-/*페이지 내 컨텐츠*/
-.welcome-content {
-    font-family: 'roboto', sans-serif;
-    font-weight: 500;
-    font-size: 20px;
-    line-height: 30px;
-    margin-bottom: 30px;
-    color: white;
-}
 
 /*메인 홈페이지로 돌아가기 버튼 관련*/
 /*메인 페이지 돌아가기 투명 버튼*/

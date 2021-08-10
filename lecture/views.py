@@ -2,22 +2,25 @@ from django.db import transaction, connection
 from django.db.models import Q
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.utils.dateformat import DateFormat
-from alarm.alarm_controller import create_lect_full_alarm, create_lect_enroll_alarm, delete_lect_by_superuser_alarm
+from alarm.alarm_controller import create_lect_full_alarm, create_lect_enroll_alarm, delete_lect_by_superuser_alarm, \
+    create_user_lect_out_alarm
 from django.contrib import messages
 from DB.models import LectType, Lect, MethodInfo, LectBoard, LectEnrollment, LectAttendance, \
-    LectAssignmentSubmit, LectMoneyStandard
+    LectAssignmentSubmit, LectMoneyStandard, StateInfo
 from file_controller import FileController
 from lecture.forms import LectForm, LectRejectForm, LectPicForm, make_lect_board_form, \
     FileForm, AssignmentSubmitForm
 from pagination_handler import get_page_object
 from user_controller import get_logined_user, superuser_only, writer_only, auth_check, is_superuser, \
-    is_logined, member_only, role_check, room_enter_check, enroll_check, is_closed, is_lect_instructor, instructor_only
+    is_logined, member_only, role_check, room_enter_check, enroll_check, is_closed, instructor_only, \
+    login_required, prohibit_professor, not_allowed
 from utils.crawler import get_og_tag
 from utils.url_regex import is_youtube
 from utils.youtube import get_youtube
-from date_controller import is_lect_recruiting
+from date_controller import is_lect_recruiting, today
 from exception_handler import exist_check
-from post_controller import comment_delete_by_post_delete
+from post_controller import comment_delete_by_post_delete, ongoing_check
+
 
 def get_pol_name(method_no):
     pol_name = MethodInfo.objects.get(pk=method_no).method_name
@@ -29,15 +32,17 @@ def get_pol_name(method_no):
         pol_name = pol_name + " 개인 채널 링크"
     return pol_name
 
+
 # 타입에 맞는 강의 리스트를 반환하는 함수
 def get_lect_list(request, type_no):
     if type_no != 4:  # 강의 개설 신청 게시판이 아닌 일반 게시판(강의, 스터디, 취미모임)의 경우
         lect_type = LectType.objects.get(pk=type_no)
-        lect_list = Lect.objects.filter(Q(lect_type=lect_type) & Q(lect_state__state_no=3)).prefetch_related(
-            "lectday_set", "enrolled_students")
+        lect_list = Lect.objects.filter(Q(lect_type=lect_type) & Q(lect_state_id__gte=3)).prefetch_related(
+            "lectday_set", "enrolled_students").order_by("-lect_created").order_by("lect_state_id")
     else:
-        lect_list = Lect.objects.filter(Q(lect_type=LectType.objects.get(pk=1)) & Q(lect_state__state_no=1) | Q(
-            lect_state__state_no=2)).prefetch_related("lectday_set").prefetch_related("enrolled_students")
+        lect_list = Lect.objects.filter(Q(lect_type=LectType.objects.get(pk=1)) & Q(lect_state_id=1) | Q(
+            lect_state__state_no=2)).prefetch_related("lectday_set").prefetch_related("enrolled_students").order_by(
+            "-lect_created").order_by("lect_state_id")
     return lect_list
 
 
@@ -46,7 +51,8 @@ def get_lect_type(request, type_no):
     if type_no != 4:
         lect_type = LectType.objects.get(pk=type_no)
     else:
-        if not is_logined(request) or not is_superuser(get_logined_user(request)):  # 강의 개설 관련 처리는 관리자만 할 수 있으므로 관리자 권한 체크
+        if not is_logined(request) or not is_superuser(
+                get_logined_user(request)):  # 강의 개설 관련 처리는 관리자만 할 수 있으므로 관리자 권한 체크
             return redirect(reverse("index"))
         lect_type = LectType()
         lect_type.type_no = type_no
@@ -102,9 +108,8 @@ def lect_detail(request, lect_no):
     lect.lect_day = lect.lect_day[:len(lect.lect_day) - 1]
     context = {
         'lect': lect,
-        'lect_user_num': len(LectEnrollment.objects.filter(lect_no=lect_no)),
         'is_in': LectEnrollment.objects.filter(student=get_logined_user(request),
-                                               lect_no_id=lect_no).first() is not None,
+                                               lect_no_id=lect_no).count() > 0,
         'lect_reject_form': LectRejectForm(instance=lect),
         'is_closed': is_closed(lect)
     }
@@ -180,6 +185,7 @@ def lect_delete(request, lect_no):
 
 
 # 강의 리스트 이동 함수
+@login_required
 def lect_view(request, type_no):  # 게시판 페이지로 이동
     lect_list = get_page_object(request, get_lect_list(request, type_no))
     lect_type = get_lect_type(request, type_no)
@@ -207,11 +213,18 @@ def lect_search(request, type_no):
 
 
 # 유저 강의 명단 등록 함수
+@prohibit_professor
 @enroll_check
+@ongoing_check
 def lect_enroll(request, lect_no):
+    cur_user = get_logined_user(request)
+    if is_superuser(cur_user) and Lect.objects.get(pk=lect_no).lect_type_id == 1:
+        return not_allowed(request, "운영진은 공정성을 위해, 강의 신청 권한이 없습니다.")
+    else:
+        messages.warning(request, "등록이 완료되었습니다.")
     lect_enrollment = LectEnrollment.objects.create(
         lect_no=Lect.objects.get(pk=lect_no),
-        student=get_logined_user(request),
+        student=cur_user,
     )
     create_lect_enroll_alarm(lect_enrollment)
     create_lect_full_alarm(Lect.objects.get(pk=lect_no))
@@ -245,6 +258,7 @@ def get_assignment_list(cur_user, lect_room, name_in_html):
 
 # 강의룸 메인 페이지
 @member_only(superuser=True)
+@ongoing_check
 def lect_room_main(request, room_no):
     try:
         lect_room = Lect.objects.prefetch_related('lectures', 'enrolled_students').get(pk=room_no)
@@ -263,6 +277,7 @@ def lect_room_main(request, room_no):
 
 
 @member_only()
+@ongoing_check
 def lect_room_search(request, room_no):
     if request.method == "GET":
         k = request.GET.get("keyword")
@@ -296,6 +311,7 @@ def lect_room_search(request, room_no):
 
 # 더보기 눌렀을 때 나오는 게시판 (공지게시판(1)/강의게시판(2)/과제게시판(3))
 @member_only(superuser=True)
+@ongoing_check
 def lect_room_list(request, room_no, board_type):
     try:
         lect_room = Lect.objects.prefetch_related('enrolled_students', 'lectures', 'submitted_assignments').get(
@@ -323,6 +339,7 @@ def lect_room_list(request, room_no, board_type):
 
 # 강의 게시글(공지/강의) 등록
 @instructor_only()
+@ongoing_check
 def lect_board_register(request, room_no, board_type):
     if request.method == "GET":
         lect_room = Lect.objects.prefetch_related('lectures').get(pk=room_no)
@@ -349,12 +366,15 @@ def lect_board_register(request, room_no, board_type):
                 )
                 file_form.save(instance=lecture)  # 공지 또는 강의 파일 저장
 
-        return redirect('lect_room_main', room_no=room_no)
+            return redirect('lect_board_detail', room_no=room_no, lect_board_no=lecture.pk)
+
+        return redirect(request.path)
 
 
 # 강의/공지 게시글 상세보기
 @exist_check
 @member_only(superuser=True)
+@ongoing_check
 def lect_board_detail(request, room_no, lect_board_no):
     lect_room = Lect.objects.get(pk=room_no)
     board = LectBoard.objects.get(pk=lect_board_no)
@@ -443,12 +463,12 @@ def lect_board_update(request, room_no, lect_board_no):
 
         return redirect('lect_board_detail', room_no=room_no, lect_board_no=lect_board_no)
 
-
-                                             # 수강생 과제 CRUD #
+        # 수강생 과제 CRUD #
 
 
 # 수강생 과제 제출
 @member_only()
+@ongoing_check
 def lect_assignment_submit(request, room_no):
     lect_room = get_object_or_404(Lect, lect_no=room_no)
 
@@ -480,6 +500,7 @@ def lect_assignment_submit(request, room_no):
 
 # 제출한 과제 목록
 @member_only()
+@ongoing_check
 def lect_assignment_list(request, room_no):
     lect_room = Lect.objects.prefetch_related('submitted_assignments').get(pk=room_no)
     cur_user = get_logined_user(request)
@@ -499,6 +520,7 @@ def lect_assignment_list(request, room_no):
 
 # 수강생이, 제출한 과제 수정
 @writer_only()
+@ongoing_check
 def lect_assignment_update(request, room_no, submit_no):
     lect_room = get_object_or_404(Lect, pk=room_no)
     submitted_assignment = LectAssignmentSubmit.objects.prefetch_related('files').get(pk=submit_no)
@@ -541,6 +563,7 @@ def lect_assignment_delete(request, room_no, assignment_submit_no):
 
 # 제출한 과제 보기/ 강의자와 운영팀도 접근 가능
 @writer_only(is_lect_assignment=True)
+@ongoing_check
 def lect_assignment_detail(request, room_no, submit_no):
     lect_room = get_object_or_404(Lect, pk=room_no)
     submitted_assignment = LectAssignmentSubmit.objects.prefetch_related('files').select_related('assignment_no').get(
@@ -587,6 +610,18 @@ def lect_room_student_status(request, room_no):
 
     return render(request, 'lecture_room_student_status.html', context)
 
+
+def lect_room_exit(request, room_no):
+    cur_student = LectEnrollment.objects.prefetch_related('lect_no').get(
+        lect_no=room_no, student_id=request.session.get('user_stu'))
+    cur_student.status_id = -1
+    cur_student.exit_time = today()
+    cur_student.save()
+
+    create_user_lect_out_alarm(lect_enrollment=cur_student)
+
+    return redirect('lect_view', type_no=1)
+
     # 강의자 메뉴 #
 
 
@@ -619,7 +654,7 @@ def lect_room_manage_member(request, room_no):
         lect_attend_info = lect_room.attendance.filter(lect_no_id=room_no)  # 해당 강의에 속한 모든 수강생의 출석 정보
         assignment_info = lect_room.submitted_assignments  # 제출된 모든 수강생의 과제
         students = list(
-            LectEnrollment.objects.prefetch_related('student__useremail_set', ).filter(lect_no_id=room_no))  # 수강생 명단
+            LectEnrollment.objects.prefetch_related('student__useremail_set').filter(lect_no_id=room_no))  # 수강생 명단
         total_attend_info = [len(lect_attend_info.filter(student=stu.student)) for stu in students]  # 개인별 출석 횟수
         attend_info_list = [{
             'enrolled': stu,
@@ -656,6 +691,7 @@ def lect_room_manage_member(request, room_no):
 # 과제 현황 조회
 # 운영팀은 GET 만 접근 가능
 @instructor_only(superuser=True)
+@ongoing_check
 def lect_room_manage_assignment(request, room_no):
     if request.method == "GET":
         lect_room = Lect.objects.prefetch_related(
@@ -671,6 +707,7 @@ def lect_room_manage_assignment(request, room_no):
         if any_assignment and students_list:
             students_list = [{
                 'student': std.student,
+                'exit_time': std.exit_time,
                 'submission': lect_room.submitted_assignments.filter(  # 제출시간, 제출여부, 제출된 파일에 접근하기 위한 객체
                     assignment_submitter=std.student, assignment_no=assignment_no).first()
             } for std in students_list]
@@ -706,6 +743,7 @@ def lect_room_manage_assignment(request, room_no):
 # 강의 게시글은 존재하지만, 학생이 없으면 => 출석부 렌더하지만, 학생이 아무도 없음.
 # 운영팀은 GET 만 접근 가능
 @instructor_only(superuser=True)
+@ongoing_check
 def lect_room_manage_attendance(request, room_no):
     lect_room = Lect.objects.prefetch_related("lectures", "enrolled_students__student").get(pk=room_no)
     lect_board_list = lect_room.lectures.filter(lect_board_type_id=2).order_by('-lect_board_no')  # 강의 게시글만 가져옴
@@ -727,6 +765,7 @@ def lect_room_manage_attendance(request, room_no):
                         u.USER_NAME, 
                         u.USER_STU, 
                         MAJOR_INFO.MAJOR_NAME, 
+                        enrollment.exit_time,
                         if(isnull(attend.LECT_ATTEND_DATE),false,true) as attendance
                     FROM LECT_ENROLLMENT AS enrollment
 
@@ -750,8 +789,9 @@ def lect_room_manage_attendance(request, room_no):
                 'name': name,
                 'stu': stu,
                 'major': major,
+                'exit_time': exit_time,
                 'attendance': '출석' if attendance == 1 else '결석'
-            } for index, (name, stu, major, attendance) in enumerate(cursor.fetchall())]
+            } for index, (name, stu, major, exit_time, attendance) in enumerate(cursor.fetchall())]
 
         context = {
             'lect': lect_room,
@@ -782,3 +822,12 @@ def lect_room_manage_attendance(request, room_no):
                 students.filter(student_id__in=checked_list).delete()
 
         return redirect(reverse('lect_room_manage_attendance', kwargs={'room_no': room_no}), )
+
+
+@instructor_only(superuser=False)
+def lect_terminate(request, lect_no):
+    lect = Lect.objects.get(pk=lect_no)
+    lect.lect_state = StateInfo.objects.get(pk=4)
+    lect.save()
+    messages.warning(request, "정상적으로 종강 처리되었습니다. IBAS에서 강의해주셔서 정말 감사합니다.")
+    return redirect("lect_view", type_no=lect.lect_type_id)

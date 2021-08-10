@@ -29,7 +29,7 @@
                 </a>
             </div>
             <!----------============= 본문 시작 ================----------->
-            <div class="content-block">
+            <div class="content-block min-height-70vh">
                 <div class="section-full content-inner bg-white">
                     <div class="container">
                         <!-- 검색창 및 진행중/마감 필터바 -->
@@ -107,8 +107,9 @@
                                                     <strong>{{ lect.lect_deadline|date:'d' }}</strong>
                                                     <!-- 모집 및 마감 상태 -->
                                                     <!-- 강의, 스터디, 취미 기간 중에 있으면 모집 span 태그가 보이고, 모집 기간이 자나면, 자동으로 마감으로 뜨게 처리 -->
-
-                                                    {% if lect.is_expired or lect.lect_limit_num <= lect.enrolled_students.all|length %}
+                                                    {% if lect.lect_state_id == 4 %}
+                                                        <span class="recruiting-wait">종 료</span>
+                                                    {% elif lect.is_expired or lect.lect_limit_num <= lect.get_enrolled_std_num %}
                                                         <span class="recruiting-end">마 감</span>
                                                     {% else %}
                                                         <span class="recruiting">모 집</span>
@@ -140,7 +141,7 @@
                                                     <span class="text-primary m-l40 mr-3"><i
                                                             class="fa fa-user"></i></span>
                                                     <!-- 강의 신청자 및 총 정원을 DB에서 가져와야 함. -->
-                                                    <span>{{ lect.enrolled_students.count }} / {{ lect.lect_limit_num }} 명</span>
+                                                    <span>{{ lect.get_enrolled_std_num }} / {{ lect.lect_limit_num }} 명</span>
                                                 </li>
                                             </ul>
                                         </div>
