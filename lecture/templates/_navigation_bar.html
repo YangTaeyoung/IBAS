@@ -39,7 +39,7 @@
                 <li><a href="{% url "lect_room_manage_member" lect.lect_no %}">{% if lect.lect_type_id == 1 %}수강생
                     관리{% elif lect.lect_type_id == 2 %}스터디원 관리{% else %}취미 모임 동료 보기{% endif %}</a>&nbsp;
                 </li>
-                {% if logined_user == lect.lect_chief %}
+                {% if logined_user == lect.lect_chief and lect.lect_state_id != 4 %}
                     <li>
                         <a onclick="goPage('{% url 'lect_terminate' lect.lect_no %}',true, '모든 게시글이 비활성화되며, 수강생은 해당 강의실에 접근이 불가능하게 됩니다. \n\n정말 종강처리하시겠습니까?')">종강
                             하기</a>
