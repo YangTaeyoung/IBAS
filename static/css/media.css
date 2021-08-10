@@ -57,7 +57,7 @@
     }
 
     .dis-none-media{
-        display: none;
+        display: none !important;
     }
 
     .media-contus{
