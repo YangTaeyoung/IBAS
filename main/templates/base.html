@@ -65,7 +65,7 @@
     <header class="site-header header-transparent mo-left">
         <!-- main header -->
         <div class="sticky-header main-bar-wraper navbar-expand-lg">
-            <div class="main-bar clearfix ">
+            <div class="main-bar clearfix">
                 <div class="container clearfix">
                     <!-- ====ibas 로고 들어가는 곳==== -->
                     <div class="logo-header mostion">
@@ -78,8 +78,21 @@
                             <img src="{% static 'images/logo_puple.png' %}" style="margin-top: 4px; margin-bottom: 4px">
                         </a>
                     </div>
-
-
+                    <!-- nav toggle button -->
+                    <button class="navbar-toggler collapsed navicon justify-content-end" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+						<span></span>
+						<span></span>
+						<span></span>
+					</button>
+                    <!-- extra nav -->
+                    <div class="extra-nav">
+                        <div class="extra-cell">
+                            <a href="register.html" class="site-button-link white"><i
+                                    class="ti-import m-r5 rotate90"></i> Sign In</a>
+                            <a href="add-listing.html" class="site-button radius-xl m-l10"><i
+                                    class="fa fa-plus m-r5"></i> Add Listing</a>
+                        </div>
+                    </div>
                     <!--====================메뉴, 회원정보에 따른 버튼 시작====================-->
                     <div class="header-nav navbar-collapse collapse justify-content-end" id="navbarNavDropdown">
                         <ul class="nav navbar-nav">
