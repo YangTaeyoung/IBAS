@@ -1,3 +1,4 @@
+/*창 크기가 1000px 이하, base 및 많이 쓰이는 것*/
 @media (max-width: 1000px) {
     .media-logo{
         width: 70%;
@@ -74,14 +75,11 @@
     }
 
 
-    .item_flex_lgn {
-    /* 무슨일이 있더라도 width를 고정시키기 */
-        width: 100%;
-        max-width: 100%;
-        min-width: 100%;
-        height: 100vh;
-    }
+}
 
+
+/*창 크기가 1000px 이하, 소개페이지에 적용된 것들*/
+@media (max-width: 1000px) {
     .intro-bigdata{
         top: 10%;
         left: 5%;
@@ -218,6 +216,17 @@
     .his-cont-w{
         width: 50vw;
     }
+}
+
+/*창 크기가 1000px 이하, 로그인/회원가입 관련에 적용된 것들*/
+@media (max-width: 1000px) {
+    .item_flex_lgn {
+    /* 무슨일이 있더라도 width를 고정시키기 */
+        width: 100%;
+        max-width: 100%;
+        min-width: 100%;
+        height: 100vh;
+    }
 
     .card-for-grid {
         display: grid;
@@ -284,6 +293,7 @@
     }
 }
 
+/*창 크기가 1000px 이상, base 및 많이 쓰이는 것*/
 @media (min-width: 1001px) {
     .dis-none{
         display: none;
@@ -293,14 +303,10 @@
         width: 80%;
     }
 
-    .item_flex_lgn {
-    /* 무슨일이 있더라도 width를 고정시키기 */
-    width: 500px;
-    max-width: 500px;
-    min-width: 500px;
-    height: 100vh;
-    }
+}
 
+/*창 크기가 1000px 이상, 소개페이지에 적용된 것들*/
+@media (min-width: 1001px) {
     .intro-bigdata{
         top: 35%;
         left: 5%;
@@ -378,6 +384,17 @@
 
     .his-cont-w{
         width: 60vw;
+    }
+}
+
+/*창 크기가 1000px 이상, 로그인/회원가입 관련에 적용된 것들*/
+@media (min-width: 1001px) {
+    .item_flex_lgn {
+        /* 무슨일이 있더라도 width를 고정시키기 */
+        width: 500px;
+        max-width: 500px;
+        min-width: 500px;
+        height: 100vh;
     }
 
     .card-for-grid {
