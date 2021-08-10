@@ -55,20 +55,20 @@
                 <!-- 체크박스 -->
                 <td scope="row">
                     <div>
-                        <input id="is_checked_{{ student.stu }}" name="is_checked_{{ student.stu }}"
-                               type="checkbox" value="{{ student.stu }}">
+                        <input id="is_checked_{% personal_info student.stu request lect %}" name="is_checked_{% personal_info student.stu request lect%}"
+                               type="checkbox" value="{% personal_info student.stu request lect%}">
 
-                        <label for="is_checked_{{ student.stu }}"
+                        <label for="is_checked_{% personal_info student.stu request lect %}"
                                class="staff_label_margin m-l20"></label>
                     </div>
                 </td>
                 <td class="text-center">{{ student.index }}</td>
                 <!-- 회원 이름 -->
-                <td class="align-middle text-center">{% personal_info student.name request %}</td>
+                <td class="align-middle text-center">{% personal_info student.name request lect%}</td>
                 <!-- 회원 학번 -->
-                <td class="text-center">{% personal_info student.stu request %}</td>
+                <td class="text-center">{% personal_info student.stu request lect%}</td>
                 <!-- 회원 학과 -->
-                <td>{% personal_info student.major request %}</td>
+                <td>{% personal_info student.major request lect%}</td>
                 <!-- 출결 -->
                 <td id="lectRoom_color" class="text-center lectRoom_attend">{{ student.attendance }}</td>
 

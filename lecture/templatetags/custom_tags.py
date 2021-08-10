@@ -49,8 +49,13 @@ def is_exist(arg: str, tar: str):
 
 # 이름이나 학번 가림.
 @register.simple_tag
-def personal_info(string, request):
-    if get_logined_user(request).user_role_id <= 3:
+def personal_info(string, request, lect):
+    cur_user = get_logined_user(request)
+
+    if cur_user == lect.lect_chief:
+        return string
+
+    elif cur_user.user_role_id <= 3:
         # 학번 : 1217****
         if type(string) == int:
             return str(string)[:4] + '****'
@@ -72,6 +77,5 @@ def personal_info(string, request):
                 else:
                     return string[0] + '*' * (len(string) - 1)
 
-    else:
-        return string
+
 
