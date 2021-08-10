@@ -829,5 +829,5 @@ def lect_terminate(request, lect_no):
     lect = Lect.objects.get(pk=lect_no)
     lect.lect_state = StateInfo.objects.get(pk=4)
     lect.save()
-    messages.warning("정상적으로 종강 처리되었습니다. IBAS에서 강의해주셔서 정말 감사합니다.")
+    messages.warning(request, "정상적으로 종강 처리되었습니다. IBAS에서 강의해주셔서 정말 감사합니다.")
     return redirect("lect_view", type_no=lect.lect_type_id)
