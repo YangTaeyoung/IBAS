@@ -271,7 +271,7 @@
                             {% if is_logined and logined_user != lect.lect_chief and not is_in and logined_user.user_role.role_no != 5 %}
                                 <!--=======신청하기 버튼, 한번 신청하기 버튼을 누르면 없어지도록 수정======-->
                                 {% if not is_closed %}
-                                    {% if not is_superuser and %}
+                                    {% if not is_superuser and lect.lect_type_id == 1 %}
                                         <div style="display: flex; justify-content: center; ">
                                             <button type="button" class="btn btn-outline-success btn-lg"
                                                     style="width: 200px; font-weight: bold"
