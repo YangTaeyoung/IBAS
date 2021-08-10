@@ -128,7 +128,7 @@
                                                         <!--전화번호 -->
                                                         <td>{% personal_info info.enrolled.student.user_phone request%}</td>
                                                         <!--이메일 -->
-                                                        <td>{% personal_info info.enrolled.student.user_email.first.user_email request%}</td>
+                                                        <td>{% personal_info info.enrolled.student.useremail_set.first.user_email request%}</td>
 
                                                         <!-- 과제 미제출 수 -->
                                                         <td>{{ info.assignment_info }}</td>
