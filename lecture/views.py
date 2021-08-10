@@ -824,10 +824,14 @@ def lect_room_manage_attendance(request, room_no):
         return redirect(reverse('lect_room_manage_attendance', kwargs={'room_no': room_no}), )
 
 
-@instructor_only(superuser=False)
+# 제작: 양태영
+# 제작일: 2021-08-11
+# 설명: 강의자가 강의를 종강처리할 때 사용하는 뷰.
+@instructor_only(superuser=False)  # 강의자만 가능, 관리자는 임의로 종강 처리할 수 없음.
 def lect_terminate(request, lect_no):
     lect = Lect.objects.get(pk=lect_no)
     lect.lect_state = StateInfo.objects.get(pk=4)
     lect.save()
+    # 종강 처리 정상처리 이후 메시지를 띄움.
     messages.warning(request, "정상적으로 종강 처리되었습니다. IBAS에서 강의해주셔서 정말 감사합니다.")
     return redirect("lect_view", type_no=lect.lect_type_id)
