@@ -3,7 +3,7 @@ from django.db.models import Q
 from django.contrib import messages
 import functools
 from django.shortcuts import redirect
-from user_controller import get_logined_user, is_superuser
+from DB.models import User
 
 ##############################################################
 # 게시글, 강의, 제명건의 등 유저와는 관련이 없는 오브젝트를 다룰 때 사용하는 컨트롤러.
@@ -48,9 +48,9 @@ def ongoing_check(func):
     def wrapper(request, *args, **kwargs):
         lect_no = kwargs.get('lect_no', kwargs.get('room_no', None))
         lect = Lect.objects.get(pk=lect_no)
-        cur_user = get_logined_user(request)
+        cur_user = User.objects.get(pk=request.session.get("user_stu"))
         # 강의가 진행중이거나, 강의자이거나, 운영진의 경우 강의실에 입장 가능
-        if is_ongoing(lect) or cur_user == lect.lect_chief or is_superuser(cur_user):
+        if is_ongoing(lect) or cur_user == lect.lect_chief or cur_user.user_role_id <= 3:
             return func(request, *args, **kwargs)
         else:  # 종강하였으며, 일반회원일 경우.
             if lect.lect_state_id == 2:  # 상태: 거절
