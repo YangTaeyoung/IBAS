@@ -268,16 +268,18 @@
                             </div>
                         {% endif %}
                         {% if lect.lect_state.state_no >= 3 %}
-                            {% if is_logined and logined_user != lect.lect_chief and not is_in and logined_user.user_role.role_no != 5 %}
-                                <!--=======신청하기 버튼, 한번 신청하기 버튼을 누르면 없어지도록 수정======-->
-                                {% if not is_closed %}
-                                    <div style="display: flex; justify-content: center; ">
-                                        <button type="button" class="btn btn-outline-success btn-lg"
-                                                style="width: 200px; font-weight: bold"
-                                                onclick="location.href='{% url "lect_enroll" lect.lect_no %}'">
-                                            신청하기
-                                        </button>
-                                    </div>
+                            {% if lect.lect_state_id == 3 %}
+                                {% if is_logined and logined_user != lect.lect_chief and not is_in and logined_user.user_role.role_no != 5 %}
+                                    <!--=======신청하기 버튼, 한번 신청하기 버튼을 누르면 없어지도록 수정======-->
+                                    {% if not is_closed %}
+                                        <div style="display: flex; justify-content: center; ">
+                                            <button type="button" class="btn btn-outline-success btn-lg"
+                                                    style="width: 200px; font-weight: bold"
+                                                    onclick="location.href='{% url "lect_enroll" lect.lect_no %}'">
+                                                신청하기
+                                            </button>
+                                        </div>
+                                    {% endif %}
                                 {% endif %}
                             {% endif %}
                             <!--=======강의실로 이동하기 버튼, 신청을 하지 않으면 뜨지 않고, 신청 후 버튼이 뜨도록 수정, 누르면 강의실로 이동함======-->
