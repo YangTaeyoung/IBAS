@@ -64,6 +64,17 @@ function validation_check_for_common_things() {
     return errors;
 }
 
+function alert_or_submit(errors){
+    // if there are any errors, not submit contest_form and alert all messages!
+    if (errors.length > 0) {
+        alert(errors.join(''));
+        return false;
+    } else {
+        $("#overlay, #PleaseWait").show();
+        return true;
+    }
+}
+
 // for contest board
 function validation_check_for_contest() {
     let errors = [];
@@ -112,14 +123,8 @@ function validation_check_for_contest() {
         errors.push(img_file_error);
     }
 
+    return alert_or_submit(errors)
 
-    // if there are any errors, not submit contest_form and alert all messages!
-    if (errors.length > 0) {
-        alert(errors.join(''));
-        return false;
-    } else {
-        return true;
-    }
 }
 
 
@@ -138,12 +143,7 @@ function validation_check_for_assignment_register() {
         errors.push('과제 마감기한을 설정하세요!')
     }
 
-    if (errors.length > 0) {
-         alert(errors.join(''));
-        return false;
-    } else {
-        return true;
-    }
+    return alert_or_submit(errors);
 }
 
 
@@ -159,13 +159,7 @@ function validation_check_for_board(is_activity=false) {
         }
     }
     
-    // if there are any errors, not submit contest_form and alert all messages!
-    if (errors.length > 0) {
-        alert(errors.join(''));
-        return false;
-    } else {
-        return true;
-    }
+    return alert_or_submit(errors);
 }
 
 // for lecture, study
@@ -239,14 +233,11 @@ function validation_check_for_lecture() {
         errors.push(img_error);
     }
     
-    // if there are any errors, not submit contest_form and alert all messages!
-    if (errors != null && errors.length > 0) {
-        alert(errors.join(''));
-        return false;
-    } else {
-        return true;
-    }
+    return alert_or_submit(errors);
 }
+// $("body").prepend('<div id="overlay" class="ui-widget-overlay" style="z-index: 1001; display: none;"></div>');
+// $("body").prepend("<div id='PleaseWait' style='display: none;'><img src='/images/spinner.gif'/></div>");
+// $("#overlay, #PleaseWait").show();
 
 function disable_check_box() {
     let check_box = $('input:checkbox[id^="check"]')
