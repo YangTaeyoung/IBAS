@@ -3,7 +3,7 @@ from allauth.socialaccount.models import SocialAccount, \
     SocialToken  # 소셜 계정 DB, socialaccount_socialaccount 테이블을 사용하기 위함.
 from django.urls import reverse
 from DB.models import User, UserAuth, UserRole, QuestForm, Answer, UserEmail, \
-    MajorInfo, PolicyTerms  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
+    MajorInfo, PolicyTerms,UserSchedule  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
 from django.http import HttpResponseRedirect
 # 내가 만든 세션 모듈 불러오기
 from . import session
@@ -80,7 +80,6 @@ def join_chk(request):  # 회원 가입 페이지로 부터 정보를 받
             "user_name": request.POST.get("user_name"),
             "user_stu": request.POST.get("user_stu"),
             "user_grade": int(request.POST.get("user_grade")),
-            "user_gen": request.POST.get("user_gen"),
             "user_phone": request.POST.get("user_phone"),
             "user_pic": request.POST.get("user_pic"),
             "provider": request.POST.get("provider"),
@@ -103,7 +102,7 @@ def quest_chk(request):
         user_name = request.POST.get("user_name")
         user_stu = request.POST.get("user_stu")
         user_grade = request.POST.get("user_grade")
-        user_gen = request.POST.get("user_gen")
+        user_gen = UserSchedule.objects.get(pk=1).generation
         user_phone = request.POST.get("user_phone")
         user_pic = request.POST.get("user_pic")
         provider = request.POST.get("provider")
