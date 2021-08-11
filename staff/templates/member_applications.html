@@ -15,14 +15,24 @@
     />
     <link rel="stylesheet" href="{% static 'plugins/tag-editor/jquery.tag-editor.css' %}"/>
     <script>
+
+
+        document.getElementById(id).submit();
+
         function member_pass() {
             if (confirm("지원자를 합격시키겠습니까?")) {
+                const loadingObj = document.createElement("div");
+                loadingObj.id = "loading-area"
+                document.body.appendChild(loadingObj)
                 document.getElementById("form-apply").submit();
             }
         }
 
         function member_nopass() {
             if (confirm("지원자를 탈락시키겠습니까?\n모든 DB에서 해당 지원자에 대한 기록이 사라집니다.")) {
+                const loadingObj = document.createElement("div");
+                loadingObj.id = "loading-area"
+                document.body.appendChild(loadingObj)
                 document.getElementById("form-deny").submit();
             }
         }
