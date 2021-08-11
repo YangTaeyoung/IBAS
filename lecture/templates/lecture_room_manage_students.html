@@ -109,7 +109,7 @@
                                                             {% csrf_token %}
                                                             <!-- 체크박스 -->
                                                             <div class="input-block">
-                                                                <input id="check_{% personal_info info.enrolled.student.user_stu request lect %} "
+                                                                <input id="check_{% personal_info info.enrolled.student.user_stu request lect %}"
                                                                        type="checkbox"
                                                                        name="is_checked_{% personal_info info.enrolled.student.user_stu request lect%}"
                                                                        value="{{ info.enrolled.id }}">
