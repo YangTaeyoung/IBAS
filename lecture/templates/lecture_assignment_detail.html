@@ -105,7 +105,7 @@
 
 
                                                 <!-- 게시글 삭제 버튼 -->
-                                                <form class="d-inline-block"
+                                                <form class="d-inline-block" method="post"
                                                       action="{% url "lect_assignment_delete" lect.pk submitted_assignment.pk %}">
                                                     {% csrf_token %}
                                                     <button class="site-button red radius-xl m-l10" type="submit">

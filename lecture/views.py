@@ -550,9 +550,9 @@ def lect_assignment_update(request, room_no, submit_no):
 
 # 수강생이, 제출했던 과제 삭제하는 경우
 @writer_only()
-def lect_assignment_delete(request, room_no, assignment_submit_no):
+def lect_assignment_delete(request, room_no, submit_no):
     if request.method == "POST":
-        assignment = get_object_or_404(LectAssignmentSubmit, pk=assignment_submit_no)
+        assignment = get_object_or_404(LectAssignmentSubmit, pk=submit_no)
         FileController.delete_all_files_of_(assignment)
         assignment.delete()
 
