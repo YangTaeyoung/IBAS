@@ -7,11 +7,14 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/size.css' %}">
     <script src="{% static 'js/ibas_centents.js' %}"></script>
     <script src="{% static 'js/comment.js' %}"></script>
+    <script src="{% static 'js/validation_check.js' %}"></script>
     <script>
 
 
     $(function () {
         $("#selectbox").val({{ cur_assignment.lect_board_no }}).prop('selected',true);
+
+        disable_check_box();
     });
     </script>
 

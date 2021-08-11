@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/size.css' %}">
     <script src="{% static 'js/ibas_centents.js' %}"></script>
     <script src="{% static 'js/comment.js' %}"></script>
+    <script src="{% static 'js/validation_check.js' %}"></script>
     <script>
 
 
@@ -27,8 +28,9 @@
                 arr.fill('\xa0') // &nbsp;
                 $(option).text(text + arr.join(''))
             }
-
         })
+
+        disable_check_box();
     });
     </script>
 
