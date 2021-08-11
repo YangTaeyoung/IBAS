@@ -248,3 +248,14 @@ function validation_check_for_lecture() {
     }
 }
 
+function disable_check_box() {
+    let check_box = $('input:checkbox[id^="check"]')
+
+    if ($(check_box[0]).attr('id').includes('*')) {
+        $(check_box).each(function () {
+            $(this).attr("disabled", true);
+        });
+        $('button.site-button').attr("disabled", true);
+    }
+}
+
