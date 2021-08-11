@@ -1,9 +1,7 @@
 from django.db import transaction
 from django.db.models import Sum, Q
 from django.shortcuts import render, get_object_or_404, reverse, redirect
-from DB.models import AuthUser, User, ChiefCarrier, UserRole, Board, BoardFile, \
-    BoardType, Comment, History, Bank, BankFile, BankApplyInfo, Lect, LectBoard, LectAttendance, \
-    LectAssignmentStatus, LectMoneyStandard  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
+from DB.models import Bank, BankFile, BankApplyInfo, Lect, LectBoard, LectAttendance, LectMoneyStandard  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
 from bank.forms import BankForm, FileForm, BankSupportForm
 from date_controller import today
 from file_controller import FileController
