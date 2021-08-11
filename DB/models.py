@@ -172,18 +172,6 @@ class BoardType(models.Model):
         db_table = 'BOARD_TYPE'
 
 
-class ChiefCarrier(models.Model):
-    carrier_no = models.AutoField(db_column='CARRIER_NO', primary_key=True)  # Field name made lowercase.
-    carrier_content = models.CharField(db_column='CARRIER_CONTENT', max_length=300, blank=True,
-                                       null=True)  # Field name made lowercase.
-    chief_user = models.ForeignKey('User', on_delete=models.CASCADE,
-                                   db_column='CHIEF_USER')  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'CHIEF_CARRIER'
-
-
 class ContestBoard(models.Model):
     contest_no = models.AutoField(db_column='CONTEST_NO', primary_key=True)
     contest_title = models.CharField(db_column='CONTEST_TITLE', max_length=100)
@@ -287,15 +275,6 @@ class Lect(models.Model):
     def get_enrolled_std_num(self):
         return len(self.enrolled_students.filter(status_id=1))
 
-
-class LectDay(models.Model):
-    day_no = models.AutoField(db_column='DAY_NO', primary_key=True)
-    lect_no = models.ForeignKey("Lect", on_delete=models.CASCADE, db_column="LECT_NO")
-    day_name = models.CharField(db_column='DAY_NAME', max_length=2)
-
-    class Meta:
-        managed = False
-        db_table = "LECT_DAY"
 
 
 class LectAttendance(models.Model):
