@@ -293,6 +293,23 @@
                                             <i class="fa fa-search fa-2x form-item-flex-major-icon search-btn"></i>
                                         </div>
                                     </div>
+                                    {% if user_role == "5" %}
+                                        <!-- 체크 박스, 동의 문구 컨테이너 -->
+                                        <div style="display: flex; flex-direction: column">
+                                            <!-- 개인정보 제공 동의 컨테이너 -->
+                                            <div class="form-group item_flex_btn_center mb-0">
+                                                <input type="checkbox" id="privacy-policy" required="required"/>
+                                                <label for="privacy-policy"
+                                                >본인은
+                                                    <a href="#" data-toggle="modal" data-target="#policy_1"
+                                                       class="btn-link quest-text">제3자 개인정보 동의 약관</a>과
+                                                    <a href="#" data-toggle="modal" data-target="#policy_3"
+                                                       class="btn-link quest-text">웹사이트 이용약관</a>,
+                                                    <a href="#" data-toggle="modal" data-target="#policy_2"
+                                                       class="btn-link quest-text">동아리 회칙</a>에 동의합니다.</label>
+                                            </div>
+                                        </div>
+                                    {% endif %}
 
                                     <!-- 입부신청 버튼 -->
                                     <div class="form-group mt-5 mb-5">
@@ -308,7 +325,11 @@
                     </div>
                 </div>
             </div>
-
+            {% if user_role == "5" %}
+                {% include "policy_modal.html" with modal_id="policy_1" policy_terms=policy_type_1 %}
+                {% include "policy_modal.html" with modal_id="policy_2" policy_terms=policy_type_2 %}
+                {% include "policy_modal.html" with modal_id="policy_3" policy_terms=policy_type_3 %}
+            {% endif %}
             <!-- 오른쪽 이미지를 넣을 장소 시작 -->
             <div class="item_flex_bg">
                 <img style="height: 100%; width: 100%" src="{% static 'images/blue-purple-technology-circuit.jpg' %}">
