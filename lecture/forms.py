@@ -202,6 +202,16 @@ class LectAssignmentForm(LectBoardFormBase):
         assignment.assignment_deadline = self.cleaned_data['assignment_deadline']
         assignment.save()
 
+    def save(self, **kwargs):
+        lect_board_ref = kwargs.get('lect_board_ref', None)
+        if '강의 선택' in lect_board_ref or lect_board_ref is None:
+            raise ValidationError(
+                code='invalid',
+                message=_('강의자가 과제 등록 시에는, 과제를 등록할 강의를 설정해야합니다!')
+            )
+        else:
+            super().save(**kwargs)
+
 
 # 타입에 맞는 강의 게시글 폼
 def make_lect_board_form(board_type, *args, **kwargs):

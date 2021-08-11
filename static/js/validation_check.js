@@ -45,7 +45,7 @@ function validation_check_for_img_file_upload() {
     return error;
 }
 
-function  validation_check_for_common_things() {
+function validation_check_for_common_things() {
     // common validation methods
     let array_of_validation_method = [
         validation_check_for_title,
@@ -121,6 +121,31 @@ function validation_check_for_contest() {
         return true;
     }
 }
+
+
+function validation_check_for_assignment_register() {
+    let errors = validation_check_for_common_things();
+
+    // validate assignment ref
+    let lect_board_ref = $('#select-box').val()
+    if (lect_board_ref === "강의 선택") {
+        errors.push('과제를 등록할 강의를 선택하세요!\n')
+    }
+
+    // validate deadline
+    let assignment_deadline = $('input[name="assignment_deadline"]').val()
+    if (assignment_deadline.length === 0) {
+        errors.push('과제 마감기한을 설정하세요!')
+    }
+
+    if (errors.length > 0) {
+         alert(errors.join(''));
+        return false;
+    } else {
+        return true;
+    }
+}
+
 
 // for board consist of only title and content, files are not necessary
 function validation_check_for_board(is_activity=false) {
