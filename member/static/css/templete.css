@@ -4153,20 +4153,20 @@ font-size: 17px;
 .dlab-login .login-form-box{
 	background-color: #fff;
 }
-.dlab-login:before {
-	content: "";
-    position: absolute;
-    left: 33.33%;
-    top: 0;
-    background-repeat: repeat-y;
-    bottom: 0;
-    width: 120px;
-    z-index: 999;
-    background-image: url(../images/background/pattern.png);
-    height: 100%;
-    background-position: left;
-    background-size: 100% auto;
-}
+/*.dlab-login:before {*/
+/*	content: "";*/
+/*    position: absolute;*/
+/*    left: 33.33%;*/
+/*    top: 0;*/
+/*    background-repeat: repeat-y;*/
+/*    bottom: 0;*/
+/*    width: 120px;*/
+/*    z-index: 999;*/
+/*    background-image: url(../images/background/pattern.png);*/
+/*    height: 100%;*/
+/*    background-position: left;*/
+/*    background-size: 100% auto;*/
+/*}*/
 .dlab-login .login-form .logo{
 	padding: 40px 10px;
     width: 180px;
@@ -4564,9 +4564,9 @@ font-size: 17px;
 		left: 0;
 		transform: none;
 	}
-	.dlab-login:before{
-		content: none;
-	}
+	/*.dlab-login:before{*/
+	/*	content: none;*/
+	/*}*/
 	.dlab-login .login-form .tab-content {
 		height: 100%;
 		padding: 0px 0 30px;
