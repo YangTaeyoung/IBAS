@@ -42,7 +42,7 @@ def introduce(request):
     # year당 제일 처음 있는 것을 mark함.
     for year in year_list:
         mark_list.append(History.objects.filter(history_date__year=year).order_by("history_date").first().history_no)
-    chief_crews = User.objects.filter(Q(user_role__role_no__lte=4) & Q(user_auth__auth_no=1)).prefetch_related('useremail_set').order_by("user_role__role_no").all()
+    chief_crews = User.objects.filter(Q(user_role__role_no__lte=4) & Q(user_auth__auth_no=1)).order_by("user_role__role_no").all()
     for history in history_list:
         for mark in mark_list:
             if history.history_no == mark:
