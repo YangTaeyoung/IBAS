@@ -61,13 +61,13 @@
     <link
             rel="stylesheet"
             type="text/css"
-            href="{% static 'css/templete_1.css' %}"
+            href="{% static 'css/templete.css' %}"
     />
     <link
             class="skin"
             rel="stylesheet"
             type="text/css"
-            href="{% static 'css/skin/skin-1.css' %}"
+            href="{% static 'css/skin/skin.css' %}"
     />
 
     <!-- 여기까지 기존 템플릿에 있던 것 -->
@@ -298,8 +298,8 @@
                                         <div style="display: flex; flex-direction: column">
                                             <!-- 개인정보 제공 동의 컨테이너 -->
                                             <div class="form-group item_flex_btn_center mb-0">
-                                                <input type="checkbox" required="required"/>
-                                                <label>
+                                                <input type="checkbox" id="privacy-policy" required="required"/>
+                                                <label for="privacy-policy">
                                                     본인은
                                                     <a href="#" data-toggle="modal" data-target="#policy_1"
                                                        class="btn-link quest-text">제3자 개인정보 동의 약관</a>과
