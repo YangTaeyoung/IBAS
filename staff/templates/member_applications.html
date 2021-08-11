@@ -44,13 +44,11 @@
             <div class="dlab-bnr-inr dlab-bnr-inr-sm overlay-black-middle"
                  style=" background-image: url('{% static 'images/board_name_img.jpg' %}'); height: 350px">
                 <!--상단 제목부분을 누르면 해당 게시판 목록으로 이동-->
-                <a href="#">
+                <a href="{% url 'staff_member_list' %}">
                     <div class="container clearfix">
                         <div class="dlab-bnr-inr-entry">
                             <!--제목-->
-                            <h1 class="text-white introduce-letter-spacing_5">지원서</h1>
-                            <!--부제목-->
-                            {#                            <p class="introduce-margin-top_20">신입부원 지원서를 볼 수 있는 게시판입니다. </p>#}
+                            <h1 class="text-white introduce-letter-spacing_5">{{ user.user_name }}님의 지원서</h1>
                         </div>
                     </div>
                 </a>
@@ -80,7 +78,7 @@
                         <!--====================================지원자 이름 시작==============================================-->
                         <div class="content-box">
                             <div class="content-header">
-                                <h3 class="title">지원자</h3>
+                                <h3 class="title">지원서</h3>
                             </div>
                             <div class="content-body">
                                 <div class="form-group">
