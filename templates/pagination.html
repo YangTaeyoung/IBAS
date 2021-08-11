@@ -9,7 +9,7 @@
                 <a href="?page={{ item_list.previous_page_number }}"> {{ item_list.previous_page_number }}</a>
             </li>
         {% endif %}
-        <li><a href="javascript:void(0)">{{ item_list.number }}</a></li>
+        <li class="active"><a href="javascript:void(0)">{{ item_list.number }}</a></li>
         {% if item_list.has_next %}
             <li>
                 <a href="?page={{ item_list.next_page_number }}"> {{ item_list.next_page_number }}</a>
