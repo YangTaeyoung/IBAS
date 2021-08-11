@@ -310,6 +310,9 @@ class LectAssignmentSubmit(models.Model):
         managed = False
         db_table = 'LECT_ASSIGNMENT_SUBMIT'
 
+    def get_file_path(self):
+        return os.path.join(MEDIA_ROOT, 'lecture', 'submitted', self.pk)
+
 
 class LectAssignmentStatus(models.Model):
     status = models.IntegerField(db_column="STATUS", primary_key=True)
