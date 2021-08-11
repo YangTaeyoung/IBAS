@@ -29,6 +29,7 @@ def get_email_list(user_model):
     return user_email_list
 
 
+@superuser_only(cfo_included=True)
 def staff_member_list(request):
     user = get_logined_user(request)
     if user.user_role.role_no <= 4:  # 회원에 대한 관리는 회장단만
