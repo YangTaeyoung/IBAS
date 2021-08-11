@@ -122,6 +122,24 @@ function validation_check_for_contest() {
     }
 }
 
+
+function validation_check_for_assignment_register() {
+    let errors = validation_check_for_common_things();
+
+    let lect_board_ref = $('#select-box').val()
+    if (lect_board_ref === "강의 선택") {
+        errors.push('과제를 등록할 강의를 선택하세요!\n')
+    }
+
+    if (errors.length > 0) {
+         alert(errors.join(''));
+        return false;
+    } else {
+        return true;
+    }
+}
+
+
 // for board consist of only title and content, files are not necessary
 function validation_check_for_board(is_activity=false) {
     let errors = validation_check_for_common_things();
