@@ -176,6 +176,7 @@ def board_view(request, board_type_no):  # 게시판 페이지로 이동
 # : 게시글 검색
 # 작성자 : 양태영
 # 마지막 수정 일시 :
+@auth_check()
 def board_search(request, board_type_no):
     if request.method == "GET":
         cur_user = get_logined_user(request)
@@ -205,7 +206,7 @@ def board_search(request, board_type_no):
                 "-board_created")
             if board_type_no == 8 and not role_check(cur_user, role_no=4, sign="lte"):
                 return not_allowed(request)
-            if board_type_no == 9 and role_check(cur_user, 6, "equal"):
+            if board_type_no == 9 and role_check(cur_user, 5, "gte"):
                 board_list = board_list.filter(board_writer=get_logined_user(request))
 
         item = get_page_object(request, board_list)
