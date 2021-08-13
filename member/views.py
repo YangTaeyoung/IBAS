@@ -3,7 +3,7 @@ from allauth.socialaccount.models import SocialAccount, \
     SocialToken  # 소셜 계정 DB, socialaccount_socialaccount 테이블을 사용하기 위함.
 from django.urls import reverse
 from DB.models import User, UserAuth, UserRole, QuestForm, Answer, UserEmail, \
-    MajorInfo, PolicyTerms  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
+    MajorInfo, PolicyTerms,UserSchedule  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
 from django.http import HttpResponseRedirect
 # 내가 만든 세션 모듈 불러오기
 from . import session
@@ -52,13 +52,13 @@ def join(request):  # 회원 가입 페이지를 랜더링 하는 함수
     for user in User.objects.all():
         stu_list.append(user.user_stu)  # 학생 리스트에서 학번만 뽑아서 학번 리스트 생성
         phone_list.append(user.user_phone)
-
+    user_role = request.POST.get("user_role")
     context = {  # hidden을 통해서 받은 회원들의 정보를 받아서 붙여넣음.
         "email": request.POST.get("email"),  # 이메일
         "name": request.POST.get("name"),  # 이름
         "pic": request.POST.get("pic"),  # 프로필 사진
         "provider": request.POST.get("provider"),
-        "user_role": request.POST.get("user_role"),  # 회원 역할 (학생 or 교수)
+        "user_role": user_role,  # 회원 역할 (학생 or 교수)
         "stu_list": stu_list,  # 학번 리스트
         "phone_list": phone_list,
         "quest_list": QuestForm.objects.all(),  # 질문 양식
@@ -80,7 +80,6 @@ def join_chk(request):  # 회원 가입 페이지로 부터 정보를 받
             "user_name": request.POST.get("user_name"),
             "user_stu": request.POST.get("user_stu"),
             "user_grade": int(request.POST.get("user_grade")),
-            "user_gen": request.POST.get("user_gen"),
             "user_phone": request.POST.get("user_phone"),
             "user_pic": request.POST.get("user_pic"),
             "provider": request.POST.get("provider"),
@@ -103,7 +102,7 @@ def quest_chk(request):
         user_name = request.POST.get("user_name")
         user_stu = request.POST.get("user_stu")
         user_grade = request.POST.get("user_grade")
-        user_gen = request.POST.get("user_gen")
+        user_gen = UserSchedule.objects.get(pk=1).generation
         user_phone = request.POST.get("user_phone")
         user_pic = request.POST.get("user_pic")
         provider = request.POST.get("provider")

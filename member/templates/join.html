@@ -61,7 +61,7 @@
     <link
             rel="stylesheet"
             type="text/css"
-            href="{% static 'css/templete_1.css' %}"
+            href="{% static 'css/templete.css' %}"
     />
     <link
             class="skin"
@@ -75,7 +75,6 @@
     <link rel="stylesheet" href="{% static 'css/login-join.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'css/size.css' %}">
     <link rel="stylesheet" href="{% static 'css/media.css' %}"/>
-
     <script>
         phoneIsNotOK = 0; // 핸드폰 중복 체크를 위한 변수 0:정상 1: 중복이 있음
         stuIsNotOK = 0;// 학 중복 체크를 위한 변수 0:정상 1: 중복이 있음
@@ -134,7 +133,13 @@
             -webkit-appearance: none;
             margin: 0;
         }
+
+        .dlab-login:before {
+            width: 0;
+            display: none;
+        }
     </style>
+
 </head>
 <body id="bg">
 <div id="loading-area"></div>
@@ -176,7 +181,6 @@
                             <input type="hidden" id="provider" name="provider" value="{{ provider }}"/>
                             <input type="hidden" id="is_activated" name="is_activated" value="0"/>
                             <!-- 승인 전까지는 대기하도록 0으로 설정 -->
-                            <input type="hidden" id="user_gen" name="user_gen" value="1"/> <!-- 기수, 바꿔주는게 필요할 듯. -->
                             <input type="hidden" id="user_pic" name="user_pic" value="{{ pic }}">
                             <!-- 프로필 사진, 받아온 것 그대로 넘기기 -->
                             <input type="hidden" name="user_email" value="{{ email }}"/> <!-- 이메일, 받아온 것 그대로 넘기기 -->
@@ -293,6 +297,24 @@
                                             <i class="fa fa-search fa-2x form-item-flex-major-icon search-btn"></i>
                                         </div>
                                     </div>
+                                    {% if user_role == "5" %}
+                                        <!-- 체크 박스, 동의 문구 컨테이너 -->
+                                        <div style="display: flex; flex-direction: column">
+                                            <!-- 개인정보 제공 동의 컨테이너 -->
+                                            <div class="form-group item_flex_btn_center mb-0">
+                                                <input type="checkbox" id="privacy-policy" required="required"/>
+                                                <label for="privacy-policy">
+                                                    본인은
+                                                    <a href="#" data-toggle="modal" data-target="#policy_1"
+                                                       class="btn-link quest-text">제3자 개인정보 동의 약관</a>과
+                                                    <a href="#" data-toggle="modal" data-target="#policy_3"
+                                                       class="btn-link quest-text">웹사이트 이용약관</a>,
+                                                    <a href="#" data-toggle="modal" data-target="#policy_2"
+                                                       class="btn-link quest-text">동아리 회칙</a>에 동의합니다.
+                                                </label>
+                                            </div>
+                                        </div>
+                                    {% endif %}
 
                                     <!-- 입부신청 버튼 -->
                                     <div class="form-group mt-5 mb-5">
@@ -308,7 +330,11 @@
                     </div>
                 </div>
             </div>
-
+            {% if user_role == "5" %}
+                {% include "policy_modal.html" with modal_id="policy_1" policy_terms=policy_type_1 %}
+                {% include "policy_modal.html" with modal_id="policy_2" policy_terms=policy_type_2 %}
+                {% include "policy_modal.html" with modal_id="policy_3" policy_terms=policy_type_3 %}
+            {% endif %}
             <!-- 오른쪽 이미지를 넣을 장소 시작 -->
             <div class="item_flex_bg">
                 <img style="height: 100%; width: 100%" src="{% static 'images/blue-purple-technology-circuit.jpg' %}">

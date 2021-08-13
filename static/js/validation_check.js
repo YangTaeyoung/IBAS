@@ -45,7 +45,7 @@ function validation_check_for_img_file_upload() {
     return error;
 }
 
-function  validation_check_for_common_things() {
+function validation_check_for_common_things() {
     // common validation methods
     let array_of_validation_method = [
         validation_check_for_title,
@@ -62,6 +62,17 @@ function  validation_check_for_common_things() {
     }
 
     return errors;
+}
+
+function alert_or_submit(errors){
+    // if there are any errors, not submit contest_form and alert all messages!
+    if (errors.length > 0) {
+        alert(errors.join(''));
+        return false;
+    } else {
+        $("#overlay, #PleaseWait").show();
+        return true;
+    }
 }
 
 // for contest board
@@ -112,15 +123,29 @@ function validation_check_for_contest() {
         errors.push(img_file_error);
     }
 
+    return alert_or_submit(errors)
 
-    // if there are any errors, not submit contest_form and alert all messages!
-    if (errors.length > 0) {
-        alert(errors.join(''));
-        return false;
-    } else {
-        return true;
-    }
 }
+
+
+function validation_check_for_assignment_register() {
+    let errors = validation_check_for_common_things();
+
+    // validate assignment ref
+    let lect_board_ref = $('#select-box').val()
+    if (lect_board_ref === "강의 선택") {
+        errors.push('과제를 등록할 강의를 선택하세요!\n')
+    }
+
+    // validate deadline
+    let assignment_deadline = $('input[name="assignment_deadline"]').val()
+    if (assignment_deadline.length === 0) {
+        errors.push('과제 마감기한을 설정하세요!')
+    }
+
+    return alert_or_submit(errors);
+}
+
 
 // for board consist of only title and content, files are not necessary
 function validation_check_for_board(is_activity=false) {
@@ -134,13 +159,7 @@ function validation_check_for_board(is_activity=false) {
         }
     }
     
-    // if there are any errors, not submit contest_form and alert all messages!
-    if (errors.length > 0) {
-        alert(errors.join(''));
-        return false;
-    } else {
-        return true;
-    }
+    return alert_or_submit(errors);
 }
 
 // for lecture, study
@@ -214,12 +233,20 @@ function validation_check_for_lecture() {
         errors.push(img_error);
     }
     
-    // if there are any errors, not submit contest_form and alert all messages!
-    if (errors != null && errors.length > 0) {
-        alert(errors.join(''));
-        return false;
-    } else {
-        return true;
+    return alert_or_submit(errors);
+}
+// $("body").prepend('<div id="overlay" class="ui-widget-overlay" style="z-index: 1001; display: none;"></div>');
+// $("body").prepend("<div id='PleaseWait' style='display: none;'><img src='/images/spinner.gif'/></div>");
+// $("#overlay, #PleaseWait").show();
+
+function disable_check_box() {
+    let check_box = $('input:checkbox[id^="check"]')
+
+    if ($(check_box[0]).attr('id').includes('*')) {
+        $(check_box).each(function () {
+            $(this).attr("disabled", true);
+        });
+        $('button.site-button').attr("disabled", true);
     }
 }
 

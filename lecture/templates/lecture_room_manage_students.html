@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/size.css' %}">
     <script src="{% static 'js/ibas_centents.js' %}"></script>
     <script src="{% static 'js/comment.js' %}"></script>
+    <script src="{% static 'js/validation_check.js' %}"></script>
     <script>
     $(function () {
         $('tr.lectRoom_tr').each(function () {
@@ -14,6 +15,8 @@
                 $(this).find('input').prop('disabled', true);
             }
         })
+
+        disable_check_box();
     })
     </script>
 
@@ -109,7 +112,7 @@
                                                             {% csrf_token %}
                                                             <!-- 체크박스 -->
                                                             <div class="input-block">
-                                                                <input id="check_{% personal_info info.enrolled.student.user_stu request lect %} "
+                                                                <input id="check_{% personal_info info.enrolled.student.user_stu request lect %}"
                                                                        type="checkbox"
                                                                        name="is_checked_{% personal_info info.enrolled.student.user_stu request lect%}"
                                                                        value="{{ info.enrolled.id }}">

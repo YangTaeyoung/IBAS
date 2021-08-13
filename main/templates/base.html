@@ -55,6 +55,12 @@
         {% endfor %}
     {% endif %}
 
+    <script>
+    $(function (){
+        $("body").prepend('<div id="overlay" class="ui-widget-overlay" style="z-index: 1001; display: none;"></div>');
+        $("body").prepend("<div id='PleaseWait' style='display: none;'><img src='/images/loading.svg'/></div>");
+    })
+    </script>
 </head>
 <body id="bg">
 <div id="loading-area"></div>
