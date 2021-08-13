@@ -30,6 +30,17 @@
         }
     </script>
 
+    <style>
+        /* 페이지네이션 색 관련 css*/
+        .page-item.active .page-link {
+            z-index: 1;
+            color: #fff;
+            background-color: #4611a7;
+            border-color: #4611a7;
+        }
+
+    </style>
+
 
     <div class="page-wraper">
         <!-- 상단 제목부분 -->
@@ -169,7 +180,9 @@
                                                     <!-- 회원 이름 -->
                                                     <td class="text-center">{{ new_user.user_name }}</td>
                                                     <!-- 회원 학년 -->
-                                                    <td class="mem_grade text-center">{% if new_user.user_grade != 5 %}{{ new_user.user_grade }}학년{% else %}교수{% endif %}</td>
+                                                    <td class="mem_grade text-center">
+                                                        {% if new_user.user_grade != 5 %}{{ new_user.user_grade }}
+                                                            학년{% else %}교수{% endif %}</td>
                                                     <!-- 회원 학번 -->
                                                     <td class="text-center">{{ new_user.user_stu }}</td>
                                                     <!-- 회원 전화번호 -->
@@ -216,7 +229,7 @@
                                                             </li>
                                                         {% endif %}
                                                         <li class="page-item active"><a class="page-link"
-                                                                                 href="#">{{ new_user_list.number }}</a>
+                                                                                        href="#">{{ new_user_list.number }}</a>
                                                         </li>
                                                         {% if new_user_list.has_next %}
                                                             <li class="page-item"><a class="page-link"
@@ -403,7 +416,7 @@
                                                             </li>
                                                         {% endif %}
                                                         <li class="page-item active"><a class="page-link"
-                                                                                 href="#">{{ exist_user_list.number }}</a>
+                                                                                        href="#">{{ exist_user_list.number }}</a>
                                                         </li>
                                                         {% if exist_user_list.has_next %}
                                                             <li class="page-item"><a class="page-link"
@@ -556,7 +569,7 @@
                                                             </li>
                                                         {% endif %}
                                                         <li class="page-item active"><a class="page-link"
-                                                                                 href="#">{{ user_update_request_list.number }}</a>
+                                                                                        href="#">{{ user_update_request_list.number }}</a>
                                                         </li>
                                                         {% if user_update_request_list.has_next %}
                                                             <li class="page-item"><a class="page-link"
