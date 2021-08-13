@@ -359,7 +359,7 @@ def contest_view(request):
     # 공모전 게시물 전부를 해당 파일과 함께 Queryset 으로 가져오기
     contest_board_list_1 = ContestBoard.objects.filter(contest_deadline__gte=today()).order_by(
         'contest_deadline').prefetch_related("files")
-    contest_board_list_2 = ContestBoard.objects.filter(contest_deadline__lte=today()).order_by(
+    contest_board_list_2 = ContestBoard.objects.filter(contest_deadline__lt=today()).order_by(
         "contest_deadline").prefetch_related("files")
     contest_board_list = contest_board_list_1.union(contest_board_list_2)
     # pagination 을 위한 page 객체 (page 객체 안에는 한 페이지에 보여줄만큼의 게시물이 들어있다.)
