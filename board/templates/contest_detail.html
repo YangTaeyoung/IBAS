@@ -58,7 +58,7 @@
                                         <ul class="d-flex align-items-center">
                                             <!-- 공모전 주체기관 -->
                                             <li class="post-author"><i class="ti ti-home"></i><a
-                                                    href="javascript:void(0);">{{ contest.contest_asso }}</a></li>
+                                                    href="javascript:void(0);">{{ contest.contest_asso |truncatechars:18 }}</a></li>
                                             <!-- 공모전 기간 -->
                                             <li class="post-comment"><i class="ti ti-calendar"></i> <a
                                                     href="javascript:void(0);">{{ contest.contest_start|date:"Y-m-d" }}
