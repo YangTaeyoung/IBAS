@@ -26,8 +26,8 @@
                 {% endif %}
             </p>
             <p {% if is_user_recruiting %}class="font-weight-bold"{% endif %}>
-                &gt; {{ user_schedule.user_register_start|date:"Y-m-d h:i" }}
-                ~ {{ user_schedule.user_register_end|date:"Y-m-d h:i" }}
+                &gt; {{ user_schedule.user_register_start|date:"Y-m-d H:i" }}
+                ~ {{ user_schedule.user_register_end|date:"Y-m-d H:i" }}
 
             </p>
             <p class="font-weight-bold toast-small-title"># 면접 일정

@@ -38,10 +38,10 @@ def get_lect_list(request, type_no):
     if type_no != 4:  # 강의 개설 신청 게시판이 아닌 일반 게시판(강의, 스터디, 취미모임)의 경우
         lect_type = LectType.objects.get(pk=type_no)
         lect_list = Lect.objects.filter(Q(lect_type=lect_type) & Q(lect_state_id__gte=3)).prefetch_related(
-            "lectday_set", "enrolled_students").order_by("-lect_created").order_by("lect_state_id")
+            "enrolled_students").order_by("lect_deadline").order_by("lect_state_id")
     else:
         lect_list = Lect.objects.filter(Q(lect_type=LectType.objects.get(pk=1)) & Q(lect_state_id=1) | Q(
-            lect_state__state_no=2)).prefetch_related("lectday_set").prefetch_related("enrolled_students").order_by(
+            lect_state__state_no=2)).prefetch_related("enrolled_students").order_by(
             "-lect_created").order_by("lect_state_id")
     return lect_list
 
@@ -282,10 +282,8 @@ def lect_room_search(request, room_no):
     if request.method == "GET":
         k = request.GET.get("keyword")
 
-        search_result = LectBoard.objects.filter((
-                                                         Q(lect_board_title__icontains=k) | Q(
-                                                     lect_board_cont__icontains=k) |
-                                                         Q(lect_board_writer__user_name__icontains=k)) & Q(
+        search_result = LectBoard.objects.filter((Q(lect_board_title__icontains=k) | Q(lect_board_cont__icontains=k) |
+                                                  Q(lect_board_writer__user_name__icontains=k)) & Q(
             lect_no_id=room_no)).order_by('-lect_board_created')
 
         # 검색 필터 (검색 범위: 강의게시글 제목, 강의게시글 내용, 강의게시글 작성자)
@@ -550,9 +548,9 @@ def lect_assignment_update(request, room_no, submit_no):
 
 # 수강생이, 제출했던 과제 삭제하는 경우
 @writer_only()
-def lect_assignment_delete(request, room_no, assignment_submit_no):
+def lect_assignment_delete(request, room_no, submit_no):
     if request.method == "POST":
-        assignment = get_object_or_404(LectAssignmentSubmit, pk=assignment_submit_no)
+        assignment = get_object_or_404(LectAssignmentSubmit, pk=submit_no)
         FileController.delete_all_files_of_(assignment)
         assignment.delete()
 
@@ -824,10 +822,14 @@ def lect_room_manage_attendance(request, room_no):
         return redirect(reverse('lect_room_manage_attendance', kwargs={'room_no': room_no}), )
 
 
-@instructor_only(superuser=False)
+# 제작: 양태영
+# 제작일: 2021-08-11
+# 설명: 강의자가 강의를 종강처리할 때 사용하는 뷰.
+@instructor_only(superuser=False)  # 강의자만 가능, 관리자는 임의로 종강 처리할 수 없음.
 def lect_terminate(request, lect_no):
     lect = Lect.objects.get(pk=lect_no)
     lect.lect_state = StateInfo.objects.get(pk=4)
     lect.save()
+    # 종강 처리 정상처리 이후 메시지를 띄움.
     messages.warning(request, "정상적으로 종강 처리되었습니다. IBAS에서 강의해주셔서 정말 감사합니다.")
     return redirect("lect_view", type_no=lect.lect_type_id)

@@ -10,9 +10,7 @@ from datetime import date, timedelta
 import os
 from django.db import models
 from datetime import datetime
-
 from django.utils import timezone
-
 from IBAS.settings import MEDIA_ROOT
 import pytz
 from django_summernote.fields import SummernoteTextField
@@ -174,18 +172,6 @@ class BoardType(models.Model):
         db_table = 'BOARD_TYPE'
 
 
-class ChiefCarrier(models.Model):
-    carrier_no = models.AutoField(db_column='CARRIER_NO', primary_key=True)  # Field name made lowercase.
-    carrier_content = models.CharField(db_column='CARRIER_CONTENT', max_length=300, blank=True,
-                                       null=True)  # Field name made lowercase.
-    chief_user = models.ForeignKey('User', on_delete=models.CASCADE,
-                                   db_column='CHIEF_USER')  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'CHIEF_CARRIER'
-
-
 class ContestBoard(models.Model):
     contest_no = models.AutoField(db_column='CONTEST_NO', primary_key=True)
     contest_title = models.CharField(db_column='CONTEST_TITLE', max_length=100)
@@ -290,22 +276,13 @@ class Lect(models.Model):
         return len(self.enrolled_students.filter(status_id=1))
 
 
-class LectDay(models.Model):
-    day_no = models.AutoField(db_column='DAY_NO', primary_key=True)
-    lect_no = models.ForeignKey("Lect", on_delete=models.CASCADE, db_column="LECT_NO")
-    day_name = models.CharField(db_column='DAY_NAME', max_length=2)
-
-    class Meta:
-        managed = False
-        db_table = "LECT_DAY"
-
 
 class LectAttendance(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)
     lect_no = models.ForeignKey('Lect', on_delete=models.CASCADE, db_column="LECT_NO", related_name='attendance')
     lect_board_no = models.ForeignKey('LectBoard', on_delete=models.CASCADE, db_column="LECT_BOARD_NO",
                                       related_name='attendance_info')  # 한 강의에 출석한 수강생들 목록
-    student = models.ForeignKey('User', on_delete=models.CASCADE, db_column='STUDENT')
+    student = models.ForeignKey('User', on_delete=models.SET_DEFAULT, db_column='STUDENT', default=0)
     lect_attend_date = models.DateTimeField(db_column='LECT_ATTEND_DATE', auto_now_add=True, null=True)
 
     class Meta:
@@ -319,17 +296,22 @@ class LectAssignmentSubmit(models.Model):
     assignment_title = models.CharField(db_column='ASSIGNMENT_TITLE', max_length=100)
     assignment_submit_created = models.DateTimeField(db_column='ASSIGNMENT_SUBMIT_CREATED', auto_now_add=True)
     assignment_cont = models.TextField(db_column='ASSIGNMENT_CONT')
-    assignment_submitter = models.ForeignKey('User', on_delete=models.DO_NOTHING, db_column='ASSIGNMENT_SUBMITTER')
+    assignment_submitter = models.ForeignKey('User', on_delete=models.SET_DEFAULT, default=0,
+                                             db_column='ASSIGNMENT_SUBMITTER')
     assignment_no = models.ForeignKey('LectBoard', on_delete=models.CASCADE, db_column='ASSIGNMENT_NO',
                                       related_name='submissions')
     lect_no = models.ForeignKey('Lect', on_delete=models.CASCADE, db_column='LECT_NO',
                                 related_name='submitted_assignments')
-    status = models.ForeignKey('LectAssignmentStatus', on_delete=models.DO_NOTHING, db_column="STATUS", default=0)
+    status = models.ForeignKey('LectAssignmentStatus', on_delete=models.SET_NULL, null=True, db_column="STATUS",
+                               default=0)
     reject_reason = models.CharField(db_column="REJECT_REASON", max_length=200, null=True)
 
     class Meta:
         managed = False
         db_table = 'LECT_ASSIGNMENT_SUBMIT'
+
+    def get_file_path(self):
+        return os.path.join(MEDIA_ROOT, 'lecture', 'submitted', self.pk)
 
 
 class LectAssignmentStatus(models.Model):

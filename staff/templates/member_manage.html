@@ -30,6 +30,17 @@
         }
     </script>
 
+    <style>
+        /* 페이지네이션 클릭 시 색 관련 css*/
+        .page-item.active .page-link {
+            z-index: 1;
+            color: #fff;
+            background-color: #4611a7;
+            border-color: #4611a7;
+        }
+
+    </style>
+
 
     <div class="page-wraper">
         <!-- 상단 제목부분 -->
@@ -216,8 +227,8 @@
                                                                 </a>
                                                             </li>
                                                         {% endif %}
-                                                        <li class="page-item"><a class="page-link"
-                                                                                 href="#">{{ new_user_list.number }}</a>
+                                                        <li class="page-item active"><a class="page-link"
+                                                                                        href="#">{{ new_user_list.number }}</a>
                                                         </li>
                                                         {% if new_user_list.has_next %}
                                                             <li class="page-item"><a class="page-link"
@@ -403,8 +414,8 @@
                                                                 </a>
                                                             </li>
                                                         {% endif %}
-                                                        <li class="page-item"><a class="page-link"
-                                                                                 href="#">{{ exist_user_list.number }}</a>
+                                                        <li class="page-item active"><a class="page-link"
+                                                                                        href="#">{{ exist_user_list.number }}</a>
                                                         </li>
                                                         {% if exist_user_list.has_next %}
                                                             <li class="page-item"><a class="page-link"
@@ -426,6 +437,7 @@
                                             <!--페이지네이션 끝-->
                                         </div>
                                     </div>
+                                </form>
                                 </form>
                             </div>
                         {% endif %}
@@ -555,8 +567,8 @@
                                                                 </a>
                                                             </li>
                                                         {% endif %}
-                                                        <li class="page-item"><a class="page-link"
-                                                                                 href="#">{{ user_update_request_list.number }}</a>
+                                                        <li class="page-item active"><a class="page-link"
+                                                                                        href="#">{{ user_update_request_list.number }}</a>
                                                         </li>
                                                         {% if user_update_request_list.has_next %}
                                                             <li class="page-item"><a class="page-link"

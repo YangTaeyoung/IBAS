@@ -31,16 +31,18 @@ def index(request):
     return render(request, "index.html", context)
 
 
-# 동아리 소개 작업할 것임
+# 동아리 소개를 출력하기 위한 뷰 함수.
 def introduce(request):
     # 히스토리 내역을 가져옴
     history_list = History.objects.all().order_by("history_date")
+    # 연도당 하나만 띄우기 위해서 히스토리에 등록된 것들의 연도만 뽑아옴. 연도 리스트.
     year_list = list(range(history_list.first().history_date.year, history_list.last().history_date.year + 1))
+    # 연도가 띄워질 연혁을 담기 위한 리스트
     mark_list = []
+    # year당 제일 처음 있는 것을 mark함.
     for year in year_list:
         mark_list.append(History.objects.filter(history_date__year=year).order_by("history_date").first().history_no)
-    chief_crews = User.objects.filter(Q(user_role__role_no__lte=4) & Q(user_auth__auth_no=1)).prefetch_related(
-        'chiefcarrier_set').prefetch_related('useremail_set').order_by("user_role__role_no").all()
+    chief_crews = User.objects.filter(Q(user_role__role_no__lte=4) & Q(user_auth__auth_no=1)).order_by("user_role__role_no").all()
     for history in history_list:
         for mark in mark_list:
             if history.history_no == mark:

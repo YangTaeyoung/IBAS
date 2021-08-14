@@ -19,6 +19,7 @@ from file_controller import FileController
 from django.db import transaction
 from django.contrib import messages
 from post_controller import comment_delete_by_post_delete
+from exception_handler import exist_check
 
 
 # 모델에 따른 이메일 리스트를 불러오는 함수
@@ -29,6 +30,7 @@ def get_email_list(user_model):
     return user_email_list
 
 
+@superuser_only(cfo_included=True)
 def staff_member_list(request):
     user = get_logined_user(request)
     if user.user_role.role_no <= 4:  # 회원에 대한 관리는 회장단만
@@ -292,10 +294,12 @@ def member_delete_register(request, deleted_user):
             return redirect(reverse("index"))
 
 
+@exist_check
 def member_delete_detail(request, user_delete_no):
     user_delete = UserDelete.objects.get(pk=user_delete_no)
     # 제명 페이지는 일반인에게는 공개되어서는 안됨. 따라서 404페이지로 이동.
     cur_user = get_logined_user(request)
+    # 해당 부분은 superuser_check로 하면 안됨. 제명 대상자가 해당 안건을 조회 가능하여야만 함.
     if not role_check(cur_user, 4, "lte") and user_delete.deleted_user != get_logined_user(request):
         return not_allowed(request, error_404=True)
     user_delete_aor_apply = UserDeleteAor.objects.filter(Q(user_delete_no=user_delete) & Q(aor=1))

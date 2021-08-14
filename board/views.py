@@ -176,6 +176,7 @@ def board_view(request, board_type_no):  # 게시판 페이지로 이동
 # : 게시글 검색
 # 작성자 : 양태영
 # 마지막 수정 일시 :
+@auth_check()
 def board_search(request, board_type_no):
     if request.method == "GET":
         cur_user = get_logined_user(request)
@@ -205,7 +206,7 @@ def board_search(request, board_type_no):
                 "-board_created")
             if board_type_no == 8 and not role_check(cur_user, role_no=4, sign="lte"):
                 return not_allowed(request)
-            if board_type_no == 9 and role_check(cur_user, 6, "equal"):
+            if board_type_no == 9 and role_check(cur_user, 5, "gte"):
                 board_list = board_list.filter(board_writer=get_logined_user(request))
 
         item = get_page_object(request, board_list)
@@ -356,8 +357,11 @@ def board_delete(request, board_no):
 @auth_check(active=True)
 def contest_view(request):
     # 공모전 게시물 전부를 해당 파일과 함께 Queryset 으로 가져오기
-    contest_board_list = ContestBoard.objects.all().order_by('-contest_deadline').prefetch_related("files")
-
+    contest_board_list = list(ContestBoard.objects.filter(contest_deadline__gte=today()).order_by(
+        'contest_deadline').prefetch_related("files"))
+    contest_board_list_expired = list(ContestBoard.objects.filter(contest_deadline__lt=today()).order_by(
+        "contest_deadline").prefetch_related("files"))
+    contest_board_list.extend(contest_board_list_expired)
     # pagination 을 위한 page 객체 (page 객체 안에는 한 페이지에 보여줄만큼의 게시물이 들어있다.)
     contest_list = get_page_object(request, contest_board_list, num_of_boards_in_one_page=4)
 

@@ -70,6 +70,12 @@
     <link rel="stylesheet" href="{% static 'css/login-join.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'css/size.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/media.css' %}">
+    <style>
+        .dlab-login:before {
+            width: 0;
+            display: none;
+        }
+    </style>
 </head>
 <body id="bg">
 <div id="loading-area"></div>
@@ -93,7 +99,6 @@
                             <input type="hidden" name="user_name" value="{{ user_name }}"/>
                             <input type="hidden" name="user_auth" value="{{ user_auth }}"/>
                             <input type="hidden" name="user_email" value="{{ user_email }}"/>
-                            <input type="hidden" name="user_gen" value="{{ user_gen }}"/>
                             <input type="hidden" name="user_grade" value="{{ user_grade }}"/>
                             <input type="hidden" name="user_major" value="{{ user_major }}"/>
                             <input type="hidden" name="user_phone" value="{{ user_phone }}"/>
@@ -133,9 +138,12 @@
                                             <input type="checkbox" id="privacy-policy" required="required"/>
                                             <label for="privacy-policy"
                                             >본인은
-                                                <a href="#" data-toggle="modal" data-target="#policy_1" class="btn-link quest-text">제3자 개인정보 동의 약관</a>과
-                                                <a href="#" data-toggle="modal" data-target="#policy_3" class="btn-link quest-text">웹사이트 이용약관</a>,
-                                                <a href="#" data-toggle="modal" data-target="#policy_2" class="btn-link quest-text">동아리 회칙</a>에 동의합니다.</label>
+                                                <a href="#" data-toggle="modal" data-target="#policy_1"
+                                                   class="btn-link quest-text">제3자 개인정보 동의 약관</a>과
+                                                <a href="#" data-toggle="modal" data-target="#policy_3"
+                                                   class="btn-link quest-text">웹사이트 이용약관</a>,
+                                                <a href="#" data-toggle="modal" data-target="#policy_2"
+                                                   class="btn-link quest-text">동아리 회칙</a>에 동의합니다.</label>
                                         </div>
                                         {% if user_grade >= 3 %}
                                             <div class="form-group item_flex_btn_center m-b0">
@@ -169,9 +177,9 @@
     </div>
     <!-- Content END-->
     <!-- 약관 모달창 -->
-    {% include "policy_modal.html" with modal_id="policy_1" policy_terms=policy_type_1%}
-    {% include "policy_modal.html" with modal_id="policy_2" policy_terms=policy_type_2%}
-    {% include "policy_modal.html" with modal_id="policy_3" policy_terms=policy_type_3%}
+    {% include "policy_modal.html" with modal_id="policy_1" policy_terms=policy_type_1 %}
+    {% include "policy_modal.html" with modal_id="policy_2" policy_terms=policy_type_2 %}
+    {% include "policy_modal.html" with modal_id="policy_3" policy_terms=policy_type_3 %}
     <button class="scroltop fa fa-chevron-up"></button>
 </div>
 <!-- JAVASCRIPT FILES ========================================= -->
