@@ -36,13 +36,34 @@ def get_pol_name(method_no):
 # 타입에 맞는 강의 리스트를 반환하는 함수
 def get_lect_list(request, type_no):
     if type_no != 4:  # 강의 개설 신청 게시판이 아닌 일반 게시판(강의, 스터디, 취미모임)의 경우
-        lect_type = LectType.objects.get(pk=type_no)
-        lect_list = Lect.objects.filter(Q(lect_type=lect_type) & Q(lect_state_id__gte=3)).prefetch_related(
-            "enrolled_students").order_by("lect_deadline").order_by("lect_state_id")
-    else:
-        lect_list = Lect.objects.filter(Q(lect_type=LectType.objects.get(pk=1)) & Q(lect_state_id=1) | Q(
-            lect_state__state_no=2)).prefetch_related("enrolled_students").order_by(
-            "-lect_created").order_by("lect_state_id")
+        # 진행중이거나 마감된 강의
+        lect_list = Lect.objects.filter(Q(lect_type_id=type_no) & Q(lect_state_id=3)).prefetch_related(
+            "enrolled_students").order_by("lect_deadline")
+        # 이미 종료된 강의
+        lect_list_end = Lect.objects.filter(Q(lect_type_id=type_no) & Q(lect_state_id=4)).prefetch_related(
+            "enrolled_students").order_by("lect_deadline")
+
+        # 마감된 강의를 담을 리스트
+        lect_list_expired = list()
+        # 아직 모집중인 강의를 담을 리스트
+        lect_list_recruiting = list()
+
+        for lect in lect_list:
+            # 마감일이 지났거나, 인원이 가득 차면 True
+            if is_closed(lect):  
+                lect_list_expired.append(lect)  # 마감 리스트에 추가
+            # 그렇지 않은 경우, 즉 모집중인 경우
+            else:  
+                lect_list_recruiting.append(lect)  # 모집 리스트에 추가
+
+        lect_list_recruiting.extend(lect_list_expired)  # 모집 리스트와 마감 리스트를 합침
+        lect_list_recruiting.extend(lect_list_end)  # 모집 리스트와 종료 리스트를 합침
+        lect_list = lect_list_recruiting  # lect_list를 합친 리스트로 변환 (리턴하고 있는게 lect_list이므로)
+
+    else:  # 강의 개설 신청 게시판의 경우
+        # 강의이면서 대기중이거나 거절당한 강의를 가져옴
+        lect_list = Lect.objects.filter(Q(lect_type_id=1) & Q(lect_state_id__lte=2)).prefetch_related(
+            "enrolled_students").order_by("-lect_created").order_by("lect_state_id")
     return lect_list
 
 
