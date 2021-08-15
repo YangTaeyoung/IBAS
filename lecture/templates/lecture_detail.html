@@ -65,7 +65,8 @@
                             {% endif %}
                         {% endif %}
                         {% if lect.lect_state_id == 4 %}
-                            <div class="alert alert-secondary" role="alert" style="text-align: center; background-color: #d2d2d2">
+                            <div class="alert alert-secondary" role="alert"
+                                 style="text-align: center; background-color: #d2d2d2">
                                 <i>이미 종료된 강의입니다.</i>
                             </div>
                         {% endif %}
@@ -177,6 +178,19 @@
                             </div>
                         {% endif %}
                         <!--====================================장소 끝=============================================-->
+                        <!--====================================대표자 전화번호 시작==============================================-->
+                        <div class="content-box">
+                            <div class="content-header">
+                                <h3 class="title">대표자 이름</h3>
+                            </div>
+                            <div class="content-body">
+                                <div class="form-group">
+                                    <!--여기 뜨는 것은 작성자가 입력한 내용이 아닌, 작성자 개인정보에서 가져와서 뜨도록 수정-->
+                                    <a>{{ lect.lect_chief.user_name }}</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!--====================================대표자 전화번호 끝=============================================-->
                         <!--====================================대표자 전화번호 시작==============================================-->
                         <div class="content-box">
                             <div class="content-header">
