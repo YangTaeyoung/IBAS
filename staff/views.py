@@ -111,8 +111,8 @@ def staff_member_update(request):
                     new_user.user_role = UserRole.objects.get(pk=user_role)  # 권한 수정
                     new_user.user_auth = UserAuth.objects.get(pk=1)  # 회비는 납부한 것으로 가정.
                     new_user.save()
-                    create_user_role_update_alarm(new_user)
-                    create_user_auth_update_alarm(new_user, False)
+                    create_user_role_update_alarm(new_user)  # 유저의 역할이 변경되었을 때 알람을 보냄
+                    create_user_auth_update_alarm(new_user, False) # 유저의 권한이 변경되었을 때 알람을 보냄. is_apply = False의 경우 비활성화 되었음을 알림.
                     if int(user_role) == 1:
                         cur_user.user_role = UserRole.objects.get(pk=6)  # 바꾸고자 하는 사람은 일반 회원으로 역할 변경됨.
                         cur_user.save()
