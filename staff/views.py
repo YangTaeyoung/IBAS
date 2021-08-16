@@ -40,8 +40,7 @@ def staff_member_list(request):
                 ~Q(user_auth__auth_no=3) & Q(user_role__role_no=6) & Q(user_role__isnull=False))
         else:
             exist_user_list = User.objects.filter(
-                ~Q(user_auth__auth_no=3) & ~Q(user_role__role_no=1) & Q(user_role__isnull=False)).order_by(
-                "user_role_id").order_by("user_auth_id")  # 기존 회원 리스트
+                ~Q(user_auth__auth_no=3) & ~Q(user_role__role_no=1) & Q(user_role__isnull=False))  # 기존 회원 리스트
             for exist_user in exist_user_list:
                 if len(UserDelete.objects.filter(Q(deleted_user=exist_user) & Q(user_delete_state__state_no=1))) != 0:
                     exist_user.is_going_to_delete = True
@@ -50,6 +49,7 @@ def staff_member_list(request):
                 else:
                     exist_user.is_going_to_delete = False
                     exist_user.delete_no = 1
+        exist_user_list = exist_user_list.order_by("user_role_id").order_by("user_auth_id")
         user_update_request_list = UserUpdateRequest.objects.filter(updated_state__state_no=1)  # 이름 변경 신청을 받는 리스트
         new_user_items = get_paginator_list(request, "new_user", new_user_list, 10)
         exist_user_items = get_paginator_list(request, "exist_user", exist_user_list, 10)
