@@ -137,6 +137,7 @@ def staff_member_update(request):
 
 
 # 각 멤버 질문에 대한 답변 조회하기.
+@superuser_only()
 def member_applications(request):
     user = User.objects.get(pk=request.POST.get('user_stu'))
 
