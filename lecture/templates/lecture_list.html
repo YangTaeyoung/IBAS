@@ -133,12 +133,17 @@
                                                         {{ lect.lect_day }}
                                                     </span>
                                                     <!-- 강의 진행방식 Zoom 혹은 강의실 호수 -->
-                                                    <span class="text-primary mr-3 m-l30"><i
+                                                    <span class="text-primary mr-2 ml-3"><i
                                                             class="ti-location-pin"></i></span>
                                                     <!-- 강의 진행방식을 DB에서 가져와야 함 -->
-                                                    <span>6-345</span>
+                                                    {# 오프라인일 경우 장소를 그대로 가져오고, 오프라인이 아닐 경우 진행 방식이름을 대신 노출. #}
+                                                    {% if lect.lect_method_id == 1 %}
+                                                        <span>{{ lect.lect_place_or_link }}</span>
+                                                    {% else %}
+                                                        <span>{{ lect.lect_method.method_name }}</span>
+                                                    {% endif %}
                                                     <!-- 수강 신청한 인원 및 제한 인원 -->
-                                                    <span class="text-primary m-l40 mr-3"><i
+                                                    <span class="text-primary mr-2 ml-3"><i
                                                             class="fa fa-user"></i></span>
                                                     <!-- 강의 신청자 및 총 정원을 DB에서 가져와야 함. -->
                                                     <span>{{ lect.get_enrolled_std_num }} / {{ lect.lect_limit_num }} 명</span>
