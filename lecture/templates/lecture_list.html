@@ -137,7 +137,7 @@
                                                             class="ti-location-pin"></i></span>
                                                     <!-- 강의 진행방식을 DB에서 가져와야 함 -->
                                                     {# 오프라인일 경우 장소를 그대로 가져오고, 오프라인이 아닐 경우 진행 방식이름을 대신 노출. #}
-                                                    {% if lect.lect_method.method_no == 1 %}
+                                                    {% if lect.lect_method.method_no == "1" %}
                                                         <span>{{ lect.lect_place_or_link }}</span>
                                                     {% else %}
                                                         <span>{{ lect.lect_method.method_name }}</span>
