@@ -49,7 +49,7 @@ def staff_member_list(request):
                 else:
                     exist_user.is_going_to_delete = False
                     exist_user.delete_no = 1
-        exist_user_list = exist_user_list.order_by("user_auth_id").order_by("user_role_id")
+        exist_user_list = exist_user_list.order_by("user_auth_id", "user_role_id")
         user_update_request_list = UserUpdateRequest.objects.filter(updated_state__state_no=1)  # 이름 변경 신청을 받는 리스트
         new_user_items = get_paginator_list(request, "new_user", new_user_list, 10)
         exist_user_items = get_paginator_list(request, "exist_user", exist_user_list, 10)
