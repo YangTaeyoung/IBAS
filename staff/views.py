@@ -40,7 +40,8 @@ def staff_member_list(request):
                 ~Q(user_auth__auth_no=3) & Q(user_role__role_no=6) & Q(user_role__isnull=False))
         else:
             exist_user_list = User.objects.filter(
-                ~Q(user_auth__auth_no=3) & ~Q(user_role__role_no=1) & Q(user_role__isnull=False))  # 기존 회원 리스트
+                ~Q(user_auth__auth_no=3) & ~Q(user_role__role_no=1) & Q(user_role__isnull=False)).order_by(
+                "user_role_id").order_by("user_auth_id")  # 기존 회원 리스트
             for exist_user in exist_user_list:
                 if len(UserDelete.objects.filter(Q(deleted_user=exist_user) & Q(user_delete_state__state_no=1))) != 0:
                     exist_user.is_going_to_delete = True
