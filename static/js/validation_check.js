@@ -235,9 +235,6 @@ function validation_check_for_lecture() {
     
     return alert_or_submit(errors);
 }
-// $("body").prepend('<div id="overlay" class="ui-widget-overlay" style="z-index: 1001; display: none;"></div>');
-// $("body").prepend("<div id='PleaseWait' style='display: none;'><img src='/images/spinner.gif'/></div>");
-// $("#overlay, #PleaseWait").show();
 
 function disable_check_box() {
     let check_box = $('input:checkbox[id^="check"]')
@@ -248,5 +245,9 @@ function disable_check_box() {
         });
         $('button.site-button').attr("disabled", true);
     }
+}
+
+function validation_check_for_join(user_stu, user_phone) {
+
 }
 
