@@ -72,7 +72,7 @@
                             <div class="content-box">
                                 <!-- 제목 div -->
                                 <div class="content-header">
-                                    <h3 class="title"><i class="la la-users m-r5"></i>신입부원 관리 <span class="font-12 text-red">({{ new_user_list|length }})</span></h3>
+                                    <h3 class="title"><i class="la la-users m-r5"></i>신입부원 관리 <span class="font-12 text-red">({{ new_user_len }})</span></h3>
                                 </div>
                                 <!-- 신입부원 관리 콘텐츠 시작 -->
                                 <div class="content-body">
@@ -257,7 +257,7 @@
                             <!-- 회원 관리 콘텐츠 시작 -->
                             <div class="content-box">
                                 <div class="content-header">
-                                    <h3 class="title"><i class="la la-tasks m-r5"></i>동아리원 현황 <span class="font-12 text-red">({{ exist_user_list|length }})</span></h3></h3>
+                                    <h3 class="title"><i class="la la-tasks m-r5"></i>동아리원 현황 <span class="font-12 text-red">({{ exist_user_len }})</span></h3></h3>
                                 </div>
                                 <!-- 동아리원현황 관리 콘텐츠 시작 -->
                                 <form action="{% url 'staff_member_update' %}" method="post">
