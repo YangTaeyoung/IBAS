@@ -34,7 +34,7 @@ def get_email_list(user_model):
 def staff_member_list(request):
     user = get_logined_user(request)
     if user.user_role.role_no <= 4:  # 회원에 대한 관리는 회장단만
-        new_user_list = User.objects.filter(Q(user_auth__auth_no=3) & Q(user_role__isnull=False))  # 신입 부원 리스트
+        new_user_list = User.objects.filter(Q(user_auth__auth_no=3) & Q(user_role__isnull=False)).order_by("-user_joined")  # 신입 부원 리스트
         if user.user_role.role_no == 4:  # 총무일 경우
             exist_user_list = User.objects.filter(
                 ~Q(user_auth__auth_no=3) & Q(user_role__role_no=6) & Q(user_role__isnull=False))
