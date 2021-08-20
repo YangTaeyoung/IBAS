@@ -247,22 +247,30 @@ function disable_check_box() {
     }
 }
 
-function phone_update_form() {
+function phone_check(uri) {
     const user_phone = $("#user_phone").val();
     let error_msg = $('#error_text_phone');
     if(/^\d{3}-\d{3,4}-\d{4}$/.test(user_phone)) {
-        axios.get('/my_info/user/update/phone/', {
+        axios.get(uri, {
             params: {user_phone: user_phone},
             timeout: 1000
         })
             .then(() => {
-                $('form#update-phone-number').submit();
+                if(uri.includes('my_info')){
+                    let form = $('form#update-phone-number');
+                    form.attr('method', 'post');
+                    form.attr('action', uri);
+                    $(form).submit();
+                }
+                else {
+                    $(error_msg).hide();
+                }
             })
             .catch(res => {
                 if(res.response.status === 400) {
                     $(error_msg).text("입력한 핸드폰 번호가 중복됩니다.").show(); // 에러메시지 출력
                 } else {
-                    $(error_msg).text("서버 오류입니다. 잠시 후 다시 시도해주세요.").show();
+                    $(error_msg).text("오류입니다. 잠시 후 다시 시도해주세요.").show();
                 }
             })
     } else {
@@ -272,9 +280,72 @@ function phone_update_form() {
     return false;
 }
 
-function validation_check_for_join(user_stu, user_phone) {
-
+function stu_check_for_join() {
+    const user_stu = $('#user_stu').val();
+    let error_msg = $('#error_text_stu');
+    if(/\d{6,8}/.test(user_stu) && parseInt(user_stu) > 99999) {
+        axios.get('/join/', {
+            params: {user_stu: user_stu},
+            timeout: 1000
+        })
+            .then(() => {
+                $(error_msg).hide();
+            })
+            .catch(res => {
+                console.log(res.response)
+                if(res.response.status === 400) {
+                    $(error_msg).text('이미 등록되어 있는 학번입니다.').show();
+                } else {
+                    $(error_msg).text("오류입니다. 잠시 후 다시 시도해주세요.").show();
+                }
+            })
+    } else {
+        $(error_msg).text('유효하지 않은 형식입니다.').show();
+    }
 }
 
+function maxLengthCheck(object) {
+    if (object.value.length > object.maxLength) {
+        object.value = object.value.slice(0, object.maxLength);
+    }
+}
 
+function validation_check_for_join_form() {
+    let errors = [];
+
+    const user_name = $('#user_name').val().trim();
+    if(user_name == null || user_name.length === 0){
+        errors.push('이름을 입력하세요!\n');
+    }
+
+    const user_phone = $('#user_phone').val();
+    if(user_phone != null && user_phone.length > 0){
+        if($('#error_text_phone').css('display') === 'block'){
+            errors.push('핸드폰 번호를 확인하세요!\n');
+        }
+    } else {
+        errors.push('핸드폰 번호를 입력하세요!\n');
+    }
+
+    const user_stu = $('#user_stu').val();
+    if(user_stu != null && user_stu.length > 0) {
+        if($('#error_text_stu').css('display') === 'block'){
+            errors.push('학번을 확인하세요!\n');
+        }
+    } else {
+        errors.push('학번을 입력하세요!\n');
+    }
+
+    const user_major = $('#user_major').val();
+    if (user_major == null || user_major.length === 0) {
+        errors.push('전공을 선택하세요!\n');
+    }
+
+    const user_grade = $('#user_grade').val();
+    if (user_grade == null || user_grade.length === 0) {
+        errors.push('학년을 선택하세요!\n');
+    }
+
+    alert_or_submit(errors);
+}
 

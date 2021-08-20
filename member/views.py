@@ -64,21 +64,20 @@ def join(request):  # 회원 가입 페이지를 랜더링 하는 함수
 
     # 회원가입 폼 제출 전에, 사용자가 입력한 학번과 핸드폰 번호를 db와 비교 후 중복여부 알려줌
     if request.method == "GET":
-        msg, status = '', 200
-        user_stu = json.loads(request.body)['stu']
-        user_phone = json.loads(request.body)['user_phone']
+        user_stu = request.GET.get('user_stu', '')
+        user_phone = request.GET.get('user_phone', '')
 
-        if len(user_stu) < 5:
-            msg += '학번을 제대로 입력하세요!\n'
-            status = 400
-        if len(User.objects.filter(user_stu=user_stu)):
-            msg += '학번이 중복됩니다!\n'
-            status = 400
-        if len(User.objects.filter(user_phone=user_phone)):
-            msg += '핸드폰 번호가 중복됩니다!\n'
-            status = 400
+        if user_stu:
+            if len(User.objects.filter(user_stu=user_stu)):
+                return JsonResponse(status=400, data={})
+            else:
+                return JsonResponse(status=200, data={})
 
-        return JsonResponse(data={'msg': msg}, status=status)
+        elif user_phone:
+            if len(User.objects.filter(user_phone=user_phone)):
+                return JsonResponse(status=400, data={})
+            else:
+                return JsonResponse(status=200, data={})
 
 
 @user_recruit_check

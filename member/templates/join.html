@@ -75,13 +75,11 @@
     <link rel="stylesheet" href="{% static 'css/login-join.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'css/size.css' %}">
     <link rel="stylesheet" href="{% static 'css/media.css' %}"/>
-    <script>
-        function maxLengthCheck(object) {
-            if (object.value.length > object.maxLength) {
-                object.value = object.value.slice(0, object.maxLength);
-            }
-        }
-    </script>
+    <link rel="stylesheet" href="{% static 'js/validation_check.js' %}"/>
+
+    <!-- axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
     <style>
         input[type="number"]::-webkit-outer-spin-button,
         input[type="number"]::-webkit-inner-spin-button {
@@ -181,7 +179,7 @@
                                                 placeholder="핸드폰번호"
                                                 maxlength="13"
                                                 required="required"
-                                                onfocusout="phone_check()"
+                                                onfocusout="phone_check('{% url 'join' %}')"
                                                 onkeyup="inputPhoneNumber(this)"
                                         />
                                     </div>
@@ -191,7 +189,7 @@
                                         <!--학년 컨테이너-->
                                         {% if user_role == "6" %}
                                             <div class="width-100">
-                                                <select name="user_grade" required="required">
+                                                <select id="user_grade" name="user_grade" required="required">
                                                     <option value="1">
                                                         1학년
                                                     </option>
@@ -225,7 +223,7 @@
                                                     maxlength="6"
                                                     {% endif %}
                                                     oninput="maxLengthCheck(this)"
-                                                    onfocusout="stu_check()"
+                                                    onfocusout="stu_check_for_join()"
                                                     onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"
                                             />
                                         </div>
@@ -273,11 +271,9 @@
 
                                     <!-- 입부신청 버튼 -->
                                     <div class="form-group mt-5 mb-5">
-                                        <button class="site-button button-md" style="width: 100%;" type="button"
-                                                onclick="return form_check();">다음
-                                        </button>
+                                        <input class="site-button button-md" style="width: 100%;" type="submit"
+                                                onclick="return validation_check_for_join_form();" value="다음">
                                     </div>
-                                    <input style="display: none" type="submit" id="btn-next" value="다음"/>
                                 </div>
                             </div>
                             <!-- 입부신청 작성란  -->

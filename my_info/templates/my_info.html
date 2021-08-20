@@ -9,8 +9,8 @@
     <script src="{% static 'js/ibas_centents.js' %}"></script>
     <script src="{% static 'js/login-join.js' %}"></script>
     <script src="{% static '/js/form.js' %}"></script>
-    <script src="{% static '/js/validation_check.js' %}"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="{% static '/js/validation_check.js' %}"></script>
 
     <!-- Content -->
     <div class="page-content bg-white text-gray-1">
@@ -1055,7 +1055,7 @@
                                     </div>
                                     <!--내용부분-->
                                     <div class="modal-body">
-                                        <form id="update-phone-number" class="dlab-form" action="{% url 'user_phone_update' %}" method="post">
+                                        <form id="update-phone-number" class="dlab-form" >
                                             {% csrf_token %}
                                             <!--수정할 전화번호 입력창, Back : 입력하면 전화번호 중복체크 하도록 수정-->
                                             <div class="form-group pb-0 mb-1">
@@ -1069,7 +1069,7 @@
                                             <p id="error_text_phone" class="mx-auto font-10 m-0 p-0"
                                                style="color:red; display: none"></p>
                                             <input type="submit" class="site-button" style="width: 100%"
-                                                    onclick="return phone_update_form();" value="수정">
+                                                    onclick='return phone_check("{% url "user_phone_update" %}");' value="수정">
 
                                         </form>
                                     </div>
