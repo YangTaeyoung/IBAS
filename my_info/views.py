@@ -1,4 +1,7 @@
+import json
 import os
+
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, reverse
 from DB.models import Board, User, Comment, Bank, UserUpdateRequest, UserEmail, StateInfo, MajorInfo, Lect, \
     LectEnrollment, BoardType
@@ -125,6 +128,14 @@ def user_phone_update(request):
         current_user.user_phone = request.POST.get("user_phone")
         current_user.save()
         return redirect(reverse("my_info"))
+
+    elif request.method == "GET":
+        user_phone = request.GET.get("user_phone", "")
+        if len(User.objects.filter(user_phone=user_phone)):
+            return JsonResponse(status=400, data={'msg': '중복되는 번호입니다.'})
+        else:
+            return JsonResponse(status=200, data={})
+
     else:
         return redirect(reverse("index"))
 

@@ -75,58 +75,13 @@
     <link rel="stylesheet" href="{% static 'css/login-join.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'css/size.css' %}">
     <link rel="stylesheet" href="{% static 'css/media.css' %}"/>
-    <script>
-        phoneIsNotOK = 0; // 핸드폰 중복 체크를 위한 변수 0:정상 1: 중복이 있음
-        stuIsNotOK = 0;// 학 중복 체크를 위한 변수 0:정상 1: 중복이 있음
 
-        function stu_check() // 학번 중복 체크를 위한 함수
-        {
-            const stu_chk = document.getElementById("user_stu");// 사용자가 입력한 학번 오브젝트
-            {% for user_stu in stu_list %}
-                if (stu_chk.value === "{{ user_stu }}") // 이미 데이터베이스와 일치하는 학번이 있을경우
-                {
-                    document.getElementById("error_text_stu").style.display = "block"; // 에러메시지 출력
-                    stuIsNotOK = 1; // 중복 변수를 비정상으로 바꿈
-                    return 0;
-                }
-            {% endfor %}
-            document.getElementById('error_text_stu').style.display = 'none';
-            stuIsNotOK = 0;
-        }
 
-        function phone_check() // 핸드폰 중복 체크를 위한 함수
-        {
-            const phone_chk = document.getElementById("user_phone");
+    <!-- axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="{% static 'js/jquery.min.js' %}"></script><!-- JQUERY.MIN JS -->
+    <script src="{% static 'js/validation_check.js' %}"></script>
 
-            {% for phone in phone_list %}
-                if (phone_chk.value === "{{ phone }}") // 이미 유저 DB에 중복되는 핸드폰 번호가 존재하는 경우
-                {
-                    document.getElementById("error_text_phone").style.display = "block"; // 에러메시지 출력
-                    phoneIsNotOK = 1; // 중복 변수를 비정상으로 바꿈
-                    return 0;
-                }
-            {% endfor %}
-            document.getElementById('error_text_phone').style.display = 'none';
-            phoneIsNotOK = 0;
-        }
-
-        function form_check() {
-            if (stuIsNotOK !== 0 || phoneIsNotOK !== 0) // 학번과 핸드폰 중 하나라도 중복이 있는 경우
-            {
-                alert("회원 입력 양식을 다시 한번 확인하세요")
-            } else // 모두 정상인 경우
-            {
-                document.getElementById("btn-next").click(); // 보이지 않는 submit 버튼을 클릭하도록 설정.
-            }
-
-        }
-
-        function maxLengthCheck(object) {
-            if (object.value.length > object.maxLength) {
-                object.value = object.value.slice(0, object.maxLength);
-            }
-        }
-    </script>
     <style>
         input[type="number"]::-webkit-outer-spin-button,
         input[type="number"]::-webkit-inner-spin-button {
@@ -226,7 +181,7 @@
                                                 placeholder="핸드폰번호"
                                                 maxlength="13"
                                                 required="required"
-                                                onfocusout="phone_check()"
+                                                onfocusout="phone_check('{% url 'join' %}')"
                                                 onkeyup="inputPhoneNumber(this)"
                                         />
                                     </div>
@@ -236,7 +191,7 @@
                                         <!--학년 컨테이너-->
                                         {% if user_role == "6" %}
                                             <div class="width-100">
-                                                <select name="user_grade" required="required">
+                                                <select id="user_grade" name="user_grade" required="required">
                                                     <option value="1">
                                                         1학년
                                                     </option>
@@ -270,7 +225,7 @@
                                                     maxlength="6"
                                                     {% endif %}
                                                     oninput="maxLengthCheck(this)"
-                                                    onfocusout="stu_check()"
+                                                    onfocusout="stu_check_for_join()"
                                                     onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"
                                             />
                                         </div>
@@ -318,11 +273,9 @@
 
                                     <!-- 입부신청 버튼 -->
                                     <div class="form-group mt-5 mb-5">
-                                        <button class="site-button button-md" style="width: 100%;" type="button"
-                                                onclick="form_check()">다음
-                                        </button>
+                                        <input class="site-button button-md" style="width: 100%;" type="submit"
+                                                onclick="return validation_check_for_join_form();" value="다음">
                                     </div>
-                                    <input style="display: none" type="submit" id="btn-next" value="다음"/>
                                 </div>
                             </div>
                             <!-- 입부신청 작성란  -->

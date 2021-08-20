@@ -1,10 +1,12 @@
+import json
+
 from django.shortcuts import render, redirect, get_object_or_404
 from allauth.socialaccount.models import SocialAccount, \
     SocialToken  # 소셜 계정 DB, socialaccount_socialaccount 테이블을 사용하기 위함.
 from django.urls import reverse
 from DB.models import User, UserAuth, UserRole, QuestForm, Answer, UserEmail, \
     MajorInfo, PolicyTerms,UserSchedule  # 전체 계정 DB, AuthUser 테이블을 사용하기 위함.
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 # 내가 만든 세션 모듈 불러오기
 from . import session
 from urllib.request import urlretrieve  # 인터넷에 있는 파일 다운로드
@@ -47,29 +49,41 @@ def choose_std_or_pro(request):  # 학생인지, 교수인지 고르게 하는 �
 
 @user_recruit_check
 def join(request):  # 회원 가입 페이지를 랜더링 하는 함수
-    stu_list = list()  # 학생번호 리스트를 담을 변수.
-    phone_list = list()  # 핸드폰 번호를 담을 변수.
-    for user in User.objects.all():
-        stu_list.append(user.user_stu)  # 학생 리스트에서 학번만 뽑아서 학번 리스트 생성
-        phone_list.append(user.user_phone)
-    user_role = request.POST.get("user_role")
-    context = {  # hidden을 통해서 받은 회원들의 정보를 받아서 붙여넣음.
-        "email": request.POST.get("email"),  # 이메일
-        "name": request.POST.get("name"),  # 이름
-        "pic": request.POST.get("pic"),  # 프로필 사진
-        "provider": request.POST.get("provider"),
-        "user_role": user_role,  # 회원 역할 (학생 or 교수)
-        "stu_list": stu_list,  # 학번 리스트
-        "phone_list": phone_list,
-        "quest_list": QuestForm.objects.all(),  # 질문 양식
-        "major_list": MajorInfo.objects.all()  # 전공 리스트(전공 검색을 위해)
-    }
-    return render(request, "join.html", context)
+    if request.method == "POST":
+        user_role = request.POST.get("user_role")
+        context = {  # hidden을 통해서 받은 회원들의 정보를 받아서 붙여넣음.
+            "email": request.POST.get("email"),  # 이메일
+            "name": request.POST.get("name"),  # 이름
+            "pic": request.POST.get("pic"),  # 프로필 사진
+            "provider": request.POST.get("provider"),
+            "user_role": user_role,  # 회원 역할 (학생 or 교수)
+            "quest_list": QuestForm.objects.all(),  # 질문 양식
+            "major_list": MajorInfo.objects.all()  # 전공 리스트(전공 검색을 위해)
+        }
+        return render(request, "join.html", context)
+
+    # 회원가입 폼 제출 전에, 사용자가 입력한 학번과 핸드폰 번호를 db와 비교 후 중복여부 알려줌
+    if request.method == "GET":
+        user_stu = request.GET.get('user_stu', '')
+        user_phone = request.GET.get('user_phone', '')
+
+        if user_stu:
+            if len(User.objects.filter(user_stu=user_stu)):
+                return JsonResponse(status=400, data={})
+            else:
+                return JsonResponse(status=200, data={})
+
+        elif user_phone:
+            if len(User.objects.filter(user_phone=user_phone)):
+                return JsonResponse(status=400, data={})
+            else:
+                return JsonResponse(status=200, data={})
 
 
 @user_recruit_check
 def join_chk(request):  # 회원 가입 페이지로 부터 정보를 받
-    if request.method == "POST":  # POST로 데이터가 들어왔을 경우, 안들어 왔다면 -> 비정상 적인 접근임. 일반적으로 GET을 통해서는 접근이 불가능 해야함.
+    # POST로 데이터가 들어왔을 경우, 안들어 왔다면 -> 비정상 적인 접근임. 일반적으로 GET을 통해서는 접근이 불가능 해야함.
+    if request.method == "POST":
         # 사용자 정보를 받아옴
 
         context = {  # 회원 가입 정보를 받아서 질문 폼으로 전송

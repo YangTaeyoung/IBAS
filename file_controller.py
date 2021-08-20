@@ -22,7 +22,7 @@ class FileController:
     # 이미지인지 확인하는 함수. 파라미터(파일 경로)
     @staticmethod
     def is_image(file_path):
-        path, ext = os.path.splitext(str(file_path))
+        path, ext = os.path.splitext(str(file_path).lower())
 
         if ext in ['.jpg', '.jpeg', '.png', '.bmp', '.gif']:
             return True
