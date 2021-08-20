@@ -28,3 +28,6 @@ npm run serve
 - vue build
 (IBAS_venv) shinseungyeon@Shinui-MacBookPro front_vue % npm run build
 (IBAS_venv) shinseungyeon@Shinui-MacBookPro IBAS % python manage.py collectstatic
+
+- vue로 앱 생성하기
+vue create 파일이름
