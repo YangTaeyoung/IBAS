@@ -97,11 +97,14 @@
 </head>
 <body id="bg">
 <script>
-    $(function () {
-        maxLengthCheck;
-        stu_check_for_join;
-        phone_check;
+    $('#user_stu').on('oninput', function () {
+        console.log('1', this.target);
+        console.log('2', this.target);
+        maxLengthCheck(this.target);
     })
+    $('#user_stu').on('onfocusout', stu_check_for_join())
+    $('#user_phone').on('onfocusout', phone_check("{% url 'join' %}"))
+
 </script>
 <div id="loading-area"></div>
 <div class="page-wraper">
@@ -187,7 +190,6 @@
                                                 placeholder="핸드폰번호"
                                                 maxlength="13"
                                                 required="required"
-                                                onfocusout="phone_check('{% url 'join' %}')"
                                                 onkeyup="inputPhoneNumber(this)"
                                         />
                                     </div>
@@ -231,7 +233,6 @@
                                                     maxlength="6"
                                                     {% endif %}
                                                     oninput="maxLengthCheck(this)"
-                                                    onfocusout="stu_check_for_join()"
                                                     onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"
                                             />
                                         </div>
