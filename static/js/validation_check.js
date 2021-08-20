@@ -286,7 +286,7 @@ function stu_check_for_join() {
     const user_stu = $('#user_stu').val();
     let error_msg = $('#error_text_stu');
     if(/\d{6,8}/.test(user_stu) && parseInt(user_stu) > 99999) {
-        axios.get('/join/', {
+        axios.get('/user/join/', {
             params: {user_stu: user_stu},
             timeout: 1000
         })
