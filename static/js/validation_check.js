@@ -247,7 +247,34 @@ function disable_check_box() {
     }
 }
 
+function phone_update_form() {
+    const user_phone = $("#user_phone").val();
+    let error_msg = $('#error_text_phone');
+    if(/^\d{3}-\d{3,4}-\d{4}$/.test(user_phone)) {
+        axios.get('/my_info/user/update/phone/', {
+            params: {user_phone: user_phone},
+            timeout: 1000
+        })
+            .then(() => {
+                $('form#update-phone-number').submit();
+            })
+            .catch(res => {
+                if(res.response.status === 400) {
+                    $(error_msg).text("입력한 핸드폰 번호가 중복됩니다.").show(); // 에러메시지 출력
+                } else {
+                    $(error_msg).text("서버 오류입니다. 잠시 후 다시 시도해주세요.").show();
+                }
+            })
+    } else {
+        $(error_msg).text("전화번호 형식에 맞지 않습니다.").show();
+        return false;
+    }
+    return false;
+}
+
 function validation_check_for_join(user_stu, user_phone) {
 
 }
+
+
 

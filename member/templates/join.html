@@ -76,26 +76,6 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/size.css' %}">
     <link rel="stylesheet" href="{% static 'css/media.css' %}"/>
     <script>
-
-        function form_check() {
-            let flag = false;
-            let user_stu = $('#user_stu').val();
-            let user_phone = $('#user_phone').val();
-            if (validation_check_for_join(user_stu, user_phone)) {
-
-            } else {
-                axios.get('https://inhabas.com/join', {user_stu:user_stu, user_phone:user_phone})
-                .then(() => {
-                    return true;
-                })
-                .catch(response => {
-                    alert('failed!\n' + response.data.msg);
-                })
-            }
-
-            return false;
-        }
-
         function maxLengthCheck(object) {
             if (object.value.length > object.maxLength) {
                 object.value = object.value.slice(0, object.maxLength);
