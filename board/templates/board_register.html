@@ -29,7 +29,9 @@
 
             {% load widget_tweaks %}
             <!--===============================================입력란=========================================================-->
-            <form action="{% if board_no is None %}{% url 'board_register' %}{% else %}{% url 'board_update' board_no %}{% endif %}"
+            <form action="
+
+                    {% if board_no is None %}{% url 'board_register' %}{% else %}{% url 'board_update' board_no %}{% endif %}"
                   class="add-listing-form" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <!-- 히든태그!! 몽땅!!-->
@@ -64,7 +66,7 @@
                                 <div class="content-header">
                                     <h3 class="title">
                                         게시글 작성&nbsp;&nbsp;&nbsp;&nbsp;
-                                        {% if logined_user.user_role.role_no <= 4 and board_type_no != 2 and board_type_no != 9%}
+                                        {% if logined_user.user_role.role_no <= 4 and board_type_no != 2 and board_type_no != 9 %}
                                             <div class="d-inline-block width-120">
                                                 <select name="board_fixdate">
                                                     <option value="0"> 상단 고정 여부</option>
@@ -85,6 +87,8 @@
                                         <!--이미지, 파일 업로드란-->
                                         <div class="form-group">
                                             {% if board_type_no == 8 %}
+                                                {% render_field file_form.upload_file accept="*" %}
+                                            {% elif board_type_no >= 6 and board_type_no <= 7 %}
                                                 {% render_field file_form.upload_file accept="*" %}
                                             {% else %}
                                                 {{ file_form.upload_file }}
@@ -111,8 +115,8 @@
                             <!--최초 글작성 시 나오는 버튼-->
                             <div style="display: grid; justify-items: center">
                                 <input class="site-button btn-block button-md" type="submit" style="width: 30%"
-                                    value="{% if board_no is None %}등록하기{% else %}수정하기{% endif %}"
-                                    onclick="return validation_check_for_board();">
+                                       value="{% if board_no is None %}등록하기{% else %}수정하기{% endif %}"
+                                       onclick="return validation_check_for_board();">
                             </div>
 
                             <!-- Pagination END -->
