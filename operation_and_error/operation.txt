@@ -20,3 +20,11 @@ mysql.server start
 
 - 데이터베이스 복제
 mysqldump -uroot -pwebproj3971-- IBAS > IBAS.sql
+
+- vue 돌리기
+cd front_vue
+npm run serve
+
+- vue build
+(IBAS_venv) shinseungyeon@Shinui-MacBookPro front_vue % npm run build
+(IBAS_venv) shinseungyeon@Shinui-MacBookPro IBAS % python manage.py collectstatic
