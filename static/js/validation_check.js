@@ -248,6 +248,7 @@ function disable_check_box() {
 }
 
 function phone_check(uri) {
+    console.log('핸드폰번호검사를 위한 axios 호출!');
     const user_phone = $("#user_phone").val();
     let error_msg = $('#error_text_phone');
     if(/^\d{3}-\d{3,4}-\d{4}$/.test(user_phone)) {
@@ -281,6 +282,7 @@ function phone_check(uri) {
 }
 
 function stu_check_for_join() {
+    console.log('학번검사를 위한 axios 호출!');
     const user_stu = $('#user_stu').val();
     let error_msg = $('#error_text_stu');
     if(/\d{6,8}/.test(user_stu) && parseInt(user_stu) > 99999) {
@@ -312,7 +314,7 @@ function maxLengthCheck(object) {
 
 function validation_check_for_join_form() {
     let errors = [];
-
+    console.log('함수호출!!');
     const user_name = $('#user_name').val().trim();
     if(user_name == null || user_name.length === 0){
         errors.push('이름을 입력하세요!\n');
@@ -345,7 +347,7 @@ function validation_check_for_join_form() {
     if (user_grade == null || user_grade.length === 0) {
         errors.push('학년을 선택하세요!\n');
     }
-
+    console.log('에러:', errors);
     alert_or_submit(errors);
 }
 
