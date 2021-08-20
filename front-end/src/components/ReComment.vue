@@ -16,14 +16,14 @@
       <ul class="d-flex">
         <li class="post-author">
           <a href="javascript:void(0);"> {{ comment.comment_writer.user_major }}
-            {{ comment.comment_writer.user_stu | subStr(2,4) }}학번</a>
+            {{ comment.comment_writer.user_stu  }}학번</a>
         </li>
 
 
         <li class="post-comment"><i
             class="ti ti-alarm-clock"></i>
           <a href="javascript:void(0);">
-            {{ comment.comment_created | timeFormat }}
+            {{ comment.comment_created  }}
           </a>
         </li>
       </ul>
@@ -96,28 +96,7 @@ export default {
     }
 
   },
-  filters: {
-    truncate: function (text, length) {
-      return String(text).slice(0, length)
-    },
-    subStr: function (text, start, end) {
-      return String(text).substring(start, end);
-    },
-    timeFormat: function (date) {
-      date = new Date(date)
-      let month = date.getMonth() + 1;
-      let day = date.getDate();
-      let hour = date.getHours();
-      let minute = date.getMinutes();
 
-      month = month >= 10 ? month : '0' + month;
-      day = day >= 10 ? day : '0' + day;
-      hour = hour >= 10 ? hour : '0' + hour;
-      minute = minute >= 10 ? minute : '0' + minute;
-
-      return date.getFullYear() + '-' + month + '-' + day + ' ' + hour + ':' + minute;
-    }
-  }
 }
 
 

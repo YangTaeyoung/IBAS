@@ -1,5 +1,5 @@
 {
-  "name": "front_vue",
+  "name": "front-end",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -10,18 +10,16 @@
   "dependencies": {
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
-    "vue": "^3.1.0",
-    "@vue/compat": "^3.1.0",
-    "vue-router": "^3.5.2"
+    "vue": "^3.0.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
+    "@vue/compiler-sfc": "^3.0.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
-    "eslint-plugin-vue": "^6.2.2",
-    "@vue/compiler-sfc": "^3.1.0"
+    "eslint-plugin-vue": "^7.0.0"
   },
   "eslintConfig": {
     "root": true,
@@ -29,7 +27,7 @@
       "node": true
     },
     "extends": [
-      "plugin:vue/essential",
+      "plugin:vue/vue3-essential",
       "eslint:recommended"
     ],
     "parserOptions": {
