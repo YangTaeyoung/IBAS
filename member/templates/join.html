@@ -2,7 +2,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
+
     <!-- 여기서부터 기존 템플릿에 있던 것 -->
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -75,11 +75,12 @@
     <link rel="stylesheet" href="{% static 'css/login-join.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'css/size.css' %}">
     <link rel="stylesheet" href="{% static 'css/media.css' %}"/>
-    <link rel="stylesheet" href="{% static 'js/validation_check.js' %}"/>
+
 
     <!-- axios -->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="{% static 'js/jquery.min.js' %}"></script><!-- JQUERY.MIN JS -->
+    <script src="{% static 'js/validation_check.js' %}"></script>
 
     <style>
         input[type="number"]::-webkit-outer-spin-button,
@@ -96,20 +97,6 @@
 
 </head>
 <body id="bg">
-<script>
-    $('#user_stu').on('input', function () {
-        console.log('1', this.target);
-        console.log('2', this.target);
-        maxLengthCheck(this.target);
-    })
-    $('#user_stu').focusout(function () {
-        stu_check_for_join();
-    })
-    $('#user_phone').focusout(function () {
-        phone_check("{% url 'join' %}")
-    })
-
-</script>
 <div id="loading-area"></div>
 <div class="page-wraper">
     <!-- Content -->
@@ -194,6 +181,7 @@
                                                 placeholder="핸드폰번호"
                                                 maxlength="13"
                                                 required="required"
+                                                onfocusout="phone_check('{% url 'join' %}')"
                                                 onkeyup="inputPhoneNumber(this)"
                                         />
                                     </div>
@@ -236,6 +224,8 @@
                                                     placeholder="교수번호"
                                                     maxlength="6"
                                                     {% endif %}
+                                                    oninput="maxLengthCheck(this)"
+                                                    onfocusout="stu_check_for_join()"
                                                     onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"
                                             />
                                         </div>
