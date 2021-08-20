@@ -1,4 +1,6 @@
 import { createApp } from 'vue'
-import App from './CommentList.vue'
+import Comment from './CommentList.vue'
+import Layout from './layouts/My_info.vue'
 
-createApp(App).mount('#CommentList')
+createApp(Comment).mount('#CommentList')
+createApp(Layout).mount('#app')
