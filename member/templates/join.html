@@ -97,13 +97,17 @@
 </head>
 <body id="bg">
 <script>
-    $('#user_stu').on('oninput', function () {
+    $('#user_stu').on('input', function () {
         console.log('1', this.target);
         console.log('2', this.target);
         maxLengthCheck(this.target);
     })
-    $('#user_stu').on('onfocusout', stu_check_for_join())
-    $('#user_phone').on('onfocusout', phone_check("{% url 'join' %}"))
+    $('#user_stu').focusout(function () {
+        stu_check_for_join();
+    })
+    $('#user_phone').focusout(function () {
+        phone_check("{% url 'join' %}")
+    })
 
 </script>
 <div id="loading-area"></div>
