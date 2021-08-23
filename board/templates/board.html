@@ -106,7 +106,7 @@
                                         <th scope="col">no.</th>
                                         <th scope="col" style="width: 500px">제목</th>
                                         <th scope="col">작성자</th>
-                                        <th scope="col">작성일</th>
+                                        <th scope="col" class="dis-none-media">작성일</th>
                                     </tr>
                                     </thead>
                                     <!-- 끌고오는 게시글 파트 -->
@@ -133,7 +133,7 @@
                                                 <!-- 게시글 작성자 -->
                                                 <td>{{ board_fixed.board_writer.user_name }}</td>
                                                 <!-- 게시글 작성일자 -->
-                                                <td>{{ board_fixed.board_created|date:"Y-m-d" }}</td>
+                                                <td class="dis-none-media">{{ board_fixed.board_created|date:"Y-m-d" }}</td>
                                             </tr>
                                         {% endfor %}
                                         {% for board in board_list %}
@@ -152,7 +152,7 @@
                                                 <!-- 게시글 작성자 -->
                                                 <td>{{ board.board_writer.user_name }}</td>
                                                 <!-- 게시글 작성일자 -->
-                                                <td>{{ board.board_created|date:"Y-m-d" }}</td>
+                                                <td class="dis-none-media">{{ board.board_created|date:"Y-m-d" }}</td>
                                             </tr>
                                         {% endfor %}
                                     {% else %}

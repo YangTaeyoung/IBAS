@@ -55,8 +55,8 @@
                                 <tr>
                                     <th scope="col" style="text-align: center">no.</th>
                                     <th scope="col" style="width: 500px; text-align: center">제목</th>
-                                    <th scope="col" style="text-align: center">작성자</th>
-                                    <th scope="col" style="text-align: center">작성일</th>
+                                    <th class="dis-none-media" scope="col" style="text-align: center">작성자</th>
+                                    <th class="dis-none-media" scope="col" style="text-align: center">작성일</th>
                                     <th scope="col" style="text-align: center">상태</th>
                                 </tr>
                                 </thead>
@@ -75,9 +75,9 @@
                                             <a href="{% url 'bank_support_detail' bank_no=bank.bank_no %}">{{ bank.bank_title }}</a>
                                         </td>
                                         <!-- 게시글 작성자 -->
-                                        <td style="text-align: center">{{ bank.bank_used_user.user_name }}</td>
+                                        <td class="dis-none-media" style="text-align: center">{{ bank.bank_used_user.user_name }}</td>
                                         <!-- 게시글 작성일자 -->
-                                        <td style="text-align: center">{{ bank.bank_created|date:"Y-m-d" }}</td>
+                                        <td class="dis-none-media" style="text-align: center">{{ bank.bank_created|date:"Y-m-d" }}</td>
                                         <!-- 상태 : 승인완료 -->
                                         <td class="{% if bank.bank_apply.bank_apply_no == 1 %}bank_yet{% elif bank.bank_apply.bank_apply_no == 2 %}bank_pass{% elif bank.bank_apply.bank_apply_no == 3 %}bank_nopass{% endif %}">{{ bank.bank_apply.bank_apply_name }}</td>
                                     </tr>
