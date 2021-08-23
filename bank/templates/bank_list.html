@@ -59,10 +59,10 @@
                         <thead>
                         <!-- bank-tr-head는 bank_yejin.js에 사용됨. bank_select 부분과 관련 -->
                         <tr id="bank-tr-head" style="text-align: center">
-                            <th scope="col" style="width: 150px;">사용일</th>
-                            <th scope="col" style="width: 150px;">게시일</th>
-                            <th scope="col" style="width: 150px;">수정일</th>
-                            <th scope="col" style="width: 400px">내용</th>
+                            <th class="dis-none-media" ="col" style="width: 150px;">사용일</th>
+                            <th class="dis-none-media" scope="col" style="width: 150px;">게시일</th>
+                            <th class="dis-none-media" scope="col" style="width: 150px;">수정일</th>
+                            <th class="dis-none-media" scope="col" style="width: 400px">내용</th>
                             <th scope="col" style="width: 123px;">수입액</th>
                             <th scope="col" style="width: 123px;">지출액</th>
                             <th scope="col" style="width: 86px;">증빙</th>
@@ -81,7 +81,7 @@
                         {% for bank in bank_list %}
                             <tr class="bank-tr text-center">
                                 <!-- 사용일 -->
-                                <td scope="row" style="padding: 10px 0; width: 100px;">
+                                <td scope="row" style="padding: 10px 0; width: 100px;" class="dis-none-media">
                                     <!-- bank-date-1는 bank_yejin.js에 사용됨. bank_select, bank_update 부분과 관련 -->
                                     <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
                                     <input class="bank-date bank-input-con" type="text"
@@ -90,7 +90,7 @@
                                 </td>
 
                                 <!-- 게시일 -->
-                                <td style="padding: 10px 0">
+                                <td style="padding: 10px 0" class="dis-none-media">
                                     <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
                                     <input class="bank-input-con" type="text"
                                            value="{{ bank.bank_created|date:"Y-m-d" }}"
@@ -98,7 +98,7 @@
                                 </td>
 
                                 <!-- 수정일 -->
-                                <td style="padding: 10px 0">
+                                <td style="padding: 10px 0" class="dis-none-media">
                                     <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
                                     <input class="bank-input-con" type="text"
                                            value="{{ bank.bank_updated|date:"Y-m-d" }}"
@@ -107,7 +107,7 @@
 
 
                                 <!-- 내용 -->
-                                <td style="width: 400px; padding: 10px 0; text-align: start">
+                                <td style="width: 400px; padding: 10px 0; text-align: start" class="dis-none-media">
                                     <!-- bank-txt-1는 bank_yejin.js에 사용됨. bank_update 부분과 관련 -->
                                     <!-- bank-input-con는 bank_yejin.css에 정의됨. -->
                                     <input class="bank-input-con" type="text"
