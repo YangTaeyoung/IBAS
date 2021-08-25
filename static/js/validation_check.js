@@ -341,10 +341,10 @@ function validation_check_for_join_form() {
         errors.push('전공을 선택하세요!\n');
     }
 
-    const user_grade = $('#user_grade').val();
-    if (user_grade == null || user_grade.length === 0) {
-        errors.push('학년을 선택하세요!\n');
-    }
+    // const user_grade = $('#user_grade').val();
+    // if (user_grade == null || user_grade.length === 0) {
+    //     errors.push('학년을 선택하세요!\n');
+    // }
 
     return alert_or_submit(errors);
 }
