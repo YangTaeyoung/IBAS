@@ -17,7 +17,7 @@ from django.db import transaction
 from date_controller import user_recruit_check, is_user_recruiting
 from django.contrib import messages
 from alarm.alarm_controller import create_user_join_alarm
-
+from user_controller import get_default_pic_path
 
 # Create your views here.
 def choose_std_or_pro(request):  # 학생인지, 교수인지 고르게 하는 것.
@@ -132,10 +132,19 @@ def quest_chk(request):
             except FileExistsError:
                 pass
             try:  #
-                urlretrieve(user_pic, "/home/ibas/Django/IBAS/media/member/" + user_stu + "/" + user_stu + ".jpg")
-                user_pic = "member/" + user_stu + "/" + user_stu + ".jpg"
-            except FileNotFoundError:
-                user_pic = "member/default/default.png"
+                if "png" in user_pic:
+                    urlretrieve(user_pic, "/home/ibas/Django/IBAS/media/member/" + user_stu + "/" + user_stu + ".png")
+                    user_pic = "member/" + user_stu + "/" + user_stu + ".png"
+                elif "jpg" in user_pic:
+                    urlretrieve(user_pic, "/home/ibas/Django/IBAS/media/member/" + user_stu + "/" + user_stu + ".jpg")
+                    user_pic = "member/" + user_stu + "/" + user_stu + ".jpg"
+                elif "gif" in user_pic:
+                    urlretrieve(user_pic, "/home/ibas/Django/IBAS/media/member/" + user_stu + "/" + user_stu + ".gif")
+                    user_pic = "member/" + user_stu + "/" + user_stu + ".gif"
+                else:
+                    user_pic = get_default_pic_path()
+            except:
+                user_pic = get_default_pic_path()
                 pass
         # 받은 정보로 user 모델 인스턴스 변수 생성
         # 사용자 정보를 DB에 저장
