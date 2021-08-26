@@ -196,7 +196,7 @@ function validation_check_for_lecture() {
             errors.push('진행 방식을 선택하세요!\n');
         } else {
             // validate lect_place_or_link
-            let lect_place_or_link = $('select[name="lect_place_or_link"]').val();
+            let lect_place_or_link = $('input[name="lect_place_or_link"]').val();
             if (lect_place_or_link.length === 0) {
                 errors.push('장소나 링크를 기재해주세요!\n');
             } else if (lect_place_or_link.length > 1000) {
@@ -225,12 +225,12 @@ function validation_check_for_lecture() {
                 errors.push('신청 마감일을 다시 설정하세요!\n')
             }
         }
-    }
 
-    // 이미지 등록 필수
-    let img_error = validation_check_for_img_file_upload();
-    if (img_error != null && img_error.length > 0) {
-        errors.push(img_error);
+        // 이미지 등록 필수
+        let img_error = validation_check_for_img_file_upload();
+        if (img_error != null && img_error.length > 0) {
+            errors.push(img_error);
+        }
     }
     
     return alert_or_submit(errors);
@@ -341,10 +341,10 @@ function validation_check_for_join_form() {
         errors.push('전공을 선택하세요!\n');
     }
 
-    const user_grade = $('#user_grade').val();
-    if (user_grade == null || user_grade.length === 0) {
-        errors.push('학년을 선택하세요!\n');
-    }
+    // const user_grade = $('#user_grade').val();
+    // if (user_grade == null || user_grade.length === 0) {
+    //     errors.push('학년을 선택하세요!\n');
+    // }
 
     return alert_or_submit(errors);
 }
