@@ -356,11 +356,15 @@
 <script src="{% static 'plugins/owl-carousel/owl.carousel.js' %}"></script><!-- OWL SLIDER -->
 <script src="{% static 'js/custom.js' %}"></script><!-- CUSTOM FUCTIONS  -->
 <script src="{% static 'js/dz.carousel.js' %}"></script><!-- SORTCODE FUCTIONS  -->
-<script src="{% static 'js/dz.ajax.js' %}"></script><!-- CONTACT JS  -->
+
+<!-- 2021.08.27 주석처리 by D.H
+<script src="{#{% static 'js/dz.ajax.js'%} #}"></script>  contact js
 <script src="https://maps.google.com/maps/api/js?key=AIzaSyBjirg3UoMD5oUiFuZt3P9sErZD-2Rxc68&sensor=false"></script>
-<!-- GOOGLE MAP -->
-<script src='https://www.google.com/recaptcha/api.js'></script> <!-- Google API For Recaptcha  -->
-<script src="{% static 'js/map.script.js' %}"></script><!-- CONTACT JS  -->
+ GOOGLE MAP
+<script src='https://www.google.com/recaptcha/api.js'></script>  Google API For Recaptcha
+ <script src="{#{% static 'js/map.script.js' %}#}"></script> CONTACT JS
+-->
+
 <script src="{% static 'plugins/drop/imageuploadify.min.js' %}"></script><!-- CONTACT JS  -->
 <script src="{% static 'plugins/lightgallery/js/lightgallery-all.min.js' %}"></script><!-- Lightgallery -->
 
