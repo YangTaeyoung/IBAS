@@ -261,3 +261,8 @@ def hall_of_fame(request):
     }
     return render(request, "hall_of_fame.html", context)
 
+
+# test sentry
+def trigger_error(request):
+    division_by_zero = 1 / 0
+    return None
