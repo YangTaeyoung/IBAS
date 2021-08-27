@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- ㅅㅂ 이것도 적용 안되나나-->
+<!-- ㅅㅂ 이것도 적용 안되나나 -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="keywords" content=""/>
@@ -16,7 +16,7 @@
     <meta name="format-detection" content="telephone=no">
 
     <!-- FAVICONS ICON -->
-    <link rel="icon" href="{% static 'images/IBAS_favicon.png' %}" type="image/x-icon"/>ㅏ
+    <link rel="icon" href="{% static 'images/IBAS_favicon.png' %}" type="image/x-icon"/>
     <link rel="shortcut icon" type="image/x-icon" href="{% static 'images/IBAS_favicon.png' %}"/>
 
     <!-- PAGE TITLE HERE -->
@@ -56,12 +56,7 @@
         {% endfor %}
     {% endif %}
 
-    <script>
-    $(function (){
-        $("body").prepend('<div id="overlay" class="ui-widget-overlay" style="z-index: 1001; display: none;"></div>');
-        $("body").prepend("<div id='PleaseWait' style='display: none;'><img src= 'https://inhabas.com/static/images/loading.svg'</div>");
-    })
-    </script>
+
 </head>
 <body id="bg">
 <div id="loading-area"></div>
@@ -362,7 +357,12 @@
 
 <script src="{% static 'plugins/drop/imageuploadify.min.js' %}"></script><!-- CONTACT JS  -->
 <script src="{% static 'plugins/lightgallery/js/lightgallery-all.min.js' %}"></script><!-- Lightgallery -->
-
+<script>
+    $(function (){
+        $("body").prepend('<div id="overlay" class="ui-widget-overlay" style="z-index: 1001; display: none;"></div>');
+        $("body").prepend("<div id='PleaseWait' style='display: none;'><img src= 'https://inhabas.com/static/images/loading.svg'</div>");
+    })
+</script>
 
 </body>
 </html>

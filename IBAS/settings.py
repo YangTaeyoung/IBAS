@@ -24,6 +24,9 @@ ROOT_DIR = os.path.dirname(BASE_DIR)
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = '_vthq1y2s@$+o&+759)d)0r59e&%!gdcp7(^tsu1=+b-cog_@1'
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = DEBUG_MODE
 
@@ -187,6 +190,14 @@ SITE_ID = 2
 LOGIN_REDIRECT_URL = '/user/pass'  # 로그인 성공시 리다이렉션 되는 URL 바꿀 필요가 있을 듯..
 ACCOUNT_EMAIL_REQUIRED = True  # 이메일은 꼭 받게 만들기.
 ACCOUNT_LOGOUT_ON_GET = True  # 로그 아웃 시 example.com사이트로 자동이동 하는 것 제거
+
+# send email
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.googlemail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'ibasmail20@gmail.com'
+EMAIL_HOST_PASSWORD = 'ibasforever'
 
 # 브라우져 종료시 세션 만료
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
