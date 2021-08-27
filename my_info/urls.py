@@ -17,5 +17,5 @@ urlpatterns = [
     path('connnect/social/account/', views.connect_social_account, name="connect_social_account"),
     path("connnect/social/account/before/set/", views.go_social_login_before_setting,
          name="connect_social_account_before_setting"),
-
+    path('test/', views.my_info_test, name='my_info_test')  # test uri for my-info.vue "inhabas.com/my_info/test/"
 ]

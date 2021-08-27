@@ -20,6 +20,33 @@ def get_ecrypt_value(value: str):
     return hashlib.md5(value.encode()).hexdigest()
 
 
+def my_info_test(request):
+    my_comment_list = Comment.objects.filter(
+        Q(comment_writer=get_logined_user(request)) & Q(comment_type_id=1)).order_by("-comment_created")
+    for my_comment in my_comment_list:
+        my_comment.board_type = Board.objects.get(pk=my_comment.comment_board_ref).board_type_no.board_type_name
+    context = {
+        "my_lect_ing_list": LectEnrollment.objects.filter(
+            Q(student=get_logined_user(request)) & Q(lect_no__lect_state__state_no=3) & Q(status_id=1)),
+        "my_lect_fin_list": LectEnrollment.objects.filter(
+            Q(student=get_logined_user(request)) & Q(lect_no__lect_state__state_no=4) & Q(status_id=1)),
+        "my_lect_made_list": Lect.objects.filter(Q(lect_chief=get_logined_user(request))),
+        "my_board_list": Board.objects.filter(board_writer=get_logined_user(request)).order_by(
+            "board_type_no").order_by("-board_created"),
+        "my_comment_list": my_comment_list,
+        "my_wait_request": UserUpdateRequest.objects.filter(
+            Q(updated_user=get_logined_user(request)) & Q(updated_state__state_no=1)),
+        "my_update_request_list": UserUpdateRequest.objects.filter(updated_user=get_logined_user(request)),
+        "my_bank_list": Bank.objects.filter(bank_used_user=get_logined_user(request)).order_by("-bank_used"),
+        "user_list": User.objects.all(),
+        "major_list": MajorInfo.objects.all(),
+        "is_naver_existed": len(
+            UserEmail.objects.filter(Q(user_stu=get_logined_user(request)) & Q(provider="naver"))) != 0,
+        "is_google_existed": len(
+            UserEmail.objects.filter(Q(user_stu=get_logined_user(request)) & Q(provider="google"))) != 0,
+    }
+    return render(request, 'my_info_test.html', context)
+
 # Create your views here.
 @login_required
 def my_info(request):  # 내 정보 출력

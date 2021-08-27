@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import Comment from './CommentList.vue'
-import Layout from './layouts/My_info.vue'
+import Myinfo from './Myinfo.vue'
+import router from './router/MyInfoIndex.js'
 
 createApp(Comment).mount('#CommentList')
-createApp(Layout).mount('#app')
+createApp(Myinfo).use(router).mount('#Myinfo')

@@ -1,10 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "base.html" %}
+{% load static %}
+{% load socialaccount %} {% providers_media_js %}
+{% block content %}
+    <link rel="stylesheet" href="{% static 'css/login-join.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/ibas_contents.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/size.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/posting_list.css' %}"/>
+    <script src="{% static 'js/ibas_centents.js' %}"></script>
+    <script src="{% static 'js/login-join.js' %}"></script>
+    <script src="{% static '/js/form.js' %}"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="{% static '/js/validation_check.js' %}"></script>
+
+    <div class="page-content bg-white text-gray-1">
+        <!-- inner page banner -->
+        <img src="{% static 'images/myinfo_bg.jpg' %}" style="height: 20%; width: 100%; overflow: hidden">
+        <div id="Myinfo"></div>
+    </div>
+<!--    <div id="myInfo"></div>-->
+    <!--    <h1>helloWorld</h1>-->
+    <!-- Content END-->
+    {% include "file_script.html" %}
+
+    <!-- django 렌더링 끝나고 나서 vue.js 렌더링 -->
+    <script type="text/javascript" src="{% static 'src/vue/dist/js/chunk-vendors.js' %}"></script>
+    <script type="text/javascript" src="{% static 'src/vue/dist/js/app.js' %}"></script>
+    <!-- django 렌더링 끝나고 나서 vue.js 렌더링 -->
+{% endblock %}

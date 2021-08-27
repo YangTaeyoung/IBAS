@@ -1,5 +1,5 @@
 <template>
-  <div id="myInfo">
+  <div id="my-info">
     <!-- inner page banner -->
     <!--    <img src='../../../my_info/static/images/myinfo_bg.jpg' alt="" style="height: 20%; width: 100%; overflow: hidden">-->
     <!-- inner page banner END -->
@@ -16,17 +16,20 @@
             <div class="listing-info-left">
               <!--            <h3 class="title">{{ logined_user.user_name }}</h3>-->
               <h3 class="title">윤예진</h3>
-              <p>{{ logined_user.user_major.major_name }} &#8226; {{ logined_user.user_stu }}</p>
+              <p>글로벌금융학과 &#8226; 12192355</p>
+              <!--              <p>{{ logined_user.user_major.major_name }} &#8226; {{ logined_user.user_stu }}</p>-->
+
             </div>
             <!--상단 오른쪽에 뜨는버튼 버튼-->
-            <div class="listing-info-right" v-if="logined_user.user_role.role_no <= 4">
+            <div class="listing-info-right">
+              <!--              <div class="listing-info-right" v-if="logined_user.user_role.role_no <= 4">-->
+
               <!--회원관리, 회장단만 보이게, 상단바에 배치랑 고민헤볼것-->
-              <a href="#" class="site-button"><i
+              <a href="#" class="site-button m-r5"><i
                   class="la la-users m-r5"></i>회원관리</a>
-              {% endif %}
               <!--사진변경-->
               <a href="javascript:void(0);" data-toggle="modal" data-target="#photo_edit"
-                 class="site-button purple"><i class="la la-photo m-r5"></i>사진변경</a>
+                 class="site-button purple m-r5"><i class="la la-photo m-r5"></i>사진변경</a>
               <!--사진삭제-->
               <a href="javascript:void(0);" class="site-button gray"
                  onClick="goSubmit('form-user-pic-delete')"><i class="la la-trash m-r5"></i>사진삭제</a>
@@ -81,6 +84,42 @@
     </div>
     <!-- Modal End -->
   </div>
+  <!--마이인포의 상단 메뉴부분 해당 버튼 누르면 해당하는 곳으로 이동,Back : 각 메뉴에 따라 권한자만 보이게 수정-->
+  <div class="listing-details-nav">
+    <div class="container">
+      <ul class="listing-nav nav">
+        <!--강의실 메뉴버튼,Back : 모두에게 보이게 수정-->
+          <li><router-link to="/my_info/myclass" data-toggle="tab"><i
+              class="la la-home"></i><span>강의실</span></router-link></li>
+        <!--개설강의 메뉴버튼,Back : 강의자만 보이게 수정-->
+          <li><router-link to="/my_info/test/classSet" data-toggle="tab"><i
+              class="la la-book"></i><span>개설 강의 관리</span></router-link>
+          </li>
+        <!--작성들관리 메뉴버튼,Back : 모두에게 보이게 수정-->
+          <li><router-link to="/my_info/test/myContent" data-toggle="tab"><i
+              class="la la-list-alt"></i><span>작성 글 관리</span></router-link>
+          </li>
+        <!--예산신청내역 메뉴버튼,Back : 모두에게 보이게 수정-->
+
+          <li><router-link to="/my_info/test/myBank" data-toggle="tab"><i class="la la-money"></i><span>예산 신청 내역</span></router-link>
+          </li>
+        <!--내정보 메뉴버튼,Back : 모두에게 보이게 수정-->
+          <li><router-link to="/my_info/test/" data-toggle="tab" class="active"><i
+              class="la la-user"></i><span>내 정보</span></router-link>
+          </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 버튼누르면 보여지는 곳 목록-->
+  <div class="section-full listing-details-content">
+    <div class="container">
+      <!--강의실, 모두에게 보임-->
+      <div class="tab-content">
+        <router-view/>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -91,7 +130,7 @@ axios.defaults.baseURL = 'http://localhost:8000/';
 
 
 export default {
-  props: ['sendLoginedUser', 'sendUserPic', 'sendUserName', 'sendUserMajor', 'sendUserStu', 'sendUserRole'],
+  props: ['sendLoginedUser', 'sendUserPic', 'sendUserName', 'sendUserMajor', 'sendUserStu', 'sendUserRole', 'sendMajorName',],
   name: "Myinfo.vue",
 
   data: () => {
@@ -100,12 +139,13 @@ export default {
       logined_user: null,
       user_pic: null,
       user_name: null,
-      user_major: null,
-      user_stu: null,
-      user_role: null,
-      // recomment_mode: false,
+      // user_major: null,
+      // user_stu: null,
+      // user_role: null,
+      // major_name: null,
 
     };
   },
 }
 </script>
+
