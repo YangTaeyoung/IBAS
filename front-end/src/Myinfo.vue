@@ -89,19 +89,19 @@
     <div class="container">
       <ul class="listing-nav nav">
         <!--강의실 메뉴버튼,Back : 모두에게 보이게 수정-->
-          <li><router-link to="/my_info/myclass" data-toggle="tab"><i
+          <li><router-link to="/my_info/myClass" data-toggle="tab"><i
               class="la la-home"></i><span>강의실</span></router-link></li>
         <!--개설강의 메뉴버튼,Back : 강의자만 보이게 수정-->
-          <li><router-link to="/my_info/test/classSet" data-toggle="tab"><i
+          <li><router-link to="/my_info/classSet" data-toggle="tab"><i
               class="la la-book"></i><span>개설 강의 관리</span></router-link>
           </li>
         <!--작성들관리 메뉴버튼,Back : 모두에게 보이게 수정-->
-          <li><router-link to="/my_info/test/myContent" data-toggle="tab"><i
+          <li><router-link to="/my_info/myContent" data-toggle="tab"><i
               class="la la-list-alt"></i><span>작성 글 관리</span></router-link>
           </li>
         <!--예산신청내역 메뉴버튼,Back : 모두에게 보이게 수정-->
 
-          <li><router-link to="/my_info/test/myBank" data-toggle="tab"><i class="la la-money"></i><span>예산 신청 내역</span></router-link>
+          <li><router-link to="/my_info/myBank" data-toggle="tab"><i class="la la-money"></i><span>예산 신청 내역</span></router-link>
           </li>
         <!--내정보 메뉴버튼,Back : 모두에게 보이게 수정-->
           <li><router-link to="/my_info/test/" data-toggle="tab" class="active"><i
@@ -117,6 +117,7 @@
       <!--강의실, 모두에게 보임-->
       <div class="tab-content">
         <router-view/>
+
       </div>
     </div>
   </div>
