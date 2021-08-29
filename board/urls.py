@@ -22,6 +22,4 @@ urlpatterns = [
     # path('contest/comment/update', views.contest_comment_update, name="contest_comment_update"),
     # path('contest/comment/delete', views.contest_comment_delete, name="contest_comment_delete"),
     # path('contest/comment/register', views.contest_comment_register, name="contest_comment_register"),
-
-    path('sentry-debug/', views.trigger_error),
 ]

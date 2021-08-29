@@ -507,9 +507,3 @@ def contest_search(request):
         return render(request, 'contest_board.html', context)
     else:
         return redirect(reverse("contest_list"))
-
-
-# test sentry
-def trigger_error(request):
-    division_by_zero = 1 / 0
-    return None
