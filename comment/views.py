@@ -2,7 +2,7 @@ import json
 from django.core.exceptions import ValidationError
 from django.views.decorators.csrf import ensure_csrf_cookie
 from comment.serializer import CommentSerializer
-from user_controller import get_logined_user, auth_check, writer_only
+from user_controller import get_logined_user, auth_check, writer_only, login_required
 from django.shortcuts import get_object_or_404
 from DB.models import CommentType, Comment, Board
 from django.db.models import Q, F
@@ -76,18 +76,21 @@ def comment_update(request, comment_id):
 
 @ensure_csrf_cookie
 def comment_view(request, type, board_ref):
-    comment_list = Comment.objects.filter(
-        Q(comment_type_id=type_no[type]) & Q(comment_board_ref=board_ref) & Q(
-            comment_cont_ref__isnull=True)).prefetch_related("re_comments").order_by("comment_created")
-    commentset_serializer = [CommentSerializer(comment.re_comments.all(), many=True).data for comment in comment_list]
-    comment_serializer = CommentSerializer(comment_list, many=True)
-    cur_user = get_logined_user(request)
-    logined_user = {
-        'user_role': cur_user.user_role_id,
-        'user_stu': cur_user.user_stu
-    }
+    if cur_user := get_logined_user(request):
+        comment_list = Comment.objects.filter(
+            Q(comment_type_id=type_no[type]) & Q(comment_board_ref=board_ref) & Q(
+                comment_cont_ref__isnull=True)).prefetch_related("re_comments").order_by("comment_created")
+        commentset_serializer = [CommentSerializer(comment.re_comments.all(), many=True).data for comment in comment_list]
+        comment_serializer = CommentSerializer(comment_list, many=True)
+        logined_user = {
+            'user_role': cur_user.user_role_id,
+            'user_stu': cur_user.user_stu
+        }
 
-    return JsonResponse({
-        'comment_list': comment_serializer.data,
-        'comment_set_list': commentset_serializer,
-        'logined_user': logined_user}, safe=False)
+        return JsonResponse({
+            'comment_list': comment_serializer.data,
+            'comment_set_list': commentset_serializer,
+            'logined_user': logined_user}, safe=False, status=200)
+
+    else:
+        return JsonResponse({}, status=400)
