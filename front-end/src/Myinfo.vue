@@ -22,7 +22,7 @@
             </div>
             <!--상단 오른쪽에 뜨는버튼 버튼-->
             <div class="listing-info-right">
-              <!--              <div class="listing-info-right" v-if="logined_user.user_role.role_no <= 4">-->
+              <!--              <div class="listing-info-right" v-if="logined_user.user_role <= 4">-->
 
               <!--회원관리, 회장단만 보이게, 상단바에 배치랑 고민헤볼것-->
               <a href="#" class="site-button m-r5"><i
@@ -127,25 +127,40 @@
 
 import axios from "axios";
 
-axios.defaults.baseURL = 'http://localhost:8000/';
+axios.defaults.baseURL = 'http://127.0.0.1:8000/';
 
 
 export default {
-  props: ['sendLoginedUser', 'sendUserPic', 'sendUserName', 'sendUserMajor', 'sendUserStu', 'sendUserRole', 'sendMajorName',],
+  // props 는 상위 컴포넌트에서 보낸 데이터를 받을 때 사용!
   name: "Myinfo.vue",
 
   data: () => {
     return {
-      // isDisabled: true,
-      logined_user: null,
-      user_pic: null,
-      user_name: null,
-      // user_major: null,
-      // user_stu: null,
-      // user_role: null,
-      // major_name: null,
-
+      my_info_data: null,
     };
+  },
+
+  mounted() {
+    console.log('mount!!')
+    this.fetch_my_info();
+  },
+
+  methods: {
+    fetch_my_info: function() {
+      console.log('Fetch!!');
+      axios.get("my_info/test/data")
+          .then(response => {
+              this.my_info_data = response.data;
+              // 세부 데이터는 response.data.logined_user,, 이렇게도 접근 가능!
+              // 위의 템플릿에서는 my_info_data.logined_user.user_stu 같이 사용 가능!
+              // 백엔드 쪽에서 )) 기존에 장고템플릿 언어로 작성했던 데이터 포맷 지켜서 여기로 보냈으니, 참고!
+              // request.session 안에 있는 변수는 아직 안넘겼음.. 참고! 추후 작업해드림!
+              // 크롬에서 vue 개발자 도구 다운 받으면 컴포넌트 별로 어떤 데이터 갖고 있는지 확인 가능!
+          })
+          .catch(response => {
+              console.log("fail to fetch data in my_info!", response)
+          })
+    }
   },
 }
 </script>

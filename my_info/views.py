@@ -3,51 +3,77 @@ import os
 
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, reverse
+from django.views.decorators.csrf import ensure_csrf_cookie
+
 from DB.models import Board, User, Comment, Bank, UserUpdateRequest, UserEmail, StateInfo, MajorInfo, Lect, \
     LectEnrollment, BoardType
 from django.db.models import Q
 
 from alarm.alarm_controller import create_user_activate_alarm
+from comment.serializer import CommentSerializer
+from member import session
+from my_info.serializer import UserSerializer, LectureSerializer, BoardSerializer, BankSerializer, MajorSerializer, \
+    UserRequestSerializer
 from user_controller import get_logined_user, login_required, get_social_login_info, get_default_pic_path, \
     is_default_pic, delete_user
 from django.conf import settings
 from django.contrib import messages
 from member.session import save_session
 import hashlib
+from collections import defaultdict
 
 
 def get_ecrypt_value(value: str):
     return hashlib.md5(value.encode()).hexdigest()
 
 
+@ensure_csrf_cookie
 def my_info_test(request):
-    my_comment_list = Comment.objects.filter(
-        Q(comment_writer=get_logined_user(request)) & Q(comment_type_id=1)).order_by("-comment_created")
-    for my_comment in my_comment_list:
-        my_comment.board_type = Board.objects.get(pk=my_comment.comment_board_ref).board_type_no.board_type_name
-    context = {
-        "my_lect_ing_list": LectEnrollment.objects.filter(
-            Q(student=get_logined_user(request)) & Q(lect_no__lect_state__state_no=3) & Q(status_id=1)),
-        "my_lect_fin_list": LectEnrollment.objects.filter(
-            Q(student=get_logined_user(request)) & Q(lect_no__lect_state__state_no=4) & Q(status_id=1)),
-        "my_lect_made_list": Lect.objects.filter(Q(lect_chief=get_logined_user(request))),
-        "my_board_list": Board.objects.filter(board_writer=get_logined_user(request)).order_by(
-            "board_type_no").order_by("-board_created"),
-        "my_comment_list": my_comment_list,
-        "my_wait_request": UserUpdateRequest.objects.filter(
-            Q(updated_user=get_logined_user(request)) & Q(updated_state__state_no=1)),
-        "my_update_request_list": UserUpdateRequest.objects.filter(updated_user=get_logined_user(request)),
-        "my_bank_list": Bank.objects.filter(bank_used_user=get_logined_user(request)).order_by("-bank_used"),
-        "user_list": User.objects.all(),
-        "major_list": MajorInfo.objects.all(),
-        "is_naver_existed": len(
-            UserEmail.objects.filter(Q(user_stu=get_logined_user(request)) & Q(provider="naver"))) != 0,
-        "is_google_existed": len(
-            UserEmail.objects.filter(Q(user_stu=get_logined_user(request)) & Q(provider="google"))) != 0,
-    }
-    return render(request, 'my_info_test.html', context)
+    session.save_session(request, user_model=User.objects.get(pk=12162359), logined_email="0130yang@gmail.com",
+                         provider="google")
+    return render(request, 'my_info_test.html')
 
-# Create your views here.
+
+def my_info_test_data(request):
+    session.save_session(request, user_model=User.objects.get(pk=12162359), logined_email="0130yang@gmail.com",
+                         provider="google")
+
+    cur_user = get_logined_user(request)
+
+    my_comment_list = Comment.objects.filter(Q(comment_writer=cur_user) & Q(comment_type_id=1)
+                                             ).order_by("-comment_created")
+    comment_list_dict = {}
+    for comment in my_comment_list:
+        comment_list_dict.update(
+            {'board_type': Board.objects.get(pk=comment.comment_board_ref).board_type_no.board_type_name}
+            | dict(CommentSerializer(comment).data))
+
+    context = {
+        "logined_user": UserSerializer(cur_user).data,
+        "my_lect_ing_list": LectureSerializer(LectEnrollment.objects.filter(
+            Q(student=cur_user) & Q(lect_no__lect_state_id=3) & Q(status_id=1)), many=True).data,
+        "my_lect_fin_list": LectureSerializer(LectEnrollment.objects.filter(
+            Q(student=cur_user) & Q(lect_no__lect_state_id=4) & Q(status_id=1)), many=True).data,
+        "my_lect_made_list": LectureSerializer(Lect.objects.filter(Q(lect_chief=cur_user)), many=True).data,
+        "my_board_list": BoardSerializer(
+            Board.objects.filter(board_writer=cur_user).order_by("board_type_no").order_by("-board_created"),
+            many=True).data,
+        "my_comment_list": comment_list_dict,
+        "my_wait_request": UserRequestSerializer(
+            UserUpdateRequest.objects.filter(Q(updated_user=cur_user) & Q(updated_state_id=1)), many=True).data,
+        "my_update_request_list": UserRequestSerializer(
+            UserUpdateRequest.objects.filter(updated_user=cur_user), many=True).data,
+        "my_bank_list":  BankSerializer(
+            Bank.objects.filter(bank_used_user=cur_user).order_by("-bank_used"), many=True).data,
+        "user_list": UserSerializer(User.objects.all(), many=True).data,
+        "major_list": MajorSerializer(MajorInfo.objects.all(), many=True).data,
+        "is_naver_existed": len(UserEmail.objects.filter(Q(user_stu=cur_user) & Q(provider="naver"))) != 0,
+        "is_google_existed": len(UserEmail.objects.filter(Q(user_stu=cur_user) & Q(provider="google"))) != 0,
+    }
+
+    return JsonResponse(data=context, status=200, safe=False)
+
+
 @login_required
 def my_info(request):  # 내 정보 출력
     my_comment_list = Comment.objects.filter(
