@@ -4,7 +4,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from comment.serializer import CommentSerializer
 from user_controller import get_logined_user, auth_check, writer_only, login_required
 from django.shortcuts import get_object_or_404
-from DB.models import CommentType, Comment, Board
+from DB.models import CommentType, Comment, Board, User
 from django.db.models import Q, F
 from django.http.response import JsonResponse
 from alarm.alarm_controller import create_comment_alarm
@@ -76,7 +76,7 @@ def comment_update(request, comment_id):
 
 @ensure_csrf_cookie
 def comment_view(request, type, board_ref):
-    if cur_user := get_logined_user(request):
+    if cur_user := User.objects.filter(pk=request.session.get("user_stu")).first():
         comment_list = Comment.objects.filter(
             Q(comment_type_id=type_no[type]) & Q(comment_board_ref=board_ref) & Q(
                 comment_cont_ref__isnull=True)).prefetch_related("re_comments").order_by("comment_created")
