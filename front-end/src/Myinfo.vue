@@ -15,7 +15,7 @@
             <!--이름, 학과, 학번 표시되는 곳, Back : 본인 이름, 학과, 한번 들어갈 수 있도록 수정-->
             <div class="listing-info-left">
               <!--            <h3 class="title">{{ logined_user.user_name }}</h3>-->
-              <h3 class="title">윤예진</h3>
+              <h3 class="title">윤예진22</h3>
               <p>글로벌금융학과 &#8226; 12192355</p>
               <!--              <p>{{ logined_user.user_major.major_name }} &#8226; {{ logined_user.user_stu }}</p>-->
 
