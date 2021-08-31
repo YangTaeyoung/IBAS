@@ -172,6 +172,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
     MY_STATIC_ROOT
 ]
+STATICFILES_STORAGE = 'IBAS.storage.ForgivingManifestStaticFilesStorage'  # md5 hashing for static files
 # social 로그인 패키지 설정
 AUTHENTICATION_BACKENDS = (
     # Needed to login by username in Django admin, regardless of `allauth`

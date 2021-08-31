@@ -78,6 +78,8 @@ def join(request):  # 회원 가입 페이지를 랜더링 하는 함수
                 return JsonResponse(status=400, data={})
             else:
                 return JsonResponse(status=200, data={})
+        else:
+            return JsonResponse(status=400, data={})
 
 
 @user_recruit_check
