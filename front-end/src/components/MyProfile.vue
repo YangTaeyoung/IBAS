@@ -17,8 +17,8 @@
               <tr>
                 <th scope="row">이름</th>
                 <!-- Back : 자기 이름 뜨도록 수정 -->
-                <!--                <td>{{ logined_user.user_name }}</td>-->
-                <td>윤예진</td>
+                                <td>{{ response.data.logined_user.user_name }}</td>
+<!--                <td>윤예진</td>-->
                 <!-- 수정하기 버튼, 누르면 모달 뜸 -->
                 <td>
                   <!--                  {% if my_wait_request|length == 0 %} {# 이름 변경 신청한 것이 없는 경우 #}-->

@@ -140,7 +140,7 @@ export default {
     };
   },
 
-  mounted() {
+  created() {
     console.log('mount!!')
     this.fetch_my_info();
   },
