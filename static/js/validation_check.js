@@ -2,7 +2,7 @@
 function validation_check_for_title() {
     let error = null; // if there are no any errors, error=null, or error =  '...'
 
-    let title = $('input[name$="title"]').val();  // Matches those that end with 'title'
+    let title = $('input[name$="title"]').val().trim();  // Matches those that end with 'title'
 
     if (title.length == null || title.length === 0) {
         error="제목을 입력하세요!\n";
@@ -163,6 +163,15 @@ function validation_check_for_board(is_activity=false) {
 }
 
 // for lecture, study
+/*
+    - lect_title
+    - lect_curri
+    - lect_intro
+    - lect_day
+    - lect_method
+    - lect_limit_num
+    - lect_deadline : 수정 시에는 과거 날짜 가능하지만, 등록 시에는 불가능
+ */
 function validation_check_for_lecture() {
     let errors = [];
 
@@ -196,7 +205,7 @@ function validation_check_for_lecture() {
             errors.push('진행 방식을 선택하세요!\n');
         } else {
             // validate lect_place_or_link
-            let lect_place_or_link = $('input[name="lect_place_or_link"]').val();
+            let lect_place_or_link = $('input[name="lect_place_or_link"]').val().trim();
             if (lect_place_or_link.length === 0) {
                 errors.push('장소나 링크를 기재해주세요!\n');
             } else if (lect_place_or_link.length > 1000) {
@@ -206,8 +215,7 @@ function validation_check_for_lecture() {
     }
 
     // validate lect_limit_num
-    let lect_limit_num = $('input[name="lect_limit_num"]').val();
-
+    let lect_limit_num = $('input[name="lect_limit_num"]').val().trim();
     if (lect_limit_num <= '0') {
         errors.push('제한인원은 0보다 커야합니다!\n');
     }

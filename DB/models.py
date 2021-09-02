@@ -237,23 +237,23 @@ def lect_pic_upload_to(instance, filename):
 
 class Lect(models.Model):
     lect_no = models.AutoField(db_column='LECT_NO', primary_key=True)
-    lect_title = models.CharField(db_column='LECT_TITLE', max_length=100)
+    lect_title = models.CharField(db_column='LECT_TITLE', max_length=100)  # required
     lect_chief = models.ForeignKey('User', on_delete=models.CASCADE, db_column='LECT_CHIEF')
     lect_pic = models.ImageField(db_column='LECT_PIC', max_length=1000,
-                                 upload_to=lect_pic_upload_to, null=True)
+                                 upload_to=lect_pic_upload_to, null=True)  # required
     lect_type = models.ForeignKey('LectType', models.DO_NOTHING, db_column='LECT_TYPE')
     lect_created = models.DateTimeField(db_column='LECT_CREATED', auto_now_add=True)
-    lect_intro = models.CharField(db_column='LECT_INTRO', max_length=300)
+    lect_intro = models.CharField(db_column='LECT_INTRO', max_length=300)  # required
     lect_state = models.ForeignKey('StateInfo', models.DO_NOTHING, db_column='LECT_STATE',
                                    default=1, null=True, blank=True)
-    lect_curri = SummernoteTextField(db_column='LECT_CURRI', max_length=CONT_SIZE)
-    lect_limit_num = models.IntegerField(db_column='LECT_LIMIT_NUM', blank=True, null=True)
+    lect_curri = SummernoteTextField(db_column='LECT_CURRI', max_length=CONT_SIZE)  # required
+    lect_limit_num = models.IntegerField(db_column='LECT_LIMIT_NUM', blank=True)  # required, default = 999
     lect_place_or_link = models.CharField(db_column='LECT_PLACE_OR_LINK', max_length=1000, null=True, blank=True)
     lect_method = models.ForeignKey('MethodInfo', models.DO_NOTHING, db_column='LECT_METHOD',
                                     choices=METHOD_CHOICES, null=True, blank=True)
-    lect_deadline = models.DateTimeField(db_column='LECT_DEADLINE')
+    lect_deadline = models.DateTimeField(db_column='LECT_DEADLINE')  # required
     lect_reject_reason = models.CharField(db_column='LECT_REJECT_REASON', null=True, blank=True, max_length=200)
-    lect_day = models.CharField(db_column="LECT_DAY", null=True, max_length=20)
+    lect_day = models.CharField(db_column="LECT_DAY", max_length=20)  # required
     lect_paid = models.IntegerField(db_column="LECT_PAID", null=True, blank=True, default=0)
 
     class Meta:
