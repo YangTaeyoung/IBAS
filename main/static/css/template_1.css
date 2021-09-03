@@ -327,7 +327,6 @@
 }
 .featured-tag:after{
 	content: "";
-	background-image: url(../images/tag.png);
 	height: 100%;
 	width: 40px;
 	display: block;
@@ -1802,7 +1801,6 @@ blockquote h6{
     top: 0;
     width: 100%;
     left: 0;
-    background-image: url(../images/background/line.png);
     height: 100%;
     background-repeat: no-repeat;
     background-position: top right;
@@ -3395,7 +3393,6 @@ font-size: 17px;
     bottom: 0;
     width: 120px;
     z-index: 999;
-    background-image: url(../images/background/pattern.png);
     height: 100%;
     background-position: left;
     background-size: 100% auto;

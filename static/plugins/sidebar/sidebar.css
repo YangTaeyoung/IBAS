@@ -272,7 +272,6 @@ a[aria-expanded="true"]::before {
 }
 #sidebar.sort-sidebar.leftbar  .nav > li.active > a:after {
     background-color: #DCDCDC;
-	background-image:url(../../images/active.png);
     content: "";
     display: block;
     height: 71px;
@@ -550,7 +549,6 @@ a[aria-expanded="true"]::before {
 		-webkit-transition:all 0.5s;
 	}
 	#sidebar.active.sort-sidebar.leftbar  .nav > li.active > a:after{
-		background-image:url(../../images/active1.png);
 		height:82px;
 	}
 	.sort-area.active .is-fixed .main-bar{

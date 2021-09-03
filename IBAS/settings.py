@@ -28,7 +28,7 @@ ROOT_DIR = os.path.dirname(BASE_DIR)
 SECRET_KEY = '_vthq1y2s@$+o&+759)d)0r59e&%!gdcp7(^tsu1=+b-cog_@1'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = DEBUG_MODE
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -86,6 +86,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'IBAS.urls'
@@ -172,6 +173,8 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
     MY_STATIC_ROOT
 ]
+STATICFILES_STORAGE = 'IBAS.storage.CompressAndHashStaticFilesStorage'  #'IBAS.storage.StaticFilesMd5HashingStorage'
+WHITENOISE_MANIFEST_STRICT = False  # 왜 안되지
 
 # social 로그인 패키지 설정
 AUTHENTICATION_BACKENDS = (

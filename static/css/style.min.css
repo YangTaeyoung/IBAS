@@ -2072,7 +2072,7 @@ input[type="radio"]:checked + label:before {
 .loading-pic {
   width: 70px;
   height: 70px;
-  background: url(inc/images/loading.GIF) center no-repeat;
+  background:  center no-repeat;
   position: fixed;
   left: 50%;
   top: 50%;
