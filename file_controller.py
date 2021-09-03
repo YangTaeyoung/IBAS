@@ -2,7 +2,7 @@ import shutil
 from DB.models import Board, BoardFile, ContestBoard, ContestFile, Lect, Bank, BankFile, UserDelete, UserDeleteFile, \
     LectBoard, LectBoardFile, LectAssignmentSubmit, LectAssignmentSubmittedFile
 import os
-from IBAS.settings import MEDIA_ROOT
+from IBAS.settings.base import MEDIA_ROOT
 from django.conf import settings
 
 # (21/07/09) 업데이트

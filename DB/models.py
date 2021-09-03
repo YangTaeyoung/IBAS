@@ -11,7 +11,7 @@ import os
 from django.db import models
 from datetime import datetime
 from django.utils import timezone
-from IBAS.settings import MEDIA_ROOT
+from IBAS.settings.base import MEDIA_ROOT
 import pytz
 from django_summernote.fields import SummernoteTextField
 
