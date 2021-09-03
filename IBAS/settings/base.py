@@ -25,7 +25,7 @@ ROOT_DIR = os.path.dirname(BASE_DIR)
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '_vthq1y2s@$+o&+759)d)0r59e&%!gdcp7(^tsu1=+b-cog_@1'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = DEBUG_MODE
@@ -121,7 +121,7 @@ TEMPLATES = [
 ]
 
 
-WSGI_APPLICATION = 'IBAS.wsgi.dev' 
+#WSGI_APPLICATION = 'IBAS.wsgi.dev.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
@@ -201,7 +201,7 @@ EMAIL_HOST = 'smtp.googlemail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'ibasmail20@gmail.com'
-EMAIL_HOST_PASSWORD = 'ibasforever'
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 
 # 브라우져 종료시 세션 만료
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True

@@ -8,7 +8,7 @@ sentry_sdk.init(
     traces_sample_rate=1.0,
     #traces_sampler=traces_sampler,
     send_default_pii=True,
-    environment= "production",
+    environment="production",
 )    
 
 
@@ -17,14 +17,3 @@ ADMINS = [
 ]
 
 WSGI_APPLICATION = 'IBAS.wsgi.production.application'
-
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '_vthq1y2s@$+o&+759)d)0r59e&%!gdcp7(^tsu1=+b-cog_@1'
-# send email
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.googlemail.com'
-EMAIL_USE_TLS = True
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'ibasmail20@gmail.com'
-EMAIL_HOST_PASSWORD = 'ibasforever'

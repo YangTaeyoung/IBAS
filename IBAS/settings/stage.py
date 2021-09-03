@@ -8,11 +8,12 @@ sentry_sdk.init(
     traces_sample_rate=1.0,
     #traces_sampler=traces_sampler,
     send_default_pii=True,
-    environment="development",
+    environment="stage",
 )
 
-ALLOW_HOST = ['*']  # 내부 개발자만 접근 가능!
 
-WSGI_APPLICATION = 'IBAS.wsgi.dev.application'
+ADMINS = [
+    ('Dong Hyeon Yu', 'ydh9516.dev@gmail.com'),
+]
 
-
+WSGI_APPLICATION = 'IBAS.wsgi.stage.application'
