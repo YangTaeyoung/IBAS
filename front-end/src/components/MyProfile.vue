@@ -17,7 +17,8 @@
               <tr>
                 <th scope="row">이름</th>
                 <!-- Back : 자기 이름 뜨도록 수정 -->
-                                <td>{{ response.data.logined_user.user_name }}</td>
+<!--                                <td>{{ my_info_data.logined_user.user_name }}</td>-->
+                <td>{{$route.params.name}}</td>
 <!--                <td>윤예진</td>-->
                 <!-- 수정하기 버튼, 누르면 모달 뜸 -->
                 <td>
@@ -645,8 +646,24 @@
 
 <script>
 export default {
-  name: "MyProfile.vue"
-}
+  name: "MyProfile.vue",
+
+  // data: () => {
+  //   return {
+  //     my_info_data: null,
+  //   };
+  // },
+
+  // created() {
+  //   this.my_info_data = this.send_my_info_data;
+  // }
+
+  props: {
+    name: {
+      type: String,
+      // default: ''
+    },
+  }}
 </script>
 
 <style scoped>

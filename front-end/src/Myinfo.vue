@@ -14,10 +14,11 @@
           <div class="listing-info">
             <!--이름, 학과, 학번 표시되는 곳, Back : 본인 이름, 학과, 한번 들어갈 수 있도록 수정-->
             <div class="listing-info-left">
-              <!--            <h3 class="title">{{ logined_user.user_name }}</h3>-->
-              <h3 class="title">윤예진22</h3>
-              <p>글로벌금융학과 &#8226; 12192355</p>
-              <!--              <p>{{ logined_user.user_major.major_name }} &#8226; {{ logined_user.user_stu }}</p>-->
+<!--              <h3 class="title">{{ my_info_data.logined_user.user_name }}</h3>-->
+              <h3 class="title">{{ my_info_data.logined_user.user_name }}</h3>
+<!--              <h3 class="title">윤예진</h3>-->
+<!--              <p>글로벌금융학과 &#8226; 12192355</p>-->
+              <p>{{ my_info_data.logined_user.user_major.major_name }} &#8226; {{ my_info_data.logined_user.user_stu }}</p>
 
             </div>
             <!--상단 오른쪽에 뜨는버튼 버튼-->
@@ -35,7 +36,8 @@
                  onClick="goSubmit('form-user-pic-delete')"><i class="la la-trash m-r5"></i>사진삭제</a>
               <form id="form-user-pic-delete" action="#" method="post">
                 <!--              {% csrf_token %}-->
-                <input type="hidden" name="user_stu" value="{{ logined_user.user_stu }}">
+<!--                <input type="hidden" name="user_stu" value="{{ logined_user.user_stu }}">-->
+                <input type="hidden" name="" value="{{  }}">
               </form>
             </div>
           </div>
@@ -104,7 +106,10 @@
           <li><router-link to="/my_info/myBank" data-toggle="tab"><i class="la la-money"></i><span>예산 신청 내역</span></router-link>
           </li>
         <!--내정보 메뉴버튼,Back : 모두에게 보이게 수정-->
-          <li><router-link to="/my_info/test/" data-toggle="tab" class="active"><i
+        <!--        <li><router-link v-bind:to="{name: 'MyProfile'}" data-toggle="tab" class="active"><i-->
+<!--        <li @click="clickList"><router-link to="{name: 'MyProfile', params: {my_info_data: this.my_info_data.logined_user.user_name}}" data-toggle="tab" class="active"><i-->
+
+        <li id="infoClick" @click="clickParams"><router-link to="{name: 'MyProfile', params: {name: 'ㅎㅇ'}}" data-toggle="tab" class="active"><i
               class="la la-user"></i><span>내 정보</span></router-link>
           </li>
       </ul>
@@ -133,6 +138,9 @@ axios.defaults.baseURL = 'http://127.0.0.1:8000/';
 export default {
   // props 는 상위 컴포넌트에서 보낸 데이터를 받을 때 사용!
   name: "Myinfo.vue",
+  // window.onload = function () {
+  //   this.document.getElementById('infoClick').click()
+  // },
 
   data: () => {
     return {
@@ -146,6 +154,7 @@ export default {
   },
 
   methods: {
+
     fetch_my_info: function() {
       console.log('Fetch!!');
       axios.get("my_info/test/data")
@@ -160,8 +169,14 @@ export default {
           .catch(response => {
               console.log("fail to fetch data in my_info!", response)
           })
-    }
+    },
+    clickParams () {
+      // this.$router.push({name: 'MyProfile', logined_user: {user_name: this.my_info_data.logined_user.user_name} })
+      // this.$router.push({name: 'MyProfile', params: {my_info_data: this.my_info_data.logined_user} })
+      this.$router.push({name: 'MyProfile', params: {name: 'ㅎㅇ'}})
+    },
   },
 }
+
 </script>
 
